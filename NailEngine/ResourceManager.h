@@ -53,10 +53,11 @@ public:
     void DeleteMesh(yunuGI::IMesh* mesh);
     void DeleteDeferredTexture();
     void DeleteMaterial(yunuGI::IMaterial* mat);
+    void OrganizeResource();
 private:
     void CreateMesh(const std::wstring& mesh);
     void CreateMesh(const std::shared_ptr<Mesh>& mesh);
-
+    
 #pragma endregion
 
 public:
