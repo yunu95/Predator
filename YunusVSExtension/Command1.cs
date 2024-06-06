@@ -112,11 +112,28 @@ namespace YunusVSExtension
             {
                 return;
             }
-            File.WriteAllText(headerFilePath, "");
-            File.WriteAllText(sourceFilePath, "");
+            string headerContents = null;
+            string cppContents = null;
+            if (filterName.EndsWith("Type"))
+            {
+                headerContents = "#pragma once\n\nenum class " + filterName + "\n{\n    NONE,\n};";
+            }
+            else
+            {
+                headerContents = "#pragma once\n\nclass " + filterName + "\n{\n    public:\n    private:\n};";
+                cppContents = "#include \"" + filterName + ".h\"";
+            }
+            if (headerContents != null)
+            {
+                File.WriteAllText(headerFilePath, headerContents);
+                projectItem.ProjectItems.AddFromFile(headerFilePath);
+            }
+            if (cppContents != null)
+            {
+                File.WriteAllText(sourceFilePath, cppContents);
+                projectItem.ProjectItems.AddFromFile(sourceFilePath);
+            }
 
-            projectItem.ProjectItems.AddFromFile(headerFilePath);
-            projectItem.ProjectItems.AddFromFile(sourceFilePath);
             //projectItem.ContainingProject.ProjectItems.AddFromFile(headerFilePath);
             //projectItem.ContainingProject.ProjectItems.AddFromFile(sourceFilePath);
 

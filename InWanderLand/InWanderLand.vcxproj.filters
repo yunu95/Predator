@@ -757,6 +757,9 @@
     <Filter Include="Contents_Refactored\Unit\UnitBehaviourTree">
       <UniqueIdentifier>{9d73307d-396f-481a-9995-7af1d80ce8db}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents_Refactored\UnitController\UnitControllerType">
+      <UniqueIdentifier>{265e5a50-668c-4df1-a66e-8d0c7dee834d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -1848,6 +1851,9 @@
     </ClInclude>
     <ClInclude Include="SkillList.h">
       <Filter>Contents_Refactored\Skill</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitControllerType.h">
+      <Filter>Contents_Refactored\UnitController\UnitControllerType</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
