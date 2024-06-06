@@ -1,12 +1,42 @@
 #pragma once
 #include "Skill.h"
 
-class IInteractableComponent;
+class Interactable_ChessPawn;
+class Interactable_ChessRook;
+class Interactable_ChessBishop;
+
+namespace BossSkill
+{
+	struct CustomCompPawn
+	{
+		bool operator()(const std::weak_ptr<Interactable_ChessPawn>& lp, const std::weak_ptr<Interactable_ChessPawn>& rp) const
+		{
+			return &lp > &rp;
+		}
+	};
+
+	struct CustomCompRook
+	{
+		bool operator()(const std::weak_ptr<Interactable_ChessRook>& lp, const std::weak_ptr<Interactable_ChessRook>& rp) const
+		{
+			return &lp > &rp;
+		}
+	};
+
+	struct CustomCompBishop
+	{
+		bool operator()(const std::weak_ptr<Interactable_ChessBishop>& lp, const std::weak_ptr<Interactable_ChessBishop>& rp) const
+		{
+			return &lp > &rp;
+		}
+	};
+}
 
 struct POD_BossSummonChessSkill
 {
 	/// 보스방 기준, 좌측 하단의 칸 중심 위치입니다.
-	application::POD_Vector3<float> pivotPos = { -1553.66f, 0, 52.06f };
+	float pivotPos_x = -1553.66f;
+	float pivotPos_z = 52.06f;
 	int horizontalSpaces = 18;
 	int verticalSpaces = 20;
 
@@ -15,7 +45,8 @@ struct POD_BossSummonChessSkill
 	int rectUnitRadius = 2;
 	int summonCount = 3;
 	float offset_Y = 6;
-	float summonTime = 0.5;
+	float summonTime = 2;
+	bool intervalSummon = true;
 	float chessSummonedExplosionDelay = 1.5f;
 
 	TO_JSON(POD_BossSummonChessSkill)
@@ -25,6 +56,7 @@ struct POD_BossSummonChessSkill
 class BossSummonChessSkill : public Skill
 {
 public:
+	virtual ~BossSummonChessSkill() override;
 	BossSummonChessSkill() {}
 	virtual SkillType::Enum GetSkillType() { return SkillType::Enum::BossSkill_Four; }
 	virtual coroutine::Coroutine operator()()override;
@@ -33,7 +65,10 @@ public:
 	static POD_BossSummonChessSkill pod;
 
 private:
-	coroutine::Coroutine SummonChess(Vector2i index);
+	std::set<std::weak_ptr<Interactable_ChessPawn>, BossSkill::CustomCompPawn> borrowedPawns = std::set<std::weak_ptr<Interactable_ChessPawn>, BossSkill::CustomCompPawn>();
+	std::set<std::weak_ptr<Interactable_ChessRook>, BossSkill::CustomCompRook> borrowedRooks = std::set<std::weak_ptr<Interactable_ChessRook>, BossSkill::CustomCompRook>();
+	std::set<std::weak_ptr<Interactable_ChessBishop>, BossSkill::CustomCompBishop> borrowedBishops = std::set<std::weak_ptr<Interactable_ChessBishop>, BossSkill::CustomCompBishop>();
+	coroutine::Coroutine SummonChess(std::weak_ptr<BossSummonChessSkill> skill, Vector2i index);
 	Vector2i GetPlaceableIndex(Vector3d pos);
 };
 

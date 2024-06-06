@@ -25,14 +25,17 @@ void Interactable_ChessPawn::Start()
 	auto boxCollider = GetGameObject()->AddComponent<physics::BoxCollider>();
 	boxCollider->SetHalfExtent(chessBlockUnitLength * 0.5 * Vector3d::one);
 
-	for (auto each : GetGameObject()->GetChildren())
+	auto fbxObj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(fbxName);
+	fbxObj->SetParent(GetGameObject());
+	fbxObj->GetTransform()->SetLocalPosition(Vector3d::zero);
+	for (auto each : fbxObj->GetChildren())
 	{
 		auto renderer = each->GetComponent<graphics::StaticMeshRenderer>();
 		if (renderer)
 		{
 			mesh = each;
 			const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-			orginTexture = resourceManager->GetTexture(L"FBX/SM_Chess_Pawn/SM_Chess_Pawn.fbm/T_Chess_Pawn_BaseColor.dds");
+			orginTexture = resourceManager->GetTexture(L"FBX/SM_Chess_Rook/SM_Chess_Rook.fbm/T_Chess_Rook_BaseColor.dds");
 			flashTexture = resourceManager->GetTexture(L"Texture/Interactable/BombFlash.png");
 			break;
 		}
@@ -82,6 +85,7 @@ void Interactable_ChessPawn::Update()
 			if (ratio >= 1)
 			{
 				OnInteractableTriggerEnter();
+				localSummonedTime = 0;
 			}
 		}
 	}
@@ -197,4 +201,31 @@ void Interactable_ChessPawn::SetDataFromEditorData(const application::editor::In
 	damage = data.pod.templateData->pod.damage;
 	delayTime = data.pod.templateData->pod.delayTime;
 	particleEffectTime = data.pod.templateData->pod.particleEffectTime;
+	fbxName = data.pod.templateData->pod.fBXName;
+}
+
+void Interactable_ChessPawn::Reload()
+{
+	if (mesh)
+	{
+		mesh->SetSelfActive(true);
+		mesh->GetTransform()->SetLocalPosition(Vector3d::zero);
+		auto renderer = mesh->GetComponent<graphics::StaticMeshRenderer>();
+		renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::ALBEDO, orginTexture);
+	}
+
+	if (!lastCoroutine.expired())
+	{
+		DeleteCoroutine(lastCoroutine);
+	}
+
+	if (!bombObjList.empty())
+	{
+		for (auto each : bombObjList)
+		{
+			each->GetComponent<ChessBombComponent>()->Reload();
+		}
+	}
+
+	GetGameObject()->SetSelfActive(true);
 }

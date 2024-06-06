@@ -21,6 +21,9 @@ public:
 
 	virtual void SetDataFromEditorData(const application::editor::InteractableData& data) override;
 
+	/// Pool 에서 사용하기 위한 초기화 함수입니다.
+	void Reload();
+
 private:
 	Vector3d initPos = Vector3d(0, 0, 0);
 	Quaternion initRotation = Quaternion();
@@ -39,5 +42,6 @@ private:
 	std::vector<GameObject*> bombObjList = std::vector<GameObject*>();
 	float guideUp_Y = 0.01;
 	float localSummonedTime = 0;
+	std::string fbxName = "SM_Chess_Bishop";
 };
 

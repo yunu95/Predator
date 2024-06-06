@@ -21,10 +21,16 @@ public:
 		comp.lock()->chessBlockUnitOffset = application::GlobalConstant::GetSingletonInstance().pod.chessBlockUnitOffset;
 		comp.lock()->vibeMaxOffset = application::GlobalConstant::GetSingletonInstance().pod.vibeMaxOffset;
 
-		assert(templateData && "templateData must already be matched.");
+		assert(templateData != nullptr && "templateData must already be matched.");
 		comp.lock()->damage = templateData->pod.damage;
 		comp.lock()->delayTime = templateData->pod.delayTime;
 		comp.lock()->particleEffectTime = templateData->pod.particleEffectTime;
+		comp.lock()->fbxName = templateData->pod.fBXName;
+	}
+
+	virtual void OnBorrow(std::weak_ptr<Interactable_ChessPawn> comp) override
+	{
+		comp.lock()->Reload();
 	}
 
 	virtual void OnContentsPlay() override
@@ -72,10 +78,22 @@ public:
 		comp.lock()->chessBlockUnitOffset = application::GlobalConstant::GetSingletonInstance().pod.chessBlockUnitOffset;
 		comp.lock()->vibeMaxOffset = application::GlobalConstant::GetSingletonInstance().pod.vibeMaxOffset;
 
-		assert(templateData && "templateData must already be matched.");
+		assert(templateData != nullptr && "templateData must already be matched.");
 		comp.lock()->damage = templateData->pod.damage;
 		comp.lock()->delayTime = templateData->pod.delayTime;
 		comp.lock()->particleEffectTime = templateData->pod.particleEffectTime;
+		comp.lock()->fbxName = templateData->pod.fBXName;
+	}
+
+	virtual void OnBorrow(std::weak_ptr<Interactable_ChessRook> comp) override
+	{
+		comp.lock()->Reload();
+	}
+
+	virtual void OnContentsPlay() override
+	{
+		this->SetActive(true);
+		MatchTemplateData();
 	}
 
 	virtual void OnContentsStop() override
@@ -117,10 +135,22 @@ public:
 		comp.lock()->chessBlockUnitOffset = application::GlobalConstant::GetSingletonInstance().pod.chessBlockUnitOffset;
 		comp.lock()->vibeMaxOffset = application::GlobalConstant::GetSingletonInstance().pod.vibeMaxOffset;
 
-		assert(templateData && "templateData must already be matched.");
+		assert(templateData != nullptr && "templateData must already be matched.");
 		comp.lock()->damage = templateData->pod.damage;
 		comp.lock()->delayTime = templateData->pod.delayTime;
 		comp.lock()->particleEffectTime = templateData->pod.particleEffectTime;
+		comp.lock()->fbxName = templateData->pod.fBXName;
+	}
+
+	virtual void OnBorrow(std::weak_ptr<Interactable_ChessBishop> comp) override
+	{
+		comp.lock()->Reload();
+	}
+
+	virtual void OnContentsPlay() override
+	{
+		this->SetActive(true);
+		MatchTemplateData();
 	}
 
 	virtual void OnContentsStop() override

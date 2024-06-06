@@ -5,14 +5,31 @@
 #include "Interactable_ChessRook.h"
 #include "Interactable_ChessBishop.h"
 #include "GlobalConstant.h"
+#include "YunutyWaitForSeconds.h"
 
 POD_BossSummonChessSkill BossSummonChessSkill::pod = POD_BossSummonChessSkill();
 
+BossSummonChessSkill::~BossSummonChessSkill()
+{
+	for (auto each : borrowedPawns)
+	{
+		Interactable_ChessPool::Instance().Return(each);
+	}
+	for (auto each : borrowedRooks)
+	{
+		Interactable_ChessPool::Instance().Return(each);
+	}
+	for (auto each : borrowedBishops)
+	{
+		Interactable_ChessPool::Instance().Return(each);
+	}
+}
+
 coroutine::Coroutine BossSummonChessSkill::operator()()
 {
-	owner.lock()->PlayAnimation(UnitAnimType::Skill4, true);
+	owner.lock()->PlayAnimation(UnitAnimType::Taunt, true);
 	auto animator = owner.lock()->GetAnimator();
-	auto anim = wanderResources::GetAnimation(owner.lock()->name, UnitAnimType::Skill2);
+	auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Taunt);
 	coroutine::ForSeconds forSeconds{ anim->GetDuration() };
 	Vector3d farUnitPos = Vector3d();
 	Vector3d ownerPos = owner.lock()->GetTransform()->GetWorldPosition();
@@ -21,7 +38,7 @@ coroutine::Coroutine BossSummonChessSkill::operator()()
 	//for (auto pUnit : PlayerUnitList)
 	//{
 	//	float tempVal = (pUnit->GetTransform()->GetWorldPosition() - ownerPos).MagnitudeSqr();
-	//	if (distance <= tempVal)
+	//	if (pUnit->IsAlive() && distance <= tempVal)
 	//	{
 	//		distance = tempVal;
 	//		farUnitPos = pUnit->GetTransform()->GetWorldPosition();
@@ -29,7 +46,7 @@ coroutine::Coroutine BossSummonChessSkill::operator()()
 	//}
 
 	farUnitPos = ownerPos;
-	owner.lock()->StartCoroutine(SummonChess(GetPlaceableIndex(farUnitPos)));
+	owner.lock()->StartCoroutine(SummonChess(std::static_pointer_cast<BossSummonChessSkill>(selfWeakPtr.lock()), GetPlaceableIndex(farUnitPos)));
 	while (forSeconds.Tick())
 	{
 		co_await std::suspend_always{};
@@ -43,8 +60,11 @@ void BossSummonChessSkill::OnInterruption()
 
 }
 
-coroutine::Coroutine BossSummonChessSkill::SummonChess(Vector2i index)
+
+coroutine::Coroutine BossSummonChessSkill::SummonChess(std::weak_ptr<BossSummonChessSkill> skill, Vector2i index)
 {
+	auto sptr = skill.lock();
+
 	if (index.x < pod.rectUnitRadius)
 	{
 		index.x = pod.rectUnitRadius;
@@ -58,7 +78,7 @@ coroutine::Coroutine BossSummonChessSkill::SummonChess(Vector2i index)
 	{
 		index.y = pod.rectUnitRadius;
 	}
-	else if (index.x > pod.verticalSpaces - 1 - pod.rectUnitRadius)
+	else if (index.y > pod.verticalSpaces - 1 - pod.rectUnitRadius)
 	{
 		index.y = pod.verticalSpaces - 1 - pod.rectUnitRadius;
 	}
@@ -66,11 +86,10 @@ coroutine::Coroutine BossSummonChessSkill::SummonChess(Vector2i index)
 	auto& gc = GlobalConstant::GetSingletonInstance().pod;
 	float unitLength = gc.chessBlockUnitLength + gc.chessBlockUnitOffset;
 
-	std::unordered_set<std::weak_ptr<Interactable_ChessPawn>> borrowedPawns = std::unordered_set<std::weak_ptr<Interactable_ChessPawn>>();
-	std::unordered_set<std::weak_ptr<Interactable_ChessRook>> borrowedRooks = std::unordered_set<std::weak_ptr<Interactable_ChessRook>>();
-	std::unordered_set<std::weak_ptr<Interactable_ChessBishop>> borrowedBishops = std::unordered_set<std::weak_ptr<Interactable_ChessBishop>>();
 	std::unordered_set<unsigned int> chessIndex = std::unordered_set<unsigned int>();
-	
+	std::vector<std::weak_ptr<IInteractableComponent>> chessList = std::vector<std::weak_ptr<IInteractableComponent>>();
+	chessList.reserve(pod.summonCount);
+
 	for (int i = 0; i < pod.summonCount; i++)
 	{
 		std::weak_ptr<IInteractableComponent> container;
@@ -111,49 +130,11 @@ coroutine::Coroutine BossSummonChessSkill::SummonChess(Vector2i index)
 			}
 		}
 
-		float finalX = pod.pivotPos.x + (index.x - pod.rectUnitRadius + arrIdx % sideLength) * unitLength;
-		float finalZ = pod.pivotPos.z + (index.y - pod.rectUnitRadius + arrIdx / sideLength) * unitLength;
+		float finalX = pod.pivotPos_x + (index.x - pod.rectUnitRadius + arrIdx % sideLength) * unitLength;
+		float finalZ = pod.pivotPos_z + (index.y - pod.rectUnitRadius + arrIdx / sideLength) * unitLength;
 
 		container.lock()->GetTransform()->SetWorldPosition(Vector3d(finalX, pod.offset_Y, finalZ));
-	}
-
-	coroutine::ForSeconds forSeconds{ pod.summonTime };
-	auto velocity = wanderUtils::GetInitSpeedOfFreeFall(pod.summonTime, Vector3d(0, pod.offset_Y, 0), Vector3d::zero);
-	while (forSeconds.Tick())
-	{
-		velocity += Vector3d::down * gc.gravitySpeed * forSeconds.Elapsed();
-		for (auto each : borrowedPawns)
-		{
-			each.lock()->GetTransform()->SetWorldPosition(each.lock()->GetTransform()->GetWorldPosition() + velocity * forSeconds.Elapsed());
-			auto tempPos = each.lock()->GetTransform()->GetWorldPosition();
-			if (tempPos.y < 0)
-			{
-				tempPos.y = 0;
-				each.lock()->GetTransform()->SetWorldPosition(tempPos);
-			}
-		}
-		for (auto each : borrowedRooks)
-		{
-			each.lock()->GetTransform()->SetWorldPosition(each.lock()->GetTransform()->GetWorldPosition() + velocity * forSeconds.Elapsed());
-			auto tempPos = each.lock()->GetTransform()->GetWorldPosition();
-			if (tempPos.y < 0)
-			{
-				tempPos.y = 0;
-				each.lock()->GetTransform()->SetWorldPosition(tempPos);
-			}
-		}
-		for (auto each : borrowedBishops)
-		{
-			each.lock()->GetTransform()->SetWorldPosition(each.lock()->GetTransform()->GetWorldPosition() + velocity * forSeconds.Elapsed());
-			auto tempPos = each.lock()->GetTransform()->GetWorldPosition();
-			if (tempPos.y < 0)
-			{
-				tempPos.y = 0;
-				each.lock()->GetTransform()->SetWorldPosition(tempPos);
-			}
-		}
-
-		co_await std::suspend_always{};
+		chessList.push_back(container);
 	}
 
 	auto playDust = [=](GameObject* target)->void
@@ -209,21 +190,48 @@ coroutine::Coroutine BossSummonChessSkill::SummonChess(Vector2i index)
 				break;
 			}
 		}
+		pComp->Play();
 	};
 
-	/// 낙하할 때 사운드 관련 작업 필요
-	for (auto each : borrowedPawns)
+	coroutine::ForSeconds forSeconds{ pod.summonTime };
+	Vector3d indivVelocity = Vector3d();
+	int summoned = 1;
+	if (!pod.intervalSummon)
 	{
-		playDust(each.lock()->GetGameObject());
+		summoned = pod.summonCount;
+		indivVelocity = wanderUtils::GetInitSpeedOfFreeFall(pod.summonTime, Vector3d(0, pod.offset_Y, 0), Vector3d::zero);
 	}
-	for (auto each : borrowedRooks)
+	else
 	{
-		playDust(each.lock()->GetGameObject());
+		assert(pod.summonCount != 0);
+		indivVelocity = wanderUtils::GetInitSpeedOfFreeFall(pod.summonTime / pod.summonCount, Vector3d(0, pod.offset_Y, 0), Vector3d::zero);
 	}
-	for (auto each : borrowedBishops)
+	std::vector<Vector3d> velocityList = std::vector<Vector3d>(pod.summonCount, indivVelocity);
+
+	while (forSeconds.Tick())
 	{
-		playDust(each.lock()->GetGameObject());
+		if (pod.intervalSummon && forSeconds.ElapsedNormalized() < 1 && forSeconds.ElapsedNormalized() >= 1 / (float)pod.summonCount * summoned)
+		{
+			summoned++;
+		}
+
+		for (int i = 0; i < summoned; i++)
+		{
+			velocityList[i] += Vector3d::down * gc.gravitySpeed * forSeconds.Elapsed();
+			chessList[i].lock()->GetTransform()->SetWorldPosition(chessList[i].lock()->GetTransform()->GetWorldPosition() + velocityList[i] * forSeconds.Elapsed());
+			auto tempPos = chessList[i].lock()->GetTransform()->GetWorldPosition();
+			if (tempPos.y < 0)
+			{
+				tempPos.y = 0;
+				chessList[i].lock()->GetTransform()->SetWorldPosition(tempPos);
+				/// 낙하할 때 사운드 관련 작업 필요
+				playDust(chessList[i].lock()->GetGameObject());
+			}
+		}
+		co_await std::suspend_always{};
 	}
+
+	co_await std::suspend_always{};
 
 	float maxDelayTime = 0;
 	float maxParticleTime = 0;
@@ -249,18 +257,6 @@ coroutine::Coroutine BossSummonChessSkill::SummonChess(Vector2i index)
 		co_await std::suspend_always{};
 	}
 	
-	for (auto each : borrowedPawns)
-	{
-		Interactable_ChessPool::Instance().Return(each);
-	}
-	for (auto each : borrowedRooks)
-	{
-		Interactable_ChessPool::Instance().Return(each);
-	}
-	for (auto each : borrowedBishops)
-	{
-		Interactable_ChessPool::Instance().Return(each);
-	}
 	co_return;
 }
 
@@ -280,7 +276,7 @@ Vector2i BossSummonChessSkill::GetPlaceableIndex(Vector3d pos)
 		horizontalMap.clear();
 		for (int i = 0; i < pod.horizontalSpaces - 1; i++)
 		{
-			horizontalMap.insert({ pod.pivotPos.x + i * unitLength, i});
+			horizontalMap.insert({ pod.pivotPos_x + unitLength / 2 + i * unitLength, i});
 		}
 	}
 
@@ -289,7 +285,7 @@ Vector2i BossSummonChessSkill::GetPlaceableIndex(Vector3d pos)
 		verticalMap.clear();
 		for (int i = 0; i < pod.verticalSpaces - 1; i++)
 		{
-			verticalMap.insert({ pod.pivotPos.z + i * unitLength, i });
+			verticalMap.insert({ pod.pivotPos_z + unitLength / 2 + i * unitLength, i });
 		}
 	}
 
