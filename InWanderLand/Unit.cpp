@@ -254,6 +254,15 @@ bool Unit::IsAlive() const
 {
     return isAlive;
 }
+std::string Unit::GetFBXName() const
+{
+    if (!skinnedMeshGameObject)
+    {
+        return std::string();
+    }
+
+    return skinnedMeshGameObject->getName();
+}
 void Unit::Damaged(std::weak_ptr<Unit> opponentUnit, float opponentDmg)
 {
     opponentUnit.lock()->onAttackHit();

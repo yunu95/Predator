@@ -66,7 +66,6 @@ namespace application
         GC<int>	maxResurrectCount;
         GC<float> chessBlockUnitLength = 3.4f;
         GC<float> chessBlockUnitOffset = 0.1f;
-        GC<float> chessSummonedExplosionDelay = 1.5f;
         GC<float> vibeMaxOffset = 0.12f;
         GC<float> defaultAnimBlendTime = 0.32f;
 

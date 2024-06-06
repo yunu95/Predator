@@ -7,9 +7,7 @@
 #include "SkillPreviewSystem.h"
 #include "GameManager.h"
 #include "UIManager.h"
-#include "EnemyImpaleSkill.h"
-#include "BossImpaleSkill.h"
-
+#include "SkillList.h"
 
 const std::unordered_map<UIEnumID, SkillUpgradeType::Enum> PlayerController::skillByUI
 {

@@ -24,11 +24,15 @@ public:
 
 	std::unordered_set<Unit*>& GetUnitsInTrigger() { return unitSet; }
 
+	/// Pool 에서 사용하기 위한 초기화 함수입니다.
+	void Reload();
+
 private:
 	GameObject* guideObj = nullptr;
 	GameObject* particleObj = nullptr;
 	std::unordered_set<Unit*> unitSet = std::unordered_set<Unit*>();
 	float bombTime = 0;
 	bool coroutineStart = false;
+	std::weak_ptr<yunutyEngine::coroutine::Coroutine> lastCoroutine = std::weak_ptr<yunutyEngine::coroutine::Coroutine>();
 };
 

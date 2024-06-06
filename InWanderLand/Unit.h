@@ -94,6 +94,7 @@ public:
     bool IsPlayerUnit() const;
     bool IsInvulenerable() const;
     bool IsAlive()const;
+    std::string GetFBXName() const;
     // 유닛의 행동 트리 상태가 전환될 때
     std::array<DelegateCallback<void()>, UnitBehaviourTree::Keywords::KeywordNum>& OnStateEngageCallback() { return onStateEngage; };
     std::array<DelegateCallback<void()>, UnitBehaviourTree::Keywords::KeywordNum>& OnStateExitCallback() { return onStateExit; };
