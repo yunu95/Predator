@@ -33,7 +33,7 @@ coroutine::Coroutine RobinChargeSkill::operator()()
         for (auto& each : knockbackCollider.lock()->GetEnemies())
         {
             Vector3d delta = gc.robinQSkillRushKnockbackDistance * (each->GetTransform()->GetWorldPosition() - currentPos).Normalized();
-            each->KnockBack(each->GetTransform()->GetWorldPosition() + delta, gc.robinQSkillRushKnockbackDuration);
+            each->KnockBackRelativeVector(delta, gc.robinQSkillRushKnockbackDuration);
             each->Damaged(owner, gc.robinQSkillDamageRush);
         }
     }

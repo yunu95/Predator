@@ -22,17 +22,24 @@ coroutine::Coroutine HanselProjectileSkill::ThrowingPie()
     co_await std::suspend_always{};
 
     pieCollider.lock()->SetRadius(pod.projectileRadius);
+    pieObject->GetTransform()->SetWorldScale({ 3,3,3 });
     pieCollider.lock()->GetTransform()->SetWorldRotation(direction);
-    //pieObject->GetTransform()->SetWorldRotation(direction);
-    pieObject->GetTransform()->SetWorldScale({3,3,3});
+	pieObject->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction.up * -1, direction));
     //pieObject->GetTransform()->SetWorldRotation(pieObject->GetTransform()->GetWorldRotation().Up() * -1);
-    
+    float rotatePerFrame = 0.0f;
+
     while (forSeconds.Tick())
     {
         currentPos += direction * pod.projectileSpeed * Time::GetDeltaTime();
         pieCollider.lock()->GetTransform()->SetWorldPosition(currentPos);
-        pieObject->GetTransform()->SetWorldPosition(currentPos);
-        //pieObject->GetTransform()->SetWorldRotation(direction);
+        pieObject->GetTransform()->SetWorldPosition(currentPos + Vector3d(0, pod.pieHeight, 0 ));
+
+        rotatePerFrame += pod.pieRotateSpeed * Time::GetDeltaTime();
+
+        Vector3d directionPerFrame = (endPos - currentPos).Normalized();
+		//pieObject->GetTransform()->SetWorldRotation(pieObject->GetTransform()->GetWorldRotation() + Vector3d(rotatePerFrame, 0, 0));
+        //pieObject->GetTransform()->SetWorldRotation(Quaternion::MakeAxisAngleQuaternion((pieObject->GetTransform()->GetWorldPosition() + directionPerFrame).right, rotatePerFrame));
+
         co_await std::suspend_always{};
         for (auto& each : pieCollider.lock()->GetEnemies())
         {
