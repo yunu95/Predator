@@ -757,6 +757,21 @@
     <Filter Include="Contents_Refactored\Unit\UnitBehaviourTree">
       <UniqueIdentifier>{9d73307d-396f-481a-9995-7af1d80ce8db}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents_Refactored\Skill\Boss">
+      <UniqueIdentifier>{27bf9416-b645-4f7f-9232-3c3c0bf41e59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Skill\Boss\Skill4">
+      <UniqueIdentifier>{05af4126-3c4c-4f28-97c2-4f499463069f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Skill\Boss\Skill3">
+      <UniqueIdentifier>{d303218b-177b-4e0a-86a8-b703eae0c705}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Skill\Boss\Skill2">
+      <UniqueIdentifier>{39c3c1d6-5b5b-465e-b15c-00d8b36f4c60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Skill\Boss\Skill1">
+      <UniqueIdentifier>{1e8cf35f-479e-46f8-a753-aa6147f19d71}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -1849,6 +1864,18 @@
     <ClInclude Include="SkillList.h">
       <Filter>Contents_Refactored\Skill</Filter>
     </ClInclude>
+    <ClInclude Include="BossSpinAttackSkill.h">
+      <Filter>Contents_Refactored\Skill\Boss\Skill1</Filter>
+    </ClInclude>
+    <ClInclude Include="BossImpaleSkill.h">
+      <Filter>Contents_Refactored\Skill\Boss\Skill2</Filter>
+    </ClInclude>
+    <ClInclude Include="BossSummonMobSkill.h">
+      <Filter>Contents_Refactored\Skill\Boss\Skill3</Filter>
+    </ClInclude>
+    <ClInclude Include="BossDebuffFieldSkill.h">
+      <Filter>Contents_Refactored\Skill\Boss\Skill4</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -2772,6 +2799,18 @@
     </ClCompile>
     <ClCompile Include="Skill.cpp">
       <Filter>Contents_Refactored\Skill</Filter>
+    </ClCompile>
+    <ClCompile Include="BossSpinAttackSkill.cpp">
+      <Filter>Contents_Refactored\Skill\Boss\Skill1</Filter>
+    </ClCompile>
+    <ClCompile Include="BossImpaleSkill.cpp">
+      <Filter>Contents_Refactored\Skill\Boss\Skill2</Filter>
+    </ClCompile>
+    <ClCompile Include="BossSummonMobSkill.cpp">
+      <Filter>Contents_Refactored\Skill\Boss\Skill3</Filter>
+    </ClCompile>
+    <ClCompile Include="BossDebuffFieldSkill.cpp">
+      <Filter>Contents_Refactored\Skill\Boss\Skill4</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
