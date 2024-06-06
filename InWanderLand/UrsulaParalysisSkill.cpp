@@ -10,7 +10,7 @@ coroutine::Coroutine UrsulaParalysisSkill::operator()()
 {
     owner.lock()->PlayAnimation(UnitAnimType::Skill2, true);
     auto animator = owner.lock()->GetAnimator();
-    auto anim = wanderResources::GetAnimation(owner.lock()->name, UnitAnimType::Skill2);
+    auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill2);
     coroutine::ForSeconds forSeconds{ anim->GetDuration() };
     skillCollider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
     skillCollider.lock()->SetRadius(pod.skillRadius);

@@ -5,7 +5,7 @@ POD_BossSpinAttackSkill BossSpinAttackSkill::pod = POD_BossSpinAttackSkill();
 
 coroutine::Coroutine BossSpinAttackSkill::operator()()
 {
-	owner.lock()->PlayAnimation(UnitAnimType::Spin, true);
+	owner.lock()->PlayAnimation(UnitAnimType::Skill1, true);
 	coroutine::ForSeconds forSeconds{ pod.skillPlayTime };
 	knockBackCollider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
 	knockBackCollider.lock()->SetRadius(pod.skillRadius);

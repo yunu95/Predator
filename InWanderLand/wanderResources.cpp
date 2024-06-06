@@ -67,16 +67,16 @@ void InitAnimMap()
     animMap["SKM_Monster2"][UnitAnimType::Move] = localAnimMap[L"Ani_Monster2_Walk"];
     animMap["SKM_Monster2"][UnitAnimType::BattleMove] = localAnimMap[L"Ani_Monster2_Walk"];
 
-    animMap["SKM_HeartQueen"][UnitAnimType::Attack] = localAnimMap[L"Ani_HeartQueen_Attack"];
-    animMap["SKM_HeartQueen"][UnitAnimType::Death] = localAnimMap[L"Ani_HeartQueen_Death"];
-    animMap["SKM_HeartQueen"][UnitAnimType::Idle] = localAnimMap[L"Ani_HeartQueen_Idle"];
-    animMap["SKM_HeartQueen"][UnitAnimType::BattleIdle] = localAnimMap[L"Ani_HeartQueen_Idle"];
-    animMap["SKM_HeartQueen"][UnitAnimType::Spin] = localAnimMap[L"Ani_HeartQueen_Skill1"];
-    animMap["SKM_HeartQueen"][UnitAnimType::Skill2] = localAnimMap[L"Ani_HeartQueen_Skill2"];
-    animMap["SKM_HeartQueen"][UnitAnimType::Skill3] = localAnimMap[L"Ani_HeartQueen_Skill3"];
-    animMap["SKM_HeartQueen"][UnitAnimType::Skill4] = localAnimMap[L"Ani_HeartQueen_Skill4"];
-    animMap["SKM_HeartQueen"][UnitAnimType::BattleMove] = localAnimMap[L"Ani_HeartQueen_Walk"];
-    animMap["SKM_HeartQueen"][UnitAnimType::Move] = localAnimMap[L"Ani_HeartQueen_Walk"];
+    animMap["SKM_HeartQueen"][UnitAnimType::Attack] = localAnimMap[L"root|Ani_HeartQueen_Attack"];
+    animMap["SKM_HeartQueen"][UnitAnimType::Death] = localAnimMap[L"root|Ani_HeartQueen_Death"];
+    animMap["SKM_HeartQueen"][UnitAnimType::Idle] = localAnimMap[L"root|Ani_HeartQueen_Idle"];
+    animMap["SKM_HeartQueen"][UnitAnimType::BattleIdle] = localAnimMap[L"root|Ani_HeartQueen_Idle"];
+    animMap["SKM_HeartQueen"][UnitAnimType::Skill1] = localAnimMap[L"root|Ani_HeartQueen_Skill1"];
+    animMap["SKM_HeartQueen"][UnitAnimType::Skill2] = localAnimMap[L"root|Ani_HeartQueen_Skill2"];
+    animMap["SKM_HeartQueen"][UnitAnimType::Skill3] = localAnimMap[L"root|Ani_HeartQueen_Skill3"];
+    animMap["SKM_HeartQueen"][UnitAnimType::Skill4] = localAnimMap[L"root|Ani_HeartQueen_Skill3"];
+    animMap["SKM_HeartQueen"][UnitAnimType::BattleMove] = localAnimMap[L"root|Ani_HeartQueen_Walk"];
+    animMap["SKM_HeartQueen"][UnitAnimType::Move] = localAnimMap[L"root|Ani_HeartQueen_Walk"];
     // 없는 애니메이션들은 전부 Idle로 대체한다.
     for (auto& each : animMap)
     {
