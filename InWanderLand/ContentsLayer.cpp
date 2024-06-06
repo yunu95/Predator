@@ -92,66 +92,18 @@ public:
 class TestComponent4 : public yunutyEngine::Component
 {
 public:
-	SkillPreviewSystem* system;
-	yunutyEngine::GameObject* obj;
-	bool isShow = false;
-	BurnEffect* effect;
+	yunutyEngine::graphics::Animator* anim;
+	yunuGI::IAnimation* idleAnimation;
+	yunuGI::IAnimation* walkAnimation;
 	virtual void Update() override
 	{
 		if (Input::isKeyPushed(yunutyEngine::KeyCode::V))
 		{
-			isShow = true;
-			obj->SetSelfActive(true);
+			anim->ChangeAnimation(walkAnimation, 0.4, 1.f);
 		}
 		if (Input::isKeyPushed(yunutyEngine::KeyCode::C))
 		{
-			isShow = false;
-			obj->SetSelfActive(false);
-		}
-		auto curPos = GetTransform()->GetLocalPosition();
-		auto curRot = GetTransform()->GetLocalRotation();
-		// 이동
-		if (Input::isKeyDown(yunutyEngine::KeyCode::I))
-		{
-			curPos.z = curPos.z + (2 * Time::GetDeltaTime());
-			obj->GetTransform()->SetLocalPosition(curPos);
-		}
-		if (Input::isKeyDown(yunutyEngine::KeyCode::K))
-		{
-			curPos.z = curPos.z - (2 * Time::GetDeltaTime());
-			obj->GetTransform()->SetLocalPosition(curPos);
-		}
-		if (Input::isKeyDown(yunutyEngine::KeyCode::J))
-		{
-			curPos.x = curPos.x - (2 * Time::GetDeltaTime());
-			obj->GetTransform()->SetLocalPosition(curPos);
-		}
-		if (Input::isKeyDown(yunutyEngine::KeyCode::L))
-		{
-			curPos.x = curPos.x + (2 * Time::GetDeltaTime());
-			obj->GetTransform()->SetLocalPosition(curPos);
-		}
-		if (Input::isKeyDown(yunutyEngine::KeyCode::U))
-		{
-			effect->Appear();
-		}
-		if (Input::isKeyDown(yunutyEngine::KeyCode::O))
-		{
-			effect->DisAppear();
-		}
-		if (Input::isKeyDown(yunutyEngine::KeyCode::Y))
-		{
-			obj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,0 });
-		}
-
-		if (Input::isKeyPushed(yunutyEngine::KeyCode::T))
-		{
-			std::vector<Vector3d> a;
-			a.push_back(Vector3d{ 0,0,0 });
-			a.push_back(Vector3d{ 0,0,0.5 });
-			a.push_back(Vector3d{ 1,0,1 });
-			system->ShowRoute(SkillPreviewSystem::UnitType::Robin, a);
-			//system->ShowRoute(a);
+			anim->ChangeAnimation(idleAnimation, 0.4, 1.f);
 		}
 	}
 };
@@ -180,13 +132,15 @@ void GraphicsTest()
 
 	for (auto& i : animationList)
 	{
-		if (i->GetName() == L"root|Ani_SVFX_Wave")
+		if (i->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Idle")
 		{
+			i->SetLoop(true);
 			animation = i;
 		}
 
-		if (i->GetName() == L"root|Ani_SVFX_Tentacle")
+		if (i->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Walk")
 		{
+			i->SetLoop(true);
 			animation2 = i;
 		}
 
@@ -207,48 +161,34 @@ void GraphicsTest()
 	//	test->effect = effect;
 
 	//}
-	// 
-	for(int i =0; i <10;++i)
+	
 	{
-		for (int j = 0; j < 10; ++j)
-		{
-			auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Pie");
-			obj2->GetTransform()->SetLocalPosition(Vector3d{ (double)2 * i,0,(double)2*j});
-		}
-	}
-	{
-		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Hansel");
-		obj2->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-5 });
+		auto obj = Scene::getCurrentScene()->AddGameObject();
+		auto test = obj->AddComponent<TestComponent4>();
+
+		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
 		auto anim = obj2->GetComponent<yunutyEngine::graphics::Animator>();
+		anim->PushAnimation(animation);
+		auto obj3 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
+		obj3->GetTransform()->SetLocalPosition(Vector3d{ 5,0,0 });
+		obj3->SetSelfActive(false);
+		anim->PushAnimationWithFunc(animation2, 0, [=]() 
+			{
+				obj3->SetSelfActive(true);
+			});
+
+		anim->PushAnimationWithFunc(animation2, 29, [=]()
+			{
+				obj3->SetSelfActive(false);
+			});
+
+		anim->Play(animation2);
+
+		test->anim = anim;
+		test->idleAnimation = animation;
+		test->walkAnimation = animation2;
 	}
-	// 
-	//{
-	//	auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Stage1_Floor");
-	//}
-	//{
-	//	auto parent = Scene::getCurrentScene()->AddGameObject();
-	//	parent->SetSelfActive(false);
-
-	//	auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SVFX_Wave");
-	//	auto anim = obj2->GetComponent<yunutyEngine::graphics::Animator>();
-	//	anim->PushAnimation(animation);
-	//	anim->Play(animation);
-	//	obj2->AddComponent<VFXAnimator>();
-
-
-	//	auto obj3 = Scene::getCurrentScene()->AddGameObjectFromFBX("SVFX_Tentacle");
-	//	auto anim2 = obj3->GetComponent<yunutyEngine::graphics::Animator>();
-	//	anim2->PushAnimation(animation2);
-	//	anim2->Play(animation2);
-	//	
-
-	//	auto obj = Scene::getCurrentScene()->AddGameObject();
-	//	auto test = obj->AddComponent<TestComponent4>();
-	//	test->obj = parent;
-
-	//	obj2->SetParent(parent);
-	//	obj3->SetParent(parent);
-	//}
+	
 	yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
 	yunutyEngine::graphics::Renderer::SingleInstance().SetUseIBL(true);
 	//yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
