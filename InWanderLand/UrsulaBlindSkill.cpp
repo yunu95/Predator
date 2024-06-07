@@ -20,13 +20,7 @@ coroutine::Coroutine UrsulaBlindSkill::operator()()
     auto onTargetPosEffect2 = FBXPool::SingleInstance().Borrow("VFX_Ursula_Skill1_2");
     auto onTargetPosEffect3 = FBXPool::SingleInstance().Borrow("VFX_Ursula_Skill1_2");
 
-    onUrsulaPosEffect.lock()->GetGameObject()->SetSelfActive(false);
-    onTargetPosEffect1.lock()->GetGameObject()->SetSelfActive(false);
-    onTargetPosEffect2.lock()->GetGameObject()->SetSelfActive(false);
-    onTargetPosEffect3.lock()->GetGameObject()->SetSelfActive(false);
-
     UpdatePosition(owner.lock()->GetGameObject()->GetTransform()->GetWorldPosition(), targetPos);
-    co_await std::suspend_always{};
 
     owner.lock()->PlayAnimation(UnitAnimType::Skill1, true);
     auto animator = owner.lock()->GetAnimator();
@@ -43,22 +37,28 @@ coroutine::Coroutine UrsulaBlindSkill::operator()()
     circle_Left.lock()->GetTransform()->SetWorldPosition(GetSkillObjectPos_Left(skillDestination));
     circle_Right.lock()->GetTransform()->SetWorldPosition(GetSkillObjectPos_Right(skillDestination));
 
-    onUrsulaPosEffect.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
-    onTargetPosEffect1.lock()->GetTransform()->SetWorldPosition(GetSkillObjectPos_Top(skillDestination));
-    onTargetPosEffect2.lock()->GetTransform()->SetWorldPosition(GetSkillObjectPos_Left(skillDestination));
-    onTargetPosEffect3.lock()->GetTransform()->SetWorldPosition(GetSkillObjectPos_Right(skillDestination));
+    onUrsulaPosEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
+    onTargetPosEffect1.lock()->GetGameObject()->GetTransform()->SetWorldPosition(GetSkillObjectPos_Top(skillDestination));
+    onTargetPosEffect2.lock()->GetGameObject()->GetTransform()->SetWorldPosition(GetSkillObjectPos_Left(skillDestination));
+    onTargetPosEffect3.lock()->GetGameObject()->GetTransform()->SetWorldPosition(GetSkillObjectPos_Right(skillDestination));
+
+    auto onUrsulaPosAnimator = onUrsulaPosEffect.lock()->AcquireVFXAnimator();
+    onUrsulaPosAnimator.lock()->SetAutoActiveFalse();
+    onUrsulaPosAnimator.lock()->Init();
+
+    auto onTargetPosAnimator1 = onTargetPosEffect1.lock()->AcquireVFXAnimator();
+    onTargetPosAnimator1.lock()->SetAutoActiveFalse();
+    onTargetPosAnimator1.lock()->Init();
+
+    auto onTargetPosAnimator2 = onTargetPosEffect2.lock()->AcquireVFXAnimator();
+    onTargetPosAnimator2.lock()->SetAutoActiveFalse();
+    onTargetPosAnimator2.lock()->Init();
+
+    auto onTargetPosAnimator3 = onTargetPosEffect3.lock()->AcquireVFXAnimator();
+    onTargetPosAnimator3.lock()->SetAutoActiveFalse();
+    onTargetPosAnimator3.lock()->Init();
 
     co_await std::suspend_always{};
-
-    onUrsulaPosEffect.lock()->GetGameObject()->SetSelfActive(true);
-    onTargetPosEffect1.lock()->GetGameObject()->SetSelfActive(true);
-    onTargetPosEffect2.lock()->GetGameObject()->SetSelfActive(true);
-    onTargetPosEffect3.lock()->GetGameObject()->SetSelfActive(true);
-
-    //auto onUrsulaPosAnimator = onUrsulaPosEffect.lock()->GetGameObject()->GetChildren()[0]->AddComponent<VFXAnimator>();
-    auto onTargetPosAnimator1 = onTargetPosEffect1.lock()->GetGameObject()->GetChildren()[0]->AddComponent<VFXAnimator>();
-    auto onTargetPosAnimator2 = onTargetPosEffect2.lock()->GetGameObject()->GetChildren()[0]->AddComponent<VFXAnimator>();
-    auto onTargetPosAnimator3 = onTargetPosEffect3.lock()->GetGameObject()->GetChildren()[0]->AddComponent<VFXAnimator>();
 
     int hitCount = 0;
     while (forSeconds.Tick())
@@ -112,17 +112,17 @@ coroutine::Coroutine UrsulaBlindSkill::operator()()
         /// 우선은 여러 영역 겹칠 경우, 중복하여 대미지 계산함
         co_await std::suspend_always{};
     }
-
-    //while (!onTargetPosAnimator->IsDone())
-    //{
-    //    co_await std::suspend_always{};
-    //}
+    animator.lock()->Pause();
+    while (!onTargetPosAnimator1.lock()->IsDone())
+    {
+        co_await std::suspend_always{};
+    }
 
     FBXPool::SingleInstance().Return(onUrsulaPosEffect);
     FBXPool::SingleInstance().Return(onTargetPosEffect1);
     FBXPool::SingleInstance().Return(onTargetPosEffect2);
     FBXPool::SingleInstance().Return(onTargetPosEffect3);
-
+    animator.lock()->Resume();
     disableNavAgent.reset();
     blockFollowingNavigation.reset();
     owner.lock()->Relocate(owner.lock()->GetTransform()->GetWorldPosition());
