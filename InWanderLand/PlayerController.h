@@ -82,6 +82,8 @@ private:
     void HandleInput();
     // 카메라의 상태를 매 프레임마다 업데이트시켜주는 함수
     void HandleCamera();
+    // 스킬들의 프리뷰 이미지를 매 프레임마다 업데이트시켜주는 함수
+    void HandleSkillPreview();
     // character가 NONE일 경우 알아서 현재 선택된 스킬로 귀결된다.
     void OnLeftClick();
     void OnRightClick();
@@ -95,6 +97,7 @@ private:
     Vector3d GetWorldCursorPosition();
     // 연속으로 쌓은 콤보를 초기화한다.
     void ResetCombo();
+    void SetSelectedSkillType(SkillType::Enum selectedSkill);
     int currentCombo{ 0 };
     std::array<int, 3> comboObjective{ 10, 20, 30 };
     std::array<bool, 3> comboAchieved{ false };

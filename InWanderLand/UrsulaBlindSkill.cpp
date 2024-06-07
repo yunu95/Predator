@@ -28,9 +28,9 @@ coroutine::Coroutine UrsulaBlindSkill::operator()()
     circle_Right = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
     circle_Right.lock()->SetRadius(pod.skillRadius);
 
-    circle_Top.lock()->GetTransform()->SetWorldPosition(GetSkillObjectPos_Top());
-    circle_Left.lock()->GetTransform()->SetWorldPosition(GetSkillObjectPos_Left());
-    circle_Right.lock()->GetTransform()->SetWorldPosition(GetSkillObjectPos_Right());
+    circle_Top.lock()->GetTransform()->SetWorldPosition(GetSkillObjectPos_Top(skillDestination));
+    circle_Left.lock()->GetTransform()->SetWorldPosition(GetSkillObjectPos_Left(skillDestination));
+    circle_Right.lock()->GetTransform()->SetWorldPosition(GetSkillObjectPos_Right(skillDestination));
 
     co_await std::suspend_always{};
 
@@ -109,25 +109,25 @@ void UrsulaBlindSkill::UpdatePosition(const Vector3d& start, const Vector3d& des
     skillDestination = dest;
 }
 
-Vector3d UrsulaBlindSkill::GetSkillObjectPos_Top()
+Vector3d UrsulaBlindSkill::GetSkillObjectPos_Top(const Vector3d& dest)
 {
     auto length = pod.skillRadius * 2 + pod.skillOffset;
-    auto skillDir = (skillDestination - skillStart).Normalized();
-    return skillDestination + std::sqrt(3) / 3 * skillDir * length;
+    auto skillDir = (dest - skillStart).Normalized();
+    return dest + std::sqrt(3) / 3 * skillDir * length;
 }
 
-Vector3d UrsulaBlindSkill::GetSkillObjectPos_Left()
+Vector3d UrsulaBlindSkill::GetSkillObjectPos_Left(const Vector3d& dest)
 {
     auto length = pod.skillRadius * 2 + pod.skillOffset;
-    auto skillDir = (skillDestination - skillStart).Normalized();
+    auto skillDir = (dest - skillStart).Normalized();
     auto left = Vector3d::Cross(skillDir, Vector3d::up).Normalized();
-    return skillDestination - std::sqrt(3) / 6 * skillDir * length + left * length / 2;
+    return dest - std::sqrt(3) / 6 * skillDir * length + left * length / 2;
 }
 
-Vector3d UrsulaBlindSkill::GetSkillObjectPos_Right()
+Vector3d UrsulaBlindSkill::GetSkillObjectPos_Right(const Vector3d& dest)
 {
     auto length = pod.skillRadius * 2 + pod.skillOffset;
-    auto skillDir = (skillDestination - skillStart).Normalized();
+    auto skillDir = (dest - skillStart).Normalized();
     auto right = Vector3d::Cross(-skillDir, Vector3d::up).Normalized();
-    return skillDestination - std::sqrt(3) / 6 * skillDir * length + right * length / 2;
+    return dest - std::sqrt(3) / 6 * skillDir * length + right * length / 2;
 }

@@ -98,6 +98,7 @@ void PlayerController::Update()
     cursorUnitDetector.lock()->GetGameObject()->GetTransform()->SetWorldPosition(GetWorldCursorPosition());
     HandleInput();
     HandleCamera();
+    HandleSkillPreview();
 #ifdef EDITOR
     static yunutyEngine::graphics::UIText* text_State{ nullptr };
     if (text_State == nullptr)
@@ -191,6 +192,38 @@ void PlayerController::HandleCamera()
     }
     RTSCam::Instance().SetIdealPosition(targetPos);
     RTSCam::Instance().SetIdealRotation(camRotation);
+}
+
+void PlayerController::HandleSkillPreview()
+{
+    switch (selectedSkill)
+    {
+    case SkillType::ROBIN_Q:
+        SkillPreviewSystem::Instance().ShowRobinQSkill(characters[PlayerCharacterType::Robin].lock()->GetTransform()->GetWorldPosition());
+        SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Robin, characters[PlayerCharacterType::Robin].lock()->GetTransform()->GetWorldPosition(), RobinChargeSkill::pod.maxDistance);
+        break;
+    case SkillType::URSULA_Q:
+    {
+        auto pos1 = UrsulaBlindSkill::GetSkillObjectPos_Left(GetWorldCursorPosition());
+        auto pos2 = UrsulaBlindSkill::GetSkillObjectPos_Right(GetWorldCursorPosition());
+        auto pos3 = UrsulaBlindSkill::GetSkillObjectPos_Top(GetWorldCursorPosition());
+        SkillPreviewSystem::Instance().ShowUrsulaQSkill(pos1, pos2, pos3, Vector3d::one * UrsulaBlindSkill::pod.skillRadius);
+        SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Ursula, characters[PlayerCharacterType::Ursula].lock()->GetTransform()->GetWorldPosition(), UrsulaBlindSkill::pod.skillRange);
+        break;
+    }
+    case SkillType::URSULA_W:
+        SkillPreviewSystem::Instance().ShowUrsulaWSkill(GetWorldCursorPosition(), UrsulaParalysisSkill::pod.skillRadius);
+        SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Ursula, characters[PlayerCharacterType::Ursula].lock()->GetTransform()->GetWorldPosition(), UrsulaParalysisSkill::pod.skillRange);
+        break;
+    case SkillType::HANSEL_Q:
+        SkillPreviewSystem::Instance().ShowHanselQSkill(GetWorldCursorPosition(), HanselChargeSkill::pod.stompRadius);
+        SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Hansel, characters[PlayerCharacterType::Hansel].lock()->GetTransform()->GetWorldPosition(), HanselChargeSkill::pod.maxRange);
+        break;
+    case SkillType::HANSEL_W:
+        SkillPreviewSystem::Instance().ShowHanselWSkill(characters[PlayerCharacterType::Hansel].lock()->GetTransform()->GetWorldPosition());
+        SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Hansel, characters[PlayerCharacterType::Hansel].lock()->GetTransform()->GetWorldPosition(), HanselProjectileSkill::pod.maxRange);
+        break;
+    }
 }
 
 void PlayerController::SelectPlayerUnit(PlayerCharacterType::Enum charType)
@@ -289,6 +322,7 @@ void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
     case SkillType::HANSEL_Q: selectedCharacter.lock()->OrderSkill(HanselChargeSkill{}, pos); break;
     case SkillType::HANSEL_W: selectedCharacter.lock()->OrderSkill(HanselProjectileSkill{}, pos); break;
     }
+    UnSelectSkill();
     // 스킬 프리뷰를 비활성화시킨다.
 }
 
@@ -417,6 +451,8 @@ void PlayerController::UnSelectSkill()
     case SkillType::HANSEL_Q: SkillPreviewSystem::Instance().HideHanselQSkill(); break;
     case SkillType::HANSEL_W: SkillPreviewSystem::Instance().HideHanselWSkill(); break;
     }
+    if (selectedSkill != SkillType::NONE)
+        SkillPreviewSystem::Instance().HideSkillMaxRange();
     selectedSkill = SkillType::NONE;
 }
 
@@ -431,4 +467,9 @@ Vector3d PlayerController::GetWorldCursorPosition()
 
 void PlayerController::ResetCombo()
 {
+}
+
+void PlayerController::SetSelectedSkillType(SkillType::Enum selectedSkill)
+{
+    this->selectedSkill = selectedSkill;
 }
