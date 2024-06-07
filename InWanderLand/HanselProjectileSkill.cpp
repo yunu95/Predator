@@ -22,7 +22,9 @@ coroutine::Coroutine HanselProjectileSkill::ThrowingPie()
     pieCollider.lock()->SetRadius(pod.projectileRadius);
     pieObject->GetTransform()->SetWorldScale({ 3,3,3 });
     pieCollider.lock()->GetTransform()->SetWorldRotation(direction);
-	pieObject->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction.up * -1, direction));
+    auto pieStartRotation = Quaternion::MakeWithForwardUp(direction.up * -1, direction);
+
+    pieObject->GetTransform()->SetWorldRotation(pieStartRotation);
     //pieObject->GetTransform()->SetWorldRotation(pieObject->GetTransform()->GetWorldRotation().Up() * -1);
     float rotatePerFrame = 0.0f;
 

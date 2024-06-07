@@ -12,41 +12,41 @@ coroutine::Coroutine RobinChargeSkill::operator()()
     Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
     Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
     Vector3d direction = deltaPos.Normalized();
-    if (deltaPos.Magnitude() > pod.MaxDistance)
+    if (deltaPos.Magnitude() > pod.maxDistance)
     {
-        deltaPos = direction * pod.MaxDistance;
+        deltaPos = direction * pod.maxDistance;
     }
     Vector3d endPos = startPos + deltaPos;
     Vector3d currentPos = startPos;
 
     owner.lock()->PlayAnimation(UnitAnimType::Rush, true);
-    coroutine::ForSeconds forSeconds{ static_cast<float>(deltaPos.Magnitude()) / pod.RushSpeed };
+    coroutine::ForSeconds forSeconds{ static_cast<float>(deltaPos.Magnitude()) / pod.rushSpeed };
     knockbackCollider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
-    knockbackCollider.lock()->SetRadius(pod.RushKnockbackRadius);
+    knockbackCollider.lock()->SetRadius(pod.rushKnockbackRadius);
     while (forSeconds.Tick())
     {
-        currentPos += direction * pod.RushSpeed * Time::GetDeltaTime();
+        currentPos += direction * pod.rushSpeed * Time::GetDeltaTime();
         knockbackCollider.lock()->GetTransform()->SetWorldPosition(currentPos);
         owner.lock()->GetTransform()->SetWorldPosition(currentPos);
         co_await std::suspend_always{};
         for (auto& each : knockbackCollider.lock()->GetEnemies())
         {
-            Vector3d delta = pod.RushKnockbackDistance * (each->GetTransform()->GetWorldPosition() - currentPos).Normalized();
-            each->KnockBackRelativeVector(delta, pod.RushKnockbackDuration);
-            each->Damaged(owner, pod.DamageRush);
+            Vector3d delta = pod.rushKnockbackDistance * (each->GetTransform()->GetWorldPosition() - currentPos).Normalized();
+            each->KnockBackRelativeVector(delta, pod.rushKnockbackDuration);
+            each->Damaged(owner, pod.damageRush);
         }
     }
 
     owner.lock()->PlayAnimation(UnitAnimType::Slam);
     owner.lock()->SetDefaultAnimation(UnitAnimType::Idle);
-    knockbackCollider.lock()->SetRadius(pod.ImpactKnockbackRadius);
+    knockbackCollider.lock()->SetRadius(pod.impactKnockbackRadius);
     co_await std::suspend_always{};
     for (auto& each : knockbackCollider.lock()->GetEnemies())
     {
-        Vector3d delta = pod.ImpactKnockbackDistance * (each->GetTransform()->GetWorldPosition() - currentPos).Normalized();
-        each->KnockBack(each->GetTransform()->GetWorldPosition() + delta, pod.ImpactKnockbackDuration);
-        each->Paralyze(pod.ImpactStunDuration);
-        each->Damaged(owner, pod.DamageRush);
+        Vector3d delta = pod.impactKnockbackDistance * (each->GetTransform()->GetWorldPosition() - currentPos).Normalized();
+        each->KnockBack(each->GetTransform()->GetWorldPosition() + delta, pod.impactKnockbackDuration);
+        each->Paralyze(pod.impactStunDuration);
+        each->Damaged(owner, pod.damageRush);
     }
     disableNavAgent.reset();
     blockFollowingNavigation.reset();
