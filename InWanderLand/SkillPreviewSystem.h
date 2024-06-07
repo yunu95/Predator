@@ -104,6 +104,12 @@ public:
 	void HideSkillMaxRange();
 #pragma endregion
 
+#pragma region AttackImage
+	// Pos는 평타치는 월드 포지션입니다.
+	yunutyEngine::graphics::StaticMeshRenderer* ShowAttackImage(UnitType unitType, Vector3d pos);
+	void HideAttackImage(yunutyEngine::graphics::StaticMeshRenderer* renderer);
+#pragma endregion
+
 private:
 #pragma region MoveEnd
 	void ShowMoveEndImage(UnitType unitType, Vector3d pos, yunuGI::IMesh* mesh);
@@ -138,6 +144,8 @@ private:
 	std::map<yunuGI::IMesh*, graphics::StaticMeshRenderer*> rendererMap;
 	// 이동 끝 메쉬를 비활성화하기위한 컨테이너 키값으로 생성된 경로 메쉬를 사용한다.
 	std::map<yunuGI::IMesh*, graphics::StaticMeshRenderer*> moveEndRendererMap;
+	// 평타 이미지를 지우기 위한 컨테이너
+	std::set<yunutyEngine::graphics::StaticMeshRenderer*> attackRendererSet;
 	unsigned int routeMeshID = 0;
 
 	const float OFFSET = 1.414;

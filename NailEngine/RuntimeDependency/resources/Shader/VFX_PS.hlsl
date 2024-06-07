@@ -16,6 +16,7 @@ float4 main(PixelIn input) : SV_TARGET
 {
     float2 offset = float2(temp_float0, 1-temp_float1);
     float4 color = AlbedoMap.Sample(sam, input.uv + offset) * materialColor;
+    color.a *= input.color.r;
     return color;
 }
 

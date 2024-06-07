@@ -784,6 +784,15 @@
     <Filter Include="Contents_Refactored\Factor">
       <UniqueIdentifier>{b994b5bd-5b65-4afe-a6db-d27d5c52659a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents_Refactored\UnitCommand\UnitMoveCommand">
+      <UniqueIdentifier>{57e83c6e-0096-43b5-bd9b-cf026fb548e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\UnitCommand\UnitAttackCommand">
+      <UniqueIdentifier>{cc667692-934b-4a85-8365-ae3b40156596}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\SkillPreviewSystem\AttackPreviewPool">
+      <UniqueIdentifier>{c162b28a-2c13-4af6-8ca8-607dbda09b2e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -1903,6 +1912,15 @@
     <ClInclude Include="Adder.h">
       <Filter>Contents_Refactored\Factor</Filter>
     </ClInclude>
+    <ClInclude Include="UnitMoveCommand.h">
+      <Filter>Contents_Refactored\UnitCommand\UnitMoveCommand</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitAttackCommand.h">
+      <Filter>Contents_Refactored\UnitCommand\UnitAttackCommand</Filter>
+    </ClInclude>
+    <ClInclude Include="AttackPreviewPool.h">
+      <Filter>Contents_Refactored\SkillPreviewSystem\AttackPreviewPool</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -2841,6 +2859,15 @@
     </ClCompile>
     <ClCompile Include="EnemyController.cpp">
       <Filter>Contents_Refactored\UnitController\EnemyController</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitMoveCommand.cpp">
+      <Filter>Contents_Refactored\UnitCommand\UnitMoveCommand</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitAttackCommand.cpp">
+      <Filter>Contents_Refactored\UnitCommand\UnitAttackCommand</Filter>
+    </ClCompile>
+    <ClCompile Include="AttackPreviewPool.cpp">
+      <Filter>Contents_Refactored\SkillPreviewSystem\AttackPreviewPool</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

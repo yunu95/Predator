@@ -6,13 +6,14 @@
 // 그래서 Start에서 자식 GameObject에서 순회해서 StaticMeshRenderer를 찾아온다.
 class VFXAnimator : public yunutyEngine::Component
 {
-
 public:
 	virtual void Start() override;
 	virtual void Update() override;
 	virtual void OnEnable() override;
 	virtual void OnDisable() override;
 
+public:
+	void SetAutoActiveFalse();
 
 private:
 	void Reset();
@@ -27,6 +28,7 @@ private:
 	};
 
 private:
+	bool isAutoActivFalse = true;
 	yunuGI::IMeshRenderer* renderer;
 	float frameRate;
 

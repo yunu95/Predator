@@ -84,7 +84,10 @@ void VFXAnimator::Update()
 			continue;
 		}
 
-		//GetGameObject()->SetSelfActive(false);
+		if (this->isAutoActivFalse == true)
+		{
+			GetGameObject()->SetSelfActive(false);
+		}
 	}
 }
 
@@ -96,6 +99,11 @@ void VFXAnimator::OnEnable()
 void VFXAnimator::OnDisable()
 {
 
+}
+
+void VFXAnimator::SetAutoActiveFalse()
+{
+	this->isAutoActivFalse = false;
 }
 
 void VFXAnimator::Reset()

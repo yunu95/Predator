@@ -1,6 +1,7 @@
 #include "SkillPreviewSystem.h"
 
 #include "MoveEndPreviewPool.h"
+#include "AttackPreviewPool.h"
 #include "GameManager.h"
 #include "RTSCam.h"
 #include "DirectXMath.h"
@@ -31,6 +32,7 @@ void SkillPreviewSystem::ObjectInitializer(std::weak_ptr<graphics::StaticMeshRen
 void SkillPreviewSystem::Init()
 {
 	MoveEndPreviewPool::SingleInstance();
+	AttackPreviewPool::SingleInstance();
 
 	const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 	yunuGI::IShader* vs = _resourceManager->GetShader(L"TextureVS.cso");
@@ -567,6 +569,41 @@ void SkillPreviewSystem::HideSkillMaxRange()
 	{
 		this->skillMaxRangePreviewObj->SetSelfActive(false);
 	}
+}
+
+yunutyEngine::graphics::StaticMeshRenderer* SkillPreviewSystem::ShowAttackImage(UnitType unitType, Vector3d pos)
+{
+	auto attackRenderer = AttackPreviewPool::SingleInstance().Borrow();
+	this->attackRendererSet.insert({attackRenderer.lock().get()});
+	attackRenderer.lock()->GetGameObject()->GetTransform()->SetLocalPosition(pos);
+	switch (unitType)
+	{
+		case SkillPreviewSystem::UnitType::Robin:
+		{
+			attackRenderer.lock()->GetGI().GetMaterial()->SetColor(wanderResources::unitColor::ROBIN_COLOR);
+		}
+		break;
+		case SkillPreviewSystem::UnitType::Ursula:
+		{
+			attackRenderer.lock()->GetGI().GetMaterial()->SetColor(wanderResources::unitColor::URSULA_COLOR);
+		}
+		break;
+		case SkillPreviewSystem::UnitType::Hansel:
+		{
+			attackRenderer.lock()->GetGI().GetMaterial()->SetColor(wanderResources::unitColor::HANSEL_COLOR);
+		}
+		break;
+		default:
+		{}
+		break;
+	}
+}
+
+void SkillPreviewSystem::HideAttackImage(yunutyEngine::graphics::StaticMeshRenderer* renderer)
+{
+	auto iter2 = this->attackRendererSet.find(renderer);
+	AttackPreviewPool::SingleInstance().Return((*iter2)->GetWeakPtr<graphics::StaticMeshRenderer>());
+	this->attackRendererSet.erase(iter2);
 }
 
 void SkillPreviewSystem::ShowMoveEndImage(UnitType unitType, Vector3d pos, yunuGI::IMesh* mesh)
