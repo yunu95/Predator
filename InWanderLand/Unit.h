@@ -47,6 +47,10 @@ public:
     static float DistanceSquare(std::weak_ptr<Unit> a, std::weak_ptr<Unit> b);
     static float Distance(Unit* a, Unit* b);
     static float DistanceSquare(Unit* a, Unit* b);
+    static float Distance(Unit* a, const Vector3d& worldPos);
+    static float DistanceSquare(Unit* a, const Vector3d& worldPos);
+    float Distance(const Vector3d& worldPos);
+    float DistanceSquare(const Vector3d& worldPos);
     // 유닛에게 필요한 모든 필수 구성요소들을 생성해주며 유닛의 초기화를 진행한다. Init은 유닛당 한번만 호출된다.
     void Init(const application::editor::Unit_TemplateData* unitTemplateData);
     // 유닛 데이터의 정보에 맞게 이 유닛을 소환한다.
@@ -105,6 +109,7 @@ public:
     std::array<DelegateCallback<void()>, UnitBehaviourTree::Keywords::KeywordNum>& OnStateEngageCallback() { return onStateEngage; };
     std::array<DelegateCallback<void()>, UnitBehaviourTree::Keywords::KeywordNum>& OnStateExitCallback() { return onStateExit; };
     string name;
+    bool playingBattleAnim{ true };
     // 내가 공격할 때
     DelegateCallback<void()> onAttack;
     // 내가 때린 공격이 적에게 맞았을 때, 근거리 공격인 경우라면 onAttack과 호출시점이 같겠으나 원거리 공격인 경우에는 시간차가 있을 수 있다. 

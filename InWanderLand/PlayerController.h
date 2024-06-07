@@ -78,6 +78,7 @@ private:
     virtual void OnContentsPlay() override;
     virtual void OnContentsStop() override;
     virtual void Update() override;
+    void HandleByState();
     // 사용자 입력을 받기 위해 매 프레임 불린다.
     void HandleInput();
     // 카메라의 상태를 매 프레임마다 업데이트시켜주는 함수
@@ -118,4 +119,6 @@ private:
     int skillPointsLeft{ 5 };
     Vector3d camOffset;
     Quaternion camRotation;
+    std::array<std::weak_ptr<Unit>, 2> peaceFollowingUnits;
+    std::array<Vector3d, 2> peaceFollowingDestination;
 };
