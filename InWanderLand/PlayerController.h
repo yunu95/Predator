@@ -102,7 +102,7 @@ private:
     int currentCombo{ 0 };
     std::array<int, 3> comboObjective{ 10, 20, 30 };
     std::array<bool, 3> comboAchieved{ false };
-    State::Enum state{ State::Peace };
+    State::Enum state{ State::Battle };
     SkillType::Enum selectedSkill = SkillType::NONE;
     PlayerCharacterType::Enum selectedCharacterType = PlayerCharacterType::None;
     std::weak_ptr<UnitAcquisitionSphereCollider> cursorUnitDetector;
