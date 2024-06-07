@@ -24,9 +24,19 @@ void FBXPool::PoolByMesh::ObjectInitializer(std::weak_ptr<ManagedFBX> mesh)
     auto gameObj = Scene::getCurrentScene()->AddGameObjectFromFBX(fbxName);
     gameObj->SetParent(mesh.lock()->GetGameObject());
     FBXPool::SingleInstance().poolsByFBX[mesh.lock().get()] = FBXPool::SingleInstance().poolsByMeshName.at(fbxName);
+    mesh.lock()->meshObject = gameObj;
 }
 
 void ManagedFBX::OnContentsStop()
 {
     FBXPool::SingleInstance().Return(GetWeakPtr<ManagedFBX>());
+}
+
+std::weak_ptr<VFXAnimator> ManagedFBX::AcquireVFXAnimator()
+{
+    if (this->vfxAnimator.expired())
+    {
+        this->vfxAnimator = meshObject->AddComponentAsWeakPtr<VFXAnimator>();
+    }
+    return this->vfxAnimator;
 }

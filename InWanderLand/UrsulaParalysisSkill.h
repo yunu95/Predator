@@ -25,8 +25,11 @@ public:
     virtual void OnInterruption()override;
 
     static POD_UrsulaParalysisSkill pod;
+
 private:
     std::weak_ptr<UnitAcquisitionSphereCollider> skillCollider;
+
+
 };
 
 
