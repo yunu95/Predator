@@ -1,0 +1,40 @@
+[
+    {
+        "material_name": "VFX_Robin_Skill2",
+        "frame_rate": 30,
+        "location_data": [
+            {
+                "frame": 0,
+                "location": [
+                    0.7000000476837158,
+                    0.0,
+                    0.0
+                ]
+            },
+            {
+                "frame": 12,
+                "location": [
+                    0.7000000476837158,
+                    0.0,
+                    0.0
+                ]
+            },
+            {
+                "frame": 25,
+                "location": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            {
+                "frame": 41,
+                "location": [
+                    -0.3499999940395355,
+                    0.0,
+                    0.0
+                ]
+            }
+        ]
+    }
+]
