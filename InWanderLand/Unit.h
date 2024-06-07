@@ -41,6 +41,12 @@ namespace application
 class Unit : public Component, public PermanentObservee
 {
 public:
+    static Vector3d FromTo(std::weak_ptr<Unit> from, std::weak_ptr<Unit> to);
+    static Vector3d FromTo(Unit* from, Unit* to);
+    static float Distance(std::weak_ptr<Unit> a, std::weak_ptr<Unit> b);
+    static float DistanceSquare(std::weak_ptr<Unit> a, std::weak_ptr<Unit> b);
+    static float Distance(Unit* a, Unit* b);
+    static float DistanceSquare(Unit* a, Unit* b);
     // 유닛에게 필요한 모든 필수 구성요소들을 생성해주며 유닛의 초기화를 진행한다. Init은 유닛당 한번만 호출된다.
     void Init(const application::editor::Unit_TemplateData* unitTemplateData);
     // 유닛 데이터의 정보에 맞게 이 유닛을 소환한다.

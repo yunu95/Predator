@@ -307,7 +307,7 @@ void PlayerController::SelectSkill(SkillType::Enum skillType)
     // 즉발은 그냥 써버리고 나머지는 준비상태로 만든다.
     switch (skillType)
     {
-    case SkillType::ROBIN_W: ActivateSkill(SkillType::ROBIN_W, Vector3d::zero); break;
+    case SkillType::ROBIN_W: ActivateSkill(SkillType::ROBIN_W, characters[PlayerCharacterType::Robin].lock()->GetTransform()->GetWorldPosition()); break;
     default:
         selectedSkill = skillType;
         // 스킬 프리뷰를 활성화시킨다.

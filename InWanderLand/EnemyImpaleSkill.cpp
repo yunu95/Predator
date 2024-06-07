@@ -50,8 +50,6 @@ const std::vector<Spear> SpearsInfo()
 // 창이 한번 불쑥 튀어나왔다가 다시 꺼지는 사이클
 coroutine::Coroutine EnemyImpaleSkill::SpearArise(std::weak_ptr<EnemyImpaleSkill> skill, std::weak_ptr<ManagedFBX> fbx, Vector2d pos)
 {
-    auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
-    auto enableNavObstacle = owner.lock()->referenceEnableNavObstacle.Acquire();
     fbx = FBXPool::SingleInstance().Borrow(wanderResources::GetFBXName(wanderResources::WanderFBX::IMPALING_SPIKE));
     std::weak_ptr<UnitAcquisitionSphereCollider> collider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(skill.lock()->owner);
     auto forward = owner.lock()->GetTransform()->GetWorldRotation().Forward();
@@ -91,6 +89,8 @@ coroutine::Coroutine EnemyImpaleSkill::SpearArise(std::weak_ptr<EnemyImpaleSkill
 }
 coroutine::Coroutine EnemyImpaleSkill::operator()()
 {
+    auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
+    auto enableNavObstacle = owner.lock()->referenceEnableNavObstacle.Acquire();
     // 창이 생성되는 시간 오프셋은 유닛으로부터의 거리와 정비례한다.
     const auto& gc = GlobalConstant::GetSingletonInstance().pod;
     owner.lock()->PlayAnimation(UnitAnimType::Slam);
