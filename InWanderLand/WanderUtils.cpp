@@ -1,4 +1,5 @@
 #include "WanderUtils.h"
+#include "GlobalConstant.h"
 
 float wanderUtils::ResourceRecursiveLoader::coroutineDeltaTimeThreshold = 0.02f;
 bool wanderUtils::ResourceRecursiveLoader::isLoadingResources = false;
@@ -185,4 +186,20 @@ coroutine::Coroutine wanderUtils::ResourceRecursiveLoader::LoadByCoroutine(strin
             co_await std::suspend_always{};
         }
     }
+}
+
+Vector3d wanderUtils::GetInitSpeedOfFreeFall(float duration, Vector3d startPos, Vector3d destPos)
+{
+    if (duration == 0)
+    {
+        return Vector3d();
+    }
+
+    float acc = GlobalConstant::GetSingletonInstance().pod.gravitySpeed;
+
+    auto deltaPos = destPos - startPos;
+    float init_Y;
+    init_Y = (deltaPos.y + acc* duration* duration / 2) / duration;
+
+    return Vector3d(deltaPos.x / duration, init_Y, deltaPos.z / duration);
 }

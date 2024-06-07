@@ -73,7 +73,7 @@ void ChessBombComponent::Update()
 {
 	if (!coroutineStart)
 	{
-		StartCoroutine(AwakeBomb());
+		lastCoroutine = StartCoroutine(AwakeBomb());
 		coroutineStart = true;
 	}
 }
@@ -104,6 +104,8 @@ yunutyEngine::coroutine::Coroutine ChessBombComponent::AwakeBomb()
 	assert(bombTime > 0 && "bombTime must be greater than 0");
 	float ratio = localTimer / bombTime;
 
+	guideObj->SetSelfActive(true);
+
 	while (ratio < 1)
 	{
 		localTimer += yunutyEngine::Time::GetDeltaTime();
@@ -121,4 +123,18 @@ yunutyEngine::coroutine::Coroutine ChessBombComponent::AwakeBomb()
 	particleObj->SetSelfActive(true);
 	particleObj->GetComponent<graphics::ParticleRenderer>()->Play();
 	co_return;
+}
+
+void ChessBombComponent::Reload()
+{
+	coroutineStart = false;
+	if (particleObj)
+	{
+		particleObj->SetSelfActive(false);
+	}
+	if (!lastCoroutine.expired())
+	{
+		DeleteCoroutine(lastCoroutine);
+	}
+	unitSet.clear();
 }

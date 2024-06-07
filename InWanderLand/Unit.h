@@ -29,6 +29,7 @@ class UnitBehaviourTree;
 class UnitAcquisitionSphereCollider;
 class UnitPool;
 class PlayerController;
+class UnitController;
 namespace application
 {
     namespace editor
@@ -48,6 +49,7 @@ public:
     void Reset();
     const application::editor::Unit_TemplateData& GetUnitTemplateData()const;
     int GetTeamIndex() const;
+    std::weak_ptr<Unit> GetAttackTarget() const;
     void Relocate(const Vector3d& pos);
     void OrderMove(Vector3d position);
     void OrderAttackMove(Vector3d position);
@@ -92,6 +94,7 @@ public:
     bool IsPlayerUnit() const;
     bool IsInvulenerable() const;
     bool IsAlive()const;
+    std::string GetFBXName() const;
     // 유닛의 행동 트리 상태가 전환될 때
     std::array<DelegateCallback<void()>, UnitBehaviourTree::Keywords::KeywordNum>& OnStateEngageCallback() { return onStateEngage; };
     std::array<DelegateCallback<void()>, UnitBehaviourTree::Keywords::KeywordNum>& OnStateExitCallback() { return onStateExit; };
@@ -143,6 +146,7 @@ private:
     Vector3d GetAttackPosition(std::weak_ptr<Unit> opponent);
     yunutyEngine::coroutine::Coroutine AttackCoroutine(std::weak_ptr<Unit> opponent);
     float DistanceTo(const Vector3d& target);
+    std::vector<UnitController*> controllers;
     UnitBehaviourTree unitBehaviourTree;
     std::array<DelegateCallback<void()>, UnitBehaviourTree::Keywords::KeywordNum> onStateEngage;
     std::array<DelegateCallback<void()>, UnitBehaviourTree::Keywords::KeywordNum> onStateExit;

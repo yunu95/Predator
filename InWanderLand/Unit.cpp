@@ -168,6 +168,11 @@ void Unit::OnStateExit<UnitBehaviourTree::Attack>()
 template<>
 void Unit::OnStateUpdate<UnitBehaviourTree::Attack>()
 {
+    if (currentTargetUnit.expired())
+    {
+        OrderHold();
+        return;
+    }
     SetDesiredRotation(currentTargetUnit.lock()->GetTransform()->GetWorldPosition() - GetTransform()->GetWorldPosition());
     if (!referenceBlockAttack.BeingReferenced())
         coroutineAttack = StartCoroutine(AttackCoroutine(currentTargetUnit));
@@ -248,6 +253,15 @@ bool Unit::IsInvulenerable() const
 bool Unit::IsAlive() const
 {
     return isAlive;
+}
+std::string Unit::GetFBXName() const
+{
+    if (!skinnedMeshGameObject)
+    {
+        return std::string();
+    }
+
+    return skinnedMeshGameObject->getName();
 }
 void Unit::Damaged(std::weak_ptr<Unit> opponentUnit, float opponentDmg)
 {
@@ -483,7 +497,6 @@ void Unit::OrderHold()
 void Unit::Init(const application::editor::Unit_TemplateData* unitTemplateData)
 {
     this->unitTemplateData = unitTemplateData;
-    this->name = unitTemplateData->pod.skinnedFBXName;
     attackRange = GetGameObject()->AddGameObject()->AddComponentAsWeakPtr<UnitAcquisitionSphereCollider>();
     acquisitionRange = GetGameObject()->AddGameObject()->AddComponentAsWeakPtr<UnitAcquisitionSphereCollider>();
     attackRange.lock()->owner = GetWeakPtr<Unit>();
@@ -723,7 +736,27 @@ void Unit::Summon(const application::editor::UnitData* unitData)
     // 인식 범위
     //AttachDebugMesh(acquisitionRange.lock()->GetGameObject()->AddGameObject(), DebugMeshType::Sphere)->GetTransform()->SetLocalScale(Vector3d{ 1,0.25,1 } *2 * unitTemplateData->pod.m_idRadius);
     // 혹여나 플레이어 캐릭터라면 플레이어로 등록, 플레이어가 아니면 그냥 무시된다.
-    PlayerController::Instance().RegisterPlayer(GetWeakPtr<Unit>());
+    switch (unitData->pod.templateData->pod.unitControllerType.enumValue)
+    {
+    case UnitControllerType::PLAYER:
+    {
+        PlayerController::Instance().RegisterUnit(GetWeakPtr<Unit>());
+        controllers.push_back(&PlayerController::Instance());
+        break;
+    }
+    case UnitControllerType::ANGRY_MOB:
+    {
+        EnemyAggroController::Instance().RegisterUnit(GetWeakPtr<Unit>());
+        controllers.push_back(&EnemyAggroController::Instance());
+        break;
+    }
+    case UnitControllerType::RANGED_ELITE:
+    {
+        EnemyAggroController::Instance().RegisterUnit(GetWeakPtr<Unit>());
+        controllers.push_back(&EnemyAggroController::Instance());
+        break;
+    }
+    }
 
     Reset();
     onCreated();
@@ -819,12 +852,17 @@ void Unit::InitBehaviorTree()
 
     unitBehaviourTree[UnitBehaviourTree::Chasing].enteringCondtion = [this]()
         {
-            return !currentTargetUnit.expired()
-                && currentTargetUnit.lock()->IsAlive()
-                && CanProcessOrder<UnitOrderType::AttackUnit>();
+            return ((!pendingTargetUnit.expired() && pendingTargetUnit.lock()->IsAlive()) ||
+                (!currentTargetUnit.expired() && currentTargetUnit.lock()->IsAlive())) &&
+                CanProcessOrder<UnitOrderType::AttackUnit>();
         };
     unitBehaviourTree[UnitBehaviourTree::Chasing].onEnter = [this]()
         {
+            if (!pendingTargetUnit.expired())
+            {
+                currentTargetUnit = pendingTargetUnit;
+                pendingTargetUnit.reset();
+            }
             currentOrderType = pendingOrderType;
         };
     unitBehaviourTree[UnitBehaviourTree::Chasing].onUpdate = [this]()
@@ -833,7 +871,7 @@ void Unit::InitBehaviorTree()
         };
     unitBehaviourTree[UnitBehaviourTree::Chasing][UnitBehaviourTree::Attack].enteringCondtion = [this]()
         {
-            return !attackRange.lock()->GetEnemies().contains(currentTargetUnit.lock().get()) || !coroutineAttack.expired();
+            return attackRange.lock()->GetEnemies().contains(currentTargetUnit.lock().get()) || !coroutineAttack.expired();
         };
     unitBehaviourTree[UnitBehaviourTree::Chasing][UnitBehaviourTree::Attack].onEnter = [this]()
         {
@@ -858,7 +896,7 @@ void Unit::InitBehaviorTree()
     unitBehaviourTree[UnitBehaviourTree::Chasing][UnitBehaviourTree::Move].onUpdate = [this]()
         {
             moveDestination = GetAttackPosition(currentTargetUnit);
-            OnStateEngage<UnitBehaviourTree::Move>();
+            OnStateUpdate<UnitBehaviourTree::Move>();
         };
     unitBehaviourTree[UnitBehaviourTree::Hold].enteringCondtion = [this]()
         {
@@ -994,4 +1032,10 @@ const editor::Unit_TemplateData& Unit::GetUnitTemplateData()const
 int Unit::GetTeamIndex() const
 {
     return teamIndex;
+}
+std::weak_ptr<Unit> Unit::GetAttackTarget() const
+{
+    if (currentTargetUnit.expired())
+        return pendingTargetUnit;
+    return currentTargetUnit;
 }

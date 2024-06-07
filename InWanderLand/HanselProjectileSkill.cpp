@@ -7,8 +7,6 @@ POD_HanselProjectileSkill HanselProjectileSkill::pod = POD_HanselProjectileSkill
 
 coroutine::Coroutine HanselProjectileSkill::ThrowingPie()
 {
-    const application::POD_GlobalConstant& gc = GlobalConstant::GetSingletonInstance().pod;
-
     Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
     Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
     Vector3d direction = deltaPos.Normalized();
@@ -75,8 +73,6 @@ float HanselProjectileSkill::GetCastRange()
 
 coroutine::Coroutine HanselProjectileSkill::operator()()
 {
-    const application::POD_GlobalConstant& gc = GlobalConstant::GetSingletonInstance().pod;
-
     auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
 	auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
 	auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();

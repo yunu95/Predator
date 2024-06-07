@@ -10,3 +10,9 @@
 #include "UrsulaParalysisSkill.h"
 #include "HanselChargeSkill.h"
 #include "HanselProjectileSkill.h"
+#include "BossSpinAttackSkill.h"
+#include "BossImpaleSkill.h"
+#include "BossSummonMobSkill.h"
+#include "BossSummonChessSkill.h"
+
+

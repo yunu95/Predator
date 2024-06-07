@@ -37,7 +37,7 @@
 #include "VFXAnimator.h"
 #include "InitialLoadingScreen.h"
 #include "InstanceManager.h"
-
+#include "Interactable_ChessPool.h"
 
 #include <algorithm>
 #include <string>
@@ -355,6 +355,7 @@ void application::contents::ContentsLayer::PlayContents(ContentsPlayFlag playFla
 	/// Playable 동작들을 일괄 처리할 부분입니다.
 	PlayableComponent::OnGameStartAll();
 
+	Interactable_ChessPool::Instance();
 	ContentsObserver::Instance().OnPlayContents();
 	SkillPreviewSystem::Instance().Init();
 	SkillPreviewSystem::Instance().camObj = RTSCam::Instance().GetGameObject();

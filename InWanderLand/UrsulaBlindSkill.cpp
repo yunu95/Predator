@@ -15,7 +15,7 @@ coroutine::Coroutine UrsulaBlindSkill::operator()()
 
     owner.lock()->PlayAnimation(UnitAnimType::Skill1, true);
     auto animator = owner.lock()->GetAnimator();
-    auto anim = wanderResources::GetAnimation(owner.lock()->name, UnitAnimType::Skill1);
+    auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill1);
     coroutine::ForSeconds forSeconds{ anim->GetDuration() };
     circle_Top = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
     circle_Top.lock()->SetRadius(pod.skillRadius);

@@ -134,6 +134,14 @@ namespace application
             {
                 obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
             }
+            else if (pod.templateData->pod.fBXName == "SM_Chess_Pawn" 
+                || pod.templateData->pod.fBXName == "SM_Chess_Rook"
+                || pod.templateData->pod.fBXName == "SM_Chess_Bishop")
+            {
+                /// Chess 는 Pooling 을 하기 위하여
+                /// Start 구문에서 FBX 를 할당하도록 변경
+                obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+            }
             else
             {
                 obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(pod.templateData->pod.fBXName);

@@ -36,6 +36,22 @@ bool Skill::SkillPodFieldPreEncoding(SkillType::Enum type, json& data)
 		{
 			return ::SkillPodFieldPreEncoding<SkillType::EnemyImpale>(data);
 		}
+		case SkillType::BossSkill_One:
+		{
+			return ::SkillPodFieldPreEncoding<SkillType::BossSkill_One>(data);
+		}
+		case SkillType::BossSkill_Two:
+		{
+			return ::SkillPodFieldPreEncoding<SkillType::BossSkill_Two>(data);
+		}
+		case SkillType::BossSkill_Three:
+		{
+			return ::SkillPodFieldPreEncoding<SkillType::BossSkill_Three>(data);
+		}
+		case SkillType::BossSkill_Four:
+		{
+			return ::SkillPodFieldPreEncoding<SkillType::BossSkill_Four>(data);
+		}
 		default:
 			break;
 	}
@@ -74,6 +90,22 @@ bool Skill::SkillPodFieldPostEncoding(SkillType::Enum type, json& data)
 		case SkillType::EnemyImpale:
 		{
 			return ::SkillPodFieldPostEncoding<SkillType::EnemyImpale>(data);
+		}
+		case SkillType::BossSkill_One:
+		{
+			return ::SkillPodFieldPostEncoding<SkillType::BossSkill_One>(data);
+		}
+		case SkillType::BossSkill_Two:
+		{
+			return ::SkillPodFieldPostEncoding<SkillType::BossSkill_Two>(data);
+		}
+		case SkillType::BossSkill_Three:
+		{
+			return ::SkillPodFieldPostEncoding<SkillType::BossSkill_Three>(data);
+		}
+		case SkillType::BossSkill_Four:
+		{
+			return ::SkillPodFieldPostEncoding<SkillType::BossSkill_Four>(data);
 		}
 		default:
 			break;
@@ -114,6 +146,22 @@ bool Skill::SkillPodFieldPreDecoding(SkillType::Enum type, const json& data)
 		{
 			return ::SkillPodFieldPreDecoding<SkillType::EnemyImpale>(data);
 		}
+		case SkillType::BossSkill_One:
+		{
+			return ::SkillPodFieldPreDecoding<SkillType::BossSkill_One>(data);
+		}
+		case SkillType::BossSkill_Two:
+		{
+			return ::SkillPodFieldPreDecoding<SkillType::BossSkill_Two>(data);
+		}
+		case SkillType::BossSkill_Three:
+		{
+			return ::SkillPodFieldPreDecoding<SkillType::BossSkill_Three>(data);
+		}
+		case SkillType::BossSkill_Four:
+		{
+			return ::SkillPodFieldPreDecoding<SkillType::BossSkill_Four>(data);
+		}
 		default:
 			break;
 	}
@@ -152,6 +200,22 @@ bool Skill::SkillPodFieldPostDecoding(SkillType::Enum type, const json& data)
 		case SkillType::EnemyImpale:
 		{
 			return ::SkillPodFieldPostDecoding<SkillType::EnemyImpale>(data);
+		}
+		case SkillType::BossSkill_One:
+		{
+			return ::SkillPodFieldPostDecoding<SkillType::BossSkill_One>(data);
+		}
+		case SkillType::BossSkill_Two:
+		{
+			return ::SkillPodFieldPostDecoding<SkillType::BossSkill_Two>(data);
+		}
+		case SkillType::BossSkill_Three:
+		{
+			return ::SkillPodFieldPostDecoding<SkillType::BossSkill_Three>(data);
+		}
+		case SkillType::BossSkill_Four:
+		{
+			return ::SkillPodFieldPostDecoding<SkillType::BossSkill_Four>(data);
 		}
 		default:
 			break;
@@ -197,6 +261,26 @@ void Skill::DrawSkillPod(SkillType::Enum type)
 		case SkillType::EnemyImpale:
 		{
 			application::editor::imgui::data::DrawDataField(EnemyImpaleSkill::pod);
+			break;
+		}
+		case SkillType::BossSkill_One:
+		{
+			application::editor::imgui::data::DrawDataField(BossSpinAttackSkill::pod);
+			break;
+		}
+		case SkillType::BossSkill_Two:
+		{
+			application::editor::imgui::data::DrawDataField(BossImpaleSkill::pod);
+			break;
+		}
+		case SkillType::BossSkill_Three:
+		{
+			application::editor::imgui::data::DrawDataField(BossSummonMobSkill::pod);
+			break;
+		}
+		case SkillType::BossSkill_Four:
+		{
+			application::editor::imgui::data::DrawDataField(BossSummonChessSkill::pod);
 			break;
 		}
 		default:

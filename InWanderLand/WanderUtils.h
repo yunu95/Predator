@@ -1,7 +1,8 @@
 #pragma once
-#include "InWanderLand.h"
+//#include "InWanderLand.h"
 #include "YunutyEngine.h"
 #include "FileSystem.h"
+#include "Unit.h"
 
 #include <string>
 #include <future>
@@ -10,6 +11,21 @@
 using namespace application;
 namespace wanderUtils
 {
+    struct CompareDistance
+    {
+        Vector3d from;
+        CompareDistance(const Vector3d& from) : from(from) {}
+
+        bool operator()(const std::weak_ptr<Unit>& a, const std::weak_ptr<Unit>& b) const {
+            if (auto a_ptr = a.lock()) {
+                if (auto b_ptr = b.lock()) {
+                    return (from - a_ptr->GetTransform()->GetWorldPosition()).MagnitudeSqr() <
+                        (from - b_ptr->GetTransform()->GetWorldPosition()).MagnitudeSqr();
+                }
+            }
+            return false;
+        }
+    };
     class ResourceRecursiveLoader
     {
     public:
@@ -55,4 +71,9 @@ namespace wanderUtils
         int wstrSize = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, nullptr, 0, nullptr, nullptr) - 1;
         wstr.resize(wstrSize);
     }
+
+    /// 자유낙하 운동에서 시간이 정해질 때의 초기 속도를 얻습니다.
+    /// 절대 좌표계상에서 방향 벡터를 반환하며, 크기가 초기 속력입니다.
+    /// GlobalConstant 의 gravitySpeed 를 가속도로 계산합니다.
+    Vector3d GetInitSpeedOfFreeFall(float duration, Vector3d startPos, Vector3d destPos);
 }
