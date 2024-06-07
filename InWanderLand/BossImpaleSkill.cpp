@@ -3,6 +3,8 @@
 
 POD_BossImpaleSkill BossImpaleSkill::pod = POD_BossImpaleSkill();
 
+const float impaleStartTime = 2.02f;
+
 struct BossSpear
 {
 	Vector2d position;
@@ -91,8 +93,8 @@ coroutine::Coroutine BossImpaleSkill::SpearArise(std::weak_ptr<BossImpaleSkill> 
 coroutine::Coroutine BossImpaleSkill::operator()()
 {
 	// 창이 생성되는 시간 오프셋은 유닛으로부터의 거리와 정비례한다.
-	owner.lock()->PlayAnimation(UnitAnimType::Skill1);
-	co_yield coroutine::WaitForSeconds{ 1.2f };
+	owner.lock()->PlayAnimation(UnitAnimType::Skill2);
+	co_yield coroutine::WaitForSeconds{ impaleStartTime };
 	coroutine::ForSeconds forSeconds{ pod.impaleSkillDuration };
 	for (auto& each : BossSpearsInfo())
 	{

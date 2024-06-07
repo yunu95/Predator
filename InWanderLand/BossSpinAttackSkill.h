@@ -3,9 +3,15 @@
 
 struct POD_BossSpinAttackSkill
 {
+	float skillPlayTime = 6.0f;
+	float skillDamage = 8.0f;
+	float colliderRadius = 10.0f;
+	float knockBackDistance = 15.0f;
+	float knockBackDuration = 1.0f;
+	float paralyzingDuration = 2.0f;
 
 	TO_JSON(POD_BossSpinAttackSkill)
-		FROM_JSON(POD_BossSpinAttackSkill)
+	FROM_JSON(POD_BossSpinAttackSkill)
 };
 
 class BossSpinAttackSkill : public Skill
@@ -17,6 +23,14 @@ public:
 	virtual void OnInterruption() override;
 
 	static POD_BossSpinAttackSkill pod;
+
+private:
+	std::unordered_set<Unit*> knockBackList;
+
+	std::shared_ptr<Reference::Guard> blockFollowingNavigation;
+	std::shared_ptr<Reference::Guard> disableNavAgent;
+
+	std::weak_ptr<UnitAcquisitionSphereCollider> knockbackCollider;
 };
 
 
