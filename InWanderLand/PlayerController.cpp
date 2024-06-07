@@ -322,6 +322,7 @@ void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
     case SkillType::HANSEL_Q: selectedCharacter.lock()->OrderSkill(HanselChargeSkill{}, pos); break;
     case SkillType::HANSEL_W: selectedCharacter.lock()->OrderSkill(HanselProjectileSkill{}, pos); break;
     }
+    UnSelectSkill();
     // 스킬 프리뷰를 비활성화시킨다.
 }
 
