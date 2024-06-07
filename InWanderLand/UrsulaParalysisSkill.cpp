@@ -8,6 +8,10 @@ POD_UrsulaParalysisSkill UrsulaParalysisSkill::pod = POD_UrsulaParalysisSkill();
 
 coroutine::Coroutine UrsulaParalysisSkill::operator()()
 {
+    auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
+    auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
+    auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
+
     owner.lock()->PlayAnimation(UnitAnimType::Skill2, true);
     auto animator = owner.lock()->GetAnimator();
     auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill2);
@@ -53,6 +57,10 @@ coroutine::Coroutine UrsulaParalysisSkill::operator()()
     {
         each->Paralyze(pod.skillParalysisTime);
     }
+
+    disableNavAgent.reset();
+    blockFollowingNavigation.reset();
+    owner.lock()->Relocate(owner.lock()->GetTransform()->GetWorldPosition());
 
     OnInterruption();
     co_return;

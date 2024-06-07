@@ -10,6 +10,10 @@ POD_UrsulaBlindSkill UrsulaBlindSkill::pod = POD_UrsulaBlindSkill();
 
 coroutine::Coroutine UrsulaBlindSkill::operator()()
 {
+    auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
+    auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
+    auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
+
     UpdatePosition(owner.lock()->GetGameObject()->GetTransform()->GetWorldPosition(), targetPos);
     co_await std::suspend_always{};
 
@@ -82,7 +86,9 @@ coroutine::Coroutine UrsulaBlindSkill::operator()()
         /// 우선은 여러 영역 겹칠 경우, 중복하여 대미지 계산함
         co_await std::suspend_always{};
     }
-
+    disableNavAgent.reset();
+    blockFollowingNavigation.reset();
+    owner.lock()->Relocate(owner.lock()->GetTransform()->GetWorldPosition());
     OnInterruption();
     co_return;
 }

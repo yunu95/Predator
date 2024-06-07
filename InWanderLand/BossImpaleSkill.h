@@ -7,12 +7,12 @@ struct POD_BossImpaleSkill
 {
 	float impaleSkillDamage = 20.0f;
 	float impaleSkillCoolTime = 2.0f;
-	float impaleSkillRange = 8.0f;
-	float impaleSkillWidth = 2.0f;
+	float impaleSkillRange = 15.0f;
+	float impaleSkillWidth = 5.0f;
 	float impaleSkillFirstSpearOffset = 0.5f;
 	float impaleSkillMaxHeightPerSpear = 2.5f;
 	float impaleSkillMinHeightPerSpear = 0.0f;
-	float impaleSkillDurationPerSpear = 0.5f;
+	float impaleSkillDurationPerSpear = 1.0f;
 	float impaleSkillAriseDistancePerSpear = 0.5f;
 	float impaleSkillAriseTimeNoisePerSpear = 0.5f;
 	float impaleSkillAriseDistanceNoisePerSpear = 0.5f;

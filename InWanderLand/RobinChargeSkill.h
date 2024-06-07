@@ -3,9 +3,22 @@
 
 struct POD_RobinChargeSkill
 {
+    float coolTime = 2.0f;
+    float cost = 10.0f;
+    float maxDistance = 8.0f;
+    float rushSpeed = 20.0f;
+    float damageRush = 20.0f;
+    float damageImpact = 80.0f;
+    float rushKnockbackDistance = 3.0f;
+    float impactKnockbackDistance = 8.0f;
+    float rushKnockbackDuration = 0.5f;
+    float impactKnockbackDuration = 1.0f;
+    float impactStunDuration = 2.0f;
+    float rushKnockbackRadius = 1.0f;
+    float impactKnockbackRadius = 5.0f;
 
     TO_JSON(POD_RobinChargeSkill)
-        FROM_JSON(POD_RobinChargeSkill)
+    FROM_JSON(POD_RobinChargeSkill)
 };
 
 class UnitAcquisitionSphereCollider;
