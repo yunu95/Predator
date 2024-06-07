@@ -13,10 +13,12 @@ public:
 	virtual void OnDisable() override;
 
 public:
+	void Init();
 	void SetAutoActiveFalse();
 	bool IsDone();
 
 private:
+	
 	void Reset();
 
 private:
@@ -29,6 +31,7 @@ private:
 	};
 
 private:
+	bool isInit = false;
 	bool isAutoActivFalse = true;
 	yunuGI::IMeshRenderer* renderer;
 	float frameRate;

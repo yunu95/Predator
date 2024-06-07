@@ -364,6 +364,14 @@ yunutyEngine::coroutine::Coroutine Unit::KnockBackCoroutine(Vector3d targetPosit
 }
 void Unit::PlayAnimation(UnitAnimType animType, bool repeat)
 {
+    if (playingBattleAnim)
+    {
+        switch (animType)
+        {
+        case UnitAnimType::Idle: animType = UnitAnimType::BattleIdle; break;
+        case UnitAnimType::Move: animType = UnitAnimType::BattleMove; break;
+        }
+    }
     auto anim = wanderResources::GetAnimation(unitTemplateData->pod.skinnedFBXName, animType);
 
     if (animatorComponent.lock()->GetGI().GetCurrentAnimation() == nullptr || animatorComponent.lock()->GetGI().GetCurrentAnimation() == anim)
@@ -482,6 +490,11 @@ void Unit::Relocate(const Vector3d& pos)
 }
 void Unit::OrderMove(Vector3d position)
 {
+    static constexpr float epsilon = 0.1f;
+    if (DistanceSquare(position)<epsilon)
+    {
+        return;
+    }
     pendingOrderType = UnitOrderType::Move;
     moveDestination = position;
 }
@@ -522,6 +535,22 @@ float Unit::Distance(Unit* a, Unit* b)
 float Unit::DistanceSquare(Unit* a, Unit* b)
 {
     return (a->GetTransform()->GetWorldPosition() - b->GetTransform()->GetWorldPosition()).MagnitudeSqr();
+}
+float Unit::Distance(Unit* a, const Vector3d& worldPos)
+{
+    return sqrtf(DistanceSquare(a, worldPos));
+}
+float Unit::DistanceSquare(Unit* a, const Vector3d& worldPos)
+{
+    return (a->GetTransform()->GetWorldPosition() - worldPos).MagnitudeSqr();
+}
+float Unit::Distance(const Vector3d& worldPos)
+{
+    return Unit::Distance(this, worldPos);
+}
+float Unit::DistanceSquare(const Vector3d& worldPos)
+{
+    return Unit::DistanceSquare(this, worldPos);
 }
 // 유닛과 관련된 객체들을 모조리 생성
 void Unit::Init(const application::editor::Unit_TemplateData* unitTemplateData)

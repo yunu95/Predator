@@ -24,6 +24,8 @@ namespace application
         GC<float> enemyAggroUpdateQuota = 2;
         // +- 몇명씩 랜덤하게 분배해주는가
         GC<float> enemyAggroUpdateQuotaNoise = 2;
+        GC<float> peaceFollowingXOffest = 3.0f;
+        GC<float> peaceFollowingZOffest = 2.0f;
 
         GC<float>   impaleSkillDamage = 20.0f;
         GC<float>   impaleSkillCoolTime = 2.0f;
