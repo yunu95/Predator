@@ -299,6 +299,7 @@ class ContentsInitializer : public yunutyEngine::Component
         DebugGraphic::SetDebugGraphicsEnabled(false);
 #endif
 
+		SkillPreviewSystem::Instance().Init();
         Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
         co_return;
     }
@@ -357,7 +358,6 @@ void application::contents::ContentsLayer::PlayContents(ContentsPlayFlag playFla
 
 	Interactable_ChessPool::Instance();
 	ContentsObserver::Instance().OnPlayContents();
-	SkillPreviewSystem::Instance().Init();
 	SkillPreviewSystem::Instance().camObj = RTSCam::Instance().GetGameObject();
 }
 

@@ -3,6 +3,8 @@
 
 POD_BossImpaleSkill BossImpaleSkill::pod = POD_BossImpaleSkill();
 
+const float impaleStartTime = 2.02f;
+
 struct BossSpear
 {
 	Vector2d position;
@@ -49,8 +51,6 @@ const std::vector<BossSpear> BossSpearsInfo()
 // 창이 한번 불쑥 튀어나왔다가 다시 꺼지는 사이클
 coroutine::Coroutine BossImpaleSkill::SpearArise(std::weak_ptr<BossImpaleSkill> skill, std::weak_ptr<ManagedFBX> fbx, Vector2d pos)
 {
-	auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
-	auto enableNavObstacle = owner.lock()->referenceEnableNavObstacle.Acquire();
 	fbx = FBXPool::SingleInstance().Borrow(wanderResources::GetFBXName(wanderResources::WanderFBX::IMPALING_SPIKE));
 	std::weak_ptr<UnitAcquisitionSphereCollider> collider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(skill.lock()->owner);
 	auto forward = owner.lock()->GetTransform()->GetWorldRotation().Forward();
@@ -90,9 +90,13 @@ coroutine::Coroutine BossImpaleSkill::SpearArise(std::weak_ptr<BossImpaleSkill> 
 
 coroutine::Coroutine BossImpaleSkill::operator()()
 {
+	auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
+	auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
+	auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
+	auto enableNavObstacle = owner.lock()->referenceEnableNavObstacle.Acquire();
 	// 창이 생성되는 시간 오프셋은 유닛으로부터의 거리와 정비례한다.
-	owner.lock()->PlayAnimation(UnitAnimType::Skill1);
-	co_yield coroutine::WaitForSeconds{ 1.2f };
+	owner.lock()->PlayAnimation(UnitAnimType::Skill2);
+	co_yield coroutine::WaitForSeconds{ impaleStartTime };
 	coroutine::ForSeconds forSeconds{ pod.impaleSkillDuration };
 	for (auto& each : BossSpearsInfo())
 	{
@@ -104,6 +108,10 @@ coroutine::Coroutine BossImpaleSkill::operator()()
 		std::weak_ptr<ManagedFBX> fbx;
 		owner.lock()->StartCoroutine(SpearArise(std::dynamic_pointer_cast<BossImpaleSkill>(selfWeakPtr.lock()), fbx, each.position));
 	}
+	
+	disableNavAgent.reset();
+	blockFollowingNavigation.reset();
+	owner.lock()->Relocate(owner.lock()->GetTransform()->GetWorldPosition());
 	while (forSeconds.Tick()) { co_await std::suspend_always{}; }
 	owner.lock()->PlayAnimation(UnitAnimType::Idle);
 	co_yield coroutine::WaitForSeconds{ 0.3f };

@@ -1051,6 +1051,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="Multiplier.h" />
     <ClInclude Include="PlayerCharacterType.h" />
     <ClInclude Include="ProjectilePool.h" />
+    <ClInclude Include="RangedEliteController.h" />
     <ClInclude Include="Reference.h" />
     <ClInclude Include="RobinTauntSkill.h" />
     <ClInclude Include="SkillList.h" />
@@ -2330,6 +2331,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="ProjectilePool.cpp" />
     <ClCompile Include="PulsingUI.cpp" />
+    <ClCompile Include="RangedEliteController.cpp" />
     <ClCompile Include="ResurrectionSystem.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGraphicsExe|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugUnitTests|x64'">true</ExcludedFromBuild>

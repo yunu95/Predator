@@ -286,7 +286,7 @@ void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
     case SkillType::ROBIN_W: selectedCharacter.lock()->OrderSkill(RobinTauntSkill{  }, pos); break;
     case SkillType::URSULA_Q: selectedCharacter.lock()->OrderSkill(UrsulaBlindSkill{  }, pos); break;
     case SkillType::URSULA_W: selectedCharacter.lock()->OrderSkill(UrsulaParalysisSkill{  }, pos); break;
-    case SkillType::HANSEL_Q: selectedCharacter.lock()->OrderSkill(BossImpaleSkill{}, pos); break;
+    case SkillType::HANSEL_Q: selectedCharacter.lock()->OrderSkill(HanselChargeSkill{}, pos); break;
     case SkillType::HANSEL_W: selectedCharacter.lock()->OrderSkill(HanselProjectileSkill{}, pos); break;
     }
     // 스킬 프리뷰를 비활성화시킨다.
@@ -307,7 +307,7 @@ void PlayerController::SelectSkill(SkillType::Enum skillType)
     // 즉발은 그냥 써버리고 나머지는 준비상태로 만든다.
     switch (skillType)
     {
-    case SkillType::ROBIN_W: ActivateSkill(SkillType::ROBIN_W, Vector3d::zero); break;
+    case SkillType::ROBIN_W: ActivateSkill(SkillType::ROBIN_W, characters[PlayerCharacterType::Robin].lock()->GetTransform()->GetWorldPosition()); break;
     default:
         selectedSkill = skillType;
         // 스킬 프리뷰를 활성화시킨다.

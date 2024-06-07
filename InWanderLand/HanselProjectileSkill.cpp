@@ -15,30 +15,35 @@ coroutine::Coroutine HanselProjectileSkill::ThrowingPie()
 
     coroutine::ForSeconds forSeconds{ static_cast<float>(deltaPos.Magnitude()) / pod.projectileSpeed };
     auto pieCollider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
-    auto pieObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Pie");
+    auto pieObject = FBXPool::SingleInstance().Borrow("SM_Pie");
+    pieObject.lock()->GetGameObject()->SetSelfActive(false);
     std::unordered_set<Unit*> onceCollidedUnits;
     co_await std::suspend_always{};
 
     pieCollider.lock()->SetRadius(pod.projectileRadius);
-    pieObject->GetTransform()->SetWorldScale({ 3,3,3 });
+    pieObject.lock()->GetTransform()->SetWorldScale({ pod.pieScaleMultipler, pod.pieScaleMultipler, pod.pieScaleMultipler });
     pieCollider.lock()->GetTransform()->SetWorldRotation(direction);
-	pieObject->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction.up * -1, direction));
+    auto pieStartRotation = Quaternion::MakeWithForwardUp(direction.up * -1, direction);
+
+    pieObject.lock()->GetTransform()->SetWorldRotation(pieStartRotation);
     //pieObject->GetTransform()->SetWorldRotation(pieObject->GetTransform()->GetWorldRotation().Up() * -1);
     float rotatePerFrame = 0.0f;
 
     while (forSeconds.Tick())
     {
         currentPos += direction * pod.projectileSpeed * Time::GetDeltaTime();
-        pieCollider.lock()->GetTransform()->SetWorldPosition(currentPos);
-        pieObject->GetTransform()->SetWorldPosition(currentPos + Vector3d(0, pod.pieHeight, 0 ));
+        pieCollider.lock()->GetTransform()->SetWorldPosition(currentPos + direction * pod.pieOffsetX + Vector3d(0, pod.pieOffsetY, 0));
+        pieObject.lock()->GetTransform()->SetWorldPosition(currentPos + direction * pod.pieOffsetX + Vector3d(0, pod.pieOffsetY, 0 ));
 
         rotatePerFrame += pod.pieRotateSpeed * Time::GetDeltaTime();
 
         Vector3d directionPerFrame = (endPos - currentPos).Normalized();
 		//pieObject->GetTransform()->SetWorldRotation(pieObject->GetTransform()->GetWorldRotation() + Vector3d(rotatePerFrame, 0, 0));
-        //pieObject->GetTransform()->SetWorldRotation(Quaternion::MakeAxisAngleQuaternion((pieObject->GetTransform()->GetWorldPosition() + directionPerFrame).right, rotatePerFrame));
-
+        auto euler =  pieObject.lock()->GetTransform()->GetLocalRotation().Euler();
+        euler.x = rotatePerFrame;
+        pieObject.lock()->GetTransform()->SetWorldRotation(Quaternion{ euler });
         co_await std::suspend_always{};
+        pieObject.lock()->GetGameObject()->SetSelfActive(true);
         for (auto& each : pieCollider.lock()->GetEnemies())
         {
             if (onceCollidedUnits.find(each) == onceCollidedUnits.end())
@@ -61,7 +66,7 @@ coroutine::Coroutine HanselProjectileSkill::ThrowingPie()
     pieCollider.lock()->SetRadius(0.5);
     
     UnitAcquisitionSphereColliderPool::SingleInstance().Return(pieCollider);
-    yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(pieObject);
+    FBXPool::SingleInstance().Return(pieObject);
     onceCollidedUnits.clear();
     co_return;
 }
@@ -101,7 +106,7 @@ coroutine::Coroutine HanselProjectileSkill::operator()()
 	disableNavAgent.reset();
 	blockFollowingNavigation.reset();
 	owner.lock()->Relocate(owner.lock()->GetTransform()->GetWorldPosition());
-
+    OnInterruption();
     co_return;
 }
 

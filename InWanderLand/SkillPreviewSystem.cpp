@@ -597,6 +597,7 @@ yunutyEngine::graphics::StaticMeshRenderer* SkillPreviewSystem::ShowAttackImage(
 		{}
 		break;
 	}
+	return attackRenderer.lock().get();
 }
 
 void SkillPreviewSystem::HideAttackImage(yunutyEngine::graphics::StaticMeshRenderer* renderer)
