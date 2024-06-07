@@ -83,7 +83,7 @@ void VFXAnimator::Update()
 		{
 			continue;
 		}
-
+		this->isPlayDone = true;
 		if (this->isAutoActivFalse == true)
 		{
 			GetGameObject()->SetSelfActive(false);
@@ -106,6 +106,11 @@ void VFXAnimator::SetAutoActiveFalse()
 	this->isAutoActivFalse = false;
 }
 
+bool VFXAnimator::IsDone()
+{
+	return this->isPlayDone;
+}
+
 void VFXAnimator::Reset()
 {
 	for (auto& each : this->curFrameVec)
@@ -115,4 +120,5 @@ void VFXAnimator::Reset()
 		each.sumTime = 0.f;
 		each.isDone = false;
 	}
+	this->isPlayDone = false;
 }

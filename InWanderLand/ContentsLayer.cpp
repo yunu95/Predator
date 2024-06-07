@@ -188,7 +188,8 @@ void GraphicsTest()
 	//	test->idleAnimation = animation;
 	//	test->walkAnimation = animation2;
 	//}
-
+	{
+	}
 	{
 		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_HeartQueen");
 	}

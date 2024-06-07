@@ -14,6 +14,7 @@ public:
 
 public:
 	void SetAutoActiveFalse();
+	bool IsDone();
 
 private:
 	void Reset();
@@ -31,6 +32,7 @@ private:
 	bool isAutoActivFalse = true;
 	yunuGI::IMeshRenderer* renderer;
 	float frameRate;
+	bool isPlayDone = false;
 
 	// 키프레임의 UV좌표 값
 	std::vector<std::vector<yunuGI::VFXInfo>> frameInfoVec;
