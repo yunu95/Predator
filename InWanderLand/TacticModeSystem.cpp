@@ -564,7 +564,21 @@ void TacticModeSystem::Enqueue(std::shared_ptr<UnitCommand> command)
 
 	this->commandQueue.push_back(command);
 
+	command->ShowPreviewMesh();
+
 	// 유닛의 타입에 따라 멤버변수 3개에 알맞게 넣어줘야한다.
+	if (command->GetUnit()->GetUnitTemplateData().GetDataResourceName() == "SKM_Robin")
+	{
+		this->robinLastCommand = command;
+	}
+	else if (command->GetUnit()->GetUnitTemplateData().GetDataResourceName() == "SKM_Ursula")
+	{
+		this->ursulaLastCommand = command;
+	}
+	else if (command->GetUnit()->GetUnitTemplateData().GetDataResourceName() == "SKM_Hansel")
+	{
+		this->hanselLastCommand = command;
+	}
 }
 
 void TacticModeSystem::Execute()

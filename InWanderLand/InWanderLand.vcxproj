@@ -1030,6 +1030,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
       </ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="Adder.h" />
+    <ClInclude Include="AttackPreviewPool.h" />
     <ClInclude Include="EnemyAggroController.h" />
     <ClInclude Include="AnimationEventManager.h" />
     <ClInclude Include="AnimationEvents.h" />
@@ -1050,6 +1051,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="Multiplier.h" />
     <ClInclude Include="PlayerCharacterType.h" />
     <ClInclude Include="ProjectilePool.h" />
+    <ClInclude Include="RangedEliteController.h" />
     <ClInclude Include="Reference.h" />
     <ClInclude Include="RobinTauntSkill.h" />
     <ClInclude Include="SkillList.h" />
@@ -1942,6 +1944,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="UIPriorityLayout.h" />
     <ClInclude Include="UISpriteAnimation.h" />
     <ClInclude Include="UnitAcquisitionSphereCollider.h" />
+    <ClInclude Include="UnitAttackCommand.h" />
     <ClInclude Include="UnitAttackType.h" />
     <ClInclude Include="UnitBehaviourTree.h" />
     <ClInclude Include="UnitBuff.h" />
@@ -1963,6 +1966,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGraphicsExe|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugEditorExe|x64'">true</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="UnitMoveCommand.h" />
     <ClInclude Include="UnitPool.h" />
     <ClInclude Include="UnitStatusBarType.h" />
     <ClInclude Include="Unit_TemplateData.h" />
@@ -2076,6 +2080,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugEditorExe|x64'">
       </ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="AttackPreviewPool.cpp" />
     <ClCompile Include="EnemyAggroController.cpp" />
     <ClCompile Include="AnimationEventManager.cpp" />
     <ClCompile Include="AttackSystem.cpp">
@@ -2326,6 +2331,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="ProjectilePool.cpp" />
     <ClCompile Include="PulsingUI.cpp" />
+    <ClCompile Include="RangedEliteController.cpp" />
     <ClCompile Include="ResurrectionSystem.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGraphicsExe|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugUnitTests|x64'">true</ExcludedFromBuild>
@@ -2934,6 +2940,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="UISpriteAnimation.cpp" />
     <ClCompile Include="UnitAcquisitionSphereCollider.cpp" />
     <ClCompile Include="UnitAcquisitionSphereColliderPool.cpp" />
+    <ClCompile Include="UnitAttackCommand.cpp" />
     <ClCompile Include="UnitBrush.cpp" />
     <ClCompile Include="UnitBuff.cpp" />
     <ClCompile Include="UnitBuffBleeding.cpp" />
@@ -2941,6 +2948,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="UnitController.cpp" />
     <ClCompile Include="UnitData.cpp" />
     <ClCompile Include="UnitEditorInstance.cpp" />
+    <ClCompile Include="UnitMoveCommand.cpp" />
     <ClCompile Include="UnitPalette.cpp" />
     <ClCompile Include="StatusEffect.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGraphicsExe|x64'">true</ExcludedFromBuild>

@@ -2,11 +2,12 @@
 #include "Skill.h"
 
 class UnitAcquisitionSphereCollider;
-
+class ManagedFBX;
 struct POD_EnemyImpaleSkill
 {
     float impaleSkillDamage = 20.0f;
-    float impaleSkillCoolTime = 2.0f;
+    float impaleSkillCoolTime = 6.0f;
+    float impaleSkillApproachingTime = 2.0f;
     float impaleSkillRange = 8.0f;
     float impaleSkillWidth = 2.0f;
     float impaleSkillFirstSpearOffset = 0.5f;
@@ -21,7 +22,7 @@ struct POD_EnemyImpaleSkill
     float impaleSkillKnockbackDuration = 2.0f;
 
     TO_JSON(POD_EnemyImpaleSkill)
-    FROM_JSON(POD_EnemyImpaleSkill)
+        FROM_JSON(POD_EnemyImpaleSkill)
 };
 
 class EnemyImpaleSkill : public Skill

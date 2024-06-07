@@ -1,7 +1,7 @@
 [
     {
-        "material_name": "M_VFX_1",
-        "frame_rate": 24,
+        "material_name": "M_SVFX_Wave_1",
+        "frame_rate": 30,
         "location_data": [
             {
                 "frame": 0,
@@ -70,8 +70,8 @@
         ]
     },
     {
-        "material_name": "M_VFX_3",
-        "frame_rate": 24,
+        "material_name": "M_SVFX_Wave_3",
+        "frame_rate": 30,
         "location_data": [
             {
                 "frame": 0,
@@ -82,7 +82,7 @@
                 ]
             },
             {
-                "frame": 25,
+                "frame": 16,
                 "location": [
                     0.8999999761581421,
                     0.0,
@@ -90,7 +90,7 @@
                 ]
             },
             {
-                "frame": 38,
+                "frame": 29,
                 "location": [
                     0.6999999284744263,
                     0.0,
@@ -98,7 +98,7 @@
                 ]
             },
             {
-                "frame": 60,
+                "frame": 51,
                 "location": [
                     0.29999998211860657,
                     0.0,
@@ -116,13 +116,21 @@
         ]
     },
     {
-        "material_name": "M_VFX_4",
-        "frame_rate": 24,
+        "material_name": "M_SVFX_Wave_4",
+        "frame_rate": 30,
         "location_data": [
             {
                 "frame": 0,
                 "location": [
-                    -0.3999999761581421,
+                    -0.29999998211860657,
+                    0.0,
+                    0.0
+                ]
+            },
+            {
+                "frame": 1,
+                "location": [
+                    -0.29999998211860657,
                     0.0,
                     0.0
                 ]
@@ -186,7 +194,7 @@
             {
                 "frame": 120,
                 "location": [
-                    -0.3999999165534973,
+                    -0.2999999225139618,
                     0.0,
                     0.0
                 ]

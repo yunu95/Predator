@@ -310,14 +310,20 @@ float Unit::GetUnitCurrentHp() const
 
 void Unit::KnockBack(Vector3d targetPosition, float knockBackDuration)
 {
-    DeleteCoroutine(coroutineKnockBack);
-    coroutineKnockBack = StartCoroutine(KnockBackCoroutine(targetPosition, knockBackDuration));
+    if (IsAlive())
+    {
+        DeleteCoroutine(coroutineKnockBack);
+        coroutineKnockBack = StartCoroutine(KnockBackCoroutine(targetPosition, knockBackDuration));
+    }
 }
 
 void Unit::KnockBackRelativeVector(Vector3d relativeVector, float knockBackDuration)
 {
-    DeleteCoroutine(coroutineKnockBack);
-    coroutineKnockBack = StartCoroutine(KnockBackCoroutine(relativeVector, knockBackDuration, true));
+    if (IsAlive())
+    {
+        DeleteCoroutine(coroutineKnockBack);
+        coroutineKnockBack = StartCoroutine(KnockBackCoroutine(relativeVector, knockBackDuration, true));
+    }
 }
 
 void Unit::Paralyze(float paralyzeDuration)
@@ -358,6 +364,14 @@ yunutyEngine::coroutine::Coroutine Unit::KnockBackCoroutine(Vector3d targetPosit
 }
 void Unit::PlayAnimation(UnitAnimType animType, bool repeat)
 {
+    if (playingBattleAnim)
+    {
+        switch (animType)
+        {
+        case UnitAnimType::Idle: animType = UnitAnimType::BattleIdle; break;
+        case UnitAnimType::Move: animType = UnitAnimType::BattleMove; break;
+        }
+    }
     auto anim = wanderResources::GetAnimation(unitTemplateData->pod.skinnedFBXName, animType);
 
     if (animatorComponent.lock()->GetGI().GetCurrentAnimation() == nullptr || animatorComponent.lock()->GetGI().GetCurrentAnimation() == anim)
@@ -476,6 +490,11 @@ void Unit::Relocate(const Vector3d& pos)
 }
 void Unit::OrderMove(Vector3d position)
 {
+    static constexpr float epsilon = 0.1f;
+    if (DistanceSquare(position)<epsilon)
+    {
+        return;
+    }
     pendingOrderType = UnitOrderType::Move;
     moveDestination = position;
 }
@@ -492,6 +511,46 @@ void Unit::OrderAttack(std::weak_ptr<Unit> opponent)
 void Unit::OrderHold()
 {
     pendingOrderType = UnitOrderType::Hold;
+}
+Vector3d Unit::FromTo(std::weak_ptr<Unit> a, std::weak_ptr<Unit> b)
+{
+    return FromTo(a.lock().get(), b.lock().get());
+}
+Vector3d Unit::FromTo(Unit* a, Unit* b)
+{
+    return b->GetTransform()->GetWorldPosition() - a->GetTransform()->GetWorldPosition();
+}
+float Unit::Distance(std::weak_ptr<Unit> a, std::weak_ptr<Unit> b)
+{
+    return Distance(a.lock().get(), b.lock().get());
+}
+float Unit::DistanceSquare(std::weak_ptr<Unit> a, std::weak_ptr<Unit> b)
+{
+    return DistanceSquare(a.lock().get(), b.lock().get());
+}
+float Unit::Distance(Unit* a, Unit* b)
+{
+    return sqrtf(DistanceSquare(a, b));
+}
+float Unit::DistanceSquare(Unit* a, Unit* b)
+{
+    return (a->GetTransform()->GetWorldPosition() - b->GetTransform()->GetWorldPosition()).MagnitudeSqr();
+}
+float Unit::Distance(Unit* a, const Vector3d& worldPos)
+{
+    return sqrtf(DistanceSquare(a, worldPos));
+}
+float Unit::DistanceSquare(Unit* a, const Vector3d& worldPos)
+{
+    return (a->GetTransform()->GetWorldPosition() - worldPos).MagnitudeSqr();
+}
+float Unit::Distance(const Vector3d& worldPos)
+{
+    return Unit::Distance(this, worldPos);
+}
+float Unit::DistanceSquare(const Vector3d& worldPos)
+{
+    return Unit::DistanceSquare(this, worldPos);
 }
 // 유닛과 관련된 객체들을 모조리 생성
 void Unit::Init(const application::editor::Unit_TemplateData* unitTemplateData)
@@ -511,7 +570,7 @@ void Unit::Init(const application::editor::Unit_TemplateData* unitTemplateData)
     skinnedMeshGameObject->SetParent(GetGameObject());
     skinnedMeshGameObject->GetTransform()->SetLocalPosition(Vector3d::zero);
     skinnedMeshGameObject->GetTransform()->SetLocalRotation(Quaternion{ {0,180,0} });
-    skinnedMeshGameObject->GetTransform()->SetLocalScale(Vector3d::one);
+    skinnedMeshGameObject->GetTransform()->SetLocalScale(Vector3d::one * unitTemplateData->pod.unit_scale);
     //wanderResources::PushAnimations(animatorComponent.lock().get(), unitTemplateData->pod.skinnedFBXName);
     unitCollider = GetGameObject()->AddComponentAsWeakPtr<physics::SphereCollider>();
     auto rigidBody = GetGameObject()->AddComponentAsWeakPtr<physics::RigidBody>();
@@ -682,6 +741,7 @@ void Unit::Init(const application::editor::Unit_TemplateData* unitTemplateData)
 }
 void Unit::Summon(const application::editor::UnitData* unitData)
 {
+    skinnedMeshGameObject->GetTransform()->SetLocalScale(Vector3d::one * unitTemplateData->pod.unit_scale);
     switch (unitTemplateData->pod.playerUnitType.enumValue)
     {
     case PlayerCharacterType::Robin:
@@ -753,6 +813,8 @@ void Unit::Summon(const application::editor::UnitData* unitData)
     case UnitControllerType::RANGED_ELITE:
     {
         EnemyAggroController::Instance().RegisterUnit(GetWeakPtr<Unit>());
+        controllers.push_back(&EnemyAggroController::Instance());
+        RangedEliteController::Instance().RegisterUnit(GetWeakPtr<Unit>());
         controllers.push_back(&EnemyAggroController::Instance());
         break;
     }
@@ -858,16 +920,11 @@ void Unit::InitBehaviorTree()
         };
     unitBehaviourTree[UnitBehaviourTree::Chasing].onEnter = [this]()
         {
-            if (!pendingTargetUnit.expired())
-            {
-                currentTargetUnit = pendingTargetUnit;
-                pendingTargetUnit.reset();
-            }
             currentOrderType = pendingOrderType;
         };
     unitBehaviourTree[UnitBehaviourTree::Chasing].onUpdate = [this]()
         {
-            OnStateEngage<UnitBehaviourTree::Chasing>();
+            OnStateUpdate<UnitBehaviourTree::Chasing>();
         };
     unitBehaviourTree[UnitBehaviourTree::Chasing][UnitBehaviourTree::Attack].enteringCondtion = [this]()
         {
@@ -895,7 +952,7 @@ void Unit::InitBehaviorTree()
         };
     unitBehaviourTree[UnitBehaviourTree::Chasing][UnitBehaviourTree::Move].onUpdate = [this]()
         {
-            moveDestination = GetAttackPosition(currentTargetUnit);
+            moveDestination = GetAttackPosition(GetAttackTarget());
             OnStateUpdate<UnitBehaviourTree::Move>();
         };
     unitBehaviourTree[UnitBehaviourTree::Hold].enteringCondtion = [this]()
@@ -1013,6 +1070,7 @@ yunutyEngine::coroutine::Coroutine Unit::AttackCoroutine(std::weak_ptr<Unit> opp
         break;
     case UnitAttackType::MISSILE:
         auto projectile = ProjectilePool::SingleInstance().Borrow(GetWeakPtr<Unit>(), opponent.lock()->GetTransform()->GetWorldPosition());
+        projectile.lock()->GetTransform()->SetLocalScale(Vector3d::one * unitTemplateData->pod.projectile_scale);
         break;
     }
     auto blockCommand = referenceBlockPendingOrder.Acquire();

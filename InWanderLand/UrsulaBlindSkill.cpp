@@ -1,5 +1,6 @@
 #include "InWanderLand.h"
 #include "UrsulaBlindSkill.h"
+#include "VFXAnimator.h"
 
 #include <math.h>
 
@@ -10,8 +11,16 @@ POD_UrsulaBlindSkill UrsulaBlindSkill::pod = POD_UrsulaBlindSkill();
 
 coroutine::Coroutine UrsulaBlindSkill::operator()()
 {
+    auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
+    auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
+    auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
+
+    auto onUrsulaPosEffect = FBXPool::SingleInstance().Borrow("VFX_Ursula_Skill1_1");
+    auto onTargetPosEffect1 = FBXPool::SingleInstance().Borrow("VFX_Ursula_Skill1_2");
+    auto onTargetPosEffect2 = FBXPool::SingleInstance().Borrow("VFX_Ursula_Skill1_2");
+    auto onTargetPosEffect3 = FBXPool::SingleInstance().Borrow("VFX_Ursula_Skill1_2");
+
     UpdatePosition(owner.lock()->GetGameObject()->GetTransform()->GetWorldPosition(), targetPos);
-    co_await std::suspend_always{};
 
     owner.lock()->PlayAnimation(UnitAnimType::Skill1, true);
     auto animator = owner.lock()->GetAnimator();
@@ -24,9 +33,30 @@ coroutine::Coroutine UrsulaBlindSkill::operator()()
     circle_Right = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
     circle_Right.lock()->SetRadius(pod.skillRadius);
 
-    circle_Top.lock()->GetTransform()->SetWorldPosition(GetSkillObjectPos_Top());
-    circle_Left.lock()->GetTransform()->SetWorldPosition(GetSkillObjectPos_Left());
-    circle_Right.lock()->GetTransform()->SetWorldPosition(GetSkillObjectPos_Right());
+    circle_Top.lock()->GetTransform()->SetWorldPosition(GetSkillObjectPos_Top(skillDestination));
+    circle_Left.lock()->GetTransform()->SetWorldPosition(GetSkillObjectPos_Left(skillDestination));
+    circle_Right.lock()->GetTransform()->SetWorldPosition(GetSkillObjectPos_Right(skillDestination));
+
+    onUrsulaPosEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
+    onTargetPosEffect1.lock()->GetGameObject()->GetTransform()->SetWorldPosition(GetSkillObjectPos_Top(skillDestination));
+    onTargetPosEffect2.lock()->GetGameObject()->GetTransform()->SetWorldPosition(GetSkillObjectPos_Left(skillDestination));
+    onTargetPosEffect3.lock()->GetGameObject()->GetTransform()->SetWorldPosition(GetSkillObjectPos_Right(skillDestination));
+
+    auto onUrsulaPosAnimator = onUrsulaPosEffect.lock()->AcquireVFXAnimator();
+    onUrsulaPosAnimator.lock()->SetAutoActiveFalse();
+    onUrsulaPosAnimator.lock()->Init();
+
+    auto onTargetPosAnimator1 = onTargetPosEffect1.lock()->AcquireVFXAnimator();
+    onTargetPosAnimator1.lock()->SetAutoActiveFalse();
+    onTargetPosAnimator1.lock()->Init();
+
+    auto onTargetPosAnimator2 = onTargetPosEffect2.lock()->AcquireVFXAnimator();
+    onTargetPosAnimator2.lock()->SetAutoActiveFalse();
+    onTargetPosAnimator2.lock()->Init();
+
+    auto onTargetPosAnimator3 = onTargetPosEffect3.lock()->AcquireVFXAnimator();
+    onTargetPosAnimator3.lock()->SetAutoActiveFalse();
+    onTargetPosAnimator3.lock()->Init();
 
     co_await std::suspend_always{};
 
@@ -82,7 +112,20 @@ coroutine::Coroutine UrsulaBlindSkill::operator()()
         /// 우선은 여러 영역 겹칠 경우, 중복하여 대미지 계산함
         co_await std::suspend_always{};
     }
+    animator.lock()->Pause();
+    while (!onTargetPosAnimator1.lock()->IsDone())
+    {
+        co_await std::suspend_always{};
+    }
 
+    FBXPool::SingleInstance().Return(onUrsulaPosEffect);
+    FBXPool::SingleInstance().Return(onTargetPosEffect1);
+    FBXPool::SingleInstance().Return(onTargetPosEffect2);
+    FBXPool::SingleInstance().Return(onTargetPosEffect3);
+    animator.lock()->Resume();
+    disableNavAgent.reset();
+    blockFollowingNavigation.reset();
+    owner.lock()->Relocate(owner.lock()->GetTransform()->GetWorldPosition());
     OnInterruption();
     co_return;
 }
@@ -103,25 +146,25 @@ void UrsulaBlindSkill::UpdatePosition(const Vector3d& start, const Vector3d& des
     skillDestination = dest;
 }
 
-Vector3d UrsulaBlindSkill::GetSkillObjectPos_Top()
+Vector3d UrsulaBlindSkill::GetSkillObjectPos_Top(const Vector3d& dest)
 {
     auto length = pod.skillRadius * 2 + pod.skillOffset;
-    auto skillDir = (skillDestination - skillStart).Normalized();
-    return skillDestination + std::sqrt(3) / 3 * skillDir * length;
+    auto skillDir = (dest - skillStart).Normalized();
+    return dest + std::sqrt(3) / 3 * skillDir * length;
 }
 
-Vector3d UrsulaBlindSkill::GetSkillObjectPos_Left()
+Vector3d UrsulaBlindSkill::GetSkillObjectPos_Left(const Vector3d& dest)
 {
     auto length = pod.skillRadius * 2 + pod.skillOffset;
-    auto skillDir = (skillDestination - skillStart).Normalized();
+    auto skillDir = (dest - skillStart).Normalized();
     auto left = Vector3d::Cross(skillDir, Vector3d::up).Normalized();
-    return skillDestination - std::sqrt(3) / 6 * skillDir * length + left * length / 2;
+    return dest - std::sqrt(3) / 6 * skillDir * length + left * length / 2;
 }
 
-Vector3d UrsulaBlindSkill::GetSkillObjectPos_Right()
+Vector3d UrsulaBlindSkill::GetSkillObjectPos_Right(const Vector3d& dest)
 {
     auto length = pod.skillRadius * 2 + pod.skillOffset;
-    auto skillDir = (skillDestination - skillStart).Normalized();
+    auto skillDir = (dest - skillStart).Normalized();
     auto right = Vector3d::Cross(-skillDir, Vector3d::up).Normalized();
-    return skillDestination - std::sqrt(3) / 6 * skillDir * length + right * length / 2;
+    return dest - std::sqrt(3) / 6 * skillDir * length + right * length / 2;
 }
