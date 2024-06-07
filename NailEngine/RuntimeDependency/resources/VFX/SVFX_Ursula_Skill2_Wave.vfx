@@ -1,7 +1,7 @@
 [
     {
         "material_name": "M_SVFX_Wave_1",
-        "frame_rate": 24,
+        "frame_rate": 30,
         "location_data": [
             {
                 "frame": 0,
@@ -71,7 +71,7 @@
     },
     {
         "material_name": "M_SVFX_Wave_3",
-        "frame_rate": 24,
+        "frame_rate": 30,
         "location_data": [
             {
                 "frame": 0,
@@ -117,7 +117,7 @@
     },
     {
         "material_name": "M_SVFX_Wave_4",
-        "frame_rate": 24,
+        "frame_rate": 30,
         "location_data": [
             {
                 "frame": 0,
