@@ -310,14 +310,20 @@ float Unit::GetUnitCurrentHp() const
 
 void Unit::KnockBack(Vector3d targetPosition, float knockBackDuration)
 {
-    DeleteCoroutine(coroutineKnockBack);
-    coroutineKnockBack = StartCoroutine(KnockBackCoroutine(targetPosition, knockBackDuration));
+    if (IsAlive())
+    {
+        DeleteCoroutine(coroutineKnockBack);
+        coroutineKnockBack = StartCoroutine(KnockBackCoroutine(targetPosition, knockBackDuration));
+    }
 }
 
 void Unit::KnockBackRelativeVector(Vector3d relativeVector, float knockBackDuration)
 {
-    DeleteCoroutine(coroutineKnockBack);
-    coroutineKnockBack = StartCoroutine(KnockBackCoroutine(relativeVector, knockBackDuration, true));
+    if (IsAlive())
+    {
+        DeleteCoroutine(coroutineKnockBack);
+        coroutineKnockBack = StartCoroutine(KnockBackCoroutine(relativeVector, knockBackDuration, true));
+    }
 }
 
 void Unit::Paralyze(float paralyzeDuration)
