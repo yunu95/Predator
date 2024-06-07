@@ -1,5 +1,6 @@
 #include "InWanderLand.h"
 #include "UrsulaParalysisSkill.h"
+#include "VFXAnimator.h"
 
 #include <math.h>
 
@@ -18,8 +19,51 @@ coroutine::Coroutine UrsulaParalysisSkill::operator()()
     coroutine::ForSeconds forSeconds{ anim->GetDuration() };
     skillCollider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
     skillCollider.lock()->SetRadius(pod.skillRadius);
-
     skillCollider.lock()->GetTransform()->SetWorldPosition(targetPos);
+
+    //auto effectParentObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+    //auto tentacleObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SVFX_Ursula_Skill2_Tentacle");
+    //auto waveObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SVFX_Ursula_Skill2_Wave");
+    auto tentacleObject = FBXPool::SingleInstance().Borrow("SVFX_Ursula_Skill2_Tentacle");
+    auto waveObject = FBXPool::SingleInstance().Borrow("SVFX_Ursula_Skill2_Wave");
+    tentacleObject.lock()->GetTransform()->SetWorldScale({3,3,3});
+    waveObject.lock()->GetTransform()->SetWorldScale({ 3,3,3 });
+
+    auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+    auto& animList = rsrcManager->GetAnimationList();
+
+    yunuGI::IAnimation* tentacleAnimation;
+    yunuGI::IAnimation* waveAnimation;
+
+    auto tentacleAnimator = tentacleObject.lock()->GetGameObject()->GetChildren()[0]->GetComponent<yunutyEngine::graphics::Animator>();
+    auto waveAnimator = waveObject.lock()->GetGameObject()->GetChildren()[0]->GetComponent<yunutyEngine::graphics::Animator>();
+
+    for (auto each : animList)
+    {
+        if (each->GetName() == L"root|Ani_SVFX_Tentacle")
+        {
+            tentacleAnimation = each;
+            tentacleAnimator->PushAnimation(tentacleAnimation);
+        }
+        else if (each->GetName() == L"root|Ani_SVFX_Wave")
+        {
+            waveAnimation = each;
+            waveAnimator->PushAnimation(waveAnimation);
+        }
+    }
+
+    waveObject.lock()->GetGameObject()->GetChildren()[0]->AddComponent<VFXAnimator>()->SetAutoActiveFalse();
+
+    //tentacleObject.lock()->GetGameObject()->SetParent(effectParentObject);
+    //waveObject.lock()->GetGameObject()->SetParent(effectParentObject);
+
+    //effectParentObject->GetTransform()->SetWorldPosition(targetPos);
+    tentacleObject.lock()->GetGameObject()->GetTransform()->SetWorldPosition(targetPos + Vector3d(0, 1.0f, 0));
+    waveObject.lock()->GetGameObject()->GetTransform()->SetWorldPosition(targetPos + Vector3d(0, 1.0f, 0));
+
+    tentacleAnimator->Play(tentacleAnimation);
+    waveAnimator->Play(waveAnimation);
+
     co_await std::suspend_always{};
 
     bool hit = false;
@@ -57,6 +101,14 @@ coroutine::Coroutine UrsulaParalysisSkill::operator()()
     {
         each->Paralyze(pod.skillParalysisTime);
     }
+
+    while (!waveAnimator->IsDone())
+    {
+        co_await std::suspend_always{};
+    }
+
+    FBXPool::SingleInstance().Return(tentacleObject);
+    FBXPool::SingleInstance().Return(waveObject);
 
     disableNavAgent.reset();
     blockFollowingNavigation.reset();
