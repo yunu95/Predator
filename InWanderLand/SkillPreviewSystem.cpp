@@ -51,7 +51,9 @@ void SkillPreviewSystem::Init()
 #pragma region SkillMaxRangeRenderer
     {
         this->skillMaxRangePreviewObj = Scene::getCurrentScene()->AddGameObject();
+        this->skillMaxRangePreviewObj->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{90,0,0} });
         this->skillMaxRangePreviewRenderer = this->skillMaxRangePreviewObj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+        this->skillMaxRangePreviewRenderer->GetGI().SetMesh(quadMesh);
         this->skillMaxRangePreviewRenderer->GetGI().GetMaterial()->SetVertexShader(vs);
         this->skillMaxRangePreviewRenderer->GetGI().GetMaterial()->SetPixelShader(ps);
         this->skillMaxRangePreviewRenderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::Temp0, maxSkillRangeTexture);
@@ -170,25 +172,6 @@ void SkillPreviewSystem::Init()
 #pragma region HanselQSkill
     {
         this->hanselQSkillPreviewObj = Scene::getCurrentScene()->AddGameObject();
-        {
-            auto arrowPreviewObj = Scene::getCurrentScene()->AddGameObjectFromFBX("Guideline");
-            arrowPreviewObj->SetParent(this->hanselQSkillPreviewObj);
-            auto arrowRenderer = arrowPreviewObj->GetChildren()[0]->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-            arrowRenderer->GetGI().GetMaterial()->SetVertexShader(vs);
-            arrowRenderer->GetGI().GetMaterial()->SetPixelShader(ps);
-            arrowRenderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::Temp0, arrowHeadTexture);
-            arrowRenderer->GetGI().GetMaterial()->SetColor(wanderResources::unitColor::HANSEL_COLOR);
-        }
-        {
-            auto arrowBody = Scene::getCurrentScene()->AddGameObjectFromFBX("Guideline");
-            arrowBody->SetParent(this->hanselQSkillPreviewObj);
-            auto bodyRenderer = arrowBody->GetChildren()[0]->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-            bodyRenderer->GetGI().GetMaterial()->SetVertexShader(vs);
-            bodyRenderer->GetGI().GetMaterial()->SetPixelShader(ps);
-            bodyRenderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::Temp0, arrowBodyTexture);
-            bodyRenderer->GetGI().GetMaterial()->SetColor(wanderResources::unitColor::HANSEL_COLOR);
-        }
-
         {
             auto circleOne = Scene::getCurrentScene()->AddGameObject();
             circleOne->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{90,0,0} });
@@ -314,8 +297,12 @@ void SkillPreviewSystem::HideRobinWSkill()
     }
 }
 
-void SkillPreviewSystem::ShowUrsulaQSkill(const Vector3d& circleOnePos, const Vector3d& circleTwoPos, const Vector3d& circleThreePos, Vector3d circleRadius)
+void SkillPreviewSystem::ShowUrsulaQSkill(Vector3d& circleOnePos, Vector3d& circleTwoPos, Vector3d& circleThreePos, Vector3d circleRadius)
 {
+    circleOnePos.y += this->Y_OFFSET;
+    circleTwoPos.y += this->Y_OFFSET;
+    circleThreePos.y += this->Y_OFFSET;
+
     circleRadius.x *= 2;
     circleRadius.y *= 2;
     circleRadius.z *= 2;
@@ -327,13 +314,13 @@ void SkillPreviewSystem::ShowUrsulaQSkill(const Vector3d& circleOnePos, const Ve
 
     // 원 3개 출력
     this->ursulaQSkillPreviewObj->GetChildren()[static_cast<int>(UrsulaQSkillInfo::CircleOne)]->GetTransform()->SetLocalPosition(circleOnePos);
-    this->ursulaQSkillPreviewObj->GetChildren()[static_cast<int>(UrsulaQSkillInfo::CircleOne)]->GetTransform()->SetLocalScale(Vector3d{ circleRadius.x,1.0,circleRadius.x });
+    this->ursulaQSkillPreviewObj->GetChildren()[static_cast<int>(UrsulaQSkillInfo::CircleOne)]->GetTransform()->SetLocalScale(Vector3d{ circleRadius.x,circleRadius.x,1.f});
 
     this->ursulaQSkillPreviewObj->GetChildren()[static_cast<int>(UrsulaQSkillInfo::CircleTwo)]->GetTransform()->SetLocalPosition(circleTwoPos);
-    this->ursulaQSkillPreviewObj->GetChildren()[static_cast<int>(UrsulaQSkillInfo::CircleTwo)]->GetTransform()->SetLocalScale(Vector3d{ circleRadius.y,1.0,circleRadius.y });
+    this->ursulaQSkillPreviewObj->GetChildren()[static_cast<int>(UrsulaQSkillInfo::CircleTwo)]->GetTransform()->SetLocalScale(Vector3d{ circleRadius.y,circleRadius.y,1.f });
 
     this->ursulaQSkillPreviewObj->GetChildren()[static_cast<int>(UrsulaQSkillInfo::CircleThree)]->GetTransform()->SetLocalPosition(circleThreePos);
-    this->ursulaQSkillPreviewObj->GetChildren()[static_cast<int>(UrsulaQSkillInfo::CircleThree)]->GetTransform()->SetLocalScale(Vector3d{ circleRadius.z,1.0,circleRadius.z });
+    this->ursulaQSkillPreviewObj->GetChildren()[static_cast<int>(UrsulaQSkillInfo::CircleThree)]->GetTransform()->SetLocalScale(Vector3d{ circleRadius.z,circleRadius.z,1.f });
 }
 
 void SkillPreviewSystem::HideUrsulaQSkill()
@@ -344,8 +331,9 @@ void SkillPreviewSystem::HideUrsulaQSkill()
     }
 }
 
-void SkillPreviewSystem::ShowUrsulaWSkill(const Vector3d& circlePos, float circleRadius)
+void SkillPreviewSystem::ShowUrsulaWSkill(Vector3d circlePos, float circleRadius)
 {
+    circlePos.y += this->Y_OFFSET;
     circleRadius *= 2;
     if (this->ursulaWSkillPreviewObj->GetActive() == false)
     {
@@ -353,7 +341,7 @@ void SkillPreviewSystem::ShowUrsulaWSkill(const Vector3d& circlePos, float circl
     }
 
     ursulaWSkillPreviewObj->GetChildren()[static_cast<int>(UrsulaWSkillInfo::CircleOne)]->GetTransform()->SetLocalPosition(circlePos);
-    ursulaWSkillPreviewObj->GetChildren()[static_cast<int>(UrsulaWSkillInfo::CircleOne)]->GetTransform()->SetLocalScale(Vector3d{ circleRadius,1, circleRadius });
+    ursulaWSkillPreviewObj->GetChildren()[static_cast<int>(UrsulaWSkillInfo::CircleOne)]->GetTransform()->SetLocalScale(Vector3d{ circleRadius,circleRadius, 1.f });
 }
 
 void SkillPreviewSystem::HideUrsulaWSkill()
@@ -364,8 +352,9 @@ void SkillPreviewSystem::HideUrsulaWSkill()
     }
 }
 
-void SkillPreviewSystem::ShowHanselQSkill(const Vector3d& circlePos, float circleRadius)
+void SkillPreviewSystem::ShowHanselQSkill(Vector3d circlePos, float circleRadius)
 {
+    circlePos.y += this->Y_OFFSET;
     circleRadius *= 2;
 
     if (this->hanselQSkillPreviewObj->GetActive() == false)
@@ -375,7 +364,7 @@ void SkillPreviewSystem::ShowHanselQSkill(const Vector3d& circlePos, float circl
 
     // 원 출력
     this->hanselQSkillPreviewObj->GetChildren()[static_cast<int>(HanselQSkillInfo::CircleOne)]->GetTransform()->SetLocalPosition(circlePos);
-    this->hanselQSkillPreviewObj->GetChildren()[static_cast<int>(HanselQSkillInfo::CircleOne)]->GetTransform()->SetLocalScale(Vector3d{ circleRadius,1.0,circleRadius });
+    this->hanselQSkillPreviewObj->GetChildren()[static_cast<int>(HanselQSkillInfo::CircleOne)]->GetTransform()->SetLocalScale(Vector3d{ circleRadius,circleRadius,1.f});
 }
 
 void SkillPreviewSystem::HideHanselQSkill()
@@ -546,8 +535,8 @@ void SkillPreviewSystem::ShowSkillMaxRange(UnitType unitType, Vector3d pos, floa
 
     auto tempPos = pos;
     tempPos.y += Y_OFFSET;
-    skillMaxRangePreviewObj->GetTransform()->SetLocalPosition(tempPos);
-
+    this->skillMaxRangePreviewObj->GetTransform()->SetLocalPosition(tempPos);
+    this->skillMaxRangePreviewObj->GetTransform()->SetLocalScale(Vector3d{ maxRange,maxRange,1 });
     switch (unitType)
     {
     case SkillPreviewSystem::UnitType::Robin:

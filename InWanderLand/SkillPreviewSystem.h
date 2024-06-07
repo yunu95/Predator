@@ -63,19 +63,19 @@ public:
 
 #pragma region UrsulaQSkill
     // 각각 원 3개의 월드 포지션값을 받으며 마지막 circleRadius는 x,y,z순으로 circleOne,circleTwo,circleThree의 크기입니다.
-    void ShowUrsulaQSkill(const Vector3d& circleOnePos, const Vector3d& circleTwoPos, const Vector3d& circleThreePos, Vector3d circleRadius);
+    void ShowUrsulaQSkill(Vector3d& circleOnePos, Vector3d& circleTwoPos, Vector3d& circleThreePos, Vector3d circleRadius);
     void HideUrsulaQSkill();
 #pragma endregion
 
 #pragma region UrsulaWSkill
     // 원 하나의 월드포지션 값을 받습니다.
-    void ShowUrsulaWSkill(const Vector3d& circlePos, float circleRadius);
+    void ShowUrsulaWSkill(Vector3d circlePos, float circleRadius);
     void HideUrsulaWSkill();
 #pragma endregion
 
 #pragma region HanselQSkill
     // 원 하나의 월드포지션 값을 받습니다.
-    void ShowHanselQSkill(const Vector3d& circlePos, float circleRadius);
+    void ShowHanselQSkill(Vector3d circlePos, float circleRadius);
     void HideHanselQSkill();
 #pragma endregion
 
