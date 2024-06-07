@@ -1,0 +1,78 @@
+[
+    {
+        "material_name": "VFX_Robin_Skill1_2",
+        "frame_rate": 30,
+        "location_data": [
+            {
+                "frame": 0,
+                "location": [
+                    -0.29999998211860657,
+                    0.0,
+                    0.0
+                ]
+            },
+            {
+                "frame": 7,
+                "location": [
+                    -0.29999998211860657,
+                    0.0,
+                    0.0
+                ]
+            },
+            {
+                "frame": 14,
+                "location": [
+                    0.0,
+                    0.0,
+                    0.0
+                ]
+            },
+            {
+                "frame": 22,
+                "location": [
+                    0.3999999761581421,
+                    0.0,
+                    0.0
+                ]
+            }
+        ]
+    },
+    {
+        "material_name": "VFX_Robin_Skill1_1",
+        "frame_rate": 30,
+        "location_data": [
+            {
+                "frame": 0,
+                "location": [
+                    0.4999999403953552,
+                    0.0,
+                    0.0
+                ]
+            },
+            {
+                "frame": 7,
+                "location": [
+                    0.4999999403953552,
+                    0.0,
+                    0.0
+                ]
+            },
+            {
+                "frame": 14,
+                "location": [
+                    0.19999998807907104,
+                    0.0,
+                    0.0
+                ]
+            },
+            {
+                "frame": 40,
+                "location": [
+                    -0.4999999701976776,
+                    0.0,
+                    0.0
+                ]
+            }
+        ]
+    }
+]
