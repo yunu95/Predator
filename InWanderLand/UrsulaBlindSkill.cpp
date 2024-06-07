@@ -1,5 +1,6 @@
 #include "InWanderLand.h"
 #include "UrsulaBlindSkill.h"
+#include "VFXAnimator.h"
 
 #include <math.h>
 
@@ -13,6 +14,12 @@ coroutine::Coroutine UrsulaBlindSkill::operator()()
     auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
     auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
     auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
+
+    auto onUrsulaPosEffect = FBXPool::SingleInstance().Borrow("VFX_Ursula_Skill1_1");
+    auto onTargetPosEffect = FBXPool::SingleInstance().Borrow("VFX_Ursula_Skill1_2");
+
+    auto onUrsulaPosAnimator = onUrsulaPosEffect.lock()->GetGameObject()->GetChildren()[0]->AddComponent<VFXAnimator>();
+    auto onTargetPosAnimator = onTargetPosEffect.lock()->GetGameObject()->GetChildren()[0]->AddComponent<VFXAnimator>();
 
     UpdatePosition(owner.lock()->GetGameObject()->GetTransform()->GetWorldPosition(), targetPos);
     co_await std::suspend_always{};
@@ -31,6 +38,11 @@ coroutine::Coroutine UrsulaBlindSkill::operator()()
     circle_Top.lock()->GetTransform()->SetWorldPosition(GetSkillObjectPos_Top(skillDestination));
     circle_Left.lock()->GetTransform()->SetWorldPosition(GetSkillObjectPos_Left(skillDestination));
     circle_Right.lock()->GetTransform()->SetWorldPosition(GetSkillObjectPos_Right(skillDestination));
+
+    onUrsulaPosEffect.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
+    onTargetPosEffect.lock()->GetTransform()->SetWorldPosition(skillDestination);
+
+
 
     co_await std::suspend_always{};
 
@@ -86,6 +98,15 @@ coroutine::Coroutine UrsulaBlindSkill::operator()()
         /// 우선은 여러 영역 겹칠 경우, 중복하여 대미지 계산함
         co_await std::suspend_always{};
     }
+
+    while (!onTargetPosAnimator->IsDone())
+    {
+        co_await std::suspend_always{};
+    }
+
+    FBXPool::SingleInstance().Return(onUrsulaPosEffect);
+    FBXPool::SingleInstance().Return(onTargetPosEffect);
+
     disableNavAgent.reset();
     blockFollowingNavigation.reset();
     owner.lock()->Relocate(owner.lock()->GetTransform()->GetWorldPosition());
