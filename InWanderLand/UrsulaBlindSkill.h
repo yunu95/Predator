@@ -18,6 +18,15 @@ struct POD_UrsulaBlindSkill
 
 class UrsulaBlindSkill : public Skill
 {
+private:
+	coroutine::Coroutine SpawningFieldEffect();
+
+	static Vector3d skillStart;
+	static Vector3d skillDestination;
+	std::weak_ptr<UnitAcquisitionSphereCollider> circle_Top;
+	std::weak_ptr<UnitAcquisitionSphereCollider> circle_Left;
+	std::weak_ptr<UnitAcquisitionSphereCollider> circle_Right;
+
 public:
     UrsulaBlindSkill() {}
     virtual SkillType::Enum GetSkillType() { return SkillType::Enum::URSULA_Q; }
@@ -35,12 +44,6 @@ public:
     static Vector3d GetSkillObjectPos_Top(const Vector3d& dest);
     static Vector3d GetSkillObjectPos_Left(const Vector3d& dest);
     static Vector3d GetSkillObjectPos_Right(const Vector3d& dest);
-private:
-    static Vector3d skillStart;
-    static Vector3d skillDestination;
-    std::weak_ptr<UnitAcquisitionSphereCollider> circle_Top;
-    std::weak_ptr<UnitAcquisitionSphereCollider> circle_Left;
-    std::weak_ptr<UnitAcquisitionSphereCollider> circle_Right;
 };
 
 
