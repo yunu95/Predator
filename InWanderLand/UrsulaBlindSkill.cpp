@@ -16,10 +16,14 @@ coroutine::Coroutine UrsulaBlindSkill::operator()()
     auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
 
     auto onUrsulaPosEffect = FBXPool::SingleInstance().Borrow("VFX_Ursula_Skill1_1");
-    auto onTargetPosEffect = FBXPool::SingleInstance().Borrow("VFX_Ursula_Skill1_2");
+    auto onTargetPosEffect1 = FBXPool::SingleInstance().Borrow("VFX_Ursula_Skill1_2");
+    auto onTargetPosEffect2 = FBXPool::SingleInstance().Borrow("VFX_Ursula_Skill1_2");
+    auto onTargetPosEffect3 = FBXPool::SingleInstance().Borrow("VFX_Ursula_Skill1_2");
 
-    auto onUrsulaPosAnimator = onUrsulaPosEffect.lock()->GetGameObject()->GetChildren()[0]->AddComponent<VFXAnimator>();
-    auto onTargetPosAnimator = onTargetPosEffect.lock()->GetGameObject()->GetChildren()[0]->AddComponent<VFXAnimator>();
+    onUrsulaPosEffect.lock()->GetGameObject()->SetSelfActive(false);
+    onTargetPosEffect1.lock()->GetGameObject()->SetSelfActive(false);
+    onTargetPosEffect2.lock()->GetGameObject()->SetSelfActive(false);
+    onTargetPosEffect3.lock()->GetGameObject()->SetSelfActive(false);
 
     UpdatePosition(owner.lock()->GetGameObject()->GetTransform()->GetWorldPosition(), targetPos);
     co_await std::suspend_always{};
@@ -40,11 +44,21 @@ coroutine::Coroutine UrsulaBlindSkill::operator()()
     circle_Right.lock()->GetTransform()->SetWorldPosition(GetSkillObjectPos_Right(skillDestination));
 
     onUrsulaPosEffect.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
-    onTargetPosEffect.lock()->GetTransform()->SetWorldPosition(skillDestination);
-
-
+    onTargetPosEffect1.lock()->GetTransform()->SetWorldPosition(GetSkillObjectPos_Top(skillDestination));
+    onTargetPosEffect2.lock()->GetTransform()->SetWorldPosition(GetSkillObjectPos_Left(skillDestination));
+    onTargetPosEffect3.lock()->GetTransform()->SetWorldPosition(GetSkillObjectPos_Right(skillDestination));
 
     co_await std::suspend_always{};
+
+    onUrsulaPosEffect.lock()->GetGameObject()->SetSelfActive(true);
+    onTargetPosEffect1.lock()->GetGameObject()->SetSelfActive(true);
+    onTargetPosEffect2.lock()->GetGameObject()->SetSelfActive(true);
+    onTargetPosEffect3.lock()->GetGameObject()->SetSelfActive(true);
+
+    //auto onUrsulaPosAnimator = onUrsulaPosEffect.lock()->GetGameObject()->GetChildren()[0]->AddComponent<VFXAnimator>();
+    auto onTargetPosAnimator1 = onTargetPosEffect1.lock()->GetGameObject()->GetChildren()[0]->AddComponent<VFXAnimator>();
+    auto onTargetPosAnimator2 = onTargetPosEffect2.lock()->GetGameObject()->GetChildren()[0]->AddComponent<VFXAnimator>();
+    auto onTargetPosAnimator3 = onTargetPosEffect3.lock()->GetGameObject()->GetChildren()[0]->AddComponent<VFXAnimator>();
 
     int hitCount = 0;
     while (forSeconds.Tick())
@@ -99,13 +113,15 @@ coroutine::Coroutine UrsulaBlindSkill::operator()()
         co_await std::suspend_always{};
     }
 
-    while (!onTargetPosAnimator->IsDone())
-    {
-        co_await std::suspend_always{};
-    }
+    //while (!onTargetPosAnimator->IsDone())
+    //{
+    //    co_await std::suspend_always{};
+    //}
 
     FBXPool::SingleInstance().Return(onUrsulaPosEffect);
-    FBXPool::SingleInstance().Return(onTargetPosEffect);
+    FBXPool::SingleInstance().Return(onTargetPosEffect1);
+    FBXPool::SingleInstance().Return(onTargetPosEffect2);
+    FBXPool::SingleInstance().Return(onTargetPosEffect3);
 
     disableNavAgent.reset();
     blockFollowingNavigation.reset();
