@@ -26,10 +26,6 @@ public:
 
 private:
 	std::unordered_set<Unit*> knockBackList;
-
-	std::shared_ptr<Reference::Guard> blockFollowingNavigation;
-	std::shared_ptr<Reference::Guard> disableNavAgent;
-
 	std::weak_ptr<UnitAcquisitionSphereCollider> knockbackCollider;
 };
 

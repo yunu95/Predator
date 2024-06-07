@@ -11,8 +11,9 @@ const float afterSpinDelay = totalTime - spinStartTime - spinAttackingTime;
 
 coroutine::Coroutine BossSpinAttackSkill::operator()()
 {
-    blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
-    disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
+    auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
+    auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
+    auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
 
     owner.lock()->PlayAnimation(UnitAnimType::Skill1, true);
     knockbackCollider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
@@ -39,6 +40,9 @@ coroutine::Coroutine BossSpinAttackSkill::operator()()
             each->KnockBack(owner.lock()->GetTransform()->GetWorldPosition() + delta, pod.knockBackDuration);
         }
     }
+    disableNavAgent.reset();
+    blockFollowingNavigation.reset();
+    owner.lock()->Relocate(owner.lock()->GetTransform()->GetWorldPosition());
     co_yield coroutine::WaitForSeconds(afterSpinDelay);
     owner.lock()->PlayAnimation(UnitAnimType::Idle, true);
     co_yield coroutine::WaitForSeconds(0.2);
@@ -51,7 +55,4 @@ void BossSpinAttackSkill::OnInterruption()
     knockbackCollider.lock()->SetRadius(0.5);
     UnitAcquisitionSphereColliderPool::SingleInstance().Return(knockbackCollider);
     knockBackList.clear();
-    disableNavAgent.reset();
-    blockFollowingNavigation.reset();
-    owner.lock()->Relocate(owner.lock()->GetTransform()->GetWorldPosition());
 }
