@@ -187,7 +187,7 @@ void GraphicsTest()
 	//	test->walkAnimation = animation2;
 	//}
 	{
-		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
+		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Hansel");
 	}
 	{
 		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("VFX_HeartQueen_Skill1");
