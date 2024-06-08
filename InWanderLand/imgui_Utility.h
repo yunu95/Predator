@@ -5,6 +5,8 @@
 
 #include "imgui.h"
 #include "imgui_internal.h"
+#include <algorithm>
+#include <iostream>
 
 #include <string>
 #include <functional>
@@ -144,23 +146,26 @@ bool application::editor::imgui::DropdownEnum_2Col(std::string label, POD_Enum<E
     //imgui::SmartStyleColor textColor2(ImGuiCol_Text, IM_COL32_WHITE);
 
     bool returnVal = false;
-    static std::vector<std::string> selections = std::vector<std::string>();
-    std::string current = data.enumName;
+    //static std::vector<std::string> selections = std::vector<std::string>();
+    int current = data.enumValue;
 
-    selections.resize(0);
-    std::transform(data.GetEnumNameMap().begin(), data.GetEnumNameMap().end(), std::back_inserter(selections)
-        , [](const std::pair<int, std::string>& each) { return each.second; });
+    //selections.resize(0);
+    //std::transform(data.GetEnumNameMap().begin(), data.GetEnumNameMap().end(), std::back_inserter(selections)
+    //    , [](const std::pair<int, std::string>& each) { return each.second; });
 
-    if (ImGui::BeginCombo(("##editableEnum : " + label).c_str(), current.c_str()))
+    int enumMin = std::min_element(data.GetEnumNameMap().begin(), data.GetEnumNameMap().end(), [](const std::pair<int, std::string>& a, const std::pair<int, std::string>& b) { return a.first < b.first; })->first;
+    int enumMax = std::max_element(data.GetEnumNameMap().begin(), data.GetEnumNameMap().end(), [](const std::pair<int, std::string>& a, const std::pair<int, std::string>& b) { return a.first < b.first; })->first;
+
+    if (ImGui::BeginCombo(("##editableEnum : " + label).c_str(), data.GetEnumNameMap().at(current).c_str()))
     {
-        for (int i = 0; i < selections.size(); i++)
+        for (int i = enumMin; i <= enumMax; i++)
         {
-            const bool is_selected = (current == selections[i]);
-            if (ImGui::Selectable(selections[i].c_str(), is_selected))
+            const bool is_selected = (current == i);
+            if (ImGui::Selectable(data.GetEnumNameMap().at(i).c_str(), is_selected))
             {
-                current = selections[i];
-                data.enumName = selections[i];
-                data.enumValue = POD_Enum<EnumType>::GetNameEnumMap().at(selections[i]);
+                current = i;
+                data.enumName = data.GetEnumNameMap().at(i).c_str();
+                data.enumValue = i;
                 returnVal = true;
             }
 
