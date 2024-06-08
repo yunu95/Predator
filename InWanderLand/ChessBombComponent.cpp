@@ -66,6 +66,7 @@ void ChessBombComponent::Start()
 			break;
 		}
 	}
+	pComp->Play();
 	particleObj->SetSelfActive(false);
 }
 
@@ -108,7 +109,6 @@ yunutyEngine::coroutine::Coroutine ChessBombComponent::AwakeBomb()
 
 	while (ratio < 1)
 	{
-		localTimer += yunutyEngine::Time::GetDeltaTime();
 		ratio = localTimer / bombTime;
 		auto renderer = guideObj->GetComponent<graphics::StaticMeshRenderer>();
 		if (ratio > 1)
@@ -117,6 +117,7 @@ yunutyEngine::coroutine::Coroutine ChessBombComponent::AwakeBomb()
 		}
 		renderer->GetGI().GetMaterial()->SetColor(yunuGI::Color(1, 1, 1, ratio));
 		co_await std::suspend_always();
+		localTimer += yunutyEngine::Time::GetDeltaTime();
 	}
 
 	guideObj->SetSelfActive(false);
@@ -125,16 +126,18 @@ yunutyEngine::coroutine::Coroutine ChessBombComponent::AwakeBomb()
 	co_return;
 }
 
-void ChessBombComponent::Reload()
+void ChessBombComponent::OnReturn()
 {
 	coroutineStart = false;
+	unitSet.clear();
+
 	if (particleObj)
 	{
 		particleObj->SetSelfActive(false);
 	}
+
 	if (!lastCoroutine.expired())
 	{
 		DeleteCoroutine(lastCoroutine);
 	}
-	unitSet.clear();
 }

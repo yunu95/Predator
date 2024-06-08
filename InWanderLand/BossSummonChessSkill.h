@@ -1,33 +1,36 @@
 #pragma once
 #include "Skill.h"
 
-class Interactable_ChessPawn;
-class Interactable_ChessRook;
-class Interactable_ChessBishop;
+namespace BossSummon
+{
+	class ChessPawn;
+	class ChessRook;
+	class ChessBishop;
+}
 
 namespace BossSkill
 {
 	struct CustomCompPawn
 	{
-		bool operator()(const std::weak_ptr<Interactable_ChessPawn>& lp, const std::weak_ptr<Interactable_ChessPawn>& rp) const
+		bool operator()(const std::weak_ptr<BossSummon::ChessPawn>& lp, const std::weak_ptr<BossSummon::ChessPawn>& rp) const
 		{
-			return &lp > &rp;
+			return lp.lock().get() > rp.lock().get();
 		}
 	};
 
 	struct CustomCompRook
 	{
-		bool operator()(const std::weak_ptr<Interactable_ChessRook>& lp, const std::weak_ptr<Interactable_ChessRook>& rp) const
+		bool operator()(const std::weak_ptr<BossSummon::ChessRook>& lp, const std::weak_ptr<BossSummon::ChessRook>& rp) const
 		{
-			return &lp > &rp;
+			return lp.lock().get() > rp.lock().get();
 		}
 	};
 
 	struct CustomCompBishop
 	{
-		bool operator()(const std::weak_ptr<Interactable_ChessBishop>& lp, const std::weak_ptr<Interactable_ChessBishop>& rp) const
+		bool operator()(const std::weak_ptr<BossSummon::ChessBishop>& lp, const std::weak_ptr<BossSummon::ChessBishop>& rp) const
 		{
-			return &lp > &rp;
+			return lp.lock().get() > rp.lock().get();
 		}
 	};
 }
@@ -45,6 +48,7 @@ struct POD_BossSummonChessSkill
 	int rectUnitRadius = 2;
 	int summonCount = 3;
 	float offset_Y = 6;
+	float summonPreDelay = 0.5;
 	float summonTime = 2;
 	bool intervalSummon = true;
 	float chessSummonedExplosionDelay = 1.5f;
@@ -56,8 +60,7 @@ struct POD_BossSummonChessSkill
 class BossSummonChessSkill : public Skill
 {
 public:
-	virtual ~BossSummonChessSkill() override;
-	BossSummonChessSkill() {}
+	BossSummonChessSkill();
 	virtual SkillType::Enum GetSkillType() { return SkillType::Enum::BossSkill_Four; }
 	virtual coroutine::Coroutine operator()()override;
 	virtual void OnInterruption() override;
@@ -65,9 +68,9 @@ public:
 	static POD_BossSummonChessSkill pod;
 
 private:
-	std::set<std::weak_ptr<Interactable_ChessPawn>, BossSkill::CustomCompPawn> borrowedPawns = std::set<std::weak_ptr<Interactable_ChessPawn>, BossSkill::CustomCompPawn>();
-	std::set<std::weak_ptr<Interactable_ChessRook>, BossSkill::CustomCompRook> borrowedRooks = std::set<std::weak_ptr<Interactable_ChessRook>, BossSkill::CustomCompRook>();
-	std::set<std::weak_ptr<Interactable_ChessBishop>, BossSkill::CustomCompBishop> borrowedBishops = std::set<std::weak_ptr<Interactable_ChessBishop>, BossSkill::CustomCompBishop>();
+	std::set<std::weak_ptr<BossSummon::ChessPawn>, BossSkill::CustomCompPawn> borrowedPawns = std::set<std::weak_ptr<BossSummon::ChessPawn>, BossSkill::CustomCompPawn>();
+	std::set<std::weak_ptr<BossSummon::ChessRook>, BossSkill::CustomCompRook> borrowedRooks = std::set<std::weak_ptr<BossSummon::ChessRook>, BossSkill::CustomCompRook>();
+	std::set<std::weak_ptr<BossSummon::ChessBishop>, BossSkill::CustomCompBishop> borrowedBishops = std::set<std::weak_ptr<BossSummon::ChessBishop>, BossSkill::CustomCompBishop>();
 	coroutine::Coroutine SummonChess(std::weak_ptr<BossSummonChessSkill> skill, Vector2i index);
 	Vector2i GetPlaceableIndex(Vector3d pos);
 };

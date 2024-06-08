@@ -37,7 +37,7 @@
 #include "VFXAnimator.h"
 #include "InitialLoadingScreen.h"
 #include "InstanceManager.h"
-#include "Interactable_ChessPool.h"
+#include "ChessPool.h"
 
 #include <algorithm>
 #include <string>
@@ -320,7 +320,7 @@ void application::contents::ContentsLayer::Initialize()
 	CinematicManager::Instance();
 	//TutorialManager::Instance();
 	Scene::getCurrentScene()->AddGameObject()->AddComponent<ContentsInitializer>();
-	//SkillPreviewSystem::Instance().Init();
+	//SkillPreviewSystem::Instance().Init();	
 }
 
 void application::contents::ContentsLayer::Update(float ts)
@@ -344,6 +344,7 @@ void application::contents::ContentsLayer::PlayContents(ContentsPlayFlag playFla
 	{
 		UIManager::Instance().ImportUI("InWanderLand.iwui");
 	}
+
 	editor::InstanceManager::GetSingletonInstance().ApplyInstancesAsPlaytimeObjects();
 
 	yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
@@ -355,7 +356,6 @@ void application::contents::ContentsLayer::PlayContents(ContentsPlayFlag playFla
 	/// Playable 동작들을 일괄 처리할 부분입니다.
 	PlayableComponent::OnGameStartAll();
 
-	Interactable_ChessPool::Instance();
 	ContentsObserver::Instance().OnPlayContents();
 	SkillPreviewSystem::Instance().Init();
 	SkillPreviewSystem::Instance().camObj = RTSCam::Instance().GetGameObject();

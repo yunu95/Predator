@@ -715,9 +715,6 @@
     <Filter Include="Contents_Refactored\InteractableComponent\InteractableList\ChessUtil">
       <UniqueIdentifier>{3c62e98a-e0d8-4e5f-a512-bd48f067905f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Contents_Refactored\InteractableComponent\InteractableList\ChessUtil\ChessPool">
-      <UniqueIdentifier>{b0801621-4320-44ec-b56c-8531f7320ca5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Contents_Refactored\Skill\Robin">
       <UniqueIdentifier>{2668370f-82c3-4b7b-8949-8ad38941aad6}</UniqueIdentifier>
     </Filter>
@@ -783,6 +780,18 @@
     </Filter>
     <Filter Include="Contents_Refactored\Factor">
       <UniqueIdentifier>{b994b5bd-5b65-4afe-a6db-d27d5c52659a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Skill\Boss\Summon">
+      <UniqueIdentifier>{32b16d49-2c2e-4a3d-88b1-e953a02e1892}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Skill\Boss\Summon\Chess">
+      <UniqueIdentifier>{c052b8bb-10e5-4172-b6c5-a265732b79ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Skill\Boss\Summon\Unit">
+      <UniqueIdentifier>{567c69e6-bcdc-4c86-87f7-12b74cd1c98d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Skill\Boss\Summon\Chess\ChessPool">
+      <UniqueIdentifier>{b0801621-4320-44ec-b56c-8531f7320ca5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1831,9 +1840,6 @@
     <ClInclude Include="Interactable_UI.h">
       <Filter>Contents_Refactored\InteractableComponent\InteractableList</Filter>
     </ClInclude>
-    <ClInclude Include="Interactable_ChessPool.h">
-      <Filter>Contents_Refactored\InteractableComponent\InteractableList\ChessUtil\ChessPool</Filter>
-    </ClInclude>
     <ClInclude Include="RobinChargeSkill.h">
       <Filter>Contents_Refactored\Skill\Robin\Q</Filter>
     </ClInclude>
@@ -1902,6 +1908,24 @@
     </ClInclude>
     <ClInclude Include="Adder.h">
       <Filter>Contents_Refactored\Factor</Filter>
+    </ClInclude>
+    <ClInclude Include="ChessPool.h">
+      <Filter>Contents_Refactored\Skill\Boss\Summon\Chess\ChessPool</Filter>
+    </ClInclude>
+    <ClInclude Include="BossSummonObject.h">
+      <Filter>Contents_Refactored\Skill\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="ChessPawn.h">
+      <Filter>Contents_Refactored\Skill\Boss\Summon\Chess</Filter>
+    </ClInclude>
+    <ClInclude Include="ChessRook.h">
+      <Filter>Contents_Refactored\Skill\Boss\Summon\Chess</Filter>
+    </ClInclude>
+    <ClInclude Include="ChessBishop.h">
+      <Filter>Contents_Refactored\Skill\Boss\Summon\Chess</Filter>
+    </ClInclude>
+    <ClInclude Include="ChessObject.h">
+      <Filter>Contents_Refactored\Skill\Boss\Summon\Chess</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2791,8 +2815,8 @@
     <ClCompile Include="ChessBombComponent.cpp">
       <Filter>Contents_Refactored\InteractableComponent\InteractableList\ChessUtil</Filter>
     </ClCompile>
-    <ClCompile Include="Interactable_ChessPool.cpp">
-      <Filter>Contents_Refactored\InteractableComponent\InteractableList\ChessUtil\ChessPool</Filter>
+    <ClCompile Include="ChessPool.cpp">
+      <Filter>Contents_Refactored\Skill\Boss\Summon\Chess\ChessPool</Filter>
     </ClCompile>
     <ClCompile Include="RobinChargeSkill.cpp">
       <Filter>Contents_Refactored\Skill\Robin\Q</Filter>
@@ -2841,6 +2865,15 @@
     </ClCompile>
     <ClCompile Include="EnemyController.cpp">
       <Filter>Contents_Refactored\UnitController\EnemyController</Filter>
+    </ClCompile>
+    <ClCompile Include="ChessBishop.cpp">
+      <Filter>Contents_Refactored\Skill\Boss\Summon\Chess</Filter>
+    </ClCompile>
+    <ClCompile Include="ChessPawn.cpp">
+      <Filter>Contents_Refactored\Skill\Boss\Summon\Chess</Filter>
+    </ClCompile>
+    <ClCompile Include="ChessRook.cpp">
+      <Filter>Contents_Refactored\Skill\Boss\Summon\Chess</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -74,6 +74,7 @@ void Interactable_TrapArms::Start()
 			break;
 		}
 	}
+	pComp->Play();
 	particleObj->SetSelfActive(false);
 }
 

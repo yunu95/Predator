@@ -1,51 +1,43 @@
 #include "InWanderLand.h"
 #include "BossSummonChessSkill.h"
-#include "Interactable_ChessPool.h"
-#include "Interactable_ChessPawn.h"
-#include "Interactable_ChessRook.h"
-#include "Interactable_ChessBishop.h"
+#include "ChessPool.h"
+#include "ChessPawn.h"
+#include "ChessRook.h"
+#include "ChessBishop.h"
 #include "GlobalConstant.h"
 #include "YunutyWaitForSeconds.h"
 
 POD_BossSummonChessSkill BossSummonChessSkill::pod = POD_BossSummonChessSkill();
 
-BossSummonChessSkill::~BossSummonChessSkill()
+BossSummonChessSkill::BossSummonChessSkill()
 {
-	for (auto each : borrowedPawns)
-	{
-		Interactable_ChessPool::Instance().Return(each);
-	}
-	for (auto each : borrowedRooks)
-	{
-		Interactable_ChessPool::Instance().Return(each);
-	}
-	for (auto each : borrowedBishops)
-	{
-		Interactable_ChessPool::Instance().Return(each);
-	}
+	BossSummon::ChessPool::Instance().Start();
 }
 
 coroutine::Coroutine BossSummonChessSkill::operator()()
 {
-	owner.lock()->PlayAnimation(UnitAnimType::Taunt, true);
+	owner.lock()->PlayAnimation(UnitAnimType::Skill4, true);
 	auto animator = owner.lock()->GetAnimator();
-	auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Taunt);
+	auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill4);
 	coroutine::ForSeconds forSeconds{ anim->GetDuration() };
 	Vector3d farUnitPos = Vector3d();
 	Vector3d ownerPos = owner.lock()->GetTransform()->GetWorldPosition();
 	/// Player 유닛만 받아서 가장 먼 거리 계산
 	float distance = 0;
-	//for (auto pUnit : PlayerUnitList)
-	//{
-	//	float tempVal = (pUnit->GetTransform()->GetWorldPosition() - ownerPos).MagnitudeSqr();
-	//	if (pUnit->IsAlive() && distance <= tempVal)
-	//	{
-	//		distance = tempVal;
-	//		farUnitPos = pUnit->GetTransform()->GetWorldPosition();
-	//	}
-	//}
+	for (auto pUnit : PlayerController::Instance().GetPlayers())
+	{
+		if (pUnit.expired())
+		{
+			continue;
+		}
+		float tempVal = (pUnit.lock()->GetTransform()->GetWorldPosition() - ownerPos).MagnitudeSqr();
+		if (pUnit.lock()->IsAlive() && distance <= tempVal)
+		{
+			distance = tempVal;
+			farUnitPos = pUnit.lock()->GetTransform()->GetWorldPosition();
+		}
+	}
 
-	farUnitPos = ownerPos;
 	owner.lock()->StartCoroutine(SummonChess(std::static_pointer_cast<BossSummonChessSkill>(selfWeakPtr.lock()), GetPlaceableIndex(farUnitPos)));
 	while (forSeconds.Tick())
 	{
@@ -59,7 +51,6 @@ void BossSummonChessSkill::OnInterruption()
 {
 
 }
-
 
 coroutine::Coroutine BossSummonChessSkill::SummonChess(std::weak_ptr<BossSummonChessSkill> skill, Vector2i index)
 {
@@ -87,37 +78,9 @@ coroutine::Coroutine BossSummonChessSkill::SummonChess(std::weak_ptr<BossSummonC
 	float unitLength = gc.chessBlockUnitLength + gc.chessBlockUnitOffset;
 
 	std::unordered_set<unsigned int> chessIndex = std::unordered_set<unsigned int>();
-	std::vector<std::weak_ptr<IInteractableComponent>> chessList = std::vector<std::weak_ptr<IInteractableComponent>>();
-	chessList.reserve(pod.summonCount);
-
+	std::vector<std::weak_ptr<BossSummon::ChessObject>> chessList = std::vector<std::weak_ptr<BossSummon::ChessObject>>();
 	for (int i = 0; i < pod.summonCount; i++)
 	{
-		std::weak_ptr<IInteractableComponent> container;
-		auto summonIdx = math::Random::GetRandomInt(0, 2);
-		switch (summonIdx)
-		{
-			case 0:
-			{
-				container = Interactable_ChessPool::Instance().BorrowPawn();
-				borrowedPawns.insert(std::static_pointer_cast<Interactable_ChessPawn>(container.lock()));
-				break;
-			}
-			case 1:
-			{
-				container = Interactable_ChessPool::Instance().BorrowRook();
-				borrowedRooks.insert(std::static_pointer_cast<Interactable_ChessRook>(container.lock()));
-				break;
-			}
-			case 2:
-			{
-				container = Interactable_ChessPool::Instance().BorrowBishop();
-				borrowedBishops.insert(std::static_pointer_cast<Interactable_ChessBishop>(container.lock()));
-				break;
-			}
-			default:
-				break;
-		}
-
 		int arrIdx = -1;
 		int sideLength = pod.rectUnitRadius * 2 + 1;
 		while (true)
@@ -133,65 +96,47 @@ coroutine::Coroutine BossSummonChessSkill::SummonChess(std::weak_ptr<BossSummonC
 		float finalX = pod.pivotPos_x + (index.x - pod.rectUnitRadius + arrIdx % sideLength) * unitLength;
 		float finalZ = pod.pivotPos_z + (index.y - pod.rectUnitRadius + arrIdx / sideLength) * unitLength;
 
-		container.lock()->GetTransform()->SetWorldPosition(Vector3d(finalX, pod.offset_Y, finalZ));
-		chessList.push_back(container);
-	}
-
-	auto playDust = [=](GameObject* target)->void
-	{
-		for (auto each : target->GetChildren())
+		auto summonIdx = math::Random::GetRandomInt(0, 2);
+		switch (summonIdx)
 		{
-			if (each->getName() == "DustParticleObj")
+			case 0:
 			{
-				auto pr = each->GetComponent<graphics::ParticleRenderer>();
-				pr->Play();
-				return;
-			}
-		}
-
-		auto particleObj = target->AddGameObject();
-		particleObj->setName("DustParticleObj");
-		auto pScale = target->GetTransform()->GetWorldScale();
-		assert(pScale.x != 0 && pScale.y != 0 && pScale.z != 0);
-		particleObj->GetTransform()->SetLocalScale(Vector3d(1 / pScale.x, 1 / pScale.y, 1 / pScale.z));
-		auto pComp = particleObj->AddComponent<graphics::ParticleRenderer>();
-		for (auto each : application::particle::ParticleTool_Manager::GetSingletonInstance().GetParticleList())
-		{
-			if (each.lock()->name == "DustParticle")
-			{
-				auto data = each.lock();
-				pComp->SetParticleShape((yunutyEngine::graphics::ParticleShape)data->shape);
-				pComp->SetParticleMode((yunutyEngine::graphics::ParticleMode)data->particleMode);
-				pComp->SetLoop(data->isLoop);
-				pComp->SetDuration(data->duration);
-				pComp->SetLifeTime(data->lifeTime);
-				pComp->SetSpeed(data->speed);
-				pComp->SetStartScale(data->startScale);
-				pComp->SetEndScale(data->endScale);
-				pComp->SetMaxParticle(data->maxParticle);
-				pComp->SetPlayAwake(data->playAwake);
-				pComp->SetRadius(data->radius);
-				pComp->SetAngle(data->angle);
-
-				pComp->SetRateOverTime(data->rateOverTime);
-
-				pComp->SetBurstsCount(data->burstsCount);
-				pComp->SetInterval(data->interval);
-
-				static const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-
-				std::wstring texturePath;
-				texturePath.assign(data->texturePath.begin(), data->texturePath.end());
-				auto texturePtr = resourceManager->GetTexture(texturePath);
-				if (texturePtr)
-				{
-					pComp->SetTexture(texturePtr);
-				}
+				auto pawn = BossSummon::ChessPool::Instance().BorrowPawn();
+				pawn.lock()->OnSummon();
+				pawn.lock()->GetTransform()->SetWorldPosition(Vector3d(finalX, pod.offset_Y, finalZ));
+				borrowedPawns.insert(pawn);
+				chessList.push_back(std::static_pointer_cast<BossSummon::ChessObject>(pawn.lock()));
 				break;
 			}
+			case 1:
+			{
+				auto rook = BossSummon::ChessPool::Instance().BorrowRook();
+				rook.lock()->OnSummon();
+				rook.lock()->GetTransform()->SetWorldPosition(Vector3d(finalX, pod.offset_Y, finalZ));
+				borrowedRooks.insert(rook);
+				chessList.push_back(std::static_pointer_cast<BossSummon::ChessObject>(rook.lock()));
+				break;
+			}
+			case 2:
+			{
+				auto bishop = BossSummon::ChessPool::Instance().BorrowBishop();
+				bishop.lock()->OnSummon();
+				bishop.lock()->GetTransform()->SetWorldPosition(Vector3d(finalX, pod.offset_Y, finalZ));
+				borrowedBishops.insert(bishop);
+				chessList.push_back(std::static_pointer_cast<BossSummon::ChessObject>(bishop.lock()));
+				break;
+			}
+			default:
+				break;
 		}
-		pComp->Play();
-	};
+	}
+
+	coroutine::ForSeconds preSeconds{ pod.summonPreDelay };
+
+	while (preSeconds.Tick())
+	{
+		co_await std::suspend_always{};
+	}
 
 	coroutine::ForSeconds forSeconds{ pod.summonTime };
 	Vector3d indivVelocity = Vector3d();
@@ -215,49 +160,28 @@ coroutine::Coroutine BossSummonChessSkill::SummonChess(std::weak_ptr<BossSummonC
 			summoned++;
 		}
 
+		auto itr = chessList.begin();
 		for (int i = 0; i < summoned; i++)
 		{
 			velocityList[i] += Vector3d::down * gc.gravitySpeed * forSeconds.Elapsed();
-			chessList[i].lock()->GetTransform()->SetWorldPosition(chessList[i].lock()->GetTransform()->GetWorldPosition() + velocityList[i] * forSeconds.Elapsed());
-			auto tempPos = chessList[i].lock()->GetTransform()->GetWorldPosition();
-			if (tempPos.y < 0)
+			chessList[i].lock()->GetSummonComponent()->GetTransform()->SetWorldPosition(chessList[i].lock()->GetSummonComponent()->GetTransform()->GetWorldPosition() + velocityList[i] * forSeconds.Elapsed());
+			auto tempPos = chessList[i].lock()->GetSummonComponent()->GetTransform()->GetWorldPosition();
+			if (tempPos.y <= 0)
 			{
 				tempPos.y = 0;
-				chessList[i].lock()->GetTransform()->SetWorldPosition(tempPos);
+				chessList[i].lock()->GetSummonComponent()->GetTransform()->SetWorldPosition(tempPos);
 				/// 낙하할 때 사운드 관련 작업 필요
-				playDust(chessList[i].lock()->GetGameObject());
+				chessList[i].lock()->SetReady();
 			}
 		}
 		co_await std::suspend_always{};
 	}
 
+	for (auto each : chessList)
+	{
+		each.lock()->StartTimer();
+	}
 	co_await std::suspend_always{};
-
-	float maxDelayTime = 0;
-	float maxParticleTime = 0;
-	if (!borrowedPawns.empty())
-	{
-		maxDelayTime = borrowedPawns.begin()->lock()->delayTime > maxDelayTime ? borrowedPawns.begin()->lock()->delayTime : maxDelayTime;
-		maxParticleTime = borrowedPawns.begin()->lock()->particleEffectTime > maxParticleTime ? borrowedPawns.begin()->lock()->particleEffectTime : maxParticleTime;
-	}
-	if (!borrowedRooks.empty())
-	{
-		maxDelayTime = borrowedRooks.begin()->lock()->delayTime > maxDelayTime ? borrowedRooks.begin()->lock()->delayTime : maxDelayTime;
-		maxParticleTime = borrowedRooks.begin()->lock()->particleEffectTime > maxParticleTime ? borrowedRooks.begin()->lock()->particleEffectTime : maxParticleTime;
-	}
-	if (!borrowedBishops.empty())
-	{
-		maxDelayTime = borrowedBishops.begin()->lock()->delayTime > maxDelayTime ? borrowedBishops.begin()->lock()->delayTime : maxDelayTime;
-		maxParticleTime = borrowedBishops.begin()->lock()->particleEffectTime > maxParticleTime ? borrowedBishops.begin()->lock()->particleEffectTime : maxParticleTime;
-	}
-
-	coroutine::ForSeconds waitBomb{ pod.chessSummonedExplosionDelay + maxDelayTime + maxParticleTime};
-	while (waitBomb.Tick())
-	{
-		co_await std::suspend_always{};
-	}
-	
-	co_return;
 }
 
 Vector2i BossSummonChessSkill::GetPlaceableIndex(Vector3d pos)
@@ -276,7 +200,7 @@ Vector2i BossSummonChessSkill::GetPlaceableIndex(Vector3d pos)
 		horizontalMap.clear();
 		for (int i = 0; i < pod.horizontalSpaces - 1; i++)
 		{
-			horizontalMap.insert({ pod.pivotPos_x + unitLength / 2 + i * unitLength, i});
+			horizontalMap.insert({ pod.pivotPos_x + unitLength / 2 + i * unitLength, i });
 		}
 	}
 
