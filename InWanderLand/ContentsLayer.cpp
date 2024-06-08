@@ -190,7 +190,7 @@ void GraphicsTest()
 		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
 	}
 	{
-		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("VFX_Robin_Skill1");
+		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("VFX_HeartQueen_Skill1");
 		obj2->SetSelfActive(false);
 		auto anim = obj2->AddComponent<VFXAnimator>();
 		anim->Init();
