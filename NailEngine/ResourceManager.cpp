@@ -460,27 +460,31 @@ void ResourceManager::LoadVFXFrameInfo(const std::wstring& vfxPath)
         }
 
         // 비어있는 프레임을 채우는 부분
-        std::vector<yunuGI::VFXInfo> frameVec;
-        frameVec.resize(locationVec.back().frame + 1);
-        for (int i = 0; i < locationVec.size() - 1; ++i)
-        {
-            int curFrameCount = locationVec[i].frame;
-            int nextFrameCount = locationVec[i + 1].frame;
-            int totalFrame = nextFrameCount - curFrameCount;
+        //std::vector<yunuGI::VFXInfo> frameVec;
+        //frameVec.resize(locationVec.back().frame + 1);
+        //for (int i = 0; i < locationVec.size() - 1; ++i)
+        //{
+        //    int curFrameCount = locationVec[i].frame;
+        //    int nextFrameCount = locationVec[i + 1].frame;
+        //    int totalFrame = nextFrameCount - curFrameCount;
 
-            int count = 0;
-            for (int j = curFrameCount; j < nextFrameCount; ++j)
-            {
-                float ratio = ((float)count / totalFrame);
+        //    if (nextFrameCount == locationVec.back().frame)
+        //    {
+        //        nextFrameCount++;
+        //    }
+        //    int count = 0;
+        //    for (int j = curFrameCount; j < nextFrameCount; ++j)
+        //    {
+        //        float ratio = ((float)count / totalFrame);
 
-                auto lerpLocation = yunuGI::Vector2::Lerp(locationVec[i].location, locationVec[i+1].location, ratio);
-                frameVec[j].frame = j;
-                frameVec[j].location = lerpLocation;
-                count++;
-            }
-        }
+        //        auto lerpLocation = yunuGI::Vector2::Lerp(locationVec[i].location, locationVec[i+1].location, ratio);
+        //        frameVec[j].frame = j;
+        //        frameVec[j].location = lerpLocation;
+        //        count++;
+        //    }
+        //}
 
-        this->vfxFrameInfoMap.insert({ wMaterialName,{frameRate, frameVec} });
+        this->vfxFrameInfoMap.insert({ wMaterialName,{frameRate, locationVec} });
         locationVec.clear();
 	}
 }

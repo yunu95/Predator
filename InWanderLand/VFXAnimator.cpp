@@ -31,7 +31,6 @@ void VFXAnimator::Update()
 			this->curFrameVec[i].nextFrame = min(static_cast<int>(this->curFrameVec[i].curFrame + 1), totalframe - 1);
 			float lerpratio = static_cast<float>(this->curFrameVec[i].sumTime - static_cast<float>(this->curFrameVec[i].curFrame) / ratio);
 
-
 			auto lerLocation = yunuGI::Vector2::Lerp(this->frameInfoVec[i][this->curFrameVec[i].curFrame].location, this->frameInfoVec[i][this->curFrameVec[i].nextFrame].location, lerpratio);
 			this->renderer->GetMaterial(i)->SetFloat(0, lerLocation.x);
 			this->renderer->GetMaterial(i)->SetFloat(1, lerLocation.y);
@@ -102,7 +101,6 @@ void VFXAnimator::Init()
 				this->frameInfoVec.push_back(temp.second);
 
 
-
 				if (auto staticMesh = each->GetComponent<graphics::StaticMeshRenderer>(); staticMesh)
 				{
 					renderer->GetMaterial(i)->SetVertexShader(_resourceManager->GetShader(L"TextureAnimVS.cso"));
@@ -117,6 +115,12 @@ void VFXAnimator::Init()
 		}
 		this->curFrameVec.resize(this->frameInfoVec.size());
 		break;
+	}
+
+	for (int j = 0; j < this->frameInfoVec.size(); ++j)
+	{
+		this->renderer->GetMaterial(j)->SetFloat(0, frameInfoVec[j][0].location.x);
+		this->renderer->GetMaterial(j)->SetFloat(1, frameInfoVec[j][0].location.y);
 	}
 }
 
