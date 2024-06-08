@@ -25,7 +25,6 @@ class IInteractableComponent
 {
 public:
 	virtual ~IInteractableComponent() = default;
-	virtual Component* GetComponent() override { return this; }
 
 	/// triggerOn / isInteracting 등의 변수를 잘 활용하여
 	/// 적절한 Update 문을 작성합니다.
@@ -52,6 +51,8 @@ public:
 
 	/// OnInteractableTriggerExit 시에 호출할 CallBack 함수입니다.
 	std::vector<std::function<void()>> OnExitCallBack = std::vector<std::function<void()>>();
+
+	virtual Component* GetComponent() { return this; }
 
 protected:
 
