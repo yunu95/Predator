@@ -186,6 +186,18 @@ void GraphicsTest()
 	//	test->idleAnimation = animation;
 	//	test->walkAnimation = animation2;
 	//}
+	{
+		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
+	}
+	{
+		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("VFX_Robin_Skill1");
+		obj2->SetSelfActive(false);
+		auto anim = obj2->AddComponent<VFXAnimator>();
+		anim->Init();
+		auto obj = Scene::getCurrentScene()->AddGameObject();
+		auto test = obj->AddComponent<TestComponent4>();
+		test->obj = obj2;
+	}
 	
 	//yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
 	yunutyEngine::graphics::Renderer::SingleInstance().SetUseIBL(true);
