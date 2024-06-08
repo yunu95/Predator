@@ -33,10 +33,13 @@ void PlayerController::RegisterUnit(std::weak_ptr<Unit> unit)
         return;
 
     characters[unit.lock()->GetUnitTemplateData().pod.playerUnitType.enumValue] = unit;
-    if (unit.lock()->GetUnitTemplateData().pod.playerUnitType.enumValue == PlayerCharacterType::Robin)
+    if (!characters[PlayerCharacterType::Robin].expired() &&
+        !characters[PlayerCharacterType::Ursula].expired() &&
+        !characters[PlayerCharacterType::Hansel].expired())
     {
         SetCameraOffset();
-        selectedCharacter = unit;
+        SelectPlayerUnit(PlayerCharacterType::Robin);
+        //selectedCharacter = unit;
     }
 }
 
@@ -98,6 +101,8 @@ void PlayerController::Update()
     cursorUnitDetector.lock()->GetGameObject()->GetTransform()->SetWorldPosition(GetWorldCursorPosition());
     HandleInput();
     HandleCamera();
+    HandleSkillPreview();
+    HandleByState();
 #ifdef EDITOR
     static yunutyEngine::graphics::UIText* text_State{ nullptr };
     if (text_State == nullptr)
@@ -124,6 +129,36 @@ void PlayerController::Update()
         text_State->GetGI().SetText(wsstream.str());
     }
 #endif
+}
+
+void PlayerController::HandleByState()
+{
+    switch (state)
+    {
+    case State::Peace:
+    {
+        const auto& gc = GlobalConstant::GetSingletonInstance().pod;
+        Vector3d forward = { std::cos(selectedCharacter.lock()->desiredRotation * math::Deg2Rad) , 0, std::sin(selectedCharacter.lock()->desiredRotation * math::Deg2Rad) };
+        Vector3d right = { std::cos((selectedCharacter.lock()->desiredRotation - 90) * math::Deg2Rad) , 0, std::sin((selectedCharacter.lock()->desiredRotation - 90) * math::Deg2Rad) };
+        peaceFollowingDestination[0] = selectedCharacter.lock()->GetTransform()->GetWorldPosition();
+        peaceFollowingDestination[0] += forward * gc.peaceFollowingZOffest;
+        peaceFollowingDestination[0] += right * gc.peaceFollowingXOffest;
+        peaceFollowingDestination[1] = selectedCharacter.lock()->GetTransform()->GetWorldPosition();
+        peaceFollowingDestination[1] += forward * gc.peaceFollowingZOffest * 1.2f;
+        peaceFollowingDestination[1] -= right * gc.peaceFollowingXOffest * 0.8f;
+
+        if (std::max(peaceFollowingUnits[0].lock()->DistanceSquare(peaceFollowingDestination[0]),
+            peaceFollowingUnits[1].lock()->DistanceSquare(peaceFollowingDestination[1])) >
+            std::max(peaceFollowingUnits[0].lock()->DistanceSquare(peaceFollowingDestination[1]),
+                peaceFollowingUnits[1].lock()->DistanceSquare(peaceFollowingDestination[0])))
+        {
+            std::swap(peaceFollowingDestination[0], peaceFollowingDestination[1]);
+        }
+        peaceFollowingUnits[0].lock()->OrderMove(peaceFollowingDestination[0]);
+        peaceFollowingUnits[1].lock()->OrderMove(peaceFollowingDestination[1]);
+        break;
+    }
+    }
 }
 
 void PlayerController::HandleInput()
@@ -193,6 +228,38 @@ void PlayerController::HandleCamera()
     RTSCam::Instance().SetIdealRotation(camRotation);
 }
 
+void PlayerController::HandleSkillPreview()
+{
+    switch (selectedSkill)
+    {
+    case SkillType::ROBIN_Q:
+        SkillPreviewSystem::Instance().ShowRobinQSkill(characters[PlayerCharacterType::Robin].lock()->GetTransform()->GetWorldPosition());
+        SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Robin, characters[PlayerCharacterType::Robin].lock()->GetTransform()->GetWorldPosition(), RobinChargeSkill::pod.maxDistance);
+        break;
+    case SkillType::URSULA_Q:
+    {
+        auto pos1 = UrsulaBlindSkill::GetSkillObjectPos_Left(GetWorldCursorPosition());
+        auto pos2 = UrsulaBlindSkill::GetSkillObjectPos_Right(GetWorldCursorPosition());
+        auto pos3 = UrsulaBlindSkill::GetSkillObjectPos_Top(GetWorldCursorPosition());
+        SkillPreviewSystem::Instance().ShowUrsulaQSkill(pos1, pos2, pos3, Vector3d::one * UrsulaBlindSkill::pod.skillRadius);
+        SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Ursula, characters[PlayerCharacterType::Ursula].lock()->GetTransform()->GetWorldPosition(), UrsulaBlindSkill::pod.skillRange);
+        break;
+    }
+    case SkillType::URSULA_W:
+        SkillPreviewSystem::Instance().ShowUrsulaWSkill(GetWorldCursorPosition(), UrsulaParalysisSkill::pod.skillRadius);
+        SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Ursula, characters[PlayerCharacterType::Ursula].lock()->GetTransform()->GetWorldPosition(), UrsulaParalysisSkill::pod.skillRange);
+        break;
+    case SkillType::HANSEL_Q:
+        SkillPreviewSystem::Instance().ShowHanselQSkill(GetWorldCursorPosition(), HanselChargeSkill::pod.stompRadius);
+        SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Hansel, characters[PlayerCharacterType::Hansel].lock()->GetTransform()->GetWorldPosition(), HanselChargeSkill::pod.maxRange);
+        break;
+    case SkillType::HANSEL_W:
+        SkillPreviewSystem::Instance().ShowHanselWSkill(characters[PlayerCharacterType::Hansel].lock()->GetTransform()->GetWorldPosition());
+        SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Hansel, characters[PlayerCharacterType::Hansel].lock()->GetTransform()->GetWorldPosition(), HanselProjectileSkill::pod.maxRange);
+        break;
+    }
+}
+
 void PlayerController::SelectPlayerUnit(PlayerCharacterType::Enum charType)
 {
     if (charType == selectedCharacterType || charType == PlayerCharacterType::None)
@@ -205,14 +272,20 @@ void PlayerController::SelectPlayerUnit(PlayerCharacterType::Enum charType)
     switch (selectedCharacterType)
     {
     case PlayerCharacterType::Robin:
+        peaceFollowingUnits[0] = characters[PlayerCharacterType::Ursula];
+        peaceFollowingUnits[1] = characters[PlayerCharacterType::Hansel];
         UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin)->
             GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Portrait)->button->InvokeInternalButtonClickEvent();
         break;
     case PlayerCharacterType::Ursula:
+        peaceFollowingUnits[0] = characters[PlayerCharacterType::Robin];
+        peaceFollowingUnits[1] = characters[PlayerCharacterType::Hansel];
         UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Ursula)->
             GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Portrait)->button->InvokeInternalButtonClickEvent();
         break;
     case PlayerCharacterType::Hansel:
+        peaceFollowingUnits[0] = characters[PlayerCharacterType::Robin];
+        peaceFollowingUnits[1] = characters[PlayerCharacterType::Ursula];
         UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel)->
             GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Portrait)->button->InvokeInternalButtonClickEvent();
     default:
@@ -286,15 +359,16 @@ void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
     case SkillType::ROBIN_W: selectedCharacter.lock()->OrderSkill(RobinTauntSkill{  }, pos); break;
     case SkillType::URSULA_Q: selectedCharacter.lock()->OrderSkill(UrsulaBlindSkill{  }, pos); break;
     case SkillType::URSULA_W: selectedCharacter.lock()->OrderSkill(UrsulaParalysisSkill{  }, pos); break;
-    case SkillType::HANSEL_Q: selectedCharacter.lock()->OrderSkill(BossImpaleSkill{}, pos); break;
+    case SkillType::HANSEL_Q: selectedCharacter.lock()->OrderSkill(HanselChargeSkill{}, pos); break;
     case SkillType::HANSEL_W: selectedCharacter.lock()->OrderSkill(HanselProjectileSkill{}, pos); break;
     }
+    UnSelectSkill();
     // 스킬 프리뷰를 비활성화시킨다.
 }
 
 void PlayerController::SelectSkill(SkillType::Enum skillType)
 {
-    //if (!GameManager::Instance().IsBattleSystemOperating()) return;
+    if (state != State::Battle) return;
     UnSelectSkill();
     onSkillSelect[skillType]();
     switch (skillType)
@@ -307,7 +381,7 @@ void PlayerController::SelectSkill(SkillType::Enum skillType)
     // 즉발은 그냥 써버리고 나머지는 준비상태로 만든다.
     switch (skillType)
     {
-    case SkillType::ROBIN_W: ActivateSkill(SkillType::ROBIN_W, Vector3d::zero); break;
+    case SkillType::ROBIN_W: ActivateSkill(SkillType::ROBIN_W, characters[PlayerCharacterType::Robin].lock()->GetTransform()->GetWorldPosition()); break;
     default:
         selectedSkill = skillType;
         // 스킬 프리뷰를 활성화시킨다.
@@ -322,6 +396,16 @@ void PlayerController::SetState(State::Enum newState)
     case State::Peace:
     case State::Cinematic:
         UnSelectSkill();
+        for (auto& each : characters)
+        {
+            each.lock()->playingBattleAnim = false;
+        }
+        break;
+    case State::Battle:
+        for (auto& each : characters)
+        {
+            each.lock()->playingBattleAnim = true;
+        }
         break;
     }
 }
@@ -401,10 +485,12 @@ void PlayerController::AddCombo()
 
 void PlayerController::OnWaveStart(std::weak_ptr<PlaytimeWave> p_wave)
 {
+    SetState(State::Battle);
 }
 
 void PlayerController::OnWaveEnd(std::weak_ptr<PlaytimeWave> p_wave)
 {
+    SetState(State::Peace);
 }
 
 void PlayerController::UnSelectSkill()
@@ -417,6 +503,8 @@ void PlayerController::UnSelectSkill()
     case SkillType::HANSEL_Q: SkillPreviewSystem::Instance().HideHanselQSkill(); break;
     case SkillType::HANSEL_W: SkillPreviewSystem::Instance().HideHanselWSkill(); break;
     }
+    if (selectedSkill != SkillType::NONE)
+        SkillPreviewSystem::Instance().HideSkillMaxRange();
     selectedSkill = SkillType::NONE;
 }
 
@@ -431,4 +519,9 @@ Vector3d PlayerController::GetWorldCursorPosition()
 
 void PlayerController::ResetCombo()
 {
+}
+
+void PlayerController::SetSelectedSkillType(SkillType::Enum selectedSkill)
+{
+    this->selectedSkill = selectedSkill;
 }

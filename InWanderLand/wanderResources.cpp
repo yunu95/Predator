@@ -56,6 +56,7 @@ void InitAnimMap()
     animMap["SKM_Monster1"][UnitAnimType::Paralysis] = localAnimMap[L"Ani_Monster1_Stun"];
     animMap["SKM_Monster1"][UnitAnimType::Move] = localAnimMap[L"Ani_Monster1_Walk"];
     animMap["SKM_Monster1"][UnitAnimType::BattleMove] = localAnimMap[L"Ani_Monster1_Walk"];
+    animMap["SKM_Monster1"][UnitAnimType::Death] = localAnimMap[L"Ani_Monster1_Death"];
 
     animMap["SKM_Monster2"][UnitAnimType::Attack] = localAnimMap[L"Ani_Monster2_Attack"];
     animMap["SKM_Monster2"][UnitAnimType::Paralysis] = localAnimMap[L"Ani_Monster2_HitCC"];
@@ -66,6 +67,7 @@ void InitAnimMap()
     animMap["SKM_Monster2"][UnitAnimType::Skill2] = localAnimMap[L"Ani_Monster2_Skill"];
     animMap["SKM_Monster2"][UnitAnimType::Move] = localAnimMap[L"Ani_Monster2_Walk"];
     animMap["SKM_Monster2"][UnitAnimType::BattleMove] = localAnimMap[L"Ani_Monster2_Walk"];
+    animMap["SKM_Monster2"][UnitAnimType::Death] = localAnimMap[L"Ani_Monster2_Death"];
 
     animMap["SKM_HeartQueen"][UnitAnimType::Attack] = localAnimMap[L"root|Ani_HeartQueen_Attack"];
     animMap["SKM_HeartQueen"][UnitAnimType::Death] = localAnimMap[L"root|Ani_HeartQueen_Death"];

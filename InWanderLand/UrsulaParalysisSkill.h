@@ -9,7 +9,7 @@ struct POD_UrsulaParalysisSkill
     float skillRadius = 3.f;
     float skillDamage = 5.f;
     float skillParalysisTime = 3.0f;
-
+    float knockBackDuration = 2.0f;
 
     TO_JSON(POD_UrsulaParalysisSkill)
         FROM_JSON(POD_UrsulaParalysisSkill)
@@ -17,6 +17,10 @@ struct POD_UrsulaParalysisSkill
 
 class UrsulaParalysisSkill : public Skill
 {
+private:
+	coroutine::Coroutine SpawningFieldEffect();
+	std::weak_ptr<UnitAcquisitionSphereCollider> skillCollider;
+
 public:
     UrsulaParalysisSkill() {}
     virtual SkillType::Enum GetSkillType() { return SkillType::Enum::URSULA_W; }
@@ -25,8 +29,6 @@ public:
     virtual void OnInterruption()override;
 
     static POD_UrsulaParalysisSkill pod;
-private:
-    std::weak_ptr<UnitAcquisitionSphereCollider> skillCollider;
 };
 
 

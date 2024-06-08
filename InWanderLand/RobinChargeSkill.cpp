@@ -12,42 +12,41 @@ coroutine::Coroutine RobinChargeSkill::operator()()
     Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
     Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
     Vector3d direction = deltaPos.Normalized();
-    if (deltaPos.Magnitude() > GlobalConstant::GetSingletonInstance().pod.robinQSkillMaxDistance)
+    if (deltaPos.Magnitude() > pod.maxDistance)
     {
-        deltaPos = direction * GlobalConstant::GetSingletonInstance().pod.robinQSkillMaxDistance;
+        deltaPos = direction * pod.maxDistance;
     }
     Vector3d endPos = startPos + deltaPos;
     Vector3d currentPos = startPos;
 
     owner.lock()->PlayAnimation(UnitAnimType::Rush, true);
-    const application::POD_GlobalConstant& gc = GlobalConstant::GetSingletonInstance().pod;
-    coroutine::ForSeconds forSeconds{ static_cast<float>(deltaPos.Magnitude()) / gc.robinQSkillRushSpeed };
+    coroutine::ForSeconds forSeconds{ static_cast<float>(deltaPos.Magnitude()) / pod.rushSpeed };
     knockbackCollider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
-    knockbackCollider.lock()->SetRadius(gc.robinQSkillRushKnockbackRadius);
+    knockbackCollider.lock()->SetRadius(pod.rushKnockbackRadius);
     while (forSeconds.Tick())
     {
-        currentPos += direction * gc.robinQSkillRushSpeed * Time::GetDeltaTime();
+        currentPos += direction * pod.rushSpeed * Time::GetDeltaTime();
         knockbackCollider.lock()->GetTransform()->SetWorldPosition(currentPos);
         owner.lock()->GetTransform()->SetWorldPosition(currentPos);
         co_await std::suspend_always{};
         for (auto& each : knockbackCollider.lock()->GetEnemies())
         {
-            Vector3d delta = gc.robinQSkillRushKnockbackDistance * (each->GetTransform()->GetWorldPosition() - currentPos).Normalized();
-            each->KnockBackRelativeVector(delta, gc.robinQSkillRushKnockbackDuration);
-            each->Damaged(owner, gc.robinQSkillDamageRush);
+            Vector3d delta = pod.rushKnockbackDistance * (each->GetTransform()->GetWorldPosition() - currentPos).Normalized();
+            each->KnockBackRelativeVector(delta, pod.rushKnockbackDuration);
+            each->Damaged(owner, pod.damageRush);
         }
     }
 
     owner.lock()->PlayAnimation(UnitAnimType::Slam);
     owner.lock()->SetDefaultAnimation(UnitAnimType::Idle);
-    knockbackCollider.lock()->SetRadius(gc.robinQSkillImpactKnockbackRadius);
+    knockbackCollider.lock()->SetRadius(pod.impactKnockbackRadius);
     co_await std::suspend_always{};
     for (auto& each : knockbackCollider.lock()->GetEnemies())
     {
-        Vector3d delta = gc.robinQSkillImpactKnockbackDistance * (each->GetTransform()->GetWorldPosition() - currentPos).Normalized();
-        each->KnockBack(each->GetTransform()->GetWorldPosition() + delta, gc.robinQSkillImpactKnockbackDuration);
-        each->Paralyze(gc.robinQSkillImpactStunDuration);
-        each->Damaged(owner, gc.robinQSkillDamageRush);
+        Vector3d delta = pod.impactKnockbackDistance * (each->GetTransform()->GetWorldPosition() - currentPos).Normalized();
+        each->KnockBack(each->GetTransform()->GetWorldPosition() + delta, pod.impactKnockbackDuration);
+        each->Paralyze(pod.impactStunDuration);
+        each->Damaged(owner, pod.damageRush);
     }
     disableNavAgent.reset();
     blockFollowingNavigation.reset();

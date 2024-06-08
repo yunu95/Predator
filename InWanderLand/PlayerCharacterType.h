@@ -4,7 +4,7 @@
 struct PlayerCharacterType
 {
     enum Enum {
-        None,
+        None = -1,
         Robin,
         Ursula,
         Hansel,

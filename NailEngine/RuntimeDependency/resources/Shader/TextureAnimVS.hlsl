@@ -27,7 +27,7 @@ VertexOut main(VertexIn input)
     
     output.posH = mul(float4(input.pos, 1.f), input.world);
     output.posH = mul(output.posH, VP);
-    
+    output.color = input.color;
     output.uv = input.uv;
     return output;
 }

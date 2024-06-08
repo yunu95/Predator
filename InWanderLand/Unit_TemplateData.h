@@ -40,7 +40,6 @@ namespace application
             // 사망할 때 번아웃 효과가 연출되는 시간
             float deathBurnTime{ 0.5 };
 
-            int unitType;
             float max_Health;
 
             float m_autoAttackDamage;

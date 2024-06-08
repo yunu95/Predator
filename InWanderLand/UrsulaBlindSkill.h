@@ -18,6 +18,15 @@ struct POD_UrsulaBlindSkill
 
 class UrsulaBlindSkill : public Skill
 {
+private:
+	coroutine::Coroutine SpawningFieldEffect();
+
+	static Vector3d skillStart;
+	static Vector3d skillDestination;
+	std::weak_ptr<UnitAcquisitionSphereCollider> circle_Top;
+	std::weak_ptr<UnitAcquisitionSphereCollider> circle_Left;
+	std::weak_ptr<UnitAcquisitionSphereCollider> circle_Right;
+
 public:
     UrsulaBlindSkill() {}
     virtual SkillType::Enum GetSkillType() { return SkillType::Enum::URSULA_Q; }
@@ -32,15 +41,9 @@ public:
     static void UpdatePosition(const Vector3d& start, const Vector3d& dest);
 
     /// 삼각형 대형으로 보았을 때, Top / Left / Right 위치값을 반환합니다.
-    static Vector3d GetSkillObjectPos_Top();
-    static Vector3d GetSkillObjectPos_Left();
-    static Vector3d GetSkillObjectPos_Right();
-private:
-    static Vector3d skillStart;
-    static Vector3d skillDestination;
-    std::weak_ptr<UnitAcquisitionSphereCollider> circle_Top;
-    std::weak_ptr<UnitAcquisitionSphereCollider> circle_Left;
-    std::weak_ptr<UnitAcquisitionSphereCollider> circle_Right;
+    static Vector3d GetSkillObjectPos_Top(const Vector3d& dest);
+    static Vector3d GetSkillObjectPos_Left(const Vector3d& dest);
+    static Vector3d GetSkillObjectPos_Right(const Vector3d& dest);
 };
 
 

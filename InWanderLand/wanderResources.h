@@ -21,6 +21,7 @@ namespace wanderResources
         const std::wstring URSULA_W_TEXTURE{ L"Texture/T_VFX_SkillRange_Clock.dds" };
         const std::wstring HANSEL_Q_TEXTURE{ L"Texture/T_VFX_SkillRange_Clock.dds" };
         const std::wstring MOVE_END_TEXTURE{ L"Texture/T_VFX_SkillRange_Move.dds" };
+        const std::wstring ATTACK_TEXTURE{ L"Texture/T_VFX_AttackCircle.dds" };
     }
     namespace unitColor
     {

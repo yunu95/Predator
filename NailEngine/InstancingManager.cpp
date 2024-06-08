@@ -41,6 +41,28 @@ bool InstancingManager::IsInTree(std::shared_ptr<RenderInfo>& renderInfo)
 
 void InstancingManager::SortByCameraDirection()
 {
+	if (!this->staticMeshDeferredRenderVec.empty())
+	{
+		for (auto& each : this->staticMeshDeferredRenderVec)
+		{
+			each.second.erase(
+				std::remove_if(each.second.begin(), each.second.end(),
+					[](const std::shared_ptr<RenderInfo>& ptr) {
+						return ptr == nullptr;
+					}),
+				each.second.end());
+		}
+	}
+	//if (!this->staticMeshDeferredRenderVec.empty())
+	//{
+	//	this->staticMeshDeferredRenderVec.erase(
+	//		std::remove_if(this->staticMeshDeferredRenderVec.begin(), this->staticMeshDeferredRenderVec.end(),
+	//			[](const std::pair<InstanceID, std::vector<std::shared_ptr<RenderInfo>>>& pair) {
+	//				return pair.second.empty();
+	//			}),
+	//		this->staticMeshDeferredRenderVec.end());
+	//}
+
 	// 쿼드트리에 중복으로 데이터가 들어가지 않게 쿼드트리에서 데이터를 빼준다.
 	if (!this->staticMeshDeferredRenderVec.empty())
 	{
@@ -80,6 +102,7 @@ void InstancingManager::SortByCameraDirection()
 		}
 	}
 	staticMeshDeferredMap.clear();
+
 
 	// 우선 BoundingRadius 기준으로 정렬
 	std::sort(this->staticMeshDeferredRenderVec.begin(), this->staticMeshDeferredRenderVec.end(),

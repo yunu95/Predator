@@ -9,8 +9,10 @@ struct POD_HanselProjectileSkill
     float maxRange = 10.0f;
     float coolTime = 2.0f;
     float skillCost = 10.0f;
-    float pieRotateSpeed = 10.0f;
-    float pieHeight = 2.0f;
+    float pieRotateSpeed = 1080.0f;
+    float pieOffsetY = 2.0f;
+    float pieOffsetX = 0.0f;
+    float pieScaleMultipler = 1.0f;
 
     TO_JSON(POD_HanselProjectileSkill)
         FROM_JSON(POD_HanselProjectileSkill)

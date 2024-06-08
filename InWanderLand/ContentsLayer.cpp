@@ -92,18 +92,16 @@ public:
 class TestComponent4 : public yunutyEngine::Component
 {
 public:
-	yunutyEngine::graphics::Animator* anim;
-	yunuGI::IAnimation* idleAnimation;
-	yunuGI::IAnimation* walkAnimation;
+	GameObject* obj;
 	virtual void Update() override
 	{
 		if (Input::isKeyPushed(yunutyEngine::KeyCode::V))
 		{
-			anim->ChangeAnimation(walkAnimation, 0.4, 1.f);
+			obj->SetSelfActive(false);
 		}
 		if (Input::isKeyPushed(yunutyEngine::KeyCode::C))
 		{
-			anim->ChangeAnimation(idleAnimation, 0.4, 1.f);
+			obj->SetSelfActive(true);
 		}
 	}
 };
@@ -188,12 +186,20 @@ void GraphicsTest()
 	//	test->idleAnimation = animation;
 	//	test->walkAnimation = animation2;
 	//}
-
 	{
-		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_HeartQueen");
+		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Hansel");
+	}
+	{
+		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("VFX_HeartQueen_Skill2");
+		obj2->SetSelfActive(false);
+		auto anim = obj2->AddComponent<VFXAnimator>();
+		anim->Init();
+		auto obj = Scene::getCurrentScene()->AddGameObject();
+		auto test = obj->AddComponent<TestComponent4>();
+		test->obj = obj2;
 	}
 	
-	yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
+	//yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
 	yunutyEngine::graphics::Renderer::SingleInstance().SetUseIBL(true);
 	//yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
 }
@@ -299,6 +305,7 @@ class ContentsInitializer : public yunutyEngine::Component
         DebugGraphic::SetDebugGraphicsEnabled(false);
 #endif
 
+		SkillPreviewSystem::Instance().Init();
         Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
         co_return;
     }
@@ -357,7 +364,6 @@ void application::contents::ContentsLayer::PlayContents(ContentsPlayFlag playFla
 	PlayableComponent::OnGameStartAll();
 
 	ContentsObserver::Instance().OnPlayContents();
-	SkillPreviewSystem::Instance().Init();
 	SkillPreviewSystem::Instance().camObj = RTSCam::Instance().GetGameObject();
 }
 

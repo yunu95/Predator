@@ -24,20 +24,8 @@ namespace application
         GC<float> enemyAggroUpdateQuota = 2;
         // +- 몇명씩 랜덤하게 분배해주는가
         GC<float> enemyAggroUpdateQuotaNoise = 2;
-
-        GC<float>	robinQSkillCoolTime = 2.0f;
-        GC<float>	robinQSkillCost = 10.0f;
-        GC<float>	robinQSkillMaxDistance = 8.0f;
-        GC<float>	robinQSkillRushSpeed = 20.0f;
-        GC<float>	robinQSkillDamageRush = 20.0f;
-        GC<float>	robinQSkillDamageImpact = 80.0f;
-        GC<float>	robinQSkillRushKnockbackDistance = 3.0f;
-        GC<float>	robinQSkillImpactKnockbackDistance = 8.0f;
-        GC<float>	robinQSkillRushKnockbackDuration = 0.5f;
-        GC<float>	robinQSkillImpactKnockbackDuration = 1.0f;
-        GC<float>	robinQSkillImpactStunDuration = 2.0f;
-        GC<float>	robinQSkillRushKnockbackRadius = 1.0f;
-        GC<float>	robinQSkillImpactKnockbackRadius = 5.0f;
+        GC<float> peaceFollowingXOffest = 3.0f;
+        GC<float> peaceFollowingZOffest = 2.0f;
 
         GC<float>   impaleSkillDamage = 20.0f;
         GC<float>   impaleSkillCoolTime = 2.0f;

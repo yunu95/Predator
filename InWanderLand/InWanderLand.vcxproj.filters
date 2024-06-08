@@ -772,9 +772,6 @@
     <Filter Include="Contents_Refactored\Unit\PlayerCharacterType">
       <UniqueIdentifier>{29cd007c-08ad-4069-88e0-f37314005db7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Contents_Refactored\UnitController\EnemyAggroController">
-      <UniqueIdentifier>{04e79efc-5c10-46da-9c0c-07cfad73a2eb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Contents_Refactored\UnitController\EnemyController">
       <UniqueIdentifier>{f24f6e3b-088a-4437-95b3-84472f220d50}</UniqueIdentifier>
     </Filter>
@@ -792,6 +789,21 @@
     </Filter>
     <Filter Include="Contents_Refactored\Skill\Boss\Summon\Chess\ChessPool">
       <UniqueIdentifier>{b0801621-4320-44ec-b56c-8531f7320ca5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\UnitCommand\UnitMoveCommand">
+      <UniqueIdentifier>{57e83c6e-0096-43b5-bd9b-cf026fb548e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\UnitCommand\UnitAttackCommand">
+      <UniqueIdentifier>{cc667692-934b-4a85-8365-ae3b40156596}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\SkillPreviewSystem\AttackPreviewPool">
+      <UniqueIdentifier>{c162b28a-2c13-4af6-8ca8-607dbda09b2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\UnitController\EnemyController\EnemyAggroController">
+      <UniqueIdentifier>{04e79efc-5c10-46da-9c0c-07cfad73a2eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\UnitController\EnemyController\RangedEliteController">
+      <UniqueIdentifier>{2559020f-20b5-4a3a-bed0-6b2c31bee46b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1895,7 +1907,7 @@
       <Filter>Contents_Refactored\Unit\PlayerCharacterType</Filter>
     </ClInclude>
     <ClInclude Include="EnemyAggroController.h">
-      <Filter>Contents_Refactored\UnitController\EnemyAggroController</Filter>
+      <Filter>Contents_Refactored\UnitController\EnemyController\EnemyAggroController</Filter>
     </ClInclude>
     <ClInclude Include="EnemyController.h">
       <Filter>Contents_Refactored\UnitController\EnemyController</Filter>
@@ -1926,6 +1938,18 @@
     </ClInclude>
     <ClInclude Include="ChessObject.h">
       <Filter>Contents_Refactored\Skill\Boss\Summon\Chess</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitMoveCommand.h">
+      <Filter>Contents_Refactored\UnitCommand\UnitMoveCommand</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitAttackCommand.h">
+      <Filter>Contents_Refactored\UnitCommand\UnitAttackCommand</Filter>
+    </ClInclude>
+    <ClInclude Include="AttackPreviewPool.h">
+      <Filter>Contents_Refactored\SkillPreviewSystem\AttackPreviewPool</Filter>
+    </ClInclude>
+    <ClInclude Include="RangedEliteController.h">
+      <Filter>Contents_Refactored\UnitController\EnemyController\RangedEliteController</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2861,7 +2885,7 @@
       <Filter>Contents_Refactored\Skill\Boss\Skill4</Filter>
     </ClCompile>
     <ClCompile Include="EnemyAggroController.cpp">
-      <Filter>Contents_Refactored\UnitController\EnemyAggroController</Filter>
+      <Filter>Contents_Refactored\UnitController\EnemyController\EnemyAggroController</Filter>
     </ClCompile>
     <ClCompile Include="EnemyController.cpp">
       <Filter>Contents_Refactored\UnitController\EnemyController</Filter>
@@ -2874,6 +2898,18 @@
     </ClCompile>
     <ClCompile Include="ChessRook.cpp">
       <Filter>Contents_Refactored\Skill\Boss\Summon\Chess</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitMoveCommand.cpp">
+      <Filter>Contents_Refactored\UnitCommand\UnitMoveCommand</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitAttackCommand.cpp">
+      <Filter>Contents_Refactored\UnitCommand\UnitAttackCommand</Filter>
+    </ClCompile>
+    <ClCompile Include="AttackPreviewPool.cpp">
+      <Filter>Contents_Refactored\SkillPreviewSystem\AttackPreviewPool</Filter>
+    </ClCompile>
+    <ClCompile Include="RangedEliteController.cpp">
+      <Filter>Contents_Refactored\UnitController\EnemyController\RangedEliteController</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
