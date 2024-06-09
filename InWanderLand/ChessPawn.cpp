@@ -118,7 +118,7 @@ namespace BossSummon
 
 	void ChessPawn::OnReturn()
 	{
-		ready = false; 
+		ready = false;
 		timerStart = false;
 		triggerOn = false;
 		isInteracting = false;
@@ -143,7 +143,10 @@ namespace BossSummon
 	void ChessPawn::OnBossDie()
 	{
 		/// 사라지는 연출이 따로 필요할 수 있음
-		ChessPool::Instance().Return(std::static_pointer_cast<ChessPawn>(myWeakPtr.lock()));
+		if (GetGameObject()->GetSelfActive())
+		{
+			ChessPool::Instance().Return(std::static_pointer_cast<ChessPawn>(myWeakPtr.lock()));
+		}
 	}
 
 	void ChessPawn::SetReady()
@@ -167,7 +170,10 @@ namespace BossSummon
 				lastCoroutine = StartCoroutine(DoInteraction());
 				lastCoroutine.lock()->PushDestroyCallBack([this]()
 					{
-						ChessPool::Instance().Return(std::static_pointer_cast<ChessPawn>(myWeakPtr.lock()));
+						if (GetGameObject()->GetSelfActive())
+						{
+							ChessPool::Instance().Return(std::static_pointer_cast<ChessPawn>(myWeakPtr.lock()));
+						}
 					});
 				isInteracting = true;
 			}
@@ -208,6 +214,15 @@ namespace BossSummon
 		{
 			unitSet.erase(colliderUnitComponent);
 		}
+	}
+
+	void ChessPawn::OnContentsStop()
+	{
+		if (!lastCoroutine.expired())
+		{
+			DeleteCoroutine(lastCoroutine);
+		}
+		GetComponent()->SetActive(false);
 	}
 
 	yunutyEngine::coroutine::Coroutine ChessPawn::DoInteraction()

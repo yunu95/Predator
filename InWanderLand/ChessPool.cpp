@@ -117,7 +117,6 @@ namespace BossSummon
 					break;
 			}
 		}
-		GetComponent()->SetActive(false); 
 	}
 
 	std::weak_ptr<ChessPawn> ChessPool::BorrowPawn()
