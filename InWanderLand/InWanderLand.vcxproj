@@ -1030,6 +1030,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
       </ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="Adder.h" />
+    <ClInclude Include="BossController.h" />
     <ClInclude Include="ChessBishop.h" />
     <ClInclude Include="ChessPawn.h" />
     <ClInclude Include="ChessRook.h" />
@@ -1049,6 +1050,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="HanselChargeSkill.h" />
     <ClInclude Include="HanselProjectileSkill.h" />
     <ClInclude Include="FBXPool.h" />
+    <ClInclude Include="LeftFrame.h" />
     <ClInclude Include="Module_Skill.h" />
     <ClInclude Include="MoveEndPreviewPool.h" />
     <ClInclude Include="Multiplier.h" />
@@ -1056,6 +1058,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="ProjectilePool.h" />
     <ClInclude Include="RangedEliteController.h" />
     <ClInclude Include="Reference.h" />
+    <ClInclude Include="RightFrame.h" />
     <ClInclude Include="RobinTauntSkill.h" />
     <ClInclude Include="SkillList.h" />
     <ClInclude Include="SkillManager.h" />
@@ -2085,6 +2088,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugEditorExe|x64'">
       </ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="BossController.cpp" />
     <ClCompile Include="ChessBishop.cpp" />
     <ClCompile Include="ChessPawn.cpp" />
     <ClCompile Include="ChessRook.cpp" />
@@ -2277,6 +2281,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="Interactable_TemplateData.cpp" />
     <ClCompile Include="Interactable_TriggerBox.cpp" />
     <ClCompile Include="Interactable_TriggerSphere.cpp" />
+    <ClCompile Include="LeftFrame.cpp" />
     <ClCompile Include="LocalTimeEntity.cpp" />
     <ClCompile Include="LocalTimeEntityManager.cpp" />
     <ClCompile Include="LinearClippingTimer.cpp" />
@@ -2352,6 +2357,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGraphicsExe|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugEditorExe|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="RightFrame.cpp" />
     <ClCompile Include="RobinChargeSkill.cpp" />
     <ClCompile Include="RobinTauntSkill.cpp" />
     <ClCompile Include="RookTrapProductor.cpp">

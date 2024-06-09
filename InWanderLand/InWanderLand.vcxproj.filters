@@ -805,6 +805,9 @@
     <Filter Include="Contents_Refactored\UnitController\EnemyController\RangedEliteController">
       <UniqueIdentifier>{2559020f-20b5-4a3a-bed0-6b2c31bee46b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents_Refactored\UnitController\EnemyController\BossController">
+      <UniqueIdentifier>{bc1a8e52-7a58-4b7f-b275-dc88a811d9d5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -1765,9 +1768,6 @@
     <ClInclude Include="Action_Ornament.h">
       <Filter>Editor\ScriptSystem\2_Action\List</Filter>
     </ClInclude>
-    <ClInclude Include="Unit.h">
-      <Filter>Contents_Refactored\Unit</Filter>
-    </ClInclude>
     <ClInclude Include="wanderResources.h">
       <Filter>Contents_Refactored\wanderResources</Filter>
     </ClInclude>
@@ -1909,9 +1909,6 @@
     <ClInclude Include="EnemyAggroController.h">
       <Filter>Contents_Refactored\UnitController\EnemyController\EnemyAggroController</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyController.h">
-      <Filter>Contents_Refactored\UnitController\EnemyController</Filter>
-    </ClInclude>
     <ClInclude Include="Multiplier.h">
       <Filter>Contents_Refactored\Factor</Filter>
     </ClInclude>
@@ -1950,6 +1947,21 @@
     </ClInclude>
     <ClInclude Include="RangedEliteController.h">
       <Filter>Contents_Refactored\UnitController\EnemyController\RangedEliteController</Filter>
+    </ClInclude>
+    <ClInclude Include="LeftFrame.h">
+      <Filter>Contents_Refactored\Skill\Boss\Summon\Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="RightFrame.h">
+      <Filter>Contents_Refactored\Skill\Boss\Summon\Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="Unit.h">
+      <Filter>Contents_Refactored\Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyController.h">
+      <Filter>Contents_Refactored\UnitController\EnemyController</Filter>
+    </ClInclude>
+    <ClInclude Include="BossController.h">
+      <Filter>Contents_Refactored\UnitController\EnemyController\BossController</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2910,6 +2922,15 @@
     </ClCompile>
     <ClCompile Include="RangedEliteController.cpp">
       <Filter>Contents_Refactored\UnitController\EnemyController\RangedEliteController</Filter>
+    </ClCompile>
+    <ClCompile Include="LeftFrame.cpp">
+      <Filter>Contents_Refactored\Skill\Boss\Summon\Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="RightFrame.cpp">
+      <Filter>Contents_Refactored\Skill\Boss\Summon\Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="BossController.cpp">
+      <Filter>Contents_Refactored\UnitController\EnemyController\BossController</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
