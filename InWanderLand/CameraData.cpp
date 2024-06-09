@@ -10,7 +10,6 @@
 #include "SkillPreviewSystem.h"
 #include "PlayerController.h"
 #include "TacticModeSystem.h"
-#include "GameManager.h"
 #include "PlayTimeRegionManager.h"
 
 namespace application

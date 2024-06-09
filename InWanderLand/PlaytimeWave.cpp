@@ -11,7 +11,7 @@
 #include "MeleeEnemyPool.h"
 #include "RangedEnemyPool.h"
 #include "ShortcutSystem.h"
-#include "GameManager.h"
+
 #include "RTSCam.h"
 #include "TacticModeSystem.h"
 #include "InWanderLand.h"

@@ -21,7 +21,7 @@
 #include "UIManager.h"
 #include "PlayerController.h"
 #include "TacticModeSystem.h"
-#include "GameManager.h"
+
 #include "PlayerSkillManager.h"
 #include "ShortcutSystem.h"
 #include "RobinSkillDevelopmentSystem.h"

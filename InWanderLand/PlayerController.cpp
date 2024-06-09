@@ -5,7 +5,6 @@
 #include "Unit.h"
 #include "PlayerUnit.h"
 #include "SkillPreviewSystem.h"
-#include "GameManager.h"
 #include "UIManager.h"
 #include "SkillList.h"
 
@@ -497,6 +496,7 @@ void PlayerController::SetState(State::Enum newState)
         }
         break;
     case State::Tactic:
+        UnSelectSkill();
         break;
     }
 }

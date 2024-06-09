@@ -1420,9 +1420,6 @@
     <ClInclude Include="RangedEnemyPool.h">
       <Filter>Contents\UnitFactory\UnitPool</Filter>
     </ClInclude>
-    <ClInclude Include="GameManager.h">
-      <Filter>Contents_Refactored\GameManager</Filter>
-    </ClInclude>
     <ClInclude Include="ScriptSystem.h">
       <Filter>Editor\ScriptSystem</Filter>
     </ClInclude>
@@ -2835,9 +2832,6 @@
     </ClCompile>
     <ClCompile Include="PlayerController.cpp">
       <Filter>Contents_Refactored\UnitController\PlayerController</Filter>
-    </ClCompile>
-    <ClCompile Include="GameManager.cpp">
-      <Filter>Contents_Refactored\GameManager</Filter>
     </ClCompile>
     <ClCompile Include="UnitBuff.cpp">
       <Filter>Contents_Refactored\Unit\UnitBuff</Filter>

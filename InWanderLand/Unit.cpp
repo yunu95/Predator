@@ -11,7 +11,7 @@
 #include "TacticModeSystem.h"
 #include "IAnimation.h"
 #include "SkillPreviewSystem.h"
-#include "GameManager.h"
+
 #include "BurnEffect.h"
 #include "DebuggingMeshPool.h"
 #include "StatusEffect.h"
