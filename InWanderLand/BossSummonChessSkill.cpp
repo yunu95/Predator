@@ -200,17 +200,23 @@ Vector2i BossSummonChessSkill::GetPlaceableIndex(Vector3d pos)
 		horizontalMap.clear();
 		for (int i = 0; i < pod.horizontalSpaces - 1; i++)
 		{
-			horizontalMap.insert({ pod.pivotPos_x + unitLength / 2 + i * unitLength, i });
+			horizontalMap.insert({ pod.pivotPos_x - unitLength / 2 + i * unitLength, i });
 		}
+
+		horizontalMap.insert({ pod.pivotPos_x - unitLength / 2 + pod.horizontalSpaces * unitLength,  pod.horizontalSpaces - 1 });
+		horizontalMap.insert({ pod.pivotPos_x - unitLength / 2 + (pod.horizontalSpaces + 1) * unitLength,  pod.horizontalSpaces - 1 });
 	}
 
 	if (pod.verticalSpaces != beforeSizeH)
 	{
 		verticalMap.clear();
-		for (int i = 0; i < pod.verticalSpaces - 1; i++)
+		for (int j = 0; j < pod.verticalSpaces; j++)
 		{
-			verticalMap.insert({ pod.pivotPos_z + unitLength / 2 + i * unitLength, i });
+			verticalMap.insert({ pod.pivotPos_z - unitLength / 2 + j * unitLength, j });
 		}
+
+		verticalMap.insert({ pod.pivotPos_z - unitLength / 2 + pod.verticalSpaces * unitLength,  pod.verticalSpaces - 1 });
+		verticalMap.insert({ pod.pivotPos_z - unitLength / 2 + (pod.verticalSpaces + 1) * unitLength,  pod.verticalSpaces - 1 });
 	}
 
 	int finalIndexX = horizontalMap.lower_bound(pos.x)->second;

@@ -39,7 +39,7 @@ struct POD_BossSummonChessSkill
 {
 	/// 보스방 기준, 좌측 하단의 칸 중심 위치입니다.
 	float pivotPos_x = -1553.66f;
-	float pivotPos_z = 52.06f;
+	float pivotPos_z = -65.95f;
 	int horizontalSpaces = 18;
 	int verticalSpaces = 20;
 
