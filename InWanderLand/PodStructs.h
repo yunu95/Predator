@@ -97,8 +97,8 @@ namespace application
     template <typename EnumType>
     struct POD_Enum
     {
-        int enumValue;
-        std::string enumName;
+        int enumValue = 0;
+        std::string enumName = "";
         static const std::unordered_map<int, std::string>& GetEnumNameMap();
         static const std::unordered_map<std::string, int>& GetNameEnumMap()
         {
@@ -112,6 +112,7 @@ namespace application
             }
             return nameEnumMap;
         }
+
         TO_JSON(POD_Enum)
             FROM_JSON(POD_Enum)
     };

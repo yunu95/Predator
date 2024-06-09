@@ -12,12 +12,9 @@
 void Interactable_ChessBishop::Start()
 {
 	auto ts = GetGameObject()->GetTransform();
-	if (!isSummoned)
-	{
-		ts->SetWorldPosition(initPos);
-		ts->SetWorldRotation(initRotation);
-		ts->SetWorldScale(initScale);
-	}
+	ts->SetWorldPosition(initPos);
+	ts->SetWorldRotation(initRotation);
+	ts->SetWorldScale(initScale);
 
 	auto rendererObj = GetGameObject()->AddGameObject();
 	AttachDebugMesh(rendererObj, DebugMeshType::Cube, yunuGI::Color::green());
@@ -25,17 +22,14 @@ void Interactable_ChessBishop::Start()
 	auto boxCollider = GetGameObject()->AddComponent<physics::BoxCollider>();
 	boxCollider->SetHalfExtent(chessBlockUnitLength * 0.5 * Vector3d::one);
 
-	auto fbxObj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(fbxName);
-	fbxObj->SetParent(GetGameObject());
-	fbxObj->GetTransform()->SetLocalPosition(Vector3d::zero);
-	for (auto each : fbxObj->GetChildren())
+	for (auto each : GetGameObject()->GetChildren())
 	{
 		auto renderer = each->GetComponent<graphics::StaticMeshRenderer>();
 		if (renderer)
 		{
 			mesh = each;
 			const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-			orginTexture = resourceManager->GetTexture(L"FBX/SM_Chess_Rook/SM_Chess_Rook.fbm/T_Chess_Rook_BaseColor.dds");
+			orginTexture = resourceManager->GetTexture(L"FBX/SM_Chess_Bishop/SM_Chess_Bishop.fbm/T_Chess_Bishop_BaseColor.dds");
 			flashTexture = resourceManager->GetTexture(L"Texture/Interactable/BombFlash.png");
 			break;
 		}
@@ -80,30 +74,13 @@ void Interactable_ChessBishop::Update()
 		if (!isInteracting)
 		{
 			lastCoroutine = StartCoroutine(DoInteraction());
+			lastCoroutine.lock()->PushDestroyCallBack([this]() { GetGameObject()->SetSelfActive(false); });
 			isInteracting = true;
 		}
 		else if (lastCoroutine.expired() || lastCoroutine.lock()->Done())
 		{
 			isInteracting = false;
-			GetGameObject()->SetSelfActive(false);
 			OnInteractableTriggerExit();
-		}
-	}
-	else if (isSummoned)
-	{
-		if (chessSummonedExplosionDelay == 0)
-		{
-			OnInteractableTriggerEnter();
-		}
-		else
-		{
-			localSummonedTime += yunutyEngine::Time::GetDeltaTime();
-			float ratio = localSummonedTime / chessSummonedExplosionDelay;
-			if (ratio >= 1)
-			{
-				OnInteractableTriggerEnter();
-				localSummonedTime = 0;
-			}
 		}
 	}
 }
@@ -112,7 +89,8 @@ void Interactable_ChessBishop::OnTriggerEnter(physics::Collider* collider)
 {
 	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
 		colliderUnitComponent != nullptr &&
-		colliderUnitComponent->IsPlayerUnit())
+		colliderUnitComponent->IsPlayerUnit() &&
+		colliderUnitComponent->IsAlive())
 	{
 		OnInteractableTriggerEnter();
 	}
@@ -131,7 +109,6 @@ yunutyEngine::coroutine::Coroutine Interactable_ChessBishop::DoInteraction()
 
 	while (ratio < 1)
 	{
-		localTimer += yunutyEngine::Time::GetDeltaTime();
 		ratio = localTimer / delayTime;
 
 		if (ratio > 1)
@@ -164,6 +141,7 @@ yunutyEngine::coroutine::Coroutine Interactable_ChessBishop::DoInteraction()
 		}
 
 		co_await std::suspend_always();
+		localTimer += yunutyEngine::Time::GetDeltaTime();
 	}
 
 	mesh->SetSelfActive(false);
@@ -211,38 +189,10 @@ void Interactable_ChessBishop::SetDataFromEditorData(const application::editor::
 	initScale.x = data.pod.scale.x;
 	initScale.y = data.pod.scale.y;
 	initScale.z = data.pod.scale.z;
-	chessSummonedExplosionDelay = BossSummonChessSkill::pod.chessSummonedExplosionDelay;
 	chessBlockUnitLength = application::GlobalConstant::GetSingletonInstance().pod.chessBlockUnitLength;
 	chessBlockUnitOffset = application::GlobalConstant::GetSingletonInstance().pod.chessBlockUnitOffset;
 	vibeMaxOffset = application::GlobalConstant::GetSingletonInstance().pod.vibeMaxOffset;
 	damage = data.pod.templateData->pod.damage;
 	delayTime = data.pod.templateData->pod.delayTime;
 	particleEffectTime = data.pod.templateData->pod.particleEffectTime;
-	fbxName = data.pod.templateData->pod.fBXName;
-}
-
-void Interactable_ChessBishop::Reload()
-{
-	if (mesh)
-	{
-		mesh->SetSelfActive(true);
-		mesh->GetTransform()->SetLocalPosition(Vector3d::zero);
-		auto renderer = mesh->GetComponent<graphics::StaticMeshRenderer>();
-		renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::ALBEDO, orginTexture);
-	}
-
-	if (!lastCoroutine.expired())
-	{
-		DeleteCoroutine(lastCoroutine);
-	}
-
-	if (!bombObjList.empty())
-	{
-		for (auto each : bombObjList)
-		{
-			each->GetComponent<ChessBombComponent>()->Reload();
-		}
-	}
-
-	GetGameObject()->SetSelfActive(true);
 }

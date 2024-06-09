@@ -496,6 +496,8 @@ void PlayerController::SetState(State::Enum newState)
             each.lock()->playingBattleAnim = true;
         }
         break;
+    case State::Tactic:
+        break;
     }
 }
 std::array<float, (int)PlayerCharacterType::Num> PlayerController::GetAggroProportions() const

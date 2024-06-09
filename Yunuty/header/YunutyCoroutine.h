@@ -6,6 +6,9 @@
 #define YUNUTY_API __declspec(dllimport)
 #endif
 
+#include <vector>
+#include <functional>
+
 namespace yunutyEngine
 {
     namespace coroutine
@@ -15,6 +18,7 @@ namespace yunutyEngine
         {
             struct promise_type {
                 YieldInstruction* yield = nullptr;
+                std::vector<std::function<void()>> destroyCallBack;
                 Coroutine get_return_object() {
                     return Coroutine{ std::coroutine_handle<promise_type>::from_promise(*this) };
                 }
@@ -30,13 +34,27 @@ namespace yunutyEngine
             };
             std::coroutine_handle<promise_type> handle;
             explicit Coroutine(std::coroutine_handle<promise_type> h) : handle(h) {}
-            ~Coroutine() { if (handle) handle.destroy(); }
+            ~Coroutine()
+            {
+                if (handle)
+                {
+                    for (auto each : handle.promise().destroyCallBack)
+                    {
+                        each();
+                    }
+                    handle.destroy();
+                }
+            }
             Coroutine(Coroutine const&) = delete;
             Coroutine(Coroutine&& other) noexcept
             {
                 handle = std::move(other.handle);
                 other.handle = nullptr;
             };
+            void PushDestroyCallBack(const std::function<void()>& callBack)
+            {
+                handle.promise().destroyCallBack.push_back(callBack);
+            }
             Coroutine& operator=(Coroutine const&) = delete;
             void resume() { handle.resume(); }
             YieldInstruction* GetLastYield() { return handle.promise().yield; };
