@@ -1,8 +1,8 @@
 #include "UnitAttackCommand.h"
 #include "SkillPreviewSystem.h"
 
-UnitAttackCommand::UnitAttackCommand(Unit* unit, Vector3d targetPos, Vector3d prevPos)
-    : UnitCommand(unit, targetPos, prevPos), renderer{ nullptr }
+UnitAttackCommand::UnitAttackCommand(Unit* unit, Vector3d expectedPos)
+    : UnitCommand(unit, expectedPos), renderer{ nullptr }
 {
 
 }

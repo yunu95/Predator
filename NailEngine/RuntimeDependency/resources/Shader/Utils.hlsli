@@ -523,7 +523,7 @@ void CalculatePointPBR(int lightIndex, float3 normal, float3 pos, out float4 dif
             ambient.xyz = lights[lightIndex].color.ambient;
         }
             
-            // Shadow 연산하는 코드 넣기
+        // Shadow 연산하는 코드 넣기
         float4 worldPos = mul(float4(pos.xyz, 1.f), VTMInv);
         float curDepth = CalCulateDepth((worldPos.xyz - lights[lightIndex].position.xyz), lightIndex);
         
