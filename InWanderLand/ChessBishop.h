@@ -30,6 +30,8 @@ namespace BossSummon
 		virtual void OnTriggerEnter(physics::Collider* collider) override;
 		virtual void OnTriggerExit(physics::Collider* collider) override;
 
+		virtual void OnContentsStop() override;
+
 		yunutyEngine::coroutine::Coroutine DoInteraction();
 
 		virtual Component* GetComponent() override { return this; }
