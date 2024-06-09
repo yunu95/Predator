@@ -6,8 +6,8 @@ class Unit;
 class UnitCommand
 {
 public:
-	// prevPos는 이전 커맨드의 targetPos가 될 것이고, targetPos는 현재 커맨드의 목표지점입니다.
-	UnitCommand(Unit* unit, Vector3d targetPos, Vector3d prevPos);
+	// expectedPos는 현재 커맨드가 실행되고 나서 유닛의 위치값을 넣어주어야 합니다.
+	UnitCommand(Unit* unit, Vector3d expectedPos);
 	virtual ~UnitCommand();
 
 public:
@@ -18,11 +18,11 @@ public:
 	virtual bool IsDone()  { return this->isDone; }
 	virtual void SetIsDone(bool isDone) { this->isDone = isDone; }
 	virtual Unit* GetUnit() { return unit; }
+	const Vector3d& GetExpectedPos() { return expectedPos; }
 
 protected:
 	Unit* unit;
-	Vector3d targetPos;
-	Vector3d prevPos;
+	Vector3d expectedPos;
 	bool isDone;
 
 };
