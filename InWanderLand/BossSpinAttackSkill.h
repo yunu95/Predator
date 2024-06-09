@@ -16,6 +16,10 @@ struct POD_BossSpinAttackSkill
 
 class BossSpinAttackSkill : public Skill
 {
+private:
+	coroutine::Coroutine SpawningSkillffect();
+	std::unordered_set<Unit*> knockBackList;
+	std::weak_ptr<UnitAcquisitionSphereCollider> knockbackCollider;
 public:
 	BossSpinAttackSkill() {}
 	virtual SkillType::Enum GetSkillType() { return SkillType::Enum::BossSkill_One; }
@@ -23,10 +27,6 @@ public:
 	virtual void OnInterruption() override;
 
 	static POD_BossSpinAttackSkill pod;
-
-private:
-	std::unordered_set<Unit*> knockBackList;
-	std::weak_ptr<UnitAcquisitionSphereCollider> knockbackCollider;
 };
 
 

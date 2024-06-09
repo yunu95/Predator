@@ -1,5 +1,6 @@
 #include "InWanderLand.h"
 #include "BossSpinAttackSkill.h"
+#include "VFXAnimator.h"
 
 POD_BossSpinAttackSkill BossSpinAttackSkill::pod = POD_BossSpinAttackSkill();
 
@@ -9,6 +10,32 @@ const float spinStartTime = 2.07f;
 const float spinAttackingTime = spinEndTime - spinStartTime;
 const float afterSpinDelay = totalTime - spinStartTime - spinAttackingTime;
 
+coroutine::Coroutine BossSpinAttackSkill::SpawningSkillffect()
+{
+	Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
+	Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
+	Vector3d direction = deltaPos.Normalized();
+
+	auto chargeEffect = FBXPool::SingleInstance().Borrow("VFX_HeartQueen_Skill1");
+
+	chargeEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos);
+	chargeEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
+	auto chargeEffectAnimator = chargeEffect.lock()->AcquireVFXAnimator();
+	chargeEffectAnimator.lock()->SetAutoActiveFalse();
+	chargeEffectAnimator.lock()->Init();
+
+	co_await std::suspend_always{};
+
+	while (!chargeEffectAnimator.lock()->IsDone())
+	{
+		co_await std::suspend_always{};
+	}
+
+	FBXPool::SingleInstance().Return(chargeEffect);
+
+	co_return;
+}
+
 coroutine::Coroutine BossSpinAttackSkill::operator()()
 {
     auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
@@ -16,6 +43,8 @@ coroutine::Coroutine BossSpinAttackSkill::operator()()
     auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
 
     owner.lock()->PlayAnimation(UnitAnimType::Skill1, true);
+    owner.lock()->StartCoroutine(SpawningSkillffect());
+
     knockbackCollider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
     knockbackCollider.lock()->SetRadius(pod.colliderRadius);
     knockbackCollider.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
