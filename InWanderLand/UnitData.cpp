@@ -42,6 +42,11 @@ namespace application
             return pod.templateData;
         }
 
+        Unit_TemplateData* UnitData::GetUnitTemplateData() const
+        {
+            return pod.templateData;
+        }
+
         bool UnitData::SetTemplateData(const std::string& dataName)
         {
             auto ptr = templateDataManager.GetTemplateData(dataName);

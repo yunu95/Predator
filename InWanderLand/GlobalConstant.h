@@ -14,7 +14,8 @@ namespace application
     struct POD_GlobalConstant
     {
         GC<int> gravitySpeed = 10;
-        GC<int> magicPower = 40;
+        GC<float> manaRegen = 7.0f;
+        GC<float> maxMana = 100.0f;
 
         // 몇초마다 유닛들을 플레이어 캐릭터들에게 분배해주는가
         GC<float> enemyAggroUpdateInterval = 1;
@@ -42,7 +43,6 @@ namespace application
         GC<float>   impaleSkillKnockbackDistance = 2.0f;
         GC<float>   impaleSkillKnockbackDuration = 2.0f;
 
-        GC<float>	skillGaugeRecoveryPerSecond = 2.0f;
 
 
         GC<float>	tacticSkillCost = 10.0f;

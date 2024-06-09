@@ -24,6 +24,12 @@ namespace application
             std::string skinnedFBXName = std::string();
             // 플레이어 유닛인지의 여부와 종류를 나타내는 열거형
             POD_Enum<PlayerCharacterType::Enum> playerUnitType;
+            // 추가 목숨의 갯수
+            int liveCount{ 0 };
+            // 부활까지 걸리는 시간
+            float revivalDuration{ 10 };
+            // 부활후 무적시간
+            float revivalInvulnerableDuration{ 3 };
             // aggroRatio가 높을수록 적의 이목을 더 잘 끈다.
             float playerAggroRatio{ 1.0f };
             // 화면에 뜨는 체력창의 타입
@@ -36,9 +42,13 @@ namespace application
             POD_Vector3<float> projectileOffset;
             float projectileSpeed{ 5 };
             // 생성될때 걸리는 시간, 생성시 번아웃 효과 연출 시간과 같다.
-            float spawnTime{ 0.5 };
+            float birthTime{ 0.5 };
             // 사망할 때 번아웃 효과가 연출되는 시간
             float deathBurnTime{ 0.5 };
+            POD_Vector3<float> birthBurnEdgeColor{ 1,1,1 };
+            float birthBurnEdgeThickness = 0.01f;
+            POD_Vector3<float> deathBurnEdgeColor{ 1,1,1 };
+            float deathBurnEdgeThickness = 0.01f;
 
             float max_Health;
 
@@ -63,9 +73,6 @@ namespace application
             std::string projectile_staticFBXName;
             float m_attackPreDelay = 0.5f;
             float m_attackPostDelay = 0.5f;
-
-            int isEliteMonster;
-            int chessType;
 
             float unit_scale{ 1.0f };
             float projectile_scale{ 1.0f };

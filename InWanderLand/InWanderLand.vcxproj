@@ -1949,6 +1949,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="UnitBehaviourTree.h" />
     <ClInclude Include="UnitBuff.h" />
     <ClInclude Include="UnitBuffBleeding.h" />
+    <ClInclude Include="UnitBuffInvulenerability.h" />
+    <ClInclude Include="UnitBuffType.h" />
     <ClInclude Include="UnitCommand.h" />
     <ClInclude Include="UnitController.h" />
     <ClInclude Include="UnitControllerType.h" />
@@ -2944,6 +2946,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="UnitBrush.cpp" />
     <ClCompile Include="UnitBuff.cpp" />
     <ClCompile Include="UnitBuffBleeding.cpp" />
+    <ClCompile Include="UnitBuffInvulenerability.cpp" />
     <ClCompile Include="UnitCommand.cpp" />
     <ClCompile Include="UnitController.cpp" />
     <ClCompile Include="UnitData.cpp" />

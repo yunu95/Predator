@@ -29,7 +29,8 @@ const std::unordered_map<UIEnumID, SkillUpgradeType::Enum> PlayerController::ski
 };
 void PlayerController::RegisterUnit(std::weak_ptr<Unit> unit)
 {
-    if (unit.lock()->GetUnitTemplateData().pod.playerUnitType.enumValue == PlayerCharacterType::None)
+    auto playerType = unit.lock()->GetUnitTemplateData().pod.playerUnitType.enumValue;
+    if (playerType == PlayerCharacterType::None)
         return;
 
     characters[unit.lock()->GetUnitTemplateData().pod.playerUnitType.enumValue] = unit;
@@ -39,10 +40,11 @@ void PlayerController::RegisterUnit(std::weak_ptr<Unit> unit)
     {
         SetCameraOffset();
         SelectPlayerUnit(PlayerCharacterType::Robin);
-        //selectedCharacter = unit;
     }
+    unit.lock()->onStateEngage[UnitBehaviourTree::Death].AddCallback([this, unit]() { UnSelectSkill(unit); });
+    unit.lock()->onStateEngage[UnitBehaviourTree::Paralysis].AddCallback([this, unit]() { UnSelectSkill(unit); });
+    UnSelectSkill(unit);
 }
-
 
 void PlayerController::SetSkillUpgradeTarget(UIEnumID skillUpgradeUITarget)
 {
@@ -82,6 +84,11 @@ void PlayerController::LockCamInRegion(const application::editor::RegionData* ca
     this->camLockRegion = camLockRegion;
 }
 
+bool PlayerController::CanUnitSelectSkill(std::weak_ptr<Unit> unit)
+{
+    return (!unit.lock()->referenceParalysis.BeingReferenced() && unit.lock()->IsAlive());
+}
+
 void PlayerController::Start()
 {
 }
@@ -89,6 +96,21 @@ void PlayerController::OnContentsPlay()
 {
     SetActive(true);
     cursorUnitDetector = Scene::getCurrentScene()->AddGameObject()->AddComponentAsWeakPtr<UnitAcquisitionSphereCollider>();
+    AttachDebugMesh(cursorUnitDetector.lock()->GetGameObject(), DebugMeshType::Cube, yunuGI::Color::white());
+    cursorUnitDetector.lock()->SetRadius(0.01f);
+    skillCooltimeNumberUI[SkillType::ROBIN_Q] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_Q_Cooltime_Number);
+    skillCooltimeNumberUI[SkillType::ROBIN_W] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_W_Cooltime_Number);
+    skillCooltimeNumberUI[SkillType::URSULA_Q] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Ursula)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_Q_Cooltime_Number);
+    skillCooltimeNumberUI[SkillType::URSULA_W] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Ursula)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_W_Cooltime_Number);
+    skillCooltimeNumberUI[SkillType::HANSEL_Q] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_Q_Cooltime_Number);
+    skillCooltimeNumberUI[SkillType::HANSEL_W] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_W_Cooltime_Number);
+    skillCooltimeMaskUI[SkillType::ROBIN_Q] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_Q_Overlay);
+    skillCooltimeMaskUI[SkillType::ROBIN_W] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_W_Overlay);
+    skillCooltimeMaskUI[SkillType::URSULA_Q] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Ursula)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_Q_Overlay);
+    skillCooltimeMaskUI[SkillType::URSULA_W] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Ursula)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_W_Overlay);
+    skillCooltimeMaskUI[SkillType::HANSEL_Q] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_Q_Overlay);
+    skillCooltimeMaskUI[SkillType::HANSEL_W] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_W_Overlay);
+    InitUnitMouseInteractionEffects();
 }
 void PlayerController::OnContentsStop()
 {
@@ -103,6 +125,9 @@ void PlayerController::Update()
     HandleCamera();
     HandleSkillPreview();
     HandleByState();
+    HandleSkillCooltime();
+    HandleManaRegen();
+    HandleMouseHover();
 #ifdef EDITOR
     static yunutyEngine::graphics::UIText* text_State{ nullptr };
     if (text_State == nullptr)
@@ -125,6 +150,10 @@ void PlayerController::Update()
         wsstream << L"\nacq : " << selectedDebugCharacter.lock()->acquisitionRange.lock()->GetEnemies().size();
         wsstream << L"\ncurrent pos : " << selectedDebugCharacter.lock()->GetTransform()->GetWorldPosition();
         wsstream << L"\nattack target pos : " << selectedDebugCharacter.lock()->attackMoveDestination;
+        if (!cursorUnitDetector.lock()->GetUnits().empty())
+        {
+            wsstream << L"\nhovering unit : " << yutility::GetWString((*cursorUnitDetector.lock()->GetUnits().begin())->name);
+        }
 
         text_State->GetGI().SetText(wsstream.str());
     }
@@ -260,8 +289,34 @@ void PlayerController::HandleSkillPreview()
     }
 }
 
+void PlayerController::HandleSkillCooltime()
+{
+    for (int skillType = SkillType::ROBIN_Q; skillType <= SkillType::HANSEL_W; skillType++)
+    {
+        SetCooltime((SkillType::Enum)skillType, skillCooltimeLeft[skillType] - Time::GetDeltaTime());
+    }
+}
+
+void PlayerController::HandleManaRegen()
+{
+    SetMana(mana + GlobalConstant::GetSingletonInstance().pod.manaRegen * Time::GetDeltaTime());
+}
+
+void PlayerController::HandleMouseHover()
+{
+    if (!cursorUnitDetector.lock()->GetUnits().empty())
+    {
+        ApplyHoverEffect((*cursorUnitDetector.lock()->GetUnits().begin())->GetWeakPtr<Unit>());
+    }
+    else
+    {
+        DisableHoverEffect();
+    }
+}
+
 void PlayerController::SelectPlayerUnit(PlayerCharacterType::Enum charType)
 {
+    UnSelectSkill();
     if (charType == selectedCharacterType || charType == PlayerCharacterType::None)
     {
         return;
@@ -269,6 +324,7 @@ void PlayerController::SelectPlayerUnit(PlayerCharacterType::Enum charType)
     selectedCharacterType = charType;
     selectedCharacter = characters[charType];
     selectedDebugCharacter = characters[charType];
+    ApplySelectEffect(characters[charType]);
     switch (selectedCharacterType)
     {
     case PlayerCharacterType::Robin:
@@ -313,9 +369,16 @@ void PlayerController::OnRightClick()
 {
     if (selectedSkill == SkillType::NONE)
     {
-        OrderMove(GetWorldCursorPosition());
+        if (!cursorUnitDetector.lock()->GetUnits().empty() && (*cursorUnitDetector.lock()->GetUnits().begin())->teamIndex != playerTeamIndex)
+        {
+            OrderAttack((*cursorUnitDetector.lock()->GetUnits().begin())->GetWeakPtr<Unit>());
+        }
+        else
+        {
+            OrderMove(GetWorldCursorPosition());
+        }
     }
-    else
+    else if (selectedSkill != SkillType::NONE)
     {
         UnSelectSkill();
     }
@@ -341,6 +404,7 @@ void PlayerController::OrderAttackMove(Vector3d position)
 
 void PlayerController::OrderAttack(std::weak_ptr<Unit> unit)
 {
+    ApplyTargetedEffect(unit);
     selectedCharacter.lock()->OrderAttack(unit);
 }
 
@@ -351,16 +415,31 @@ void PlayerController::OrderInteraction(std::weak_ptr<IInteractableComponent> in
 
 void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
 {
+    if (skillCooltimeLeft[skillType] > 0) return;
     if (state == State::Cinematic) return;
+    SetMana(mana - RequiredManaForSkill(skillType));
     onSkillActivate[skillType]();
+    SetCooltime(skillType, GetCooltimeForSkill(skillType));
     switch (skillType)
     {
-    case SkillType::ROBIN_Q: selectedCharacter.lock()->OrderSkill(RobinChargeSkill{  }, pos); break;
-    case SkillType::ROBIN_W: selectedCharacter.lock()->OrderSkill(RobinTauntSkill{  }, pos); break;
-    case SkillType::URSULA_Q: selectedCharacter.lock()->OrderSkill(UrsulaBlindSkill{  }, pos); break;
-    case SkillType::URSULA_W: selectedCharacter.lock()->OrderSkill(UrsulaParalysisSkill{  }, pos); break;
-    case SkillType::HANSEL_Q: selectedCharacter.lock()->OrderSkill(HanselChargeSkill{}, pos); break;
-    case SkillType::HANSEL_W: selectedCharacter.lock()->OrderSkill(HanselProjectileSkill{}, pos); break;
+    case SkillType::ROBIN_Q:
+        selectedCharacter.lock()->OrderSkill(RobinChargeSkill{  }, pos);
+        break;
+    case SkillType::ROBIN_W:
+        selectedCharacter.lock()->OrderSkill(RobinTauntSkill{  }, pos);
+        break;
+    case SkillType::URSULA_Q:
+        selectedCharacter.lock()->OrderSkill(UrsulaBlindSkill{  }, pos);
+        break;
+    case SkillType::URSULA_W:
+        selectedCharacter.lock()->OrderSkill(UrsulaParalysisSkill{  }, pos);
+        break;
+    case SkillType::HANSEL_Q:
+        selectedCharacter.lock()->OrderSkill(HanselChargeSkill{}, pos);
+        break;
+    case SkillType::HANSEL_W:
+        selectedCharacter.lock()->OrderSkill(HanselProjectileSkill{}, pos);
+        break;
     }
     UnSelectSkill();
     // 스킬 프리뷰를 비활성화시킨다.
@@ -368,8 +447,18 @@ void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
 
 void PlayerController::SelectSkill(SkillType::Enum skillType)
 {
-    if (state != State::Battle) return;
     UnSelectSkill();
+    if (skillCooltimeLeft[skillType] > 0)
+    {
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::ErrorPopup_Cooltime)->EnableElement();
+        return;
+    }
+    if (mana < RequiredManaForSkill(skillType))
+    {
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::ErrorPopup_Cooltime)->EnableElement();
+        return;
+    }
+    if (state != State::Battle) return;
     onSkillSelect[skillType]();
     switch (skillType)
     {
@@ -508,6 +597,32 @@ void PlayerController::UnSelectSkill()
     selectedSkill = SkillType::NONE;
 }
 
+void PlayerController::UnSelectSkill(std::weak_ptr<Unit> unit)
+{
+    auto playerType = unit.lock()->unitTemplateData->pod.playerUnitType.enumValue;
+    switch (playerType)
+    {
+    case PlayerCharacterType::Robin:
+        if (selectedSkill == SkillType::ROBIN_Q || selectedSkill == SkillType::ROBIN_W)
+        {
+            UnSelectSkill();
+        }
+        break;
+    case PlayerCharacterType::Ursula:
+        if (selectedSkill == SkillType::URSULA_Q || selectedSkill == SkillType::URSULA_W)
+        {
+            UnSelectSkill();
+        }
+        break;
+    case PlayerCharacterType::Hansel:
+        if (selectedSkill == SkillType::HANSEL_Q || selectedSkill == SkillType::HANSEL_W)
+        {
+            UnSelectSkill();
+        }
+        break;
+    }
+}
+
 // xz평면에 사영된 마우스 위치를 반환한다.
 Vector3d PlayerController::GetWorldCursorPosition()
 {
@@ -520,8 +635,93 @@ Vector3d PlayerController::GetWorldCursorPosition()
 void PlayerController::ResetCombo()
 {
 }
-
-void PlayerController::SetSelectedSkillType(SkillType::Enum selectedSkill)
+void PlayerController::SetMana(float mana)
 {
-    this->selectedSkill = selectedSkill;
+    const auto& gc = GlobalConstant::GetSingletonInstance().pod;
+    this->mana = std::fmin(gc.maxMana, mana);
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::ManaFill)->adjuster->SetTargetFloat(1 - mana / gc.maxMana);
+}
+
+void PlayerController::SetCooltime(SkillType::Enum skillType, float cooltime)
+{
+    skillCooltimeLeft[skillType] = std::fmax(0.0f, cooltime);
+    skillCooltimeNumberUI[skillType]->SetNumber(cooltime);
+    skillCooltimeMaskUI[skillType]->adjuster->SetTargetFloat(skillCooltimeLeft[skillType] / GetCooltimeForSkill(skillType));
+}
+
+float PlayerController::GetCooltimeForSkill(SkillType::Enum skillType)
+{
+    switch (skillType)
+    {
+    case SkillType::ROBIN_Q: return skillType, RobinChargeSkill::pod.coolTime;
+    case SkillType::ROBIN_W: return RobinTauntSkill::pod.coolTime;
+    case SkillType::URSULA_Q: return UrsulaBlindSkill::pod.skillCoolTime;
+    case SkillType::URSULA_W: return UrsulaParalysisSkill::pod.skillCoolTime;
+    case SkillType::HANSEL_Q: return HanselChargeSkill::pod.coolTime;
+    case SkillType::HANSEL_W: return HanselProjectileSkill::pod.coolTime;
+    }
+}
+
+float PlayerController::RequiredManaForSkill(SkillType::Enum skillType)
+{
+    switch (skillType)
+    {
+    case SkillType::ROBIN_Q: return RobinChargeSkill::pod.cost;
+    case SkillType::ROBIN_W: return RobinTauntSkill::pod.skillCost;
+    case SkillType::URSULA_Q: return UrsulaBlindSkill::pod.skillCost;
+    case SkillType::URSULA_W: return UrsulaParalysisSkill::pod.skillCost;
+    case SkillType::HANSEL_Q: return HanselChargeSkill::pod.skillCost;
+    case SkillType::HANSEL_W: return HanselProjectileSkill::pod.skillCost;
+    }
+}
+
+void PlayerController::ApplyHoverEffect(std::weak_ptr<Unit> unit)
+{
+    if (unit.lock()->GetTeamIndex() == playerTeamIndex)
+    {
+        enemyHoverEffect->SetSelfActive(false);
+        allyHoverEffect->SetSelfActive(true);
+        allyHoverEffect->SetParent(unit.lock()->GetGameObject());
+    }
+    else
+    {
+        enemyHoverEffect->SetSelfActive(true);
+        allyHoverEffect->SetSelfActive(false);
+        enemyHoverEffect->SetParent(unit.lock()->GetGameObject());
+    }
+}
+
+void PlayerController::DisableHoverEffect()
+{
+    if (!mouseInteractionEffectInitalized) return;
+    enemyHoverEffect->SetSelfActive(false);
+    allyHoverEffect->SetSelfActive(false);
+}
+
+void PlayerController::ApplySelectEffect(std::weak_ptr<Unit> unit)
+{
+    if (!mouseInteractionEffectInitalized) return;
+    allySelectedEffect->SetSelfActive(true);
+    allySelectedEffect->SetParent(unit.lock()->GetGameObject());
+}
+
+void PlayerController::ApplyTargetedEffect(std::weak_ptr<Unit> unit)
+{
+    if (!mouseInteractionEffectInitalized) return;
+    enemyTargetedEffect->SetSelfActive(true);
+    enemyTargetedEffect->SetParent(unit.lock()->GetGameObject());
+}
+
+void PlayerController::InitUnitMouseInteractionEffects()
+{
+    if (mouseInteractionEffectInitalized) return;
+    mouseInteractionEffectInitalized = true;
+    allySelectedEffect = Scene::getCurrentScene()->AddGameObject();
+    enemyTargetedEffect = Scene::getCurrentScene()->AddGameObject();
+    allyHoverEffect = Scene::getCurrentScene()->AddGameObject();
+    enemyHoverEffect = Scene::getCurrentScene()->AddGameObject();
+    AttachDebugMesh(allySelectedEffect, DebugMeshType::Sphere, yunuGI::Color::green());
+    AttachDebugMesh(enemyTargetedEffect, DebugMeshType::Sphere, yunuGI::Color::red());
+    AttachDebugMesh(allyHoverEffect, DebugMeshType::Sphere, yunuGI::Color::green());
+    AttachDebugMesh(enemyHoverEffect, DebugMeshType::Sphere, yunuGI::Color::orange());
 }

@@ -16,7 +16,7 @@ void BurnEffect::SetSpeed(float speed)
 	this->speed = speed;
 }
 
-void BurnEffect::DisAppear()
+void BurnEffect::Disappear()
 {
 	isDisAppear = true;
 	isDone = false;

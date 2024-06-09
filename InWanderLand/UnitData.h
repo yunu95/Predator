@@ -68,7 +68,8 @@ namespace application
 
         public:
             virtual bool EnterDataFromTemplate() override;
-            virtual Unit_TemplateData* GetTemplateData() override;
+            virtual Unit_TemplateData* GetTemplateData()override;
+            virtual Unit_TemplateData* GetUnitTemplateData()const;
             virtual bool SetTemplateData(const std::string& dataName) override;
             virtual IEditableData* Clone() const override;
             virtual void OnRelocate(const Vector3d& newLoc) override;

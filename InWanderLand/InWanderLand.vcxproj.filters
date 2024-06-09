@@ -796,6 +796,12 @@
     <Filter Include="Contents_Refactored\UnitController\EnemyController\RangedEliteController">
       <UniqueIdentifier>{2559020f-20b5-4a3a-bed0-6b2c31bee46b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents_Refactored\Unit\UnitBuff\UnitBuffType">
+      <UniqueIdentifier>{d9edcc6f-5959-4393-b429-659e8ebccaf5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Unit\UnitBuff\UnitBuffInvulenerability">
+      <UniqueIdentifier>{10862094-2470-4741-9195-5cb06b08b1e7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -1927,6 +1933,12 @@
     <ClInclude Include="RangedEliteController.h">
       <Filter>Contents_Refactored\UnitController\EnemyController\RangedEliteController</Filter>
     </ClInclude>
+    <ClInclude Include="UnitBuffType.h">
+      <Filter>Contents_Refactored\Unit\UnitBuff\UnitBuffType</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitBuffInvulenerability.h">
+      <Filter>Contents_Refactored\Unit\UnitBuff\UnitBuffInvulenerability</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -2877,6 +2889,9 @@
     </ClCompile>
     <ClCompile Include="RangedEliteController.cpp">
       <Filter>Contents_Refactored\UnitController\EnemyController\RangedEliteController</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitBuffInvulenerability.cpp">
+      <Filter>Contents_Refactored\Unit\UnitBuff\UnitBuffInvulenerability</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
