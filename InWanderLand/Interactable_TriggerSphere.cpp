@@ -54,13 +54,16 @@ void Interactable_TriggerSphere::Update()
 			}
 		}
 	}
+
+	/// 내부로 들어온 유닛이 죽었을 때, 리스트에서 제외하는 로직 필요함
 }
 
 void Interactable_TriggerSphere::OnTriggerEnter(physics::Collider* collider)
 {
 	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
 		colliderUnitComponent != nullptr &&
-		colliderUnitComponent->IsPlayerUnit())
+		colliderUnitComponent->IsPlayerUnit() &&
+		colliderUnitComponent->IsAlive())
 	{
 		triggerStay.insert(collider);
 		if (activeInteractable)

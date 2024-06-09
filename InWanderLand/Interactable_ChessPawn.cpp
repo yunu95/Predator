@@ -72,7 +72,8 @@ void Interactable_ChessPawn::OnTriggerEnter(physics::Collider* collider)
 {
 	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
 		colliderUnitComponent != nullptr &&
-		colliderUnitComponent->IsPlayerUnit())
+		colliderUnitComponent->IsPlayerUnit() &&
+		colliderUnitComponent->IsAlive())
 	{
 		OnInteractableTriggerEnter();
 	}

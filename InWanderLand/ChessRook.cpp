@@ -217,7 +217,8 @@ namespace BossSummon
 	{
 		if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
 			colliderUnitComponent != nullptr &&
-			colliderUnitComponent->IsPlayerUnit())
+			colliderUnitComponent->IsPlayerUnit() &&
+			colliderUnitComponent->IsAlive())
 		{
 			unitSet.insert(colliderUnitComponent);
 		}
