@@ -16,6 +16,9 @@ BossSummonChessSkill::BossSummonChessSkill()
 
 coroutine::Coroutine BossSummonChessSkill::operator()()
 {
+	auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
+	auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
+	auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
 	owner.lock()->PlayAnimation(UnitAnimType::Skill4, true);
 	auto animator = owner.lock()->GetAnimator();
 	auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill4);
@@ -43,6 +46,10 @@ coroutine::Coroutine BossSummonChessSkill::operator()()
 	{
 		co_await std::suspend_always{};
 	}
+
+	disableNavAgent.reset();
+	blockFollowingNavigation.reset();
+	owner.lock()->Relocate(owner.lock()->GetTransform()->GetWorldPosition());
 	OnInterruption();
 	co_return;
 }

@@ -23,6 +23,9 @@
 #include "ParticleTool_Manager.h"
 #include "AnimationEventManager.h"
 #include "SFXManager.h"
+#include "LeftFrame.h"
+#include "RightFrame.h"
+#include "BossSummonMobSkill.h"
 
 namespace application
 {
@@ -127,6 +130,43 @@ namespace application
                 each.Clear();
             for (auto& each : onStateExit)
                 each.Clear();
+            if (pod.isBossSummon)
+            {
+                if (pod.templateData->pod.skinnedFBXName == "SKM_FRAME1")
+                {
+                    auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX(pod.templateData->pod.skinnedFBXName);
+                    obj->GetTransform()->SetWorldPosition({ pod.position.x,pod.position.y,pod.position.z });
+                    obj->GetTransform()->SetWorldRotation({ pod.rotation.w, pod.rotation.x,pod.rotation.y,pod.rotation.z });
+                    obj->GetTransform()->SetWorldScale({ pod.scale.x,pod.scale.y,pod.scale.z });
+                    auto comp = obj->AddComponent<BossSummon::LeftFrame>();
+                    comp->Init(pod.templateData);
+                    comp->SetFrameData(this);
+                    BossSummonMobSkill::SetLeftFrame(comp);
+                    return;
+                }
+                else if (pod.templateData->pod.skinnedFBXName == "SKM_FRAME2")
+                {
+                    auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX(pod.templateData->pod.skinnedFBXName);
+                    obj->GetTransform()->SetWorldPosition({ pod.position.x,pod.position.y,pod.position.z });
+                    obj->GetTransform()->SetWorldRotation({ pod.rotation.w, pod.rotation.x,pod.rotation.y,pod.rotation.z });
+                    obj->GetTransform()->SetWorldScale({ pod.scale.x,pod.scale.y,pod.scale.z });
+                    auto comp = obj->AddComponent<BossSummon::RightFrame>();
+                    comp->Init(pod.templateData);
+                    comp->SetFrameData(this);
+                    BossSummonMobSkill::SetRightFrame(comp);
+                    return;
+                }
+
+                if (pod.summonLeftFrame)
+                {
+                    BossSummon::LeftFrame::RegisterUnitData(this);
+                }
+                else
+                {
+                    BossSummon::RightFrame::RegisterUnitData(this);
+                }
+                return;
+            }
             if (pod.isGuide || pod.waveData != nullptr)
             {
                 return;

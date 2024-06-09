@@ -818,6 +818,14 @@ void Unit::Summon(const application::editor::UnitData* unitData)
         controllers.push_back(&EnemyAggroController::Instance());
         break;
     }
+    case UnitControllerType::HEART_QUEEN:
+    {
+        EnemyAggroController::Instance().RegisterUnit(GetWeakPtr<Unit>());
+        controllers.push_back(&EnemyAggroController::Instance());
+        BossController::Instance().RegisterUnit(GetWeakPtr<Unit>());
+        controllers.push_back(&BossController::Instance());
+        break;
+    }
     }
 
     Reset();
