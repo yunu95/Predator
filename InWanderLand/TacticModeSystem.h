@@ -39,19 +39,19 @@ public:
     bool IsExecuting() { return this->isExecuting; }
 
     // 전술모드를 활성화하는 함수입니다.
-    void OperateTacticSystem();
+    void EngageTacticSystem();
 
     // 유닛의 행동을 큐에 등록할 수 있게 해주는 함수 입니다.
-    void Enqueue(std::shared_ptr<UnitCommand> command);
-
-    // 전술 모드가 풀리면 실행될 함수 입니다.
-    void Execute();
+    void EnqueueCommand(std::shared_ptr<UnitCommand> command);
 
     // 맨 마지막 명령 하나를 지우는 함수입니다.
     void PopCommand();
 
     // 모든 명령을 지우는 함수입니다.
     void ClearCommand();
+
+    // 전술 모드가 풀리면 실행될 함수 입니다.
+    void ExecuteCommands();
 
 private:
     // 전술모드 내부에서 등록된 명령들을 실행해주는 함수입니다.
