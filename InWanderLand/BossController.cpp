@@ -18,12 +18,12 @@ coroutine::Coroutine BossController::RoutineGlobal()
 		if (state == 0 && boss->GetUnitCurrentHp() / boss->GetUnitTemplateData().pod.max_Health <= 2 / 3)
 		{
 			state = 1;
-			boss->OrderSkill(BossSummonMobSkill{}, Vector3d());
+			boss->OrderSkill(BossSummonMobSkill{}, boss->GetTransform()->GetWorldPosition());
 		}
 		else if (state == 1 && boss->GetUnitCurrentHp() / boss->GetUnitTemplateData().pod.max_Health <= 1 / 3)
 		{
 			state = 2;
-			boss->OrderSkill(BossSummonMobSkill{}, Vector3d());
+			boss->OrderSkill(BossSummonMobSkill{}, boss->GetTransform()->GetWorldPosition());
 		}
 		co_await std::suspend_always();
 	}
@@ -59,7 +59,7 @@ coroutine::Coroutine BossController::RoutinePerUnit(std::weak_ptr<Unit> unit)
 			{
 				case 1:
 				{
-					unit.lock()->OrderSkill(BossSpinAttackSkill{}, Vector3d());
+					unit.lock()->OrderSkill(BossSpinAttackSkill{}, unit.lock()->GetTransform()->GetWorldPosition());
 					break;
 				}
 				case 2:
@@ -85,7 +85,7 @@ coroutine::Coroutine BossController::RoutinePerUnit(std::weak_ptr<Unit> unit)
 				}
 				case 2:
 				{
-					unit.lock()->OrderSkill(BossSpinAttackSkill{}, Vector3d());
+					unit.lock()->OrderSkill(BossSpinAttackSkill{}, unit.lock()->GetTransform()->GetWorldPosition());
 					break;
 				}
 				default:
@@ -103,7 +103,7 @@ coroutine::Coroutine BossController::RoutinePerUnit(std::weak_ptr<Unit> unit)
 			{
 				case 1:
 				{
-					unit.lock()->OrderSkill(BossSpinAttackSkill{}, Vector3d());
+					unit.lock()->OrderSkill(BossSpinAttackSkill{}, unit.lock()->GetTransform()->GetWorldPosition());
 					break;
 				}
 				case 2:
@@ -120,7 +120,7 @@ coroutine::Coroutine BossController::RoutinePerUnit(std::weak_ptr<Unit> unit)
 		}
 		case 4:
 		{
-			unit.lock()->OrderSkill(BossSummonChessSkill{}, Vector3d());
+			unit.lock()->OrderSkill(BossSummonChessSkill{}, unit.lock()->GetTransform()->GetWorldPosition());
 			currentState = 0;
 			co_yield coroutine::WaitForSeconds{ gc.bossSkillPeriod_4 };
 			break;
