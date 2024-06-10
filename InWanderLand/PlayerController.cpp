@@ -8,6 +8,7 @@
 #include "UIManager.h"
 #include "SkillList.h"
 #include "VFXAnimator.h"
+#include "TacticModeSystem.h"
 
 const std::unordered_map<UIEnumID, SkillUpgradeType::Enum> PlayerController::skillByUI
 {
@@ -193,6 +194,21 @@ void PlayerController::HandleByState()
 void PlayerController::HandleInput()
 {
 	if (state == State::Cinematic) return;
+
+	if (Input::isKeyPushed(KeyCode::Space) && ((state == State::Battle) || state == State::Tactic))
+	{
+		if ((TacticModeSystem::Instance().IsCoolTime() == false) && (TacticModeSystem::Instance().IsExecuting() == false))
+		{
+			state = State::Tactic;
+			TacticModeSystem::Instance().EngageTacticSystem();
+		}
+
+		if ((TacticModeSystem::Instance().IsOperation() == true) && (TacticModeSystem::Instance().IsExecuting() == false))
+		{
+			TacticModeSystem::Instance().ExecuteCommands();
+		}
+	}
+
 	if (Input::isKeyPushed(KeyCode::Q))
 	{
 		switch (selectedCharacterType)
