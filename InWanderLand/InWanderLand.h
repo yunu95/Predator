@@ -49,6 +49,7 @@
 #include "Unit.h"
 #include "UnitPool.h"
 #include "UnitBuff.h"
+#include "UnitBuffInvulenerability.h"
 #include "UnitBuffBleeding.h"
 #include "UnitAnimationType.h"
 #include "UnitAttackType.h"

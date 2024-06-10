@@ -2,7 +2,7 @@
 
 #include "MoveEndPreviewPool.h"
 #include "AttackPreviewPool.h"
-#include "GameManager.h"
+
 #include "RTSCam.h"
 #include "DirectXMath.h"
 #include "UVAnimator.h"

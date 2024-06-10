@@ -1,5 +1,6 @@
 #include "InWanderLand.h"
 #include "BossImpaleSkill.h"
+#include "VFXAnimator.h"
 
 POD_BossImpaleSkill BossImpaleSkill::pod = POD_BossImpaleSkill();
 
@@ -88,14 +89,44 @@ coroutine::Coroutine BossImpaleSkill::SpearArise(std::weak_ptr<BossImpaleSkill> 
 	co_return;
 }
 
+coroutine::Coroutine BossImpaleSkill::SpawningSkillffect()
+{
+	Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
+	Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
+	Vector3d direction = deltaPos.Normalized();
+
+	auto tauntEffect = FBXPool::SingleInstance().Borrow("VFX_HeartQueen_Skill2");
+
+	tauntEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos);
+	tauntEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
+	auto chargeEffectAnimator = tauntEffect.lock()->AcquireVFXAnimator();
+	chargeEffectAnimator.lock()->SetAutoActiveFalse();
+	chargeEffectAnimator.lock()->Init();
+
+	co_await std::suspend_always{};
+
+	while (!chargeEffectAnimator.lock()->IsDone())
+	{
+		co_await std::suspend_always{};
+	}
+
+	FBXPool::SingleInstance().Return(tauntEffect);
+
+	co_return;
+}
+
 coroutine::Coroutine BossImpaleSkill::operator()()
 {
-	auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
+	//auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
 	auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
 	auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
 	auto enableNavObstacle = owner.lock()->referenceEnableNavObstacle.Acquire();
+	auto animator = owner.lock()->GetAnimator();
+	auto impaleAnim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill2);
+
 	// 창이 생성되는 시간 오프셋은 유닛으로부터의 거리와 정비례한다.
 	owner.lock()->PlayAnimation(UnitAnimType::Skill2);
+	owner.lock()->StartCoroutine(SpawningSkillffect());
 	co_yield coroutine::WaitForSeconds{ impaleStartTime };
 	coroutine::ForSeconds forSeconds{ pod.impaleSkillDuration };
 	for (auto& each : BossSpearsInfo())
@@ -109,13 +140,9 @@ coroutine::Coroutine BossImpaleSkill::operator()()
 		owner.lock()->StartCoroutine(SpearArise(std::dynamic_pointer_cast<BossImpaleSkill>(selfWeakPtr.lock()), fbx, each.position));
 	}
 	
-	disableNavAgent.reset();
-	blockFollowingNavigation.reset();
-	owner.lock()->Relocate(owner.lock()->GetTransform()->GetWorldPosition());
-	while (forSeconds.Tick()) { co_await std::suspend_always{}; }
-	owner.lock()->PlayAnimation(UnitAnimType::Idle);
-	co_yield coroutine::WaitForSeconds{ 0.3f };
+	co_yield coroutine::WaitForSeconds{ impaleAnim->GetDuration() - impaleStartTime };
 
+	owner.lock()->PlayAnimation(UnitAnimType::Idle);
 	co_return;
 }
 

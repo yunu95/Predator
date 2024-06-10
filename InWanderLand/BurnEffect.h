@@ -10,7 +10,7 @@ public:
 	void SetEdgeThickness(float edgeThickness);
 	void SetSpeed(float speed);
 
-	void DisAppear();
+	void Disappear();
 	void Appear();
 	bool IsDone();
 

@@ -19,7 +19,7 @@
 #include "RookTrapProductor.h"
 #include "RangedEnemyPool.h"
 #include "MeleeEnemyPool.h"
-#include "GameManager.h"
+
 #include "ShortcutSystem.h"
 #include "PlaytimeWave.h"
 #include "BurnEffect.h"

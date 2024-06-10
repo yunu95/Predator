@@ -7,6 +7,7 @@ public:
     enum Keywords
     {
         Death = 0,
+        Reviving,
         Paralysis,
         Knockback,
         Stun,
@@ -29,6 +30,7 @@ const std::unordered_map<int, std::string>& application::POD_Enum<UnitBehaviourT
     static std::unordered_map<int, std::string> enumNameMap
     {
         {UnitBehaviourTree::Death, "Death"},
+        {UnitBehaviourTree::Reviving, "Reviving"},
         {UnitBehaviourTree::Paralysis, "Paralysis"},
         {UnitBehaviourTree::Knockback, "Knockback"},
         {UnitBehaviourTree::Stun, "Stun"},

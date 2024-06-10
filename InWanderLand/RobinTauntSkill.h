@@ -17,6 +17,11 @@ struct POD_RobinTauntSkill
 class UnitAcquisitionSphereCollider;
 class RobinTauntSkill : public Skill
 {
+private:
+	coroutine::Coroutine SpawningSkillffect();
+	std::weak_ptr<UnitAcquisitionSphereCollider> tauntCollider;
+	std::unordered_set<Unit*> tauntList;
+
 public:
     RobinTauntSkill() {}
     virtual SkillType::Enum GetSkillType() { return SkillType::Enum::ROBIN_W; }
@@ -25,9 +30,6 @@ public:
     virtual void OnInterruption()override;
 
     static POD_RobinTauntSkill pod;
-
-private:
-    std::weak_ptr<UnitAcquisitionSphereCollider> tauntCollider;
 };
 
 

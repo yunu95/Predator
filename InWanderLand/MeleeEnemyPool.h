@@ -4,7 +4,7 @@
 //#include "PermanentObservee.h"
 //#include "MeleeEnemyProductor.h"
 //#include "SingleNavigationField.h"
-//#include "GameManager.h"
+//
 //#include "BurnEffect.h"
 //
 //class MeleeEnemyPool : public GameObjectPool<DummyComponent>, public SingletonComponent<MeleeEnemyPool>, public Component, public PermanentObservee

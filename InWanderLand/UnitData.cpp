@@ -16,7 +16,7 @@
 #include "SpikeTrapProductor.h"
 #include "RangedEnemyPool.h"
 #include "MeleeEnemyPool.h"
-#include "GameManager.h"
+
 #include "ShortcutSystem.h"
 #include "PlaytimeWave.h"
 #include "BurnEffect.h"
@@ -41,6 +41,11 @@ namespace application
         }
 
         Unit_TemplateData* UnitData::GetTemplateData()
+        {
+            return pod.templateData;
+        }
+
+        Unit_TemplateData* UnitData::GetUnitTemplateData() const
         {
             return pod.templateData;
         }

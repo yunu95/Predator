@@ -22,15 +22,15 @@ void UnitAttackCommand::ShowPreviewMesh()
 {
     if (unit->GetUnitTemplateData().GetDataResourceName() == "SKM_Robin")
     {
-        renderer = SkillPreviewSystem::Instance().ShowAttackImage(SkillPreviewSystem::UnitType::Robin, targetPos);
+        renderer = SkillPreviewSystem::Instance().ShowAttackImage(SkillPreviewSystem::UnitType::Robin, expectedPos);
     }
     else if (unit->GetUnitTemplateData().GetDataResourceName() == "SKM_Ursula")
     {
-        renderer = SkillPreviewSystem::Instance().ShowAttackImage(SkillPreviewSystem::UnitType::Ursula, targetPos);
+        renderer = SkillPreviewSystem::Instance().ShowAttackImage(SkillPreviewSystem::UnitType::Ursula, expectedPos);
     }
     else if (unit->GetUnitTemplateData().GetDataResourceName() == "SKM_Hansel")
     {
-        renderer = SkillPreviewSystem::Instance().ShowAttackImage(SkillPreviewSystem::UnitType::Hansel, targetPos);
+        renderer = SkillPreviewSystem::Instance().ShowAttackImage(SkillPreviewSystem::UnitType::Hansel, expectedPos);
     }
 }
 

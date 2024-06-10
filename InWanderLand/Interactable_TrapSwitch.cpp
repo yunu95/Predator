@@ -4,7 +4,7 @@
 #include "DebugMeshes.h"
 
 #include "Unit.h"
-#include "GameManager.h"
+
 #include "SFXManager.h"
 
 void Interactable_TrapSwitch::Start()

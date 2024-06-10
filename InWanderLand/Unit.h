@@ -55,6 +55,7 @@ public:
     void Init(const application::editor::Unit_TemplateData* unitTemplateData);
     // 유닛 데이터의 정보에 맞게 이 유닛을 소환한다.
     void Summon(const application::editor::UnitData* unitData);
+    void Summon(application::editor::Unit_TemplateData* td, const Vector3d& position, float rotation, bool instant = true);
     // 유닛의 초기화 구문, 유닛의 체력을 정상상태로 만들며, 버프를 모두 제거하고 상태를 Idle로 만든다.
     void Reset();
     const application::editor::Unit_TemplateData& GetUnitTemplateData()const;
@@ -68,11 +69,11 @@ public:
     template<typename SkillType>
     void OrderSkill(const SkillType& skill, Vector3d pos);
     template<typename BuffType>
-    void ApplyBuff(const BuffType& buff);
+    void ApplyBuff(BuffType&& buff);
     void Damaged(std::weak_ptr<Unit> opponentUnit, float opponentAp);	// 데미지 입었을 경우 추적하는 로직 포함
     void Damaged(float dmg);                            // 추적받지 않는 데미지
     void Heal(float healingPoint);
-    void SetUnitCurrentHp(float p_newHp);
+    void SetCurrentHp(float p_newHp);
     void KnockBack(Vector3d targetPosition, float knockBackDuration);
     /// Unit 의 위치로부터 입력한 위치벡터(월드 좌표계 기준)에 KnockBack 을 수행합니다.
     void KnockBackRelativeVector(Vector3d relativeVector, float knockBackDuration);
@@ -135,7 +136,8 @@ public:
 
     std::weak_ptr<yunutyEngine::graphics::Animator> GetAnimator() { return animatorComponent; }
 private:
-    void SetNavObstacleActive(bool active);
+    void Summon(application::editor::Unit_TemplateData* templateData);
+    void SetIsAlive(bool isAlive);
     void UpdateRotation();
     void InitBehaviorTree();
     template<UnitBehaviourTree::Keywords state>
@@ -155,14 +157,22 @@ private:
     bool CanProcessOrder();
     // 상대 유닛에 대해 다가가서 때리기 좋은 위치를 반환합니다.
     Vector3d GetAttackPosition(std::weak_ptr<Unit> opponent);
+    // 유닛 부활 코루틴
+    yunutyEngine::coroutine::Coroutine RevivalCoroutine();
+    // 유닛이 새로 생성될때 애니메이션, 번 이펙트와 함께 나오는 코루틴
+    yunutyEngine::coroutine::Coroutine BirthCoroutine();
+    // 유닛이 죽을 때 애니메이션, 번 이펙트와 함께 사라지고 유닛 풀에 반환되는 코루틴
+    yunutyEngine::coroutine::Coroutine DeathCoroutine();
     yunutyEngine::coroutine::Coroutine AttackCoroutine(std::weak_ptr<Unit> opponent);
     float DistanceTo(const Vector3d& target);
+    int liveCountLeft{ 0 };
     std::vector<UnitController*> controllers;
     UnitBehaviourTree unitBehaviourTree;
     std::array<DelegateCallback<void()>, UnitBehaviourTree::Keywords::KeywordNum> onStateEngage;
     std::array<DelegateCallback<void()>, UnitBehaviourTree::Keywords::KeywordNum> onStateExit;
-    std::shared_ptr<Reference::Guard> enableNavObstacle;
-    std::shared_ptr<Reference::Guard> disableNavAgent;
+    std::shared_ptr<Reference::Guard> enableNavObstacleByState;
+    std::shared_ptr<Reference::Guard> disableNavAgentByState;
+    std::shared_ptr<Reference::Guard> invulnerabilityByState;
     // 공격범위와 적 포착범위
     std::weak_ptr<UnitAcquisitionSphereCollider> attackRange;
     std::weak_ptr<UnitAcquisitionSphereCollider> acquisitionRange;
@@ -171,7 +181,7 @@ private:
     // 유닛들이 가만히 있을 때 장애물로 인식하게 만들기 위함.
     std::weak_ptr<yunutyEngine::NavigationObstacle> navObstacle;
     std::weak_ptr<yunutyEngine::physics::SphereCollider> unitCollider;
-    std::unordered_map<UnitBuff::Type, std::shared_ptr<UnitBuff>> buffs;
+    std::unordered_map<UnitBuffType, std::shared_ptr<UnitBuff>> buffs;
     std::shared_ptr<Skill> onGoingSkill;
     std::shared_ptr<Skill> pendingSkill;
     std::weak_ptr<BurnEffect> burnEffect;
@@ -203,7 +213,10 @@ private:
     factor::Adder<float> adderDamage;
     factor::Multiplier<float> multiplierAttackSpeed;
     factor::Adder<float> adderCrit;
+    std::weak_ptr<yunutyEngine::coroutine::Coroutine> coroutineBirth;
+    std::weak_ptr<yunutyEngine::coroutine::Coroutine> coroutineDeath;
     std::weak_ptr<yunutyEngine::coroutine::Coroutine> coroutineKnockBack;
+    std::weak_ptr<yunutyEngine::coroutine::Coroutine> coroutineRevival;
     std::weak_ptr<yunutyEngine::coroutine::Coroutine> coroutineAttack;
     std::weak_ptr<yunutyEngine::coroutine::Coroutine> coroutineSkill;
     UnitAnimType defaultAnimationType;
@@ -232,9 +245,17 @@ void Unit::OrderSkill(const SkillType& skill, Vector3d pos)
     pendingOrderType = UnitOrderType::Skill;
 }
 template<typename BuffType>
-void Unit::ApplyBuff(const BuffType& buff)
+void Unit::ApplyBuff(BuffType&& buff)
 {
     static_assert(std::is_base_of<UnitBuff, BuffType>::value, "BuffType must be derived from UnitBuff");
-    buffs[buff.GetBuffType()] = std::make_shared<BuffType>(buff);
-    buffs[buff.GetBuffType()]->Init(GetWeakPtr<Unit>());
+    if (buffs.contains(buff.GetBuffType()))
+    {
+        buffs[buff.GetBuffType()]->OnOverlap(std::move(buff));
+    }
+    else
+    {
+        buffs[buff.GetBuffType()] = std::make_shared<BuffType>(buff);
+        buffs[buff.GetBuffType()]->Init(GetWeakPtr<Unit>());
+        buffs[buff.GetBuffType()]->OnStart();
+    }
 }

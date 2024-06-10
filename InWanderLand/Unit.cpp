@@ -11,7 +11,7 @@
 #include "TacticModeSystem.h"
 #include "IAnimation.h"
 #include "SkillPreviewSystem.h"
-#include "GameManager.h"
+
 #include "BurnEffect.h"
 #include "DebuggingMeshPool.h"
 #include "StatusEffect.h"
@@ -83,8 +83,10 @@ void Unit::Update()
     {
         buff.get()->OnUpdate();
         buff.get()->durationLeft -= Time::GetDeltaTime();
+        if (buff.get()->durationLeft < 0)
+            buff.get()->OnEnd();
     }
-    std::erase_if(buffs, [](std::pair<const UnitBuff::Type, std::shared_ptr<UnitBuff>>& pair)
+    std::erase_if(buffs, [](std::pair<const UnitBuffType, std::shared_ptr<UnitBuff>>& pair)
         { return pair.second->durationLeft < 0; });
     // behaviour tree에 맞게 동작
     unitBehaviourTree.Update();
@@ -113,7 +115,16 @@ void Unit::OnStateEngage<UnitBehaviourTree::Death>()
 {
     onStateEngage[UnitBehaviourTree::Death]();
     PlayAnimation(UnitAnimType::Death);
+    enableNavObstacleByState.reset();
+    disableNavAgentByState = referenceDisableNavAgent.Acquire();
     defaultAnimationType = UnitAnimType::None;
+    coroutineDeath = StartCoroutine(DeathCoroutine());
+}
+template<>
+void Unit::OnStateExit<UnitBehaviourTree::Death>()
+{
+    onStateExit[UnitBehaviourTree::Death]();
+    disableNavAgentByState.reset();
 }
 template<>
 void Unit::OnStateEngage<UnitBehaviourTree::Paralysis>()
@@ -132,14 +143,31 @@ void Unit::OnStateEngage<UnitBehaviourTree::Pause>()
 {
     onStateEngage[UnitBehaviourTree::Pause]();
     PlayAnimation(UnitAnimType::Idle, true);
-    SetNavObstacleActive(true);
+    enableNavObstacleByState = referenceEnableNavObstacle.Acquire();
+    disableNavAgentByState = referenceDisableNavAgent.Acquire();
 }
 template<>
 void Unit::OnStateExit<UnitBehaviourTree::Pause>()
 {
     onStateExit[UnitBehaviourTree::Pause]();
     PlayAnimation(UnitAnimType::Idle, true);
-    SetNavObstacleActive(false);
+    enableNavObstacleByState.reset();
+    disableNavAgentByState.reset();
+}
+template<>
+void Unit::OnStateEngage<UnitBehaviourTree::Reviving>()
+{
+    onStateEngage[UnitBehaviourTree::Reviving]();
+    enableNavObstacleByState = referenceEnableNavObstacle.Acquire();
+    disableNavAgentByState = referenceDisableNavAgent.Acquire();
+    coroutineRevival = StartCoroutine(RevivalCoroutine());
+}
+template<>
+void Unit::OnStateExit<UnitBehaviourTree::Reviving>()
+{
+    onStateExit[UnitBehaviourTree::Reviving]();
+    enableNavObstacleByState.reset();
+    disableNavAgentByState.reset();
 }
 template<>
 void Unit::OnStateUpdate<UnitBehaviourTree::Chasing>()
@@ -154,16 +182,16 @@ template<>
 void Unit::OnStateEngage<UnitBehaviourTree::Attack>()
 {
     onStateEngage[UnitBehaviourTree::Attack]();
-    // Stop의 NavObstacle을 활성화하는 효과를 이용하여 공격을 할 때 장애물로 인식하게 만듭니다.
-    SetNavObstacleActive(true);
+    enableNavObstacleByState = referenceEnableNavObstacle.Acquire();
+    disableNavAgentByState = referenceDisableNavAgent.Acquire();
 }
 template<>
 void Unit::OnStateExit<UnitBehaviourTree::Attack>()
 {
     DeleteCoroutine(coroutineAttack);
     onStateExit[UnitBehaviourTree::Attack]();
-    // Stop의 NavObstacle을 활성화하는 효과를 이용하여 공격을 할 때 장애물로 인식하게 만듭니다.
-    SetNavObstacleActive(false);
+    enableNavObstacleByState.reset();
+    disableNavAgentByState.reset();
 }
 template<>
 void Unit::OnStateUpdate<UnitBehaviourTree::Attack>()
@@ -188,7 +216,6 @@ void Unit::OnStateEngage<UnitBehaviourTree::Move>()
 template<>
 void Unit::OnStateUpdate<UnitBehaviourTree::Move>()
 {
-    SetNavObstacleActive(false);
     static constexpr float epsilon = 0.1f;
     if ((moveDestination - GetTransform()->GetWorldPosition()).MagnitudeSqr() < epsilon)
     {
@@ -222,13 +249,15 @@ void Unit::OnStateEngage<UnitBehaviourTree::Stop>()
 {
     onStateEngage[UnitBehaviourTree::Stop]();
     PlayAnimation(UnitAnimType::Idle, true);
-    SetNavObstacleActive(true);
+    enableNavObstacleByState = referenceEnableNavObstacle.Acquire();
+    disableNavAgentByState = referenceDisableNavAgent.Acquire();
 }
 template<>
 void Unit::OnStateExit<UnitBehaviourTree::Stop>()
 {
     onStateExit[UnitBehaviourTree::Stop]();
-    SetNavObstacleActive(false);
+    enableNavObstacleByState.reset();
+    disableNavAgentByState.reset();
 }
 
 Unit::~Unit()
@@ -271,23 +300,24 @@ void Unit::Damaged(std::weak_ptr<Unit> opponentUnit, float opponentDmg)
 
 void Unit::Damaged(float dmg)
 {
-    SetUnitCurrentHp(currentHitPoint -= dmg);
+    SetCurrentHp(currentHitPoint -= dmg);
 }
 
 void Unit::Heal(float healingPoint)
 {
     // 최대 체력이면 x
-    SetUnitCurrentHp(currentHitPoint += healingPoint);
+    SetCurrentHp(currentHitPoint += healingPoint);
     if (currentHitPoint >= unitTemplateData->pod.max_Health)
-        SetUnitCurrentHp(unitTemplateData->pod.max_Health);
+        SetCurrentHp(unitTemplateData->pod.max_Health);
 }
 
-void Unit::SetUnitCurrentHp(float p_newHp)
+void Unit::SetCurrentHp(float p_newHp)
 {
     currentHitPoint = std::fmax(0, p_newHp);
-    if (p_newHp <= 0)
+    if (p_newHp <= 0 && isAlive)
     {
-        isAlive = false;
+        liveCountLeft--;
+        SetIsAlive(false);
     }
     if (!unitStatusUI.expired())
     {
@@ -433,22 +463,9 @@ coroutine::Coroutine Unit::SettingRotation(float facingAngle, float rotatingTime
     co_yield coroutine::WaitForSeconds(rotatingTime);
     currentRotationSpeed = unitTemplateData->pod.rotationSpeed;
 }
-void Unit::SetNavObstacleActive(bool active)
+void Unit::SetIsAlive(bool isAlive)
 {
-    if (active)
-    {
-        enableNavObstacle = referenceEnableNavObstacle.Acquire();
-        disableNavAgent = referenceDisableNavAgent.Acquire();
-        //navAgentComponent.lock()->SetActive(false);
-        //navObstacle.lock()->SetActive(true);
-    }
-    else
-    {
-        enableNavObstacle.reset();
-        disableNavAgent.reset();
-        //navObstacle.lock()->SetActive(false);
-        //navAgentComponent.lock()->SetActive(true);
-    }
+    this->isAlive = isAlive;
 }
 void Unit::UpdateRotation()
 {
@@ -491,7 +508,7 @@ void Unit::Relocate(const Vector3d& pos)
 void Unit::OrderMove(Vector3d position)
 {
     static constexpr float epsilon = 0.1f;
-    if (DistanceSquare(position)<epsilon)
+    if (DistanceSquare(position) < epsilon)
     {
         return;
     }
@@ -563,9 +580,9 @@ void Unit::Init(const application::editor::Unit_TemplateData* unitTemplateData)
     navAgentComponent = Scene::getCurrentScene()->AddGameObject()->AddComponentAsWeakPtr<NavigationAgent>();
     navObstacle = navAgentComponent.lock()->GetGameObject()->AddComponentAsWeakPtr<NavigationObstacle>();
     navObstacle.lock()->SetObstacleType(NavigationObstacle::ObstacleType::Cylinder);
-    burnEffect = GetGameObject()->AddComponentAsWeakPtr<BurnEffect>();
     teamIndex = unitTemplateData->pod.playerUnitType.enumValue == PlayerCharacterType::None ? 2 : PlayerController::playerTeamIndex;
     skinnedMeshGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(unitTemplateData->pod.skinnedFBXName);
+    burnEffect = skinnedMeshGameObject->AddComponentAsWeakPtr<BurnEffect>();
     animatorComponent = skinnedMeshGameObject->GetComponentWeakPtr<graphics::Animator>();
     skinnedMeshGameObject->SetParent(GetGameObject());
     skinnedMeshGameObject->GetTransform()->SetLocalPosition(Vector3d::zero);
@@ -741,6 +758,68 @@ void Unit::Init(const application::editor::Unit_TemplateData* unitTemplateData)
 }
 void Unit::Summon(const application::editor::UnitData* unitData)
 {
+    this->unitData = unitData;
+    onAttack = unitData->onAttack;
+    onAttackHit = unitData->onAttackHit;
+    onDamaged = unitData->onDamaged;
+    onCreated = unitData->onCreated;
+    onRotationFinish = unitData->onRotationFinish;
+    onStateEngage = unitData->onStateEngage;
+    onStateExit = unitData->onStateExit;
+    Summon(unitData->GetUnitTemplateData());
+
+    // 유닛 데이터 없이 유닛을 생성하는 코드 테스트용
+    //Summon(unitData->GetUnitTemplateData(), Vector3d{ unitData->pod.position }, 270);
+    //return;
+
+    GetTransform()->SetWorldPosition(Vector3d{ unitData->pod.position });
+    navAgentComponent.lock()->GetTransform()->SetWorldPosition(Vector3d{ unitData->pod.position });
+    navAgentComponent.lock()->AssignToNavigationField(&SingleNavigationField::Instance());
+    navObstacle.lock()->AssignToNavigationField(&SingleNavigationField::Instance());
+
+    Quaternion quat{ unitData->pod.rotation.w,unitData->pod.rotation.x,unitData->pod.rotation.y ,unitData->pod.rotation.z };
+    GetTransform()->SetWorldRotation(quat);
+    desiredRotation = currentRotation = 90 - quat.Euler().y;
+    Reset();
+    coroutineBirth = StartCoroutine(BirthCoroutine());
+}
+void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& position, float rotation, bool instant)
+{
+    this->unitData = nullptr;
+    onAttack.Clear();
+    onAttackHit.Clear();
+    onDamaged.Clear();
+    onCreated.Clear();
+    onRotationFinish.Clear();
+    for (auto& each : onStateEngage)
+    {
+        each.Clear();
+    }
+    for (auto& each : onStateExit)
+    {
+        each.Clear();
+    }
+    Summon(td);
+
+    GetTransform()->SetWorldPosition(Vector3d{ position });
+    navAgentComponent.lock()->GetTransform()->SetWorldPosition(Vector3d{ position });
+    navAgentComponent.lock()->AssignToNavigationField(&SingleNavigationField::Instance());
+    navObstacle.lock()->AssignToNavigationField(&SingleNavigationField::Instance());
+
+    GetTransform()->SetWorldRotation(Vector3d{ 0,90 - rotation,0 });
+    desiredRotation = currentRotation = rotation;
+    Reset();
+    if (instant)
+    {
+        onCreated();
+    }
+    else
+    {
+        coroutineBirth = StartCoroutine(BirthCoroutine());
+    }
+}
+void Unit::Summon(application::editor::Unit_TemplateData* templateData)
+{
     skinnedMeshGameObject->GetTransform()->SetLocalScale(Vector3d::one * unitTemplateData->pod.unit_scale);
     switch (unitTemplateData->pod.playerUnitType.enumValue)
     {
@@ -765,26 +844,6 @@ void Unit::Summon(const application::editor::UnitData* unitData)
         unitStatusUI = UIManager::Instance().DuplicateUIElement(UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_MeleeEnemy));
         break;
     }
-    this->unitData = unitData;
-    currentRotationSpeed = unitTemplateData->pod.rotationSpeed;
-    onAttack = unitData->onAttack;
-    // 내가 때린 공격이 적에게 맞았을 때, 근거리 공격인 경우라면 onAttack과 호출시점이 같겠으나 원거리 공격인 경우에는 시간차가 있을 수 있다. 
-    onAttackHit = unitData->onAttackHit;
-    // 내가 피해를 입었을 때
-    onDamaged = unitData->onDamaged;
-    // 유닛이 새로 생성될 때
-    onCreated = unitData->onCreated;
-    // 유닛이 회전을 끝냈을 때
-    onRotationFinish = unitData->onRotationFinish;
-    onStateEngage = unitData->onStateEngage;
-    onStateExit = unitData->onStateExit;
-
-    GetTransform()->SetWorldPosition(Vector3d{ unitData->pod.position });
-    navAgentComponent.lock()->GetTransform()->SetWorldPosition(Vector3d{ unitData->pod.position });
-    navAgentComponent.lock()->AssignToNavigationField(&SingleNavigationField::Instance());
-    //navAgentComponent.lock()->Relocate(Vector3d{ unitData->pod.position })
-    navObstacle.lock()->AssignToNavigationField(&SingleNavigationField::Instance());
-    navObstacle.lock()->SetRadiusAndHeight(unitTemplateData->pod.collisionSize, 100);
 
     unitCollider.lock()->SetRadius(unitTemplateData->pod.collisionSize);
     attackRange.lock()->SetRadius(unitTemplateData->pod.m_atkRadius);
@@ -796,7 +855,7 @@ void Unit::Summon(const application::editor::UnitData* unitData)
     // 인식 범위
     //AttachDebugMesh(acquisitionRange.lock()->GetGameObject()->AddGameObject(), DebugMeshType::Sphere)->GetTransform()->SetLocalScale(Vector3d{ 1,0.25,1 } *2 * unitTemplateData->pod.m_idRadius);
     // 혹여나 플레이어 캐릭터라면 플레이어로 등록, 플레이어가 아니면 그냥 무시된다.
-    switch (unitData->pod.templateData->pod.unitControllerType.enumValue)
+    switch (templateData->pod.unitControllerType.enumValue)
     {
     case UnitControllerType::PLAYER:
     {
@@ -827,17 +886,21 @@ void Unit::Summon(const application::editor::UnitData* unitData)
         break;
     }
     }
-
-    Reset();
-    onCreated();
+    currentRotationSpeed = unitTemplateData->pod.rotationSpeed;
+    navAgentComponent.lock()->SetRadius(unitTemplateData->pod.collisionSize);
+    navAgentComponent.lock()->SetSpeed(unitTemplateData->pod.m_unitSpeed);
+    navObstacle.lock()->SetRadiusAndHeight(unitTemplateData->pod.collisionSize, 100);
 }
 void Unit::Reset()
 {
-    isAlive = true;
-    SetUnitCurrentHp(unitTemplateData->pod.max_Health);
+    SetIsAlive(true);
+    SetCurrentHp(unitTemplateData->pod.max_Health);
     DeleteCoroutine(coroutineKnockBack);
     DeleteCoroutine(coroutineAttack);
     DeleteCoroutine(coroutineSkill);
+    DeleteCoroutine(coroutineRevival);
+    DeleteCoroutine(coroutineDeath);
+    liveCountLeft = unitTemplateData->pod.liveCount;
     currentTargetUnit.reset();
     currentOrderType = UnitOrderType::AttackMove;
     pendingOrderType = UnitOrderType::AttackMove;
@@ -848,11 +911,15 @@ void Unit::InitBehaviorTree()
     // 이 행동 트리에 대한 설계문서는 Document/프로그래밍 폴더 내부의 파일 "InWanderLand Behaviour tree.drawio"입니다.
     unitBehaviourTree[UnitBehaviourTree::Death].enteringCondtion = [this]()
         {
-            return !isAlive;
+            return !isAlive && liveCountLeft < 0;
         };
     unitBehaviourTree[UnitBehaviourTree::Death].onEnter = [this]()
         {
             OnStateEngage<UnitBehaviourTree::Death>();
+        };
+    unitBehaviourTree[UnitBehaviourTree::Death].onExit = [this]()
+        {
+            OnStateExit<UnitBehaviourTree::Death>();
         };
     unitBehaviourTree[UnitBehaviourTree::Paralysis].enteringCondtion = [this]()
         {
@@ -873,6 +940,26 @@ void Unit::InitBehaviorTree()
     unitBehaviourTree[UnitBehaviourTree::Pause].enteringCondtion = [this]()
         {
             return referencePause.BeingReferenced();
+        };
+    unitBehaviourTree[UnitBehaviourTree::Pause].onEnter = [this]()
+        {
+            OnStateEngage<UnitBehaviourTree::Pause>();
+        };
+    unitBehaviourTree[UnitBehaviourTree::Pause].onExit = [this]()
+        {
+            OnStateExit<UnitBehaviourTree::Pause>();
+        };
+    unitBehaviourTree[UnitBehaviourTree::Reviving].enteringCondtion = [this]()
+        {
+            return !isAlive;
+        };
+    unitBehaviourTree[UnitBehaviourTree::Reviving].onEnter = [this]()
+        {
+            OnStateEngage<UnitBehaviourTree::Reviving>();
+        };
+    unitBehaviourTree[UnitBehaviourTree::Reviving].onExit = [this]()
+        {
+            OnStateExit<UnitBehaviourTree::Reviving>();
         };
     unitBehaviourTree[UnitBehaviourTree::Skill].enteringCondtion = [this]()
         {
@@ -1059,11 +1146,66 @@ void Unit::InitBehaviorTree()
         {
             OnStateEngage<UnitBehaviourTree::Stop>();
         };
+    unitBehaviourTree[UnitBehaviourTree::AttackMove][UnitBehaviourTree::Stop].onExit = [this]()
+        {
+            OnStateExit<UnitBehaviourTree::Stop>();
+        };
 }
 Vector3d Unit::GetAttackPosition(std::weak_ptr<Unit> opponent)
 {
     auto delta = opponent.lock()->GetTransform()->GetWorldPosition() - GetTransform()->GetWorldPosition();
     return opponent.lock()->GetTransform()->GetWorldPosition() - opponent.lock()->unitTemplateData->pod.collisionSize * delta.Normalized();
+}
+yunutyEngine::coroutine::Coroutine Unit::RevivalCoroutine()
+{
+    float birthAnimDuration = wanderResources::GetAnimation(unitTemplateData->pod.skinnedFBXName, UnitAnimType::Birth)->GetDuration();
+    PlayAnimation(UnitAnimType::Death, false);
+    SetDefaultAnimation(UnitAnimType::None);
+    co_yield coroutine::WaitForSeconds(unitTemplateData->pod.revivalDuration - birthAnimDuration);
+    PlayAnimation(UnitAnimType::Birth, false);
+    co_yield coroutine::WaitForSeconds(birthAnimDuration);
+    SetCurrentHp(unitTemplateData->pod.max_Health);
+    SetIsAlive(true);
+    ApplyBuff(UnitBuffInvulenerability{ unitTemplateData->pod.revivalInvulnerableDuration });
+    co_return;
+}
+yunutyEngine::coroutine::Coroutine Unit::BirthCoroutine()
+{
+    if (unitTemplateData->pod.birthTime <= 0)
+    {
+        onCreated();
+        co_return;
+    }
+    auto pauseGuard = referencePause.Acquire();
+    auto invulnerableGuard = referenceInvulnerable.Acquire();
+    float animSpeed = wanderResources::GetAnimation(unitTemplateData->pod.skinnedFBXName, UnitAnimType::Birth)->GetDuration() / unitTemplateData->pod.birthTime;
+    PlayAnimation(UnitAnimType::Birth, false);
+    animatorComponent.lock()->GetGI().SetPlaySpeed(animSpeed);
+    burnEffect.lock()->SetSpeed(1 / unitTemplateData->pod.birthTime);
+    burnEffect.lock()->SetEdgeColor({ unitTemplateData->pod.birthBurnEdgeColor.x,unitTemplateData->pod.birthBurnEdgeColor.y,unitTemplateData->pod.birthBurnEdgeColor.z });
+    burnEffect.lock()->SetEdgeThickness(unitTemplateData->pod.birthBurnEdgeThickness);
+    burnEffect.lock()->Appear();
+    co_yield coroutine::WaitForSeconds(unitTemplateData->pod.birthTime);
+    animatorComponent.lock()->GetGI().SetPlaySpeed(1);
+    onCreated();
+    co_return;
+}
+yunutyEngine::coroutine::Coroutine Unit::DeathCoroutine()
+{
+    if (unitTemplateData->pod.deathBurnTime <= 0)
+    {
+        UnitPool::SingleInstance().Return(GetWeakPtr<Unit>());
+        co_return;
+    }
+    float animSpeed = wanderResources::GetAnimation(unitTemplateData->pod.skinnedFBXName, UnitAnimType::Death)->GetDuration() / unitTemplateData->pod.deathBurnTime;
+    PlayAnimation(UnitAnimType::Death, false);
+    animatorComponent.lock()->GetGI().SetPlaySpeed(animSpeed);
+    burnEffect.lock()->SetEdgeColor({ unitTemplateData->pod.deathBurnEdgeColor.x,unitTemplateData->pod.deathBurnEdgeColor.y,unitTemplateData->pod.deathBurnEdgeColor.z });
+    burnEffect.lock()->SetEdgeThickness(unitTemplateData->pod.deathBurnEdgeThickness);
+    burnEffect.lock()->Disappear();
+    co_yield coroutine::WaitForSeconds(unitTemplateData->pod.deathBurnTime);
+    UnitPool::SingleInstance().Return(GetWeakPtr<Unit>());
+    co_return;
 }
 yunutyEngine::coroutine::Coroutine Unit::AttackCoroutine(std::weak_ptr<Unit> opponent)
 {

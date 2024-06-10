@@ -805,6 +805,12 @@
     <Filter Include="Contents_Refactored\UnitController\EnemyController\RangedEliteController">
       <UniqueIdentifier>{2559020f-20b5-4a3a-bed0-6b2c31bee46b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents_Refactored\Unit\UnitBuff\UnitBuffType">
+      <UniqueIdentifier>{d9edcc6f-5959-4393-b429-659e8ebccaf5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Unit\UnitBuff\UnitBuffInvulenerability">
+      <UniqueIdentifier>{10862094-2470-4741-9195-5cb06b08b1e7}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Contents_Refactored\UnitController\EnemyController\BossController">
       <UniqueIdentifier>{bc1a8e52-7a58-4b7f-b275-dc88a811d9d5}</UniqueIdentifier>
     </Filter>
@@ -1414,9 +1420,6 @@
     <ClInclude Include="RangedEnemyPool.h">
       <Filter>Contents\UnitFactory\UnitPool</Filter>
     </ClInclude>
-    <ClInclude Include="GameManager.h">
-      <Filter>Contents_Refactored\GameManager</Filter>
-    </ClInclude>
     <ClInclude Include="ScriptSystem.h">
       <Filter>Editor\ScriptSystem</Filter>
     </ClInclude>
@@ -1947,6 +1950,12 @@
     </ClInclude>
     <ClInclude Include="RangedEliteController.h">
       <Filter>Contents_Refactored\UnitController\EnemyController\RangedEliteController</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitBuffType.h">
+      <Filter>Contents_Refactored\Unit\UnitBuff\UnitBuffType</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitBuffInvulenerability.h">
+      <Filter>Contents_Refactored\Unit\UnitBuff\UnitBuffInvulenerability</Filter>
     </ClInclude>
     <ClInclude Include="LeftFrame.h">
       <Filter>Contents_Refactored\Skill\Boss\Summon\Unit</Filter>
@@ -2824,9 +2833,6 @@
     <ClCompile Include="PlayerController.cpp">
       <Filter>Contents_Refactored\UnitController\PlayerController</Filter>
     </ClCompile>
-    <ClCompile Include="GameManager.cpp">
-      <Filter>Contents_Refactored\GameManager</Filter>
-    </ClCompile>
     <ClCompile Include="UnitBuff.cpp">
       <Filter>Contents_Refactored\Unit\UnitBuff</Filter>
     </ClCompile>
@@ -2922,6 +2928,9 @@
     </ClCompile>
     <ClCompile Include="RangedEliteController.cpp">
       <Filter>Contents_Refactored\UnitController\EnemyController\RangedEliteController</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitBuffInvulenerability.cpp">
+      <Filter>Contents_Refactored\Unit\UnitBuff\UnitBuffInvulenerability</Filter>
     </ClCompile>
     <ClCompile Include="LeftFrame.cpp">
       <Filter>Contents_Refactored\Skill\Boss\Summon\Unit</Filter>
