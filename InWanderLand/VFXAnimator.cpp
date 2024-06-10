@@ -126,6 +126,10 @@ void VFXAnimator::Init()
 
 	for (int j = 0; j < this->frameInfoVec.size(); ++j)
 	{
+		if (frameInfoVec[j].empty())
+		{
+			continue;
+		}
 		this->renderer->GetMaterial(j)->SetFloat(0, frameInfoVec[j][0].location.x);
 		this->renderer->GetMaterial(j)->SetFloat(1, frameInfoVec[j][0].location.y);
 	}
