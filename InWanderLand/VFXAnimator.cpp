@@ -22,8 +22,15 @@ void VFXAnimator::Update()
 		{
 			if (this->curFrameVec[i].sumTime >= duration)
 			{
-				this->curFrameVec[i].isDone = true;
-				continue;
+				if (this->isLoop == false)
+				{
+					this->curFrameVec[i].isDone = true;
+					continue;
+				}
+				else
+				{
+					this->curFrameVec[i].sumTime = 0.f;
+				}
 			}
 
 			this->curFrameVec[i].curFrame = static_cast<__int32>(this->curFrameVec[i].sumTime * ratio);

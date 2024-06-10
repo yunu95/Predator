@@ -16,6 +16,7 @@ public:
 	void Init();
 	void SetAutoActiveFalse();
 	bool IsDone();
+	void SetLoop(bool isLoop) { this->isLoop = isLoop; }
 
 private:
 	
@@ -33,6 +34,7 @@ private:
 private:
 	bool isInit = false;
 	bool isAutoActivFalse = true;
+	bool isLoop = false;
 	yunuGI::IMeshRenderer* renderer;
 	float frameRate;
 	bool isPlayDone = false;

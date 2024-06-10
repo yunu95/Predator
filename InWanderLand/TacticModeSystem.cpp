@@ -117,7 +117,7 @@ yunutyEngine::coroutine::Coroutine TacticModeSystem::ExecuteInternal()
 		each->Execute();
 		while (!each->IsDone())
 		{
-			co_return;
+			co_await std::suspend_always();
 		}
 		each->HidePreviewMesh();
 	}
