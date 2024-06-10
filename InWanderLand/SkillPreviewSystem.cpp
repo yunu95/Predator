@@ -483,6 +483,14 @@ void SkillPreviewSystem::ShowTemporaryRoute(UnitType unitType, std::vector<Vecto
 
 }
 
+void SkillPreviewSystem::HideTemporaryRoute()
+{
+	if (temporaryRouteMeshRendererObj->GetActive() == true)
+	{
+		temporaryRouteMeshRendererObj->SetSelfActive(false);
+	}
+}
+
 yunuGI::IMesh* SkillPreviewSystem::ShowRoute(UnitType unitType, std::vector<Vector3d>& vertexList)
 {
     auto mesh = CreateRouteMesh(vertexList);

@@ -9,6 +9,7 @@
 #include "SkillList.h"
 #include "VFXAnimator.h"
 #include "TacticModeSystem.h"
+#include "UnitMoveCommand.h"
 
 const std::unordered_map<UIEnumID, SkillUpgradeType::Enum> PlayerController::skillByUI
 {
@@ -396,13 +397,32 @@ void PlayerController::OnRightClick()
 {
 	if (selectedSkill == SkillType::NONE)
 	{
-		if (!cursorUnitDetector.lock()->GetUnits().empty() && (*cursorUnitDetector.lock()->GetUnits().begin())->teamIndex != playerTeamIndex)
+		if (state != State::Tactic)
 		{
-			OrderAttack((*cursorUnitDetector.lock()->GetUnits().begin())->GetWeakPtr<Unit>());
+			if (!cursorUnitDetector.lock()->GetUnits().empty() && (*cursorUnitDetector.lock()->GetUnits().begin())->teamIndex != playerTeamIndex)
+			{
+				OrderAttack((*cursorUnitDetector.lock()->GetUnits().begin())->GetWeakPtr<Unit>());
+			}
+			else
+			{
+				OrderMove(GetWorldCursorPosition());
+			}
 		}
 		else
 		{
-			OrderMove(GetWorldCursorPosition());
+			if (!cursorUnitDetector.lock()->GetUnits().empty() && (*cursorUnitDetector.lock()->GetUnits().begin())->teamIndex != playerTeamIndex)
+			{
+				// Attack
+				//TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitAttackCommand>());
+			}
+			else
+			{
+				// Move
+				auto path = SingleNavigationField::Instance().GetSmoothPath(characters[selectedCharacterType].lock()->GetGameObject()->GetTransform()->GetWorldPosition(), GetWorldCursorPosition());
+
+				TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitMoveCommand>(this, GetWorldCursorPosition(),
+					SkillPreviewSystem::Instance().ShowRoute(SkillPreviewSystem::UnitType::Robin, path)));
+			}
 		}
 	}
 	else if (selectedSkill != SkillType::NONE)
@@ -475,6 +495,7 @@ void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
 void PlayerController::SelectSkill(SkillType::Enum skillType)
 {
 	UnSelectSkill();
+	SkillPreviewSystem::Instance().HideTemporaryRoute();
 	if (skillCooltimeLeft[skillType] > 0)
 	{
 		UIManager::Instance().GetUIElementByEnum(UIEnumID::ErrorPopup_Cooltime)->EnableElement();
@@ -485,7 +506,8 @@ void PlayerController::SelectSkill(SkillType::Enum skillType)
 		UIManager::Instance().GetUIElementByEnum(UIEnumID::ErrorPopup_Cooltime)->EnableElement();
 		return;
 	}
-	if (state != State::Battle) return;
+	// 이 부분은 협의가 필요함
+	if ((state == State::Peace) || (state == State::Cinematic)) return;
 	onSkillSelect[skillType]();
 	switch (skillType)
 	{
@@ -497,7 +519,14 @@ void PlayerController::SelectSkill(SkillType::Enum skillType)
 	// 즉발은 그냥 써버리고 나머지는 준비상태로 만든다.
 	switch (skillType)
 	{
-		case SkillType::ROBIN_W: ActivateSkill(SkillType::ROBIN_W, characters[PlayerCharacterType::Robin].lock()->GetTransform()->GetWorldPosition()); break;
+		case SkillType::ROBIN_W:
+		{
+			if (state != State::Tactic)
+			{
+				ActivateSkill(SkillType::ROBIN_W, characters[PlayerCharacterType::Robin].lock()->GetTransform()->GetWorldPosition());
+			}
+		}
+		break;
 		default:
 			selectedSkill = skillType;
 			// 스킬 프리뷰를 활성화시킨다.
