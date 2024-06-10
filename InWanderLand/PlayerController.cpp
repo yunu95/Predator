@@ -202,8 +202,7 @@ void PlayerController::HandleInput()
 			state = State::Tactic;
 			TacticModeSystem::Instance().EngageTacticSystem();
 		}
-
-		if ((TacticModeSystem::Instance().IsOperation() == true) && (TacticModeSystem::Instance().IsExecuting() == false))
+		else if ((TacticModeSystem::Instance().IsOperation() == true) && (TacticModeSystem::Instance().IsExecuting() == false))
 		{
 			TacticModeSystem::Instance().ExecuteCommands();
 		}
@@ -302,6 +301,18 @@ void PlayerController::HandleSkillPreview()
 			SkillPreviewSystem::Instance().ShowHanselWSkill(characters[PlayerCharacterType::Hansel].lock()->GetTransform()->GetWorldPosition());
 			SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Hansel, characters[PlayerCharacterType::Hansel].lock()->GetTransform()->GetWorldPosition(), HanselProjectileSkill::pod.maxRange);
 			break;
+	}
+
+	if ((state == State::Tactic) && (selectedSkill == SkillType::NONE))
+	{
+		auto path = SingleNavigationField::Instance().GetSmoothPath(characters[selectedCharacterType].lock()->GetGameObject()->GetTransform()->GetWorldPosition(), GetWorldCursorPosition());
+		
+		switch (selectedCharacterType)
+		{
+			case PlayerCharacterType::Robin: SkillPreviewSystem::Instance().ShowTemporaryRoute(SkillPreviewSystem::UnitType::Robin, path); break;
+			case PlayerCharacterType::Ursula: SkillPreviewSystem::Instance().ShowTemporaryRoute(SkillPreviewSystem::UnitType::Ursula, path); break;
+			case PlayerCharacterType::Hansel: SkillPreviewSystem::Instance().ShowTemporaryRoute(SkillPreviewSystem::UnitType::Hansel, path); break;
+		}
 	}
 }
 

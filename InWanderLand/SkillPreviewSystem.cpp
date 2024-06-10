@@ -19,6 +19,7 @@ void SkillPreviewSystem::ObjectInitializer(std::weak_ptr<graphics::StaticMeshRen
     const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
     yunuGI::IShader* vs = _resourceManager->GetShader(L"TextureAnimVS.cso");
     yunuGI::IShader* ps = _resourceManager->GetShader(L"TextureAnimPS.cso");
+
     yunuGI::ITexture* move = _resourceManager->GetTexture(wanderResources::texture::MOVE_TEXTURE);
     comp.lock()->GetGI().GetMaterial()->SetVertexShader(vs);
     comp.lock()->GetGI().GetMaterial()->SetPixelShader(ps);
@@ -37,6 +38,8 @@ void SkillPreviewSystem::Init()
     const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
     yunuGI::IShader* vs = _resourceManager->GetShader(L"TextureVS.cso");
     yunuGI::IShader* ps = _resourceManager->GetShader(L"GuideLinePS.cso");
+	yunuGI::IShader* vs1 = _resourceManager->GetShader(L"TextureAnimVS.cso");
+	yunuGI::IShader* ps1 = _resourceManager->GetShader(L"TextureAnimPS.cso");
     yunuGI::ITexture* arrowBodyTexture = _resourceManager->GetTexture(wanderResources::texture::ARROW_BODY_TEXTURE);
     yunuGI::ITexture* arrowHeadTexture = _resourceManager->GetTexture(wanderResources::texture::ARROW_HEAD_TEXTURE);
     yunuGI::ITexture* moveTexture = _resourceManager->GetTexture(wanderResources::texture::MOVE_TEXTURE);
@@ -64,9 +67,12 @@ void SkillPreviewSystem::Init()
     {
         this->temporaryRouteMeshRendererObj = Scene::getCurrentScene()->AddGameObject();
         this->temporaryRouteMeshRenderer = this->temporaryRouteMeshRendererObj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-        this->temporaryRouteMeshRenderer->GetGI().GetMaterial()->SetVertexShader(vs);
-        this->temporaryRouteMeshRenderer->GetGI().GetMaterial()->SetPixelShader(ps);
         this->temporaryRouteMeshRenderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::Temp0, moveTexture);
+        this->temporaryRouteMeshRenderer->GetGI().GetMaterial()->SetVertexShader(vs1);
+        this->temporaryRouteMeshRenderer->GetGI().GetMaterial()->SetPixelShader(ps1);
+		auto anim = temporaryRouteMeshRendererObj->AddComponent<UVAnimator>();
+		anim->SetStaticMeshRenderer(temporaryRouteMeshRenderer);
+		anim->SetDirection(Vector2d{ 1,0 });
     }
 #pragma endregion
 
@@ -434,6 +440,10 @@ void SkillPreviewSystem::HideHanselWSkill()
 
 void SkillPreviewSystem::ShowTemporaryRoute(UnitType unitType, std::vector<Vector3d>& vertexList)
 {
+    if (temporaryRouteMeshRendererObj->GetActive() == false)
+    {
+        temporaryRouteMeshRendererObj->SetSelfActive(true);
+    }
     const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
     // 버텍스가 1개만 들어오는 일은 없을 것으로 예상 혹시모르니 return
     if (vertexList.size() < 2)

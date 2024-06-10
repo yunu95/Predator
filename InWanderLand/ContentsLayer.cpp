@@ -103,6 +103,11 @@ public:
 		{
 			obj->SetSelfActive(true);
 		}
+		std::vector<Vector3d> temp;
+		temp.push_back(Vector3d{ 0,0,0 });
+		temp.push_back(Vector3d{ 0,0,0.5 });
+		temp.push_back(Vector3d{ 0,0,1 });
+		SkillPreviewSystem::Instance().ShowTemporaryRoute(SkillPreviewSystem::UnitType::Robin, temp);
 	}
 };
 
@@ -159,7 +164,7 @@ void GraphicsTest()
 	//	test->effect = effect;
 
 	//}
-	
+
 	//{
 	//	auto obj = Scene::getCurrentScene()->AddGameObject();
 	//	auto test = obj->AddComponent<TestComponent4>();
@@ -187,20 +192,13 @@ void GraphicsTest()
 	//	test->walkAnimation = animation2;
 	//}
 	{
-		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Frame2");
-	}
-	{
 		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_HeartQueen");
 		obj2->GetTransform()->SetLocalPosition(Vector3d{ 5,0,0 });
 	}
 	{
-		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("VFX_CharacterSelected");
-		auto anim = obj2->AddComponent<VFXAnimator>();
-		anim->Init();
-		anim->SetLoop(true);
-		obj2->GetTransform()->SetLocalPosition(Vector3d{ 10,0,0 });
+		auto obj2 = Scene::getCurrentScene()->AddGameObject();
+		obj2->AddComponent<TestComponent4>();
 	}
-	
 	//yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
 	yunutyEngine::graphics::Renderer::SingleInstance().SetUseIBL(true);
 	//yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
@@ -304,17 +302,17 @@ class ContentsInitializer : public yunutyEngine::Component
 #endif
 #endif
 #ifndef EDITOR
-        DebugGraphic::SetDebugGraphicsEnabled(false);
+		DebugGraphic::SetDebugGraphicsEnabled(false);
 #endif
 
 		SkillPreviewSystem::Instance().Init();
-        Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
-        co_return;
-    }
-    virtual void Start() override
-    {
-        StartCoroutine(Initialize());
-    }
+		Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
+		co_return;
+	}
+	virtual void Start() override
+	{
+		StartCoroutine(Initialize());
+	}
 };
 void application::contents::ContentsLayer::Initialize()
 {
