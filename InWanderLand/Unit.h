@@ -165,6 +165,7 @@ private:
     yunutyEngine::coroutine::Coroutine DeathCoroutine();
     yunutyEngine::coroutine::Coroutine AttackCoroutine(std::weak_ptr<Unit> opponent);
     float DistanceTo(const Vector3d& target);
+    void ReturnToPool();
     int liveCountLeft{ 0 };
     std::vector<UnitController*> controllers;
     UnitBehaviourTree unitBehaviourTree;
