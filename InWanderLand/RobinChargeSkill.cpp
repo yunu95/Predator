@@ -1,9 +1,34 @@
 #include "InWanderLand.h"
 #include "RobinChargeSkill.h"
+#include "VFXAnimator.h"
 
 POD_RobinChargeSkill RobinChargeSkill::pod = POD_RobinChargeSkill();
 
+coroutine::Coroutine RobinChargeSkill::SpawningSkillffect(Vector3d skillStartPos)
+{
+	Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
+    Vector3d deltaPos = targetPos - skillStartPos;
+	Vector3d direction = deltaPos.Normalized();
 
+	auto chargeEffect = FBXPool::SingleInstance().Borrow("VFX_Robin_Skill1");
+
+    chargeEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos);
+    chargeEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
+	auto chargeEffectAnimator = chargeEffect.lock()->AcquireVFXAnimator();
+    chargeEffectAnimator.lock()->SetAutoActiveFalse();
+    chargeEffectAnimator.lock()->Init();
+
+	co_await std::suspend_always{};
+
+	while (!chargeEffectAnimator.lock()->IsDone())
+	{
+		co_await std::suspend_always{};
+	}
+
+	FBXPool::SingleInstance().Return(chargeEffect);
+
+	co_return;
+}
 
 coroutine::Coroutine RobinChargeSkill::operator()()
 {
@@ -19,7 +44,18 @@ coroutine::Coroutine RobinChargeSkill::operator()()
     Vector3d endPos = startPos + deltaPos;
     Vector3d currentPos = startPos;
 
+	auto animator = owner.lock()->GetAnimator();
+	auto rushAnim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Rush);
+	auto slamAnim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Slam);
+
     owner.lock()->PlayAnimation(UnitAnimType::Rush, true);
+
+    co_yield coroutine::WaitForSeconds(rushAnim->GetDuration());
+
+    animator.lock()->Pause();
+
+	co_await std::suspend_always{};
+
     coroutine::ForSeconds forSeconds{ static_cast<float>(deltaPos.Magnitude()) / pod.rushSpeed };
     knockbackCollider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
     knockbackCollider.lock()->SetRadius(pod.rushKnockbackRadius);
@@ -38,8 +74,9 @@ coroutine::Coroutine RobinChargeSkill::operator()()
     }
 
     owner.lock()->PlayAnimation(UnitAnimType::Slam);
-    owner.lock()->SetDefaultAnimation(UnitAnimType::Idle);
+	animator.lock()->Resume();
     knockbackCollider.lock()->SetRadius(pod.impactKnockbackRadius);
+	owner.lock()->StartCoroutine(SpawningSkillffect(startPos));
     co_await std::suspend_always{};
     for (auto& each : knockbackCollider.lock()->GetEnemies())
     {
@@ -48,10 +85,12 @@ coroutine::Coroutine RobinChargeSkill::operator()()
         each->Paralyze(pod.impactStunDuration);
         each->Damaged(owner, pod.damageRush);
     }
+
+	co_yield coroutine::WaitForSeconds(slamAnim->GetDuration());
+
     disableNavAgent.reset();
     blockFollowingNavigation.reset();
     owner.lock()->Relocate(currentPos);
-    co_yield coroutine::WaitForSeconds(0.8);
     owner.lock()->PlayAnimation(UnitAnimType::Idle, true);
     co_yield coroutine::WaitForSeconds(0.2);
     OnInterruption();
@@ -63,3 +102,4 @@ void RobinChargeSkill::OnInterruption()
     knockbackCollider.lock()->SetRadius(0.5);
     UnitAcquisitionSphereColliderPool::SingleInstance().Return(knockbackCollider);
 }
+

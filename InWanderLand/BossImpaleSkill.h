@@ -26,6 +26,9 @@ struct POD_BossImpaleSkill
 
 class BossImpaleSkill : public Skill
 {
+private:
+	coroutine::Coroutine SpawningSkillffect();
+
 public:
 	BossImpaleSkill() {}
 	virtual SkillType::Enum GetSkillType() { return SkillType::Enum::BossSkill_Two; }
