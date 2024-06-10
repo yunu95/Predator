@@ -969,6 +969,10 @@ void Unit::InitBehaviorTree()
         {
             OnStateEngage<UnitBehaviourTree::Skill>();
         };
+    unitBehaviourTree[UnitBehaviourTree::Skill].onExit = [this]()
+        {
+            OnStateExit<UnitBehaviourTree::Skill>();
+        };
     unitBehaviourTree[UnitBehaviourTree::Skill][UnitBehaviourTree::SkillOnGoing].enteringCondtion = [this]()
         {
             return !coroutineSkill.expired();

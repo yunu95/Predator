@@ -9,11 +9,13 @@ class BossController
 	: public EnemyController, public SingletonComponent<BossController>
 {
 public:
+    virtual void RegisterUnit(std::weak_ptr<Unit> unit) override;
 	virtual void OnContentsStop() override;
+
+	std::weak_ptr<Unit> GetBoss();
 
 private:
 	int currentState = 0;
 	int beforeSkillIndex = 0;
-	virtual coroutine::Coroutine RoutineGlobal() override;
 	virtual coroutine::Coroutine RoutinePerUnit(std::weak_ptr<Unit> unit)override;
 };

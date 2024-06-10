@@ -40,6 +40,8 @@ public:
 	static void SetLeftFrame(BossSummon::LeftFrame* leftFrame);
 	static void SetRightFrame(BossSummon::RightFrame* rightFrame);
 
+	static void OnBossDie();
+
 private:
 	coroutine::Coroutine StartSummonTimer();
 	static std::weak_ptr<coroutine::Coroutine> summonCoroutine;

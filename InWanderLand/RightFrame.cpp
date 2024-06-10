@@ -52,17 +52,16 @@ namespace BossSummon
 
 	void RightFrame::OnBossDie()
 	{
-		if (!unitFrame.expired())
+		if (!unitFrame.expired() && unitFrame.lock()->IsAlive())
 		{
-			/// unitFrame 을 죽여서 사망 애니메이션이 나오도록 합니다.
-			unitFrame.lock();
+			unitFrame.lock()->SetCurrentHp(0);
 		}
 
 		for (auto each : summonUnit)
 		{
 			if (!each.expired() && each.lock()->IsAlive())
 			{
-				/// 죽이기
+				each.lock()->SetCurrentHp(0);
 			}
 		}
 	}
