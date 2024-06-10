@@ -187,16 +187,18 @@ void GraphicsTest()
 	//	test->walkAnimation = animation2;
 	//}
 	{
-		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Hansel");
+		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Frame2");
 	}
 	{
-		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("VFX_HeartQueen_Skill2");
-		obj2->SetSelfActive(false);
+		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Frame1");
+		obj2->GetTransform()->SetLocalPosition(Vector3d{ 5,0,0 });
+	}
+	{
+		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("VFX_CharacterSelected");
 		auto anim = obj2->AddComponent<VFXAnimator>();
 		anim->Init();
-		auto obj = Scene::getCurrentScene()->AddGameObject();
-		auto test = obj->AddComponent<TestComponent4>();
-		test->obj = obj2;
+		anim->SetLoop(true);
+		obj2->GetTransform()->SetLocalPosition(Vector3d{ 10,0,0 });
 	}
 	
 	//yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();

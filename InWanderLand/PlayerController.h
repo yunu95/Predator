@@ -141,9 +141,12 @@ private:
     bool mouseInteractionEffectInitalized{ false };
     // 유닛이 선택되었을 떄의 효과
     GameObject* allySelectedEffect{ nullptr };
+    yunutyEngine::graphics::StaticMeshRenderer* allySelectedEffectRenderer{ nullptr };
     // 유닛이 타겟으로 지정되었을 떄의 효과(사실상 평타 우클릭밖에 없음)
-    GameObject* enemyTargetedEffect{ nullptr };
+    std::array<GameObject*,3> enemyTargetedEffect{ nullptr };
     // 마우스 커서가 적 혹은 아군 위에 올라갈 때의 효과
     GameObject* allyHoverEffect{ nullptr };
+    yunutyEngine::graphics::StaticMeshRenderer* allyHoverEffectRenderer{ nullptr };
     GameObject* enemyHoverEffect{ nullptr };
+    yunutyEngine::graphics::StaticMeshRenderer* enemyHoverEffectRenderer{ nullptr };
 };

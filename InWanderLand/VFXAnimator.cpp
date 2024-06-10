@@ -22,8 +22,15 @@ void VFXAnimator::Update()
 		{
 			if (this->curFrameVec[i].sumTime >= duration)
 			{
-				this->curFrameVec[i].isDone = true;
-				continue;
+				if (this->isLoop == false)
+				{
+					this->curFrameVec[i].isDone = true;
+					continue;
+				}
+				else
+				{
+					this->curFrameVec[i].sumTime = 0.f;
+				}
 			}
 
 			this->curFrameVec[i].curFrame = static_cast<__int32>(this->curFrameVec[i].sumTime * ratio);
@@ -119,6 +126,10 @@ void VFXAnimator::Init()
 
 	for (int j = 0; j < this->frameInfoVec.size(); ++j)
 	{
+		if (frameInfoVec[j].empty())
+		{
+			continue;
+		}
 		this->renderer->GetMaterial(j)->SetFloat(0, frameInfoVec[j][0].location.x);
 		this->renderer->GetMaterial(j)->SetFloat(1, frameInfoVec[j][0].location.y);
 	}

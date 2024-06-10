@@ -814,6 +814,9 @@
     <Filter Include="Contents_Refactored\UnitController\EnemyController\BossController">
       <UniqueIdentifier>{bc1a8e52-7a58-4b7f-b275-dc88a811d9d5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents_Refactored\UnitCommand\UnitSkillCommand">
+      <UniqueIdentifier>{b2063c72-2ebb-4fc2-b61e-d77a7b41d9dc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -1972,6 +1975,9 @@
     <ClInclude Include="BossController.h">
       <Filter>Contents_Refactored\UnitController\EnemyController\BossController</Filter>
     </ClInclude>
+    <ClInclude Include="UnitSkillCommand.h">
+      <Filter>Contents_Refactored\UnitCommand\UnitSkillCommand</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -2940,6 +2946,9 @@
     </ClCompile>
     <ClCompile Include="BossController.cpp">
       <Filter>Contents_Refactored\UnitController\EnemyController\BossController</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitSkillCommand.cpp">
+      <Filter>Contents_Refactored\UnitCommand\UnitSkillCommand</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
