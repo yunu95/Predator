@@ -58,13 +58,13 @@ void TacticModeSystem::Update()
 	}
 }
 
-void TacticModeSystem::OperateTacticSystem()
+void TacticModeSystem::EngageTacticSystem()
 {
 	this->isOperating = true;
 	this->isCoolTime = true;
 }
 
-void TacticModeSystem::Enqueue(std::shared_ptr<UnitCommand> command)
+void TacticModeSystem::EnqueueCommand(std::shared_ptr<UnitCommand> command)
 {
 	if (isOperating == false) return;
 
@@ -87,7 +87,7 @@ void TacticModeSystem::Enqueue(std::shared_ptr<UnitCommand> command)
 	}
 }
 
-void TacticModeSystem::Execute()
+void TacticModeSystem::ExecuteCommands()
 {
 	this->isExecuting = true;
 	StartCoroutine(this->ExecuteInternal());

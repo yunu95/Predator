@@ -233,7 +233,11 @@ void Unit::OnStateEngage<UnitBehaviourTree::Skill>()
 template<>
 void Unit::OnStateExit<UnitBehaviourTree::SkillOnGoing>()
 {
-    DeleteCoroutine(coroutineSkill);
+    if (!coroutineSkill.expired())
+    {
+        onGoingSkill->OnInterruption();
+        DeleteCoroutine(coroutineSkill);
+    }
     onGoingSkill.reset();
 }
 template<>
@@ -487,7 +491,7 @@ void Unit::UpdateRotation()
 }
 void Unit::OnContentsStop()
 {
-    UnitPool::SingleInstance().Return(GetWeakPtr<Unit>());
+    ReturnToPool();
 }
 void Unit::OnEnable()
 {
@@ -897,7 +901,12 @@ void Unit::Reset()
     SetCurrentHp(unitTemplateData->pod.max_Health);
     DeleteCoroutine(coroutineKnockBack);
     DeleteCoroutine(coroutineAttack);
-    DeleteCoroutine(coroutineSkill);
+    if (!coroutineSkill.expired())
+    {
+        onGoingSkill->OnInterruption();
+        DeleteCoroutine(coroutineSkill);
+        onGoingSkill.reset();
+    }
     DeleteCoroutine(coroutineRevival);
     DeleteCoroutine(coroutineDeath);
     liveCountLeft = unitTemplateData->pod.liveCount;
@@ -1198,7 +1207,7 @@ yunutyEngine::coroutine::Coroutine Unit::DeathCoroutine()
 {
     if (unitTemplateData->pod.deathBurnTime <= 0)
     {
-        UnitPool::SingleInstance().Return(GetWeakPtr<Unit>());
+        ReturnToPool();
         co_return;
     }
     float animSpeed = wanderResources::GetAnimation(unitTemplateData->pod.skinnedFBXName, UnitAnimType::Death)->GetDuration() / unitTemplateData->pod.deathBurnTime;
@@ -1208,7 +1217,7 @@ yunutyEngine::coroutine::Coroutine Unit::DeathCoroutine()
     burnEffect.lock()->SetEdgeThickness(unitTemplateData->pod.deathBurnEdgeThickness);
     burnEffect.lock()->Disappear();
     co_yield coroutine::WaitForSeconds(unitTemplateData->pod.deathBurnTime);
-    UnitPool::SingleInstance().Return(GetWeakPtr<Unit>());
+    ReturnToPool();
     co_return;
 }
 yunutyEngine::coroutine::Coroutine Unit::AttackCoroutine(std::weak_ptr<Unit> opponent)
@@ -1236,6 +1245,11 @@ yunutyEngine::coroutine::Coroutine Unit::AttackCoroutine(std::weak_ptr<Unit> opp
 float Unit::DistanceTo(const Vector3d& target)
 {
     return (GetTransform()->GetWorldPosition() - target).Magnitude();
+}
+void Unit::ReturnToPool()
+{
+    Reset();
+    UnitPool::SingleInstance().Return(GetWeakPtr<Unit>());
 }
 const editor::Unit_TemplateData& Unit::GetUnitTemplateData()const
 {
