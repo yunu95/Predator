@@ -28,5 +28,6 @@ namespace wanderResources
         const yunuGI::Color ROBIN_COLOR{ 1,0,0,1 };
         const yunuGI::Color URSULA_COLOR{ 0.545,0,1,1 };
         const yunuGI::Color HANSEL_COLOR{ 1,0.5,0,1 };
+        const yunuGI::Color ENEMY_COLOR{ 0,1,1,1 };
     }
 }
