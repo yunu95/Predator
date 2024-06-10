@@ -53,6 +53,10 @@ public:
     // 모든 명령을 지우는 함수입니다.
     void ClearCommand();
 
+    std::shared_ptr<UnitCommand>& GetRobinLastCommand() { return robinLastCommand; }
+    std::shared_ptr<UnitCommand>& GetUrsulaLastCommand() { return ursulaLastCommand; }
+    std::shared_ptr<UnitCommand>& GetHanselLastCommand() { return hanselLastCommand; }
+
 private:
     // 전술모드 내부에서 등록된 명령들을 실행해주는 함수입니다.
     coroutine::Coroutine ExecuteInternal();
