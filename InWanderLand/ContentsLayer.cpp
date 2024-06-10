@@ -190,7 +190,7 @@ void GraphicsTest()
 		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Frame2");
 	}
 	{
-		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Frame1");
+		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_HeartQueen");
 		obj2->GetTransform()->SetLocalPosition(Vector3d{ 5,0,0 });
 	}
 	{

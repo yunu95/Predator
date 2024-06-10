@@ -73,5 +73,7 @@ private:
     float coolTime;
     float elapsedTime;
 
+
+    friend class PlayerController;
 };
 

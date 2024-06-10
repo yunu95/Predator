@@ -82,6 +82,8 @@ void PlaytimeWave::Update()
             auto unitData = waveData->waveUnitDatasVector[waveDataIndex];
             unitData->inGameUnit = UnitPool::SingleInstance().Borrow(unitData);
 
+            m_currentWaveUnitVector.push_back(waveData->waveUnitDatasVector[waveDataIndex]->inGameUnit.lock().get());
+
             nextSummonUnitIndex++;
             waveDataIndex++;
         }
