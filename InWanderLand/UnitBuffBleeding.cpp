@@ -4,6 +4,5 @@
 
 void UnitBuffBleeding::OnUpdate()
 {
-    float globalconstant = 3;
-    owner.lock()->Damaged(Inflictor, globalconstant * yunutyEngine::Time::GetDeltaTime());
+    owner.lock()->Damaged(Inflictor, damagePerSecond * yunutyEngine::Time::GetDeltaTime());
 }

@@ -1,8 +1,27 @@
 #pragma once
 #include "Skill.h"
 
+namespace BossSummon
+{
+	class LeftFrame;
+	class RightFrame;
+}
+
 struct POD_BossSummonMobSkill
 {
+	/// LeftFrame 기준 소환 위치의 offset 입니다.
+	/// -x, +z
+	float leftSummonOffset_x = 10.0f;
+	float leftSummonOffset_z = 10.0f;
+	float leftNoiseRadius = 5.0f;
+
+	/// RightFrame 기준 소환 위치의 offset 입니다.
+	/// +x, +z
+	float rightSummonOffset_x = 10.0f;
+	float rightSummonOffset_z = 10.0f;
+	float rightNoiseRadius = 5.0f;
+
+	float summonPeriod = 15.0f;
 
 	TO_JSON(POD_BossSummonMobSkill)
 		FROM_JSON(POD_BossSummonMobSkill)
@@ -17,6 +36,15 @@ public:
 	virtual void OnInterruption() override;
 
 	static POD_BossSummonMobSkill pod;
+
+	static void SetLeftFrame(BossSummon::LeftFrame* leftFrame);
+	static void SetRightFrame(BossSummon::RightFrame* rightFrame);
+
+private:
+	coroutine::Coroutine StartSummonTimer();
+	static std::weak_ptr<coroutine::Coroutine> summonCoroutine;
+	static BossSummon::LeftFrame * leftFrame;
+	static BossSummon::RightFrame* rightFrame;
 };
 
 

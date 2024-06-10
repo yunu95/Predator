@@ -9,7 +9,7 @@ class yunuGI::IMesh;
 class UnitAttackCommand : public UnitCommand
 {
 public:
-	UnitAttackCommand(Unit* unit, Vector3d targetPos, Vector3d prevPos);
+	UnitAttackCommand(Unit* unit, Vector3d expectedPos);
 	virtual ~UnitAttackCommand();
 
 public:

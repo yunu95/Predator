@@ -1,6 +1,5 @@
 #include "CinematicManager.h"
 
-#include "GameManager.h"
 #include "GamePlayTimer.h"
 #include "UIManager.h"
 #include "UIElement.h"

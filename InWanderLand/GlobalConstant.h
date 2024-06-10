@@ -14,7 +14,8 @@ namespace application
     struct POD_GlobalConstant
     {
         GC<int> gravitySpeed = 10;
-        GC<int> magicPower = 40;
+        GC<float> manaRegen = 7.0f;
+        GC<float> maxMana = 100.0f;
 
         // 몇초마다 유닛들을 플레이어 캐릭터들에게 분배해주는가
         GC<float> enemyAggroUpdateInterval = 1;
@@ -42,7 +43,6 @@ namespace application
         GC<float>   impaleSkillKnockbackDistance = 2.0f;
         GC<float>   impaleSkillKnockbackDuration = 2.0f;
 
-        GC<float>	skillGaugeRecoveryPerSecond = 2.0f;
 
 
         GC<float>	tacticSkillCost = 10.0f;
@@ -56,6 +56,11 @@ namespace application
         GC<float> chessBlockUnitOffset = 0.1f;
         GC<float> vibeMaxOffset = 0.12f;
         GC<float> defaultAnimBlendTime = 0.32f;
+
+        GC<float> bossSkillPeriod_1 = 4.f;   
+        GC<float> bossSkillPeriod_2 = 4.f;
+        GC<float> bossSkillPeriod_3 = 6.f;
+        GC<float> bossSkillPeriod_4 = 8.f;
 
         TO_JSON(POD_GlobalConstant)
             FROM_JSON(POD_GlobalConstant)

@@ -37,6 +37,8 @@ public:
             None,
             // 전투중
             Battle,
+            // 전술모드
+            Tactic,
             // 평화상태, 애들이 선두 유닛을 졸졸 따라다님.
             Peace,
             // 시네마틱 상태, 사용자의 모든 입력이 막히고 컨트롤러가 유닛들에 일절 개입하지 않는다.
@@ -65,6 +67,7 @@ public:
     int GetSkillPoints();
     void IncrementSkillPoint();
     void LockCamInRegion(const application::editor::RegionData* camLockRegion);
+    bool CanUnitSelectSkill(std::weak_ptr<Unit> unit);
     static constexpr int playerTeamIndex = 1;
     static const std::unordered_map<UIEnumID, SkillUpgradeType::Enum> skillByUI;
     bool blockSkillSelection[(int)SkillType::SKILL_NUM]{ false };
@@ -85,6 +88,9 @@ private:
     void HandleCamera();
     // 스킬들의 프리뷰 이미지를 매 프레임마다 업데이트시켜주는 함수
     void HandleSkillPreview();
+    void HandleSkillCooltime();
+    void HandleManaRegen();
+    void HandleMouseHover();
     // character가 NONE일 경우 알아서 현재 선택된 스킬로 귀결된다.
     void OnLeftClick();
     void OnRightClick();
@@ -95,13 +101,27 @@ private:
     void OrderInteraction(std::weak_ptr<IInteractableComponent> interactable);
     void ActivateSkill(SkillType::Enum skillType, Vector3d pos);
     void UnSelectSkill();
+    // 현재 선택된 스킬이 특정 유닛의 스킬이라면 선택을 취소시킨다.
+    void UnSelectSkill(std::weak_ptr<Unit> unit);
     Vector3d GetWorldCursorPosition();
     // 연속으로 쌓은 콤보를 초기화한다.
     void ResetCombo();
-    void SetSelectedSkillType(SkillType::Enum selectedSkill);
+    void SetMana(float mana);
+    void SetCooltime(SkillType::Enum skillType, float cooltime);
+    float GetCooltimeForSkill(SkillType::Enum skillType);
+    float RequiredManaForSkill(SkillType::Enum skillType);
+    void ApplyHoverEffect(std::weak_ptr<Unit> unit);
+    void DisableHoverEffect();
+    void ApplySelectEffect(std::weak_ptr<Unit> unit);
+    void ApplyTargetedEffect(std::weak_ptr<Unit> unit);
+    void InitUnitMouseInteractionEffects();
     int currentCombo{ 0 };
     std::array<int, 3> comboObjective{ 10, 20, 30 };
     std::array<bool, 3> comboAchieved{ false };
+    std::array<float, SkillType::SKILL_NUM> skillCooltimeLeft;
+    std::array<UIElement*, SkillType::SKILL_NUM> skillCooltimeNumberUI;
+    std::array<UIElement*, SkillType::SKILL_NUM> skillCooltimeMaskUI;
+    float mana{ 0 };
     State::Enum state{ State::Battle };
     SkillType::Enum selectedSkill = SkillType::NONE;
     PlayerCharacterType::Enum selectedCharacterType = PlayerCharacterType::None;
@@ -113,12 +133,17 @@ private:
     SkillUpgradeType::Enum skillUpgradeTarget;
     UIEnumID skillUpgradeUITarget;
     std::array<bool, SkillUpgradeType::END> skillUpgraded;
-    //std::array<float, SkillType::SKILL_NUM> skillCooltime;
-    //std::array<float, SkillType::SKILL_NUM> manaCost;
-    std::array<float, SkillType::SKILL_NUM> skillCooltimeLeft;
     int skillPointsLeft{ 5 };
     Vector3d camOffset;
     Quaternion camRotation;
     std::array<std::weak_ptr<Unit>, 2> peaceFollowingUnits;
     std::array<Vector3d, 2> peaceFollowingDestination;
+    bool mouseInteractionEffectInitalized{ false };
+    // 유닛이 선택되었을 떄의 효과
+    GameObject* allySelectedEffect{ nullptr };
+    // 유닛이 타겟으로 지정되었을 떄의 효과(사실상 평타 우클릭밖에 없음)
+    GameObject* enemyTargetedEffect{ nullptr };
+    // 마우스 커서가 적 혹은 아군 위에 올라갈 때의 효과
+    GameObject* allyHoverEffect{ nullptr };
+    GameObject* enemyHoverEffect{ nullptr };
 };

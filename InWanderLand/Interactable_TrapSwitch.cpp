@@ -4,7 +4,7 @@
 #include "DebugMeshes.h"
 
 #include "Unit.h"
-#include "GameManager.h"
+
 #include "SFXManager.h"
 
 void Interactable_TrapSwitch::Start()
@@ -52,6 +52,8 @@ void Interactable_TrapSwitch::Update()
 			mesh->GetTransform()->SetLocalPosition(Vector3d(0, 0, 0));
 		}
 	}
+
+	/// 내부로 들어온 유닛이 죽었을 때, 리스트에서 제외하는 로직 필요함
 }
 
 void Interactable_TrapSwitch::OnTriggerEnter(physics::Collider* collider)
@@ -59,7 +61,8 @@ void Interactable_TrapSwitch::OnTriggerEnter(physics::Collider* collider)
 	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
 		//GameManager::Instance().IsBattleSystemOperating() &&
 		colliderUnitComponent != nullptr &&
-		colliderUnitComponent->IsPlayerUnit())
+		colliderUnitComponent->IsPlayerUnit() &&
+		colliderUnitComponent->IsAlive())
 	{
 		triggerStay.insert(collider);
 		triggerOn = true;

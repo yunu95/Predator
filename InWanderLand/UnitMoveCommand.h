@@ -9,7 +9,7 @@ class yunuGI::IMesh;
 class UnitMoveCommand : public UnitCommand
 {
 public:
-	UnitMoveCommand(Unit* unit, Vector3d targetPos, Vector3d prevPos,yunuGI::IMesh* routeMesh);
+	UnitMoveCommand(Unit* unit, Vector3d expectedPos,yunuGI::IMesh* routeMesh);
 	virtual ~UnitMoveCommand();
 
 public:

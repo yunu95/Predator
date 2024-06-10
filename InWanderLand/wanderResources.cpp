@@ -79,6 +79,17 @@ void InitAnimMap()
     animMap["SKM_HeartQueen"][UnitAnimType::Skill4] = localAnimMap[L"root|Ani_HeartQueen_Skill3"];
     animMap["SKM_HeartQueen"][UnitAnimType::BattleMove] = localAnimMap[L"root|Ani_HeartQueen_Walk"];
     animMap["SKM_HeartQueen"][UnitAnimType::Move] = localAnimMap[L"root|Ani_HeartQueen_Walk"];
+    //animMap["SKM_HeartQueen"][UnitAnimType::Birth] = localAnimMap[L""];
+
+    /// Frame 준비되면 추가
+    //animMap["SKM_FRAME1"][UnitAnimType::Birth] = localAnimMap[L""];
+    //animMap["SKM_FRAME1"][UnitAnimType::Skill1] = localAnimMap[L""];
+    //animMap["SKM_FRAME1"][UnitAnimType::Death] = localAnimMap[L""];
+
+    //animMap["SKM_FRAME2"][UnitAnimType::Birth] = localAnimMap[L""];
+    //animMap["SKM_FRAME2"][UnitAnimType::Skill1] = localAnimMap[L""];
+    //animMap["SKM_FRAME2"][UnitAnimType::Death] = localAnimMap[L""];
+
     // 없는 애니메이션들은 전부 Idle로 대체한다.
     for (auto& each : animMap)
     {

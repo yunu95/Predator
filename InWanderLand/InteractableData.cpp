@@ -19,7 +19,7 @@
 #include "RookTrapProductor.h"
 #include "RangedEnemyPool.h"
 #include "MeleeEnemyPool.h"
-#include "GameManager.h"
+
 #include "ShortcutSystem.h"
 #include "PlaytimeWave.h"
 #include "BurnEffect.h"
@@ -133,15 +133,7 @@ namespace application
             if (pod.templateData->pod.fBXName == "Trigger_Cube" || pod.templateData->pod.fBXName == "Trigger_Sphere")
             {
                 obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-            }
-            else if (pod.templateData->pod.fBXName == "SM_Chess_Pawn" 
-                || pod.templateData->pod.fBXName == "SM_Chess_Rook"
-                || pod.templateData->pod.fBXName == "SM_Chess_Bishop")
-            {
-                /// Chess 는 Pooling 을 하기 위하여
-                /// Start 구문에서 FBX 를 할당하도록 변경
-                obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-            }
+            }            
             else
             {
                 obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(pod.templateData->pod.fBXName);
@@ -164,10 +156,6 @@ namespace application
             {
                 comp = obj->AddComponent<Interactable_TriggerSphere>();
             }
-            else if (pod.templateData->pod.fBXName == "SM_Chess_Bishop")
-            {
-                comp = obj->AddComponent<Interactable_ChessBishop>();
-            }
             else if (pod.templateData->pod.fBXName == "SM_Chess_Pawn")
             {
                 comp = obj->AddComponent<Interactable_ChessPawn>();
@@ -175,6 +163,10 @@ namespace application
             else if (pod.templateData->pod.fBXName == "SM_Chess_Rook")
             {
                 comp = obj->AddComponent<Interactable_ChessRook>();
+            }
+            else if (pod.templateData->pod.fBXName == "SM_Chess_Bishop")
+            {
+                comp = obj->AddComponent<Interactable_ChessBishop>();
             }
             else if (pod.templateData->pod.fBXName == "SM_Spike01" || pod.templateData->pod.fBXName == "SM_Spike02" || pod.templateData->pod.fBXName == "SM_Spike03")
             {
