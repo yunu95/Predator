@@ -10,7 +10,7 @@ const float spinStartTime = 2.07f;
 const float spinAttackingTime = spinEndTime - spinStartTime;
 const float afterSpinDelay = totalTime - spinStartTime - spinAttackingTime;
 
-coroutine::Coroutine BossSpinAttackSkill::SpawningSkillffect()
+coroutine::Coroutine BossSpinAttackSkill::SpawningSkillffect(std::weak_ptr<BossSpinAttackSkill> skill)
 {
 	Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
 	Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
@@ -43,7 +43,7 @@ coroutine::Coroutine BossSpinAttackSkill::operator()()
     auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
 
     owner.lock()->PlayAnimation(UnitAnimType::Skill1, true);
-    owner.lock()->StartCoroutine(SpawningSkillffect());
+    owner.lock()->StartCoroutine(SpawningSkillffect(dynamic_pointer_cast<BossSpinAttackSkill>(selfWeakPtr.lock())));
 
     knockbackCollider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
     knockbackCollider.lock()->SetRadius(pod.colliderRadius);

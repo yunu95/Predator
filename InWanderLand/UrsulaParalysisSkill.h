@@ -20,7 +20,8 @@ class UrsulaParalysisSkill : public Skill
 {
 private:
 	coroutine::Coroutine SpawningFieldEffect(std::weak_ptr<UrsulaParalysisSkill> skill);
-	std::weak_ptr<UnitAcquisitionSphereCollider> skillCollider;
+	std::weak_ptr<UnitAcquisitionSphereCollider> damageCollider;
+	std::weak_ptr<UnitAcquisitionSphereCollider> knockBackCollider;
 	std::weak_ptr<ManagedFBX> tentacleObject;
 	std::weak_ptr<ManagedFBX> waveObject;
 

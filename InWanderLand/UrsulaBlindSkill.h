@@ -20,13 +20,18 @@ struct POD_UrsulaBlindSkill
 class UrsulaBlindSkill : public Skill
 {
 private:
-	coroutine::Coroutine SpawningFieldEffect();
+	coroutine::Coroutine SpawningFieldEffect(std::weak_ptr<UrsulaBlindSkill> skill);
 
 	static Vector3d skillStart;
 	static Vector3d skillDestination;
 	std::weak_ptr<UnitAcquisitionSphereCollider> circle_Top;
 	std::weak_ptr<UnitAcquisitionSphereCollider> circle_Left;
 	std::weak_ptr<UnitAcquisitionSphereCollider> circle_Right;
+
+	std::weak_ptr<ManagedFBX> onUrsulaPosEffect;
+	std::weak_ptr<ManagedFBX> onTargetPosEffect1;
+	std::weak_ptr<ManagedFBX> onTargetPosEffect2;
+	std::weak_ptr<ManagedFBX> onTargetPosEffect3;
 
 public:
     UrsulaBlindSkill() {}

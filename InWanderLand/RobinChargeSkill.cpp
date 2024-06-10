@@ -103,5 +103,6 @@ coroutine::Coroutine RobinChargeSkill::operator()()
 void RobinChargeSkill::OnInterruption()
 {
     UnitAcquisitionSphereColliderPool::SingleInstance().Return(knockbackCollider);
+    FBXPool::SingleInstance().Return(chargeEffect);     
 }
 

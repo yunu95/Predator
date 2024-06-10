@@ -11,12 +11,14 @@ POD_UrsulaBlindSkill UrsulaBlindSkill::pod = POD_UrsulaBlindSkill();
 
 float UrsulaBlindSkill::colliderEffectRatio = 3.0f;
 
-coroutine::Coroutine UrsulaBlindSkill::SpawningFieldEffect()
+coroutine::Coroutine UrsulaBlindSkill::SpawningFieldEffect(std::weak_ptr<UrsulaBlindSkill> skill)
 {
-	auto onUrsulaPosEffect = FBXPool::SingleInstance().Borrow("VFX_Ursula_Skill1_1");
-	auto onTargetPosEffect1 = FBXPool::SingleInstance().Borrow("VFX_Ursula_Skill1_2");
-	auto onTargetPosEffect2 = FBXPool::SingleInstance().Borrow("VFX_Ursula_Skill1_2");
-	auto onTargetPosEffect3 = FBXPool::SingleInstance().Borrow("VFX_Ursula_Skill1_2");
+	float actualCollideRange = UrsulaBlindSkill::pod.skillScale * colliderEffectRatio;
+
+	onUrsulaPosEffect = FBXPool::SingleInstance().Borrow("VFX_Ursula_Skill1_1");
+	onTargetPosEffect1 = FBXPool::SingleInstance().Borrow("VFX_Ursula_Skill1_2");
+	onTargetPosEffect2 = FBXPool::SingleInstance().Borrow("VFX_Ursula_Skill1_2");
+	onTargetPosEffect3 = FBXPool::SingleInstance().Borrow("VFX_Ursula_Skill1_2");
 
 	UpdatePosition(owner.lock()->GetGameObject()->GetTransform()->GetWorldPosition(), targetPos);
 
@@ -46,51 +48,24 @@ coroutine::Coroutine UrsulaBlindSkill::SpawningFieldEffect()
 	onTargetPosAnimator3.lock()->SetAutoActiveFalse();
 	onTargetPosAnimator3.lock()->Init();
 
-	co_await std::suspend_always{};
-
-	while (!onTargetPosAnimator1.lock()->IsDone())
-	{
-		co_await std::suspend_always{};
-	}
-
-	FBXPool::SingleInstance().Return(onUrsulaPosEffect);
-	FBXPool::SingleInstance().Return(onTargetPosEffect1);
-	FBXPool::SingleInstance().Return(onTargetPosEffect2);
-	FBXPool::SingleInstance().Return(onTargetPosEffect3);
-
-	co_return;
-}
-
-coroutine::Coroutine UrsulaBlindSkill::operator()()
-{
-	float actualCollideRange = UrsulaBlindSkill::pod.skillScale * colliderEffectRatio;
-
-	auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
-    auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
-    auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
-	owner.lock()->PlayAnimation(UnitAnimType::Skill1, true);
 	auto animator = owner.lock()->GetAnimator();
-	auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill1);
-
-	UpdatePosition(owner.lock()->GetGameObject()->GetTransform()->GetWorldPosition(), targetPos);
 
 	circle_Top = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
-	circle_Top.lock()->SetRadius(actualCollideRange);
 	circle_Left = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
-	circle_Left.lock()->SetRadius(actualCollideRange);
 	circle_Right = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
+
+	circle_Top.lock()->SetRadius(actualCollideRange);
+	circle_Left.lock()->SetRadius(actualCollideRange);
 	circle_Right.lock()->SetRadius(actualCollideRange);
 
 	circle_Top.lock()->GetTransform()->SetWorldPosition(GetSkillObjectPos_Top(skillDestination));
 	circle_Left.lock()->GetTransform()->SetWorldPosition(GetSkillObjectPos_Left(skillDestination));
 	circle_Right.lock()->GetTransform()->SetWorldPosition(GetSkillObjectPos_Right(skillDestination));
 
-	owner.lock()->StartCoroutine(SpawningFieldEffect());
-
-	coroutine::ForSeconds forSeconds{ anim->GetDuration() };
+	co_await std::suspend_always{};
 
 	int hitCount = 0;
-	while (forSeconds.Tick())
+	while (!onTargetPosAnimator1.lock()->IsDone())
 	{
 		auto curFrame = animator.lock()->GetCurrentFrame();
 		bool hit = false;
@@ -114,12 +89,9 @@ coroutine::Coroutine UrsulaBlindSkill::operator()()
 		{
 			co_await std::suspend_always{};
 
-			/// 장판 3개의 콜라이더와 이펙트를 생성하는 코루틴 함수 호출.
-
 			for (auto& each : circle_Top.lock()->GetEnemies())
 			{
 				each->Damaged(owner, pod.skillDamage);
-
 				/// 실명
 				/// 실명 대상은 skillBlindTime 동안 실명 상태
 			}
@@ -127,7 +99,6 @@ coroutine::Coroutine UrsulaBlindSkill::operator()()
 			for (auto& each : circle_Left.lock()->GetEnemies())
 			{
 				each->Damaged(owner, pod.skillDamage);
-
 				/// 실명
 				/// 실명 대상은 skillBlindTime 동안 실명 상태
 			}
@@ -135,7 +106,6 @@ coroutine::Coroutine UrsulaBlindSkill::operator()()
 			for (auto& each : circle_Right.lock()->GetEnemies())
 			{
 				each->Damaged(owner, pod.skillDamage);
-
 				/// 실명
 				/// 실명 대상은 skillBlindTime 동안 실명 상태
 			}
@@ -144,6 +114,44 @@ coroutine::Coroutine UrsulaBlindSkill::operator()()
 		/// 우선은 여러 영역 겹칠 경우, 중복하여 대미지 계산함
 		co_await std::suspend_always{};
 	}
+
+	while (!onTargetPosAnimator1.lock()->IsDone())
+	{
+		co_await std::suspend_always{};
+	}
+
+	co_return;
+}
+
+coroutine::Coroutine UrsulaBlindSkill::operator()()
+{
+	float actualCollideRange = UrsulaBlindSkill::pod.skillScale * colliderEffectRatio;
+
+	auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
+    auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
+    auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
+	owner.lock()->PlayAnimation(UnitAnimType::Skill1, true);
+	auto animator = owner.lock()->GetAnimator();
+	auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill1);
+
+	UpdatePosition(owner.lock()->GetGameObject()->GetTransform()->GetWorldPosition(), targetPos);
+
+	auto effectCoroutine = owner.lock()->StartCoroutine(SpawningFieldEffect(dynamic_pointer_cast<UrsulaBlindSkill>(selfWeakPtr.lock())));
+	effectCoroutine.lock()->PushDestroyCallBack([this]()
+		{
+			circle_Top.lock()->SetRadius(0.5);
+			circle_Left.lock()->SetRadius(0.5);
+			circle_Right.lock()->SetRadius(0.5);
+			UnitAcquisitionSphereColliderPool::SingleInstance().Return(circle_Top);
+			UnitAcquisitionSphereColliderPool::SingleInstance().Return(circle_Left);
+			UnitAcquisitionSphereColliderPool::SingleInstance().Return(circle_Right);
+			FBXPool::SingleInstance().Return(onUrsulaPosEffect);
+			FBXPool::SingleInstance().Return(onTargetPosEffect1);
+			FBXPool::SingleInstance().Return(onTargetPosEffect2);
+			FBXPool::SingleInstance().Return(onTargetPosEffect3);
+		});
+
+	co_yield coroutine::WaitForSeconds(anim->GetDuration());
 
     disableNavAgent.reset();
     blockFollowingNavigation.reset();

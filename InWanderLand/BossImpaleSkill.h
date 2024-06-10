@@ -27,7 +27,7 @@ struct POD_BossImpaleSkill
 class BossImpaleSkill : public Skill
 {
 private:
-	coroutine::Coroutine SpawningSkillffect();
+	coroutine::Coroutine SpawningSkillffect(std::weak_ptr<BossImpaleSkill> skill);
 
 public:
 	BossImpaleSkill() {}

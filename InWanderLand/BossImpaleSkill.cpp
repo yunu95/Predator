@@ -89,17 +89,17 @@ coroutine::Coroutine BossImpaleSkill::SpearArise(std::weak_ptr<BossImpaleSkill> 
 	co_return;
 }
 
-coroutine::Coroutine BossImpaleSkill::SpawningSkillffect()
+coroutine::Coroutine BossImpaleSkill::SpawningSkillffect(std::weak_ptr<BossImpaleSkill> skill)
 {
 	Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
 	Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
 	Vector3d direction = deltaPos.Normalized();
 
-	auto tauntEffect = FBXPool::SingleInstance().Borrow("VFX_HeartQueen_Skill2");
+	auto impaleEffect = FBXPool::SingleInstance().Borrow("VFX_HeartQueen_Skill2");
 
-	tauntEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos);
-	tauntEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
-	auto chargeEffectAnimator = tauntEffect.lock()->AcquireVFXAnimator();
+	impaleEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos);
+	impaleEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
+	auto chargeEffectAnimator = impaleEffect.lock()->AcquireVFXAnimator();
 	chargeEffectAnimator.lock()->SetAutoActiveFalse();
 	chargeEffectAnimator.lock()->Init();
 
@@ -110,7 +110,7 @@ coroutine::Coroutine BossImpaleSkill::SpawningSkillffect()
 		co_await std::suspend_always{};
 	}
 
-	FBXPool::SingleInstance().Return(tauntEffect);
+	FBXPool::SingleInstance().Return(impaleEffect);
 
 	co_return;
 }
@@ -126,7 +126,7 @@ coroutine::Coroutine BossImpaleSkill::operator()()
 
 	// 창이 생성되는 시간 오프셋은 유닛으로부터의 거리와 정비례한다.
 	owner.lock()->PlayAnimation(UnitAnimType::Skill2);
-	owner.lock()->StartCoroutine(SpawningSkillffect());
+	auto effectCoroutine = owner.lock()->StartCoroutine(SpawningSkillffect(dynamic_pointer_cast<BossImpaleSkill>(selfWeakPtr.lock())));
 	co_yield coroutine::WaitForSeconds{ impaleStartTime };
 	coroutine::ForSeconds forSeconds{ pod.impaleSkillDuration };
 	for (auto& each : BossSpearsInfo())
