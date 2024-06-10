@@ -1972,6 +1972,9 @@
     <ClInclude Include="BossController.h">
       <Filter>Contents_Refactored\UnitController\EnemyController\BossController</Filter>
     </ClInclude>
+    <ClInclude Include="PassiveSkill.h">
+      <Filter>Contents_Refactored\Skill\PassiveSkill</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -2940,6 +2943,9 @@
     </ClCompile>
     <ClCompile Include="BossController.cpp">
       <Filter>Contents_Refactored\UnitController\EnemyController\BossController</Filter>
+    </ClCompile>
+    <ClCompile Include="PassiveSkill.cpp">
+      <Filter>Contents_Refactored\Skill\PassiveSkill</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

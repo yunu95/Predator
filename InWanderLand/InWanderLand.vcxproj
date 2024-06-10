@@ -1054,6 +1054,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="Module_Skill.h" />
     <ClInclude Include="MoveEndPreviewPool.h" />
     <ClInclude Include="Multiplier.h" />
+    <ClInclude Include="PassiveSkill.h" />
     <ClInclude Include="PlayerCharacterType.h" />
     <ClInclude Include="ProjectilePool.h" />
     <ClInclude Include="RangedEliteController.h" />
@@ -2294,6 +2295,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="ParticlePalette.cpp" />
     <ClCompile Include="ParticleTool_Manager.cpp" />
     <ClCompile Include="Particle_TemplateData.cpp" />
+    <ClCompile Include="PassiveSkill.cpp" />
     <ClCompile Include="PermanentObservee.cpp" />
     <ClCompile Include="PlayableComponent.cpp" />
     <ClCompile Include="Module_ScriptEditor.cpp">
