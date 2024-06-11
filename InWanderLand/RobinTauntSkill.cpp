@@ -26,11 +26,13 @@ coroutine::Coroutine RobinTauntSkill::SpawningSkillffect(std::weak_ptr<RobinTaun
 
 	auto animator = owner.lock()->GetAnimator();
 	auto tauntAnim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Taunt);
-	coroutine::ForSeconds forSeconds{ pod.skillPlayTime };
 
 	tauntCollider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
 	tauntCollider.lock()->SetRadius(actualCollideRange);
 	tauntCollider.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
+
+	coroutine::ForSeconds forSeconds{ pod.skillPlayTime };
+	std::unordered_set<Unit*> tauntList;
 
 	co_await std::suspend_always{};
 
@@ -69,11 +71,9 @@ coroutine::Coroutine RobinTauntSkill::operator()()
     auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
 
     owner.lock()->PlayAnimation(UnitAnimType::Taunt, true);
-	auto effectCoroutine = owner.lock()->StartCoroutine(SpawningSkillffect(std::dynamic_pointer_cast<RobinTauntSkill>(selfWeakPtr.lock())));
-
-	effectCoroutine.lock()->PushDestroyCallBack([this]()
+	effectColliderCoroutine = owner.lock()->StartCoroutine(SpawningSkillffect(std::dynamic_pointer_cast<RobinTauntSkill>(selfWeakPtr.lock())));
+	effectColliderCoroutine.lock()->PushDestroyCallBack([this]()
 		{
-			tauntList.clear();
 			tauntCollider.lock()->SetRadius(0.5);
 			UnitAcquisitionSphereColliderPool::SingleInstance().Return(tauntCollider);
 			FBXPool::SingleInstance().Return(tauntEffect);
@@ -84,11 +84,13 @@ coroutine::Coroutine RobinTauntSkill::operator()()
     disableNavAgent.reset();
     blockFollowingNavigation.reset();
     owner.lock()->Relocate(owner.lock()->GetTransform()->GetWorldPosition());
-    OnInterruption();
     co_return;
 }
 
 void RobinTauntSkill::OnInterruption()
 {
-
+	if (!effectColliderCoroutine.expired())
+	{
+		owner.lock()->DeleteCoroutine(effectColliderCoroutine);
+	}
 }

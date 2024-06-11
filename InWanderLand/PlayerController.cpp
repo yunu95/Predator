@@ -535,7 +535,7 @@ void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
 			selectedCharacter.lock()->OrderSkill(HanselChargeSkill{}, pos);
 			break;
 		case SkillType::HANSEL_W:
-			selectedCharacter.lock()->OrderSkill(HanselProjectileSkill{}, pos);
+			selectedCharacter.lock()->OrderSkill(HanselProjectileSkill {}, pos);
 			break;
 	}
 	UnSelectSkill();

@@ -26,9 +26,6 @@ struct POD_BossImpaleSkill
 
 class BossImpaleSkill : public Skill
 {
-private:
-	coroutine::Coroutine SpawningSkillffect(std::weak_ptr<BossImpaleSkill> skill);
-
 public:
 	BossImpaleSkill() {}
 	virtual SkillType::Enum GetSkillType() { return SkillType::Enum::BossSkill_Two; }
@@ -39,6 +36,8 @@ public:
 
 private:
 	coroutine::Coroutine SpearArise(std::weak_ptr<BossImpaleSkill> skill, std::weak_ptr<ManagedFBX> fbx, std::weak_ptr<UnitAcquisitionSphereCollider> collider, Vector2d pos);
+	coroutine::Coroutine SpawningSkillffect(std::weak_ptr<BossImpaleSkill> skill);
+
 	std::weak_ptr<ManagedFBX> impaleEffect;
 	std::vector<std::weak_ptr<UnitAcquisitionSphereCollider>> knockbackColliderVector;
 	std::vector<std::weak_ptr<ManagedFBX>> spearFbxVector;

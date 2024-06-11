@@ -136,8 +136,8 @@ coroutine::Coroutine UrsulaBlindSkill::operator()()
 
 	UpdatePosition(owner.lock()->GetGameObject()->GetTransform()->GetWorldPosition(), targetPos);
 
-	auto effectCoroutine = owner.lock()->StartCoroutine(SpawningFieldEffect(dynamic_pointer_cast<UrsulaBlindSkill>(selfWeakPtr.lock())));
-	effectCoroutine.lock()->PushDestroyCallBack([this]()
+	effectColliderCoroutine = owner.lock()->StartCoroutine(SpawningFieldEffect(dynamic_pointer_cast<UrsulaBlindSkill>(selfWeakPtr.lock())));
+	effectColliderCoroutine.lock()->PushDestroyCallBack([this]()
 		{
 			circle_Top.lock()->SetRadius(0.5);
 			circle_Left.lock()->SetRadius(0.5);
@@ -156,18 +156,15 @@ coroutine::Coroutine UrsulaBlindSkill::operator()()
     disableNavAgent.reset();
     blockFollowingNavigation.reset();
     owner.lock()->Relocate(owner.lock()->GetTransform()->GetWorldPosition());
-    OnInterruption();
     co_return;
 }
 
 void UrsulaBlindSkill::OnInterruption()
 {
-    circle_Top.lock()->SetRadius(0.5);
-    circle_Left.lock()->SetRadius(0.5);
-    circle_Right.lock()->SetRadius(0.5);
-    UnitAcquisitionSphereColliderPool::SingleInstance().Return(circle_Top);
-    UnitAcquisitionSphereColliderPool::SingleInstance().Return(circle_Left);
-    UnitAcquisitionSphereColliderPool::SingleInstance().Return(circle_Right);
+	if (!effectColliderCoroutine.expired())
+	{
+		owner.lock()->DeleteCoroutine(effectColliderCoroutine);
+	}
 }
 
 void UrsulaBlindSkill::UpdatePosition(const Vector3d& start, const Vector3d& dest)

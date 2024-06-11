@@ -22,6 +22,8 @@ class UrsulaBlindSkill : public Skill
 private:
 	coroutine::Coroutine SpawningFieldEffect(std::weak_ptr<UrsulaBlindSkill> skill);
 
+    std::weak_ptr<coroutine::Coroutine> effectColliderCoroutine;
+
 	static Vector3d skillStart;
 	static Vector3d skillDestination;
 	std::weak_ptr<UnitAcquisitionSphereCollider> circle_Top;

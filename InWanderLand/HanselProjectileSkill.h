@@ -23,7 +23,6 @@ private:
     coroutine::Coroutine ThrowingPie(std::weak_ptr<HanselProjectileSkill> skill);
     std::weak_ptr<UnitAcquisitionSphereCollider> pieCollider;
     std::weak_ptr<ManagedFBX> pieObject;
-    std::unordered_set<Unit*> onceCollidedUnits;
 
 public:
     HanselProjectileSkill() {}

@@ -14,6 +14,8 @@ coroutine::Coroutine RobinChargeSkill::SpawningSkillffect(std::weak_ptr<RobinCha
 
     chargeEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos);
     chargeEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
+    chargeEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(pod.effectScale, pod.effectScale, pod.effectScale));
+
 	auto chargeEffectAnimator = chargeEffect.lock()->AcquireVFXAnimator();
     chargeEffectAnimator.lock()->SetAutoActiveFalse();
     chargeEffectAnimator.lock()->Init();
@@ -78,6 +80,8 @@ coroutine::Coroutine RobinChargeSkill::operator()()
     effectCoroutine.lock()->PushDestroyCallBack([this]()
         {
             FBXPool::SingleInstance().Return(chargeEffect);
+            UnitAcquisitionSphereColliderPool::SingleInstance().Return(knockbackCollider);
+            FBXPool::SingleInstance().Return(chargeEffect);
         });
     
     co_await std::suspend_always{};
@@ -96,13 +100,11 @@ coroutine::Coroutine RobinChargeSkill::operator()()
     owner.lock()->Relocate(currentPos);
     owner.lock()->PlayAnimation(UnitAnimType::Idle, true);
     co_yield coroutine::WaitForSeconds(0.2);
-    OnInterruption();
     co_return;
 }
 
 void RobinChargeSkill::OnInterruption()
 {
-    UnitAcquisitionSphereColliderPool::SingleInstance().Return(knockbackCollider);
-    FBXPool::SingleInstance().Return(chargeEffect);     
+  
 }
 

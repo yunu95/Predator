@@ -11,7 +11,6 @@ struct POD_UrsulaParalysisSkill
     float skillDamage = 5.f;
     float skillParalysisTime = 3.0f;
     float knockBackDuration = 2.0f;
-
     TO_JSON(POD_UrsulaParalysisSkill)
         FROM_JSON(POD_UrsulaParalysisSkill)
 };
@@ -20,6 +19,7 @@ class UrsulaParalysisSkill : public Skill
 {
 private:
 	coroutine::Coroutine SpawningFieldEffect(std::weak_ptr<UrsulaParalysisSkill> skill);
+	std::weak_ptr<coroutine::Coroutine> effectColliderCoroutine;
 	std::weak_ptr<UnitAcquisitionSphereCollider> damageCollider;
 	std::weak_ptr<UnitAcquisitionSphereCollider> knockBackCollider;
 	std::weak_ptr<ManagedFBX> tentacleObject;

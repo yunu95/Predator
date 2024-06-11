@@ -925,6 +925,7 @@ void Unit::Reset()
     }
     DeleteCoroutine(coroutineRevival);
     DeleteCoroutine(coroutineDeath);
+    ClearCoroutines();
     passiveSkill.reset();
     liveCountLeft = unitTemplateData->pod.liveCount;
     currentTargetUnit.reset();
