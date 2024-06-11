@@ -783,6 +783,7 @@ void Unit::Init(const application::editor::Unit_TemplateData* unitTemplateData)
 void Unit::Summon(const application::editor::UnitData* unitData)
 {
     this->unitData = unitData;
+    Reset();
     onAttack = unitData->onAttack;
     onAttackHit = unitData->onAttackHit;
     onDamaged = unitData->onDamaged;
@@ -804,12 +805,12 @@ void Unit::Summon(const application::editor::UnitData* unitData)
     Quaternion quat{ unitData->pod.rotation.w,unitData->pod.rotation.x,unitData->pod.rotation.y ,unitData->pod.rotation.z };
     auto forward = quat.Forward();
     desiredRotation = currentRotation = 180 + std::atan2f(forward.z, forward.x) * math::Rad2Deg;
-    Reset();
     coroutineBirth = StartCoroutine(BirthCoroutine());
 }
 void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& position, float rotation, bool instant)
 {
     this->unitData = nullptr;
+    Reset();
     onAttack.Clear();
     onAttackHit.Clear();
     onDamaged.Clear();
@@ -832,7 +833,6 @@ void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& po
 
     GetTransform()->SetWorldRotation(Vector3d{ 0,90 - rotation,0 });
     desiredRotation = currentRotation = rotation;
-    Reset();
     if (instant)
     {
         onCreated();
@@ -845,6 +845,7 @@ void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& po
 void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& position, const Quaternion& rotation, bool instant)
 {
     this->unitData = nullptr;
+    Reset();
     onAttack.Clear();
     onAttackHit.Clear();
     onDamaged.Clear();
@@ -868,7 +869,6 @@ void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& po
     auto forward = rotation.Forward();
     desiredRotation = currentRotation = 180 + std::atan2f(forward.z, forward.x) * math::Rad2Deg;
 
-    Reset();
     if (instant)
     {
         onCreated();
@@ -881,6 +881,7 @@ void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& po
 void Unit::AddPassiveSkill(std::shared_ptr<PassiveSkill> skill)
 {
     passiveSkill = skill;
+    passiveSkill->owner = GetWeakPtr<Unit>();
     passiveSkill->Init(GetWeakPtr<Unit>());
 }
 void Unit::Summon(application::editor::Unit_TemplateData* templateData)
@@ -890,15 +891,15 @@ void Unit::Summon(application::editor::Unit_TemplateData* templateData)
     {
     case PlayerCharacterType::Robin:
         unitStatusPortraitUI = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin)->GetWeakPtr<UIElement>();
-        AddPassiveSkill(std::make_shared<PassiveRobinBleed>());
+        AddPassiveSkill(std::static_pointer_cast<PassiveSkill>(std::make_shared<PassiveRobinBleed>()));
         break;
     case PlayerCharacterType::Ursula:
         unitStatusPortraitUI = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Ursula)->GetWeakPtr<UIElement>();
-        AddPassiveSkill(std::make_shared<PassiveUrsula>());
+        AddPassiveSkill(std::static_pointer_cast<PassiveSkill>(std::make_shared<PassiveUrsula>()));
         break;
     case PlayerCharacterType::Hansel:
         unitStatusPortraitUI = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel)->GetWeakPtr<UIElement>();
-        AddPassiveSkill(std::make_shared<PassiveHanselHeal>());
+        AddPassiveSkill(std::static_pointer_cast<PassiveSkill>(std::make_shared<PassiveHanselHeal>()));
         break;
     default:
         break;

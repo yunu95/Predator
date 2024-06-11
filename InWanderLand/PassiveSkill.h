@@ -13,4 +13,5 @@ public:
 protected:
     std::weak_ptr<Unit> owner;
 private:
+    friend Unit;
 };

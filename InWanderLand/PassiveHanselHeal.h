@@ -23,7 +23,7 @@ public:
 private:
     int hitCounter{ 0 };
     void IncrementHitCounter();
-    coroutine::Coroutine CookieLingering(const Vector3d& pos, std::weak_ptr<Unit> owner);
+    coroutine::Coroutine CookieLingering( Vector3d pos, std::weak_ptr<Unit> owner);
     //coroutine::Coroutine CookieDisappear(const Vector3d& pos, std::weak_ptr<Unit> owner);
 };
 
