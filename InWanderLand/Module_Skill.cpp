@@ -61,7 +61,10 @@ namespace application
 			imgui::DropdownEnum_2Col("Selected Skill", selectedSkill);
 			auto region = ImGui::GetContentRegionAvail();
 			imgui::ShiftCursorY(10);
-			DrawList(region);
+			if (selectedSkill.enumValue != (int)SkillType::NONE)
+			{
+				DrawList(region);
+			}
 			imgui::EndSection();
 		}
 
