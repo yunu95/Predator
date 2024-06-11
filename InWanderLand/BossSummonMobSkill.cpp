@@ -57,6 +57,7 @@ coroutine::Coroutine BossSummonMobSkill::operator()()
 	if (rightFrame->HasChangedUnit())
 	{
 		leftFrame->ChangeUnit();
+		co_await std::suspend_always{};
 		leftFrame->SummonUnit();
 		if (!summonCoroutine.expired())
 		{
@@ -67,6 +68,7 @@ coroutine::Coroutine BossSummonMobSkill::operator()()
 	else
 	{
 		rightFrame->ChangeUnit();
+		co_await std::suspend_always{};
 		rightFrame->SummonUnit();
 		summonCoroutine = owner.lock()->StartCoroutine(StartSummonTimer());
 	}

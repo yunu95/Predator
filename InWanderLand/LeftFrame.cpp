@@ -99,7 +99,11 @@ namespace BossSummon
 
 	void LeftFrame::SummonUnit()
 	{
-		unitFrame.lock()->StartCoroutine(SummonMoldUnit());
+		if (!summonCorountine.expired())
+		{
+			unitFrame.lock()->DeleteCoroutine(summonCorountine);
+		}
+		summonCorountine = unitFrame.lock()->StartCoroutine(SummonMoldUnit());
 	}
 
 	bool LeftFrame::IsAlive() const
@@ -147,6 +151,11 @@ namespace BossSummon
 
 	coroutine::Coroutine LeftFrame::SummonMoldUnit()
 	{
+		auto blockFollowingNavigation = unitFrame.lock()->referenceBlockFollowingNavAgent.Acquire();
+		auto blockAnimLoop = unitFrame.lock()->referenceBlockAnimLoop.Acquire();
+		auto disableNavAgent = unitFrame.lock()->referenceDisableNavAgent.Acquire();
+		auto blockStateChange = unitFrame.lock()->referencePause.Acquire();
+
 		unitFrame.lock()->PlayAnimation(UnitAnimType::Skill1, false);
 		auto animator = unitFrame.lock()->GetAnimator();
 		auto anim = wanderResources::GetAnimation(unitFrame.lock()->GetFBXName(), UnitAnimType::Skill1);
@@ -161,6 +170,16 @@ namespace BossSummon
 		{
 			bool unitSummon = false;
 			auto index = math::Random::GetRandomInt(0, 1);
+			if (meleeSummonCount + projectileSummonCount == BossSummonMobSkill::pod.leftMeleeCount + BossSummonMobSkill::pod.leftProjectileCount)
+			{
+				continue;
+			}
+
+			while (forSeconds.ElapsedNormalized() < (float)(meleeSummonCount + projectileSummonCount) / (float)(BossSummonMobSkill::pod.leftMeleeCount + BossSummonMobSkill::pod.leftProjectileCount))
+			{
+				co_await std::suspend_always();
+			}
+
 			while (!unitSummon)
 			{
 				if (meleeSummonCount + projectileSummonCount == BossSummonMobSkill::pod.leftMeleeCount + BossSummonMobSkill::pod.leftProjectileCount)
@@ -213,14 +232,7 @@ namespace BossSummon
 						break;
 				}
 			}
-
-			while (forSeconds.ElapsedNormalized() <= (float)(meleeSummonCount + projectileSummonCount) / (float)(BossSummonMobSkill::pod.leftMeleeCount + BossSummonMobSkill::pod.leftProjectileCount))
-			{
-				co_await std::suspend_always();
-			}
 		}
-
-		unitFrame.lock()->PlayAnimation(UnitAnimType::Idle, true);
 		co_return;
 	}
 }

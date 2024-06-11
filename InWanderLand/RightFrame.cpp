@@ -97,7 +97,11 @@ namespace BossSummon
 
 	void RightFrame::SummonUnit()
 	{
-		unitFrame.lock()->StartCoroutine(SummonMoldUnit());
+		if (!summonCorountine.expired())
+		{
+			unitFrame.lock()->DeleteCoroutine(summonCorountine);
+		}
+		summonCorountine = unitFrame.lock()->StartCoroutine(SummonMoldUnit());
 	}
 
 	bool RightFrame::IsAlive() const
@@ -145,6 +149,11 @@ namespace BossSummon
 
 	coroutine::Coroutine RightFrame::SummonMoldUnit()
 	{
+		auto blockFollowingNavigation = unitFrame.lock()->referenceBlockFollowingNavAgent.Acquire();
+		auto blockAnimLoop = unitFrame.lock()->referenceBlockAnimLoop.Acquire();
+		auto disableNavAgent = unitFrame.lock()->referenceDisableNavAgent.Acquire();
+		auto blockStateChange = unitFrame.lock()->referencePause.Acquire();
+
 		unitFrame.lock()->PlayAnimation(UnitAnimType::Skill1, false);
 		auto animator = unitFrame.lock()->GetAnimator();
 		auto anim = wanderResources::GetAnimation(unitFrame.lock()->GetFBXName(), UnitAnimType::Skill1);
@@ -159,13 +168,18 @@ namespace BossSummon
 		{
 			bool unitSummon = false;
 			auto index = math::Random::GetRandomInt(0, 1);
+			if (meleeSummonCount + projectileSummonCount == BossSummonMobSkill::pod.rightMeleeCount + BossSummonMobSkill::pod.rightProjectileCount)
+			{
+				continue;
+			}
+
+			while (forSeconds.ElapsedNormalized() < (float)(meleeSummonCount + projectileSummonCount) / (float)(BossSummonMobSkill::pod.rightMeleeCount + BossSummonMobSkill::pod.rightProjectileCount))
+			{
+				co_await std::suspend_always();
+			}
+
 			while (!unitSummon)
 			{
-				if (meleeSummonCount + projectileSummonCount == BossSummonMobSkill::pod.rightMeleeCount + BossSummonMobSkill::pod.rightProjectileCount)
-				{
-					break;
-				}
-
 				switch (index)
 				{
 					case 0:
@@ -213,14 +227,7 @@ namespace BossSummon
 						break;
 				}
 			}
-
-			while (forSeconds.ElapsedNormalized() <= (float)(meleeSummonCount + projectileSummonCount) / (float)(BossSummonMobSkill::pod.rightMeleeCount + BossSummonMobSkill::pod.rightProjectileCount))
-			{
-				co_await std::suspend_always();
-			}
 		}
-
-		unitFrame.lock()->PlayAnimation(UnitAnimType::Idle, true);
 		co_return;
 	}
 }
