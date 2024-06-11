@@ -34,8 +34,8 @@ void BossSummonMobSkill::OnBossDie()
 {
 	if (leftFrame && rightFrame)
 	{
-		leftFrame->OnBossAppear();
-		rightFrame->OnBossAppear();
+		leftFrame->OnBossDie();
+		rightFrame->OnBossDie();
 	}
 }
 

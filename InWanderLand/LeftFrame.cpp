@@ -22,6 +22,7 @@ namespace BossSummon
 
 	LeftFrame::~LeftFrame()
 	{
+		OnBossDie();
 		mold.clear();
 		BossSummonMobSkill::SetLeftFrame(nullptr);
 	}
@@ -146,26 +147,23 @@ namespace BossSummon
 		int summonCount = 0;
 		while (forSeconds.Tick())
 		{
-			if (forSeconds.ElapsedNormalized() > 1 / (float)mold.size() * summonCount)
+			if (summonCount < mold.size() && forSeconds.ElapsedNormalized() >= 1 / (float)mold.size() * summonCount)
 			{
+				Vector3d finalPos = Vector3d();
+				finalPos.x = math::Random::GetRandomFloat((pivotPos + BossSummonMobSkill::pod.leftNoiseRadius * summonRot.Right().Normalized()).x, pivotPos.x + BossSummonMobSkill::pod.leftNoiseRadius);
+				finalPos.z = math::Random::GetRandomFloat(pivotPos.z - BossSummonMobSkill::pod.leftNoiseRadius, (pivotPos - BossSummonMobSkill::pod.leftNoiseRadius * summonRot.Right().Normalized()).z);
+				auto sUnit = UnitPool::SingleInstance().Borrow(mold[summonCount++]);
+				sUnit.lock()->GetTransform()->SetWorldPosition(finalPos);
+				sUnit.lock()->GetTransform()->SetWorldRotation(summonRot);
+				summonUnit.insert(sUnit);
+
+				/// 소환 사운드
+				// SFXManager::PlaySoundfile3D("sounds/", finalPos);
+
+				/// 소환 후 이동 명령
+				sUnit.lock()->OrderMove(finalPos + summonRot.Forward().Normalized() * std::sqrt(BossSummonMobSkill::pod.leftSummonOffset_x * BossSummonMobSkill::pod.leftSummonOffset_x + BossSummonMobSkill::pod.leftSummonOffset_z * BossSummonMobSkill::pod.leftSummonOffset_z));
 				co_await std::suspend_always{};
-				continue;
 			}
-
-			Vector3d finalPos = Vector3d();
-			finalPos.x = math::Random::GetRandomFloat((pivotPos + BossSummonMobSkill::pod.leftNoiseRadius * summonRot.Right().Normalized()).x, pivotPos.x + BossSummonMobSkill::pod.leftNoiseRadius);
-			finalPos.z = math::Random::GetRandomFloat(pivotPos.z - BossSummonMobSkill::pod.leftNoiseRadius, (pivotPos - BossSummonMobSkill::pod.leftNoiseRadius * summonRot.Right().Normalized()).z);
-			auto sUnit = UnitPool::SingleInstance().Borrow(mold[summonCount++]);
-			sUnit.lock()->GetTransform()->SetWorldPosition(finalPos);
-			sUnit.lock()->GetTransform()->SetWorldRotation(summonRot);
-			summonUnit.insert(sUnit);
-
-			/// 소환 사운드
-			// SFXManager::PlaySoundfile3D("sounds/", finalPos);
-
-			/// 소환 후 이동 명령
-			sUnit.lock()->OrderMove(finalPos + summonRot.Forward().Normalized() * std::sqrt(BossSummonMobSkill::pod.leftSummonOffset_x * BossSummonMobSkill::pod.leftSummonOffset_x + BossSummonMobSkill::pod.leftSummonOffset_z * BossSummonMobSkill::pod.leftSummonOffset_z));
-			co_await std::suspend_always{};
 		}
 
 		unitFrame.lock()->PlayAnimation(UnitAnimType::Idle, true);

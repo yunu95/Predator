@@ -1,0 +1,50 @@
+#include "PassiveHanselHeal.h"
+#include "InWanderLand.h"
+
+//coroutine::YieldInstruction ASD()
+//{
+//    co_return;
+//}
+POD_PassiveHanselHeal PassiveHanselHeal::pod;
+coroutine::Coroutine PassiveHanselHeal::CookieLingering(const Vector3d& pos, std::weak_ptr<Unit> owner)
+{
+    Vector3d newPos = SingleNavigationField::Instance().GetClosestPointOnField(pos);
+    auto cookieMesh = FBXPool::SingleInstance().Borrow(wanderResources::GetFBXName(wanderResources::WanderFBX::HEALING_COOKIE));
+    auto collider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner);
+    collider.lock()->SetRadius(pod.cookieRadius);
+    cookieMesh.lock()->GetTransform()->SetWorldPosition(newPos);
+    cookieMesh.lock()->GetTransform()->SetLocalScale(pod.cookieScale * Vector3d::one);
+    coroutine::ForSeconds forSeconds{ pod.cookieLifetime };
+    while (forSeconds.Tick())
+    {
+        for (auto unit : collider.lock()->GetFriends())
+        {
+            if (unit->GetTeamIndex() == PlayerController::playerTeamIndex && unit->GetUnitCurrentHp() < unit->GetUnitTemplateData().pod.max_Health)
+            {
+                unit->Heal(pod.healAmount);
+                co_return;
+            }
+        }
+        cookieMesh.lock()->GetTransform()->SetWorldPosition(newPos);
+        co_await std::suspend_always{};
+    }
+    //co_await CookieLingering(newPos, owner);
+    co_return;
+}
+
+void PassiveHanselHeal::Init(std::weak_ptr<Unit> owner)
+{
+    owner.lock()->onAttack.AddCallback([this]()
+        {
+            IncrementHitCounter();
+        });
+}
+
+void PassiveHanselHeal::IncrementHitCounter()
+{
+    hitCounter++;
+    if (hitCounter >= pod.hitsRequired)
+    {
+        hitCounter = 0;
+    };
+}

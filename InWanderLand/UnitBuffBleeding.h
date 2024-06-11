@@ -16,4 +16,5 @@ public:
     {
         durationLeft = duration;
     }
+    virtual void OnOverlap(UnitBuff&& overlapping) override;
 };

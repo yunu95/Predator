@@ -11,7 +11,7 @@ void BossController::RegisterUnit(std::weak_ptr<Unit> unit)
 
 	unit.lock()->onDamaged.AddCallback([this]()
 		{
-			if (summonState == 0 && (boss.lock()->GetUnitCurrentHp() / boss.lock()->GetUnitTemplateData().pod.max_Health) <= 2 / 3)
+			if (summonState == 0 && (boss.lock()->GetUnitCurrentHp() / boss.lock()->GetUnitMaxHp()) <= 2.0f / 3.0f)
 			{
 				summonState++;
 				boss.lock()->OrderSkill(BossSummonMobSkill{}, boss.lock()->GetTransform()->GetWorldPosition());
@@ -29,7 +29,7 @@ void BossController::RegisterUnit(std::weak_ptr<Unit> unit)
 
 	unit.lock()->onDamaged.AddCallback([this]()
 		{
-			if (summonState == 1 && (boss.lock()->GetUnitCurrentHp() / boss.lock()->GetUnitTemplateData().pod.max_Health) <= 1 / 3)
+			if (summonState == 1 && (boss.lock()->GetUnitCurrentHp() / boss.lock()->GetUnitMaxHp()) <= 1.0f / 3.0f)
 			{
 				summonState++;
 				boss.lock()->OrderSkill(BossSummonMobSkill{}, boss.lock()->GetTransform()->GetWorldPosition());
