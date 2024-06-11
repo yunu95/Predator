@@ -332,6 +332,7 @@ void application::contents::ContentsLayer::PlayContents(ContentsPlayFlag playFla
 
 	ContentsObserver::Instance().OnPlayContents();
 	SkillPreviewSystem::Instance().camObj = RTSCam::Instance().GetGameObject();
+	TacticModeSystem::Instance();
 }
 
 void application::contents::ContentsLayer::PauseContents()

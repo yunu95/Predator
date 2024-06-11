@@ -115,6 +115,7 @@ private:
     void ApplySelectEffect(std::weak_ptr<Unit> unit);
     void ApplyTargetedEffect(std::weak_ptr<Unit> unit);
     void InitUnitMouseInteractionEffects();
+    std::vector<Vector3d>& ModifyPathForAttack(std::vector<Vector3d>& path);
     int currentCombo{ 0 };
     std::array<int, 3> comboObjective{ 10, 20, 30 };
     std::array<bool, 3> comboAchieved{ false };

@@ -51,6 +51,9 @@ public:
     // 맨 마지막 명령 하나를 지우는 함수입니다.
     void PopCommand();
 
+    // 명령을 실행하는 도중 플레이어 유닛이 방해받았을 때 부르는 함수입니다.
+    void InterruptedCommand(Unit* unit);
+
     // 모든 명령을 지우는 함수입니다.
     void ClearCommand();
 
@@ -83,5 +86,6 @@ private:
     const int MAX_COMMAND_COUNT = 6;
 
     friend class PlayerController;
+    friend class UnitAttackCommand;
 };
 

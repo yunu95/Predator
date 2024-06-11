@@ -20,7 +20,7 @@ void TacticModeSystem::Start()
 {
 	// 나중에는 글로벌 컨스탄트에서 데이터 받아오기
 	this->coolTime = 3.f;
-	
+
 }
 
 void TacticModeSystem::Update()
@@ -62,7 +62,7 @@ void TacticModeSystem::OnContentsStop()
 {
 	SkillPreviewSystem::Instance().HideTemporaryRoute();
 	this->ClearCommand();
-	 GetComponent()->SetActive(false); 
+	GetComponent()->SetActive(false);
 }
 
 void TacticModeSystem::EngageTacticSystem()
@@ -213,7 +213,6 @@ std::vector<Vector3d> TacticModeSystem::GetPathInTacticMode(PlayerCharacterType:
 			}
 			break;
 		}
-		return path;
 	}
 	else
 	{
@@ -256,14 +255,82 @@ std::vector<Vector3d> TacticModeSystem::GetPathInTacticMode(PlayerCharacterType:
 			}
 			break;
 		}
-		return path;
 	}
+
+	for (auto& each : path)
+	{
+		each.y = 0.1f;
+	}
+	return path;
 }
 
 void TacticModeSystem::PopCommand()
 {
 	this->commandCount--;
 	this->commandQueue.back()->SetIsDone(true);
+	auto backCommandUnitType = static_cast<PlayerCharacterType::Enum>(this->commandQueue.back()->GetUnit()->GetUnitTemplateData().pod.playerUnitType.enumValue);
+
+	for (auto it = commandQueue.rbegin(); it != commandQueue.rend(); ++it)
+	{
+		auto command = *it;
+		if ((!command->IsDone()) &&
+			(backCommandUnitType == static_cast<PlayerCharacterType::Enum>(command->GetUnit()->GetUnitTemplateData().pod.playerUnitType.enumValue)))
+		{
+			switch (backCommandUnitType)
+			{
+				case PlayerCharacterType::Robin:
+				{
+					this->robinLastCommand = command;
+				}
+				break;
+				case PlayerCharacterType::Ursula:
+				{
+					this->ursulaLastCommand = command;
+				}
+				break;
+				case PlayerCharacterType::Hansel:
+				{
+					this->hanselLastCommand = command;
+				}
+				break;
+			}
+
+			break;
+		}
+	}
+}
+
+void TacticModeSystem::InterruptedCommand(Unit* unit)
+{
+	auto unitType = static_cast<PlayerCharacterType::Enum>(unit->GetUnitTemplateData().pod.playerUnitType.enumValue);
+
+	for (auto& each : commandQueue)
+	{
+		if (static_cast<PlayerCharacterType::Enum>(each->GetUnit()->GetUnitTemplateData().pod.playerUnitType.enumValue) == unitType)
+		{
+			each->SetIsDone(true);
+			this->commandCount--;
+		}
+	}
+
+	switch (unitType)
+	{
+		case PlayerCharacterType::Robin:
+		{
+			this->robinLastCommand = nullptr;
+		}
+		break;
+		case PlayerCharacterType::Ursula:
+		{
+			this->ursulaLastCommand = nullptr;
+		}
+		break;
+		case PlayerCharacterType::Hansel:
+		{
+			this->hanselLastCommand = nullptr;
+		}
+		break;
+	}
 }
 
 void TacticModeSystem::ClearCommand()
@@ -276,6 +343,9 @@ void TacticModeSystem::ClearCommand()
 	this->commandCount = 0;
 	this->commandQueue.clear();
 	PlayerController::Instance().SetState(PlayerController::State::None);
+	this->robinLastCommand = nullptr;
+	this->ursulaLastCommand = nullptr;
+	this->hanselLastCommand = nullptr;
 }
 
 yunutyEngine::coroutine::Coroutine TacticModeSystem::ExecuteInternal()
@@ -297,4 +367,7 @@ yunutyEngine::coroutine::Coroutine TacticModeSystem::ExecuteInternal()
 
 	this->isExecuting = false;
 	this->isOperating = false;
+	this->robinLastCommand = nullptr;
+	this->ursulaLastCommand = nullptr;
+	this->hanselLastCommand = nullptr;
 }
