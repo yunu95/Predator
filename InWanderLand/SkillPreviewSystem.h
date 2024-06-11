@@ -90,6 +90,7 @@ public:
 #pragma region Route
     // 매 프레임 불리는 함수 마우스를 따라다니며 임시 경로를 보여줍니다.
     void ShowTemporaryRoute(UnitType unitType, std::vector<Vector3d>& vertexList);
+    void HideTemporaryRoute();
     // 이동 할 경로가 확정되면 불러 줄 함수 삭제 요청이 들어오기 전까지 화면에 보여집니다.
     // 이동경로의 마지막 지점에 이동 끝 이미지까지 보여줍니다.
     yunuGI::IMesh* ShowRoute(UnitType unitType, std::vector<Vector3d>& vertexList);
@@ -113,7 +114,7 @@ public:
 
 private:
 #pragma region MoveEnd
-    void ShowMoveEndImage(UnitType unitType, Vector3d pos, yunuGI::IMesh* mesh);
+    void ShowMoveEndImage(UnitType unitType, Vector3d pos, yunuGI::IMesh* mesh, Vector3d direction);
     void HideShowMoveEndImage(yunuGI::IMesh* mesh);
 #pragma endregion
 

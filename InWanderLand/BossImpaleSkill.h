@@ -27,7 +27,7 @@ struct POD_BossImpaleSkill
 class BossImpaleSkill : public Skill
 {
 private:
-	coroutine::Coroutine SpawningSkillffect();
+	coroutine::Coroutine SpawningSkillffect(std::weak_ptr<BossImpaleSkill> skill);
 
 public:
 	BossImpaleSkill() {}
@@ -38,9 +38,13 @@ public:
 	static POD_BossImpaleSkill pod;
 
 private:
-	coroutine::Coroutine SpearArise(std::weak_ptr<BossImpaleSkill> skill, std::weak_ptr<ManagedFBX> fbx, Vector2d pos);
-	std::weak_ptr<UnitAcquisitionSphereCollider> knockbackCollider;
+	coroutine::Coroutine SpearArise(std::weak_ptr<BossImpaleSkill> skill, std::weak_ptr<ManagedFBX> fbx, std::weak_ptr<UnitAcquisitionSphereCollider> collider, Vector2d pos);
+	std::weak_ptr<ManagedFBX> impaleEffect;
+	std::vector<std::weak_ptr<UnitAcquisitionSphereCollider>> knockbackColliderVector;
+	std::vector<std::weak_ptr<ManagedFBX>> spearFbxVector;
 	std::unordered_set<Unit*> damagedUnits;
+
+	static int managingIndex;
 };
 
 

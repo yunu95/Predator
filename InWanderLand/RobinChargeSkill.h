@@ -25,8 +25,9 @@ class UnitAcquisitionSphereCollider;
 class RobinChargeSkill : public Skill
 {
 private:
-	coroutine::Coroutine SpawningSkillffect(Vector3d skillStartPos);
+	coroutine::Coroutine SpawningSkillffect(std::weak_ptr<RobinChargeSkill> skill, Vector3d skillStartPos);
 	std::weak_ptr<UnitAcquisitionSphereCollider> knockbackCollider;
+	std::weak_ptr<ManagedFBX> chargeEffect;
 
 public:
     RobinChargeSkill() {};

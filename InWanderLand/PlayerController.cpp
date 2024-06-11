@@ -9,6 +9,7 @@
 #include "SkillList.h"
 #include "VFXAnimator.h"
 #include "TacticModeSystem.h"
+#include "UnitMoveCommand.h"
 
 const std::unordered_map<UIEnumID, SkillUpgradeType::Enum> PlayerController::skillByUI
 {
@@ -202,8 +203,7 @@ void PlayerController::HandleInput()
 			state = State::Tactic;
 			TacticModeSystem::Instance().EngageTacticSystem();
 		}
-
-		if ((TacticModeSystem::Instance().IsOperation() == true) && (TacticModeSystem::Instance().IsExecuting() == false))
+		else if ((TacticModeSystem::Instance().IsOperation() == true) && (TacticModeSystem::Instance().IsExecuting() == false))
 		{
 			TacticModeSystem::Instance().ExecuteCommands();
 		}
@@ -275,33 +275,39 @@ void PlayerController::HandleCamera()
 
 void PlayerController::HandleSkillPreview()
 {
-	switch (selectedSkill)
+    switch (selectedSkill)
+    {
+    case SkillType::ROBIN_Q:
+        SkillPreviewSystem::Instance().ShowRobinQSkill(characters[PlayerCharacterType::Robin].lock()->GetTransform()->GetWorldPosition());
+        SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Robin, characters[PlayerCharacterType::Robin].lock()->GetTransform()->GetWorldPosition(), RobinChargeSkill::pod.maxDistance);
+        break;
+    case SkillType::URSULA_Q:
+    {
+        auto pos1 = UrsulaBlindSkill::GetSkillObjectPos_Left(GetWorldCursorPosition());
+        auto pos2 = UrsulaBlindSkill::GetSkillObjectPos_Right(GetWorldCursorPosition());
+        auto pos3 = UrsulaBlindSkill::GetSkillObjectPos_Top(GetWorldCursorPosition());
+        SkillPreviewSystem::Instance().ShowUrsulaQSkill(pos1, pos2, pos3, Vector3d::one * UrsulaBlindSkill::pod.skillScale * UrsulaBlindSkill::colliderEffectRatio);
+        SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Ursula, characters[PlayerCharacterType::Ursula].lock()->GetTransform()->GetWorldPosition(), UrsulaBlindSkill::pod.skillRange);
+        break;
+    }
+    case SkillType::URSULA_W:
+        SkillPreviewSystem::Instance().ShowUrsulaWSkill(GetWorldCursorPosition(), UrsulaParalysisSkill::pod.skillScale * UrsulaBlindSkill::colliderEffectRatio);
+        SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Ursula, characters[PlayerCharacterType::Ursula].lock()->GetTransform()->GetWorldPosition(), UrsulaParalysisSkill::pod.skillRange);
+        break;
+    case SkillType::HANSEL_Q:
+        SkillPreviewSystem::Instance().ShowHanselQSkill(GetWorldCursorPosition(), HanselChargeSkill::pod.stompRadius);
+        SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Hansel, characters[PlayerCharacterType::Hansel].lock()->GetTransform()->GetWorldPosition(), HanselChargeSkill::pod.maxRange);
+        break;
+    case SkillType::HANSEL_W:
+        SkillPreviewSystem::Instance().ShowHanselWSkill(characters[PlayerCharacterType::Hansel].lock()->GetTransform()->GetWorldPosition());
+        SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Hansel, characters[PlayerCharacterType::Hansel].lock()->GetTransform()->GetWorldPosition(), HanselProjectileSkill::pod.maxRange);
+        break;
+    }
+
+	// 임시 이동 경로 보여주는 부분
+	if ((state == State::Tactic) && (selectedSkill == SkillType::NONE))
 	{
-		case SkillType::ROBIN_Q:
-			SkillPreviewSystem::Instance().ShowRobinQSkill(characters[PlayerCharacterType::Robin].lock()->GetTransform()->GetWorldPosition());
-			SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Robin, characters[PlayerCharacterType::Robin].lock()->GetTransform()->GetWorldPosition(), RobinChargeSkill::pod.maxDistance);
-			break;
-		case SkillType::URSULA_Q:
-		{
-			auto pos1 = UrsulaBlindSkill::GetSkillObjectPos_Left(GetWorldCursorPosition());
-			auto pos2 = UrsulaBlindSkill::GetSkillObjectPos_Right(GetWorldCursorPosition());
-			auto pos3 = UrsulaBlindSkill::GetSkillObjectPos_Top(GetWorldCursorPosition());
-			SkillPreviewSystem::Instance().ShowUrsulaQSkill(pos1, pos2, pos3, Vector3d::one * UrsulaBlindSkill::pod.skillRadius);
-			SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Ursula, characters[PlayerCharacterType::Ursula].lock()->GetTransform()->GetWorldPosition(), UrsulaBlindSkill::pod.skillRange);
-			break;
-		}
-		case SkillType::URSULA_W:
-			SkillPreviewSystem::Instance().ShowUrsulaWSkill(GetWorldCursorPosition(), UrsulaParalysisSkill::pod.skillRadius);
-			SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Ursula, characters[PlayerCharacterType::Ursula].lock()->GetTransform()->GetWorldPosition(), UrsulaParalysisSkill::pod.skillRange);
-			break;
-		case SkillType::HANSEL_Q:
-			SkillPreviewSystem::Instance().ShowHanselQSkill(GetWorldCursorPosition(), HanselChargeSkill::pod.stompRadius);
-			SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Hansel, characters[PlayerCharacterType::Hansel].lock()->GetTransform()->GetWorldPosition(), HanselChargeSkill::pod.maxRange);
-			break;
-		case SkillType::HANSEL_W:
-			SkillPreviewSystem::Instance().ShowHanselWSkill(characters[PlayerCharacterType::Hansel].lock()->GetTransform()->GetWorldPosition());
-			SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Hansel, characters[PlayerCharacterType::Hansel].lock()->GetTransform()->GetWorldPosition(), HanselProjectileSkill::pod.maxRange);
-			break;
+		TacticModeSystem::Instance().ShowTemporaryRouteInTacticMode(this->selectedCharacterType);
 	}
 }
 
@@ -385,13 +391,88 @@ void PlayerController::OnRightClick()
 {
 	if (selectedSkill == SkillType::NONE)
 	{
-		if (!cursorUnitDetector.lock()->GetUnits().empty() && (*cursorUnitDetector.lock()->GetUnits().begin())->teamIndex != playerTeamIndex)
+		if (state != State::Tactic)
 		{
-			OrderAttack((*cursorUnitDetector.lock()->GetUnits().begin())->GetWeakPtr<Unit>());
+			if (!cursorUnitDetector.lock()->GetUnits().empty() && (*cursorUnitDetector.lock()->GetUnits().begin())->teamIndex != playerTeamIndex)
+			{
+				OrderAttack((*cursorUnitDetector.lock()->GetUnits().begin())->GetWeakPtr<Unit>());
+			}
+			else
+			{
+				OrderMove(GetWorldCursorPosition());
+			}
 		}
 		else
 		{
-			OrderMove(GetWorldCursorPosition());
+			SkillPreviewSystem::Instance().HideTemporaryRoute();
+			if (!cursorUnitDetector.lock()->GetUnits().empty() && (*cursorUnitDetector.lock()->GetUnits().begin())->teamIndex != playerTeamIndex)
+			{
+				// Attack
+
+				// 걸어가서 공격을 하게 될 수 있음
+				std::vector<Vector3d> path;
+				switch (selectedCharacterType)
+				{
+					case PlayerCharacterType::Robin:
+					{
+						path = TacticModeSystem::Instance().GetPathInTacticMode(selectedCharacterType, (*cursorUnitDetector.lock()->GetUnits().begin()));
+						TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitMoveCommand>(characters[selectedCharacterType].lock().get()
+							, GetWorldCursorPosition(),
+							SkillPreviewSystem::Instance().ShowRoute(SkillPreviewSystem::UnitType::Robin, path)));
+					}
+					break;
+					case PlayerCharacterType::Ursula:
+					{
+						path = TacticModeSystem::Instance().GetPathInTacticMode(selectedCharacterType, (*cursorUnitDetector.lock()->GetUnits().begin()));
+						TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitMoveCommand>(characters[selectedCharacterType].lock().get()
+							, GetWorldCursorPosition(),
+							SkillPreviewSystem::Instance().ShowRoute(SkillPreviewSystem::UnitType::Ursula, path)));
+					}
+					break;
+					case PlayerCharacterType::Hansel:
+					{
+						path = TacticModeSystem::Instance().GetPathInTacticMode(selectedCharacterType, (*cursorUnitDetector.lock()->GetUnits().begin()));
+						TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitMoveCommand>(characters[selectedCharacterType].lock().get()
+							, GetWorldCursorPosition(),
+							SkillPreviewSystem::Instance().ShowRoute(SkillPreviewSystem::UnitType::Hansel, path)));
+					}
+					break;
+				}
+
+				//TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitAttackCommand>());
+			}
+			else
+			{
+				// Move
+				std::vector<Vector3d> path;
+				switch (selectedCharacterType)
+				{
+					case PlayerCharacterType::Robin:
+					{
+						path = TacticModeSystem::Instance().GetPathInTacticMode(selectedCharacterType);
+						TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitMoveCommand>(characters[selectedCharacterType].lock().get()
+							, GetWorldCursorPosition(),
+							SkillPreviewSystem::Instance().ShowRoute(SkillPreviewSystem::UnitType::Robin, path)));
+					}
+					break;
+					case PlayerCharacterType::Ursula:
+					{
+						path = TacticModeSystem::Instance().GetPathInTacticMode(selectedCharacterType);
+						TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitMoveCommand>(characters[selectedCharacterType].lock().get()
+							, GetWorldCursorPosition(),
+							SkillPreviewSystem::Instance().ShowRoute(SkillPreviewSystem::UnitType::Ursula, path)));
+					}
+					break;
+					case PlayerCharacterType::Hansel:
+					{
+						path = TacticModeSystem::Instance().GetPathInTacticMode(selectedCharacterType);
+						TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitMoveCommand>(characters[selectedCharacterType].lock().get()
+							, GetWorldCursorPosition(),
+							SkillPreviewSystem::Instance().ShowRoute(SkillPreviewSystem::UnitType::Hansel, path)));
+					}
+					break;
+				}
+			}
 		}
 	}
 	else if (selectedSkill != SkillType::NONE)
@@ -464,6 +545,7 @@ void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
 void PlayerController::SelectSkill(SkillType::Enum skillType)
 {
 	UnSelectSkill();
+	SkillPreviewSystem::Instance().HideTemporaryRoute();
 	if (skillCooltimeLeft[skillType] > 0)
 	{
 		UIManager::Instance().GetUIElementByEnum(UIEnumID::ErrorPopup_Cooltime)->EnableElement();
@@ -474,7 +556,8 @@ void PlayerController::SelectSkill(SkillType::Enum skillType)
 		UIManager::Instance().GetUIElementByEnum(UIEnumID::ErrorPopup_Cooltime)->EnableElement();
 		return;
 	}
-	if (state != State::Battle) return;
+	// 이 부분은 협의가 필요함
+	if ((state == State::Peace) || (state == State::Cinematic)) return;
 	onSkillSelect[skillType]();
 	switch (skillType)
 	{
@@ -486,7 +569,14 @@ void PlayerController::SelectSkill(SkillType::Enum skillType)
 	// 즉발은 그냥 써버리고 나머지는 준비상태로 만든다.
 	switch (skillType)
 	{
-		case SkillType::ROBIN_W: ActivateSkill(SkillType::ROBIN_W, characters[PlayerCharacterType::Robin].lock()->GetTransform()->GetWorldPosition()); break;
+		case SkillType::ROBIN_W:
+		{
+			if (state != State::Tactic)
+			{
+				ActivateSkill(SkillType::ROBIN_W, characters[PlayerCharacterType::Robin].lock()->GetTransform()->GetWorldPosition());
+			}
+		}
+		break;
 		default:
 			selectedSkill = skillType;
 			// 스킬 프리뷰를 활성화시킨다.
@@ -767,6 +857,7 @@ void PlayerController::InitUnitMouseInteractionEffects()
 		allySelectedEffect = Scene::getCurrentScene()->AddGameObjectFromFBX("VFX_CharacterRange");
 		allySelectedEffectRenderer = allySelectedEffect->GetChildren()[0]->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 		allySelectedEffectRenderer->GetGI().GetMaterial()->SetPixelShader(_resourceManager->GetShader(L"VFX_PS.cso"));
+		allySelectedEffect->SetSelfActive(false);
 	}
 	{
 		for (auto& each : enemyTargetedEffect)
@@ -774,10 +865,12 @@ void PlayerController::InitUnitMouseInteractionEffects()
 			each = Scene::getCurrentScene()->AddGameObjectFromFBX("VFX_AttackSelected");
 			each->GetChildren()[0]->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().GetMaterial()->SetColor(wanderResources::unitColor::ENEMY_COLOR);
 			each->AddComponent<VFXAnimator>()->Init();
+			each->SetSelfActive(false);
 		}
 	}
 	{
 		allyHoverEffect = Scene::getCurrentScene()->AddGameObjectFromFBX("VFX_CharacterSelected");
+		allyHoverEffect->SetSelfActive(false);
 		allyHoverEffectRenderer = allyHoverEffect->GetChildren()[0]->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 		allyHoverEffectRenderer->GetGI().GetMaterial()->SetPixelShader(_resourceManager->GetShader(L"VFX_PS.cso"));
 
@@ -787,6 +880,7 @@ void PlayerController::InitUnitMouseInteractionEffects()
 	}
 	{
 		enemyHoverEffect = Scene::getCurrentScene()->AddGameObjectFromFBX("VFX_CharacterSelected");
+		enemyHoverEffect->SetSelfActive(false);
 		enemyHoverEffectRenderer = enemyHoverEffect->GetChildren()[0]->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 		enemyHoverEffectRenderer->GetGI().GetMaterial()->SetPixelShader(_resourceManager->GetShader(L"VFX_PS.cso"));
 		enemyHoverEffectRenderer->GetGI().GetMaterial()->SetColor(wanderResources::unitColor::ENEMY_COLOR);

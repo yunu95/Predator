@@ -93,6 +93,7 @@ class TestComponent4 : public yunutyEngine::Component
 {
 public:
 	GameObject* obj;
+	yunutyEngine::graphics::Animator* anim;
 	virtual void Update() override
 	{
 		if (Input::isKeyPushed(yunutyEngine::KeyCode::V))
@@ -102,6 +103,14 @@ public:
 		if (Input::isKeyPushed(yunutyEngine::KeyCode::C))
 		{
 			obj->SetSelfActive(true);
+		}
+		if (Input::isKeyPushed(yunutyEngine::KeyCode::T))
+		{
+			std::vector<Vector3d> temp;
+			temp.push_back(Vector3d{ 0,0,0 });
+			temp.push_back(Vector3d{ 0,0,0.5 });
+			temp.push_back(Vector3d{ 0,0,1 });
+			SkillPreviewSystem::Instance().ShowRoute(SkillPreviewSystem::UnitType::Robin, temp);
 		}
 	}
 };
@@ -130,7 +139,7 @@ void GraphicsTest()
 
 	for (auto& i : animationList)
 	{
-		if (i->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Idle")
+		if (i->GetName() == L"Ani_Frame1_Appear")
 		{
 			i->SetLoop(true);
 			animation = i;
@@ -149,58 +158,14 @@ void GraphicsTest()
 			animation3 = i;
 		}
 	}
-	//{
-	//	auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
-	//	auto effect = obj2->AddComponent<BurnEffect>();
-
-
-	//	auto obj = Scene::getCurrentScene()->AddGameObject();
-	//	auto test = obj->AddComponent<TestComponent4>();
-	//	test->effect = effect;
-
-	//}
-	
-	//{
-	//	auto obj = Scene::getCurrentScene()->AddGameObject();
-	//	auto test = obj->AddComponent<TestComponent4>();
-
-	//	auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
-	//	auto anim = obj2->GetComponent<yunutyEngine::graphics::Animator>();
-	//	anim->PushAnimation(animation);
-	//	auto obj3 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
-	//	obj3->GetTransform()->SetLocalPosition(Vector3d{ 5,0,0 });
-	//	obj3->SetSelfActive(false);
-	//	anim->PushAnimationWithFunc(animation2, 0, [=]() 
-	//		{
-	//			obj3->SetSelfActive(true);
-	//		});
-
-	//	anim->PushAnimationWithFunc(animation2, 29, [=]()
-	//		{
-	//			obj3->SetSelfActive(false);
-	//		});
-
-	//	anim->Play(animation2);
-
-	//	test->anim = anim;
-	//	test->idleAnimation = animation;
-	//	test->walkAnimation = animation2;
-	//}
 	{
-		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Frame2");
-	}
-	{
-		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_HeartQueen");
-		obj2->GetTransform()->SetLocalPosition(Vector3d{ 5,0,0 });
-	}
-	{
-		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("VFX_CharacterSelected");
+		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("VFX_Ursula_Skill1_2");
 		auto anim = obj2->AddComponent<VFXAnimator>();
 		anim->Init();
-		anim->SetLoop(true);
-		obj2->GetTransform()->SetLocalPosition(Vector3d{ 10,0,0 });
+
+		auto obj1 = Scene::getCurrentScene()->AddGameObject();
+		obj1->AddComponent<TestComponent4>()->obj = obj2;
 	}
-	
 	//yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
 	yunutyEngine::graphics::Renderer::SingleInstance().SetUseIBL(true);
 	//yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
@@ -304,17 +269,17 @@ class ContentsInitializer : public yunutyEngine::Component
 #endif
 #endif
 #ifndef EDITOR
-        DebugGraphic::SetDebugGraphicsEnabled(false);
+		DebugGraphic::SetDebugGraphicsEnabled(false);
 #endif
 
 		SkillPreviewSystem::Instance().Init();
-        Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
-        co_return;
-    }
-    virtual void Start() override
-    {
-        StartCoroutine(Initialize());
-    }
+		Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
+		co_return;
+	}
+	virtual void Start() override
+	{
+		StartCoroutine(Initialize());
+	}
 };
 void application::contents::ContentsLayer::Initialize()
 {

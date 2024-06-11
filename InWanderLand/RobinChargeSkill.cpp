@@ -4,13 +4,13 @@
 
 POD_RobinChargeSkill RobinChargeSkill::pod = POD_RobinChargeSkill();
 
-coroutine::Coroutine RobinChargeSkill::SpawningSkillffect(Vector3d skillStartPos)
+coroutine::Coroutine RobinChargeSkill::SpawningSkillffect(std::weak_ptr<RobinChargeSkill> skill, Vector3d skillStartPos)
 {
 	Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
     Vector3d deltaPos = targetPos - skillStartPos;
 	Vector3d direction = deltaPos.Normalized();
 
-	auto chargeEffect = FBXPool::SingleInstance().Borrow("VFX_Robin_Skill1");
+	chargeEffect = FBXPool::SingleInstance().Borrow("VFX_Robin_Skill1");
 
     chargeEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos);
     chargeEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
@@ -24,8 +24,6 @@ coroutine::Coroutine RobinChargeSkill::SpawningSkillffect(Vector3d skillStartPos
 	{
 		co_await std::suspend_always{};
 	}
-
-	FBXPool::SingleInstance().Return(chargeEffect);
 
 	co_return;
 }
@@ -76,7 +74,12 @@ coroutine::Coroutine RobinChargeSkill::operator()()
     owner.lock()->PlayAnimation(UnitAnimType::Slam);
 	animator.lock()->Resume();
     knockbackCollider.lock()->SetRadius(pod.impactKnockbackRadius);
-	owner.lock()->StartCoroutine(SpawningSkillffect(startPos));
+	auto effectCoroutine = owner.lock()->StartCoroutine(SpawningSkillffect(dynamic_pointer_cast<RobinChargeSkill>(selfWeakPtr.lock()), startPos));
+    effectCoroutine.lock()->PushDestroyCallBack([this]()
+        {
+            FBXPool::SingleInstance().Return(chargeEffect);
+        });
+    
     co_await std::suspend_always{};
     for (auto& each : knockbackCollider.lock()->GetEnemies())
     {
@@ -99,7 +102,7 @@ coroutine::Coroutine RobinChargeSkill::operator()()
 
 void RobinChargeSkill::OnInterruption()
 {
-    knockbackCollider.lock()->SetRadius(0.5);
     UnitAcquisitionSphereColliderPool::SingleInstance().Return(knockbackCollider);
+    FBXPool::SingleInstance().Return(chargeEffect);     
 }
 
