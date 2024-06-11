@@ -4,7 +4,7 @@
 POD_PassiveUrsulaSpeed PassiveUrsula::pod;
 void PassiveUrsula::Init(std::weak_ptr<Unit> owner)
 {
-    owner.lock()->onAttack.AddCallback([this, owner]()
+    owner.lock()->onAttack.AddCallback([this, owner](std::weak_ptr<Unit>)
         {
             owner.lock()->ApplyBuff(UnitBuffUrsula{});
         });

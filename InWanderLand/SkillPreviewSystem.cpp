@@ -540,10 +540,6 @@ void SkillPreviewSystem::DeleteRouteMesh(yunuGI::IMesh* mesh)
 		this->Return(iter->second->GetWeakPtr<graphics::StaticMeshRenderer>());
 		this->rendererMap.erase(iter);
 
-		// 이동 끝 이미지도 풀에 반납
-		this->HideShowMoveEndImage(mesh);
-
-
 		const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 		_resourceManager->DeleteMesh(mesh);
 	}
@@ -596,7 +592,9 @@ yunutyEngine::graphics::StaticMeshRenderer* SkillPreviewSystem::ShowAttackImage(
 {
 	auto attackRenderer = AttackPreviewPool::SingleInstance().Borrow();
 	this->attackRendererSet.insert({ attackRenderer.lock().get() });
+	pos.y = this->Y_OFFSET;
 	attackRenderer.lock()->GetGameObject()->GetTransform()->SetLocalPosition(pos);
+	attackRenderer.lock()->GetGameObject()->GetTransform()->SetLocalScale(Vector3d{ 2,2,1 });
 	switch (unitType)
 	{
 		case SkillPreviewSystem::UnitType::Robin:
@@ -630,6 +628,8 @@ void SkillPreviewSystem::HideAttackImage(yunutyEngine::graphics::StaticMeshRende
 
 void SkillPreviewSystem::ShowMoveEndImage(UnitType unitType, Vector3d pos, yunuGI::IMesh* mesh, Vector3d direction)
 {
+	direction.y = 0.f;
+	direction=direction.Normalize(direction);
 	auto moveEndRenderer = MoveEndPreviewPool::SingleInstance().Borrow();
 	this->moveEndRendererMap.insert({ mesh, moveEndRenderer.lock().get() });
 	pos.y = this->Y_OFFSET;
@@ -639,11 +639,10 @@ void SkillPreviewSystem::ShowMoveEndImage(UnitType unitType, Vector3d pos, yunuG
 	auto dotProduct = std::clamp(Vector3d::Dot(Vector3d{ 0, 0, 1 }, direction), -1.0, 1.0);
 	auto angle = std::acos(dotProduct) * (180.0 / yunutyEngine::math::PI);
 
-	// 외적 계산
 	auto crossProduct = Vector3d::Cross(Vector3d{ 0, 0, 1 }, direction);
 
 	// 반대 방향 회전 문제 해결
-	if (dotProduct > 0.9999) 
+	if (dotProduct > 0.9999)
 	{
 		// 방향이 거의 동일함
 		angle = 0;
@@ -653,7 +652,7 @@ void SkillPreviewSystem::ShowMoveEndImage(UnitType unitType, Vector3d pos, yunuG
 		// 방향이 정반대임
 		angle = 180.0;
 	}
-	else 
+	else
 	{
 		// 일반적인 경우, crossProduct의 y 성분으로 회전 방향 결정
 		if (crossProduct.y < 0)
@@ -689,8 +688,12 @@ void SkillPreviewSystem::ShowMoveEndImage(UnitType unitType, Vector3d pos, yunuG
 void SkillPreviewSystem::HideShowMoveEndImage(yunuGI::IMesh* mesh)
 {
 	auto iter2 = this->moveEndRendererMap.find(mesh);
-	MoveEndPreviewPool::SingleInstance().Return(iter2->second->GetWeakPtr<graphics::StaticMeshRenderer>());
-	this->moveEndRendererMap.erase(iter2);
+	if (iter2 != this->moveEndRendererMap.end())
+	{
+		iter2->second->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{90,0,0} });
+		MoveEndPreviewPool::SingleInstance().Return(iter2->second->GetWeakPtr<graphics::StaticMeshRenderer>());
+		this->moveEndRendererMap.erase(iter2);
+	}
 }
 
 yunuGI::IMesh* SkillPreviewSystem::CreateRouteMesh(std::vector<Vector3d>& vertexList)

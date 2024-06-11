@@ -83,18 +83,20 @@ namespace application
 
             POD_Unit pod;
 
-            // 내가 공격할 때
-            DelegateCallback<void()> onAttack;
+            // 내가 공격할 때, 매개변수는 내가 공격하는 상대
+            DelegateCallback<std::weak_ptr<Unit>> onAttack;
             // 내가 때린 공격이 적에게 맞았을 때, 근거리 공격인 경우라면 onAttack과 호출시점이 같겠으나 원거리 공격인 경우에는 시간차가 있을 수 있다. 
-            DelegateCallback<void()> onAttackHit;
-            // 내가 피해를 입었을 때
-            DelegateCallback<void()> onDamaged;
+            // 매개변수는 피해를 받은 상대
+            DelegateCallback<std::weak_ptr<Unit>> onAttackHit;
+            // 내가 피해를 입었을 때, 매개변수는 피해를 준 상대
+            DelegateCallback<void> onDamaged;
             // 유닛이 새로 생성될 때
-            DelegateCallback<void()> onCreated;
+            DelegateCallback<void> onCreated;
             // 유닛이 회전을 끝냈을 때
-            DelegateCallback<void()> onRotationFinish;
-            std::array<DelegateCallback<void()>, UnitBehaviourTree::Keywords::KeywordNum> onStateEngage;
-            std::array<DelegateCallback<void()>, UnitBehaviourTree::Keywords::KeywordNum> onStateExit;
+            DelegateCallback<void> onRotationFinish;
+
+            std::array<DelegateCallback<void>, UnitBehaviourTree::Keywords::KeywordNum> onStateEngage;
+            std::array<DelegateCallback<void>, UnitBehaviourTree::Keywords::KeywordNum> onStateExit;
             mutable std::weak_ptr<Unit> inGameUnit;
 
         protected:

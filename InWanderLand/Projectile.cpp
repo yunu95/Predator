@@ -18,7 +18,7 @@ void Projectile::OnEnemyEnter(Unit* unit)
 {
     if (!traveling)
         return;
-    unit->Damaged(owner, damage);
+    unit->Damaged(owner, damage, DamageType::Attack);
     ProjectilePool::SingleInstance().Return(GetWeakPtr<Projectile>());
 }
 void Projectile::SetSpeed(Vector3d speed)

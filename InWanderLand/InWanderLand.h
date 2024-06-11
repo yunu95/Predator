@@ -39,6 +39,7 @@
 #include "IInteractableComponent.h"
 #include "SkillList.h"
 #include "UnitStatusBarType.h"
+#include "DamageType.h"
 #include "PlayerCharacterType.h"
 #include "BurnEffect.h"
 
@@ -70,8 +71,10 @@
 #include "SingleNavigationField.h"
 #include "DebugBeacon.h"
 #include "WanderUtils.h"
+#include "WanderYieldInstrcution.h"
 #include "ParticleToolData.h"
 #include "ParticleTool_Manager.h"
 #include "wanderResources.h"
 #include "WanderFBX.h"
 #include "SFXManager.h"
+#include "ContentsCoroutine.h"

@@ -71,8 +71,8 @@ public:
     static constexpr int playerTeamIndex = 1;
     static const std::unordered_map<UIEnumID, SkillUpgradeType::Enum> skillByUI;
     bool blockSkillSelection[(int)SkillType::SKILL_NUM]{ false };
-    DelegateCallback<void()> onSkillSelect[(int)SkillType::SKILL_NUM];
-    DelegateCallback<void()> onSkillActivate[(int)SkillType::SKILL_NUM];
+    DelegateCallback<void> onSkillSelect[(int)SkillType::SKILL_NUM];
+    DelegateCallback<void> onSkillActivate[(int)SkillType::SKILL_NUM];
     // 스킬 업그레이드와 관련된 부분
     // 어떤 스킬을 업그레이드 할 것인지 미리 정한다. 미리 지정만 하는 것이지 바로 업그레이드까지 직행하는 것은 아니다.
 private:
@@ -115,6 +115,7 @@ private:
     void ApplySelectEffect(std::weak_ptr<Unit> unit);
     void ApplyTargetedEffect(std::weak_ptr<Unit> unit);
     void InitUnitMouseInteractionEffects();
+    std::vector<Vector3d>& ModifyPathForAttack(std::vector<Vector3d>& path);
     int currentCombo{ 0 };
     std::array<int, 3> comboObjective{ 10, 20, 30 };
     std::array<bool, 3> comboAchieved{ false };
