@@ -351,6 +351,11 @@ namespace application
                         Action_OrnamentFloating::ImGui_DrawDataPopup(static_cast<Action_OrnamentFloating*>(data));
                         break;
                     }
+                    case application::ActionType::BossAppear:
+                    {
+                        Action_BossAppear::ImGui_DrawDataPopup(static_cast<Action_BossAppear*>(data));
+                        break;
+                    }
                     default:
                         break;
                     }

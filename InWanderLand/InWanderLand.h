@@ -39,6 +39,7 @@
 #include "IInteractableComponent.h"
 #include "SkillList.h"
 #include "UnitStatusBarType.h"
+#include "DamageType.h"
 #include "PlayerCharacterType.h"
 #include "BurnEffect.h"
 

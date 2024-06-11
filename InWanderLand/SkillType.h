@@ -42,6 +42,8 @@ const std::unordered_map<int, std::string>& application::POD_Enum<SkillType::Enu
         { (int)SkillType::BossSkill_Three, "BossSkill_Three" },
         { (int)SkillType::BossSkill_Four, "BossSkill_Four" },
         { (int)SkillType::Passive_Robin_Bleeding, "Passive_Robin_Bleeding" },
+        { (int)SkillType::Passive_Ursula_Speed, "Passive_Ursula_Speed" },
+        { (int)SkillType::Passive_Hansel_Heal, "Passive_Hansel_Heal" },
         { (int)SkillType::SKILL_NUM, "Skill_Num"}
     };
     return enumNameMap;

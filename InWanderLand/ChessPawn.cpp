@@ -142,10 +142,12 @@ namespace BossSummon
 
 	void ChessPawn::OnBossDie()
 	{
-		/// 사라지는 연출이 따로 필요할 수 있음
 		if (GetGameObject()->GetSelfActive())
 		{
-			ChessPool::Instance().Return(std::static_pointer_cast<ChessPawn>(myWeakPtr.lock()));
+			if (!lastCoroutine.expired())
+			{
+				DeleteCoroutine(lastCoroutine);
+			}
 		}
 	}
 

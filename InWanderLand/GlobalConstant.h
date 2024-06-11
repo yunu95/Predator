@@ -57,6 +57,8 @@ namespace application
         GC<float> vibeMaxOffset = 0.12f;
         GC<float> defaultAnimBlendTime = 0.32f;
 
+        GC<float> bossAppearHeight = 60.f;
+        GC<float> bossAppearTime = 2.f;
         GC<float> bossSkillPeriod_1 = 4.f;   
         GC<float> bossSkillPeriod_2 = 4.f;
         GC<float> bossSkillPeriod_3 = 6.f;

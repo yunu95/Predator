@@ -21,7 +21,7 @@ public:
     virtual SkillType::Enum GetSkillType() { return SkillType::Passive_Hansel_Heal; };
     static POD_PassiveHanselHeal pod;
 private:
-    int hitCounter = 0;
+    int hitCounter{ 0 };
     void IncrementHitCounter();
     coroutine::Coroutine CookieLingering(const Vector3d& pos, std::weak_ptr<Unit> owner);
     //coroutine::Coroutine CookieDisappear(const Vector3d& pos, std::weak_ptr<Unit> owner);

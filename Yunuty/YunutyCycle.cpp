@@ -134,7 +134,6 @@ void yunutyEngine::YunutyCycle::ThreadUpdate()
 	// 살생부에 올라온 코루틴들을 파괴합니다.
 	for (auto& each : deleteCoroutineTargets)
 	{
-
 		std::erase_if(each->coroutines, [](std::shared_ptr<yunutyEngine::coroutine::Coroutine> coroutine) {return coroutine->deathWish; });
 		if (!each->coroutines.empty())
 		{

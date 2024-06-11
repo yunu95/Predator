@@ -52,6 +52,18 @@ bool Skill::SkillPodFieldPreEncoding(SkillType::Enum type, json& data)
 		{
 			return ::SkillPodFieldPreEncoding<SkillType::BossSkill_Four>(data);
 		}
+		case SkillType::Passive_Robin_Bleeding:
+		{
+			return ::SkillPodFieldPreEncoding<SkillType::Passive_Robin_Bleeding>(data);
+		}
+		case SkillType::Passive_Ursula_Speed:
+		{
+			return ::SkillPodFieldPreEncoding<SkillType::Passive_Ursula_Speed>(data);
+		}
+		case SkillType::Passive_Hansel_Heal:
+		{
+			return ::SkillPodFieldPreEncoding<SkillType::Passive_Hansel_Heal>(data);
+		}
 		default:
 			break;
 	}
@@ -106,6 +118,18 @@ bool Skill::SkillPodFieldPostEncoding(SkillType::Enum type, json& data)
 		case SkillType::BossSkill_Four:
 		{
 			return ::SkillPodFieldPostEncoding<SkillType::BossSkill_Four>(data);
+		}
+		case SkillType::Passive_Robin_Bleeding:
+		{
+			return ::SkillPodFieldPostEncoding<SkillType::Passive_Robin_Bleeding>(data);
+		}
+		case SkillType::Passive_Ursula_Speed:
+		{
+			return ::SkillPodFieldPostEncoding<SkillType::Passive_Ursula_Speed>(data);
+		}
+		case SkillType::Passive_Hansel_Heal:
+		{
+			return ::SkillPodFieldPostEncoding<SkillType::Passive_Hansel_Heal>(data);
 		}
 		default:
 			break;
@@ -162,6 +186,18 @@ bool Skill::SkillPodFieldPreDecoding(SkillType::Enum type, const json& data)
 		{
 			return ::SkillPodFieldPreDecoding<SkillType::BossSkill_Four>(data);
 		}
+		case SkillType::Passive_Robin_Bleeding:
+		{
+			return ::SkillPodFieldPreDecoding<SkillType::Passive_Robin_Bleeding>(data);
+		}
+		case SkillType::Passive_Ursula_Speed:
+		{
+			return ::SkillPodFieldPreDecoding<SkillType::Passive_Ursula_Speed>(data);
+		}
+		case SkillType::Passive_Hansel_Heal:
+		{
+			return ::SkillPodFieldPreDecoding<SkillType::Passive_Hansel_Heal>(data);
+		}
 		default:
 			break;
 	}
@@ -216,6 +252,18 @@ bool Skill::SkillPodFieldPostDecoding(SkillType::Enum type, const json& data)
 		case SkillType::BossSkill_Four:
 		{
 			return ::SkillPodFieldPostDecoding<SkillType::BossSkill_Four>(data);
+		}
+		case SkillType::Passive_Robin_Bleeding:
+		{
+			return ::SkillPodFieldPostDecoding<SkillType::Passive_Robin_Bleeding>(data);
+		}
+		case SkillType::Passive_Ursula_Speed:
+		{
+			return ::SkillPodFieldPostDecoding<SkillType::Passive_Ursula_Speed>(data);
+		}
+		case SkillType::Passive_Hansel_Heal:
+		{
+			return ::SkillPodFieldPostDecoding<SkillType::Passive_Hansel_Heal>(data);
 		}
 		default:
 			break;
@@ -281,6 +329,21 @@ void Skill::DrawSkillPod(SkillType::Enum type)
 		case SkillType::BossSkill_Four:
 		{
 			application::editor::imgui::data::DrawDataField(BossSummonChessSkill::pod);
+			break;
+		}
+		case SkillType::Passive_Robin_Bleeding:
+		{
+			application::editor::imgui::data::DrawDataField(PassiveRobinBleed::pod);
+			break;
+		}
+		case SkillType::Passive_Ursula_Speed:
+		{
+			application::editor::imgui::data::DrawDataField(PassiveUrsula::pod);
+			break;
+		}
+		case SkillType::Passive_Hansel_Heal:
+		{
+			application::editor::imgui::data::DrawDataField(PassiveHanselHeal::pod);
 			break;
 		}
 		default:

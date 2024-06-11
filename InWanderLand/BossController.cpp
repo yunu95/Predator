@@ -1,32 +1,122 @@
 #include "BossController.h"
 #include "InWanderLand.h"
 
+#include "LeftFrame.h"
+#include "RightFrame.h"
+
+void BossController::RegisterUnit(std::weak_ptr<Unit> unit)
+{
+	boss = unit;
+	EnemyController::RegisterUnit(unit);
+
+	unit.lock()->onDamaged.AddCallback([this]()
+		{
+			if (summonState == 0 && (boss.lock()->GetUnitCurrentHp() / boss.lock()->GetUnitMaxHp()) <= 2.0f / 3.0f)
+			{
+				summonState++;
+				boss.lock()->OrderSkill(BossSummonMobSkill{}, boss.lock()->GetTransform()->GetWorldPosition());
+				if (!unitRoutines.empty())
+				{
+					for (auto [target, coro] : unitRoutines)
+					{
+						DeleteCoroutine(coro);
+					}
+					unitRoutines.clear();
+				}
+			}
+		}
+	);
+
+	unit.lock()->onDamaged.AddCallback([this]()
+		{
+			if (summonState == 1 && (boss.lock()->GetUnitCurrentHp() / boss.lock()->GetUnitMaxHp()) <= 1.0f / 3.0f)
+			{
+				summonState++;
+				boss.lock()->OrderSkill(BossSummonMobSkill{}, boss.lock()->GetTransform()->GetWorldPosition());
+				if (!unitRoutines.empty())
+				{
+					for (auto [target, coro] : unitRoutines)
+					{
+						DeleteCoroutine(coro);
+					}
+					unitRoutines.clear();
+				}
+			}
+		}
+	);
+
+	unit.lock()->OnStateEngageCallback()[UnitBehaviourTree::Death].AddVolatileCallback([]()
+		{
+			BossSummonMobSkill::OnBossDie();
+			BossSummonChessSkill::OnBossDie();
+		});
+
+	unit.lock()->GetGameObject()->SetSelfActive(false);
+}
 
 void BossController::OnContentsStop()
 {
+	summonState = 0;
 	currentState = 0;
 	beforeSkillIndex = 0;
 	EnemyController::OnContentsStop();
 }
 
-coroutine::Coroutine BossController::RoutineGlobal()
+void BossController::BossAppear()
 {
-	int state = 0;
-	auto boss = unitRoutines.begin()->first;
-	while (true)
+	if (!boss.expired())
 	{
-		if (state == 0 && boss->GetUnitCurrentHp() / boss->GetUnitTemplateData().pod.max_Health <= 2 / 3)
+		StartCoroutine(BossAppearCoroutine());
+	}
+}
+
+std::weak_ptr<Unit> BossController::GetBoss()
+{
+	return boss;
+}
+
+coroutine::Coroutine BossController::BossAppearCoroutine()
+{
+	auto& gc = GlobalConstant::GetSingletonInstance().pod;
+
+	auto pause = boss.lock()->referencePause.Acquire();
+	auto blockFollowingNavigation = boss.lock()->referenceBlockFollowingNavAgent.Acquire();
+	auto blockAnimLoop = boss.lock()->referenceBlockAnimLoop.Acquire();
+	auto disableNavAgent = boss.lock()->referenceDisableNavAgent.Acquire();
+
+	boss.lock()->GetGameObject()->SetSelfActive(true);
+	boss.lock()->GetTransform()->SetWorldPosition(boss.lock()->GetTransform()->GetWorldPosition() + Vector3d(0, gc.bossAppearHeight, 0));
+	co_await std::suspend_always();
+
+	BossSummonMobSkill::OnBossAppear();
+
+	coroutine::ForSeconds preAppear{ gc.bossAppearTime };
+	auto initVel = wanderUtils::GetInitSpeedOfFreeFall(gc.bossAppearTime, Vector3d(0, gc.bossAppearHeight, 0), Vector3d(0, 0.5, 0));
+	while (preAppear.Tick())
+	{
+		initVel += Vector3d::down * gc.gravitySpeed * preAppear.Elapsed();
+		boss.lock()->GetTransform()->SetWorldPosition(boss.lock()->GetTransform()->GetWorldPosition() + initVel * preAppear.Elapsed());
+		auto curPos = boss.lock()->GetTransform()->GetWorldPosition();
+		if (curPos.y < 0.5)
 		{
-			state = 1;
-			boss->OrderSkill(BossSummonMobSkill{}, boss->GetTransform()->GetWorldPosition());
-		}
-		else if (state == 1 && boss->GetUnitCurrentHp() / boss->GetUnitTemplateData().pod.max_Health <= 1 / 3)
-		{
-			state = 2;
-			boss->OrderSkill(BossSummonMobSkill{}, boss->GetTransform()->GetWorldPosition());
+			curPos.y = 0.5;
+			boss.lock()->GetTransform()->SetWorldPosition(curPos);
+			break;
 		}
 		co_await std::suspend_always();
 	}
+
+	boss.lock()->GetTransform()->SetWorldPosition(boss.lock()->GetTransform()->GetWorldPosition() - Vector3d(0, 0.5, 0));
+	boss.lock()->PlayAnimation(UnitAnimType::Birth, false);
+	auto animator = boss.lock()->GetAnimator();
+	auto anim = wanderResources::GetAnimation(boss.lock()->GetFBXName(), UnitAnimType::Birth);
+	coroutine::ForSeconds forSeconds{ anim->GetDuration() };
+
+	while (forSeconds.Tick())
+	{
+		co_await std::suspend_always();
+	}
+	co_return;
 }
 
 coroutine::Coroutine BossController::RoutinePerUnit(std::weak_ptr<Unit> unit)
@@ -38,9 +128,6 @@ coroutine::Coroutine BossController::RoutinePerUnit(std::weak_ptr<Unit> unit)
 
 	/// BossSummonMobSkill 이 발동 되었을 때에는 해당 루틴의 Timer 가 일시 정지가 되어야 할 것으로 보임
 
-	/// Skill 을 사용할 때, 해당 Coroutine 의 타이머는 개별 동작하기에 Skill 완료되는 시점에 대한 것도
-	/// 알아야 할 것으로 보임
-
 	auto& gc = GlobalConstant::GetSingletonInstance().pod;
 
 	switch (currentState)
@@ -49,11 +136,12 @@ coroutine::Coroutine BossController::RoutinePerUnit(std::weak_ptr<Unit> unit)
 		{
 			/// 시작
 			currentState = 1;
-			co_yield coroutine::WaitForSeconds{ gc.bossSkillPeriod_4 };
 			break;
 		}
 		case 1:
 		{
+			co_yield coroutine::WaitForSeconds{ gc.bossSkillPeriod_4 };
+
 			beforeSkillIndex = math::Random::GetRandomInt(1, 2);
 			switch (beforeSkillIndex)
 			{
@@ -64,23 +152,64 @@ coroutine::Coroutine BossController::RoutinePerUnit(std::weak_ptr<Unit> unit)
 				}
 				case 2:
 				{
-					/// 2번 스킬 사용
+					Vector3d skillDir = Vector3d::zero;
+					std::weak_ptr<Unit> targetUnit = unit.lock()->GetAttackTarget();
+					if (targetUnit.expired() || !targetUnit.lock()->IsAlive())
+					{
+						for (auto pUnit : PlayerController::Instance().GetPlayers())
+						{
+							if (pUnit.expired() || !pUnit.lock()->IsAlive())
+							{
+								continue;
+							}
+							targetUnit = pUnit;
+							break;
+						}
+					}
+					skillDir = (targetUnit.lock()->GetTransform()->GetWorldPosition() - unit.lock()->GetTransform()->GetWorldPosition()).Normalized();
+					unit.lock()->OrderSkill(BossImpaleSkill{}, targetUnit.lock()->GetTransform()->GetWorldPosition() + skillDir);
 					break;
 				}
 				default:
 					break;
 			}
+
+			bool skillDone = false;
+			unit.lock()->OnStateExitCallback()[UnitBehaviourTree::Skill].AddVolatileCallback([&]()
+				{
+					skillDone = true;
+				});
+			while (!skillDone)
+			{
+				co_await std::suspend_always();
+			}
 			currentState = 2;
-			co_yield coroutine::WaitForSeconds{ gc.bossSkillPeriod_1 };
 			break;
 		}
 		case 2:
 		{
+			co_yield coroutine::WaitForSeconds{ gc.bossSkillPeriod_1 };
+
 			switch (beforeSkillIndex)
 			{
 				case 1:
 				{
-					/// 2번 스킬 사용
+					Vector3d skillDir = Vector3d::zero;
+					std::weak_ptr<Unit> targetUnit = unit.lock()->GetAttackTarget();
+					if (targetUnit.expired() || !targetUnit.lock()->IsAlive())
+					{
+						for (auto pUnit : PlayerController::Instance().GetPlayers())
+						{
+							if (pUnit.expired() || !pUnit.lock()->IsAlive())
+							{
+								continue;
+							}
+							targetUnit = pUnit;
+							break;
+						}
+					}
+					skillDir = (targetUnit.lock()->GetTransform()->GetWorldPosition() - unit.lock()->GetTransform()->GetWorldPosition()).Normalized();
+					unit.lock()->OrderSkill(BossImpaleSkill{}, targetUnit.lock()->GetTransform()->GetWorldPosition() + skillDir);
 					break;
 				}
 				case 2:
@@ -91,13 +220,24 @@ coroutine::Coroutine BossController::RoutinePerUnit(std::weak_ptr<Unit> unit)
 				default:
 					break;
 			}
+
+			bool skillDone = false;
+			unit.lock()->OnStateExitCallback()[UnitBehaviourTree::Skill].AddVolatileCallback([&]()
+				{
+					skillDone = true;
+				});
+			while (!skillDone)
+			{
+				co_await std::suspend_always();
+			}
 			beforeSkillIndex = 0;
 			currentState = 3;
-			co_yield coroutine::WaitForSeconds{ gc.bossSkillPeriod_2 };
 			break;
 		}
 		case 3:
 		{
+			co_yield coroutine::WaitForSeconds{ gc.bossSkillPeriod_2 };
+
 			auto randSkill = math::Random::GetRandomInt(1, 2);
 			switch(randSkill)
 			{
@@ -108,21 +248,56 @@ coroutine::Coroutine BossController::RoutinePerUnit(std::weak_ptr<Unit> unit)
 				}
 				case 2:
 				{
-					/// 2번 스킬 사용
+					Vector3d skillDir = Vector3d::zero;
+					std::weak_ptr<Unit> targetUnit = unit.lock()->GetAttackTarget();
+					if (targetUnit.expired() || !targetUnit.lock()->IsAlive())
+					{
+						for (auto pUnit : PlayerController::Instance().GetPlayers())
+						{
+							if (pUnit.expired() || !pUnit.lock()->IsAlive())
+							{
+								continue;
+							}
+							targetUnit = pUnit;
+							break;
+						}
+					}
+					skillDir = (targetUnit.lock()->GetTransform()->GetWorldPosition() - unit.lock()->GetTransform()->GetWorldPosition()).Normalized();
+					unit.lock()->OrderSkill(BossImpaleSkill{}, targetUnit.lock()->GetTransform()->GetWorldPosition() + skillDir);
 					break;
 				}
 				default:
 					break;
 			}
+
+			bool skillDone = false;
+			unit.lock()->OnStateExitCallback()[UnitBehaviourTree::Skill].AddVolatileCallback([&]()
+				{
+					skillDone = true;
+				});
+			while (!skillDone)
+			{
+				co_await std::suspend_always();
+			}
 			currentState = 4;
-			co_yield coroutine::WaitForSeconds{ gc.bossSkillPeriod_3 };
 			break;
 		}
 		case 4:
 		{
+			co_yield coroutine::WaitForSeconds{ gc.bossSkillPeriod_3 };
+
 			unit.lock()->OrderSkill(BossSummonChessSkill{}, unit.lock()->GetTransform()->GetWorldPosition());
-			currentState = 0;
-			co_yield coroutine::WaitForSeconds{ gc.bossSkillPeriod_4 };
+
+			bool skillDone = false;
+			unit.lock()->OnStateExitCallback()[UnitBehaviourTree::Skill].AddVolatileCallback([&]()
+				{
+					skillDone = true;
+				});
+			while (!skillDone)
+			{
+				co_await std::suspend_always();
+			}
+			currentState = 1;
 			break;
 		}
 		default:

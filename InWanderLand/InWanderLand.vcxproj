@@ -1009,6 +1009,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="Action_BlockPlayerSwitch.h" />
     <ClInclude Include="Action_BlockSkillCancel.h" />
     <ClInclude Include="Action_BlockSkillSelection.h" />
+    <ClInclude Include="Action_Boss.h" />
     <ClInclude Include="Action_Ornament.h" />
     <ClInclude Include="Action_PauseWaves.h" />
     <ClInclude Include="Action_PlayerSelect.h" />
@@ -1036,6 +1037,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="ChessRook.h" />
     <ClInclude Include="AttackPreviewPool.h" />
     <ClInclude Include="ContentsCoroutine.h" />
+    <ClInclude Include="DamageType.h" />
     <ClInclude Include="EnemyAggroController.h" />
     <ClInclude Include="AnimationEventManager.h" />
     <ClInclude Include="AnimationEvents.h" />
@@ -1047,6 +1049,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="DelegateCallback.h" />
     <ClInclude Include="EnemyController.h" />
     <ClInclude Include="EnemyImpaleSkill.h" />
+    <ClInclude Include="EnqueErrorType.h" />
     <ClInclude Include="Factor.h" />
     <ClInclude Include="HanselChargeSkill.h" />
     <ClInclude Include="HanselProjectileSkill.h" />
@@ -2077,6 +2080,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="Action_BlockPlayerSwitch.cpp" />
     <ClCompile Include="Action_BlockSkillCancel.cpp" />
     <ClCompile Include="Action_BlockSkillSelection.cpp" />
+    <ClCompile Include="Action_Boss.cpp" />
     <ClCompile Include="Action_Ornament.cpp" />
     <ClCompile Include="Action_PauseWaves.cpp" />
     <ClCompile Include="Action_PlayerSelect.cpp" />
