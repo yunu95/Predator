@@ -12,7 +12,7 @@ namespace application
 {
 	namespace editor
 	{
-		class UnitData;
+		class Unit_TemplateData;
 	}
 }
 
@@ -30,6 +30,7 @@ namespace BossSummon
 		virtual void Init(application::editor::ITemplateData* templateData) override;
 		virtual void OnSummon() override;
 		virtual void OnReturn() override {}
+		virtual void OnBossAppear();
 		virtual void OnBossDie() override;
 
 		virtual void Update() override;
@@ -42,12 +43,11 @@ namespace BossSummon
 		virtual Component* GetComponent() override { return this; }
 		virtual Component* GetSummonComponent() override { return this; }
 
-		static void RegisterUnitData(application::editor::UnitData* unitData);
-
 		bool HasChangedUnit() const { return !unitFrame.expired(); }
 		bool IsAlive() const;
 
 	private:
+		coroutine::Coroutine OnAppear();
 		coroutine::Coroutine SummonMoldUnit();
 
 		struct CustomCompUnit
@@ -62,7 +62,8 @@ namespace BossSummon
 		application::editor::UnitData* frameData = nullptr;
 		std::weak_ptr<Unit> unitFrame = std::weak_ptr<Unit>();
 		std::set<std::weak_ptr<Unit>, CustomCompUnit> summonUnit = std::set<std::weak_ptr<Unit>, CustomCompUnit>();
-		static std::vector<application::editor::UnitData*> mold;
+		static application::editor::Unit_TemplateData* meleeUnitMold;
+		static application::editor::Unit_TemplateData* projectileUnitMold;
 	};
 
 }

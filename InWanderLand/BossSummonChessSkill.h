@@ -67,6 +67,8 @@ public:
 
 	static POD_BossSummonChessSkill pod;
 
+	static void OnBossDie();
+
 private:
 	std::set<std::weak_ptr<BossSummon::ChessPawn>, BossSkill::CustomCompPawn> borrowedPawns = std::set<std::weak_ptr<BossSummon::ChessPawn>, BossSkill::CustomCompPawn>();
 	std::set<std::weak_ptr<BossSummon::ChessRook>, BossSkill::CustomCompRook> borrowedRooks = std::set<std::weak_ptr<BossSummon::ChessRook>, BossSkill::CustomCompRook>();

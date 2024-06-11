@@ -57,6 +57,7 @@ public:
     // 유닛 데이터의 정보에 맞게 이 유닛을 소환한다.
     void Summon(const application::editor::UnitData* unitData);
     void Summon(application::editor::Unit_TemplateData* td, const Vector3d& position, float rotation, bool instant = true);
+    void Summon(application::editor::Unit_TemplateData* td, const Vector3d& position, const Quaternion& rotation, bool instant = true);
     // 유닛의 초기화 구문, 유닛의 체력을 정상상태로 만들며, 버프를 모두 제거하고 상태를 Idle로 만든다.
     void Reset();
     const application::editor::Unit_TemplateData& GetUnitTemplateData()const;
@@ -90,6 +91,7 @@ public:
     coroutine::Coroutine SettingRotation(float facingAngle, float rotatingTime);
     const UnitBehaviourTree& GetBehaviourTree() const { return unitBehaviourTree; };
     float GetUnitCurrentHp() const;
+    float GetUnitMaxHp() const;
     // AcquireFactor는 수치에 곱연산이 적용될 부분이며, AcquireDelta는 수치에 덧셈 연산이 적용될 부분이다.
     factor::Multiplier<float> multiplierDamage;
     factor::Multiplier<float> multiplierDamageReceive;

@@ -347,6 +347,11 @@ float Unit::GetUnitCurrentHp() const
     return currentHitPoint;
 }
 
+float Unit::GetUnitMaxHp() const
+{
+    return unitTemplateData->pod.max_Health;
+}
+
 void Unit::KnockBack(Vector3d targetPosition, float knockBackDuration)
 {
     if (IsAlive())
@@ -787,8 +792,8 @@ void Unit::Summon(const application::editor::UnitData* unitData)
     navObstacle.lock()->AssignToNavigationField(&SingleNavigationField::Instance());
 
     Quaternion quat{ unitData->pod.rotation.w,unitData->pod.rotation.x,unitData->pod.rotation.y ,unitData->pod.rotation.z };
-    GetTransform()->SetWorldRotation(quat);
-    desiredRotation = currentRotation = 90 - quat.Euler().y;
+    auto forward = quat.Forward();
+    desiredRotation = currentRotation = 180 + std::atan2f(forward.z, forward.x) * math::Rad2Deg;
     Reset();
     coroutineBirth = StartCoroutine(BirthCoroutine());
 }
@@ -817,6 +822,42 @@ void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& po
 
     GetTransform()->SetWorldRotation(Vector3d{ 0,90 - rotation,0 });
     desiredRotation = currentRotation = rotation;
+    Reset();
+    if (instant)
+    {
+        onCreated();
+    }
+    else
+    {
+        coroutineBirth = StartCoroutine(BirthCoroutine());
+    }
+}
+void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& position, const Quaternion& rotation, bool instant)
+{
+    this->unitData = nullptr;
+    onAttack.Clear();
+    onAttackHit.Clear();
+    onDamaged.Clear();
+    onCreated.Clear();
+    onRotationFinish.Clear();
+    for (auto& each : onStateEngage)
+    {
+        each.Clear();
+    }
+    for (auto& each : onStateExit)
+    {
+        each.Clear();
+    }
+    Summon(td);
+
+    GetTransform()->SetWorldPosition(Vector3d{ position });
+    navAgentComponent.lock()->GetTransform()->SetWorldPosition(Vector3d{ position });
+    navAgentComponent.lock()->AssignToNavigationField(&SingleNavigationField::Instance());
+    navObstacle.lock()->AssignToNavigationField(&SingleNavigationField::Instance());
+
+    auto forward = rotation.Forward();
+    desiredRotation = currentRotation = 180 + std::atan2f(forward.z, forward.x) * math::Rad2Deg;
+
     Reset();
     if (instant)
     {
@@ -896,8 +937,6 @@ void Unit::Summon(application::editor::Unit_TemplateData* templateData)
     }
     case UnitControllerType::HEART_QUEEN:
     {
-        EnemyAggroController::Instance().RegisterUnit(GetWeakPtr<Unit>());
-        controllers.push_back(&EnemyAggroController::Instance());
         BossController::Instance().RegisterUnit(GetWeakPtr<Unit>());
         controllers.push_back(&BossController::Instance());
         break;

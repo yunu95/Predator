@@ -52,8 +52,6 @@ namespace application
             POD_Vector3<float> scale = { 1,1,1 };
             int stage = 1;
             bool isGuide = false;
-            bool isBossSummon = false;
-            bool summonLeftFrame = false;
 
             /// Global Constant
 

@@ -811,6 +811,9 @@
     <Filter Include="Contents_Refactored\UnitCommand\UnitSkillCommand">
       <UniqueIdentifier>{b2063c72-2ebb-4fc2-b61e-d77a7b41d9dc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor\ScriptSystem\2_Action\List\Action_Boss">
+      <UniqueIdentifier>{d4859df6-8135-4806-b3e2-3a50c02a0600}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Contents_Refactored\Skill\PassiveSkill\PassiveUrsulaSpeed">
       <UniqueIdentifier>{8d7611b4-6699-4000-bc5c-acd24db7d01b}</UniqueIdentifier>
     </Filter>
@@ -1990,6 +1993,9 @@
     <ClInclude Include="UnitSkillCommand.h">
       <Filter>Contents_Refactored\UnitCommand\UnitSkillCommand</Filter>
     </ClInclude>
+    <ClInclude Include="Action_Boss.h">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_Boss</Filter>
+    </ClInclude>
     <ClInclude Include="PassiveRobinBleed.h">
       <Filter>Contents_Refactored\Skill\PassiveSkill\PassiveRobinBleed</Filter>
     </ClInclude>
@@ -2982,6 +2988,9 @@
     </ClCompile>
     <ClCompile Include="UnitSkillCommand.cpp">
       <Filter>Contents_Refactored\UnitCommand\UnitSkillCommand</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_Boss.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_Boss</Filter>
     </ClCompile>
     <ClCompile Include="PassiveRobinBleed.cpp">
       <Filter>Contents_Refactored\Skill\PassiveSkill\PassiveRobinBleed</Filter>
