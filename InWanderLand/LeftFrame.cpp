@@ -43,11 +43,6 @@ namespace BossSummon
 
 	void LeftFrame::OnSummon()
 	{
-		StartCoroutine(OnAppear());
-	}
-
-	void LeftFrame::OnBossAppear()
-	{
 		for (auto each : application::editor::TemplateDataManager::GetSingletonInstance().GetDataList(application::editor::DataType::UnitData))
 		{
 			auto td = static_cast<application::editor::Unit_TemplateData*>(each);
@@ -60,11 +55,21 @@ namespace BossSummon
 				projectileUnitMold = td;
 			}
 		}
+		StartCoroutine(OnAppear());
+	}
+
+	void LeftFrame::OnBossAppear()
+	{
 		OnSummon();
 	}
 
 	void LeftFrame::OnBossDie()
 	{
+		if (!summonCorountine.expired())
+		{
+			DeleteCoroutine(summonCorountine);
+		}
+
 		if (!unitFrame.expired() && unitFrame.lock()->IsAlive())
 		{
 			unitFrame.lock()->SetCurrentHp(0);
@@ -101,9 +106,9 @@ namespace BossSummon
 	{
 		if (!summonCorountine.expired())
 		{
-			unitFrame.lock()->DeleteCoroutine(summonCorountine);
+			DeleteCoroutine(summonCorountine);
 		}
-		summonCorountine = unitFrame.lock()->StartCoroutine(SummonMoldUnit());
+		summonCorountine = StartCoroutine(SummonMoldUnit());
 	}
 
 	bool LeftFrame::IsAlive() const
@@ -178,6 +183,7 @@ namespace BossSummon
 			while (forSeconds.ElapsedNormalized() < (float)(meleeSummonCount + projectileSummonCount) / (float)(BossSummonMobSkill::pod.leftMeleeCount + BossSummonMobSkill::pod.leftProjectileCount))
 			{
 				co_await std::suspend_always();
+				continue;
 			}
 
 			while (!unitSummon)

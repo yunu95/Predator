@@ -63,6 +63,11 @@ namespace BossSummon
 
 	void RightFrame::OnBossDie()
 	{
+		if (!summonCorountine.expired())
+		{
+			DeleteCoroutine(summonCorountine);
+		}
+
 		if (!unitFrame.expired() && unitFrame.lock()->IsAlive())
 		{
 			unitFrame.lock()->SetCurrentHp(0);
@@ -99,9 +104,9 @@ namespace BossSummon
 	{
 		if (!summonCorountine.expired())
 		{
-			unitFrame.lock()->DeleteCoroutine(summonCorountine);
+			DeleteCoroutine(summonCorountine);
 		}
-		summonCorountine = unitFrame.lock()->StartCoroutine(SummonMoldUnit());
+		summonCorountine = StartCoroutine(SummonMoldUnit());
 	}
 
 	bool RightFrame::IsAlive() const
@@ -173,9 +178,10 @@ namespace BossSummon
 				continue;
 			}
 
-			while (forSeconds.ElapsedNormalized() < (float)(meleeSummonCount + projectileSummonCount) / (float)(BossSummonMobSkill::pod.rightMeleeCount + BossSummonMobSkill::pod.rightProjectileCount))
+			if(forSeconds.ElapsedNormalized() < (float)(meleeSummonCount + projectileSummonCount) / (float)(BossSummonMobSkill::pod.rightMeleeCount + BossSummonMobSkill::pod.rightProjectileCount))
 			{
 				co_await std::suspend_always();
+				continue;
 			}
 
 			while (!unitSummon)
