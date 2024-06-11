@@ -41,6 +41,7 @@ void yunutyEngine::NavigationAgent::OnDisable()
     {
         impl->crowd->removeAgent(impl->agentIdx);
         navField->agents.erase(this);
+        impl->agentIdx = -1;
     }
 }
 void yunutyEngine::NavigationAgent::AssignToNavigationField(NavigationField* navField)
@@ -97,6 +98,11 @@ float yunutyEngine::NavigationAgent::GetRadius()
 }
 void yunutyEngine::NavigationAgent::Relocate(Vector3f destination)
 {
+    if (impl->agentIdx == -1)
+    {
+        GetTransform()->SetWorldPosition(destination);
+        return;
+    }
     const float* pos = &destination.x;
     constexpr float agentPlacementHalfExtents[3]{ 1000,1000,1000 };
     float nearest[3];

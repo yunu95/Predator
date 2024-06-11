@@ -4,7 +4,7 @@
 POD_PassiveRobinBleed PassiveRobinBleed::pod;
 void PassiveRobinBleed::Init(std::weak_ptr<Unit> owner)
 {
-    owner.lock()->onAttackHit.AddCallback([this, owner]()
+    owner.lock()->onAttackHit.AddCallback([this, owner](std::weak_ptr<Unit>)
         {
             auto target = owner.lock()->GetAttackTarget();
             if (target.lock()->IsAlive())

@@ -15,7 +15,7 @@ UnitAttackCommand::~UnitAttackCommand()
 void UnitAttackCommand::Execute()
 {
     //unit->OrderAttack(unit->GetWeakPtr<Unit>());
-    unit->onAttackHit.AddVolatileCallback([this]() {isDone = true; });
+    unit->onAttackHit.AddVolatileCallback([this](std::weak_ptr<Unit>) {isDone = true; });
 }
 
 void UnitAttackCommand::ShowPreviewMesh()

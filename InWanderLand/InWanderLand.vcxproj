@@ -1035,6 +1035,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="ChessPawn.h" />
     <ClInclude Include="ChessRook.h" />
     <ClInclude Include="AttackPreviewPool.h" />
+    <ClInclude Include="ContentsCoroutine.h" />
     <ClInclude Include="EnemyAggroController.h" />
     <ClInclude Include="AnimationEventManager.h" />
     <ClInclude Include="AnimationEvents.h" />
@@ -2001,7 +2002,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     </ClInclude>
     <ClInclude Include="Action_WaitForSeconds.h" />
     <ClInclude Include="UVAnimator.h" />
-    <ClInclude Include="wanderCoroutines.h" />
+    <ClInclude Include="WanderYieldInstrcution.h" />
     <ClInclude Include="WanderFBX.h" />
     <ClInclude Include="wanderResources.h" />
     <ClInclude Include="VFXAnimator.h" />
@@ -2102,6 +2103,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="ChessPawn.cpp" />
     <ClCompile Include="ChessRook.cpp" />
     <ClCompile Include="AttackPreviewPool.cpp" />
+    <ClCompile Include="ContentsCoroutine.cpp" />
     <ClCompile Include="EnemyAggroController.cpp" />
     <ClCompile Include="AnimationEventManager.cpp" />
     <ClCompile Include="AttackSystem.cpp">
@@ -3032,7 +3034,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     </ClCompile>
     <ClCompile Include="Action_WaitForSeconds.cpp" />
     <ClCompile Include="UVAnimator.cpp" />
-    <ClCompile Include="wanderCoroutines.cpp" />
+    <ClCompile Include="WanderYieldInstrcution.cpp" />
     <ClCompile Include="wanderResources.cpp" />
     <ClCompile Include="VFXAnimator.cpp" />
     <ClCompile Include="WanderUtils.cpp" />

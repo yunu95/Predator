@@ -823,8 +823,11 @@
     <Filter Include="Contents_Refactored\Unit\UnitBuff\UnitBuffHansel">
       <UniqueIdentifier>{30b4f5d3-ed9d-4789-800c-27fcf8eb8da2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Contents_Refactored\wanderCoroutines">
+    <Filter Include="Contents_Refactored\WanderYieldInstrcution">
       <UniqueIdentifier>{0cd58224-0474-47e2-bcc0-e4746ac7f062}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\ContentsCoroutine">
+      <UniqueIdentifier>{4b1ee376-13c3-478c-bec5-3a359bccf054}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2005,8 +2008,11 @@
     <ClInclude Include="PassiveHanselHeal.h">
       <Filter>Contents_Refactored\Skill\PassiveSkill\PassiveHanselHeal</Filter>
     </ClInclude>
-    <ClInclude Include="wanderCoroutines.h">
-      <Filter>Contents_Refactored\wanderCoroutines</Filter>
+    <ClInclude Include="WanderYieldInstrcution.h">
+      <Filter>Contents_Refactored\WanderYieldInstrcution</Filter>
+    </ClInclude>
+    <ClInclude Include="ContentsCoroutine.h">
+      <Filter>Contents_Refactored\ContentsCoroutine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2998,8 +3004,11 @@
     <ClCompile Include="PassiveHanselHeal.cpp">
       <Filter>Contents_Refactored\Skill\PassiveSkill\PassiveHanselHeal</Filter>
     </ClCompile>
-    <ClCompile Include="wanderCoroutines.cpp">
-      <Filter>Contents_Refactored\wanderCoroutines</Filter>
+    <ClCompile Include="WanderYieldInstrcution.cpp">
+      <Filter>Contents_Refactored\WanderYieldInstrcution</Filter>
+    </ClCompile>
+    <ClCompile Include="ContentsCoroutine.cpp">
+      <Filter>Contents_Refactored\ContentsCoroutine</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

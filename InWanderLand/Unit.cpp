@@ -302,7 +302,7 @@ void Unit::EraseBuff(UnitBuffType buffType)
 }
 void Unit::Damaged(std::weak_ptr<Unit> opponentUnit, float opponentDmg)
 {
-    opponentUnit.lock()->onAttackHit();
+    opponentUnit.lock()->onAttackHit(GetWeakPtr<Unit>());
     Damaged(opponentDmg);
 }
 
@@ -607,6 +607,7 @@ void Unit::Init(const application::editor::Unit_TemplateData* unitTemplateData)
     const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
     std::wstring fbxNameW = yutility::GetWString(unitTemplateData->pod.skinnedFBXName);
     //fbxNameW.assign(pod.templateData->pod.skinnedFBXName.begin(), pod.templateData->pod.skinnedFBXName.end());
+    AttachDebugMesh(navAgentComponent.lock()->GetGameObject(), DebugMeshType::Sphere)->GetTransform()->SetLocalScale(Vector3d::one * unitTemplateData->pod.collisionSize);
 
     /// Particle Setting
     for (auto& eachPI : ptm.GetChildrenParticleInstanceList(unitTemplateData->pod.skinnedFBXName))
@@ -1116,10 +1117,10 @@ void Unit::InitBehaviorTree()
             currentOrderType = pendingOrderType;
             OnStateEngage<UnitBehaviourTree::Move>();
         };
-	unitBehaviourTree[UnitBehaviourTree::Move].onExit = [this]()
-		{
-			OnStateExit<UnitBehaviourTree::Move>();
-		};
+    unitBehaviourTree[UnitBehaviourTree::Move].onExit = [this]()
+        {
+            OnStateExit<UnitBehaviourTree::Move>();
+        };
     unitBehaviourTree[UnitBehaviourTree::Move].onUpdate = [this]()
         {
             OnStateUpdate<UnitBehaviourTree::Move>();
@@ -1242,7 +1243,7 @@ yunutyEngine::coroutine::Coroutine Unit::AttackCoroutine(std::weak_ptr<Unit> opp
     defaultAnimationType = UnitAnimType::Idle;
     PlayAnimation(UnitAnimType::Attack, false);
     co_yield coroutine::WaitForSeconds(unitTemplateData->pod.m_attackPreDelay);
-    onAttack();
+    onAttack(opponent);
     switch (unitTemplateData->pod.attackType.enumValue)
     {
     case UnitAttackType::MELEE:
