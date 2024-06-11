@@ -296,6 +296,10 @@ std::string Unit::GetFBXName() const
 
     return skinnedMeshGameObject->getName();
 }
+void Unit::EraseBuff(UnitBuffType buffType)
+{
+    buffs.erase(buffType);
+}
 void Unit::Damaged(std::weak_ptr<Unit> opponentUnit, float opponentDmg)
 {
     opponentUnit.lock()->onAttackHit();
@@ -305,6 +309,7 @@ void Unit::Damaged(std::weak_ptr<Unit> opponentUnit, float opponentDmg)
 void Unit::Damaged(float dmg)
 {
     SetCurrentHp(currentHitPoint -= dmg);
+    onDamaged();
 }
 
 void Unit::Heal(float healingPoint)
@@ -340,6 +345,11 @@ void Unit::SetCurrentHp(float p_newHp)
 float Unit::GetUnitCurrentHp() const
 {
     return currentHitPoint;
+}
+
+float Unit::GetUnitMaxHp() const
+{
+    return unitTemplateData->pod.max_Health;
 }
 
 void Unit::KnockBack(Vector3d targetPosition, float knockBackDuration)
@@ -782,8 +792,8 @@ void Unit::Summon(const application::editor::UnitData* unitData)
     navObstacle.lock()->AssignToNavigationField(&SingleNavigationField::Instance());
 
     Quaternion quat{ unitData->pod.rotation.w,unitData->pod.rotation.x,unitData->pod.rotation.y ,unitData->pod.rotation.z };
-    GetTransform()->SetWorldRotation(quat);
-    desiredRotation = currentRotation = 90 - quat.Euler().y;
+    auto forward = quat.Forward();
+    desiredRotation = currentRotation = 180 + std::atan2f(forward.z, forward.x) * math::Rad2Deg;
     Reset();
     coroutineBirth = StartCoroutine(BirthCoroutine());
 }
@@ -822,6 +832,47 @@ void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& po
         coroutineBirth = StartCoroutine(BirthCoroutine());
     }
 }
+void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& position, const Quaternion& rotation, bool instant)
+{
+    this->unitData = nullptr;
+    onAttack.Clear();
+    onAttackHit.Clear();
+    onDamaged.Clear();
+    onCreated.Clear();
+    onRotationFinish.Clear();
+    for (auto& each : onStateEngage)
+    {
+        each.Clear();
+    }
+    for (auto& each : onStateExit)
+    {
+        each.Clear();
+    }
+    Summon(td);
+
+    GetTransform()->SetWorldPosition(Vector3d{ position });
+    navAgentComponent.lock()->GetTransform()->SetWorldPosition(Vector3d{ position });
+    navAgentComponent.lock()->AssignToNavigationField(&SingleNavigationField::Instance());
+    navObstacle.lock()->AssignToNavigationField(&SingleNavigationField::Instance());
+
+    auto forward = rotation.Forward();
+    desiredRotation = currentRotation = 180 + std::atan2f(forward.z, forward.x) * math::Rad2Deg;
+
+    Reset();
+    if (instant)
+    {
+        onCreated();
+    }
+    else
+    {
+        coroutineBirth = StartCoroutine(BirthCoroutine());
+    }
+}
+void Unit::AddPassiveSkill(std::shared_ptr<PassiveSkill> skill)
+{
+    passiveSkill = skill;
+    passiveSkill->Init(GetWeakPtr<Unit>());
+}
 void Unit::Summon(application::editor::Unit_TemplateData* templateData)
 {
     skinnedMeshGameObject->GetTransform()->SetLocalScale(Vector3d::one * unitTemplateData->pod.unit_scale);
@@ -829,12 +880,15 @@ void Unit::Summon(application::editor::Unit_TemplateData* templateData)
     {
     case PlayerCharacterType::Robin:
         unitStatusPortraitUI = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin)->GetWeakPtr<UIElement>();
+        AddPassiveSkill(std::make_shared<PassiveRobinBleed>());
         break;
     case PlayerCharacterType::Ursula:
         unitStatusPortraitUI = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Ursula)->GetWeakPtr<UIElement>();
+        AddPassiveSkill(std::make_shared<PassiveUrsula>());
         break;
     case PlayerCharacterType::Hansel:
         unitStatusPortraitUI = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel)->GetWeakPtr<UIElement>();
+        AddPassiveSkill(std::make_shared<PassiveHanselHeal>());
         break;
     default:
         break;
@@ -883,8 +937,6 @@ void Unit::Summon(application::editor::Unit_TemplateData* templateData)
     }
     case UnitControllerType::HEART_QUEEN:
     {
-        EnemyAggroController::Instance().RegisterUnit(GetWeakPtr<Unit>());
-        controllers.push_back(&EnemyAggroController::Instance());
         BossController::Instance().RegisterUnit(GetWeakPtr<Unit>());
         controllers.push_back(&BossController::Instance());
         break;
@@ -909,6 +961,8 @@ void Unit::Reset()
     }
     DeleteCoroutine(coroutineRevival);
     DeleteCoroutine(coroutineDeath);
+    ClearCoroutines();
+    passiveSkill.reset();
     liveCountLeft = unitTemplateData->pod.liveCount;
     currentTargetUnit.reset();
     currentOrderType = UnitOrderType::AttackMove;
@@ -1220,16 +1274,18 @@ yunutyEngine::coroutine::Coroutine Unit::DeathCoroutine()
     ReturnToPool();
     co_return;
 }
+
 yunutyEngine::coroutine::Coroutine Unit::AttackCoroutine(std::weak_ptr<Unit> opponent)
 {
     auto blockAttack = referenceBlockAttack.Acquire();
     defaultAnimationType = UnitAnimType::Idle;
     PlayAnimation(UnitAnimType::Attack, false);
     co_yield coroutine::WaitForSeconds(unitTemplateData->pod.m_attackPreDelay);
+    onAttack();
     switch (unitTemplateData->pod.attackType.enumValue)
     {
     case UnitAttackType::MELEE:
-        opponent.lock()->Damaged(GetWeakPtr<Unit>(), unitTemplateData->pod.m_autoAttackDamage);
+        opponent.lock()->Damaged(GetWeakPtr<Unit>(), unitTemplateData->pod.m_autoAttackDamage + adderAttackDamage);
         break;
     case UnitAttackType::MISSILE:
         auto projectile = ProjectilePool::SingleInstance().Borrow(GetWeakPtr<Unit>(), opponent.lock()->GetTransform()->GetWorldPosition());
@@ -1239,7 +1295,7 @@ yunutyEngine::coroutine::Coroutine Unit::AttackCoroutine(std::weak_ptr<Unit> opp
     auto blockCommand = referenceBlockPendingOrder.Acquire();
     co_yield coroutine::WaitForSeconds(unitTemplateData->pod.m_attackPostDelay);
     blockCommand.reset();
-    StartCoroutine(referenceBlockAttack.AcquireForSecondsCoroutine(unitTemplateData->pod.m_atkCooltime - unitTemplateData->pod.m_attackPostDelay - unitTemplateData->pod.m_attackPreDelay));
+    StartCoroutine(referenceBlockAttack.AcquireForSecondsCoroutine(unitTemplateData->pod.m_atkCooltime / (1 + adderAttackSpeed) - unitTemplateData->pod.m_attackPostDelay - unitTemplateData->pod.m_attackPreDelay));
     co_return;
 }
 float Unit::DistanceTo(const Vector3d& target)

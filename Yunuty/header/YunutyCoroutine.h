@@ -11,6 +11,8 @@
 
 namespace yunutyEngine
 {
+    class Component;
+    class YunutyCycle;
     namespace coroutine
     {
         class YieldInstruction;
@@ -32,7 +34,6 @@ namespace yunutyEngine
                 std::suspend_always yield_value(YieldInstruction&& yield) { this->yield = &yield; return {}; }
                 void unhandled_exception() {  }
             };
-            std::coroutine_handle<promise_type> handle;
             explicit Coroutine(std::coroutine_handle<promise_type> h) : handle(h) {}
             ~Coroutine()
             {
@@ -59,6 +60,11 @@ namespace yunutyEngine
             void resume() { handle.resume(); }
             YieldInstruction* GetLastYield() { return handle.promise().yield; };
             bool Done() { return handle.done(); }
+            std::coroutine_handle<promise_type> handle;
+        private:
+            bool deathWish = false;
+            friend yunutyEngine::Component;
+            friend yunutyEngine::YunutyCycle;
         };
     }
 }

@@ -21,6 +21,24 @@ void BossSummonMobSkill::SetRightFrame(BossSummon::RightFrame* rightFrame)
 	BossSummonMobSkill::rightFrame = rightFrame;
 }
 
+void BossSummonMobSkill::OnBossAppear()
+{
+	if (leftFrame && rightFrame)
+	{
+		leftFrame->OnBossAppear();
+		rightFrame->OnBossAppear();
+	}
+}
+
+void BossSummonMobSkill::OnBossDie()
+{
+	if (leftFrame && rightFrame)
+	{
+		leftFrame->OnBossDie();
+		rightFrame->OnBossDie();
+	}
+}
+
 coroutine::Coroutine BossSummonMobSkill::operator()()
 {
 	if (leftFrame == nullptr || rightFrame == nullptr || leftFrame->HasChangedUnit())

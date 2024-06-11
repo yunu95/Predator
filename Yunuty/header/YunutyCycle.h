@@ -48,8 +48,7 @@ namespace yunutyEngine
         void ThreadFunction();
         // update의 대상이 되는 컴포넌트들을 정리합니다.
         void ResetUpdateTargetComponents();
-        friend Component;
-        friend GameObject;
+        std::unordered_set<Component*> deleteCoroutineTargets;
     protected:
         static YunutyCycle* _instance;
         YunutyCycle();
@@ -87,5 +86,7 @@ namespace yunutyEngine
         void SetMaxFrameRate();
         bool IsGameRunning();
         bool IsUpdating();
+        friend yunutyEngine::Component;
+        friend yunutyEngine::GameObject;
     };
 }

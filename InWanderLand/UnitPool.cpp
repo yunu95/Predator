@@ -14,7 +14,14 @@ std::weak_ptr<Unit> UnitPool::Borrow(application::editor::Unit_TemplateData* td,
 {
     auto unit = Borrow(td);
     unit.lock()->Summon(td, position, rotation);
-    return std::weak_ptr<Unit>();
+    return unit;
+}
+
+std::weak_ptr<Unit> UnitPool::Borrow(application::editor::Unit_TemplateData* td, const Vector3d& position, const Quaternion& rotation)
+{
+    auto unit = Borrow(td);
+    unit.lock()->Summon(td, position, rotation);
+    return unit;
 }
 
 std::weak_ptr<Unit> UnitPool::Borrow(application::editor::Unit_TemplateData* td)

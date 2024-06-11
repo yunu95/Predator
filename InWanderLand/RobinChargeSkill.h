@@ -16,6 +16,7 @@ struct POD_RobinChargeSkill
     float impactStunDuration = 2.0f;
     float rushKnockbackRadius = 1.0f;
     float impactKnockbackRadius = 5.0f;
+    float effectScale = 1.0f;
 
     TO_JSON(POD_RobinChargeSkill)
     FROM_JSON(POD_RobinChargeSkill)

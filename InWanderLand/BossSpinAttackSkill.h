@@ -5,10 +5,11 @@ struct POD_BossSpinAttackSkill
 {
 	float skillPlayTime = 6.0f;
 	float skillDamage = 8.0f;
-	float colliderRadius = 10.0f;
+	float skillScale = 1.0f;
 	float knockBackDistance = 15.0f;
 	float knockBackDuration = 1.0f;
 	float paralyzingDuration = 2.0f;
+	float skillEndTimeAfterDamaged = 0.1f;
 
 	TO_JSON(POD_BossSpinAttackSkill)
 	FROM_JSON(POD_BossSpinAttackSkill)
@@ -18,9 +19,10 @@ class BossSpinAttackSkill : public Skill
 {
 private:
 	coroutine::Coroutine SpawningSkillffect(std::weak_ptr<BossSpinAttackSkill> skill);
-	std::unordered_set<Unit*> knockBackList;
 	std::weak_ptr<UnitAcquisitionSphereCollider> knockbackCollider;
 	std::weak_ptr<ManagedFBX> chargeEffect;
+	std::weak_ptr<coroutine::Coroutine> effectColliderCoroutine;
+
 public:
 	BossSpinAttackSkill() {}
 	virtual SkillType::Enum GetSkillType() { return SkillType::Enum::BossSkill_One; }
@@ -28,6 +30,8 @@ public:
 	virtual void OnInterruption() override;
 
 	static POD_BossSpinAttackSkill pod;
+	static float colliderEffectRatio;
+
 };
 
 

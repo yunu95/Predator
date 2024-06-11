@@ -19,6 +19,7 @@
 #include "Multiplier.h"
 #include "Reference.h"
 
+class PassiveSkill;
 class UIManager;
 class UnitProductor;
 class SkillSystem;
@@ -56,6 +57,7 @@ public:
     // 유닛 데이터의 정보에 맞게 이 유닛을 소환한다.
     void Summon(const application::editor::UnitData* unitData);
     void Summon(application::editor::Unit_TemplateData* td, const Vector3d& position, float rotation, bool instant = true);
+    void Summon(application::editor::Unit_TemplateData* td, const Vector3d& position, const Quaternion& rotation, bool instant = true);
     // 유닛의 초기화 구문, 유닛의 체력을 정상상태로 만들며, 버프를 모두 제거하고 상태를 Idle로 만든다.
     void Reset();
     const application::editor::Unit_TemplateData& GetUnitTemplateData()const;
@@ -68,8 +70,9 @@ public:
     void OrderHold();
     template<typename SkillType>
     void OrderSkill(const SkillType& skill, Vector3d pos);
-    template<typename BuffType>
-    void ApplyBuff(BuffType&& buff);
+    template<typename Buff>
+    void ApplyBuff(Buff&& buff);
+    void EraseBuff(UnitBuffType buffType);
     void Damaged(std::weak_ptr<Unit> opponentUnit, float opponentAp);	// 데미지 입었을 경우 추적하는 로직 포함
     void Damaged(float dmg);                            // 추적받지 않는 데미지
     void Heal(float healingPoint);
@@ -88,11 +91,15 @@ public:
     coroutine::Coroutine SettingRotation(float facingAngle, float rotatingTime);
     const UnitBehaviourTree& GetBehaviourTree() const { return unitBehaviourTree; };
     float GetUnitCurrentHp() const;
+    float GetUnitMaxHp() const;
     // AcquireFactor는 수치에 곱연산이 적용될 부분이며, AcquireDelta는 수치에 덧셈 연산이 적용될 부분이다.
-    factor::Multiplier<float>& GetDamageMultiplier() { return multiplierDamage; };
-    factor::Adder<float>& GetDamageAdder() { return adderDamage; };
-    factor::Multiplier<float>& GetAttackSpeedMultiplier() { return multiplierAttackSpeed; };
-    factor::Adder<float>& GetCritAdder() { return adderCrit; };
+    factor::Multiplier<float> multiplierDamage;
+    factor::Multiplier<float> multiplierDamageReceive;
+    factor::Adder<float> adderAttackDamage;
+    // adderAttackSpeed에 담긴 값들은 합연산되어 공격 주기에 1 / (1 + adderAttackSpeed)의 수치로 곱해진다.
+    factor::Adder<float> adderAttackSpeed;
+    factor::Multiplier<float> multiplierAttackSpeed;
+    factor::Adder<float> adderCrit;
     virtual void OnContentsPlay() override { }
     virtual void OnContentsStop() override;
     virtual Component* GetComponent() override { return this; }
@@ -136,6 +143,7 @@ public:
 
     std::weak_ptr<yunutyEngine::graphics::Animator> GetAnimator() { return animatorComponent; }
 private:
+    void AddPassiveSkill(std::shared_ptr<PassiveSkill> skill);
     void Summon(application::editor::Unit_TemplateData* templateData);
     void SetIsAlive(bool isAlive);
     void UpdateRotation();
@@ -171,6 +179,7 @@ private:
     UnitBehaviourTree unitBehaviourTree;
     std::array<DelegateCallback<void()>, UnitBehaviourTree::Keywords::KeywordNum> onStateEngage;
     std::array<DelegateCallback<void()>, UnitBehaviourTree::Keywords::KeywordNum> onStateExit;
+    std::shared_ptr<PassiveSkill> passiveSkill;
     std::shared_ptr<Reference::Guard> enableNavObstacleByState;
     std::shared_ptr<Reference::Guard> disableNavAgentByState;
     std::shared_ptr<Reference::Guard> invulnerabilityByState;
@@ -209,11 +218,6 @@ private:
     weak_ptr<UIElement> unitStatusUI;
     // 초상화까지 있는 플레이어측 캐릭터 UI
     std::weak_ptr<UIElement> unitStatusPortraitUI;
-    factor::Multiplier<float> multiplierDamage;
-    factor::Multiplier<float> multiplierDamageReceive;
-    factor::Adder<float> adderDamage;
-    factor::Multiplier<float> multiplierAttackSpeed;
-    factor::Adder<float> adderCrit;
     std::weak_ptr<yunutyEngine::coroutine::Coroutine> coroutineBirth;
     std::weak_ptr<yunutyEngine::coroutine::Coroutine> coroutineDeath;
     std::weak_ptr<yunutyEngine::coroutine::Coroutine> coroutineKnockBack;
@@ -245,17 +249,17 @@ void Unit::OrderSkill(const SkillType& skill, Vector3d pos)
     static_cast<Skill*>(pendingSkill.get())->targetPos = pos;
     pendingOrderType = UnitOrderType::Skill;
 }
-template<typename BuffType>
-void Unit::ApplyBuff(BuffType&& buff)
+template<typename Buff>
+void Unit::ApplyBuff(Buff&& buff)
 {
-    static_assert(std::is_base_of<UnitBuff, BuffType>::value, "BuffType must be derived from UnitBuff");
+    static_assert(std::is_base_of<UnitBuff, Buff>::value, "BuffType must be derived from UnitBuff");
     if (buffs.contains(buff.GetBuffType()))
     {
         buffs[buff.GetBuffType()]->OnOverlap(std::move(buff));
     }
     else
     {
-        buffs[buff.GetBuffType()] = std::make_shared<BuffType>(buff);
+        buffs[buff.GetBuffType()] = std::make_shared<Buff>(buff);
         buffs[buff.GetBuffType()]->Init(GetWeakPtr<Unit>());
         buffs[buff.GetBuffType()]->OnStart();
     }

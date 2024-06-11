@@ -9,10 +9,13 @@ const float spinEndTime = 3.15f;
 const float spinStartTime = 2.07f;
 const float spinAttackingTime = spinEndTime - spinStartTime;
 const float afterSpinDelay = totalTime - spinStartTime - spinAttackingTime;
+float BossSpinAttackSkill::colliderEffectRatio = 10.0f;
 
 coroutine::Coroutine BossSpinAttackSkill::SpawningSkillffect(std::weak_ptr<BossSpinAttackSkill> skill)
 {
-	Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
+    float actualCollideRange = pod.skillScale * colliderEffectRatio;
+
+    Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
 	Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
 	Vector3d direction = deltaPos.Normalized();
 
@@ -20,18 +23,22 @@ coroutine::Coroutine BossSpinAttackSkill::SpawningSkillffect(std::weak_ptr<BossS
 
 	chargeEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos);
 	chargeEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
+	chargeEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(pod.skillScale * owner.lock()->GetTransform()->GetWorldScale().x,
+        pod.skillScale * owner.lock()->GetTransform()->GetWorldScale().y,
+        pod.skillScale * owner.lock()->GetTransform()->GetWorldScale().z));
 	auto chargeEffectAnimator = chargeEffect.lock()->AcquireVFXAnimator();
 	chargeEffectAnimator.lock()->SetAutoActiveFalse();
 	chargeEffectAnimator.lock()->Init();
 
-    co_yield coroutine::WaitForSeconds(spinStartTime);
-
     knockbackCollider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
-    knockbackCollider.lock()->SetRadius(pod.colliderRadius);
+    knockbackCollider.lock()->SetRadius(actualCollideRange * owner.lock()->GetTransform()->GetWorldScale().x);
     knockbackCollider.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
 
-    coroutine::ForSeconds forSeconds{ spinAttackingTime };
+    std::unordered_set<Unit*> knockBackList;
 
+    co_yield coroutine::WaitForSeconds(spinStartTime);
+
+    coroutine::ForSeconds forSeconds{ spinAttackingTime };
     while (forSeconds.Tick())
     {
         co_await std::suspend_always{};
@@ -51,8 +58,11 @@ coroutine::Coroutine BossSpinAttackSkill::SpawningSkillffect(std::weak_ptr<BossS
 
 	co_await std::suspend_always{};
 
-	while (!chargeEffectAnimator.lock()->IsDone())
+    float elapsed = 0.0f;
+
+	while (elapsed <= pod.skillEndTimeAfterDamaged)
 	{
+        elapsed += Time::GetDeltaTime();
 		co_await std::suspend_always{};
 	}
 
@@ -67,12 +77,11 @@ coroutine::Coroutine BossSpinAttackSkill::operator()()
     auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
 
     owner.lock()->PlayAnimation(UnitAnimType::Skill1, true);
-    auto effectCoroutine = owner.lock()->StartCoroutine(SpawningSkillffect(dynamic_pointer_cast<BossSpinAttackSkill>(selfWeakPtr.lock())));
-    effectCoroutine.lock()->PushDestroyCallBack([this]()
+    effectColliderCoroutine = owner.lock()->StartCoroutine(SpawningSkillffect(dynamic_pointer_cast<BossSpinAttackSkill>(selfWeakPtr.lock())));
+    effectColliderCoroutine.lock()->PushDestroyCallBack([this]()
         {
             FBXPool::SingleInstance().Return(chargeEffect);
             UnitAcquisitionSphereColliderPool::SingleInstance().Return(knockbackCollider);
-            knockBackList.clear();
         });
     co_yield coroutine::WaitForSeconds(spinStartTime);
 
@@ -84,13 +93,13 @@ coroutine::Coroutine BossSpinAttackSkill::operator()()
     co_yield coroutine::WaitForSeconds(afterSpinDelay);
     owner.lock()->PlayAnimation(UnitAnimType::Idle, true);
     co_yield coroutine::WaitForSeconds(0.2);
-    OnInterruption();
     co_return;
 }
 
 void BossSpinAttackSkill::OnInterruption()
 {
-    knockbackCollider.lock()->SetRadius(0.5);
-    UnitAcquisitionSphereColliderPool::SingleInstance().Return(knockbackCollider);
-    knockBackList.clear();
+    if (!effectColliderCoroutine.expired())
+    {
+        owner.lock()->DeleteCoroutine(effectColliderCoroutine);
+    }
 }

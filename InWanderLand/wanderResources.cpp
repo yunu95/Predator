@@ -69,26 +69,27 @@ void InitAnimMap()
     animMap["SKM_Monster2"][UnitAnimType::BattleMove] = localAnimMap[L"Ani_Monster2_Walk"];
     animMap["SKM_Monster2"][UnitAnimType::Death] = localAnimMap[L"Ani_Monster2_Death"];
 
-    animMap["SKM_HeartQueen"][UnitAnimType::Attack] = localAnimMap[L"root|Ani_HeartQueen_Attack"];
-    animMap["SKM_HeartQueen"][UnitAnimType::Death] = localAnimMap[L"root|Ani_HeartQueen_Death"];
-    animMap["SKM_HeartQueen"][UnitAnimType::Idle] = localAnimMap[L"root|Ani_HeartQueen_Idle"];
-    animMap["SKM_HeartQueen"][UnitAnimType::BattleIdle] = localAnimMap[L"root|Ani_HeartQueen_Idle"];
-    animMap["SKM_HeartQueen"][UnitAnimType::Skill1] = localAnimMap[L"root|Ani_HeartQueen_Skill1"];
-    animMap["SKM_HeartQueen"][UnitAnimType::Skill2] = localAnimMap[L"root|Ani_HeartQueen_Skill2"];
-    animMap["SKM_HeartQueen"][UnitAnimType::Skill3] = localAnimMap[L"root|Ani_HeartQueen_Skill3"];
-    animMap["SKM_HeartQueen"][UnitAnimType::Skill4] = localAnimMap[L"root|Ani_HeartQueen_Skill3"];
-    animMap["SKM_HeartQueen"][UnitAnimType::BattleMove] = localAnimMap[L"root|Ani_HeartQueen_Walk"];
-    animMap["SKM_HeartQueen"][UnitAnimType::Move] = localAnimMap[L"root|Ani_HeartQueen_Walk"];
-    //animMap["SKM_HeartQueen"][UnitAnimType::Birth] = localAnimMap[L""];
+    animMap["SKM_HeartQueen"][UnitAnimType::Attack] = localAnimMap[L"Ani_HeartQueen_Attack"];
+    animMap["SKM_HeartQueen"][UnitAnimType::Death] = localAnimMap[L"Ani_HeartQueen_Death"];
+    animMap["SKM_HeartQueen"][UnitAnimType::Idle] = localAnimMap[L"Ani_HeartQueen_Idle"];
+    animMap["SKM_HeartQueen"][UnitAnimType::BattleIdle] = localAnimMap[L"Ani_HeartQueen_Idle"];
+    animMap["SKM_HeartQueen"][UnitAnimType::Skill1] = localAnimMap[L"Ani_HeartQueen_Skill1"];
+    animMap["SKM_HeartQueen"][UnitAnimType::Skill2] = localAnimMap[L"Ani_HeartQueen_Skill2"];
+    animMap["SKM_HeartQueen"][UnitAnimType::Skill3] = localAnimMap[L"Ani_HeartQueen_Skill3"];
+    animMap["SKM_HeartQueen"][UnitAnimType::Skill4] = localAnimMap[L"Ani_HeartQueen_Skill3"];
+    animMap["SKM_HeartQueen"][UnitAnimType::BattleMove] = localAnimMap[L"Ani_HeartQueen_Walk"];
+    animMap["SKM_HeartQueen"][UnitAnimType::Move] = localAnimMap[L"Ani_HeartQueen_Walk"];
+    animMap["SKM_HeartQueen"][UnitAnimType::Birth] = localAnimMap[L"Ani_HeartQueen_Appear"];
 
-    /// Frame 준비되면 추가
-    //animMap["SKM_FRAME1"][UnitAnimType::Birth] = localAnimMap[L""];
-    //animMap["SKM_FRAME1"][UnitAnimType::Skill1] = localAnimMap[L""];
-    //animMap["SKM_FRAME1"][UnitAnimType::Death] = localAnimMap[L""];
+    animMap["SKM_Frame1"][UnitAnimType::Birth] = localAnimMap[L"Ani_Frame1_Appear"];
+    animMap["SKM_Frame1"][UnitAnimType::Idle] = localAnimMap[L"Ani_Frame1_Idle"];
+    animMap["SKM_Frame1"][UnitAnimType::Death] = localAnimMap[L"Ani_Frame1_Death"];
+    animMap["SKM_Frame1"][UnitAnimType::Skill1] = localAnimMap[L"Ani_Frame1_Summon"];
 
-    //animMap["SKM_FRAME2"][UnitAnimType::Birth] = localAnimMap[L""];
-    //animMap["SKM_FRAME2"][UnitAnimType::Skill1] = localAnimMap[L""];
-    //animMap["SKM_FRAME2"][UnitAnimType::Death] = localAnimMap[L""];
+    animMap["SKM_Frame2"][UnitAnimType::Birth] = localAnimMap[L"Ani_Frame2_Appear"];
+    animMap["SKM_Frame2"][UnitAnimType::Idle] = localAnimMap[L"Ani_Frame2_Idle"];
+    animMap["SKM_Frame2"][UnitAnimType::Death] = localAnimMap[L"Ani_Frame2_Death"];
+    animMap["SKM_Frame2"][UnitAnimType::Skill1] = localAnimMap[L"Ani_Frame2_Summon"];
 
     // 없는 애니메이션들은 전부 Idle로 대체한다.
     for (auto& each : animMap)
@@ -115,6 +116,7 @@ constexpr const std::string wanderResources::GetFBXName(WanderFBX::Enum fbxType)
     {
     case wanderResources::WanderFBX::None: return "";
     case wanderResources::WanderFBX::IMPALING_SPIKE: return "SM_Spike02";
+    case wanderResources::WanderFBX::HEALING_COOKIE: return "SM_Spike02";
     case wanderResources::WanderFBX::NUM: return "";
     default:
         break;

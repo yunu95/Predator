@@ -59,6 +59,8 @@ namespace BossSummon
 		application::editor::ITemplateData* GetRookTemplate();
 		application::editor::ITemplateData* GetBishopTemplate();
 
+		void OnBossDie();
+
 	private:
 		std::map<std::weak_ptr<ChessObject>, int, CustomCompChessObject> borrowedChess = std::map<std::weak_ptr<ChessObject>, int, CustomCompChessObject>();
 	};

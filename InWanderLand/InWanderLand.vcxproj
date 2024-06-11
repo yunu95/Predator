@@ -1009,6 +1009,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="Action_BlockPlayerSwitch.h" />
     <ClInclude Include="Action_BlockSkillCancel.h" />
     <ClInclude Include="Action_BlockSkillSelection.h" />
+    <ClInclude Include="Action_Boss.h" />
     <ClInclude Include="Action_Ornament.h" />
     <ClInclude Include="Action_PauseWaves.h" />
     <ClInclude Include="Action_PlayerSelect.h" />
@@ -1054,6 +1055,10 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="Module_Skill.h" />
     <ClInclude Include="MoveEndPreviewPool.h" />
     <ClInclude Include="Multiplier.h" />
+    <ClInclude Include="PassiveHanselHeal.h" />
+    <ClInclude Include="PassiveRobinBleed.h" />
+    <ClInclude Include="PassiveSkill.h" />
+    <ClInclude Include="PassiveUrsulaSpeed.h" />
     <ClInclude Include="PlayerCharacterType.h" />
     <ClInclude Include="ProjectilePool.h" />
     <ClInclude Include="RangedEliteController.h" />
@@ -1955,8 +1960,10 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="UnitBehaviourTree.h" />
     <ClInclude Include="UnitBuff.h" />
     <ClInclude Include="UnitBuffBleeding.h" />
+    <ClInclude Include="UnitBuffHansel.h" />
     <ClInclude Include="UnitBuffInvulenerability.h" />
     <ClInclude Include="UnitBuffType.h" />
+    <ClInclude Include="UnitBuffUrsula.h" />
     <ClInclude Include="UnitCommand.h" />
     <ClInclude Include="UnitController.h" />
     <ClInclude Include="UnitControllerType.h" />
@@ -1995,6 +2002,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     </ClInclude>
     <ClInclude Include="Action_WaitForSeconds.h" />
     <ClInclude Include="UVAnimator.h" />
+    <ClInclude Include="wanderCoroutines.h" />
     <ClInclude Include="WanderFBX.h" />
     <ClInclude Include="wanderResources.h" />
     <ClInclude Include="VFXAnimator.h" />
@@ -2069,6 +2077,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="Action_BlockPlayerSwitch.cpp" />
     <ClCompile Include="Action_BlockSkillCancel.cpp" />
     <ClCompile Include="Action_BlockSkillSelection.cpp" />
+    <ClCompile Include="Action_Boss.cpp" />
     <ClCompile Include="Action_Ornament.cpp" />
     <ClCompile Include="Action_PauseWaves.cpp" />
     <ClCompile Include="Action_PlayerSelect.cpp" />
@@ -2295,6 +2304,10 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="ParticlePalette.cpp" />
     <ClCompile Include="ParticleTool_Manager.cpp" />
     <ClCompile Include="Particle_TemplateData.cpp" />
+    <ClCompile Include="PassiveHanselHeal.cpp" />
+    <ClCompile Include="PassiveRobinBleed.cpp" />
+    <ClCompile Include="PassiveSkill.cpp" />
+    <ClCompile Include="PassiveUrsulaSpeed.cpp" />
     <ClCompile Include="PermanentObservee.cpp" />
     <ClCompile Include="PlayableComponent.cpp" />
     <ClCompile Include="Module_ScriptEditor.cpp">
@@ -2959,7 +2972,9 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="UnitBrush.cpp" />
     <ClCompile Include="UnitBuff.cpp" />
     <ClCompile Include="UnitBuffBleeding.cpp" />
+    <ClCompile Include="UnitBuffHansel.cpp" />
     <ClCompile Include="UnitBuffInvulenerability.cpp" />
+    <ClCompile Include="UnitBuffUrsula.cpp" />
     <ClCompile Include="UnitCommand.cpp" />
     <ClCompile Include="UnitController.cpp" />
     <ClCompile Include="UnitData.cpp" />
@@ -3019,6 +3034,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     </ClCompile>
     <ClCompile Include="Action_WaitForSeconds.cpp" />
     <ClCompile Include="UVAnimator.cpp" />
+    <ClCompile Include="wanderCoroutines.cpp" />
     <ClCompile Include="wanderResources.cpp" />
     <ClCompile Include="VFXAnimator.cpp" />
     <ClCompile Include="WanderUtils.cpp" />

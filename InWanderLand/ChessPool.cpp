@@ -178,4 +178,12 @@ namespace BossSummon
 	{
 		return ChessBishopPool::Instance().templateData;
 	}
+
+	void ChessPool::OnBossDie()
+	{
+		for (auto [each, idx] : borrowedChess)
+		{
+			each.lock()->OnBossDie();
+		}
+	}
 }
