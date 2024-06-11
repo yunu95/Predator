@@ -20,6 +20,7 @@ private:
 	coroutine::Coroutine SpawningSkillffect(std::weak_ptr<BossSpinAttackSkill> skill);
 	std::unordered_set<Unit*> knockBackList;
 	std::weak_ptr<UnitAcquisitionSphereCollider> knockbackCollider;
+	std::weak_ptr<ManagedFBX> chargeEffect;
 public:
 	BossSpinAttackSkill() {}
 	virtual SkillType::Enum GetSkillType() { return SkillType::Enum::BossSkill_One; }

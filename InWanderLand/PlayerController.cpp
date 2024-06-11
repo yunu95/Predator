@@ -451,7 +451,7 @@ void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
 			selectedCharacter.lock()->OrderSkill(UrsulaParalysisSkill{  }, pos);
 			break;
 		case SkillType::HANSEL_Q:
-			selectedCharacter.lock()->OrderSkill(HanselChargeSkill{}, pos);
+			selectedCharacter.lock()->OrderSkill(BossSpinAttackSkill{}, pos);
 			break;
 		case SkillType::HANSEL_W:
 			selectedCharacter.lock()->OrderSkill(BossImpaleSkill{}, pos);

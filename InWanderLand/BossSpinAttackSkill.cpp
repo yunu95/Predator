@@ -16,7 +16,7 @@ coroutine::Coroutine BossSpinAttackSkill::SpawningSkillffect(std::weak_ptr<BossS
 	Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
 	Vector3d direction = deltaPos.Normalized();
 
-	auto chargeEffect = FBXPool::SingleInstance().Borrow("VFX_HeartQueen_Skill1");
+	chargeEffect = FBXPool::SingleInstance().Borrow("VFX_HeartQueen_Skill1");
 
 	chargeEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos);
 	chargeEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
@@ -24,32 +24,11 @@ coroutine::Coroutine BossSpinAttackSkill::SpawningSkillffect(std::weak_ptr<BossS
 	chargeEffectAnimator.lock()->SetAutoActiveFalse();
 	chargeEffectAnimator.lock()->Init();
 
-	co_await std::suspend_always{};
-
-	while (!chargeEffectAnimator.lock()->IsDone())
-	{
-		co_await std::suspend_always{};
-	}
-
-	FBXPool::SingleInstance().Return(chargeEffect);
-
-	co_return;
-}
-
-coroutine::Coroutine BossSpinAttackSkill::operator()()
-{
-    auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
-    auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
-    auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
-
-    owner.lock()->PlayAnimation(UnitAnimType::Skill1, true);
-    owner.lock()->StartCoroutine(SpawningSkillffect(dynamic_pointer_cast<BossSpinAttackSkill>(selfWeakPtr.lock())));
+    co_yield coroutine::WaitForSeconds(spinStartTime);
 
     knockbackCollider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
     knockbackCollider.lock()->SetRadius(pod.colliderRadius);
     knockbackCollider.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
-
-    co_yield coroutine::WaitForSeconds(spinStartTime);
 
     coroutine::ForSeconds forSeconds{ spinAttackingTime };
 
@@ -69,6 +48,36 @@ coroutine::Coroutine BossSpinAttackSkill::operator()()
             each->KnockBack(owner.lock()->GetTransform()->GetWorldPosition() + delta, pod.knockBackDuration);
         }
     }
+
+	co_await std::suspend_always{};
+
+	while (!chargeEffectAnimator.lock()->IsDone())
+	{
+		co_await std::suspend_always{};
+	}
+
+
+	co_return;
+}
+
+coroutine::Coroutine BossSpinAttackSkill::operator()()
+{
+    auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
+    auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
+    auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
+
+    owner.lock()->PlayAnimation(UnitAnimType::Skill1, true);
+    auto effectCoroutine = owner.lock()->StartCoroutine(SpawningSkillffect(dynamic_pointer_cast<BossSpinAttackSkill>(selfWeakPtr.lock())));
+    effectCoroutine.lock()->PushDestroyCallBack([this]()
+        {
+            FBXPool::SingleInstance().Return(chargeEffect);
+            UnitAcquisitionSphereColliderPool::SingleInstance().Return(knockbackCollider);
+            knockBackList.clear();
+        });
+    co_yield coroutine::WaitForSeconds(spinStartTime);
+
+    coroutine::ForSeconds forSeconds{ spinAttackingTime };
+
     disableNavAgent.reset();
     blockFollowingNavigation.reset();
     owner.lock()->Relocate(owner.lock()->GetTransform()->GetWorldPosition());
