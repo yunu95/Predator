@@ -30,6 +30,7 @@ namespace BossSummon
 		virtual void Init(application::editor::ITemplateData* templateData) override;
 		virtual void OnSummon() override;
 		virtual void OnReturn() override {}
+		virtual void OnBossAppear();
 		virtual void OnBossDie() override;
 
 		virtual void Update() override;
@@ -48,6 +49,7 @@ namespace BossSummon
 		bool IsAlive() const;
 
 	private:
+		coroutine::Coroutine OnAppear();
 		coroutine::Coroutine SummonMoldUnit();
 
 		struct CustomCompUnit

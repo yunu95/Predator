@@ -30,7 +30,7 @@ namespace BossSummon
 	{
 		for (auto each : GetGameObject()->GetChildren())
 		{
-			auto renderer = each->GetComponent<graphics::StaticMeshRenderer>();
+			auto renderer = each->GetComponent<graphics::SkinnedMesh>();
 			if (renderer)
 			{
 				mesh = each;
@@ -43,12 +43,12 @@ namespace BossSummon
 
 	void LeftFrame::OnSummon()
 	{
-		/// Pool 에서 Summon 하는 게 아니라, 해당 함수로 Boss 등장 시 Animation 재생합니다.
-		mesh->SetSelfActive(true);
+		StartCoroutine(OnAppear());
+	}
 
-		//auto animator = GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>();
-		//auto anim = wanderResources::GetAnimation("SKM_FRAME1", UnitAnimType::Birth);
-		//animator->Play(anim);
+	void LeftFrame::OnBossAppear()
+	{
+		OnSummon();
 	}
 
 	void LeftFrame::OnBossDie()
@@ -80,6 +80,8 @@ namespace BossSummon
 	void LeftFrame::ChangeUnit()
 	{
 		mesh->SetSelfActive(false);
+		auto idle = wanderResources::GetAnimation("SKM_Frame1", UnitAnimType::Idle);
+		idle->SetLoop(false);
 		unitFrame = UnitPool::SingleInstance().Borrow(frameData);
 	}
 
@@ -91,6 +93,44 @@ namespace BossSummon
 	bool LeftFrame::IsAlive() const
 	{
 		return HasChangedUnit() && unitFrame.lock()->IsAlive();
+	}
+
+	coroutine::Coroutine LeftFrame::OnAppear()
+	{
+		auto& gc = GlobalConstant::GetSingletonInstance().pod;
+
+		mesh->SetSelfActive(true);
+		coroutine::ForSeconds preAppear{ gc.bossAppearTime };
+		mesh->GetTransform()->SetLocalPosition(Vector3d(0, gc.bossAppearHeight, 0));
+
+		auto initVel = wanderUtils::GetInitSpeedOfFreeFall(gc.bossAppearTime, Vector3d(0, gc.bossAppearHeight, 0), Vector3d(0, 1, 0));
+		while (preAppear.Tick())
+		{
+			initVel += Vector3d::down * gc.gravitySpeed * preAppear.Elapsed();
+			mesh->GetTransform()->SetLocalPosition(Vector3d(0, (mesh->GetTransform()->GetLocalPosition() + initVel * preAppear.Elapsed()).y, 0));
+			auto curPos = mesh->GetTransform()->GetLocalPosition();
+			if (curPos.y < 1)
+			{
+				mesh->GetTransform()->SetLocalPosition(Vector3d(0, 1, 0));
+				break;
+			}
+			co_await std::suspend_always();
+		}
+
+		auto animator = GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>();
+		auto anim = wanderResources::GetAnimation("SKM_Frame1", UnitAnimType::Birth);
+		animator->Play(anim);
+
+		coroutine::ForSeconds forSeconds{ anim->GetDuration() };
+
+		while (forSeconds.Tick())
+		{
+			co_await std::suspend_always();
+		}
+		auto idle = wanderResources::GetAnimation("SKM_Frame1", UnitAnimType::Idle);
+		idle->SetLoop(true);
+		animator->Play(idle);
+		co_return;
 	}
 
 	coroutine::Coroutine LeftFrame::SummonMoldUnit()

@@ -88,6 +88,7 @@ public:
     coroutine::Coroutine SettingRotation(float facingAngle, float rotatingTime);
     const UnitBehaviourTree& GetBehaviourTree() const { return unitBehaviourTree; };
     float GetUnitCurrentHp() const;
+    float GetUnitMaxHp() const;
     // AcquireFactor는 수치에 곱연산이 적용될 부분이며, AcquireDelta는 수치에 덧셈 연산이 적용될 부분이다.
     factor::Multiplier<float>& GetDamageMultiplier() { return multiplierDamage; };
     factor::Adder<float>& GetDamageAdder() { return adderDamage; };

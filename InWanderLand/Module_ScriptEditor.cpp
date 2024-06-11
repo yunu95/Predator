@@ -1619,6 +1619,11 @@ namespace application
 									selectedScript->AddAction<Action_OrnamentFloating>();
 									break;
 								}
+								case application::ActionType::BossAppear:
+								{
+									selectedScript->AddAction<Action_BossAppear>();
+									break;
+								}
 								default:
 									break;
 							}

@@ -137,7 +137,7 @@ namespace application
                 each.Clear();
             if (pod.isBossSummon)
             {
-                if (pod.templateData->pod.skinnedFBXName == "SKM_FRAME1")
+                if (pod.templateData->pod.skinnedFBXName == "SKM_Frame1")
                 {
                     auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX(pod.templateData->pod.skinnedFBXName);
                     obj->GetTransform()->SetWorldPosition({ pod.position.x,pod.position.y,pod.position.z });
@@ -149,7 +149,7 @@ namespace application
                     BossSummonMobSkill::SetLeftFrame(comp);
                     return;
                 }
-                else if (pod.templateData->pod.skinnedFBXName == "SKM_FRAME2")
+                else if (pod.templateData->pod.skinnedFBXName == "SKM_Frame2")
                 {
                     auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX(pod.templateData->pod.skinnedFBXName);
                     obj->GetTransform()->SetWorldPosition({ pod.position.x,pod.position.y,pod.position.z });

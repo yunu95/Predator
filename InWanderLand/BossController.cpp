@@ -1,15 +1,20 @@
 #include "BossController.h"
 #include "InWanderLand.h"
 
+#include "LeftFrame.h"
+#include "RightFrame.h"
+
 void BossController::RegisterUnit(std::weak_ptr<Unit> unit)
 {
+	boss = unit;
 	EnemyController::RegisterUnit(unit);
 
-	unit.lock()->onDamaged.AddCallback([unit, this]()
+	unit.lock()->onDamaged.AddCallback([this]()
 		{
-			if (unit.lock()->GetUnitCurrentHp() / unit.lock()->GetUnitTemplateData().pod.max_Health <= 2 / 3)
+			if (summonState == 0 && (boss.lock()->GetUnitCurrentHp() / boss.lock()->GetUnitTemplateData().pod.max_Health) <= 2 / 3)
 			{
-				unit.lock()->OrderSkill(BossSummonMobSkill{}, unit.lock()->GetTransform()->GetWorldPosition());
+				summonState++;
+				boss.lock()->OrderSkill(BossSummonMobSkill{}, boss.lock()->GetTransform()->GetWorldPosition());
 				if (!unitRoutines.empty())
 				{
 					for (auto [target, coro] : unitRoutines)
@@ -22,11 +27,12 @@ void BossController::RegisterUnit(std::weak_ptr<Unit> unit)
 		}
 	);
 
-	unit.lock()->onDamaged.AddCallback([unit, this]()
+	unit.lock()->onDamaged.AddCallback([this]()
 		{
-			if (unit.lock()->GetUnitCurrentHp() / unit.lock()->GetUnitTemplateData().pod.max_Health <= 1 / 3)
+			if (summonState == 1 && (boss.lock()->GetUnitCurrentHp() / boss.lock()->GetUnitTemplateData().pod.max_Health) <= 1 / 3)
 			{
-				unit.lock()->OrderSkill(BossSummonMobSkill{}, unit.lock()->GetTransform()->GetWorldPosition());
+				summonState++;
+				boss.lock()->OrderSkill(BossSummonMobSkill{}, boss.lock()->GetTransform()->GetWorldPosition());
 				if (!unitRoutines.empty())
 				{
 					for (auto [target, coro] : unitRoutines)
@@ -39,23 +45,78 @@ void BossController::RegisterUnit(std::weak_ptr<Unit> unit)
 		}
 	);
 
-	unit.lock()->OnStateEngageCallback()[UnitBehaviourTree::Death].AddVolatileCallback([]() 
+	unit.lock()->OnStateEngageCallback()[UnitBehaviourTree::Death].AddVolatileCallback([]()
 		{
 			BossSummonMobSkill::OnBossDie();
 			BossSummonChessSkill::OnBossDie();
 		});
+
+	unit.lock()->GetGameObject()->SetSelfActive(false);
 }
 
 void BossController::OnContentsStop()
 {
+	summonState = 0;
 	currentState = 0;
 	beforeSkillIndex = 0;
 	EnemyController::OnContentsStop();
 }
 
+void BossController::BossAppear()
+{
+	if (!boss.expired())
+	{
+		StartCoroutine(BossAppearCoroutine());
+	}
+}
+
 std::weak_ptr<Unit> BossController::GetBoss()
 {
-	return unitRoutines.begin()->first->GetWeakPtr<Unit>();
+	return boss;
+}
+
+coroutine::Coroutine BossController::BossAppearCoroutine()
+{
+	auto& gc = GlobalConstant::GetSingletonInstance().pod;
+
+	auto pause = boss.lock()->referencePause.Acquire();
+	auto blockFollowingNavigation = boss.lock()->referenceBlockFollowingNavAgent.Acquire();
+	auto blockAnimLoop = boss.lock()->referenceBlockAnimLoop.Acquire();
+	auto disableNavAgent = boss.lock()->referenceDisableNavAgent.Acquire();
+
+	boss.lock()->GetGameObject()->SetSelfActive(true);
+	boss.lock()->GetTransform()->SetWorldPosition(boss.lock()->GetTransform()->GetWorldPosition() + Vector3d(0, gc.bossAppearHeight, 0));
+	co_await std::suspend_always();
+
+	BossSummonMobSkill::OnBossAppear();
+
+	coroutine::ForSeconds preAppear{ gc.bossAppearTime };
+	auto initVel = wanderUtils::GetInitSpeedOfFreeFall(gc.bossAppearTime, Vector3d(0, gc.bossAppearHeight, 0), Vector3d(0, 0.5, 0));
+	while (preAppear.Tick())
+	{
+		initVel += Vector3d::down * gc.gravitySpeed * preAppear.Elapsed();
+		boss.lock()->GetTransform()->SetWorldPosition(boss.lock()->GetTransform()->GetWorldPosition() + initVel * preAppear.Elapsed());
+		auto curPos = boss.lock()->GetTransform()->GetWorldPosition();
+		if (curPos.y < 0.5)
+		{
+			curPos.y = 0.5;
+			boss.lock()->GetTransform()->SetWorldPosition(curPos);
+			break;
+		}
+		co_await std::suspend_always();
+	}
+
+	boss.lock()->GetTransform()->SetWorldPosition(boss.lock()->GetTransform()->GetWorldPosition() - Vector3d(0, 0.5, 0));
+	boss.lock()->PlayAnimation(UnitAnimType::Birth, false);
+	auto animator = boss.lock()->GetAnimator();
+	auto anim = wanderResources::GetAnimation(boss.lock()->GetFBXName(), UnitAnimType::Birth);
+	coroutine::ForSeconds forSeconds{ anim->GetDuration() };
+
+	while (forSeconds.Tick())
+	{
+		co_await std::suspend_always();
+	}
+	co_return;
 }
 
 coroutine::Coroutine BossController::RoutinePerUnit(std::weak_ptr<Unit> unit)

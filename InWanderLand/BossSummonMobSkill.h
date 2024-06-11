@@ -40,6 +40,7 @@ public:
 	static void SetLeftFrame(BossSummon::LeftFrame* leftFrame);
 	static void SetRightFrame(BossSummon::RightFrame* rightFrame);
 
+	static void OnBossAppear();
 	static void OnBossDie();
 
 private:

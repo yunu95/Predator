@@ -817,6 +817,9 @@
     <Filter Include="Contents_Refactored\UnitCommand\UnitSkillCommand">
       <UniqueIdentifier>{b2063c72-2ebb-4fc2-b61e-d77a7b41d9dc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor\ScriptSystem\2_Action\List\Action_Boss">
+      <UniqueIdentifier>{d4859df6-8135-4806-b3e2-3a50c02a0600}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -1978,6 +1981,9 @@
     <ClInclude Include="UnitSkillCommand.h">
       <Filter>Contents_Refactored\UnitCommand\UnitSkillCommand</Filter>
     </ClInclude>
+    <ClInclude Include="Action_Boss.h">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_Boss</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -2949,6 +2955,9 @@
     </ClCompile>
     <ClCompile Include="UnitSkillCommand.cpp">
       <Filter>Contents_Refactored\UnitCommand\UnitSkillCommand</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_Boss.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_Boss</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
