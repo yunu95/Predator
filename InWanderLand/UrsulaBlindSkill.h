@@ -6,11 +6,12 @@ struct POD_UrsulaBlindSkill
     float skillCoolTime = 2.0f;
     float skillCost = 10.0f;
     float skillRange = 6.f;
-    float skillRadius = 3.f;
+    //float skillRadius = 3.f;
+    float skillScale = 1.0f;
     float skillOffset = 1.f;
     float skillDamage = 5.f;
     float skillBlindTime = 3.0f;
-
+    
 
     TO_JSON(POD_UrsulaBlindSkill)
         FROM_JSON(POD_UrsulaBlindSkill)
@@ -19,13 +20,18 @@ struct POD_UrsulaBlindSkill
 class UrsulaBlindSkill : public Skill
 {
 private:
-	coroutine::Coroutine SpawningFieldEffect();
+	coroutine::Coroutine SpawningFieldEffect(std::weak_ptr<UrsulaBlindSkill> skill);
 
 	static Vector3d skillStart;
 	static Vector3d skillDestination;
 	std::weak_ptr<UnitAcquisitionSphereCollider> circle_Top;
 	std::weak_ptr<UnitAcquisitionSphereCollider> circle_Left;
 	std::weak_ptr<UnitAcquisitionSphereCollider> circle_Right;
+
+	std::weak_ptr<ManagedFBX> onUrsulaPosEffect;
+	std::weak_ptr<ManagedFBX> onTargetPosEffect1;
+	std::weak_ptr<ManagedFBX> onTargetPosEffect2;
+	std::weak_ptr<ManagedFBX> onTargetPosEffect3;
 
 public:
     UrsulaBlindSkill() {}
@@ -44,6 +50,8 @@ public:
     static Vector3d GetSkillObjectPos_Top(const Vector3d& dest);
     static Vector3d GetSkillObjectPos_Left(const Vector3d& dest);
     static Vector3d GetSkillObjectPos_Right(const Vector3d& dest);
+
+    static float colliderEffectRatio;
 };
 
 

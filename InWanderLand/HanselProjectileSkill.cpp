@@ -4,9 +4,12 @@
 const float throwingPieTimingFrame = 70.0f;
 
 POD_HanselProjectileSkill HanselProjectileSkill::pod = POD_HanselProjectileSkill();
+float HanselProjectileSkill::colliderEffectRatio = 1.0f;
 
-coroutine::Coroutine HanselProjectileSkill::ThrowingPie()
+coroutine::Coroutine HanselProjectileSkill::ThrowingPie(std::weak_ptr<HanselProjectileSkill> skill)
 {
+    float actualCollideRange = UrsulaBlindSkill::pod.skillScale * colliderEffectRatio;
+
     Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
     Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
     Vector3d direction = deltaPos.Normalized();
@@ -14,14 +17,16 @@ coroutine::Coroutine HanselProjectileSkill::ThrowingPie()
     Vector3d currentPos = startPos;
 
     coroutine::ForSeconds forSeconds{ static_cast<float>(deltaPos.Magnitude()) / pod.projectileSpeed };
-    auto pieCollider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
-    auto pieObject = FBXPool::SingleInstance().Borrow("SM_Pie");
+    pieCollider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
+    pieObject = FBXPool::SingleInstance().Borrow("SM_Pie");
     pieObject.lock()->GetGameObject()->SetSelfActive(false);
-    std::unordered_set<Unit*> onceCollidedUnits;
+
     co_await std::suspend_always{};
 
-    pieCollider.lock()->SetRadius(pod.projectileRadius);
-    pieObject.lock()->GetTransform()->SetWorldScale({ pod.pieScaleMultipler, pod.pieScaleMultipler, pod.pieScaleMultipler });
+    actualCollideRange = pod.pieScale;
+
+    pieCollider.lock()->SetRadius(actualCollideRange);
+    pieObject.lock()->GetTransform()->SetWorldScale({ pod.pieScale, pod.pieScale, pod.pieScale });
     pieCollider.lock()->GetTransform()->SetWorldRotation(direction);
     auto pieStartRotation = Quaternion::MakeWithForwardUp(direction.up * -1, direction);
 
@@ -62,12 +67,7 @@ coroutine::Coroutine HanselProjectileSkill::ThrowingPie()
             }
         }
     }
-
-    pieCollider.lock()->SetRadius(0.5);
-    
-    UnitAcquisitionSphereColliderPool::SingleInstance().Return(pieCollider);
-    FBXPool::SingleInstance().Return(pieObject);
-    onceCollidedUnits.clear();
+   
     co_return;
 }
 
@@ -96,7 +96,14 @@ coroutine::Coroutine HanselProjectileSkill::operator()()
     {
         co_await std::suspend_always{};
     }
-    owner.lock()->StartCoroutine(ThrowingPie());
+
+    auto throwingCoroutine = owner.lock()->StartCoroutine(ThrowingPie(std::dynamic_pointer_cast<HanselProjectileSkill>(selfWeakPtr.lock())));
+    throwingCoroutine.lock()->PushDestroyCallBack([this]()
+        {
+            UnitAcquisitionSphereColliderPool::SingleInstance().Return(pieCollider);
+            FBXPool::SingleInstance().Return(pieObject);
+            onceCollidedUnits.clear();
+        });
 
     coroutine::ForSeconds forIdleSeconds{ 1.0f };
     while (forIdleSeconds.Tick()) { co_await std::suspend_always{}; }

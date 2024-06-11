@@ -5,7 +5,7 @@ struct POD_RobinTauntSkill
 {
     float	coolTime = 2.0f;
     float	skillCost = 10.0f;
-    float	skillRadius = 6.0f;
+    float   skillScale = 1.0f;
     float	skillDamage = 5.0f;
     float	skillPlayTime = 2.0f;
     float	skillTauntTime = 3.0f;
@@ -18,18 +18,20 @@ class UnitAcquisitionSphereCollider;
 class RobinTauntSkill : public Skill
 {
 private:
-	coroutine::Coroutine SpawningSkillffect();
+	coroutine::Coroutine SpawningSkillffect(std::weak_ptr<RobinTauntSkill> skill);
 	std::weak_ptr<UnitAcquisitionSphereCollider> tauntCollider;
 	std::unordered_set<Unit*> tauntList;
+    std::weak_ptr<ManagedFBX> tauntEffect;
 
 public:
     RobinTauntSkill() {}
     virtual SkillType::Enum GetSkillType() { return SkillType::Enum::ROBIN_W; }
-    virtual float GetCastRange() override { return pod.skillRadius; }
+    virtual float GetCastRange() override { return pod.skillScale * colliderEffectRatio; }
     virtual coroutine::Coroutine operator()()override;
     virtual void OnInterruption()override;
 
     static POD_RobinTauntSkill pod;
+    static float colliderEffectRatio;
 };
 
 
