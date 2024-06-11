@@ -304,16 +304,10 @@ void PlayerController::HandleSkillPreview()
 			break;
 	}
 
+	// 임시 이동 경로 보여주는 부분
 	if ((state == State::Tactic) && (selectedSkill == SkillType::NONE))
 	{
-		auto path = SingleNavigationField::Instance().GetSmoothPath(characters[selectedCharacterType].lock()->GetGameObject()->GetTransform()->GetWorldPosition(), GetWorldCursorPosition());
-		
-		switch (selectedCharacterType)
-		{
-			case PlayerCharacterType::Robin: SkillPreviewSystem::Instance().ShowTemporaryRoute(SkillPreviewSystem::UnitType::Robin, path); break;
-			case PlayerCharacterType::Ursula: SkillPreviewSystem::Instance().ShowTemporaryRoute(SkillPreviewSystem::UnitType::Ursula, path); break;
-			case PlayerCharacterType::Hansel: SkillPreviewSystem::Instance().ShowTemporaryRoute(SkillPreviewSystem::UnitType::Hansel, path); break;
-		}
+		TacticModeSystem::Instance().ShowTemporaryRouteInTacticMode(this->selectedCharacterType);
 	}
 }
 
@@ -410,18 +404,74 @@ void PlayerController::OnRightClick()
 		}
 		else
 		{
+			SkillPreviewSystem::Instance().HideTemporaryRoute();
 			if (!cursorUnitDetector.lock()->GetUnits().empty() && (*cursorUnitDetector.lock()->GetUnits().begin())->teamIndex != playerTeamIndex)
 			{
 				// Attack
+
+				// 걸어가서 공격을 하게 될 수 있음
+				std::vector<Vector3d> path;
+				switch (selectedCharacterType)
+				{
+					case PlayerCharacterType::Robin:
+					{
+						path = TacticModeSystem::Instance().GetPathInTacticMode(selectedCharacterType, (*cursorUnitDetector.lock()->GetUnits().begin()));
+						TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitMoveCommand>(characters[selectedCharacterType].lock().get()
+							, GetWorldCursorPosition(),
+							SkillPreviewSystem::Instance().ShowRoute(SkillPreviewSystem::UnitType::Robin, path)));
+					}
+					break;
+					case PlayerCharacterType::Ursula:
+					{
+						path = TacticModeSystem::Instance().GetPathInTacticMode(selectedCharacterType, (*cursorUnitDetector.lock()->GetUnits().begin()));
+						TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitMoveCommand>(characters[selectedCharacterType].lock().get()
+							, GetWorldCursorPosition(),
+							SkillPreviewSystem::Instance().ShowRoute(SkillPreviewSystem::UnitType::Ursula, path)));
+					}
+					break;
+					case PlayerCharacterType::Hansel:
+					{
+						path = TacticModeSystem::Instance().GetPathInTacticMode(selectedCharacterType, (*cursorUnitDetector.lock()->GetUnits().begin()));
+						TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitMoveCommand>(characters[selectedCharacterType].lock().get()
+							, GetWorldCursorPosition(),
+							SkillPreviewSystem::Instance().ShowRoute(SkillPreviewSystem::UnitType::Hansel, path)));
+					}
+					break;
+				}
+
 				//TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitAttackCommand>());
 			}
 			else
 			{
 				// Move
-				auto path = SingleNavigationField::Instance().GetSmoothPath(characters[selectedCharacterType].lock()->GetGameObject()->GetTransform()->GetWorldPosition(), GetWorldCursorPosition());
-
-				TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitMoveCommand>(this, GetWorldCursorPosition(),
-					SkillPreviewSystem::Instance().ShowRoute(SkillPreviewSystem::UnitType::Robin, path)));
+				std::vector<Vector3d> path;
+				switch (selectedCharacterType)
+				{
+					case PlayerCharacterType::Robin:
+					{
+						path = TacticModeSystem::Instance().GetPathInTacticMode(selectedCharacterType);
+						TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitMoveCommand>(characters[selectedCharacterType].lock().get()
+							, GetWorldCursorPosition(),
+							SkillPreviewSystem::Instance().ShowRoute(SkillPreviewSystem::UnitType::Robin, path)));
+					}
+					break;
+					case PlayerCharacterType::Ursula:
+					{
+						path = TacticModeSystem::Instance().GetPathInTacticMode(selectedCharacterType);
+						TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitMoveCommand>(characters[selectedCharacterType].lock().get()
+							, GetWorldCursorPosition(),
+							SkillPreviewSystem::Instance().ShowRoute(SkillPreviewSystem::UnitType::Ursula, path)));
+					}
+					break;
+					case PlayerCharacterType::Hansel:
+					{
+						path = TacticModeSystem::Instance().GetPathInTacticMode(selectedCharacterType);
+						TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitMoveCommand>(characters[selectedCharacterType].lock().get()
+							, GetWorldCursorPosition(),
+							SkillPreviewSystem::Instance().ShowRoute(SkillPreviewSystem::UnitType::Hansel, path)));
+					}
+					break;
+				}
 			}
 		}
 	}
@@ -807,6 +857,7 @@ void PlayerController::InitUnitMouseInteractionEffects()
 		allySelectedEffect = Scene::getCurrentScene()->AddGameObjectFromFBX("VFX_CharacterRange");
 		allySelectedEffectRenderer = allySelectedEffect->GetChildren()[0]->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 		allySelectedEffectRenderer->GetGI().GetMaterial()->SetPixelShader(_resourceManager->GetShader(L"VFX_PS.cso"));
+		allySelectedEffect->SetSelfActive(false);
 	}
 	{
 		for (auto& each : enemyTargetedEffect)
@@ -814,10 +865,12 @@ void PlayerController::InitUnitMouseInteractionEffects()
 			each = Scene::getCurrentScene()->AddGameObjectFromFBX("VFX_AttackSelected");
 			each->GetChildren()[0]->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().GetMaterial()->SetColor(wanderResources::unitColor::ENEMY_COLOR);
 			each->AddComponent<VFXAnimator>()->Init();
+			each->SetSelfActive(false);
 		}
 	}
 	{
 		allyHoverEffect = Scene::getCurrentScene()->AddGameObjectFromFBX("VFX_CharacterSelected");
+		allyHoverEffect->SetSelfActive(false);
 		allyHoverEffectRenderer = allyHoverEffect->GetChildren()[0]->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 		allyHoverEffectRenderer->GetGI().GetMaterial()->SetPixelShader(_resourceManager->GetShader(L"VFX_PS.cso"));
 
@@ -827,6 +880,7 @@ void PlayerController::InitUnitMouseInteractionEffects()
 	}
 	{
 		enemyHoverEffect = Scene::getCurrentScene()->AddGameObjectFromFBX("VFX_CharacterSelected");
+		enemyHoverEffect->SetSelfActive(false);
 		enemyHoverEffectRenderer = enemyHoverEffect->GetChildren()[0]->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 		enemyHoverEffectRenderer->GetGI().GetMaterial()->SetPixelShader(_resourceManager->GetShader(L"VFX_PS.cso"));
 		enemyHoverEffectRenderer->GetGI().GetMaterial()->SetColor(wanderResources::unitColor::ENEMY_COLOR);

@@ -4,6 +4,7 @@
 #include "Unit.h"
 #include "PlayerUnit.h"
 #include "PermanentObservee.h"
+#include "PlayerCharacterType.h"
 #include <unordered_map>
 #include <memory>
 #include <queue>
@@ -28,6 +29,7 @@ public:
     virtual void Start() override;
     virtual void Update() override;
 
+    virtual void OnContentsStop() override;
     virtual Component* GetComponent() override { return this; }
 
 public:
@@ -42,7 +44,9 @@ public:
     void EngageTacticSystem();
 
     // 유닛의 행동을 큐에 등록할 수 있게 해주는 함수 입니다.
-    void EnqueueCommand(std::shared_ptr<UnitCommand> command);
+    // 이 함수의 반환값이 false라면 이미 여섯개의 Command가 들어온 상태임. 이 때 UI를 띄어주든 해야할 거 같음.
+    // 혹은 전술모드가 활성화되어있지 않기 때문에 false가 나올 것임.
+    bool EnqueueCommand(std::shared_ptr<UnitCommand> command);
 
     // 맨 마지막 명령 하나를 지우는 함수입니다.
     void PopCommand();
@@ -50,12 +54,14 @@ public:
     // 모든 명령을 지우는 함수입니다.
     void ClearCommand();
 
-    std::shared_ptr<UnitCommand>& GetRobinLastCommand() { return robinLastCommand; }
-    std::shared_ptr<UnitCommand>& GetUrsulaLastCommand() { return ursulaLastCommand; }
-    std::shared_ptr<UnitCommand>& GetHanselLastCommand() { return hanselLastCommand; }
-
     // 전술 모드가 풀리면 실행될 함수 입니다.
     void ExecuteCommands();
+
+    // 전술모드가 활성화 되어 있을 때 선택된 스킬이 없을 때 임시경로를 보여주는 함수입니다.
+    void ShowTemporaryRouteInTacticMode(PlayerCharacterType::Enum playerType);
+
+    // 전술모드가 활성화 되어 있을 때 이동 커맨드가 들어가기 전 경로를 반환해주는 함수 입니다.
+    std::vector<Vector3d> GetPathInTacticMode(PlayerCharacterType::Enum playerType, Unit* unit = nullptr);
 
 private:
     // 전술모드 내부에서 등록된 명령들을 실행해주는 함수입니다.
@@ -73,6 +79,8 @@ private:
     float coolTime;
     float elapsedTime;
 
+    int commandCount = 0;
+    const int MAX_COMMAND_COUNT = 6;
 
     friend class PlayerController;
 };

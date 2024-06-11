@@ -1101,6 +1101,10 @@ void Unit::InitBehaviorTree()
             currentOrderType = pendingOrderType;
             OnStateEngage<UnitBehaviourTree::Move>();
         };
+	unitBehaviourTree[UnitBehaviourTree::Move].onExit = [this]()
+		{
+			OnStateExit<UnitBehaviourTree::Move>();
+		};
     unitBehaviourTree[UnitBehaviourTree::Move].onUpdate = [this]()
         {
             OnStateUpdate<UnitBehaviourTree::Move>();
