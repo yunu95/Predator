@@ -19,8 +19,8 @@ class RobinTauntSkill : public Skill
 {
 private:
 	coroutine::Coroutine SpawningSkillffect(std::weak_ptr<RobinTauntSkill> skill);
-	std::weak_ptr<UnitAcquisitionSphereCollider> tauntCollider;
-	std::unordered_set<Unit*> tauntList;
+    std::weak_ptr<coroutine::Coroutine> effectColliderCoroutine;
+    std::weak_ptr<UnitAcquisitionSphereCollider> tauntCollider;
     std::weak_ptr<ManagedFBX> tauntEffect;
 
 public:

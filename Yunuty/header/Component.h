@@ -121,6 +121,7 @@ namespace yunutyEngine
         void SetIsUpdating(bool isUpdating);
         std::weak_ptr<yunutyEngine::coroutine::Coroutine> StartCoroutine(coroutine::Coroutine&& coroutine);
         void DeleteCoroutine(const std::weak_ptr<coroutine::Coroutine>& coroutine);
+        void ClearCoroutines();
 
         Component(const Component&) = delete;
         Component& operator=(const Component&) = delete;

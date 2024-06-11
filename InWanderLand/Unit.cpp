@@ -909,6 +909,7 @@ void Unit::Reset()
     }
     DeleteCoroutine(coroutineRevival);
     DeleteCoroutine(coroutineDeath);
+    ClearCoroutines();
     liveCountLeft = unitTemplateData->pod.liveCount;
     currentTargetUnit.reset();
     currentOrderType = UnitOrderType::AttackMove;
