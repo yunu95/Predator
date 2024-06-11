@@ -925,6 +925,7 @@ void Unit::Reset()
     DeleteCoroutine(coroutineDeath);
     ClearCoroutines();
     passiveSkill.reset();
+    buffs.clear();
     liveCountLeft = unitTemplateData->pod.liveCount;
     currentTargetUnit.reset();
     currentOrderType = UnitOrderType::AttackMove;
