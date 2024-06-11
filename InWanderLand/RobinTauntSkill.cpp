@@ -6,56 +6,40 @@ POD_RobinTauntSkill RobinTauntSkill::pod = POD_RobinTauntSkill();
 
 const float damageTimingFrame = 24.0f;
 
-coroutine::Coroutine RobinTauntSkill::SpawningSkillffect()
+float RobinTauntSkill::colliderEffectRatio = 6.0f;
+
+coroutine::Coroutine RobinTauntSkill::SpawningSkillffect(std::weak_ptr<RobinTauntSkill> skill)
 {
+	float actualCollideRange = RobinTauntSkill::pod.skillScale * colliderEffectRatio;
+
 	Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
 	Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
 	Vector3d direction = deltaPos.Normalized();
 
-	auto tauntEffect = FBXPool::SingleInstance().Borrow("VFX_Robin_Skill2");
-
-    tauntEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos);
-    tauntEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
+	tauntEffect = FBXPool::SingleInstance().Borrow("VFX_Robin_Skill2");
+	tauntEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos);
+	tauntEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(pod.skillScale, pod.skillScale, pod.skillScale));
+	tauntEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
 	auto chargeEffectAnimator = tauntEffect.lock()->AcquireVFXAnimator();
 	chargeEffectAnimator.lock()->SetAutoActiveFalse();
 	chargeEffectAnimator.lock()->Init();
 
-	co_await std::suspend_always{};
-
-	while (!chargeEffectAnimator.lock()->IsDone())
-	{
-		co_await std::suspend_always{};
-	}
-
-	FBXPool::SingleInstance().Return(tauntEffect);
-
-	co_return;
-}
-
-coroutine::Coroutine RobinTauntSkill::operator()()
-{
-    auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
-    auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
-    auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
-
 	auto animator = owner.lock()->GetAnimator();
 	auto tauntAnim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Taunt);
+	coroutine::ForSeconds forSeconds{ pod.skillPlayTime };
 
-    owner.lock()->PlayAnimation(UnitAnimType::Taunt, true);
-    owner.lock()->StartCoroutine(SpawningSkillffect());
-    coroutine::ForSeconds forSeconds{ pod.skillPlayTime };
-    tauntCollider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
-    tauntCollider.lock()->SetRadius(pod.skillRadius);
+	tauntCollider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
+	tauntCollider.lock()->SetRadius(actualCollideRange);
 	tauntCollider.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
 
 	co_await std::suspend_always{};
 
-    while (forSeconds.Tick())
-    {
+	while (forSeconds.Tick())
+	{
 		co_await std::suspend_always{};
 
-        if (animator.lock()->GetCurrentFrame() >= damageTimingFrame)
-        {
+		if (animator.lock()->GetCurrentFrame() >= damageTimingFrame)
+		{
 			for (auto& each : tauntCollider.lock()->GetEnemies())
 			{
 				if (!tauntList.contains(each))
@@ -67,9 +51,36 @@ coroutine::Coroutine RobinTauntSkill::operator()()
 					each->Damaged(owner, pod.skillDamage);
 				}
 			}
-        }
-    }
- 
+		}
+	}
+	co_await std::suspend_always{};
+
+	while (!chargeEffectAnimator.lock()->IsDone())
+	{
+		co_await std::suspend_always{};
+	}
+	co_return;
+}
+
+coroutine::Coroutine RobinTauntSkill::operator()()
+{
+    auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
+    auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
+    auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
+
+    owner.lock()->PlayAnimation(UnitAnimType::Taunt, true);
+	auto effectCoroutine = owner.lock()->StartCoroutine(SpawningSkillffect(std::dynamic_pointer_cast<RobinTauntSkill>(selfWeakPtr.lock())));
+
+	effectCoroutine.lock()->PushDestroyCallBack([this]()
+		{
+			tauntList.clear();
+			tauntCollider.lock()->SetRadius(0.5);
+			UnitAcquisitionSphereColliderPool::SingleInstance().Return(tauntCollider);
+			FBXPool::SingleInstance().Return(tauntEffect);
+		});
+
+	co_yield coroutine::WaitForSeconds(pod.skillPlayTime);
+
     disableNavAgent.reset();
     blockFollowingNavigation.reset();
     owner.lock()->Relocate(owner.lock()->GetTransform()->GetWorldPosition());
@@ -79,7 +90,5 @@ coroutine::Coroutine RobinTauntSkill::operator()()
 
 void RobinTauntSkill::OnInterruption()
 {
-	tauntList.clear();
-    tauntCollider.lock()->SetRadius(0.5);
-    UnitAcquisitionSphereColliderPool::SingleInstance().Return(tauntCollider);
+
 }

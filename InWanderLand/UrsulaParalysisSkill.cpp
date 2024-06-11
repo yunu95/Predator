@@ -6,15 +6,18 @@
 
 
 POD_UrsulaParalysisSkill UrsulaParalysisSkill::pod = POD_UrsulaParalysisSkill();
+float UrsulaParalysisSkill::colliderEffectRatio = 3.0f;
 
-coroutine::Coroutine UrsulaParalysisSkill::SpawningFieldEffect()
+coroutine::Coroutine UrsulaParalysisSkill::SpawningFieldEffect(std::weak_ptr<UrsulaParalysisSkill> skill)
 {
 	auto animator = owner.lock()->GetAnimator();
 
-	auto tentacleObject = FBXPool::SingleInstance().Borrow("SVFX_Ursula_Skill2_Tentacle");
-	auto waveObject = FBXPool::SingleInstance().Borrow("SVFX_Ursula_Skill2_Wave");
-	tentacleObject.lock()->GetTransform()->SetWorldScale({ 3,3,3 });
-	waveObject.lock()->GetTransform()->SetWorldScale({ 3,3,3 });
+	float actualCollideRange = UrsulaBlindSkill::pod.skillScale * colliderEffectRatio;
+
+	tentacleObject = FBXPool::SingleInstance().Borrow("SVFX_Ursula_Skill2_Tentacle");
+	waveObject = FBXPool::SingleInstance().Borrow("SVFX_Ursula_Skill2_Wave");
+	tentacleObject.lock()->GetTransform()->SetWorldScale({ pod.skillScale, pod.skillScale, pod.skillScale });
+	waveObject.lock()->GetTransform()->SetWorldScale({ pod.skillScale, pod.skillScale, pod.skillScale });
 
 	auto tentacleAnimator = tentacleObject.lock()->GetGameObject()->GetChildren()[0]->GetComponent<yunutyEngine::graphics::Animator>();
 	auto waveAnimator = waveObject.lock()->GetGameObject()->GetChildren()[0]->GetComponent<yunutyEngine::graphics::Animator>();
@@ -49,13 +52,6 @@ coroutine::Coroutine UrsulaParalysisSkill::SpawningFieldEffect()
 
 	co_await std::suspend_always{};
 
-
-	skillCollider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
-	skillCollider.lock()->SetRadius(pod.skillRadius);
-	skillCollider.lock()->GetTransform()->SetWorldPosition(targetPos);
-
-	co_await std::suspend_always{};
-
 	bool hit = false;
 	while (!hit)
 	{
@@ -68,8 +64,11 @@ coroutine::Coroutine UrsulaParalysisSkill::SpawningFieldEffect()
 
 		if (hit)
 		{
+			damageCollider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
+			damageCollider.lock()->SetRadius(actualCollideRange);
+			damageCollider.lock()->GetTransform()->SetWorldPosition(targetPos);
 			co_await std::suspend_always{};
-			for (auto& each : skillCollider.lock()->GetEnemies())
+			for (auto& each : damageCollider.lock()->GetEnemies())
 			{
 				each->Damaged(owner, pod.skillDamage);
 			}
@@ -89,8 +88,11 @@ coroutine::Coroutine UrsulaParalysisSkill::SpawningFieldEffect()
 
 		if (knockBacked)
 		{
+			knockBackCollider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
+			knockBackCollider.lock()->SetRadius(actualCollideRange);
+			knockBackCollider.lock()->GetTransform()->SetWorldPosition(targetPos);
 			co_await std::suspend_always{};
-			for (auto& each : skillCollider.lock()->GetEnemies())
+			for (auto& each : knockBackCollider.lock()->GetEnemies())
 			{
 				each->KnockBack(targetPos, pod.knockBackDuration);
 			}
@@ -103,9 +105,6 @@ coroutine::Coroutine UrsulaParalysisSkill::SpawningFieldEffect()
 		co_await std::suspend_always{};
 	}
 
-	FBXPool::SingleInstance().Return(tentacleObject);
-	FBXPool::SingleInstance().Return(waveObject);
-
     co_return;
 }
 
@@ -114,7 +113,14 @@ coroutine::Coroutine UrsulaParalysisSkill::operator()()
     auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
     auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
     auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
-	owner.lock()->StartCoroutine(SpawningFieldEffect());
+	auto effectCoroutine = owner.lock()->StartCoroutine(SpawningFieldEffect(dynamic_pointer_cast<UrsulaParalysisSkill>(selfWeakPtr.lock())));
+	effectCoroutine.lock()->PushDestroyCallBack([this]()
+		{
+			FBXPool::SingleInstance().Return(tentacleObject);
+			FBXPool::SingleInstance().Return(waveObject);
+			UnitAcquisitionSphereColliderPool::SingleInstance().Return(damageCollider);
+			UnitAcquisitionSphereColliderPool::SingleInstance().Return(knockBackCollider);
+		});
     owner.lock()->PlayAnimation(UnitAnimType::Skill2, true);
     auto animator = owner.lock()->GetAnimator();
     auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill2);
@@ -124,12 +130,6 @@ coroutine::Coroutine UrsulaParalysisSkill::operator()()
     {
         co_await std::suspend_always{};
     }
-
-//     /// 마지막으로 경직
-//     for (auto& each : skillCollider.lock()->GetEnemies())
-//     {
-//         each->Paralyze(pod.skillParalysisTime);
-//     }
 
     disableNavAgent.reset();
     blockFollowingNavigation.reset();
@@ -141,6 +141,6 @@ coroutine::Coroutine UrsulaParalysisSkill::operator()()
 
 void UrsulaParalysisSkill::OnInterruption()
 {
-    skillCollider.lock()->SetRadius(0.5);
-    UnitAcquisitionSphereColliderPool::SingleInstance().Return(skillCollider);
+	UnitAcquisitionSphereColliderPool::SingleInstance().Return(damageCollider);
+	UnitAcquisitionSphereColliderPool::SingleInstance().Return(knockBackCollider);
 }

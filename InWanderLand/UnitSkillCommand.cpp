@@ -36,7 +36,7 @@ void UnitSkillCommand::ShowPreviewMesh()
 		else if (this->skillType.ROBIN_W == SkillType::ROBIN_W)
 		{
 			SkillPreviewSystem::Instance().ShowRobinWSkill(TacticModeSystem::Instance().GetRobinLastCommand()->GetExpectedPos(),
-				RobinTauntSkill::pod.skillRadius);
+				RobinTauntSkill::pod.skillScale);
 		}
 	}
 	else if (unit->GetUnitTemplateData().GetDataResourceName() == "SKM_Ursula")
@@ -51,11 +51,11 @@ void UnitSkillCommand::ShowPreviewMesh()
 			auto pos1 = UrsulaBlindSkill::GetSkillObjectPos_Left(projectedPoint);
 			auto pos2 = UrsulaBlindSkill::GetSkillObjectPos_Right(projectedPoint);
 			auto pos3 = UrsulaBlindSkill::GetSkillObjectPos_Top(projectedPoint);
-			SkillPreviewSystem::Instance().ShowUrsulaQSkill(pos1, pos2, pos3, Vector3d::one * UrsulaBlindSkill::pod.skillRadius);
+			SkillPreviewSystem::Instance().ShowUrsulaQSkill(pos1, pos2, pos3, Vector3d::one * UrsulaBlindSkill::pod.skillScale * UrsulaBlindSkill::colliderEffectRatio);
 		}
 		else if (this->skillType.URSULA_W == SkillType::URSULA_W)
 		{
-			SkillPreviewSystem::Instance().ShowUrsulaWSkill(projectedPoint, UrsulaParalysisSkill::pod.skillRadius);
+			SkillPreviewSystem::Instance().ShowUrsulaWSkill(projectedPoint, UrsulaParalysisSkill::pod.skillScale * UrsulaBlindSkill::colliderEffectRatio);
 		}
 	}
 	else if (unit->GetUnitTemplateData().GetDataResourceName() == "SKM_Hansel")
