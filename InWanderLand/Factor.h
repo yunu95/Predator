@@ -11,7 +11,7 @@ namespace factor
         std::shared_ptr<T> AcquireFactor()
         {
             auto factor = std::make_shared<T>(IdentityFactor());
-            push_back(factor);
+            std::vector<std::weak_ptr<T>>::push_back(factor);
             return factor;
         };
         virtual T IdentityFactor()const = 0;

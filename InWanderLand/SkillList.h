@@ -14,5 +14,6 @@
 #include "BossImpaleSkill.h"
 #include "BossSummonMobSkill.h"
 #include "BossSummonChessSkill.h"
-
-
+#include "PassiveRobinBleed.h"
+#include "PassiveUrsulaSpeed.h"
+#include "PassiveHanselHeal.h"

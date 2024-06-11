@@ -31,7 +31,7 @@ std::weak_ptr<Projectile> ProjectilePool::Borrow(std::weak_ptr<Unit> owner, Vect
     float vy0 = (-y0 + 0.5f * GlobalConstant::GetSingletonInstance().pod.gravitySpeed * t * t) / t;
 
     ret.lock()->speed += Vector3d::up * vy0;
-    ret.lock()->damage = owner.lock()->GetUnitTemplateData().pod.m_autoAttackDamage;
+    ret.lock()->damage = owner.lock()->GetUnitTemplateData().pod.m_autoAttackDamage + owner.lock()->adderAttackDamage;
     ret.lock()->traveling = true;
     return ret;
 }

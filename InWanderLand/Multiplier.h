@@ -4,7 +4,7 @@
 namespace factor
 {
     template<typename T>
-    class Multiplier : Factor<T>
+    class Multiplier : public Factor<T>
     {
     public:
         virtual T IdentityFactor() const { return 1; };

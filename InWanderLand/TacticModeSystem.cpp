@@ -108,6 +108,7 @@ void TacticModeSystem::ClearCommand()
 	}
 
 	this->commandQueue.clear();
+	PlayerController::Instance().SetState(PlayerController::State::None);
 }
 
 yunutyEngine::coroutine::Coroutine TacticModeSystem::ExecuteInternal()
@@ -123,4 +124,5 @@ yunutyEngine::coroutine::Coroutine TacticModeSystem::ExecuteInternal()
 	}
 
 	this->commandQueue.clear();
+	PlayerController::Instance().SetState(PlayerController::State::None);
 }
