@@ -832,6 +832,42 @@ void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& po
         coroutineBirth = StartCoroutine(BirthCoroutine());
     }
 }
+void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& position, const Quaternion& rotation, bool instant)
+{
+    this->unitData = nullptr;
+    onAttack.Clear();
+    onAttackHit.Clear();
+    onDamaged.Clear();
+    onCreated.Clear();
+    onRotationFinish.Clear();
+    for (auto& each : onStateEngage)
+    {
+        each.Clear();
+    }
+    for (auto& each : onStateExit)
+    {
+        each.Clear();
+    }
+    Summon(td);
+
+    GetTransform()->SetWorldPosition(Vector3d{ position });
+    navAgentComponent.lock()->GetTransform()->SetWorldPosition(Vector3d{ position });
+    navAgentComponent.lock()->AssignToNavigationField(&SingleNavigationField::Instance());
+    navObstacle.lock()->AssignToNavigationField(&SingleNavigationField::Instance());
+
+    auto forward = rotation.Forward();
+    desiredRotation = currentRotation = 180 + std::atan2f(forward.z, forward.x) * math::Rad2Deg;
+
+    Reset();
+    if (instant)
+    {
+        onCreated();
+    }
+    else
+    {
+        coroutineBirth = StartCoroutine(BirthCoroutine());
+    }
+}
 void Unit::AddPassiveSkill(std::shared_ptr<PassiveSkill> skill)
 {
     passiveSkill = skill;

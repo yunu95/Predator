@@ -10,20 +10,19 @@
 #include "BossSummonMobSkill.h"
 #include "GlobalConstant.h"
 #include "UnitPool.h"
+#include "Unit_TemplateData.h"
+#include "TemplateDataManager.h"
 
 namespace BossSummon
 {
-	std::vector<application::editor::UnitData*> LeftFrame::mold = std::vector<application::editor::UnitData*>();
-
-	void LeftFrame::RegisterUnitData(application::editor::UnitData* unitData)
-	{
-		mold.push_back(unitData);
-	}
+	application::editor::Unit_TemplateData* LeftFrame::meleeUnitMold = nullptr;
+	application::editor::Unit_TemplateData* LeftFrame::projectileUnitMold = nullptr;
 
 	LeftFrame::~LeftFrame()
 	{
 		OnBossDie();
-		mold.clear();
+		meleeUnitMold = nullptr;
+		projectileUnitMold = nullptr;
 		BossSummonMobSkill::SetLeftFrame(nullptr);
 	}
 
@@ -49,6 +48,18 @@ namespace BossSummon
 
 	void LeftFrame::OnBossAppear()
 	{
+		for (auto each : application::editor::TemplateDataManager::GetSingletonInstance().GetDataList(application::editor::DataType::UnitData))
+		{
+			auto td = static_cast<application::editor::Unit_TemplateData*>(each);
+			if (td->pod.skinnedFBXName == "SKM_Monster1" && td->pod.unitControllerType.enumValue != UnitControllerType::MELEE_ELITE)
+			{
+				meleeUnitMold = td;
+			}
+			else if (td->pod.skinnedFBXName == "SKM_Monster2" && td->pod.unitControllerType.enumValue != UnitControllerType::RANGED_ELITE)
+			{
+				projectileUnitMold = td;
+			}
+		}
 		OnSummon();
 	}
 
@@ -136,7 +147,7 @@ namespace BossSummon
 
 	coroutine::Coroutine LeftFrame::SummonMoldUnit()
 	{
-		unitFrame.lock()->PlayAnimation(UnitAnimType::Skill1, true);
+		unitFrame.lock()->PlayAnimation(UnitAnimType::Skill1, false);
 		auto animator = unitFrame.lock()->GetAnimator();
 		auto anim = wanderResources::GetAnimation(unitFrame.lock()->GetFBXName(), UnitAnimType::Skill1);
 		coroutine::ForSeconds forSeconds{ anim->GetDuration() };
@@ -144,25 +155,68 @@ namespace BossSummon
 		Vector3d pivotPos = GetGameObject()->GetTransform()->GetWorldPosition() + Vector3d(-BossSummonMobSkill::pod.leftSummonOffset_x, 0, BossSummonMobSkill::pod.leftSummonOffset_z);
 		Quaternion summonRot = GetGameObject()->GetTransform()->GetWorldRotation();
 
-		int summonCount = 0;
+		int meleeSummonCount = 0;
+		int projectileSummonCount = 0;
 		while (forSeconds.Tick())
 		{
-			if (summonCount < mold.size() && forSeconds.ElapsedNormalized() >= 1 / (float)mold.size() * summonCount)
+			bool unitSummon = false;
+			auto index = math::Random::GetRandomInt(0, 1);
+			while (!unitSummon)
 			{
-				Vector3d finalPos = Vector3d();
-				finalPos.x = math::Random::GetRandomFloat((pivotPos + BossSummonMobSkill::pod.leftNoiseRadius * summonRot.Right().Normalized()).x, pivotPos.x + BossSummonMobSkill::pod.leftNoiseRadius);
-				finalPos.z = math::Random::GetRandomFloat(pivotPos.z - BossSummonMobSkill::pod.leftNoiseRadius, (pivotPos - BossSummonMobSkill::pod.leftNoiseRadius * summonRot.Right().Normalized()).z);
-				auto sUnit = UnitPool::SingleInstance().Borrow(mold[summonCount++]);
-				sUnit.lock()->GetTransform()->SetWorldPosition(finalPos);
-				sUnit.lock()->GetTransform()->SetWorldRotation(summonRot);
-				summonUnit.insert(sUnit);
+				if (meleeSummonCount + projectileSummonCount == BossSummonMobSkill::pod.leftMeleeCount + BossSummonMobSkill::pod.leftProjectileCount)
+				{
+					break;
+				}
 
-				/// 소환 사운드
-				// SFXManager::PlaySoundfile3D("sounds/", finalPos);
+				switch (index)
+				{
+					case 0:
+					{
+						if (meleeSummonCount < BossSummonMobSkill::pod.leftMeleeCount)
+						{
+							Vector3d finalPos = Vector3d();
+							finalPos.x = math::Random::GetRandomFloat((pivotPos + BossSummonMobSkill::pod.leftNoiseRadius * summonRot.Right().Normalized()).x, pivotPos.x + BossSummonMobSkill::pod.leftNoiseRadius);
+							finalPos.z = math::Random::GetRandomFloat(pivotPos.z - BossSummonMobSkill::pod.leftNoiseRadius, (pivotPos - BossSummonMobSkill::pod.leftNoiseRadius * summonRot.Right().Normalized()).z);
+							auto sUnit = UnitPool::SingleInstance().Borrow(meleeUnitMold, finalPos, summonRot);
+							summonUnit.insert(sUnit);
+							/// 소환 사운드
+							// SFXManager::PlaySoundfile3D("sounds/", finalPos);
 
-				/// 소환 후 이동 명령
-				sUnit.lock()->OrderMove(finalPos + summonRot.Forward().Normalized() * std::sqrt(BossSummonMobSkill::pod.leftSummonOffset_x * BossSummonMobSkill::pod.leftSummonOffset_x + BossSummonMobSkill::pod.leftSummonOffset_z * BossSummonMobSkill::pod.leftSummonOffset_z));
-				co_await std::suspend_always{};
+							co_await std::suspend_always{};
+
+							sUnit.lock()->OrderMove(finalPos - summonRot.Forward().Normalized() * std::sqrt(BossSummonMobSkill::pod.leftSummonOffset_x * BossSummonMobSkill::pod.leftSummonOffset_x + BossSummonMobSkill::pod.leftSummonOffset_z * BossSummonMobSkill::pod.leftSummonOffset_z));
+							meleeSummonCount++;
+							unitSummon = true;
+						}
+						break;
+					}
+					case 1:
+					{
+						if (projectileSummonCount < BossSummonMobSkill::pod.leftProjectileCount)
+						{
+							Vector3d finalPos = Vector3d();
+							finalPos.x = math::Random::GetRandomFloat((pivotPos + BossSummonMobSkill::pod.leftNoiseRadius * summonRot.Right().Normalized()).x, pivotPos.x + BossSummonMobSkill::pod.leftNoiseRadius);
+							finalPos.z = math::Random::GetRandomFloat(pivotPos.z - BossSummonMobSkill::pod.leftNoiseRadius, (pivotPos - BossSummonMobSkill::pod.leftNoiseRadius * summonRot.Right().Normalized()).z);
+							auto sUnit = UnitPool::SingleInstance().Borrow(projectileUnitMold, finalPos, summonRot);
+							summonUnit.insert(sUnit);
+							/// 소환 사운드
+							// SFXManager::PlaySoundfile3D("sounds/", finalPos);
+
+							co_await std::suspend_always{};
+							sUnit.lock()->OrderMove(finalPos - summonRot.Forward().Normalized() * std::sqrt(BossSummonMobSkill::pod.leftSummonOffset_x * BossSummonMobSkill::pod.leftSummonOffset_x + BossSummonMobSkill::pod.leftSummonOffset_z * BossSummonMobSkill::pod.leftSummonOffset_z));
+							projectileSummonCount++;
+							unitSummon = true;
+						}
+						break;
+					}
+					default:
+						break;
+				}
+			}
+
+			while (forSeconds.ElapsedNormalized() <= (float)(meleeSummonCount + projectileSummonCount) / (float)(BossSummonMobSkill::pod.leftMeleeCount + BossSummonMobSkill::pod.leftProjectileCount))
+			{
+				co_await std::suspend_always();
 			}
 		}
 
