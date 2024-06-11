@@ -17,6 +17,9 @@ struct SkillType
         BossSkill_Two,
         BossSkill_Three,
         BossSkill_Four,
+        Passive_Robin_Bleeding,
+        Passive_Ursula_Speed,
+        Passive_Hansel_Heal,
         SKILL_NUM
     };
 };
@@ -34,10 +37,11 @@ const std::unordered_map<int, std::string>& application::POD_Enum<SkillType::Enu
         { (int)SkillType::HANSEL_Q, "Hansel_Q" },
         { (int)SkillType::HANSEL_W, "Hansel_W" },
         { (int)SkillType::EnemyImpale, "EnemyImpale" },
-		{ (int)SkillType::BossSkill_One, "BossSkill_One" },
-		{ (int)SkillType::BossSkill_Two, "BossSkill_Two" },
-		{ (int)SkillType::BossSkill_Three, "BossSkill_Three" },
-		{ (int)SkillType::BossSkill_Four, "BossSkill_Four" },
+        { (int)SkillType::BossSkill_One, "BossSkill_One" },
+        { (int)SkillType::BossSkill_Two, "BossSkill_Two" },
+        { (int)SkillType::BossSkill_Three, "BossSkill_Three" },
+        { (int)SkillType::BossSkill_Four, "BossSkill_Four" },
+        { (int)SkillType::Passive_Robin_Bleeding, "Passive_Robin_Bleeding" },
         { (int)SkillType::SKILL_NUM, "Skill_Num"}
     };
     return enumNameMap;

@@ -42,11 +42,6 @@ private:
     //static const std::vector<Spear> SpearsInfo();
 };
 
-
-
-
-
-
 template <>
 bool SkillPodFieldPreEncoding<SkillType::Enum::EnemyImpale>(json& data)
 {

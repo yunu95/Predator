@@ -51,6 +51,8 @@
 #include "UnitBuff.h"
 #include "UnitBuffInvulenerability.h"
 #include "UnitBuffBleeding.h"
+#include "UnitBuffUrsula.h"
+#include "UnitBuffHansel.h"
 #include "UnitAnimationType.h"
 #include "UnitAttackType.h"
 #include "UnitAcquisitionSphereCollider.h"

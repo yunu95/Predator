@@ -607,12 +607,6 @@
     <Filter Include="Contents_Refactored\Skill\PassiveSkill\PassiveRobinBleed">
       <UniqueIdentifier>{760634b1-a4e5-4048-ad60-bf766f083f61}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Contents_Refactored\Skill\PassiveSkill\PassiveUrsulaBleed">
-      <UniqueIdentifier>{8d7611b4-6699-4000-bc5c-acd24db7d01b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Contents_Refactored\Skill\PassiveSkill\PassiveHanselBleed">
-      <UniqueIdentifier>{1f8de78f-6574-4e21-a6f6-854000ebd0c4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Contents_Refactored\Timer">
       <UniqueIdentifier>{e6ac6c6a-8749-4b81-8b38-f053b8e345ba}</UniqueIdentifier>
     </Filter>
@@ -816,6 +810,21 @@
     </Filter>
     <Filter Include="Contents_Refactored\UnitCommand\UnitSkillCommand">
       <UniqueIdentifier>{b2063c72-2ebb-4fc2-b61e-d77a7b41d9dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Skill\PassiveSkill\PassiveUrsulaSpeed">
+      <UniqueIdentifier>{8d7611b4-6699-4000-bc5c-acd24db7d01b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Skill\PassiveSkill\PassiveHanselHeal">
+      <UniqueIdentifier>{1f8de78f-6574-4e21-a6f6-854000ebd0c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Unit\UnitBuff\UnitBuffUrsula">
+      <UniqueIdentifier>{3c5e05c5-b64b-44a6-a080-5518de005d5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Unit\UnitBuff\UnitBuffHansel">
+      <UniqueIdentifier>{30b4f5d3-ed9d-4789-800c-27fcf8eb8da2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\wanderCoroutines">
+      <UniqueIdentifier>{0cd58224-0474-47e2-bcc0-e4746ac7f062}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1975,8 +1984,29 @@
     <ClInclude Include="BossController.h">
       <Filter>Contents_Refactored\UnitController\EnemyController\BossController</Filter>
     </ClInclude>
+    <ClInclude Include="PassiveSkill.h">
+      <Filter>Contents_Refactored\Skill\PassiveSkill</Filter>
+    </ClInclude>
     <ClInclude Include="UnitSkillCommand.h">
       <Filter>Contents_Refactored\UnitCommand\UnitSkillCommand</Filter>
+    </ClInclude>
+    <ClInclude Include="PassiveRobinBleed.h">
+      <Filter>Contents_Refactored\Skill\PassiveSkill\PassiveRobinBleed</Filter>
+    </ClInclude>
+    <ClInclude Include="PassiveUrsulaSpeed.h">
+      <Filter>Contents_Refactored\Skill\PassiveSkill\PassiveUrsulaSpeed</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitBuffUrsula.h">
+      <Filter>Contents_Refactored\Unit\UnitBuff\UnitBuffUrsula</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitBuffHansel.h">
+      <Filter>Contents_Refactored\Unit\UnitBuff\UnitBuffHansel</Filter>
+    </ClInclude>
+    <ClInclude Include="PassiveHanselHeal.h">
+      <Filter>Contents_Refactored\Skill\PassiveSkill\PassiveHanselHeal</Filter>
+    </ClInclude>
+    <ClInclude Include="wanderCoroutines.h">
+      <Filter>Contents_Refactored\wanderCoroutines</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2947,8 +2977,29 @@
     <ClCompile Include="BossController.cpp">
       <Filter>Contents_Refactored\UnitController\EnemyController\BossController</Filter>
     </ClCompile>
+    <ClCompile Include="PassiveSkill.cpp">
+      <Filter>Contents_Refactored\Skill\PassiveSkill</Filter>
+    </ClCompile>
     <ClCompile Include="UnitSkillCommand.cpp">
       <Filter>Contents_Refactored\UnitCommand\UnitSkillCommand</Filter>
+    </ClCompile>
+    <ClCompile Include="PassiveRobinBleed.cpp">
+      <Filter>Contents_Refactored\Skill\PassiveSkill\PassiveRobinBleed</Filter>
+    </ClCompile>
+    <ClCompile Include="PassiveUrsulaSpeed.cpp">
+      <Filter>Contents_Refactored\Skill\PassiveSkill\PassiveUrsulaSpeed</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitBuffUrsula.cpp">
+      <Filter>Contents_Refactored\Unit\UnitBuff\UnitBuffUrsula</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitBuffHansel.cpp">
+      <Filter>Contents_Refactored\Unit\UnitBuff\UnitBuffHansel</Filter>
+    </ClCompile>
+    <ClCompile Include="PassiveHanselHeal.cpp">
+      <Filter>Contents_Refactored\Skill\PassiveSkill\PassiveHanselHeal</Filter>
+    </ClCompile>
+    <ClCompile Include="wanderCoroutines.cpp">
+      <Filter>Contents_Refactored\wanderCoroutines</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
