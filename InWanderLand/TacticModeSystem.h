@@ -64,9 +64,12 @@ public:
     // 전술모드가 활성화 되어 있을 때 선택된 스킬이 없을 때 임시경로를 보여주는 함수입니다.
     void ShowTemporaryRouteInTacticMode(PlayerCharacterType::Enum playerType);
 
+    void ShowSkillPreviewInTacticMode(SkillType::Enum skillType);
+
     // 전술모드가 활성화 되어 있을 때 이동 커맨드가 들어가기 전 경로를 반환해주는 함수 입니다.
     std::vector<Vector3d> GetPathInTacticMode(PlayerCharacterType::Enum playerType, Unit* unit = nullptr);
 
+    bool CanSelectSkill(SkillType::Enum skillType);
 private:
     // 전술모드 내부에서 등록된 명령들을 실행해주는 함수입니다.
     coroutine::Coroutine ExecuteInternal();
@@ -88,8 +91,9 @@ private:
 
     std::array<std::shared_ptr<Reference::Guard>, 3> playersPauseRevArr;
     std::vector< std::shared_ptr<Reference::Guard>> activateWaveEnemyUnitPauseRefVec;
-
+    std::array<bool, 6> useSkill;
     friend class PlayerController;
     friend class UnitAttackCommand;
+    friend class UnitSkillCommand;
 };
 
