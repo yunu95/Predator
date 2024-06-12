@@ -136,6 +136,7 @@ namespace BossSummon
 			co_await std::suspend_always();
 		}
 
+		mesh->GetTransform()->SetLocalPosition(Vector3d(0, 0, 0));
 		auto animator = GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>();
 		auto anim = wanderResources::GetAnimation("SKM_Frame2", UnitAnimType::Birth);
 		animator->Play(anim);
@@ -171,21 +172,21 @@ namespace BossSummon
 		int projectileSummonCount = 0;
 		while (forSeconds.Tick())
 		{
-			bool unitSummon = false;
-			auto index = math::Random::GetRandomInt(0, 1);
-			if (meleeSummonCount + projectileSummonCount == BossSummonMobSkill::pod.rightMeleeCount + BossSummonMobSkill::pod.rightProjectileCount)
-			{
-				continue;
-			}
-
 			if(forSeconds.ElapsedNormalized() < (float)(meleeSummonCount + projectileSummonCount) / (float)(BossSummonMobSkill::pod.rightMeleeCount + BossSummonMobSkill::pod.rightProjectileCount))
 			{
 				co_await std::suspend_always();
 				continue;
 			}
 
+			if (meleeSummonCount + projectileSummonCount == BossSummonMobSkill::pod.rightMeleeCount + BossSummonMobSkill::pod.rightProjectileCount)
+			{
+				continue;
+			}
+
+			bool unitSummon = false;
 			while (!unitSummon)
 			{
+				auto index = math::Random::GetRandomInt(0, 1);
 				switch (index)
 				{
 					case 0:
@@ -202,8 +203,21 @@ namespace BossSummon
 							// SFXManager::PlaySoundfile3D("sounds/", finalPos);
 
 							co_await std::suspend_always{};
+							
+							int findCount = 0;
+							while (findCount < PlayerCharacterType::Num)
+							{
+								int targetIndex = math::Random::GetRandomInt(1, PlayerCharacterType::Num);
+								auto targetUnit = PlayerController::Instance().GetPlayers().at(targetIndex - 1);
+								if (!targetUnit.expired() && targetUnit.lock()->IsAlive())
+								{
+									sUnit.lock()->OrderAttack(targetUnit);
+									break;
+								}
+								findCount++;
+							}
 
-							sUnit.lock()->OrderMove(finalPos - summonRot.Forward().Normalized() * std::sqrt(BossSummonMobSkill::pod.rightSummonOffset_x * BossSummonMobSkill::pod.rightSummonOffset_x + BossSummonMobSkill::pod.rightSummonOffset_z * BossSummonMobSkill::pod.rightSummonOffset_z));
+							//sUnit.lock()->OrderMove(finalPos - summonRot.Forward().Normalized() * std::sqrt(BossSummonMobSkill::pod.rightSummonOffset_x * BossSummonMobSkill::pod.rightSummonOffset_x + BossSummonMobSkill::pod.rightSummonOffset_z * BossSummonMobSkill::pod.rightSummonOffset_z));
 							meleeSummonCount++;
 							unitSummon = true;
 						}
@@ -223,7 +237,20 @@ namespace BossSummon
 
 							co_await std::suspend_always{};
 
-							sUnit.lock()->OrderMove(finalPos - summonRot.Forward().Normalized() * std::sqrt(BossSummonMobSkill::pod.rightSummonOffset_x * BossSummonMobSkill::pod.rightSummonOffset_x + BossSummonMobSkill::pod.rightSummonOffset_z * BossSummonMobSkill::pod.rightSummonOffset_z));
+							int findCount = 0;
+							while (findCount < PlayerCharacterType::Num)
+							{
+								int targetIndex = math::Random::GetRandomInt(1, PlayerCharacterType::Num);
+								auto targetUnit = PlayerController::Instance().GetPlayers().at(targetIndex - 1);
+								if (!targetUnit.expired() && targetUnit.lock()->IsAlive())
+								{
+									sUnit.lock()->OrderAttack(targetUnit);
+									break;
+								}
+								findCount++;
+							}
+
+							//sUnit.lock()->OrderMove(finalPos - summonRot.Forward().Normalized() * std::sqrt(BossSummonMobSkill::pod.rightSummonOffset_x * BossSummonMobSkill::pod.rightSummonOffset_x + BossSummonMobSkill::pod.rightSummonOffset_z * BossSummonMobSkill::pod.rightSummonOffset_z));
 							projectileSummonCount++;
 							unitSummon = true;
 						}
@@ -233,6 +260,7 @@ namespace BossSummon
 						break;
 				}
 			}
+			co_await std::suspend_always();
 		}
 		co_return;
 	}

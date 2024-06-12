@@ -588,9 +588,34 @@ std::array<float, (int)PlayerCharacterType::Num> PlayerController::GetAggroPropo
 {
 	std::array<float, (int)PlayerCharacterType::Num> proportions;
 	float sum = 0;
-	sum = proportions[PlayerCharacterType::Robin] = characters.at(PlayerCharacterType::Robin).lock()->GetUnitTemplateData().pod.playerAggroRatio;
-	sum += proportions[PlayerCharacterType::Ursula] = characters.at(PlayerCharacterType::Ursula).lock()->GetUnitTemplateData().pod.playerAggroRatio;
-	sum += proportions[PlayerCharacterType::Hansel] = characters.at(PlayerCharacterType::Hansel).lock()->GetUnitTemplateData().pod.playerAggroRatio;
+
+	if (characters.at(PlayerCharacterType::Robin).lock()->IsAlive())
+	{
+		sum += proportions[PlayerCharacterType::Robin] = characters.at(PlayerCharacterType::Robin).lock()->GetUnitTemplateData().pod.playerAggroRatio;
+	}
+	else
+	{
+		proportions[PlayerCharacterType::Robin] = 0;
+	}
+
+	if (characters.at(PlayerCharacterType::Ursula).lock()->IsAlive())
+	{
+		sum += proportions[PlayerCharacterType::Ursula] = characters.at(PlayerCharacterType::Ursula).lock()->GetUnitTemplateData().pod.playerAggroRatio;
+	}
+	else
+	{
+		proportions[PlayerCharacterType::Ursula] = 0;
+	}
+
+	if (characters.at(PlayerCharacterType::Hansel).lock()->IsAlive())
+	{
+		sum += proportions[PlayerCharacterType::Hansel] = characters.at(PlayerCharacterType::Hansel).lock()->GetUnitTemplateData().pod.playerAggroRatio;
+	}
+	else
+	{
+		proportions[PlayerCharacterType::Hansel] = 0;
+	}
+
 	proportions[PlayerCharacterType::Robin] /= sum;
 	proportions[PlayerCharacterType::Ursula] /= sum;
 	proportions[PlayerCharacterType::Hansel] /= sum;

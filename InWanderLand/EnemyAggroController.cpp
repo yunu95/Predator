@@ -33,13 +33,16 @@ coroutine::Coroutine EnemyAggroController::RoutineGlobal()
         {
             int randomOffset = Random::GetRandomInt(1, PlayerCharacterType::Num);
             bool aggroChanged = false;
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < PlayerCharacterType::Num; i++)
             {
                 int playerIndex = (i + randomOffset) % PlayerCharacterType::Num;
-                if (aggroChanged = currentAggros[playerIndex] < IdealAggros[playerIndex])
+                if (aggroChanged = currentAggros[playerIndex] < IdealAggros[playerIndex]
+                    && PlayerController::Instance().GetPlayers().at(playerIndex).lock()->IsAlive())
                 {
                     if (!unit->GetAttackTarget().expired())
+                    {
                         currentAggros[unit->GetAttackTarget().lock()->GetUnitTemplateData().pod.playerUnitType.enumValue]--;
+                    }
                     currentAggros[playerIndex]++;
                     unit->OrderAttack(PlayerController::Instance().GetPlayers().at(playerIndex));
                     aggroUpdateCount++;

@@ -11,11 +11,10 @@ struct Spear
 const std::vector<Spear> SpearsInfo()
 {
     std::vector<Spear> spears;
-    const auto& gc = GlobalConstant::GetSingletonInstance().pod;
     // 타원에 빽뺵하게 창을 생성
     // y는 캐릭터 기준 전방방향, x는 우측방향
-    float ovalHeight = (gc.impaleSkillRange - gc.impaleSkillFirstSpearOffset) * 0.5f;
-    float ovalWidth = gc.impaleSkillWidth * 0.5;
+    float ovalHeight = (EnemyImpaleSkill::pod.impaleSkillRange - EnemyImpaleSkill::pod.impaleSkillFirstSpearOffset) * 0.5f;
+    float ovalWidth = EnemyImpaleSkill::pod.impaleSkillWidth * 0.5;
     float ovalHeightSqr = ovalHeight * ovalHeight;
     float ovalWidthSqr = ovalWidth * ovalWidth;
 
@@ -24,26 +23,26 @@ const std::vector<Spear> SpearsInfo()
     float currOvalWidth = 0;
     while (currY < ovalHeight)
     {
-        const float& noise = gc.impaleSkillAriseDistanceNoisePerSpear;
+        const float& noise = EnemyImpaleSkill::pod.impaleSkillAriseDistanceNoisePerSpear;
         float x = { currX + math::Random::GetRandomFloat(noise) };
         float y = { currY + math::Random::GetRandomFloat(noise) };
         if (x >= currOvalWidth)
         {
-            currY += gc.impaleSkillAriseDistancePerSpear;
+            currY += EnemyImpaleSkill::pod.impaleSkillAriseDistancePerSpear;
             currOvalWidth = ovalWidth * sqrtf(1 - currY * currY / ovalHeightSqr);
             currX = -currOvalWidth;
         }
         else
         {
-            currX += gc.impaleSkillAriseDistancePerSpear;
+            currX += EnemyImpaleSkill::pod.impaleSkillAriseDistancePerSpear;
             if (currX >= -currOvalWidth)
             {
                 spears.push_back({ { x, y}, 0 });
-                spears.rbegin()->timeOffset = math::Random::GetRandomFloat(0, gc.impaleSkillAriseTimeNoisePerSpear);
+                spears.rbegin()->timeOffset = math::Random::GetRandomFloat(0, EnemyImpaleSkill::pod.impaleSkillAriseTimeNoisePerSpear);
             }
         }
     }
-    std::for_each(spears.begin(), spears.end(), [=](Spear& a) { a.position.y += gc.impaleSkillFirstSpearOffset + ovalHeight; });
+    std::for_each(spears.begin(), spears.end(), [=](Spear& a) { a.position.y += EnemyImpaleSkill::pod.impaleSkillFirstSpearOffset + ovalHeight; });
     std::sort(spears.begin(), spears.end(), [](const Spear& a, const Spear& b) { return a.timeOffset < b.timeOffset; });
     return spears;
 }
@@ -56,7 +55,6 @@ coroutine::Coroutine EnemyImpaleSkill::SpearArise(std::weak_ptr<EnemyImpaleSkill
     auto right = owner.lock()->GetTransform()->GetWorldRotation().Right();
     auto worldPos = owner.lock()->GetTransform()->GetWorldPosition() + forward * pos.y + right * pos.x;
     fbx.lock()->GetTransform()->SetWorldPosition(worldPos);
-    const auto& gc = GlobalConstant::GetSingletonInstance().pod;
     collider.lock()->SetRadius(0.01);
     collider.lock()->GetTransform()->SetWorldPosition(worldPos);
     co_await std::suspend_always{};
@@ -69,17 +67,17 @@ coroutine::Coroutine EnemyImpaleSkill::SpearArise(std::weak_ptr<EnemyImpaleSkill
                 continue;
             }
             skill.lock()->damagedUnits.insert(each);
-            each->Damaged(skill.lock()->owner, gc.impaleSkillDamage);
-            Vector3d knockBackDest = each->GetTransform()->GetWorldPosition() + (each->GetTransform()->GetWorldPosition() - worldPos).Normalized() * gc.impaleSkillKnockbackDistance;
-            each->KnockBack(knockBackDest, gc.impaleSkillKnockbackDuration);
+            each->Damaged(skill.lock()->owner, pod.impaleSkillDamage);
+            Vector3d knockBackDest = each->GetTransform()->GetWorldPosition() + (each->GetTransform()->GetWorldPosition() - worldPos).Normalized() * pod.impaleSkillKnockbackDistance;
+            each->KnockBack(knockBackDest, pod.impaleSkillKnockbackDuration);
         }
     }
 
-    coroutine::ForSeconds forSeconds{ gc.impaleSkillDurationPerSpear };
+    coroutine::ForSeconds forSeconds{ pod.impaleSkillDurationPerSpear };
     while (forSeconds.Tick())
     {
         float heightAlpha = std::sinf(forSeconds.ElapsedNormalized() * math::PI);
-        float yDelta = math::LerpF(gc.impaleSkillMinHeightPerSpear, gc.impaleSkillMaxHeightPerSpear, heightAlpha);
+        float yDelta = math::LerpF(pod.impaleSkillMinHeightPerSpear, pod.impaleSkillMaxHeightPerSpear, heightAlpha);
         fbx.lock()->GetTransform()->SetWorldPosition(worldPos + Vector3d::up * yDelta);
         co_await std::suspend_always{};
     }
@@ -92,10 +90,9 @@ coroutine::Coroutine EnemyImpaleSkill::operator()()
     auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
     auto enableNavObstacle = owner.lock()->referenceEnableNavObstacle.Acquire();
     // 창이 생성되는 시간 오프셋은 유닛으로부터의 거리와 정비례한다.
-    const auto& gc = GlobalConstant::GetSingletonInstance().pod;
     owner.lock()->PlayAnimation(UnitAnimType::Slam);
     co_yield coroutine::WaitForSeconds{ 1.2f };
-    coroutine::ForSeconds forSeconds{ gc.impaleSkillDuration };
+    coroutine::ForSeconds forSeconds{ pod.impaleSkillDuration };
     for (auto& each : SpearsInfo())
     {
         while (each.timeOffset > forSeconds.Elapsed())
