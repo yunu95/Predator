@@ -62,7 +62,7 @@ coroutine::Coroutine BossImpaleSkill::operator()()
 
 	// 창이 생성되는 시간 오프셋은 유닛으로부터의 거리와 정비례한다.
 	owner.lock()->PlayAnimation(UnitAnimType::Skill2);
-	auto effectCoroutine = owner.lock()->StartCoroutine(SpawningSkillffect(dynamic_pointer_cast<BossImpaleSkill>(selfWeakPtr.lock())));
+	effectCoroutine = owner.lock()->StartCoroutine(SpawningSkillffect(dynamic_pointer_cast<BossImpaleSkill>(selfWeakPtr.lock())));
 	effectCoroutine.lock()->PushDestroyCallBack([this]()
 		{
 			FBXPool::SingleInstance().Return(impaleEffect);
@@ -104,7 +104,10 @@ coroutine::Coroutine BossImpaleSkill::operator()()
 
 void BossImpaleSkill::OnInterruption()
 {
-
+	if (!effectCoroutine.expired())
+	{
+		FBXPool::SingleInstance().Return(impaleEffect);
+	}
 }
 
 // 창이 한번 불쑥 튀어나왔다가 다시 꺼지는 사이클
