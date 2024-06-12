@@ -9,7 +9,7 @@ const float eliteSpinEndTime = 3.15f;
 const float eliteSpinStartTime = 2.07f;
 const float eliteSpinAttackingTime = eliteSpinEndTime - eliteSpinStartTime;
 const float eliteAfterSpinDelay = eliteTotalTime - eliteSpinStartTime - eliteSpinAttackingTime;
-float EnemySpinAttackSkill::colliderEffectRatio = 10.0f;
+float EnemySpinAttackSkill::colliderEffectRatio = 10.0f * 0.5f;
 
 coroutine::Coroutine EnemySpinAttackSkill::SpawningSkillffect(std::weak_ptr<EnemySpinAttackSkill> skill)
 {
