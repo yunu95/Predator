@@ -2,6 +2,7 @@
 #include "EnemyImpaleSkill.h"
 
 POD_EnemyImpaleSkill EnemyImpaleSkill::pod = POD_EnemyImpaleSkill();
+int EnemyImpaleSkill::managingIndex = 0;
 
 struct Spear
 {
@@ -47,10 +48,13 @@ const std::vector<Spear> SpearsInfo()
     return spears;
 }
 // 창이 한번 불쑥 튀어나왔다가 다시 꺼지는 사이클
-coroutine::Coroutine EnemyImpaleSkill::SpearArise(std::weak_ptr<EnemyImpaleSkill> skill, std::weak_ptr<ManagedFBX> fbx, Vector2d pos)
+coroutine::Coroutine EnemyImpaleSkill::SpearArise(std::weak_ptr<EnemyImpaleSkill> skill, std::weak_ptr<ManagedFBX> fbx, std::weak_ptr<UnitAcquisitionSphereCollider> collider, Vector2d pos)
 {
+    auto temp = skill.lock();
     fbx = FBXPool::SingleInstance().Borrow(wanderResources::GetFBXName(wanderResources::WanderFBX::IMPALING_SPIKE));
-    std::weak_ptr<UnitAcquisitionSphereCollider> collider = UnitAcquisitionSphereColliderPool::Instance().Borrow(skill.lock()->owner);
+    skill.lock()->spearFbxVector.push_back(fbx);
+    collider = UnitAcquisitionSphereColliderPool::Instance().Borrow(skill.lock()->owner);
+    skill.lock()->knockbackColliderVector.push_back(collider);
     auto forward = owner.lock()->GetTransform()->GetWorldRotation().Forward();
     auto right = owner.lock()->GetTransform()->GetWorldRotation().Right();
     auto worldPos = owner.lock()->GetTransform()->GetWorldPosition() + forward * pos.y + right * pos.x;
@@ -60,6 +64,7 @@ coroutine::Coroutine EnemyImpaleSkill::SpearArise(std::weak_ptr<EnemyImpaleSkill
     co_await std::suspend_always{};
     if (!skill.expired())
     {
+        skill.lock();
         for (auto& each : collider.lock()->GetEnemies())
         {
             if (skill.lock()->damagedUnits.contains(each))
@@ -76,23 +81,33 @@ coroutine::Coroutine EnemyImpaleSkill::SpearArise(std::weak_ptr<EnemyImpaleSkill
     coroutine::ForSeconds forSeconds{ pod.impaleSkillDurationPerSpear };
     while (forSeconds.Tick())
     {
+        skill.lock();
         float heightAlpha = std::sinf(forSeconds.ElapsedNormalized() * math::PI);
         float yDelta = math::LerpF(pod.impaleSkillMinHeightPerSpear, pod.impaleSkillMaxHeightPerSpear, heightAlpha);
         fbx.lock()->GetTransform()->SetWorldPosition(worldPos + Vector3d::up * yDelta);
         co_await std::suspend_always{};
     }
-    UnitAcquisitionSphereColliderPool::Instance().Return(collider);
-    FBXPool::SingleInstance().Return(fbx);
+
     co_return;
 }
 coroutine::Coroutine EnemyImpaleSkill::operator()()
 {
+    //auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
+    auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
     auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
     auto enableNavObstacle = owner.lock()->referenceEnableNavObstacle.Acquire();
+    auto animator = owner.lock()->GetAnimator();
+    auto impaleAnim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill2);
+
     // 창이 생성되는 시간 오프셋은 유닛으로부터의 거리와 정비례한다.
-    owner.lock()->PlayAnimation(UnitAnimType::Slam);
-    co_yield coroutine::WaitForSeconds{ 1.2f };
+    owner.lock()->PlayAnimation(UnitAnimType::Skill2);
+
+    co_yield coroutine::WaitForSeconds{ pod.impaleStartDelay };
+    //coroutine::ForSeconds forSeconds{ pod.impaleSkillDuration };
     coroutine::ForSeconds forSeconds{ pod.impaleSkillDuration };
+    if (managingIndex != 0)
+        managingIndex = 0;
+
     for (auto& each : SpearsInfo())
     {
         while (each.timeOffset > forSeconds.Elapsed())
@@ -100,17 +115,28 @@ coroutine::Coroutine EnemyImpaleSkill::operator()()
             forSeconds.Tick();
             co_await std::suspend_always{};
         }
-        std::weak_ptr<ManagedFBX> fbx;
-        owner.lock()->StartCoroutine(SpearArise(std::dynamic_pointer_cast<EnemyImpaleSkill>(selfWeakPtr.lock()), fbx, each.position));
-    }
-    while (forSeconds.Tick()) { co_await std::suspend_always{}; }
-    owner.lock()->PlayAnimation(UnitAnimType::Idle);
-    co_yield coroutine::WaitForSeconds{ 0.3f };
 
+        std::weak_ptr<ManagedFBX> fbx;
+        std::weak_ptr<UnitAcquisitionSphereCollider> collider;
+
+        auto spearAriseCoroutine = owner.lock()->StartCoroutine(SpearArise(std::dynamic_pointer_cast<EnemyImpaleSkill>(selfWeakPtr.lock()), fbx, collider, each.position));
+        spearAriseCoroutine.lock()->PushDestroyCallBack([this]()
+            {
+                if (knockbackColliderVector.empty() && spearFbxVector.empty())
+                    return;
+                UnitAcquisitionSphereColliderPool::Instance().Return(knockbackColliderVector[managingIndex]);
+                FBXPool::SingleInstance().Return(spearFbxVector[managingIndex]);
+                managingIndex++;
+            });
+    }
+
+    co_yield coroutine::WaitForSeconds{ 2.0f };
+
+    owner.lock()->PlayAnimation(UnitAnimType::Idle);
     co_return;
 }
 
 void EnemyImpaleSkill::OnInterruption()
 {
-    UnitAcquisitionSphereColliderPool::Instance().Return(knockbackCollider);
+
 }
