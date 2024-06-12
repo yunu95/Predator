@@ -120,6 +120,7 @@ void PlayerController::OnContentsStop()
 {
 	SetActive(false);
 	Scene::getCurrentScene()->DestroyGameObject(cursorUnitDetector.lock()->GetGameObject());
+	//this->state = State::Enum::Peace;
 }
 
 void PlayerController::Update()
