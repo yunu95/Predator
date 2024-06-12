@@ -49,6 +49,7 @@ namespace yunutyEngine
             Coroutine(Coroutine const&) = delete;
             Coroutine(Coroutine&& other) noexcept
             {
+                deathWish = other.deathWish;
                 handle = std::move(other.handle);
                 other.handle = nullptr;
             };

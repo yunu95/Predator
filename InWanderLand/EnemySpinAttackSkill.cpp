@@ -30,7 +30,7 @@ coroutine::Coroutine EnemySpinAttackSkill::SpawningSkillffect(std::weak_ptr<Enem
     chargeEffectAnimator.lock()->SetAutoActiveFalse();
     chargeEffectAnimator.lock()->Init();
 
-    knockbackCollider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
+    knockbackCollider = UnitAcquisitionSphereColliderPool::Instance().Borrow(owner.lock());
     knockbackCollider.lock()->SetRadius(pod.skillRadius * owner.lock()->GetTransform()->GetWorldScale().x);
     knockbackCollider.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
 
@@ -80,7 +80,7 @@ coroutine::Coroutine EnemySpinAttackSkill::operator()()
     effectColliderCoroutine.lock()->PushDestroyCallBack([this]()
         {
             FBXPool::SingleInstance().Return(chargeEffect);
-            UnitAcquisitionSphereColliderPool::SingleInstance().Return(knockbackCollider);
+            UnitAcquisitionSphereColliderPool::Instance().Return(knockbackCollider);
         });
     co_yield coroutine::WaitForSeconds(eliteSpinStartTime);
 

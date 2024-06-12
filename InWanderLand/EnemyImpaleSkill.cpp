@@ -51,7 +51,7 @@ const std::vector<Spear> SpearsInfo()
 coroutine::Coroutine EnemyImpaleSkill::SpearArise(std::weak_ptr<EnemyImpaleSkill> skill, std::weak_ptr<ManagedFBX> fbx, Vector2d pos)
 {
     fbx = FBXPool::SingleInstance().Borrow(wanderResources::GetFBXName(wanderResources::WanderFBX::IMPALING_SPIKE));
-    std::weak_ptr<UnitAcquisitionSphereCollider> collider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(skill.lock()->owner);
+    std::weak_ptr<UnitAcquisitionSphereCollider> collider = UnitAcquisitionSphereColliderPool::Instance().Borrow(skill.lock()->owner);
     auto forward = owner.lock()->GetTransform()->GetWorldRotation().Forward();
     auto right = owner.lock()->GetTransform()->GetWorldRotation().Right();
     auto worldPos = owner.lock()->GetTransform()->GetWorldPosition() + forward * pos.y + right * pos.x;
@@ -83,7 +83,7 @@ coroutine::Coroutine EnemyImpaleSkill::SpearArise(std::weak_ptr<EnemyImpaleSkill
         fbx.lock()->GetTransform()->SetWorldPosition(worldPos + Vector3d::up * yDelta);
         co_await std::suspend_always{};
     }
-    UnitAcquisitionSphereColliderPool::SingleInstance().Return(collider);
+    UnitAcquisitionSphereColliderPool::Instance().Return(collider);
     FBXPool::SingleInstance().Return(fbx);
     co_return;
 }
@@ -115,5 +115,5 @@ coroutine::Coroutine EnemyImpaleSkill::operator()()
 
 void EnemyImpaleSkill::OnInterruption()
 {
-    UnitAcquisitionSphereColliderPool::SingleInstance().Return(knockbackCollider);
+    UnitAcquisitionSphereColliderPool::Instance().Return(knockbackCollider);
 }

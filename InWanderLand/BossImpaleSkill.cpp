@@ -90,11 +90,10 @@ coroutine::Coroutine BossImpaleSkill::operator()()
 			{
 				if (knockbackColliderVector.empty() && spearFbxVector.empty())
 					return ;
-				UnitAcquisitionSphereColliderPool::SingleInstance().Return(knockbackColliderVector[managingIndex]);
+				UnitAcquisitionSphereColliderPool::Instance().Return(knockbackColliderVector[managingIndex]);
 				FBXPool::SingleInstance().Return(spearFbxVector[managingIndex]);
 				managingIndex++;
 			});
-		coroutineVector.push_back(spearAriseCoroutine.lock());
 	}
 	
 	co_yield coroutine::WaitForSeconds{ 2.0f };
@@ -113,9 +112,9 @@ coroutine::Coroutine BossImpaleSkill::SpearArise(std::weak_ptr<BossImpaleSkill> 
 {
 	skill.lock();
 	fbx = FBXPool::SingleInstance().Borrow(wanderResources::GetFBXName(wanderResources::WanderFBX::IMPALING_SPIKE));
-	spearFbxVector.push_back(fbx);
-	collider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(skill.lock()->owner);
-	knockbackColliderVector.push_back(collider);
+	skill.lock()->spearFbxVector.push_back(fbx);
+	collider = UnitAcquisitionSphereColliderPool::Instance().Borrow(skill.lock()->owner);
+	skill.lock()->knockbackColliderVector.push_back(collider);
 	auto forward = owner.lock()->GetTransform()->GetWorldRotation().Forward();
 	auto right = owner.lock()->GetTransform()->GetWorldRotation().Right();
 	auto worldPos = owner.lock()->GetTransform()->GetWorldPosition() + forward * pos.y + right * pos.x;
@@ -178,6 +177,3 @@ coroutine::Coroutine BossImpaleSkill::SpawningSkillffect(std::weak_ptr<BossImpal
 
 	co_return;
 }
-
-
-

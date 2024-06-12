@@ -6,7 +6,7 @@ coroutine::Coroutine PassiveHanselHeal::CookieLingering(const Vector3d& pos, std
 {
     Vector3d newPos = SingleNavigationField::Instance().GetClosestPointOnField(pos);
     auto cookieMesh = FBXPool::SingleInstance().Borrow(wanderResources::GetFBXName(wanderResources::WanderFBX::HEALING_COOKIE));
-    auto collider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner);
+    auto collider = UnitAcquisitionSphereColliderPool::Instance().Borrow(owner);
     collider.lock()->SetRadius(pod.cookieRadius);
     cookieMesh.lock()->GetTransform()->SetWorldPosition(newPos);
     cookieMesh.lock()->GetTransform()->SetLocalScale(pod.cookieScale * Vector3d::one);

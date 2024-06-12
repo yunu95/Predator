@@ -41,7 +41,6 @@ private:
 	std::weak_ptr<ManagedFBX> impaleEffect;
 	std::vector<std::weak_ptr<UnitAcquisitionSphereCollider>> knockbackColliderVector;
 	std::vector<std::weak_ptr<ManagedFBX>> spearFbxVector;
-	std::vector<std::weak_ptr<coroutine::Coroutine>> coroutineVector;
 	std::unordered_set<Unit*> damagedUnits;
 
 	static int managingIndex;
