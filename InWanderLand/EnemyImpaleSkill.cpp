@@ -2,7 +2,6 @@
 #include "EnemyImpaleSkill.h"
 
 POD_EnemyImpaleSkill EnemyImpaleSkill::pod = POD_EnemyImpaleSkill();
-int EnemyImpaleSkill::managingIndex = 0;
 
 struct Spear
 {
@@ -105,8 +104,7 @@ coroutine::Coroutine EnemyImpaleSkill::operator()()
     co_yield coroutine::WaitForSeconds{ pod.impaleStartDelay };
     //coroutine::ForSeconds forSeconds{ pod.impaleSkillDuration };
     coroutine::ForSeconds forSeconds{ pod.impaleSkillDuration };
-    if (managingIndex != 0)
-        managingIndex = 0;
+    managingIndex = 0;
 
     for (auto& each : SpearsInfo())
     {

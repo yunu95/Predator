@@ -3,7 +3,6 @@
 #include "VFXAnimator.h"
 
 POD_BossImpaleSkill BossImpaleSkill::pod = POD_BossImpaleSkill();
-int BossImpaleSkill::managingIndex = 0;
 
 const float impaleStartTime = 3.02f;
 
@@ -73,8 +72,7 @@ coroutine::Coroutine BossImpaleSkill::operator()()
 	co_yield coroutine::WaitForSeconds{ impaleStartTime };
 
 	coroutine::ForSeconds forSeconds{ pod.impaleSkillDuration };
-	if (managingIndex != 0)
-		managingIndex = 0;
+	managingIndex = 0;
 
 	for (auto& each : BossSpearsInfo())
 	{

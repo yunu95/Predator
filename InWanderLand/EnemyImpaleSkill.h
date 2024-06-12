@@ -46,7 +46,7 @@ private:
     std::vector<std::weak_ptr<ManagedFBX>> spearFbxVector;
     std::unordered_set<Unit*> damagedUnits;
 
-    static int managingIndex;
+    int managingIndex;
 };
 
 template <>
