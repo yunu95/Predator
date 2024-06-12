@@ -57,6 +57,7 @@ void InitAnimMap()
     animMap["SKM_Monster1"][UnitAnimType::Move] = localAnimMap[L"Ani_Monster1_Walk"];
     animMap["SKM_Monster1"][UnitAnimType::BattleMove] = localAnimMap[L"Ani_Monster1_Walk"];
     animMap["SKM_Monster1"][UnitAnimType::Death] = localAnimMap[L"Ani_Monster1_Death"];
+    animMap["SKM_Monster1"][UnitAnimType::Spin] = localAnimMap[L"Ani_Monster1_Skill"];
 
     animMap["SKM_Monster2"][UnitAnimType::Attack] = localAnimMap[L"Ani_Monster2_Attack"];
     animMap["SKM_Monster2"][UnitAnimType::Paralysis] = localAnimMap[L"Ani_Monster2_HitCC"];

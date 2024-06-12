@@ -948,6 +948,14 @@ void Unit::Summon(application::editor::Unit_TemplateData* templateData)
 			controllers.push_back(&EnemyAggroController::Instance());
 			break;
 		}
+		case UnitControllerType::MELEE_ELITE:
+		{
+			EnemyAggroController::Instance().RegisterUnit(GetWeakPtr<Unit>());
+			controllers.push_back(&EnemyAggroController::Instance());
+			MeleeEliteController::Instance().RegisterUnit(GetWeakPtr<Unit>());
+			controllers.push_back(&MeleeEliteController::Instance());
+			break;
+		}
 		case UnitControllerType::RANGED_ELITE:
 		{
 			EnemyAggroController::Instance().RegisterUnit(GetWeakPtr<Unit>());
