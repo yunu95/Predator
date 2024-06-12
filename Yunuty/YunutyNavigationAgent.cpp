@@ -30,6 +30,11 @@ void yunutyEngine::NavigationAgent::OnEnable()
 {
     if (navField != nullptr)
     {
+        if (impl->agentIdx != -1)
+        {
+            impl->crowd->removeAgent(impl->agentIdx);
+            impl->agentIdx = -1;
+        }
         navField->agents.insert(this);
         Vector3f pos = GetTransform()->GetWorldPosition();
         impl->agentIdx = impl->crowd->addAgent(reinterpret_cast<float*>(&pos), &impl->agentParams);

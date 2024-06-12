@@ -1,3 +1,4 @@
+#include "InWanderLand.h"
 #include "CinematicManager.h"
 
 #include "GamePlayTimer.h"
@@ -48,7 +49,7 @@ namespace application
 
             // 인게임 UI 비활성화
             UIManager::Instance().SetIngameUIVisible(false);
-            //GameManager::Instance().EngageCinematic();
+            PlayerController::Instance().SetState(PlayerController::State::Cinematic);
         }
         else if (this->isCinematicMode && !isCinematicMode)
         {
@@ -62,7 +63,7 @@ namespace application
 
             // 인게임 UI 활성화
             UIManager::Instance().SetIngameUIVisible(true);
-            //GameManager::Instance().EndCinematic();
+            PlayerController::Instance().SetState(PlayerController::State::Peace);
         }
     }
 }

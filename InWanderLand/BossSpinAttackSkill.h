@@ -5,7 +5,7 @@ struct POD_BossSpinAttackSkill
 {
 	float skillPlayTime = 6.0f;
 	float skillDamage = 8.0f;
-	float skillRadius = 1.0f;
+	float skillRadius = 5.0f;
 	float knockBackDistance = 15.0f;
 	float knockBackDuration = 1.0f;
 	float paralyzingDuration = 2.0f;

@@ -115,6 +115,7 @@ void PlayerController::OnContentsPlay()
 	skillCooltimeMaskUI[SkillType::URSULA_W] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Ursula)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_W_Overlay);
 	skillCooltimeMaskUI[SkillType::HANSEL_Q] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_Q_Overlay);
 	skillCooltimeMaskUI[SkillType::HANSEL_W] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_W_Overlay);
+	SetState(State::Peace);
 	InitUnitMouseInteractionEffects();
 }
 void PlayerController::OnContentsStop()
