@@ -604,11 +604,11 @@ void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
 				{
 					TacticModeSystem::Instance().PopCommand();
 				}
+				if(errorType == EnqueErrorType::Success)
+				{
+					selectedSkill = SkillType::NONE;
+				}
 			}
-			else
-			{
-			}
-
 		}
 		else
 		{
@@ -619,6 +619,11 @@ void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
 				, GetWorldCursorPosition()
 				, skillType
 			));
+			if (errorType == EnqueErrorType::Success)
+			{
+				selectedSkill = SkillType::NONE;
+			}
+
 			// 에러 타입에 따른 UI활성화
 		}
 	}
