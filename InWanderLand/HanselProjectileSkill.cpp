@@ -17,7 +17,7 @@ coroutine::Coroutine HanselProjectileSkill::ThrowingPie(std::weak_ptr<HanselProj
     Vector3d currentPos = startPos;
 
     coroutine::ForSeconds forSeconds{ static_cast<float>(deltaPos.Magnitude()) / pod.projectileSpeed };
-    pieCollider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
+    pieCollider = UnitAcquisitionSphereColliderPool::Instance().Borrow(owner.lock());
     pieObject = FBXPool::SingleInstance().Borrow("SM_Pie");
     pieObject.lock()->GetGameObject()->SetSelfActive(false);
 
@@ -99,7 +99,7 @@ coroutine::Coroutine HanselProjectileSkill::operator()()
     auto throwingCoroutine = owner.lock()->StartCoroutine(ThrowingPie(std::dynamic_pointer_cast<HanselProjectileSkill>(selfWeakPtr.lock())));
     throwingCoroutine.lock()->PushDestroyCallBack([this]()
         {
-            UnitAcquisitionSphereColliderPool::SingleInstance().Return(pieCollider);
+            UnitAcquisitionSphereColliderPool::Instance().Return(pieCollider);
             FBXPool::SingleInstance().Return(pieObject);
         });
 

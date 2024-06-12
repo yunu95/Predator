@@ -50,9 +50,9 @@ coroutine::Coroutine UrsulaBlindSkill::SpawningFieldEffect(std::weak_ptr<UrsulaB
 
     auto animator = owner.lock()->GetAnimator();
 
-    circle_Top = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
-    circle_Left = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
-    circle_Right = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
+    circle_Top = UnitAcquisitionSphereColliderPool::Instance().Borrow(owner.lock());
+    circle_Left = UnitAcquisitionSphereColliderPool::Instance().Borrow(owner.lock());
+    circle_Right = UnitAcquisitionSphereColliderPool::Instance().Borrow(owner.lock());
 
     circle_Top.lock()->SetRadius(pod.skillRadius);
     circle_Left.lock()->SetRadius(pod.skillRadius);
@@ -141,9 +141,9 @@ coroutine::Coroutine UrsulaBlindSkill::operator()()
             circle_Top.lock()->SetRadius(0.5);
             circle_Left.lock()->SetRadius(0.5);
             circle_Right.lock()->SetRadius(0.5);
-            UnitAcquisitionSphereColliderPool::SingleInstance().Return(circle_Top);
-            UnitAcquisitionSphereColliderPool::SingleInstance().Return(circle_Left);
-            UnitAcquisitionSphereColliderPool::SingleInstance().Return(circle_Right);
+            UnitAcquisitionSphereColliderPool::Instance().Return(circle_Top);
+            UnitAcquisitionSphereColliderPool::Instance().Return(circle_Left);
+            UnitAcquisitionSphereColliderPool::Instance().Return(circle_Right);
             FBXPool::SingleInstance().Return(onUrsulaPosEffect);
             FBXPool::SingleInstance().Return(onTargetPosEffect1);
             FBXPool::SingleInstance().Return(onTargetPosEffect2);
