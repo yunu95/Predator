@@ -289,16 +289,16 @@ void PlayerController::HandleSkillPreview()
 			auto pos1 = UrsulaBlindSkill::GetSkillObjectPos_Left(GetWorldCursorPosition());
 			auto pos2 = UrsulaBlindSkill::GetSkillObjectPos_Right(GetWorldCursorPosition());
 			auto pos3 = UrsulaBlindSkill::GetSkillObjectPos_Top(GetWorldCursorPosition());
-			SkillPreviewSystem::Instance().ShowUrsulaQSkill(pos1, pos2, pos3, Vector3d::one * UrsulaBlindSkill::pod.skillScale * UrsulaBlindSkill::colliderEffectRatio);
+			SkillPreviewSystem::Instance().ShowUrsulaQSkill(pos1, pos2, pos3, Vector3d::one * UrsulaBlindSkill::pod.skillRadius);
 			SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Ursula, characters[PlayerCharacterType::Ursula].lock()->GetTransform()->GetWorldPosition(), UrsulaBlindSkill::pod.skillRange);
 			break;
 		}
 		case SkillType::URSULA_W:
-			SkillPreviewSystem::Instance().ShowUrsulaWSkill(GetWorldCursorPosition(), UrsulaParalysisSkill::pod.skillScale * UrsulaParalysisSkill::colliderEffectRatio);
+			SkillPreviewSystem::Instance().ShowUrsulaWSkill(GetWorldCursorPosition(), UrsulaParalysisSkill::pod.skillRadius);
 			SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Ursula, characters[PlayerCharacterType::Ursula].lock()->GetTransform()->GetWorldPosition(), UrsulaParalysisSkill::pod.skillRange);
 			break;
 		case SkillType::HANSEL_Q:
-			SkillPreviewSystem::Instance().ShowHanselQSkill(GetWorldCursorPosition(), HanselChargeSkill::pod.stompRadius);
+			SkillPreviewSystem::Instance().ShowHanselQSkill(GetWorldCursorPosition(), HanselChargeSkill::pod.skillRadius);
 			SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Hansel, characters[PlayerCharacterType::Hansel].lock()->GetTransform()->GetWorldPosition(), HanselChargeSkill::pod.maxRange);
 			break;
 		case SkillType::HANSEL_W:
@@ -534,7 +534,7 @@ void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
 			selectedCharacter.lock()->OrderSkill(HanselChargeSkill{}, pos);
 			break;
 		case SkillType::HANSEL_W:
-			selectedCharacter.lock()->OrderSkill(HanselProjectileSkill {}, pos);
+			selectedCharacter.lock()->OrderSkill(BossImpaleSkill {}, pos);
 			break;
 	}
 	UnSelectSkill();
