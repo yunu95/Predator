@@ -97,7 +97,7 @@ namespace application
 
             std::array<DelegateCallback<void>, UnitBehaviourTree::Keywords::KeywordNum> onStateEngage;
             std::array<DelegateCallback<void>, UnitBehaviourTree::Keywords::KeywordNum> onStateExit;
-            mutable std::weak_ptr<Unit> inGameUnit;
+            mutable std::weak_ptr<Unit> inGameUnit = std::weak_ptr<Unit>();
 
         protected:
             virtual bool PreEncoding(json& data) const override;

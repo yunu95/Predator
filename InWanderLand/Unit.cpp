@@ -233,6 +233,7 @@ void Unit::OnStateEngage<UnitBehaviourTree::Skill>()
 template<>
 void Unit::OnStateExit<UnitBehaviourTree::SkillOnGoing>()
 {
+	onStateExit[UnitBehaviourTree::SkillOnGoing]();
 	if (!coroutineSkill.expired())
 	{
 		onGoingSkill->OnInterruption();
@@ -1043,6 +1044,10 @@ void Unit::InitBehaviorTree()
 		{
 			OnStateEngage<UnitBehaviourTree::Skill>();
 		};
+	unitBehaviourTree[UnitBehaviourTree::Skill].onExit = [this]()
+		{
+			OnStateExit<UnitBehaviourTree::Skill>();
+		};
 	unitBehaviourTree[UnitBehaviourTree::Skill][UnitBehaviourTree::SkillOnGoing].enteringCondtion = [this]()
 		{
 			return !coroutineSkill.expired();
@@ -1319,8 +1324,8 @@ void Unit::ReturnToPool()
 	if (!unitStatusUI.expired())
 	{
 		Scene::getCurrentScene()->DestroyGameObject(unitStatusUI.lock()->GetGameObject());
+		unitStatusUI.reset();
 	}
-	unitStatusUI.reset();
 	unitStatusPortraitUI.reset();
 	UnitPool::SingleInstance().Return(GetWeakPtr<Unit>());
 }

@@ -105,6 +105,7 @@ void BossController::ChangeAttackTarget(const std::weak_ptr<Unit>& unit)
 
 coroutine::Coroutine BossController::BossAppearCoroutine()
 {
+
 	auto& gc = GlobalConstant::GetSingletonInstance().pod;
 
 	auto pause = boss.lock()->referencePause.Acquire();
@@ -149,7 +150,7 @@ coroutine::Coroutine BossController::BossAppearCoroutine()
 
 coroutine::Coroutine BossController::RoutinePerUnit(std::weak_ptr<Unit> unit)
 {
-	if (!unit.lock()->IsAlive())
+	if (!unit.lock()->IsAlive() || summonState == 1 || summonState == 2)
 	{
 		co_return;
 	}
@@ -193,7 +194,7 @@ coroutine::Coroutine BossController::RoutinePerUnit(std::weak_ptr<Unit> unit)
 						}
 					}
 					skillDir = (targetUnit.lock()->GetTransform()->GetWorldPosition() - unit.lock()->GetTransform()->GetWorldPosition()).Normalized();
-					unit.lock()->OrderSkill(BossImpaleSkill{}, targetUnit.lock()->GetTransform()->GetWorldPosition() + skillDir);
+					unit.lock()->OrderSkill(BossImpaleSkill{}, unit.lock()->GetTransform()->GetWorldPosition() + skillDir);
 					break;
 				}
 				default:
@@ -201,7 +202,7 @@ coroutine::Coroutine BossController::RoutinePerUnit(std::weak_ptr<Unit> unit)
 			}
 
 			bool skillDone = false;
-			unit.lock()->OnStateExitCallback()[UnitBehaviourTree::Skill].AddVolatileCallback([&]()
+			unit.lock()->OnStateExitCallback()[UnitBehaviourTree::SkillOnGoing].AddVolatileCallback([&]()
 				{
 					skillDone = true;
 				});
@@ -235,7 +236,7 @@ coroutine::Coroutine BossController::RoutinePerUnit(std::weak_ptr<Unit> unit)
 						}
 					}
 					skillDir = (targetUnit.lock()->GetTransform()->GetWorldPosition() - unit.lock()->GetTransform()->GetWorldPosition()).Normalized();
-					unit.lock()->OrderSkill(BossImpaleSkill{}, targetUnit.lock()->GetTransform()->GetWorldPosition() + skillDir);
+					unit.lock()->OrderSkill(BossImpaleSkill{}, unit.lock()->GetTransform()->GetWorldPosition() + skillDir);
 					break;
 				}
 				case 2:
@@ -248,7 +249,7 @@ coroutine::Coroutine BossController::RoutinePerUnit(std::weak_ptr<Unit> unit)
 			}
 
 			bool skillDone = false;
-			unit.lock()->OnStateExitCallback()[UnitBehaviourTree::Skill].AddVolatileCallback([&]()
+			unit.lock()->OnStateExitCallback()[UnitBehaviourTree::SkillOnGoing].AddVolatileCallback([&]()
 				{
 					skillDone = true;
 				});
@@ -289,7 +290,7 @@ coroutine::Coroutine BossController::RoutinePerUnit(std::weak_ptr<Unit> unit)
 						}
 					}
 					skillDir = (targetUnit.lock()->GetTransform()->GetWorldPosition() - unit.lock()->GetTransform()->GetWorldPosition()).Normalized();
-					unit.lock()->OrderSkill(BossImpaleSkill{}, targetUnit.lock()->GetTransform()->GetWorldPosition() + skillDir);
+					unit.lock()->OrderSkill(BossImpaleSkill{}, unit.lock()->GetTransform()->GetWorldPosition() + skillDir);
 					break;
 				}
 				default:
@@ -297,7 +298,7 @@ coroutine::Coroutine BossController::RoutinePerUnit(std::weak_ptr<Unit> unit)
 			}
 
 			bool skillDone = false;
-			unit.lock()->OnStateExitCallback()[UnitBehaviourTree::Skill].AddVolatileCallback([&]()
+			unit.lock()->OnStateExitCallback()[UnitBehaviourTree::SkillOnGoing].AddVolatileCallback([&]()
 				{
 					skillDone = true;
 				});
@@ -315,7 +316,7 @@ coroutine::Coroutine BossController::RoutinePerUnit(std::weak_ptr<Unit> unit)
 			unit.lock()->OrderSkill(BossSummonChessSkill{}, unit.lock()->GetTransform()->GetWorldPosition());
 
 			bool skillDone = false;
-			unit.lock()->OnStateExitCallback()[UnitBehaviourTree::Skill].AddVolatileCallback([&]()
+			unit.lock()->OnStateExitCallback()[UnitBehaviourTree::SkillOnGoing].AddVolatileCallback([&]()
 				{
 					skillDone = true;
 				});

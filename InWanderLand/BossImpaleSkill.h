@@ -29,6 +29,7 @@ class BossImpaleSkill : public Skill
 public:
 	BossImpaleSkill() {}
 	virtual SkillType::Enum GetSkillType() { return SkillType::Enum::BossSkill_Two; }
+	virtual float GetCastRange() override { return pod.impaleSkillRange; };
 	virtual coroutine::Coroutine operator()() override;
 	virtual void OnInterruption() override;
 

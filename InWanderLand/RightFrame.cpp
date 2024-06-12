@@ -102,6 +102,11 @@ namespace BossSummon
 
 	void RightFrame::SummonUnit()
 	{
+		if (!unitFrame.lock()->IsAlive())
+		{
+			return;
+		}
+
 		if (!summonCorountine.expired())
 		{
 			DeleteCoroutine(summonCorountine);
@@ -211,7 +216,7 @@ namespace BossSummon
 								auto targetUnit = PlayerController::Instance().GetPlayers().at(targetIndex - 1);
 								if (!targetUnit.expired() && targetUnit.lock()->IsAlive())
 								{
-									sUnit.lock()->OrderAttack(targetUnit);
+									sUnit.lock()->OrderAttackMove(targetUnit.lock()->GetTransform()->GetWorldPosition());
 									break;
 								}
 								findCount++;
@@ -244,7 +249,7 @@ namespace BossSummon
 								auto targetUnit = PlayerController::Instance().GetPlayers().at(targetIndex - 1);
 								if (!targetUnit.expired() && targetUnit.lock()->IsAlive())
 								{
-									sUnit.lock()->OrderAttack(targetUnit);
+									sUnit.lock()->OrderAttackMove(targetUnit.lock()->GetTransform()->GetWorldPosition());
 									break;
 								}
 								findCount++;

@@ -587,7 +587,7 @@ void PlayerController::SetState(State::Enum newState)
 }
 std::array<float, (int)PlayerCharacterType::Num> PlayerController::GetAggroProportions() const
 {
-	std::array<float, (int)PlayerCharacterType::Num> proportions;
+	std::array<float, (int)PlayerCharacterType::Num> proportions = std::array<float, (int)PlayerCharacterType::Num>();
 	float sum = 0;
 
 	if (characters.at(PlayerCharacterType::Robin).lock()->IsAlive())
