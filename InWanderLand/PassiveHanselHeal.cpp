@@ -8,6 +8,7 @@ coroutine::Coroutine PassiveHanselHeal::CookieLingering(Vector3d pos, std::weak_
     auto cookieMesh = FBXPool::SingleInstance().Borrow(wanderResources::GetFBXName(wanderResources::WanderFBX::HEALING_COOKIE));
     auto collider = UnitAcquisitionSphereColliderPool::Instance().Borrow(owner);
     collider.lock()->SetRadius(pod.cookieRadius);
+    collider.lock()->GetTransform()->SetWorldPosition(pos);
     cookieMesh.lock()->GetTransform()->SetWorldPosition(pos);
     cookieMesh.lock()->GetTransform()->SetLocalScale(pod.cookieScale * Vector3d::one);
     coroutine::ForSeconds forSeconds{ pod.cookieLifetime };
