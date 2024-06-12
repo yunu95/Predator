@@ -32,6 +32,7 @@ class UnitAcquisitionSphereCollider;
 class UnitPool;
 class PlayerController;
 class UnitController;
+class BossController;
 namespace application
 {
     namespace editor
@@ -232,6 +233,7 @@ private:
     friend UnitBuff;
     friend UnitPool;
     friend PlayerController;
+    friend BossController;
 };
 template<UnitOrderType orderType>
 bool Unit::CanProcessOrder()

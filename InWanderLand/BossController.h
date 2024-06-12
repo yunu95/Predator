@@ -17,11 +17,12 @@ public:
 	std::weak_ptr<Unit> GetBoss();
 
 private:
+	void ChangeAttackTarget(const std::weak_ptr<Unit>& unit);
 	coroutine::Coroutine BossAppearCoroutine();
 
 	std::weak_ptr<Unit> boss = std::weak_ptr<Unit>();
 	int summonState = 0;
 	int currentState = 0;
 	int beforeSkillIndex = 0;
-	virtual coroutine::Coroutine RoutinePerUnit(std::weak_ptr<Unit> unit)override;
+	virtual coroutine::Coroutine RoutinePerUnit(std::weak_ptr<Unit> unit) override;
 };

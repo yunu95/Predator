@@ -13,7 +13,7 @@ UnitSkillCommand::UnitSkillCommand(Unit* unit, Vector3d expectedPos, SkillType::
 	: UnitCommand(unit, expectedPos), renderer{ nullptr }, skillType(skillType)
 {
 	this->commandType = UnitCommand::Skill;
-
+	this->skillTargetPos = expectedPos;
 	switch (skillType)
 	{
 		case SkillType::ROBIN_Q: 
@@ -23,7 +23,7 @@ UnitSkillCommand::UnitSkillCommand(Unit* unit, Vector3d expectedPos, SkillType::
 			{
 				this->previewStartPos = TacticModeSystem::Instance().robinLastCommand->GetExpectedPos();
 				previewStartPos.y = unit->GetGameObject()->GetTransform()->GetWorldPosition().y;
-			}
+			} 
 			else
 			{
 				this->previewStartPos = unit->GetGameObject()->GetTransform()->GetWorldPosition();
@@ -87,12 +87,10 @@ UnitSkillCommand::UnitSkillCommand(Unit* unit, Vector3d expectedPos, SkillType::
 			{
 				this->previewStartPos = TacticModeSystem::Instance().hanselLastCommand->GetExpectedPos();
 				previewStartPos.y = unit->GetGameObject()->GetTransform()->GetWorldPosition().y;
-				this->expectedPos = TacticModeSystem::Instance().hanselLastCommand->GetExpectedPos();
 			}
 			else
 			{
 				this->previewStartPos = unit->GetGameObject()->GetTransform()->GetWorldPosition();
-				this->expectedPos = unit->GetGameObject()->GetTransform()->GetWorldPosition();
 			}
 		}
 			break;
@@ -109,22 +107,22 @@ void UnitSkillCommand::Execute()
 	switch (skillType)
 	{
 		case SkillType::ROBIN_Q:
-			unit->OrderSkill(RobinChargeSkill{  }, expectedPos);
+			unit->OrderSkill(RobinChargeSkill{  }, this->skillTargetPos);
 			break;
 		case SkillType::ROBIN_W:
-			unit->OrderSkill(RobinTauntSkill{  }, expectedPos);
+			unit->OrderSkill(RobinTauntSkill{  }, this->expectedPos);
 			break;
 		case SkillType::URSULA_Q:
-			unit->OrderSkill(UrsulaBlindSkill{  }, expectedPos);
+			unit->OrderSkill(UrsulaBlindSkill{  }, this->skillTargetPos);
 			break;
 		case SkillType::URSULA_W:
-			unit->OrderSkill(UrsulaParalysisSkill{  }, expectedPos);
+			unit->OrderSkill(UrsulaParalysisSkill{  }, this->skillTargetPos);
 			break;
 		case SkillType::HANSEL_Q:
-			unit->OrderSkill(HanselChargeSkill{}, expectedPos);
+			unit->OrderSkill(HanselChargeSkill{}, this->skillTargetPos);
 			break;
 		case SkillType::HANSEL_W:
-			unit->OrderSkill(HanselProjectileSkill{}, expectedPos);
+			unit->OrderSkill(HanselProjectileSkill{}, this->skillTargetPos);
 			break;
 	}
 

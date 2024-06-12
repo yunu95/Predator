@@ -4,6 +4,7 @@
 class ContentsObservee;
 class PermanentObservee;
 
+#include <algorithm>
 #include <vector>
 
 class ContentsObserver : public Component, public SingletonComponent<ContentsObserver>
@@ -11,6 +12,8 @@ class ContentsObserver : public Component, public SingletonComponent<ContentsObs
 public:
 	void RegisterObservee(PermanentObservee* permanentObservee);
 	void RegisterObservee(ContentsObservee* contentsObservee);
+	void RemoveObservee(PermanentObservee* permanentObservee);
+	void RemoveObservee(ContentsObservee* contentsObservee);
 
 	/// PermanentObservee 의 경우에만 시작할 때 처리하는 OnContentsPlay 함수를 호출합니다.
 	void OnPlayContents();

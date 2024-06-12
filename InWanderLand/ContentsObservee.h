@@ -5,7 +5,7 @@
 class ContentsObservee
 {
 public:
-	virtual ~ContentsObservee() = default;
+	virtual ~ContentsObservee();
 	ContentsObservee();
 
 	/// 해당 ContentsObservee 를 상속받는 구체화된 Component 에서

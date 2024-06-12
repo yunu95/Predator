@@ -9,7 +9,7 @@ class Projectile : public UnitAcquisitionSphereCollider, public PermanentObserve
 {
 private:
     virtual void Update() override;
-    virtual void OnEnemyEnter(Unit* unit) override;
+    //virtual void OnEnemyEnter(Unit* unit) override;
     //std::weak_ptr<Unit> owner;
     Vector3d speed;
     float damage;

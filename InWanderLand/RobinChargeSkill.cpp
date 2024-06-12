@@ -57,7 +57,7 @@ coroutine::Coroutine RobinChargeSkill::operator()()
 	co_await std::suspend_always{};
 
     coroutine::ForSeconds forSeconds{ static_cast<float>(deltaPos.Magnitude()) / pod.rushSpeed };
-    knockbackCollider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
+    knockbackCollider = UnitAcquisitionSphereColliderPool::Instance().Borrow(owner.lock());
     knockbackCollider.lock()->SetRadius(pod.rushKnockbackRadius);
     while (forSeconds.Tick())
     {
@@ -80,7 +80,7 @@ coroutine::Coroutine RobinChargeSkill::operator()()
     effectCoroutine.lock()->PushDestroyCallBack([this]()
         {
             FBXPool::SingleInstance().Return(chargeEffect);
-            UnitAcquisitionSphereColliderPool::SingleInstance().Return(knockbackCollider);
+            UnitAcquisitionSphereColliderPool::Instance().Return(knockbackCollider);
             FBXPool::SingleInstance().Return(chargeEffect);
         });
     

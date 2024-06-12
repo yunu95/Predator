@@ -181,7 +181,7 @@ void Animator::Update()
             desc.curr.speed = currentAnimation->GetPlaySpeed();
             __int32 ratio = static_cast<__int32>(totalFrame / duration);
 
-            desc.curr.sumTime += (desc.curr.speed * Time::GetDeltaTime());
+            desc.curr.sumTime += (gi.GetPlaySpeed() * desc.curr.speed * Time::GetDeltaTime());
             if (desc.curr.sumTime >= currentAnimation->GetDuration())
             {
                 // 현재 애니메이션의 마지막 프레임에 왔다면 이벤트를 클리어해준다.
@@ -248,7 +248,7 @@ void Animator::Update()
             else
             {
                 desc.next.speed = nextAnimation->GetPlaySpeed();
-                desc.next.sumTime += (desc.next.speed * Time::GetDeltaTime());
+                desc.next.sumTime += (gi.GetPlaySpeed() * desc.next.speed * Time::GetDeltaTime());
                 if (desc.next.sumTime >= nextAnimation->GetDuration())
                 {
                     desc.next.sumTime = 0;
@@ -261,29 +261,29 @@ void Animator::Update()
                 desc.next.ratio = static_cast<float>(desc.next.sumTime - static_cast<float>(desc.next.currFrame) / ratio);
 
                 // 다음 애니메이션에 대한 이벤트까지 처리
-				for (auto& each : this->animationEventMap)
-				{
-					auto nextAnimation = gi.GetNextAnimation();
-					for (auto& [key, each2] : each.second)
-					{
-						if (nextAnimation->GetName() == each.first->GetName())
-						{
-							if (each2.frame == desc.next.currFrame)
-							{
-								if (each2.isFirst && (each2.func != nullptr))
-								{
+                for (auto& each : this->animationEventMap)
+                {
+                    auto nextAnimation = gi.GetNextAnimation();
+                    for (auto& [key, each2] : each.second)
+                    {
+                        if (nextAnimation->GetName() == each.first->GetName())
+                        {
+                            if (each2.frame == desc.next.currFrame)
+                            {
+                                if (each2.isFirst && (each2.func != nullptr))
+                                {
                                     each2.isExecute = true;
-									each2.isFirst = false;
-									each2.func();
-								}
-							}
-							else
-							{
-								each2.isFirst = true;
-							}
-						}
-					}
-				}
+                                    each2.isFirst = false;
+                                    each2.func();
+                                }
+                            }
+                            else
+                            {
+                                each2.isFirst = true;
+                            }
+                        }
+                    }
+                }
             }
         }
 

@@ -213,47 +213,56 @@ void PlayerController::HandleInput()
 		}
 	}
 
-	if (Input::isKeyPushed(KeyCode::Q))
+	// 전술모드의 마지막 명령을 지우는 키
+	if (Input::isKeyDown(KeyCode::Control)&& Input::isKeyPushed(KeyCode::Z) && TacticModeSystem::Instance().IsOperation() && !TacticModeSystem::Instance().IsExecuting())
 	{
-		switch (selectedCharacterType)
+		TacticModeSystem::Instance().PopCommand();
+	}
+
+	if ((TacticModeSystem::Instance().IsExecuting() == false))
+	{
+		if (Input::isKeyPushed(KeyCode::Q))
 		{
-			case PlayerCharacterType::Robin: SelectSkill(SkillType::ROBIN_Q); break;
-			case PlayerCharacterType::Ursula: SelectSkill(SkillType::URSULA_Q); break;
-			case PlayerCharacterType::Hansel: SelectSkill(SkillType::HANSEL_Q); break;
+			switch (selectedCharacterType)
+			{
+				case PlayerCharacterType::Robin: SelectSkill(SkillType::ROBIN_Q); break;
+				case PlayerCharacterType::Ursula: SelectSkill(SkillType::URSULA_Q); break;
+				case PlayerCharacterType::Hansel: SelectSkill(SkillType::HANSEL_Q); break;
+			}
 		}
-	}
-	if (Input::isKeyPushed(KeyCode::W))
-	{
-		switch (selectedCharacterType)
+		if (Input::isKeyPushed(KeyCode::W))
 		{
-			case PlayerCharacterType::Robin: SelectSkill(SkillType::ROBIN_W); break;
-			case PlayerCharacterType::Ursula: SelectSkill(SkillType::URSULA_W); break;
-			case PlayerCharacterType::Hansel: SelectSkill(SkillType::HANSEL_W); break;
+			switch (selectedCharacterType)
+			{
+				case PlayerCharacterType::Robin: SelectSkill(SkillType::ROBIN_W); break;
+				case PlayerCharacterType::Ursula: SelectSkill(SkillType::URSULA_W); break;
+				case PlayerCharacterType::Hansel: SelectSkill(SkillType::HANSEL_W); break;
+			}
 		}
-	}
-	if (Input::isKeyPushed(KeyCode::NUM_1))
-	{
-		SelectPlayerUnit(PlayerCharacterType::Robin);
-	}
-	if (Input::isKeyPushed(KeyCode::NUM_2))
-	{
-		SelectPlayerUnit(PlayerCharacterType::Ursula);
-	}
-	if (Input::isKeyPushed(KeyCode::NUM_3))
-	{
-		SelectPlayerUnit(PlayerCharacterType::Hansel);
-	}
-	if (Input::isKeyPushed(KeyCode::A))
-	{
-		OrderAttackMove(GetWorldCursorPosition());
-	}
-	if (Input::isKeyPushed(KeyCode::MouseLeftClick) && !UIManager::Instance().IsMouseOnButton())
-	{
-		OnLeftClick();
-	}
-	if (Input::isKeyPushed(KeyCode::MouseRightClick))
-	{
-		OnRightClick();
+		if (Input::isKeyPushed(KeyCode::NUM_1))
+		{
+			SelectPlayerUnit(PlayerCharacterType::Robin);
+		}
+		if (Input::isKeyPushed(KeyCode::NUM_2))
+		{
+			SelectPlayerUnit(PlayerCharacterType::Ursula);
+		}
+		if (Input::isKeyPushed(KeyCode::NUM_3))
+		{
+			SelectPlayerUnit(PlayerCharacterType::Hansel);
+		}
+		if (Input::isKeyPushed(KeyCode::A))
+		{
+			OrderAttackMove(GetWorldCursorPosition());
+		}
+		if (Input::isKeyPushed(KeyCode::MouseLeftClick) && !UIManager::Instance().IsMouseOnButton())
+		{
+			OnLeftClick();
+		}
+		if (Input::isKeyPushed(KeyCode::MouseRightClick))
+		{
+			OnRightClick();
+		}
 	}
 }
 
@@ -279,34 +288,41 @@ void PlayerController::HandleCamera()
 
 void PlayerController::HandleSkillPreview()
 {
-	switch (selectedSkill)
+	if (state != State::Tactic)
 	{
-		case SkillType::ROBIN_Q:
-			SkillPreviewSystem::Instance().ShowRobinQSkill(characters[PlayerCharacterType::Robin].lock()->GetTransform()->GetWorldPosition());
-			SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Robin, characters[PlayerCharacterType::Robin].lock()->GetTransform()->GetWorldPosition(), RobinChargeSkill::pod.maxDistance);
-			break;
-		case SkillType::URSULA_Q:
+		switch (selectedSkill)
 		{
-			UrsulaBlindSkill::UpdatePosition(characters[PlayerCharacterType::Ursula].lock()->GetTransform()->GetWorldPosition(), GetWorldCursorPosition());
-			auto pos1 = UrsulaBlindSkill::GetSkillObjectPos_Left(GetWorldCursorPosition());
-			auto pos2 = UrsulaBlindSkill::GetSkillObjectPos_Right(GetWorldCursorPosition());
-			auto pos3 = UrsulaBlindSkill::GetSkillObjectPos_Top(GetWorldCursorPosition());
-			SkillPreviewSystem::Instance().ShowUrsulaQSkill(pos1, pos2, pos3, Vector3d::one * UrsulaBlindSkill::pod.skillRadius);
-			SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Ursula, characters[PlayerCharacterType::Ursula].lock()->GetTransform()->GetWorldPosition(), UrsulaBlindSkill::pod.skillRange);
-			break;
+			case SkillType::ROBIN_Q:
+				SkillPreviewSystem::Instance().ShowRobinQSkill(characters[PlayerCharacterType::Robin].lock()->GetTransform()->GetWorldPosition());
+				SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Robin, characters[PlayerCharacterType::Robin].lock()->GetTransform()->GetWorldPosition(), RobinChargeSkill::pod.maxDistance);
+				break;
+			case SkillType::URSULA_Q:
+			{
+				UrsulaBlindSkill::UpdatePosition(characters[PlayerCharacterType::Ursula].lock()->GetTransform()->GetWorldPosition(), GetWorldCursorPosition());
+				auto pos1 = UrsulaBlindSkill::GetSkillObjectPos_Left(GetWorldCursorPosition());
+				auto pos2 = UrsulaBlindSkill::GetSkillObjectPos_Right(GetWorldCursorPosition());
+				auto pos3 = UrsulaBlindSkill::GetSkillObjectPos_Top(GetWorldCursorPosition());
+				SkillPreviewSystem::Instance().ShowUrsulaQSkill(pos1, pos2, pos3, Vector3d::one * UrsulaBlindSkill::pod.skillRadius);
+				SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Ursula, characters[PlayerCharacterType::Ursula].lock()->GetTransform()->GetWorldPosition(), UrsulaBlindSkill::pod.skillRange);
+				break;
+			}
+			case SkillType::URSULA_W:
+				SkillPreviewSystem::Instance().ShowUrsulaWSkill(GetWorldCursorPosition(), UrsulaParalysisSkill::pod.skillRadius);
+				SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Ursula, characters[PlayerCharacterType::Ursula].lock()->GetTransform()->GetWorldPosition(), UrsulaParalysisSkill::pod.skillRange);
+				break;
+			case SkillType::HANSEL_Q:
+				SkillPreviewSystem::Instance().ShowHanselQSkill(GetWorldCursorPosition(), HanselChargeSkill::pod.skillRadius);
+				SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Hansel, characters[PlayerCharacterType::Hansel].lock()->GetTransform()->GetWorldPosition(), HanselChargeSkill::pod.maxRange);
+				break;
+			case SkillType::HANSEL_W:
+				SkillPreviewSystem::Instance().ShowHanselWSkill(characters[PlayerCharacterType::Hansel].lock()->GetTransform()->GetWorldPosition());
+				SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Hansel, characters[PlayerCharacterType::Hansel].lock()->GetTransform()->GetWorldPosition(), HanselProjectileSkill::pod.maxRange);
+				break;
 		}
-		case SkillType::URSULA_W:
-			SkillPreviewSystem::Instance().ShowUrsulaWSkill(GetWorldCursorPosition(), UrsulaParalysisSkill::pod.skillRadius);
-			SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Ursula, characters[PlayerCharacterType::Ursula].lock()->GetTransform()->GetWorldPosition(), UrsulaParalysisSkill::pod.skillRange);
-			break;
-		case SkillType::HANSEL_Q:
-			SkillPreviewSystem::Instance().ShowHanselQSkill(GetWorldCursorPosition(), HanselChargeSkill::pod.skillRadius);
-			SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Hansel, characters[PlayerCharacterType::Hansel].lock()->GetTransform()->GetWorldPosition(), HanselChargeSkill::pod.maxRange);
-			break;
-		case SkillType::HANSEL_W:
-			SkillPreviewSystem::Instance().ShowHanselWSkill(characters[PlayerCharacterType::Hansel].lock()->GetTransform()->GetWorldPosition());
-			SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Hansel, characters[PlayerCharacterType::Hansel].lock()->GetTransform()->GetWorldPosition(), HanselProjectileSkill::pod.maxRange);
-			break;
+	}
+	else
+	{
+		TacticModeSystem::Instance().ShowSkillPreviewInTacticMode(selectedSkill);
 	}
 
 	// 임시 이동 경로 보여주는 부분
@@ -557,6 +573,7 @@ void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
 		this->ModifyPathForSkill(path, skillType);
 		if (!path.empty())
 		{
+
 			// 이동을 해야한다면
 			// 이동 명령
 			errorType = TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitMoveCommand>(characters[selectedCharacterType].lock().get()
@@ -583,6 +600,7 @@ void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
 		else
 		{
 			// 이동없이 스킬 사용이 가능하다면 스킬 명령
+
 			EnqueErrorType errorType = EnqueErrorType::NONE;
 			errorType = TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitSkillCommand>(characters[selectedCharacterType].lock().get()
 				, GetWorldCursorPosition()
@@ -595,6 +613,11 @@ void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
 
 void PlayerController::SelectSkill(SkillType::Enum skillType)
 {
+	if ((TacticModeSystem::Instance().CanSelectSkill(skillType) == false) && (TacticModeSystem::Instance().IsOperation()))
+	{
+		return;
+	}
+
 	UnSelectSkill();
 	SkillPreviewSystem::Instance().HideTemporaryRoute();
 	if (skillCooltimeLeft[skillType] > 0)
@@ -792,6 +815,7 @@ Vector3d PlayerController::GetWorldCursorPosition()
 void PlayerController::ResetCombo()
 {
 }
+
 void PlayerController::SetMana(float mana)
 {
 	const auto& gc = GlobalConstant::GetSingletonInstance().pod;

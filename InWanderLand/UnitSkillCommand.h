@@ -16,10 +16,11 @@ public:
 	virtual void Execute() override;
 	virtual void ShowPreviewMesh() override;
 	virtual void HidePreviewMesh() override;
-
+	SkillType::Enum GetSkillType() { return skillType; }
 private:
 	yunutyEngine::graphics::StaticMeshRenderer* renderer;
 	SkillType::Enum skillType;
 	Vector3d previewStartPos;
+	Vector3d skillTargetPos;
 };
 

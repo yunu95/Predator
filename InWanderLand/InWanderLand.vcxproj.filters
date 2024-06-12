@@ -568,9 +568,6 @@
     <Filter Include="Contents_Refactored\UnitController\PlayerController">
       <UniqueIdentifier>{e38b554b-48ad-47f3-9339-359425c3455a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Contents_Refactored\PlayerStatusManager">
-      <UniqueIdentifier>{424d61c0-5c28-4669-b8f1-8d22299f7e82}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Contents_Refactored\wanderResources">
       <UniqueIdentifier>{945f1a80-43b5-4b29-a109-da4c0c846cce}</UniqueIdentifier>
     </Filter>
@@ -1807,9 +1804,6 @@
     <ClInclude Include="Projectile.h">
       <Filter>Contents_Refactored\Projectile</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerStatusManager.h">
-      <Filter>Contents_Refactored\PlayerStatusManager</Filter>
-    </ClInclude>
     <ClInclude Include="UnitAcquisitionSphereCollider.h">
       <Filter>Contents_Refactored\Unit\UnitAcquisitionSphereCollider</Filter>
     </ClInclude>
@@ -2874,9 +2868,6 @@
     </ClCompile>
     <ClCompile Include="Projectile.cpp">
       <Filter>Contents_Refactored\Projectile</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerStatusManager.cpp">
-      <Filter>Contents_Refactored\PlayerStatusManager</Filter>
     </ClCompile>
     <ClCompile Include="UnitAcquisitionSphereCollider.cpp">
       <Filter>Contents_Refactored\Unit\UnitAcquisitionSphereCollider</Filter>

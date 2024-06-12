@@ -29,6 +29,7 @@ class BossImpaleSkill : public Skill
 public:
 	BossImpaleSkill() {}
 	virtual SkillType::Enum GetSkillType() { return SkillType::Enum::BossSkill_Two; }
+	virtual float GetCastRange() override { return pod.impaleSkillRange; };
 	virtual coroutine::Coroutine operator()() override;
 	virtual void OnInterruption() override;
 
@@ -41,7 +42,6 @@ private:
 	std::weak_ptr<ManagedFBX> impaleEffect;
 	std::vector<std::weak_ptr<UnitAcquisitionSphereCollider>> knockbackColliderVector;
 	std::vector<std::weak_ptr<ManagedFBX>> spearFbxVector;
-	std::vector<std::weak_ptr<coroutine::Coroutine>> coroutineVector;
 	std::unordered_set<Unit*> damagedUnits;
 
 	static int managingIndex;
