@@ -145,14 +145,20 @@ void Unit::OnStateEngage<UnitBehaviourTree::Pause>()
 	PlayAnimation(UnitAnimType::Idle, true);
 	enableNavObstacleByState = referenceEnableNavObstacle.Acquire();
 	disableNavAgentByState = referenceDisableNavAgent.Acquire();
+    onStateEngage[UnitBehaviourTree::Pause]();
+    //PlayAnimation(UnitAnimType::Idle, true);
+    animatorComponent.lock()->Pause();
+    enableNavObstacleByState = referenceEnableNavObstacle.Acquire();
+    disableNavAgentByState = referenceDisableNavAgent.Acquire();
 }
 template<>
 void Unit::OnStateExit<UnitBehaviourTree::Pause>()
 {
-	onStateExit[UnitBehaviourTree::Pause]();
-	PlayAnimation(UnitAnimType::Idle, true);
-	enableNavObstacleByState.reset();
-	disableNavAgentByState.reset();
+    onStateExit[UnitBehaviourTree::Pause]();
+    //PlayAnimation(UnitAnimType::Idle, true);
+    animatorComponent.lock()->Resume();
+    enableNavObstacleByState.reset();
+    disableNavAgentByState.reset();
 }
 template<>
 void Unit::OnStateEngage<UnitBehaviourTree::Reviving>()
@@ -181,17 +187,20 @@ void Unit::OnStateUpdate<UnitBehaviourTree::Chasing>()
 template<>
 void Unit::OnStateEngage<UnitBehaviourTree::Attack>()
 {
-	onStateEngage[UnitBehaviourTree::Attack]();
-	enableNavObstacleByState = referenceEnableNavObstacle.Acquire();
-	disableNavAgentByState = referenceDisableNavAgent.Acquire();
+    onStateEngage[UnitBehaviourTree::Attack]();
+    PlayAnimation(UnitAnimType::Idle);
+    defaultAnimationType = UnitAnimType::Idle;
+    enableNavObstacleByState = referenceEnableNavObstacle.Acquire();
+    disableNavAgentByState = referenceDisableNavAgent.Acquire();
 }
 template<>
 void Unit::OnStateExit<UnitBehaviourTree::Attack>()
 {
-	DeleteCoroutine(coroutineAttack);
-	onStateExit[UnitBehaviourTree::Attack]();
-	enableNavObstacleByState.reset();
-	disableNavAgentByState.reset();
+    DeleteCoroutine(coroutineAttack);
+    animatorComponent.lock()->GetGI().SetPlaySpeed(1);
+    onStateExit[UnitBehaviourTree::Attack]();
+    enableNavObstacleByState.reset();
+    disableNavAgentByState.reset();
 }
 template<>
 void Unit::OnStateUpdate<UnitBehaviourTree::Attack>()
@@ -783,15 +792,16 @@ void Unit::Init(const application::editor::Unit_TemplateData* unitTemplateData)
 }
 void Unit::Summon(const application::editor::UnitData* unitData)
 {
-	this->unitData = unitData;
-	onAttack = unitData->onAttack;
-	onAttackHit = unitData->onAttackHit;
-	onDamaged = unitData->onDamaged;
-	onCreated = unitData->onCreated;
-	onRotationFinish = unitData->onRotationFinish;
-	onStateEngage = unitData->onStateEngage;
-	onStateExit = unitData->onStateExit;
-	Summon(unitData->GetUnitTemplateData());
+    this->unitData = unitData;
+    Reset();
+    onAttack = unitData->onAttack;
+    onAttackHit = unitData->onAttackHit;
+    onDamaged = unitData->onDamaged;
+    onCreated = unitData->onCreated;
+    onRotationFinish = unitData->onRotationFinish;
+    onStateEngage = unitData->onStateEngage;
+    onStateExit = unitData->onStateExit;
+    Summon(unitData->GetUnitTemplateData());
 
 	// 유닛 데이터 없이 유닛을 생성하는 코드 테스트용
 	//Summon(unitData->GetUnitTemplateData(), Vector3d{ unitData->pod.position }, 270);
@@ -802,64 +812,64 @@ void Unit::Summon(const application::editor::UnitData* unitData)
 	navAgentComponent.lock()->AssignToNavigationField(&SingleNavigationField::Instance());
 	navObstacle.lock()->AssignToNavigationField(&SingleNavigationField::Instance());
 
-	Quaternion quat{ unitData->pod.rotation.w,unitData->pod.rotation.x,unitData->pod.rotation.y ,unitData->pod.rotation.z };
-	auto forward = quat.Forward();
-	desiredRotation = currentRotation = 180 + std::atan2f(forward.z, forward.x) * math::Rad2Deg;
-	Reset();
-	coroutineBirth = StartCoroutine(BirthCoroutine());
+    Quaternion quat{ unitData->pod.rotation.w,unitData->pod.rotation.x,unitData->pod.rotation.y ,unitData->pod.rotation.z };
+    auto forward = quat.Forward();
+    desiredRotation = currentRotation = 180 + std::atan2f(forward.z, forward.x) * math::Rad2Deg;
+    coroutineBirth = StartCoroutine(BirthCoroutine());
 }
 void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& position, float rotation, bool instant)
 {
-	this->unitData = nullptr;
-	onAttack.Clear();
-	onAttackHit.Clear();
-	onDamaged.Clear();
-	onCreated.Clear();
-	onRotationFinish.Clear();
-	for (auto& each : onStateEngage)
-	{
-		each.Clear();
-	}
-	for (auto& each : onStateExit)
-	{
-		each.Clear();
-	}
-	Summon(td);
+    this->unitData = nullptr;
+    Reset();
+    onAttack.Clear();
+    onAttackHit.Clear();
+    onDamaged.Clear();
+    onCreated.Clear();
+    onRotationFinish.Clear();
+    for (auto& each : onStateEngage)
+    {
+        each.Clear();
+    }
+    for (auto& each : onStateExit)
+    {
+        each.Clear();
+    }
+    Summon(td);
 
 	GetTransform()->SetWorldPosition(Vector3d{ position });
 	navAgentComponent.lock()->GetTransform()->SetWorldPosition(Vector3d{ position });
 	navAgentComponent.lock()->AssignToNavigationField(&SingleNavigationField::Instance());
 	navObstacle.lock()->AssignToNavigationField(&SingleNavigationField::Instance());
 
-	GetTransform()->SetWorldRotation(Vector3d{ 0,90 - rotation,0 });
-	desiredRotation = currentRotation = rotation;
-	Reset();
-	if (instant)
-	{
-		onCreated();
-	}
-	else
-	{
-		coroutineBirth = StartCoroutine(BirthCoroutine());
-	}
+    GetTransform()->SetWorldRotation(Vector3d{ 0,90 - rotation,0 });
+    desiredRotation = currentRotation = rotation;
+    if (instant)
+    {
+        onCreated();
+    }
+    else
+    {
+        coroutineBirth = StartCoroutine(BirthCoroutine());
+    }
 }
 void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& position, const Quaternion& rotation, bool instant)
 {
-	this->unitData = nullptr;
-	onAttack.Clear();
-	onAttackHit.Clear();
-	onDamaged.Clear();
-	onCreated.Clear();
-	onRotationFinish.Clear();
-	for (auto& each : onStateEngage)
-	{
-		each.Clear();
-	}
-	for (auto& each : onStateExit)
-	{
-		each.Clear();
-	}
-	Summon(td);
+    this->unitData = nullptr;
+    Reset();
+    onAttack.Clear();
+    onAttackHit.Clear();
+    onDamaged.Clear();
+    onCreated.Clear();
+    onRotationFinish.Clear();
+    for (auto& each : onStateEngage)
+    {
+        each.Clear();
+    }
+    for (auto& each : onStateExit)
+    {
+        each.Clear();
+    }
+    Summon(td);
 
 	GetTransform()->SetWorldPosition(Vector3d{ position });
 	navAgentComponent.lock()->GetTransform()->SetWorldPosition(Vector3d{ position });
@@ -869,50 +879,50 @@ void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& po
 	auto forward = rotation.Forward();
 	desiredRotation = currentRotation = 180 + std::atan2f(forward.z, forward.x) * math::Rad2Deg;
 
-	Reset();
-	if (instant)
-	{
-		onCreated();
-	}
-	else
-	{
-		coroutineBirth = StartCoroutine(BirthCoroutine());
-	}
+    if (instant)
+    {
+        onCreated();
+    }
+    else
+    {
+        coroutineBirth = StartCoroutine(BirthCoroutine());
+    }
 }
 void Unit::AddPassiveSkill(std::shared_ptr<PassiveSkill> skill)
 {
-	passiveSkill = skill;
-	passiveSkill->Init(GetWeakPtr<Unit>());
+    passiveSkill = skill;
+    passiveSkill->owner = GetWeakPtr<Unit>();
+    passiveSkill->Init(GetWeakPtr<Unit>());
 }
 void Unit::Summon(application::editor::Unit_TemplateData* templateData)
 {
-	skinnedMeshGameObject->GetTransform()->SetLocalScale(Vector3d::one * unitTemplateData->pod.unit_scale);
-	switch (unitTemplateData->pod.playerUnitType.enumValue)
-	{
-		case PlayerCharacterType::Robin:
-			unitStatusPortraitUI = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin)->GetWeakPtr<UIElement>();
-			//AddPassiveSkill(std::make_shared<PassiveRobinBleed>());
-			break;
-		case PlayerCharacterType::Ursula:
-			unitStatusPortraitUI = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Ursula)->GetWeakPtr<UIElement>();
-			//AddPassiveSkill(std::make_shared<PassiveUrsula>());
-			break;
-		case PlayerCharacterType::Hansel:
-			unitStatusPortraitUI = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel)->GetWeakPtr<UIElement>();
-			//AddPassiveSkill(std::make_shared<PassiveHanselHeal>());
-			break;
-		default:
-			break;
-	}
-	switch (unitTemplateData->pod.unitStatusBar.enumValue)
-	{
-		case UnitStatusBarType::PLAYER:
-			unitStatusUI = UIManager::Instance().DuplicateUIElement(UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_Heroes));
-			break;
-		case UnitStatusBarType::ENEMY:
-			unitStatusUI = UIManager::Instance().DuplicateUIElement(UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_MeleeEnemy));
-			break;
-	}
+    skinnedMeshGameObject->GetTransform()->SetLocalScale(Vector3d::one * unitTemplateData->pod.unit_scale);
+    switch (unitTemplateData->pod.playerUnitType.enumValue)
+    {
+    case PlayerCharacterType::Robin:
+        unitStatusPortraitUI = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin)->GetWeakPtr<UIElement>();
+        AddPassiveSkill(std::static_pointer_cast<PassiveSkill>(std::make_shared<PassiveRobinBleed>()));
+        break;
+    case PlayerCharacterType::Ursula:
+        unitStatusPortraitUI = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Ursula)->GetWeakPtr<UIElement>();
+        AddPassiveSkill(std::static_pointer_cast<PassiveSkill>(std::make_shared<PassiveUrsula>()));
+        break;
+    case PlayerCharacterType::Hansel:
+        unitStatusPortraitUI = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel)->GetWeakPtr<UIElement>();
+        AddPassiveSkill(std::static_pointer_cast<PassiveSkill>(std::make_shared<PassiveHanselHeal>()));
+        break;
+    default:
+        break;
+    }
+    switch (unitTemplateData->pod.unitStatusBar.enumValue)
+    {
+    case UnitStatusBarType::PLAYER:
+        unitStatusUI = UIManager::Instance().DuplicateUIElement(UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_Heroes));
+        break;
+    case UnitStatusBarType::ENEMY:
+        unitStatusUI = UIManager::Instance().DuplicateUIElement(UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_MeleeEnemy));
+        break;
+    }
 
 	unitCollider.lock()->SetRadius(unitTemplateData->pod.collisionSize);
 	attackRange.lock()->SetRadius(unitTemplateData->pod.m_atkRadius);
@@ -1293,26 +1303,42 @@ yunutyEngine::coroutine::Coroutine Unit::DeathCoroutine()
 
 yunutyEngine::coroutine::Coroutine Unit::AttackCoroutine(std::weak_ptr<Unit> opponent)
 {
-	auto blockAttack = referenceBlockAttack.Acquire();
-	defaultAnimationType = UnitAnimType::Idle;
-	PlayAnimation(UnitAnimType::Attack, false);
-	co_yield coroutine::WaitForSeconds(unitTemplateData->pod.m_attackPreDelay);
-	onAttack(opponent);
-	switch (unitTemplateData->pod.attackType.enumValue)
-	{
-		case UnitAttackType::MELEE:
-			opponent.lock()->Damaged(GetWeakPtr<Unit>(), unitTemplateData->pod.m_autoAttackDamage + adderAttackDamage, DamageType::Attack);
-			break;
-		case UnitAttackType::MISSILE:
-			auto projectile = ProjectilePool::SingleInstance().Borrow(GetWeakPtr<Unit>(), opponent.lock()->GetTransform()->GetWorldPosition());
-			projectile.lock()->GetTransform()->SetLocalScale(Vector3d::one * unitTemplateData->pod.projectile_scale);
-			break;
-	}
-	auto blockCommand = referenceBlockPendingOrder.Acquire();
-	co_yield coroutine::WaitForSeconds(unitTemplateData->pod.m_attackPostDelay);
-	blockCommand.reset();
-	StartCoroutine(referenceBlockAttack.AcquireForSecondsCoroutine(unitTemplateData->pod.m_atkCooltime / (1 + adderAttackSpeed) - unitTemplateData->pod.m_attackPostDelay - unitTemplateData->pod.m_attackPreDelay));
-	co_return;
+    auto blockAttack = referenceBlockAttack.Acquire();
+    defaultAnimationType = UnitAnimType::Idle;
+    // 공격 애니메이션이 자연스럽게 맞물리기까지 필요한 최소시간
+    float animMinimumTime = unitTemplateData->pod.m_attackPreDelay + unitTemplateData->pod.m_attackPostDelay;
+    // 현재 공격주기
+    float finalAttackCooltime = unitTemplateData->pod.m_atkCooltime / (1 + adderAttackSpeed);
+    float attackDelayMultiplier = 1;
+    // 공격 애니메이션 재생시간이 공격주기보다 더 길다면, 애니메이션 재생속도를 더 빠르게 해줘야 한다.
+    if (animMinimumTime > finalAttackCooltime)
+    {
+        attackDelayMultiplier = finalAttackCooltime / animMinimumTime;
+        animatorComponent.lock()->GetGI().SetPlaySpeed(animMinimumTime / finalAttackCooltime);
+    }
+    PlayAnimation(UnitAnimType::Attack, false);
+    float playSpeed = animatorComponent.lock()->GetGI().GetPlaySpeed();
+
+    co_yield coroutine::WaitForSeconds(unitTemplateData->pod.m_attackPreDelay * attackDelayMultiplier);
+    onAttack(opponent);
+    playSpeed = animatorComponent.lock()->GetGI().GetPlaySpeed();
+    switch (unitTemplateData->pod.attackType.enumValue)
+    {
+    case UnitAttackType::MELEE:
+        opponent.lock()->Damaged(GetWeakPtr<Unit>(), unitTemplateData->pod.m_autoAttackDamage + adderAttackDamage, DamageType::Attack);
+        break;
+    case UnitAttackType::MISSILE:
+        auto projectile = ProjectilePool::SingleInstance().Borrow(GetWeakPtr<Unit>(), opponent.lock()->GetTransform()->GetWorldPosition());
+        projectile.lock()->GetTransform()->SetLocalScale(Vector3d::one * unitTemplateData->pod.projectile_scale);
+        break;
+    }
+    StartCoroutine(referenceBlockAttack.AcquireForSecondsCoroutine(finalAttackCooltime - unitTemplateData->pod.m_attackPreDelay * attackDelayMultiplier));
+    auto blockCommand = referenceBlockPendingOrder.Acquire();
+    co_yield coroutine::WaitForSeconds(unitTemplateData->pod.m_attackPostDelay * attackDelayMultiplier);
+    playSpeed = animatorComponent.lock()->GetGI().GetPlaySpeed();
+    blockCommand.reset();
+    animatorComponent.lock()->GetGI().SetPlaySpeed(1);
+    co_return;
 }
 float Unit::DistanceTo(const Vector3d& target)
 {

@@ -38,9 +38,6 @@ namespace application
             POD_Enum<UnitControllerType::Enum> unitControllerType;
             // 체력창을 유닛의 위치로부터 얼마나 멀리 띄울 것인가?
             POD_Vector2<float> statusBarOffset;
-            // 발사체가 생성되는 위치
-            POD_Vector3<float> projectileOffset;
-            float projectileSpeed{ 5 };
             // 생성될때 걸리는 시간, 생성시 번아웃 효과 연출 시간과 같다.
             float birthTime{ 0.5 };
             // 사망할 때 번아웃 효과가 연출되는 시간
@@ -53,13 +50,13 @@ namespace application
             float max_Health;
 
             float m_autoAttackDamage;
-            int m_criticalHitProbability;				// 치명타 확률
-            float m_criticalHitMultiplier;				// 공격 시 치명타 피해량
+            //int m_criticalHitProbability;				// 치명타 확률
+            //float m_criticalHitMultiplier;				// 공격 시 치명타 피해량
 
             /// Decreasing Damage Elements
-            int m_defensePoint;
-            float m_dodgeProbability;					// 회피율
-            float m_criticalDamageDecreaseMultiplier;	// 피격 시 치명타 피해 감소 배율
+            //int m_defensePoint;
+            //float m_dodgeProbability;					// 회피율
+            //float m_criticalDamageDecreaseMultiplier;	// 피격 시 치명타 피해 감소 배율
 
             float collisionSize = 0.5f;
             float m_idRadius;
@@ -71,11 +68,14 @@ namespace application
             // 유닛의 공격방식, 근거리 혹은 원거리
             POD_Enum<UnitAttackType::Enum> attackType;
             std::string projectile_staticFBXName;
+            // 발사체가 생성되는 위치
+            POD_Vector3<float> projectileOffset;
+            float projectileSpeed{ 5 };
+            float projectile_scale{ 1.0f };
             float m_attackPreDelay = 0.5f;
             float m_attackPostDelay = 0.5f;
 
             float unit_scale{ 1.0f };
-            float projectile_scale{ 1.0f };
 
             TO_JSON(POD_Unit_TemplateData)
                 FROM_JSON(POD_Unit_TemplateData)

@@ -18,6 +18,9 @@ public:
 	virtual void HidePreviewMesh() override;
 
 private:
+	void CalculateCommandCost();
+
+private:
 	yunuGI::IMesh* routeMesh;
 	std::vector<Vector3d> path;
 	bool isForAttack;

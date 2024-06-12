@@ -4,7 +4,9 @@
 UnitMoveCommand::UnitMoveCommand(Unit* unit, Vector3d expectedPos, std::vector<Vector3d> path, bool isForAttack)
 	: UnitCommand(unit, expectedPos), path(path), isForAttack(isForAttack)
 {
+	this->commandType = UnitCommand::Move;
 
+	this->CalculateCommandCost();
 }
 
 UnitMoveCommand::~UnitMoveCommand()
@@ -57,4 +59,15 @@ void UnitMoveCommand::HidePreviewMesh()
 		SkillPreviewSystem::Instance().HideShowMoveEndImage(routeMesh);
 	}
 	SkillPreviewSystem::Instance().DeleteRouteMesh(routeMesh);
+}
+
+void UnitMoveCommand::CalculateCommandCost()
+{
+	float distance = 0.f;
+	for (int i = 0; i < path.size() - 1; ++i)
+	{
+		auto dist = path[i] - path[i + 1];
+		distance += dist.Magnitude();
+	}
+	this->commandCost = distance * application::GlobalConstant::GetSingletonInstance().pod.tacticMoveCost;
 }

@@ -2,13 +2,13 @@
 #include "InWanderLand.h"
 
 POD_PassiveHanselHeal PassiveHanselHeal::pod;
-coroutine::Coroutine PassiveHanselHeal::CookieLingering(const Vector3d& pos, std::weak_ptr<Unit> owner)
+coroutine::Coroutine PassiveHanselHeal::CookieLingering(Vector3d pos, std::weak_ptr<Unit> owner)
 {
-    Vector3d newPos = SingleNavigationField::Instance().GetClosestPointOnField(pos);
+    pos = SingleNavigationField::Instance().GetClosestPointOnField(pos);
     auto cookieMesh = FBXPool::SingleInstance().Borrow(wanderResources::GetFBXName(wanderResources::WanderFBX::HEALING_COOKIE));
     auto collider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner);
     collider.lock()->SetRadius(pod.cookieRadius);
-    cookieMesh.lock()->GetTransform()->SetWorldPosition(newPos);
+    cookieMesh.lock()->GetTransform()->SetWorldPosition(pos);
     cookieMesh.lock()->GetTransform()->SetLocalScale(pod.cookieScale * Vector3d::one);
     coroutine::ForSeconds forSeconds{ pod.cookieLifetime };
     while (forSeconds.Tick())
@@ -22,7 +22,7 @@ coroutine::Coroutine PassiveHanselHeal::CookieLingering(const Vector3d& pos, std
                 co_return;
             }
         }
-        cookieMesh.lock()->GetTransform()->SetWorldPosition(newPos);
+        cookieMesh.lock()->GetTransform()->SetWorldPosition(pos);
         co_await std::suspend_always{};
     }
     FBXPool::SingleInstance().Return(cookieMesh);

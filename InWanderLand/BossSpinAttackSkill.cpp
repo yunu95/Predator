@@ -9,11 +9,11 @@ const float spinEndTime = 3.15f;
 const float spinStartTime = 2.07f;
 const float spinAttackingTime = spinEndTime - spinStartTime;
 const float afterSpinDelay = totalTime - spinStartTime - spinAttackingTime;
-float BossSpinAttackSkill::colliderEffectRatio = 10.0f;
+float BossSpinAttackSkill::colliderEffectRatio = 10.0f * 0.5f;
 
 coroutine::Coroutine BossSpinAttackSkill::SpawningSkillffect(std::weak_ptr<BossSpinAttackSkill> skill)
 {
-    float actualCollideRange = pod.skillScale * colliderEffectRatio;
+    float actualCollideRange = pod.skillRadius * 1 / (colliderEffectRatio);
 
     Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
 	Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
@@ -23,15 +23,15 @@ coroutine::Coroutine BossSpinAttackSkill::SpawningSkillffect(std::weak_ptr<BossS
 
 	chargeEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos);
 	chargeEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
-	chargeEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(pod.skillScale * owner.lock()->GetTransform()->GetWorldScale().x,
-        pod.skillScale * owner.lock()->GetTransform()->GetWorldScale().y,
-        pod.skillScale * owner.lock()->GetTransform()->GetWorldScale().z));
+	chargeEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(actualCollideRange * owner.lock()->GetTransform()->GetWorldScale().x,
+        actualCollideRange * owner.lock()->GetTransform()->GetWorldScale().y,
+        actualCollideRange * owner.lock()->GetTransform()->GetWorldScale().z));
 	auto chargeEffectAnimator = chargeEffect.lock()->AcquireVFXAnimator();
 	chargeEffectAnimator.lock()->SetAutoActiveFalse();
 	chargeEffectAnimator.lock()->Init();
 
     knockbackCollider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
-    knockbackCollider.lock()->SetRadius(actualCollideRange * owner.lock()->GetTransform()->GetWorldScale().x);
+    knockbackCollider.lock()->SetRadius(pod.skillRadius * owner.lock()->GetTransform()->GetWorldScale().x);
     knockbackCollider.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
 
     std::unordered_set<Unit*> knockBackList;

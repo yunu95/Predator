@@ -11,6 +11,7 @@
 #include "TacticModeSystem.h"
 #include "UnitMoveCommand.h"
 #include "UnitAttackCommand.h"
+#include "EnqueErrorType.h"
 
 const std::unordered_map<UIEnumID, SkillUpgradeType::Enum> PlayerController::skillByUI
 {
@@ -119,6 +120,7 @@ void PlayerController::OnContentsStop()
 {
 	SetActive(false);
 	Scene::getCurrentScene()->DestroyGameObject(cursorUnitDetector.lock()->GetGameObject());
+	//this->state = State::Enum::Peace;
 }
 
 void PlayerController::Update()
@@ -288,16 +290,16 @@ void PlayerController::HandleSkillPreview()
 			auto pos1 = UrsulaBlindSkill::GetSkillObjectPos_Left(GetWorldCursorPosition());
 			auto pos2 = UrsulaBlindSkill::GetSkillObjectPos_Right(GetWorldCursorPosition());
 			auto pos3 = UrsulaBlindSkill::GetSkillObjectPos_Top(GetWorldCursorPosition());
-			SkillPreviewSystem::Instance().ShowUrsulaQSkill(pos1, pos2, pos3, Vector3d::one * UrsulaBlindSkill::pod.skillScale * UrsulaBlindSkill::colliderEffectRatio);
+			SkillPreviewSystem::Instance().ShowUrsulaQSkill(pos1, pos2, pos3, Vector3d::one * UrsulaBlindSkill::pod.skillRadius);
 			SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Ursula, characters[PlayerCharacterType::Ursula].lock()->GetTransform()->GetWorldPosition(), UrsulaBlindSkill::pod.skillRange);
 			break;
 		}
 		case SkillType::URSULA_W:
-			SkillPreviewSystem::Instance().ShowUrsulaWSkill(GetWorldCursorPosition(), UrsulaParalysisSkill::pod.skillScale * UrsulaParalysisSkill::colliderEffectRatio);
+			SkillPreviewSystem::Instance().ShowUrsulaWSkill(GetWorldCursorPosition(), UrsulaParalysisSkill::pod.skillRadius);
 			SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Ursula, characters[PlayerCharacterType::Ursula].lock()->GetTransform()->GetWorldPosition(), UrsulaParalysisSkill::pod.skillRange);
 			break;
 		case SkillType::HANSEL_Q:
-			SkillPreviewSystem::Instance().ShowHanselQSkill(GetWorldCursorPosition(), HanselChargeSkill::pod.stompRadius);
+			SkillPreviewSystem::Instance().ShowHanselQSkill(GetWorldCursorPosition(), HanselChargeSkill::pod.skillRadius);
 			SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Hansel, characters[PlayerCharacterType::Hansel].lock()->GetTransform()->GetWorldPosition(), HanselChargeSkill::pod.maxRange);
 			break;
 		case SkillType::HANSEL_W:
@@ -323,7 +325,10 @@ void PlayerController::HandleSkillCooltime()
 
 void PlayerController::HandleManaRegen()
 {
-	SetMana(mana + GlobalConstant::GetSingletonInstance().pod.manaRegen * Time::GetDeltaTime());
+	if (state != State::Tactic)
+	{
+		SetMana(mana + GlobalConstant::GetSingletonInstance().pod.manaRegen * Time::GetDeltaTime());
+	}
 }
 
 void PlayerController::HandleMouseHover()
@@ -411,6 +416,7 @@ void PlayerController::OnRightClick()
 			{
 				// Attack
 				// 걸어가서 공격을 하게 될 수 있음
+				EnqueErrorType errorType = EnqueErrorType::NONE;
 				std::vector<Vector3d> path;
 				path = TacticModeSystem::Instance().GetPathInTacticMode(selectedCharacterType, (*cursorUnitDetector.lock()->GetUnits().begin()));
 				this->ModifyPathForAttack(path);
@@ -418,38 +424,54 @@ void PlayerController::OnRightClick()
 				{
 					// 이동을 해야한다면
 					// 이동 명령
-					TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitMoveCommand>(characters[selectedCharacterType].lock().get()
+					errorType = TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitMoveCommand>(characters[selectedCharacterType].lock().get()
 						, path.back()
 						, path
 						, true
 					));
 
 					// 공격 명령
-					TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitAttackCommand>(
-						characters[selectedCharacterType].lock().get()
-						, path.back()
-						, (*cursorUnitDetector.lock()->GetUnits().begin())
-						, true));
+					if (errorType == EnqueErrorType::Success)
+					{
+						errorType = TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitAttackCommand>(
+							characters[selectedCharacterType].lock().get()
+							, path.back()
+							, (*cursorUnitDetector.lock()->GetUnits().begin())
+							, true
+							, path.back() - path[path.size()-2]));
+
+						// 이동 명령은 Enque됐지만 공격명령이 Enque되지 않았을 경우 이동 명령까지 지운다
+						if (errorType != EnqueErrorType::Success)
+						{
+							TacticModeSystem::Instance().PopCommand();
+						}
+					}
 				}
 				else
 				{
 					// 이동없이 공격이 가능하다면 공격 명령
-					TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitAttackCommand>(
+					EnqueErrorType errorType = EnqueErrorType::NONE;
+					errorType  = TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitAttackCommand>(
 						characters[selectedCharacterType].lock().get()
 						, Vector3d::zero
 						, (*cursorUnitDetector.lock()->GetUnits().begin())
-						, false));
+						, false
+						, (*cursorUnitDetector.lock()->GetUnits().begin())->GetGameObject()->GetTransform()->GetWorldPosition() - 
+						characters[selectedCharacterType].lock().get()->GetGameObject()->GetTransform()->GetWorldPosition()));
+					// 에러 타입에 따른 UI활성화
 				}
 			}
 			else
 			{
 				// Move
 				std::vector<Vector3d> path;
+				EnqueErrorType errorType = EnqueErrorType::NONE;
 				path = TacticModeSystem::Instance().GetPathInTacticMode(selectedCharacterType);
 
-				TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitMoveCommand>(characters[selectedCharacterType].lock().get()
+				errorType = TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitMoveCommand>(characters[selectedCharacterType].lock().get()
 					, GetWorldCursorPosition(),
 					path,false));
+				// 에러 타입에 따른 UI활성화
 			}
 		}
 	}
@@ -513,7 +535,7 @@ void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
 			selectedCharacter.lock()->OrderSkill(HanselChargeSkill{}, pos);
 			break;
 		case SkillType::HANSEL_W:
-			selectedCharacter.lock()->OrderSkill(HanselProjectileSkill {}, pos);
+			selectedCharacter.lock()->OrderSkill(BossImpaleSkill {}, pos);
 			break;
 	}
 	UnSelectSkill();
@@ -752,6 +774,11 @@ void PlayerController::SetMana(float mana)
 	const auto& gc = GlobalConstant::GetSingletonInstance().pod;
 	this->mana = std::fmin(gc.maxMana, mana);
 	UIManager::Instance().GetUIElementByEnum(UIEnumID::ManaFill)->adjuster->SetTargetFloat(1 - mana / gc.maxMana);
+}
+
+float PlayerController::GetMana()
+{
+	return this->mana;
 }
 
 void PlayerController::SetCooltime(SkillType::Enum skillType, float cooltime)
