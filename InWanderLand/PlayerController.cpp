@@ -215,7 +215,7 @@ void PlayerController::HandleInput()
 	}
 
 	// 전술모드의 마지막 명령을 지우는 키
-	if (Input::isKeyDown(KeyCode::Control)&& Input::isKeyPushed(KeyCode::Z) && TacticModeSystem::Instance().IsOperation() && !TacticModeSystem::Instance().IsExecuting())
+	if (Input::isKeyDown(KeyCode::Control) && Input::isKeyPushed(KeyCode::Z) && TacticModeSystem::Instance().IsOperation() && !TacticModeSystem::Instance().IsExecuting())
 	{
 		TacticModeSystem::Instance().PopCommand();
 	}
@@ -413,7 +413,10 @@ void PlayerController::OnLeftClick()
 	else
 	{
 		ActivateSkill(selectedSkill, GetWorldCursorPosition());
-		selectedSkill = SkillType::NONE;
+		if (state != State::Tactic)
+		{
+			selectedSkill = SkillType::NONE;
+		}
 	}
 }
 
@@ -602,6 +605,10 @@ void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
 					TacticModeSystem::Instance().PopCommand();
 				}
 			}
+			else
+			{
+			}
+
 		}
 		else
 		{
