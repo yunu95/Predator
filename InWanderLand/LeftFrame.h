@@ -58,6 +58,7 @@ namespace BossSummon
 			}
 		};
 
+		std::weak_ptr<coroutine::Coroutine> summonCorountine = std::weak_ptr<coroutine::Coroutine>();
 		GameObject* mesh = nullptr;
 		application::editor::UnitData* frameData = nullptr;
 		std::weak_ptr<Unit> unitFrame = std::weak_ptr<Unit>();
