@@ -5,6 +5,7 @@
 #include "PlayerUnit.h"
 #include "PermanentObservee.h"
 #include "PlayerCharacterType.h"
+#include "EnqueErrorType.h"
 #include <unordered_map>
 #include <memory>
 #include <queue>
@@ -46,7 +47,7 @@ public:
     // 유닛의 행동을 큐에 등록할 수 있게 해주는 함수 입니다.
     // 이 함수의 반환값이 false라면 이미 여섯개의 Command가 들어온 상태임. 이 때 UI를 띄어주든 해야할 거 같음.
     // 혹은 전술모드가 활성화되어있지 않기 때문에 false가 나올 것임.
-    bool EnqueueCommand(std::shared_ptr<UnitCommand> command);
+    EnqueErrorType EnqueueCommand(std::shared_ptr<UnitCommand> command);
 
     // 맨 마지막 명령 하나를 지우는 함수입니다.
     void PopCommand();

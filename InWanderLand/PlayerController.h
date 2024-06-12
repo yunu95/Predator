@@ -68,6 +68,8 @@ public:
     void IncrementSkillPoint();
     void LockCamInRegion(const application::editor::RegionData* camLockRegion);
     bool CanUnitSelectSkill(std::weak_ptr<Unit> unit);
+    float GetMana();
+    void SetMana(float mana);
     static constexpr int playerTeamIndex = 1;
     static const std::unordered_map<UIEnumID, SkillUpgradeType::Enum> skillByUI;
     bool blockSkillSelection[(int)SkillType::SKILL_NUM]{ false };
@@ -106,7 +108,7 @@ private:
     Vector3d GetWorldCursorPosition();
     // 연속으로 쌓은 콤보를 초기화한다.
     void ResetCombo();
-    void SetMana(float mana);
+   
     void SetCooltime(SkillType::Enum skillType, float cooltime);
     float GetCooltimeForSkill(SkillType::Enum skillType);
     float RequiredManaForSkill(SkillType::Enum skillType);

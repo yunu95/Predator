@@ -1,10 +1,14 @@
 #include "UnitAttackCommand.h"
 #include "SkillPreviewSystem.h"
+#include "GlobalConstant.h"
 
 
 UnitAttackCommand::UnitAttackCommand(Unit* unit, Vector3d expectedPos, Unit* enemyUnit, bool isAttackAfterMove)
     : UnitCommand(unit, expectedPos), renderer{ nullptr }, enemyUnit(enemyUnit)
 {
+	this->commandType = UnitCommand::Attack;
+	this->commandCost = application::GlobalConstant::GetSingletonInstance().pod.tacticAttackCost;
+
 	if (!isAttackAfterMove)
 	{
 		auto playerType = static_cast<PlayerCharacterType::Enum>(unit->GetUnitTemplateData().pod.playerUnitType.enumValue);

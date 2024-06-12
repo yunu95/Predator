@@ -71,17 +71,26 @@ void TacticModeSystem::EngageTacticSystem()
 	this->isCoolTime = true;
 }
 
-bool TacticModeSystem::EnqueueCommand(std::shared_ptr<UnitCommand> command)
+EnqueErrorType TacticModeSystem::EnqueueCommand(std::shared_ptr<UnitCommand> command)
 {
-	if (isOperating == false)
-	{
-		return false;
-	}
+	EnqueErrorType errorType = EnqueErrorType::NONE;
+
+	// 큐가 가득 차 있는지 검사하는 코드
 	if (this->commandCount == this->MAX_COMMAND_COUNT)
 	{
-		return false;
+		errorType = EnqueErrorType::QueueFull;
+		return errorType;
 	}
 
+	// 들어 온 명령을 수행 할 마나가 있는지에 대한 여부
+	auto mana = PlayerController::Instance().GetMana();
+	if (mana < command->GetCommandCost())
+	{
+		errorType = EnqueErrorType::NotEnoughMana;
+		return errorType;
+	}
+
+	PlayerController::Instance().SetMana(mana - command->GetCommandCost());
 	this->commandCount++;
 
 	this->commandQueue.push_back(command);
@@ -101,6 +110,9 @@ bool TacticModeSystem::EnqueueCommand(std::shared_ptr<UnitCommand> command)
 	{
 		this->hanselLastCommand = command;
 	}
+
+	errorType = EnqueErrorType::Success;
+	return errorType;
 }
 
 void TacticModeSystem::ExecuteCommands()

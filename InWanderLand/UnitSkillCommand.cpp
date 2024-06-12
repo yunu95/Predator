@@ -1,16 +1,34 @@
 #include "UnitSkillCommand.h"
 #include "SkillPreviewSystem.h"
 #include "TacticModeSystem.h"
+#include "RobinChargeSkill.h"
 #include "RobinTauntSkill.h"
 #include "UrsulaBlindSkill.h"
 #include "UrsulaParalysisSkill.h"
 #include "HanselChargeSkill.h"
+#include "HanselProjectileSkill.h"
 
 
-UnitSkillCommand::UnitSkillCommand(Unit* unit, Vector3d expectedPos, SkillType skillType)
+UnitSkillCommand::UnitSkillCommand(Unit* unit, Vector3d expectedPos, SkillType::Enum skillType)
 	: UnitCommand(unit, expectedPos), renderer{ nullptr }, skillType(skillType)
 {
+	this->commandType = UnitCommand::Skill;
 
+	switch (skillType)
+	{
+		case SkillType::ROBIN_Q:  this->commandCost = RobinChargeSkill::pod.cost;
+			break;
+		case SkillType::ROBIN_W: this->commandCost = RobinTauntSkill::pod.skillCost;
+			break;
+		case SkillType::URSULA_Q: this->commandCost = UrsulaBlindSkill::pod.skillCost;
+			break;
+		case SkillType::URSULA_W: this->commandCost = UrsulaParalysisSkill::pod.skillCost;
+			break;
+		case SkillType::HANSEL_Q: this->commandCost = HanselChargeSkill::pod.skillCost;
+			break;
+		case SkillType::HANSEL_W: this->commandCost = HanselProjectileSkill::pod.skillCost;
+			break;
+	}
 }
 
 UnitSkillCommand::~UnitSkillCommand()
@@ -79,33 +97,33 @@ void UnitSkillCommand::HidePreviewMesh()
 {
 	if (unit->GetUnitTemplateData().GetDataResourceName() == "SKM_Robin")
 	{
-		if (this->skillType.ROBIN_Q == SkillType::ROBIN_Q)
+		if (this->skillType == SkillType::ROBIN_Q)
 		{
 			SkillPreviewSystem::Instance().HideRobinQSkill();
 		}
-		else if (this->skillType.ROBIN_W == SkillType::ROBIN_W)
+		else if (this->skillType == SkillType::ROBIN_W)
 		{
 			SkillPreviewSystem::Instance().HideRobinWSkill();
 		}
 	}
 	else if (unit->GetUnitTemplateData().GetDataResourceName() == "SKM_Ursula")
 	{
-		if (this->skillType.URSULA_Q == SkillType::URSULA_Q)
+		if (this->skillType == SkillType::URSULA_Q)
 		{
 			SkillPreviewSystem::Instance().HideUrsulaQSkill();
 		}
-		else if (this->skillType.URSULA_W == SkillType::URSULA_W)
+		else if (this->skillType == SkillType::URSULA_W)
 		{
 			SkillPreviewSystem::Instance().HideUrsulaWSkill();
 		}
 	}
 	else if (unit->GetUnitTemplateData().GetDataResourceName() == "SKM_Hansel")
 	{
-		if (this->skillType.HANSEL_Q == SkillType::HANSEL_Q)
+		if (this->skillType == SkillType::HANSEL_Q)
 		{
 			SkillPreviewSystem::Instance().HideHanselQSkill();
 		}
-		else if (this->skillType.HANSEL_W == SkillType::HANSEL_W)
+		else if (this->skillType == SkillType::HANSEL_W)
 		{
 			SkillPreviewSystem::Instance().HideHanselWSkill();
 		}
