@@ -8,7 +8,7 @@ struct POD_HanselChargeSkill
     float	maxRange = 10.0f;
     float	maxJumpHeight = 5.0f;
     float   damage = 10.0f;
-    float   stompRadius = 10.0f;
+    float   skillRadius = 10.0f;
 
     TO_JSON(POD_HanselChargeSkill)
     FROM_JSON(POD_HanselChargeSkill)

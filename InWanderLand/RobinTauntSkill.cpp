@@ -10,7 +10,7 @@ float RobinTauntSkill::colliderEffectRatio = 6.0f * 0.5f;
 
 coroutine::Coroutine RobinTauntSkill::SpawningSkillffect(std::weak_ptr<RobinTauntSkill> skill)
 {
-	float actualCollideRange = RobinTauntSkill::pod.skillScale * colliderEffectRatio;
+	float actualCollideRange = RobinTauntSkill::pod.skillRadius * (1 / colliderEffectRatio);
 
 	Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
 	Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
@@ -18,7 +18,7 @@ coroutine::Coroutine RobinTauntSkill::SpawningSkillffect(std::weak_ptr<RobinTaun
 
 	tauntEffect = FBXPool::SingleInstance().Borrow("VFX_Robin_Skill2");
 	tauntEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos);
-	tauntEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(pod.skillScale, pod.skillScale, pod.skillScale));
+	tauntEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(actualCollideRange, actualCollideRange, actualCollideRange));
 	tauntEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
 	auto chargeEffectAnimator = tauntEffect.lock()->AcquireVFXAnimator();
 	chargeEffectAnimator.lock()->SetAutoActiveFalse();
@@ -28,7 +28,7 @@ coroutine::Coroutine RobinTauntSkill::SpawningSkillffect(std::weak_ptr<RobinTaun
 	auto tauntAnim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Taunt);
 
 	tauntCollider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
-	tauntCollider.lock()->SetRadius(actualCollideRange);
+	tauntCollider.lock()->SetRadius(pod.skillRadius);
 	tauntCollider.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
 
 	coroutine::ForSeconds forSeconds{ pod.skillPlayTime };

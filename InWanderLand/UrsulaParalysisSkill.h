@@ -6,8 +6,7 @@ struct POD_UrsulaParalysisSkill
     float skillCoolTime = 2.0f;
     float skillCost = 10.0f;
     float skillRange = 6.f;
-    //float skillRadius = 3.f;
-    float skillScale = 1.f;
+    float skillRadius = 1.f;
     float skillDamage = 5.f;
     float skillParalysisTime = 3.0f;
     float knockBackDuration = 2.0f;

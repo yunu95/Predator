@@ -8,7 +8,7 @@ float HanselProjectileSkill::colliderEffectRatio = 1.0f * 0.5f;
 
 coroutine::Coroutine HanselProjectileSkill::ThrowingPie(std::weak_ptr<HanselProjectileSkill> skill)
 {
-    float actualCollideRange = pod.pieScale * colliderEffectRatio;
+    float actualCollideRange = pod.skillRadius * (1 / colliderEffectRatio);
 
     Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
     Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
@@ -24,8 +24,8 @@ coroutine::Coroutine HanselProjectileSkill::ThrowingPie(std::weak_ptr<HanselProj
     std::unordered_set<Unit*> onceCollidedUnits;
     co_await std::suspend_always{};
 
-    pieCollider.lock()->SetRadius(actualCollideRange);
-    pieObject.lock()->GetTransform()->SetWorldScale({ pod.pieScale, pod.pieScale, pod.pieScale });
+    pieCollider.lock()->SetRadius(pod.skillRadius);
+    pieObject.lock()->GetTransform()->SetWorldScale({ actualCollideRange, actualCollideRange, actualCollideRange });
     pieCollider.lock()->GetTransform()->SetWorldRotation(direction);
     auto pieStartRotation = Quaternion::MakeWithForwardUp(direction.up * -1, direction);
 

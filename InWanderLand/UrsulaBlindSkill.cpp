@@ -13,7 +13,7 @@ float UrsulaBlindSkill::colliderEffectRatio = 3.0f * 0.5f;
 
 coroutine::Coroutine UrsulaBlindSkill::SpawningFieldEffect(std::weak_ptr<UrsulaBlindSkill> skill)
 {
-    float actualCollideRange = pod.skillScale * colliderEffectRatio;
+    float actualCollideRange = pod.skillRadius * (1 / colliderEffectRatio);
 
     onUrsulaPosEffect = FBXPool::SingleInstance().Borrow("VFX_Ursula_Skill1_1");
     onTargetPosEffect1 = FBXPool::SingleInstance().Borrow("VFX_Ursula_Skill1_2");
@@ -27,10 +27,10 @@ coroutine::Coroutine UrsulaBlindSkill::SpawningFieldEffect(std::weak_ptr<UrsulaB
     onTargetPosEffect2.lock()->GetGameObject()->GetTransform()->SetWorldPosition(GetSkillObjectPos_Left(skillDestination));
     onTargetPosEffect3.lock()->GetGameObject()->GetTransform()->SetWorldPosition(GetSkillObjectPos_Right(skillDestination));
 
-    onUrsulaPosEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(pod.skillScale, pod.skillScale, pod.skillScale));
-    onTargetPosEffect1.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(pod.skillScale, pod.skillScale, pod.skillScale));
-    onTargetPosEffect2.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(pod.skillScale, pod.skillScale, pod.skillScale));
-    onTargetPosEffect3.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(pod.skillScale, pod.skillScale, pod.skillScale));
+    onUrsulaPosEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(actualCollideRange, actualCollideRange, actualCollideRange));
+    onTargetPosEffect1.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(actualCollideRange, actualCollideRange, actualCollideRange));
+    onTargetPosEffect2.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(actualCollideRange, actualCollideRange, actualCollideRange));
+    onTargetPosEffect3.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(actualCollideRange, actualCollideRange, actualCollideRange));
 
     auto onUrsulaPosAnimator = onUrsulaPosEffect.lock()->AcquireVFXAnimator();
     onUrsulaPosAnimator.lock()->SetAutoActiveFalse();
@@ -54,9 +54,9 @@ coroutine::Coroutine UrsulaBlindSkill::SpawningFieldEffect(std::weak_ptr<UrsulaB
     circle_Left = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
     circle_Right = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
 
-    circle_Top.lock()->SetRadius(actualCollideRange);
-    circle_Left.lock()->SetRadius(actualCollideRange);
-    circle_Right.lock()->SetRadius(actualCollideRange);
+    circle_Top.lock()->SetRadius(pod.skillRadius);
+    circle_Left.lock()->SetRadius(pod.skillRadius);
+    circle_Right.lock()->SetRadius(pod.skillRadius);
 
     circle_Top.lock()->GetTransform()->SetWorldPosition(GetSkillObjectPos_Top(skillDestination));
     circle_Left.lock()->GetTransform()->SetWorldPosition(GetSkillObjectPos_Left(skillDestination));
@@ -125,8 +125,6 @@ coroutine::Coroutine UrsulaBlindSkill::SpawningFieldEffect(std::weak_ptr<UrsulaB
 
 coroutine::Coroutine UrsulaBlindSkill::operator()()
 {
-    float actualCollideRange = pod.skillScale * colliderEffectRatio;
-
     auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
     auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
     auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
@@ -176,18 +174,14 @@ void UrsulaBlindSkill::UpdatePosition(const Vector3d& start, const Vector3d& des
 
 Vector3d UrsulaBlindSkill::GetSkillObjectPos_Top(const Vector3d& dest)
 {
-    float actualCollideRange = pod.skillScale * colliderEffectRatio;
-
-    auto length = actualCollideRange * 2 + pod.skillOffset;
+    auto length = pod.skillRadius * 2 + pod.skillOffset;
     auto skillDir = (dest - skillStart).Normalized();
     return dest + std::sqrt(3) / 3 * skillDir * length;
 }
 
 Vector3d UrsulaBlindSkill::GetSkillObjectPos_Left(const Vector3d& dest)
 {
-    float actualCollideRange = pod.skillScale * colliderEffectRatio;
-
-    auto length = actualCollideRange * 2 + pod.skillOffset;
+    auto length = pod.skillRadius * 2 + pod.skillOffset;
     auto skillDir = (dest - skillStart).Normalized();
     auto left = Vector3d::Cross(skillDir, Vector3d::up).Normalized();
     return dest - std::sqrt(3) / 6 * skillDir * length + left * length / 2;
@@ -195,9 +189,7 @@ Vector3d UrsulaBlindSkill::GetSkillObjectPos_Left(const Vector3d& dest)
 
 Vector3d UrsulaBlindSkill::GetSkillObjectPos_Right(const Vector3d& dest)
 {
-    float actualCollideRange = pod.skillScale * colliderEffectRatio;
-
-    auto length = actualCollideRange * 2 + pod.skillOffset;
+    auto length = pod.skillRadius * 2 + pod.skillOffset;
     auto skillDir = (dest - skillStart).Normalized();
     auto right = Vector3d::Cross(-skillDir, Vector3d::up).Normalized();
     return dest - std::sqrt(3) / 6 * skillDir * length + right * length / 2;

@@ -51,7 +51,7 @@ coroutine::Coroutine HanselChargeSkill::SpawningFieldEffect(std::weak_ptr<Hansel
     auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
 
     stompCollider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
-    stompCollider.lock()->SetRadius(pod.stompRadius);
+    stompCollider.lock()->SetRadius(pod.skillRadius);
     stompCollider.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
 
     Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
