@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "EnemySpinAttackSkill.h"
 #include "EnemyImpaleSkill.h"
 #include "RobinChargeSkill.h"
 #include "RobinTauntSkill.h"
