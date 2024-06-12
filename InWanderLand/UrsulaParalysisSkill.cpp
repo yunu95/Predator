@@ -12,7 +12,7 @@ coroutine::Coroutine UrsulaParalysisSkill::SpawningFieldEffect(std::weak_ptr<Urs
 {
 	auto animator = owner.lock()->GetAnimator();
 
-	float actualCollideRange = UrsulaBlindSkill::pod.skillScale * colliderEffectRatio;
+	float actualCollideRange = pod.skillScale * colliderEffectRatio;
 
 	damageCollider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
 	damageCollider.lock()->SetRadius(actualCollideRange);

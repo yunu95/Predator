@@ -8,7 +8,7 @@ float HanselProjectileSkill::colliderEffectRatio = 1.0f;
 
 coroutine::Coroutine HanselProjectileSkill::ThrowingPie(std::weak_ptr<HanselProjectileSkill> skill)
 {
-    float actualCollideRange = UrsulaBlindSkill::pod.skillScale * colliderEffectRatio;
+    float actualCollideRange = pod.pieScale * colliderEffectRatio;
 
     Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
     Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();

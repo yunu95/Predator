@@ -53,7 +53,7 @@ UnitAcquisitionSphereCollider::UnitAcquisitionSphereCollider()
 void UnitAcquisitionSphereCollider::SetRadius(float radius)
 {
     physics::SphereCollider::SetRadius(radius);
-    debugMesh->GetTransform()->SetWorldScale(radius * Vector3d::one);
+    debugMesh->GetTransform()->SetWorldScale(2 * radius * Vector3d::one);
 }
 
 void UnitAcquisitionSphereCollider::SetColor(yunuGI::Color color)
