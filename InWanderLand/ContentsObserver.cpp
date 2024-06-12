@@ -13,6 +13,16 @@ void ContentsObserver::RegisterObservee(ContentsObservee* p_observee)
 	contentsObservees.push_back(p_observee);
 }
 
+void ContentsObserver::RemoveObservee(PermanentObservee* permanentObservee)
+{
+	permanentObservees.erase(std::find(permanentObservees.begin(), permanentObservees.end(), permanentObservee), permanentObservees.end());
+}
+
+void ContentsObserver::RemoveObservee(ContentsObservee* contentsObservee)
+{
+	contentsObservees.erase(std::find(contentsObservees.begin(), contentsObservees.end(), contentsObservee), contentsObservees.end());
+}
+
 void ContentsObserver::OnPlayContents()
 {
 	for (auto each : permanentObservees)

@@ -12,6 +12,6 @@ public:
     // 개별 유닛들에게서 반복되는 루틴
     //virtual coroutine::Coroutine RoutinePerUnit(std::weak_ptr<Unit> unit);
 private:
-    std::array<float, PlayerCharacterType::Num> IdealAggros;
-    std::array<int, PlayerCharacterType::Num> currentAggros;
+    std::array<int, PlayerCharacterType::Num> IdealAggros = std::array<int, PlayerCharacterType::Num>();
+    std::array<int, PlayerCharacterType::Num> currentAggros = std::array<int, PlayerCharacterType::Num>();
 };

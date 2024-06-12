@@ -9,7 +9,7 @@ class PermanentObservee
 	: public ContentsObservee
 {
 public:
-	virtual ~PermanentObservee() = default;
+	virtual ~PermanentObservee();
 	PermanentObservee();
 
 	/// Editor 상에서 Contents 가 Play 될 때, 호출하는 함수입니다.

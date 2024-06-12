@@ -36,7 +36,7 @@ std::weak_ptr<Unit> UnitPool::Borrow(application::editor::Unit_TemplateData* td)
 
 void UnitPool::Return(std::weak_ptr<Unit> unit)
 {
-    if (unit.lock()->unitData)
+    if (unit.lock()->unitData && !unit.lock()->unitData->inGameUnit.expired())
         unit.lock()->unitData->inGameUnit.reset();
     for (auto& each : unit.lock()->controllers)
     {
