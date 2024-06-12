@@ -27,7 +27,7 @@ coroutine::Coroutine RobinTauntSkill::SpawningSkillffect(std::weak_ptr<RobinTaun
 	auto animator = owner.lock()->GetAnimator();
 	auto tauntAnim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Taunt);
 
-	tauntCollider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
+	tauntCollider = UnitAcquisitionSphereColliderPool::Instance().Borrow(owner.lock());
 	tauntCollider.lock()->SetRadius(pod.skillRadius);
 	tauntCollider.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
 
@@ -75,7 +75,7 @@ coroutine::Coroutine RobinTauntSkill::operator()()
 	effectColliderCoroutine.lock()->PushDestroyCallBack([this]()
 		{
 			tauntCollider.lock()->SetRadius(0.5);
-			UnitAcquisitionSphereColliderPool::SingleInstance().Return(tauntCollider);
+			UnitAcquisitionSphereColliderPool::Instance().Return(tauntCollider);
 			FBXPool::SingleInstance().Return(tauntEffect);
 		});
 

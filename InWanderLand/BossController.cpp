@@ -9,6 +9,18 @@ void BossController::RegisterUnit(std::weak_ptr<Unit> unit)
 	boss = unit;
 	EnemyController::RegisterUnit(unit);
 
+	unit.lock()->onAttack.AddCallback([this](std::weak_ptr<Unit> target)
+		{
+			auto beforeTarget = boss.lock()->GetAttackTarget();
+			if (beforeTarget.expired() || !beforeTarget.lock()->IsAlive())
+			{
+				return;
+			}
+
+			ChangeAttackTarget(target);
+		}
+	);
+
 	unit.lock()->onDamaged.AddCallback([this]()
 		{
 			if (summonState == 0 && (boss.lock()->GetUnitCurrentHp() / boss.lock()->GetUnitMaxHp()) <= 2.0f / 3.0f)
@@ -20,8 +32,8 @@ void BossController::RegisterUnit(std::weak_ptr<Unit> unit)
 					for (auto [target, coro] : unitRoutines)
 					{
 						DeleteCoroutine(coro);
+						unitRoutines[target] = StartCoroutine(RoutinePerUnit(boss));
 					}
-					unitRoutines.clear();
 				}
 			}
 		}
@@ -38,8 +50,8 @@ void BossController::RegisterUnit(std::weak_ptr<Unit> unit)
 					for (auto [target, coro] : unitRoutines)
 					{
 						DeleteCoroutine(coro);
+						unitRoutines[target] = StartCoroutine(RoutinePerUnit(boss));
 					}
-					unitRoutines.clear();
 				}
 			}
 		}
@@ -75,14 +87,32 @@ std::weak_ptr<Unit> BossController::GetBoss()
 	return boss;
 }
 
+void BossController::ChangeAttackTarget(const std::weak_ptr<Unit>& unit)
+{
+	if (!unit.expired() && unit.lock()->IsAlive())
+	{
+		auto bossPos = boss.lock()->GetTransform()->GetWorldPosition();
+		auto beforeTarget = boss.lock()->GetAttackTarget();
+		auto prevUnitPos = beforeTarget.lock()->GetTransform()->GetWorldPosition();
+		auto newUnitPos = unit.lock()->GetTransform()->GetWorldPosition();
+
+		if ((newUnitPos - bossPos).MagnitudeSqr() < (prevUnitPos - bossPos).MagnitudeSqr())
+		{
+			boss.lock()->OrderAttack(unit);
+		}
+	}
+}
+
 coroutine::Coroutine BossController::BossAppearCoroutine()
 {
+
 	auto& gc = GlobalConstant::GetSingletonInstance().pod;
 
 	auto pause = boss.lock()->referencePause.Acquire();
 	auto blockFollowingNavigation = boss.lock()->referenceBlockFollowingNavAgent.Acquire();
 	auto blockAnimLoop = boss.lock()->referenceBlockAnimLoop.Acquire();
 	auto disableNavAgent = boss.lock()->referenceDisableNavAgent.Acquire();
+	auto enableNavObstacle = boss.lock()->referenceEnableNavObstacle.Acquire();
 
 	boss.lock()->GetGameObject()->SetSelfActive(true);
 	boss.lock()->GetTransform()->SetWorldPosition(boss.lock()->GetTransform()->GetWorldPosition() + Vector3d(0, gc.bossAppearHeight, 0));
@@ -108,7 +138,6 @@ coroutine::Coroutine BossController::BossAppearCoroutine()
 
 	boss.lock()->GetTransform()->SetWorldPosition(boss.lock()->GetTransform()->GetWorldPosition() - Vector3d(0, 0.5, 0));
 	boss.lock()->PlayAnimation(UnitAnimType::Birth, false);
-	auto animator = boss.lock()->GetAnimator();
 	auto anim = wanderResources::GetAnimation(boss.lock()->GetFBXName(), UnitAnimType::Birth);
 	coroutine::ForSeconds forSeconds{ anim->GetDuration() };
 
@@ -121,12 +150,10 @@ coroutine::Coroutine BossController::BossAppearCoroutine()
 
 coroutine::Coroutine BossController::RoutinePerUnit(std::weak_ptr<Unit> unit)
 {
-	if (!unit.lock()->IsAlive())
+	if (!unit.lock()->IsAlive() || summonState == 1 || summonState == 2)
 	{
 		co_return;
 	}
-
-	/// BossSummonMobSkill 이 발동 되었을 때에는 해당 루틴의 Timer 가 일시 정지가 되어야 할 것으로 보임
 
 	auto& gc = GlobalConstant::GetSingletonInstance().pod;
 
@@ -167,7 +194,7 @@ coroutine::Coroutine BossController::RoutinePerUnit(std::weak_ptr<Unit> unit)
 						}
 					}
 					skillDir = (targetUnit.lock()->GetTransform()->GetWorldPosition() - unit.lock()->GetTransform()->GetWorldPosition()).Normalized();
-					unit.lock()->OrderSkill(BossImpaleSkill{}, targetUnit.lock()->GetTransform()->GetWorldPosition() + skillDir);
+					unit.lock()->OrderSkill(BossImpaleSkill{}, unit.lock()->GetTransform()->GetWorldPosition() + skillDir);
 					break;
 				}
 				default:
@@ -175,7 +202,7 @@ coroutine::Coroutine BossController::RoutinePerUnit(std::weak_ptr<Unit> unit)
 			}
 
 			bool skillDone = false;
-			unit.lock()->OnStateExitCallback()[UnitBehaviourTree::Skill].AddVolatileCallback([&]()
+			unit.lock()->OnStateExitCallback()[UnitBehaviourTree::SkillOnGoing].AddVolatileCallback([&]()
 				{
 					skillDone = true;
 				});
@@ -209,7 +236,7 @@ coroutine::Coroutine BossController::RoutinePerUnit(std::weak_ptr<Unit> unit)
 						}
 					}
 					skillDir = (targetUnit.lock()->GetTransform()->GetWorldPosition() - unit.lock()->GetTransform()->GetWorldPosition()).Normalized();
-					unit.lock()->OrderSkill(BossImpaleSkill{}, targetUnit.lock()->GetTransform()->GetWorldPosition() + skillDir);
+					unit.lock()->OrderSkill(BossImpaleSkill{}, unit.lock()->GetTransform()->GetWorldPosition() + skillDir);
 					break;
 				}
 				case 2:
@@ -222,7 +249,7 @@ coroutine::Coroutine BossController::RoutinePerUnit(std::weak_ptr<Unit> unit)
 			}
 
 			bool skillDone = false;
-			unit.lock()->OnStateExitCallback()[UnitBehaviourTree::Skill].AddVolatileCallback([&]()
+			unit.lock()->OnStateExitCallback()[UnitBehaviourTree::SkillOnGoing].AddVolatileCallback([&]()
 				{
 					skillDone = true;
 				});
@@ -263,7 +290,7 @@ coroutine::Coroutine BossController::RoutinePerUnit(std::weak_ptr<Unit> unit)
 						}
 					}
 					skillDir = (targetUnit.lock()->GetTransform()->GetWorldPosition() - unit.lock()->GetTransform()->GetWorldPosition()).Normalized();
-					unit.lock()->OrderSkill(BossImpaleSkill{}, targetUnit.lock()->GetTransform()->GetWorldPosition() + skillDir);
+					unit.lock()->OrderSkill(BossImpaleSkill{}, unit.lock()->GetTransform()->GetWorldPosition() + skillDir);
 					break;
 				}
 				default:
@@ -271,7 +298,7 @@ coroutine::Coroutine BossController::RoutinePerUnit(std::weak_ptr<Unit> unit)
 			}
 
 			bool skillDone = false;
-			unit.lock()->OnStateExitCallback()[UnitBehaviourTree::Skill].AddVolatileCallback([&]()
+			unit.lock()->OnStateExitCallback()[UnitBehaviourTree::SkillOnGoing].AddVolatileCallback([&]()
 				{
 					skillDone = true;
 				});
@@ -289,7 +316,7 @@ coroutine::Coroutine BossController::RoutinePerUnit(std::weak_ptr<Unit> unit)
 			unit.lock()->OrderSkill(BossSummonChessSkill{}, unit.lock()->GetTransform()->GetWorldPosition());
 
 			bool skillDone = false;
-			unit.lock()->OnStateExitCallback()[UnitBehaviourTree::Skill].AddVolatileCallback([&]()
+			unit.lock()->OnStateExitCallback()[UnitBehaviourTree::SkillOnGoing].AddVolatileCallback([&]()
 				{
 					skillDone = true;
 				});

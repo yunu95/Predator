@@ -10,8 +10,20 @@ std::weak_ptr<UnitAcquisitionSphereCollider> UnitAcquisitionSphereColliderPool::
 
 void UnitAcquisitionSphereColliderPool::Return(std::weak_ptr<UnitAcquisitionSphereCollider> collider)
 {
+    borrowedList.erase(collider);
     collider.lock()->SetActive(false);
     GameObjectPool<UnitAcquisitionSphereCollider>::Return(collider);
+}
+
+void UnitAcquisitionSphereColliderPool::OnContentsStop()
+{
+    for (auto each : borrowedList)
+    {
+        each.lock()->SetActive(false);
+        GameObjectPool<UnitAcquisitionSphereCollider>::Return(each);
+    }
+    borrowedList.clear();
+    GetComponent()->SetActive(false);
 }
 
 int UnitAcquisitionSphereColliderPool::poolObjectsSize()

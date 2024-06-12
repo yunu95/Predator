@@ -14,10 +14,10 @@ coroutine::Coroutine UrsulaParalysisSkill::SpawningFieldEffect(std::weak_ptr<Urs
 
 	float actualCollideRange = pod.skillRadius * (1 / colliderEffectRatio);
 
-	damageCollider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
+	damageCollider = UnitAcquisitionSphereColliderPool::Instance().Borrow(owner.lock());
 	damageCollider.lock()->SetRadius(pod.skillRadius);
 	damageCollider.lock()->GetTransform()->SetWorldPosition(targetPos);
-	knockBackCollider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
+	knockBackCollider = UnitAcquisitionSphereColliderPool::Instance().Borrow(owner.lock());
 	knockBackCollider.lock()->SetRadius(pod.skillRadius);
 	knockBackCollider.lock()->GetTransform()->SetWorldPosition(targetPos);
 
@@ -64,7 +64,7 @@ coroutine::Coroutine UrsulaParalysisSkill::SpawningFieldEffect(std::weak_ptr<Urs
 	{
 		auto curFrame = tentacleAnimator->GetCurrentFrame();
 
-		if (curFrame >= 45)
+		if (curFrame >= 30)
 		{
 			hit = true;
 		}
@@ -85,7 +85,7 @@ coroutine::Coroutine UrsulaParalysisSkill::SpawningFieldEffect(std::weak_ptr<Urs
 	{
 		auto curFrame = tentacleAnimator->GetCurrentFrame();
 
-		if (curFrame >= 80)
+		if (curFrame >= 70)
 		{
 			knockBacked = true;
 		}
@@ -119,8 +119,8 @@ coroutine::Coroutine UrsulaParalysisSkill::operator()()
 		{
 			FBXPool::SingleInstance().Return(tentacleObject);
 			FBXPool::SingleInstance().Return(waveObject);
-			UnitAcquisitionSphereColliderPool::SingleInstance().Return(damageCollider);
-			UnitAcquisitionSphereColliderPool::SingleInstance().Return(knockBackCollider);
+			UnitAcquisitionSphereColliderPool::Instance().Return(damageCollider);
+			UnitAcquisitionSphereColliderPool::Instance().Return(knockBackCollider);
 		});
     owner.lock()->PlayAnimation(UnitAnimType::Skill2, true);
     auto animator = owner.lock()->GetAnimator();

@@ -31,7 +31,7 @@ coroutine::Coroutine HanselChargeSkill::operator()()
     effectColliderCoroutine = owner.lock()->StartCoroutine(SpawningFieldEffect(dynamic_pointer_cast<HanselChargeSkill>(selfWeakPtr.lock())));
     effectColliderCoroutine.lock()->PushDestroyCallBack([this]()
         {
-            UnitAcquisitionSphereColliderPool::SingleInstance().Return(stompCollider);
+            UnitAcquisitionSphereColliderPool::Instance().Return(stompCollider);
         });
 
     co_return;
@@ -50,7 +50,7 @@ coroutine::Coroutine HanselChargeSkill::SpawningFieldEffect(std::weak_ptr<Hansel
     auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
     auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
 
-    stompCollider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
+    stompCollider = UnitAcquisitionSphereColliderPool::Instance().Borrow(owner.lock());
     stompCollider.lock()->SetRadius(pod.skillRadius);
     stompCollider.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
 

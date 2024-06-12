@@ -28,23 +28,6 @@ namespace application
         GC<float> peaceFollowingXOffest = 3.0f;
         GC<float> peaceFollowingZOffest = 2.0f;
 
-        GC<float>   impaleSkillDamage = 20.0f;
-        GC<float>   impaleSkillCoolTime = 2.0f;
-        GC<float>   impaleSkillRange = 8.0f;
-        GC<float>   impaleSkillWidth = 2.0f;
-        GC<float>   impaleSkillFirstSpearOffset = 0.5f;
-        GC<float>   impaleSkillMaxHeightPerSpear = 2.5f;
-        GC<float>   impaleSkillMinHeightPerSpear = 0.0f;
-        GC<float>   impaleSkillDurationPerSpear = 0.5f;
-        GC<float>   impaleSkillAriseDistancePerSpear = 0.5f;
-        GC<float>   impaleSkillAriseTimeNoisePerSpear = 0.5f;
-        GC<float>   impaleSkillAriseDistanceNoisePerSpear = 0.5f;
-        GC<float>   impaleSkillDuration = 2.0f;
-        GC<float>   impaleSkillKnockbackDistance = 2.0f;
-        GC<float>   impaleSkillKnockbackDuration = 2.0f;
-
-
-
         GC<float>	tacticSkillCost = 10.0f;
         GC<float>	tacticMoveCost = 10.0f;
         GC<float>	tacticAttackCost = 10.0f;

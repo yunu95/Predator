@@ -62,7 +62,7 @@ coroutine::Coroutine BossImpaleSkill::operator()()
 
 	// 창이 생성되는 시간 오프셋은 유닛으로부터의 거리와 정비례한다.
 	owner.lock()->PlayAnimation(UnitAnimType::Skill2);
-	auto effectCoroutine = owner.lock()->StartCoroutine(SpawningSkillffect(dynamic_pointer_cast<BossImpaleSkill>(selfWeakPtr.lock())));
+	effectCoroutine = owner.lock()->StartCoroutine(SpawningSkillffect(dynamic_pointer_cast<BossImpaleSkill>(selfWeakPtr.lock())));
 	effectCoroutine.lock()->PushDestroyCallBack([this]()
 		{
 			FBXPool::SingleInstance().Return(impaleEffect);
@@ -90,11 +90,10 @@ coroutine::Coroutine BossImpaleSkill::operator()()
 			{
 				if (knockbackColliderVector.empty() && spearFbxVector.empty())
 					return ;
-				UnitAcquisitionSphereColliderPool::SingleInstance().Return(knockbackColliderVector[managingIndex]);
+				UnitAcquisitionSphereColliderPool::Instance().Return(knockbackColliderVector[managingIndex]);
 				FBXPool::SingleInstance().Return(spearFbxVector[managingIndex]);
 				managingIndex++;
 			});
-		coroutineVector.push_back(spearAriseCoroutine.lock());
 	}
 	
 	co_yield coroutine::WaitForSeconds{ 2.0f };
@@ -105,17 +104,20 @@ coroutine::Coroutine BossImpaleSkill::operator()()
 
 void BossImpaleSkill::OnInterruption()
 {
-
+	if (!effectCoroutine.expired())
+	{
+		FBXPool::SingleInstance().Return(impaleEffect);
+	}
 }
 
 // 창이 한번 불쑥 튀어나왔다가 다시 꺼지는 사이클
 coroutine::Coroutine BossImpaleSkill::SpearArise(std::weak_ptr<BossImpaleSkill> skill, std::weak_ptr<ManagedFBX> fbx, std::weak_ptr<UnitAcquisitionSphereCollider> collider, Vector2d pos)
 {
-	skill.lock();
+	auto temp = skill.lock();
 	fbx = FBXPool::SingleInstance().Borrow(wanderResources::GetFBXName(wanderResources::WanderFBX::IMPALING_SPIKE));
-	spearFbxVector.push_back(fbx);
-	collider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(skill.lock()->owner);
-	knockbackColliderVector.push_back(collider);
+	skill.lock()->spearFbxVector.push_back(fbx);
+	collider = UnitAcquisitionSphereColliderPool::Instance().Borrow(skill.lock()->owner);
+	skill.lock()->knockbackColliderVector.push_back(collider);
 	auto forward = owner.lock()->GetTransform()->GetWorldRotation().Forward();
 	auto right = owner.lock()->GetTransform()->GetWorldRotation().Right();
 	auto worldPos = owner.lock()->GetTransform()->GetWorldPosition() + forward * pos.y + right * pos.x;
@@ -178,6 +180,3 @@ coroutine::Coroutine BossImpaleSkill::SpawningSkillffect(std::weak_ptr<BossImpal
 
 	co_return;
 }
-
-
-
