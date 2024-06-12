@@ -64,7 +64,7 @@ coroutine::Coroutine UrsulaParalysisSkill::SpawningFieldEffect(std::weak_ptr<Urs
 	{
 		auto curFrame = tentacleAnimator->GetCurrentFrame();
 
-		if (curFrame >= 45)
+		if (curFrame >= 30)
 		{
 			hit = true;
 		}
@@ -85,7 +85,7 @@ coroutine::Coroutine UrsulaParalysisSkill::SpawningFieldEffect(std::weak_ptr<Urs
 	{
 		auto curFrame = tentacleAnimator->GetCurrentFrame();
 
-		if (curFrame >= 80)
+		if (curFrame >= 70)
 		{
 			knockBacked = true;
 		}

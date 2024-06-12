@@ -282,17 +282,20 @@ void SkillPreviewSystem::HideRobinQSkill()
 	}
 }
 
-void SkillPreviewSystem::ShowRobinWSkill(const Vector3d& objectPos, float circleRadius)
+void SkillPreviewSystem::ShowRobinWSkill(Vector3d& objectPos, float circleRadius)
 {
 	if (this->robinWSkillPreviewObj->GetActive() == false)
 	{
 		this->robinWSkillPreviewObj->SetSelfActive(true);
 	}
-
+	if (objectPos.y == 0)
+	{
+		objectPos.y = this->Y_OFFSET;
+	}
 	circleRadius *= 2;
 
 	this->robinWSkillPreviewObj->GetChildren()[static_cast<int>(RobinWSkillInfo::CircleOne)]->GetTransform()->SetLocalPosition(objectPos);
-	this->robinWSkillPreviewObj->GetChildren()[static_cast<int>(RobinWSkillInfo::CircleOne)]->GetTransform()->SetLocalScale(Vector3d{ circleRadius,1.0,circleRadius });
+	this->robinWSkillPreviewObj->GetChildren()[static_cast<int>(RobinWSkillInfo::CircleOne)]->GetTransform()->SetLocalScale(Vector3d{ circleRadius,circleRadius,1.0 });
 }
 
 void SkillPreviewSystem::HideRobinWSkill()
@@ -661,7 +664,7 @@ void SkillPreviewSystem::HideAttackImage(yunutyEngine::graphics::StaticMeshRende
 void SkillPreviewSystem::ShowMoveEndImage(UnitType unitType, Vector3d pos, yunuGI::IMesh* mesh, Vector3d direction)
 {
 	direction.y = 0.f;
-	direction=direction.Normalize(direction);
+	direction = direction.Normalize(direction);
 	auto moveEndRenderer = MoveEndPreviewPool::SingleInstance().Borrow();
 	this->moveEndRendererMap.insert({ mesh, moveEndRenderer.lock().get() });
 	pos.y = this->Y_OFFSET;

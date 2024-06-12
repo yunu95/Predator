@@ -26,8 +26,6 @@ private:
     int hitCounter{ 0 };
     void IncrementHitCounter();
     coroutine::Coroutine CookieLingering( Vector3d pos, std::weak_ptr<Unit> owner);
-    static std::weak_ptr<ManagedFBX> borrowedFBX;
-    static std::weak_ptr<UnitAcquisitionSphereCollider> borrowedCollider;
     //coroutine::Coroutine CookieDisappear(const Vector3d& pos, std::weak_ptr<Unit> owner);
 };
 
