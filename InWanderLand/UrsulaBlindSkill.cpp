@@ -9,11 +9,11 @@ Vector3d UrsulaBlindSkill::skillDestination = Vector3d();
 
 POD_UrsulaBlindSkill UrsulaBlindSkill::pod = POD_UrsulaBlindSkill();
 
-float UrsulaBlindSkill::colliderEffectRatio = 3.0f;
+float UrsulaBlindSkill::colliderEffectRatio = 3.0f * 0.5f;
 
 coroutine::Coroutine UrsulaBlindSkill::SpawningFieldEffect(std::weak_ptr<UrsulaBlindSkill> skill)
 {
-    float actualCollideRange = UrsulaBlindSkill::pod.skillScale * colliderEffectRatio;
+    float actualCollideRange = pod.skillScale * colliderEffectRatio;
 
     onUrsulaPosEffect = FBXPool::SingleInstance().Borrow("VFX_Ursula_Skill1_1");
     onTargetPosEffect1 = FBXPool::SingleInstance().Borrow("VFX_Ursula_Skill1_2");
@@ -125,7 +125,7 @@ coroutine::Coroutine UrsulaBlindSkill::SpawningFieldEffect(std::weak_ptr<UrsulaB
 
 coroutine::Coroutine UrsulaBlindSkill::operator()()
 {
-    float actualCollideRange = UrsulaBlindSkill::pod.skillScale * colliderEffectRatio;
+    float actualCollideRange = pod.skillScale * colliderEffectRatio;
 
     auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
     auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
@@ -176,7 +176,7 @@ void UrsulaBlindSkill::UpdatePosition(const Vector3d& start, const Vector3d& des
 
 Vector3d UrsulaBlindSkill::GetSkillObjectPos_Top(const Vector3d& dest)
 {
-    float actualCollideRange = UrsulaBlindSkill::pod.skillScale * colliderEffectRatio;
+    float actualCollideRange = pod.skillScale * colliderEffectRatio;
 
     auto length = actualCollideRange * 2 + pod.skillOffset;
     auto skillDir = (dest - skillStart).Normalized();
@@ -185,7 +185,7 @@ Vector3d UrsulaBlindSkill::GetSkillObjectPos_Top(const Vector3d& dest)
 
 Vector3d UrsulaBlindSkill::GetSkillObjectPos_Left(const Vector3d& dest)
 {
-    float actualCollideRange = UrsulaBlindSkill::pod.skillScale * colliderEffectRatio;
+    float actualCollideRange = pod.skillScale * colliderEffectRatio;
 
     auto length = actualCollideRange * 2 + pod.skillOffset;
     auto skillDir = (dest - skillStart).Normalized();
@@ -195,7 +195,7 @@ Vector3d UrsulaBlindSkill::GetSkillObjectPos_Left(const Vector3d& dest)
 
 Vector3d UrsulaBlindSkill::GetSkillObjectPos_Right(const Vector3d& dest)
 {
-    float actualCollideRange = UrsulaBlindSkill::pod.skillScale * colliderEffectRatio;
+    float actualCollideRange = pod.skillScale * colliderEffectRatio;
 
     auto length = actualCollideRange * 2 + pod.skillOffset;
     auto skillDir = (dest - skillStart).Normalized();

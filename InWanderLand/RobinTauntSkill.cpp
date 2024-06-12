@@ -6,7 +6,7 @@ POD_RobinTauntSkill RobinTauntSkill::pod = POD_RobinTauntSkill();
 
 const float damageTimingFrame = 24.0f;
 
-float RobinTauntSkill::colliderEffectRatio = 6.0f;
+float RobinTauntSkill::colliderEffectRatio = 6.0f * 0.5f;
 
 coroutine::Coroutine RobinTauntSkill::SpawningSkillffect(std::weak_ptr<RobinTauntSkill> skill)
 {

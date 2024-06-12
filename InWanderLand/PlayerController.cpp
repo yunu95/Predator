@@ -285,6 +285,7 @@ void PlayerController::HandleSkillPreview()
 			break;
 		case SkillType::URSULA_Q:
 		{
+			UrsulaBlindSkill::UpdatePosition(characters[PlayerCharacterType::Ursula].lock()->GetTransform()->GetWorldPosition(), GetWorldCursorPosition());
 			auto pos1 = UrsulaBlindSkill::GetSkillObjectPos_Left(GetWorldCursorPosition());
 			auto pos2 = UrsulaBlindSkill::GetSkillObjectPos_Right(GetWorldCursorPosition());
 			auto pos3 = UrsulaBlindSkill::GetSkillObjectPos_Top(GetWorldCursorPosition());
@@ -293,7 +294,7 @@ void PlayerController::HandleSkillPreview()
 			break;
 		}
 		case SkillType::URSULA_W:
-			SkillPreviewSystem::Instance().ShowUrsulaWSkill(GetWorldCursorPosition(), UrsulaParalysisSkill::pod.skillScale * UrsulaBlindSkill::colliderEffectRatio);
+			SkillPreviewSystem::Instance().ShowUrsulaWSkill(GetWorldCursorPosition(), UrsulaParalysisSkill::pod.skillScale * UrsulaParalysisSkill::colliderEffectRatio);
 			SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Ursula, characters[PlayerCharacterType::Ursula].lock()->GetTransform()->GetWorldPosition(), UrsulaParalysisSkill::pod.skillRange);
 			break;
 		case SkillType::HANSEL_Q:
