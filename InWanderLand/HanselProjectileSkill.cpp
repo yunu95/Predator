@@ -4,7 +4,7 @@
 const float throwingPieTimingFrame = 70.0f;
 
 POD_HanselProjectileSkill HanselProjectileSkill::pod = POD_HanselProjectileSkill();
-float HanselProjectileSkill::colliderEffectRatio = 1.0f;
+float HanselProjectileSkill::colliderEffectRatio = 1.0f * 0.5f;
 
 coroutine::Coroutine HanselProjectileSkill::ThrowingPie(std::weak_ptr<HanselProjectileSkill> skill)
 {
@@ -23,8 +23,6 @@ coroutine::Coroutine HanselProjectileSkill::ThrowingPie(std::weak_ptr<HanselProj
 
     std::unordered_set<Unit*> onceCollidedUnits;
     co_await std::suspend_always{};
-
-    actualCollideRange = pod.pieScale;
 
     pieCollider.lock()->SetRadius(actualCollideRange);
     pieObject.lock()->GetTransform()->SetWorldScale({ pod.pieScale, pod.pieScale, pod.pieScale });

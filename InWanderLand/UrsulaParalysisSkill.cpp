@@ -6,7 +6,7 @@
 
 
 POD_UrsulaParalysisSkill UrsulaParalysisSkill::pod = POD_UrsulaParalysisSkill();
-float UrsulaParalysisSkill::colliderEffectRatio = 3.0f;
+float UrsulaParalysisSkill::colliderEffectRatio = 3.0f * 0.5f;
 
 coroutine::Coroutine UrsulaParalysisSkill::SpawningFieldEffect(std::weak_ptr<UrsulaParalysisSkill> skill)
 {

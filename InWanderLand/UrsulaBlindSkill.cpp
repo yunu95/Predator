@@ -9,7 +9,7 @@ Vector3d UrsulaBlindSkill::skillDestination = Vector3d();
 
 POD_UrsulaBlindSkill UrsulaBlindSkill::pod = POD_UrsulaBlindSkill();
 
-float UrsulaBlindSkill::colliderEffectRatio = 3.0f;
+float UrsulaBlindSkill::colliderEffectRatio = 3.0f * 0.5f;
 
 coroutine::Coroutine UrsulaBlindSkill::SpawningFieldEffect(std::weak_ptr<UrsulaBlindSkill> skill)
 {

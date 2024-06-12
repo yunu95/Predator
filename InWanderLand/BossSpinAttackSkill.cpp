@@ -9,7 +9,7 @@ const float spinEndTime = 3.15f;
 const float spinStartTime = 2.07f;
 const float spinAttackingTime = spinEndTime - spinStartTime;
 const float afterSpinDelay = totalTime - spinStartTime - spinAttackingTime;
-float BossSpinAttackSkill::colliderEffectRatio = 10.0f;
+float BossSpinAttackSkill::colliderEffectRatio = 10.0f * 0.5f;
 
 coroutine::Coroutine BossSpinAttackSkill::SpawningSkillffect(std::weak_ptr<BossSpinAttackSkill> skill)
 {
