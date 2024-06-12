@@ -32,6 +32,10 @@ bool Skill::SkillPodFieldPreEncoding(SkillType::Enum type, json& data)
 		{
 			return ::SkillPodFieldPreEncoding<SkillType::HANSEL_W>(data);
 		}
+		case SkillType::EnemySpin:
+		{
+			return ::SkillPodFieldPreEncoding<SkillType::EnemySpin>(data);
+		}
 		case SkillType::EnemyImpale:
 		{
 			return ::SkillPodFieldPreEncoding<SkillType::EnemyImpale>(data);
@@ -86,6 +90,10 @@ bool Skill::SkillPodFieldPostEncoding(SkillType::Enum type, json& data)
 		case SkillType::HANSEL_W:
 		{
 			return ::SkillPodFieldPostEncoding<SkillType::HANSEL_W>(data);
+		}
+		case SkillType::EnemySpin:
+		{
+			return ::SkillPodFieldPostEncoding<SkillType::EnemySpin>(data);
 		}
 		case SkillType::EnemyImpale:
 		{
@@ -142,6 +150,10 @@ bool Skill::SkillPodFieldPreDecoding(SkillType::Enum type, const json& data)
 		{
 			return ::SkillPodFieldPreDecoding<SkillType::HANSEL_W>(data);
 		}
+		case SkillType::EnemySpin:
+		{
+			return ::SkillPodFieldPreDecoding<SkillType::EnemySpin>(data);
+		}
 		case SkillType::EnemyImpale:
 		{
 			return ::SkillPodFieldPreDecoding<SkillType::EnemyImpale>(data);
@@ -196,6 +208,10 @@ bool Skill::SkillPodFieldPostDecoding(SkillType::Enum type, const json& data)
 		case SkillType::HANSEL_W:
 		{
 			return ::SkillPodFieldPostDecoding<SkillType::HANSEL_W>(data);
+		}
+		case SkillType::EnemySpin:
+		{
+			return ::SkillPodFieldPostDecoding<SkillType::EnemySpin>(data);
 		}
 		case SkillType::EnemyImpale:
 		{
@@ -256,6 +272,11 @@ void Skill::DrawSkillPod(SkillType::Enum type)
 		case SkillType::HANSEL_W:
 		{
 			application::editor::imgui::data::DrawDataField(HanselProjectileSkill::pod);
+			break;
+		}
+		case SkillType::EnemySpin:
+		{
+			application::editor::imgui::data::DrawDataField(EnemySpinAttackSkill::pod);
 			break;
 		}
 		case SkillType::EnemyImpale:

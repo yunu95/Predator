@@ -826,6 +826,9 @@
     <Filter Include="Contents_Refactored\wanderCoroutines">
       <UniqueIdentifier>{0cd58224-0474-47e2-bcc0-e4746ac7f062}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents_Refactored\Skill\EnemySpinAttackSkill">
+      <UniqueIdentifier>{72389f56-33e5-48b8-a182-5e66d434fe6a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -2008,6 +2011,9 @@
     <ClInclude Include="wanderCoroutines.h">
       <Filter>Contents_Refactored\wanderCoroutines</Filter>
     </ClInclude>
+    <ClInclude Include="EnemySpinAttackSkill.h">
+      <Filter>Contents_Refactored\Skill\EnemySpinAttackSkill</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -3000,6 +3006,9 @@
     </ClCompile>
     <ClCompile Include="wanderCoroutines.cpp">
       <Filter>Contents_Refactored\wanderCoroutines</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemySpinAttackSkill.cpp">
+      <Filter>Contents_Refactored\Skill\EnemySpinAttackSkill</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
