@@ -16,6 +16,10 @@ std::weak_ptr<ManagedFBX> FBXPool::Borrow(const std::string& fbxName)
 
 void FBXPool::Return(std::weak_ptr<ManagedFBX> fbx)
 {
+    if (fbx.expired())
+    {
+        return;
+    }
     poolsByFBX.at(fbx.lock().get()).lock()->Return(fbx);
 }
 
