@@ -142,7 +142,8 @@ template<>
 void Unit::OnStateEngage<UnitBehaviourTree::Pause>()
 {
     onStateEngage[UnitBehaviourTree::Pause]();
-    PlayAnimation(UnitAnimType::Idle, true);
+    //PlayAnimation(UnitAnimType::Idle, true);
+    animatorComponent.lock()->Pause();
     enableNavObstacleByState = referenceEnableNavObstacle.Acquire();
     disableNavAgentByState = referenceDisableNavAgent.Acquire();
 }
@@ -150,7 +151,8 @@ template<>
 void Unit::OnStateExit<UnitBehaviourTree::Pause>()
 {
     onStateExit[UnitBehaviourTree::Pause]();
-    PlayAnimation(UnitAnimType::Idle, true);
+    //PlayAnimation(UnitAnimType::Idle, true);
+    animatorComponent.lock()->Resume();
     enableNavObstacleByState.reset();
     disableNavAgentByState.reset();
 }

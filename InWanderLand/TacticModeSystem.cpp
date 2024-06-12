@@ -13,7 +13,7 @@
 
 void TacticModeSystem::OnEnable()
 {
-
+	
 }
 
 void TacticModeSystem::Start()
@@ -69,19 +69,39 @@ void TacticModeSystem::EngageTacticSystem()
 {
 	this->isOperating = true;
 	this->isCoolTime = true;
+
+	playersPauseRevArr[0] = PlayerController::Instance().GetPlayers()[0].lock()->referencePause.Acquire();
+	playersPauseRevArr[1] = PlayerController::Instance().GetPlayers()[1].lock()->referencePause.Acquire();
+	playersPauseRevArr[2] = PlayerController::Instance().GetPlayers()[2].lock()->referencePause.Acquire();
+
+	auto wave = PlaytimeWave::GetCurrentOperatingWave();
+	wave.lock()->StopWaveElapsedTime();
+	for (auto& each : wave.lock()->m_currentWaveUnitVector)
+	{
+		activateWaveEnemyUnitPauseRefVec.push_back(each->referencePause.Acquire());
+	}
 }
 
-bool TacticModeSystem::EnqueueCommand(std::shared_ptr<UnitCommand> command)
+EnqueErrorType TacticModeSystem::EnqueueCommand(std::shared_ptr<UnitCommand> command)
 {
-	if (isOperating == false)
-	{
-		return false;
-	}
+	EnqueErrorType errorType = EnqueErrorType::NONE;
+
+	// 큐가 가득 차 있는지 검사하는 코드
 	if (this->commandCount == this->MAX_COMMAND_COUNT)
 	{
-		return false;
+		errorType = EnqueErrorType::QueueFull;
+		return errorType;
 	}
 
+	// 들어 온 명령을 수행 할 마나가 있는지에 대한 여부
+	auto mana = PlayerController::Instance().GetMana();
+	if (mana < command->GetCommandCost())
+	{
+		errorType = EnqueErrorType::NotEnoughMana;
+		return errorType;
+	}
+
+	PlayerController::Instance().SetMana(mana - command->GetCommandCost());
 	this->commandCount++;
 
 	this->commandQueue.push_back(command);
@@ -101,6 +121,9 @@ bool TacticModeSystem::EnqueueCommand(std::shared_ptr<UnitCommand> command)
 	{
 		this->hanselLastCommand = command;
 	}
+
+	errorType = EnqueErrorType::Success;
+	return errorType;
 }
 
 void TacticModeSystem::ExecuteCommands()
@@ -353,11 +376,15 @@ yunutyEngine::coroutine::Coroutine TacticModeSystem::ExecuteInternal()
 	for (auto& each : commandQueue)
 	{
 		PlayerController::Instance().SelectPlayerUnit(static_cast<PlayerCharacterType::Enum>(each->GetUnit()->GetUnitTemplateData().pod.playerUnitType.enumValue));
+		// 현재 명령을 수행하는 플레이어 유닛은 움직인다.
+		this->playersPauseRevArr[each->GetPlayerType()].reset();
 		each->Execute();
 		while (!each->IsDone())
 		{
 			co_await std::suspend_always();
 		}
+		// 명령 수행이 끝나면 다시 멈춘다.
+		this->playersPauseRevArr[each->GetPlayerType()] = PlayerController::Instance().GetPlayers()[each->GetPlayerType()].lock()->referencePause.Acquire();;
 		this->commandCount--;
 		each->HidePreviewMesh();
 	}
@@ -370,4 +397,16 @@ yunutyEngine::coroutine::Coroutine TacticModeSystem::ExecuteInternal()
 	this->robinLastCommand = nullptr;
 	this->ursulaLastCommand = nullptr;
 	this->hanselLastCommand = nullptr;
+
+	// 전술모드 명령이 끝나면 플레이어들은 다시 움직인다.
+	for (auto& each : playersPauseRevArr)
+	{
+		each.reset();
+	}
+
+	// Wave의 시간도 흐른다.
+	auto wave = PlaytimeWave::GetCurrentOperatingWave();
+	wave.lock()->ResumeWaveElapsedTime();
+	// Wave의 적 유닛들도 움직인다.
+	activateWaveEnemyUnitPauseRefVec.clear();
 }

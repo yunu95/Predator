@@ -9,7 +9,7 @@ class yunuGI::IMesh;
 class UnitAttackCommand : public UnitCommand
 {
 public:
-	UnitAttackCommand(Unit* unit, Vector3d expectedPos, Unit* enemyUnit, bool isAttackAfterMove);
+	UnitAttackCommand(Unit* unit, Vector3d expectedPos, Unit* enemyUnit, bool isAttackAfterMove, Vector3d direction);
 	virtual ~UnitAttackCommand();
 
 public:
@@ -20,6 +20,6 @@ public:
 private:
 	yunutyEngine::graphics::StaticMeshRenderer* renderer;
 	Unit* enemyUnit;
-
+	Vector3d direction;
 };
 

@@ -9,7 +9,7 @@ class yunuGI::IMesh;
 class UnitSkillCommand : public UnitCommand
 {
 public:
-	UnitSkillCommand(Unit* unit, Vector3d expectedPos, SkillType skillType);
+	UnitSkillCommand(Unit* unit, Vector3d expectedPos, SkillType::Enum skillType);
 	virtual ~UnitSkillCommand();
 
 public:
@@ -19,6 +19,6 @@ public:
 
 private:
 	yunutyEngine::graphics::StaticMeshRenderer* renderer;
-	SkillType skillType;
+	SkillType::Enum skillType;
 };
 
