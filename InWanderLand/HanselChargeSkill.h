@@ -25,8 +25,9 @@ public:
     static POD_HanselChargeSkill pod;
     virtual void OnInterruption()override;
 private:
+    coroutine::Coroutine SpawningFieldEffect(std::weak_ptr<HanselChargeSkill> skill);
     std::weak_ptr<UnitAcquisitionSphereCollider> stompCollider;
-
+    std::weak_ptr<coroutine::Coroutine> effectColliderCoroutine;
 };
 
 
