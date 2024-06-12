@@ -110,7 +110,7 @@ void BossImpaleSkill::OnInterruption()
 // 창이 한번 불쑥 튀어나왔다가 다시 꺼지는 사이클
 coroutine::Coroutine BossImpaleSkill::SpearArise(std::weak_ptr<BossImpaleSkill> skill, std::weak_ptr<ManagedFBX> fbx, std::weak_ptr<UnitAcquisitionSphereCollider> collider, Vector2d pos)
 {
-	skill.lock();
+	auto temp = skill.lock();
 	fbx = FBXPool::SingleInstance().Borrow(wanderResources::GetFBXName(wanderResources::WanderFBX::IMPALING_SPIKE));
 	skill.lock()->spearFbxVector.push_back(fbx);
 	collider = UnitAcquisitionSphereColliderPool::Instance().Borrow(skill.lock()->owner);

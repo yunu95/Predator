@@ -21,6 +21,8 @@ struct POD_EnemyImpaleSkill
     float impaleSkillKnockbackDistance = 2.0f;
     float impaleSkillKnockbackDuration = 2.0f;
 
+    float impaleStartDelay = 1.5f;
+
     TO_JSON(POD_EnemyImpaleSkill)
         FROM_JSON(POD_EnemyImpaleSkill)
 };
@@ -30,16 +32,21 @@ class EnemyImpaleSkill : public Skill
 public:
     EnemyImpaleSkill() {}
     virtual SkillType::Enum GetSkillType() { return SkillType::Enum::EnemyImpale; }
+    virtual float GetCastRange() override { return pod.impaleSkillRange; };
     virtual coroutine::Coroutine operator()() override;
     virtual void OnInterruption() override;
 
     static POD_EnemyImpaleSkill pod;
 
 private:
-    coroutine::Coroutine SpearArise(std::weak_ptr<EnemyImpaleSkill> skill, std::weak_ptr<ManagedFBX> fbx, Vector2d pos);
-    std::weak_ptr<UnitAcquisitionSphereCollider> knockbackCollider;
+    coroutine::Coroutine SpearArise(std::weak_ptr<EnemyImpaleSkill> skill, std::weak_ptr<ManagedFBX> fbx, std::weak_ptr<UnitAcquisitionSphereCollider> collider, Vector2d pos);
+ 
+    std::weak_ptr<ManagedFBX> impaleEffect;
+    std::vector<std::weak_ptr<UnitAcquisitionSphereCollider>> knockbackColliderVector;
+    std::vector<std::weak_ptr<ManagedFBX>> spearFbxVector;
     std::unordered_set<Unit*> damagedUnits;
-    //static const std::vector<Spear> SpearsInfo();
+
+    static int managingIndex;
 };
 
 template <>
