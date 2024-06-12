@@ -425,7 +425,7 @@ void TacticModeSystem::PopCommand()
 	this->commandCount--;
 
 
-	
+
 	for (auto it = commandQueue.rbegin(); it != commandQueue.rend(); ++it)
 	{
 		auto command = *it;
@@ -443,7 +443,7 @@ void TacticModeSystem::PopCommand()
 			break;
 		}
 	}
-	
+
 	bool robinCommand = false;
 	bool ursulaCommand = false;
 	bool hanselCommand = false;
@@ -537,7 +537,12 @@ void TacticModeSystem::ClearCommand()
 {
 	for (auto& each : this->commandQueue)
 	{
-		each->HidePreviewMesh();
+		if (!each->IsDone())
+		{
+			each->SetIsDone(true);
+			each->HidePreviewMesh();
+			PlayerController::Instance().SetMana(PlayerController::Instance().GetMana() + each->GetCommandCost());
+		}
 	}
 	for (auto& each : this->useSkill)
 	{
@@ -545,7 +550,6 @@ void TacticModeSystem::ClearCommand()
 	}
 	this->commandCount = 0;
 	this->commandQueue.clear();
-	PlayerController::Instance().SetState(PlayerController::State::None);
 	this->robinLastCommand = nullptr;
 	this->ursulaLastCommand = nullptr;
 	this->hanselLastCommand = nullptr;
@@ -560,10 +564,14 @@ yunutyEngine::coroutine::Coroutine TacticModeSystem::ExecuteInternal()
 			PlayerController::Instance().SelectPlayerUnit(static_cast<PlayerCharacterType::Enum>(each->GetUnit()->GetUnitTemplateData().pod.playerUnitType.enumValue));
 			// 현재 명령을 수행하는 플레이어 유닛은 움직인다.
 			this->playersPauseRevArr[each->GetPlayerType()].reset();
-			each->Execute();
-			while (!each->IsDone())
+
+			if (!each->IsDone())
 			{
-				co_await std::suspend_always();
+				each->Execute();
+				while (!each->IsDone())
+				{
+					co_await std::suspend_always();
+				}
 			}
 			// 명령 수행이 끝나면 다시 멈춘다.
 			this->playersPauseRevArr[each->GetPlayerType()] = PlayerController::Instance().GetPlayers()[each->GetPlayerType()].lock()->referencePause.Acquire();

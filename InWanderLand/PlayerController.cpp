@@ -219,6 +219,11 @@ void PlayerController::HandleInput()
 		TacticModeSystem::Instance().PopCommand();
 	}
 
+	if (Input::isKeyPushed(KeyCode::ESC) && TacticModeSystem::Instance().IsOperation() && !TacticModeSystem::Instance().IsExecuting())
+	{
+		TacticModeSystem::Instance().ClearCommand();
+	}
+
 	if ((TacticModeSystem::Instance().IsExecuting() == false))
 	{
 		if (Input::isKeyPushed(KeyCode::Q))
