@@ -53,6 +53,10 @@ const std::vector<BossSpear> BossSpearsInfo()
 
 coroutine::Coroutine BossImpaleSkill::operator()()
 {
+	auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
+	auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
+	auto enableNavObstacle = owner.lock()->referenceEnableNavObstacle.Acquire();
+
 	effectCoroutine = owner.lock()->StartCoroutine(SpawningSkillffect(dynamic_pointer_cast<BossImpaleSkill>(selfWeakPtr.lock())));
 	effectCoroutine.lock()->PushDestroyCallBack([this]()
 		{
@@ -61,9 +65,6 @@ coroutine::Coroutine BossImpaleSkill::operator()()
 
 	co_yield coroutine::WaitForSeconds(0.7f);
 
-	auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
-	auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
-	auto enableNavObstacle = owner.lock()->referenceEnableNavObstacle.Acquire();
 	auto animator = owner.lock()->GetAnimator();
 	auto impaleAnim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill2);
 
