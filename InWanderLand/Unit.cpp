@@ -182,6 +182,8 @@ template<>
 void Unit::OnStateEngage<UnitBehaviourTree::Attack>()
 {
     onStateEngage[UnitBehaviourTree::Attack]();
+    PlayAnimation(UnitAnimType::Idle);
+    defaultAnimationType = UnitAnimType::Idle;
     enableNavObstacleByState = referenceEnableNavObstacle.Acquire();
     disableNavAgentByState = referenceDisableNavAgent.Acquire();
 }
@@ -189,6 +191,7 @@ template<>
 void Unit::OnStateExit<UnitBehaviourTree::Attack>()
 {
     DeleteCoroutine(coroutineAttack);
+    animatorComponent.lock()->GetGI().SetPlaySpeed(1);
     onStateExit[UnitBehaviourTree::Attack]();
     enableNavObstacleByState.reset();
     disableNavAgentByState.reset();
@@ -1291,9 +1294,23 @@ yunutyEngine::coroutine::Coroutine Unit::AttackCoroutine(std::weak_ptr<Unit> opp
 {
     auto blockAttack = referenceBlockAttack.Acquire();
     defaultAnimationType = UnitAnimType::Idle;
+    // 공격 애니메이션이 자연스럽게 맞물리기까지 필요한 최소시간
+    float animMinimumTime = unitTemplateData->pod.m_attackPreDelay + unitTemplateData->pod.m_attackPostDelay;
+    // 현재 공격주기
+    float finalAttackCooltime = unitTemplateData->pod.m_atkCooltime / (1 + adderAttackSpeed);
+    float attackDelayMultiplier = 1;
+    // 공격 애니메이션 재생시간이 공격주기보다 더 길다면, 애니메이션 재생속도를 더 빠르게 해줘야 한다.
+    if (animMinimumTime > finalAttackCooltime)
+    {
+        attackDelayMultiplier = finalAttackCooltime / animMinimumTime;
+        animatorComponent.lock()->GetGI().SetPlaySpeed(animMinimumTime / finalAttackCooltime);
+    }
     PlayAnimation(UnitAnimType::Attack, false);
-    co_yield coroutine::WaitForSeconds(unitTemplateData->pod.m_attackPreDelay);
+    float playSpeed = animatorComponent.lock()->GetGI().GetPlaySpeed();
+
+    co_yield coroutine::WaitForSeconds(unitTemplateData->pod.m_attackPreDelay * attackDelayMultiplier);
     onAttack(opponent);
+    playSpeed = animatorComponent.lock()->GetGI().GetPlaySpeed();
     switch (unitTemplateData->pod.attackType.enumValue)
     {
     case UnitAttackType::MELEE:
@@ -1304,10 +1321,12 @@ yunutyEngine::coroutine::Coroutine Unit::AttackCoroutine(std::weak_ptr<Unit> opp
         projectile.lock()->GetTransform()->SetLocalScale(Vector3d::one * unitTemplateData->pod.projectile_scale);
         break;
     }
+    StartCoroutine(referenceBlockAttack.AcquireForSecondsCoroutine(finalAttackCooltime - unitTemplateData->pod.m_attackPreDelay * attackDelayMultiplier));
     auto blockCommand = referenceBlockPendingOrder.Acquire();
-    co_yield coroutine::WaitForSeconds(unitTemplateData->pod.m_attackPostDelay);
+    co_yield coroutine::WaitForSeconds(unitTemplateData->pod.m_attackPostDelay * attackDelayMultiplier);
+    playSpeed = animatorComponent.lock()->GetGI().GetPlaySpeed();
     blockCommand.reset();
-    StartCoroutine(referenceBlockAttack.AcquireForSecondsCoroutine(unitTemplateData->pod.m_atkCooltime / (1 + adderAttackSpeed) - unitTemplateData->pod.m_attackPostDelay - unitTemplateData->pod.m_attackPreDelay));
+    animatorComponent.lock()->GetGI().SetPlaySpeed(1);
     co_return;
 }
 float Unit::DistanceTo(const Vector3d& target)

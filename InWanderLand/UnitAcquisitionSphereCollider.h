@@ -19,14 +19,17 @@ public:
     bool includeInvulnerableUnits = false;
     virtual void OnEnable() override { physics::SphereCollider::OnEnable(); };
 protected:
-    virtual void OnUnitEnter(Unit* unit) {};
-    virtual void OnUnitExit(Unit* unit) {};
-    virtual void OnEnemyEnter(Unit* enemy) {};
-    virtual void OnEnemyExit(Unit* enemy) {};
-    virtual void OnFriendEnter(Unit* friendUnit) {};
-    virtual void OnFriendExit(Unit* friendUnit) {};
+    //virtual void OnUnitEnter(Unit* unit) {};
+    //virtual void OnUnitExit(Unit* unit) {};
+    //virtual void OnEnemyEnter(Unit* enemy) {};
+    //virtual void OnEnemyExit(Unit* enemy) {};
+    //virtual void OnFriendEnter(Unit* friendUnit) {};
+    //virtual void OnFriendExit(Unit* friendUnit) {};
     virtual void Update() override;
     int GetTeamIndex();
+
+    // 유닛이면 일단 집어넣는 리스트
+    std::unordered_set<Unit*> unitsWhatSoEver;
 
     std::unordered_set<Unit*> units;
     std::unordered_set<Unit*> enemies;
@@ -34,6 +37,7 @@ protected:
 
     GameObject* debugMesh = nullptr;
 private:
+    bool ShouldContain(Unit* unit);
     virtual void OnTriggerEnter(physics::Collider* other) override;
     virtual void OnTriggerExit(physics::Collider* other) override;
 };
