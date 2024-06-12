@@ -17,7 +17,7 @@ void UnitBuffUrsula::OnStart()
 void UnitBuffUrsula::OnOverlap(UnitBuff&& overlapping)
 {
     UnitBuff::OnOverlap(std::move(overlapping));
-    if (auto sameUrsulaBuff = dynamic_cast<UnitBuffBleeding*>(&overlapping); sameUrsulaBuff)
+    if (auto sameUrsulaBuff = dynamic_cast<UnitBuffUrsula*>(&overlapping); sameUrsulaBuff)
     {
         *attackSpeedAdder = std::fmin(PassiveUrsula::pod.attackSpeedBonusPerStack * PassiveUrsula::pod.maxStack, *attackSpeedAdder + PassiveUrsula::pod.attackSpeedBonusPerStack);
         *attackDamageAdder = std::fmin(PassiveUrsula::pod.attackDamageBonusPerStack * PassiveUrsula::pod.maxStack, *attackDamageAdder + PassiveUrsula::pod.attackDamageBonusPerStack);

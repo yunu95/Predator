@@ -4,8 +4,16 @@
 
 void Projectile::Update()
 {
+    UnitAcquisitionSphereCollider::Update();
     if (traveling)
     {
+        if (!enemies.empty())
+        {
+            (*enemies.begin())->Damaged(owner, damage, DamageType::Attack);
+            ProjectilePool::SingleInstance().Return(GetWeakPtr<Projectile>());
+            return;
+        }
+
         GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition() + speed * Time::GetDeltaTime());
         SetSpeed(speed + Vector3d::down * GlobalConstant::GetSingletonInstance().pod.gravitySpeed * Time::GetDeltaTime());
         if (GetTransform()->GetWorldPosition().y < 0)
@@ -13,13 +21,6 @@ void Projectile::Update()
             ProjectilePool::SingleInstance().Return(GetWeakPtr<Projectile>());
         }
     }
-}
-void Projectile::OnEnemyEnter(Unit* unit)
-{
-    if (!traveling)
-        return;
-    unit->Damaged(owner, damage, DamageType::Attack);
-    ProjectilePool::SingleInstance().Return(GetWeakPtr<Projectile>());
 }
 void Projectile::SetSpeed(Vector3d speed)
 {

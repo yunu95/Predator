@@ -7,127 +7,130 @@
 
 #include <set>
 
-class NailAnimator 
+class NailAnimator
 {
 public:
-	void PushAnimation(yunuGI::IAnimation* animation)
-	{
-		this->animationSet.insert(animation);
-	};
+    void PushAnimation(yunuGI::IAnimation* animation)
+    {
+        this->animationSet.insert(animation);
+    };
 
-	void Play(yunuGI::IAnimation* animation) 
-	{
-		this->currentAnimation = animation;
-		this->transitionDesc.curr.animIndex = ((Animation*)animation)->GetAnimationIndex();
-		this->transitionDesc.curr.currFrame = 0;
-		this->transitionDesc.curr.nextFrame = 0;
-		this->transitionDesc.curr.ratio = 0;
-		this->transitionDesc.curr.sumTime = 0;
-	};
+    void Play(yunuGI::IAnimation* animation)
+    {
+        this->currentAnimation = animation;
+        this->transitionDesc.curr.animIndex = ((Animation*)animation)->GetAnimationIndex();
+        this->transitionDesc.curr.currFrame = 0;
+        this->transitionDesc.curr.nextFrame = 0;
+        this->transitionDesc.curr.ratio = 0;
+        this->transitionDesc.curr.sumTime = 0;
+    };
 
-	void SetAnimationFrame(yunuGI::IAnimation* animation, unsigned int frame)
-	{
-		this->currentAnimation = animation;
-		this->transitionDesc.curr.animIndex = ((Animation*)animation)->GetAnimationIndex();
-		this->transitionDesc.curr.currFrame = frame;
-	}
+    void SetAnimationFrame(yunuGI::IAnimation* animation, unsigned int frame)
+    {
+        this->currentAnimation = animation;
+        this->transitionDesc.curr.animIndex = ((Animation*)animation)->GetAnimationIndex();
+        this->transitionDesc.curr.currFrame = frame;
+    }
 
-	void SetPlaySpeed(float playSpeed)
-	{
-		this->transitionDesc.curr.speed = playSpeed;
-	};
+    void SetPlaySpeed(float playSpeed)
+    {
+        animatorSpeed = playSpeed;
+        //this->transitionDesc.curr.speed = playSpeed;
+    };
 
-	float GetPlaySpeed()
-	{
-		return this->transitionDesc.curr.speed;
-	}
+    float GetPlaySpeed()
+    {
+        return animatorSpeed;
+        //return this->transitionDesc.curr.speed;
+    }
 
-	void SetMesh(yunuGI::IMesh* mesh) {};
+    void SetMesh(yunuGI::IMesh* mesh) {};
 
-	void SetModel(const std::wstring& modelName) 
-	{
-		this->modelName = modelName;
-	};
+    void SetModel(const std::wstring& modelName)
+    {
+        this->modelName = modelName;
+    };
 
-	const std::wstring& GetModel() { return this->modelName; }
+    const std::wstring& GetModel() { return this->modelName; }
 
-	void SetID(unsigned int id)
-	{
-		this->id = id;
-	}
+    void SetID(unsigned int id)
+    {
+        this->id = id;
+    }
 
-	unsigned int GetID()
-	{
-		return this->id;
-	}
+    unsigned int GetID()
+    {
+        return this->id;
+    }
 
-	void SetCurrentFrame(int frame)
-	{
-		this->transitionDesc.curr.currFrame = frame;
-	};
+    void SetCurrentFrame(int frame)
+    {
+        this->transitionDesc.curr.currFrame = frame;
+    };
 
-	void SetFrameRatio(float ratio)
-	{
-		this->transitionDesc.curr.ratio = ratio;
-	};
+    void SetFrameRatio(float ratio)
+    {
+        this->transitionDesc.curr.ratio = ratio;
+    };
 
-	yunuGI::IAnimation* GetCurrentAnimation() 
-	{
-		return this->currentAnimation;
-	};
+    yunuGI::IAnimation* GetCurrentAnimation()
+    {
+        return this->currentAnimation;
+    };
 
-	int GetCurrentFrame()
-	{
-		return this->transitionDesc.curr.currFrame;
-	}
+    int GetCurrentFrame()
+    {
+        return this->transitionDesc.curr.currFrame;
+    }
 
-	float GetFrameRatio()
-	{
-		return this->transitionDesc.curr.ratio;
-	}
+    float GetFrameRatio()
+    {
+        return this->transitionDesc.curr.ratio;
+    }
 
-	TransitionDesc& GetTransitionDesc()
-	{
-		return this->transitionDesc; 
-	}
-	void SetTransitionDesc(TransitionDesc& transitionDesc) { this->transitionDesc = transitionDesc;	}
+    TransitionDesc& GetTransitionDesc()
+    {
+        return this->transitionDesc;
+    }
+    void SetTransitionDesc(TransitionDesc& transitionDesc) { this->transitionDesc = transitionDesc; }
 
-	void ChangeAnimation(yunuGI::IAnimation* animation, float transitionDuration, float transitionSpeed)
-	{
-		if (currentAnimation == animation) return;
-		
-		nextAnimation = animation;
-		transitionDesc.next.animIndex = ((Animation*)(animation))->GetAnimationIndex();
-		//transitionDesc.next.speed = transitionSpeed;
-		transitionDesc.transitionDuration = transitionDuration;
-		transitionDesc.transitionSpeed = transitionSpeed;
-	};
+    void ChangeAnimation(yunuGI::IAnimation* animation, float transitionDuration, float transitionSpeed)
+    {
+        if (currentAnimation == animation) return;
 
-	void SetCurrentAnimation(yunuGI::IAnimation* animation) 
-	{
-		currentAnimation = animation;
-	};
+        nextAnimation = animation;
+        transitionDesc.next.animIndex = ((Animation*)(animation))->GetAnimationIndex();
+        //transitionDesc.next.speed = transitionSpeed;
+        transitionDesc.transitionDuration = transitionDuration;
+        transitionDesc.transitionSpeed = transitionSpeed;
+    };
 
-	void SetNextAnimation(yunuGI::IAnimation* animation)
-	{
-		nextAnimation = animation;
-	};
+    void SetCurrentAnimation(yunuGI::IAnimation* animation)
+    {
+        currentAnimation = animation;
+    };
 
-	yunuGI::IAnimation* GetNextAnimation() 
-	{
-		return nextAnimation;
-	};
+    void SetNextAnimation(yunuGI::IAnimation* animation)
+    {
+        nextAnimation = animation;
+    };
+
+    yunuGI::IAnimation* GetNextAnimation()
+    {
+        return nextAnimation;
+    };
 
 private:
-	TransitionDesc transitionDesc;
+    float animatorSpeed{ 1.0f };
+    TransitionDesc transitionDesc;
 
-	yunuGI::IAnimation* currentAnimation;
-	yunuGI::IAnimation* nextAnimation;
-	std::set<yunuGI::IAnimation*> animationSet;
+    yunuGI::IAnimation* currentAnimation;
+    yunuGI::IAnimation* nextAnimation;
+    std::set<yunuGI::IAnimation*> animationSet;
 
-	std::wstring modelName;
+    std::wstring modelName;
 
-	unsigned __int64 id;
+    unsigned __int64 id;
 
 };
 
