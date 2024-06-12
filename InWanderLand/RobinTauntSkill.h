@@ -5,7 +5,7 @@ struct POD_RobinTauntSkill
 {
     float	coolTime = 2.0f;
     float	skillCost = 10.0f;
-    float   skillScale = 1.0f;
+    float   skillRadius = 1.0f;
     float	skillDamage = 5.0f;
     float	skillPlayTime = 2.0f;
     float	skillTauntTime = 3.0f;
@@ -26,7 +26,7 @@ private:
 public:
     RobinTauntSkill() {}
     virtual SkillType::Enum GetSkillType() { return SkillType::Enum::ROBIN_W; }
-    virtual float GetCastRange() override { return pod.skillScale * colliderEffectRatio; }
+    virtual float GetCastRange() override { return pod.skillRadius * colliderEffectRatio; }
     virtual coroutine::Coroutine operator()()override;
     virtual void OnInterruption()override;
 

@@ -98,11 +98,13 @@ public:
 	{
 		if (Input::isKeyPushed(yunutyEngine::KeyCode::V))
 		{
-			obj->SetSelfActive(false);
+			anim->GetGI().SetPlaySpeed(10000);
+			//obj->SetSelfActive(false);
 		}
 		if (Input::isKeyPushed(yunutyEngine::KeyCode::C))
 		{
-			obj->SetSelfActive(true);
+			anim->GetGI().SetPlaySpeed(1);
+			//obj->SetSelfActive(true);
 		}
 		if (Input::isKeyPushed(yunutyEngine::KeyCode::T))
 		{
@@ -138,12 +140,12 @@ void GraphicsTest()
 	yunuGI::IAnimation* animation3 = nullptr;
 
 	for (auto& i : animationList)
-	{
-		if (i->GetName() == L"Ani_Frame1_Appear")
+	{/*
+		if (i->GetName() == L"Armature.001|BMA_00003")
 		{
 			i->SetLoop(true);
 			animation = i;
-		}
+		}*/
 
 		if (i->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Walk")
 		{
@@ -159,12 +161,14 @@ void GraphicsTest()
 		}
 	}
 	{
-		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("VFX_Ursula_Skill1_2");
-		auto anim = obj2->AddComponent<VFXAnimator>();
-		anim->Init();
-
-		auto obj1 = Scene::getCurrentScene()->AddGameObject();
-		obj1->AddComponent<TestComponent4>()->obj = obj2;
+		//auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("mon_wasp_body");
+		//obj2->GetTransform()->SetLocalScale(Vector3d{ 0.001,0.001,0.001 });
+		//auto anim = obj2->GetComponent<yunutyEngine::graphics::Animator>();
+		//anim->PushAnimation(animation);
+		//anim->Play(animation);
+		
+		//auto obj1 = Scene::getCurrentScene()->AddGameObject();
+		//obj1->AddComponent<TestComponent4>()->anim = anim;
 	}
 	//yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
 	yunutyEngine::graphics::Renderer::SingleInstance().SetUseIBL(true);

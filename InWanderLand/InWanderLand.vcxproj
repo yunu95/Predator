@@ -1049,6 +1049,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="DelegateCallback.h" />
     <ClInclude Include="EnemyController.h" />
     <ClInclude Include="EnemyImpaleSkill.h" />
+    <ClInclude Include="EnemySpinAttackSkill.h" />
     <ClInclude Include="EnqueErrorType.h" />
     <ClInclude Include="Factor.h" />
     <ClInclude Include="HanselChargeSkill.h" />
@@ -2236,6 +2237,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="Camera_TemplateData.cpp" />
     <ClCompile Include="CameraData.cpp" />
     <ClCompile Include="EnemyController.cpp" />
+    <ClCompile Include="EnemySpinAttackSkill.cpp" />
     <ClCompile Include="HanselChargeSkill.cpp" />
     <ClCompile Include="HanselProjectileSkill.cpp" />
     <ClCompile Include="EnemyImpaleSkill.cpp" />

@@ -826,6 +826,9 @@
     <Filter Include="Contents_Refactored\WanderYieldInstrcution">
       <UniqueIdentifier>{0cd58224-0474-47e2-bcc0-e4746ac7f062}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents_Refactored\Skill\EnemySpinAttackSkill">
+      <UniqueIdentifier>{72389f56-33e5-48b8-a182-5e66d434fe6a}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Contents_Refactored\ContentsCoroutine">
       <UniqueIdentifier>{4b1ee376-13c3-478c-bec5-3a359bccf054}</UniqueIdentifier>
     </Filter>
@@ -2017,6 +2020,9 @@
     <ClInclude Include="WanderYieldInstrcution.h">
       <Filter>Contents_Refactored\WanderYieldInstrcution</Filter>
     </ClInclude>
+    <ClInclude Include="EnemySpinAttackSkill.h">
+      <Filter>Contents_Refactored\Skill\EnemySpinAttackSkill</Filter>
+    </ClInclude>
     <ClInclude Include="ContentsCoroutine.h">
       <Filter>Contents_Refactored\ContentsCoroutine</Filter>
     </ClInclude>
@@ -3018,6 +3024,9 @@
     </ClCompile>
     <ClCompile Include="WanderYieldInstrcution.cpp">
       <Filter>Contents_Refactored\WanderYieldInstrcution</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemySpinAttackSkill.cpp">
+      <Filter>Contents_Refactored\Skill\EnemySpinAttackSkill</Filter>
     </ClCompile>
     <ClCompile Include="ContentsCoroutine.cpp">
       <Filter>Contents_Refactored\ContentsCoroutine</Filter>

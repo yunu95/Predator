@@ -6,25 +6,25 @@
 
 
 POD_UrsulaParalysisSkill UrsulaParalysisSkill::pod = POD_UrsulaParalysisSkill();
-float UrsulaParalysisSkill::colliderEffectRatio = 3.0f;
+float UrsulaParalysisSkill::colliderEffectRatio = 3.0f * 0.5f;
 
 coroutine::Coroutine UrsulaParalysisSkill::SpawningFieldEffect(std::weak_ptr<UrsulaParalysisSkill> skill)
 {
 	auto animator = owner.lock()->GetAnimator();
 
-	float actualCollideRange = UrsulaBlindSkill::pod.skillScale * colliderEffectRatio;
+	float actualCollideRange = pod.skillRadius * (1 / colliderEffectRatio);
 
 	damageCollider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
-	damageCollider.lock()->SetRadius(actualCollideRange);
+	damageCollider.lock()->SetRadius(pod.skillRadius);
 	damageCollider.lock()->GetTransform()->SetWorldPosition(targetPos);
 	knockBackCollider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
-	knockBackCollider.lock()->SetRadius(actualCollideRange);
+	knockBackCollider.lock()->SetRadius(pod.skillRadius);
 	knockBackCollider.lock()->GetTransform()->SetWorldPosition(targetPos);
 
 	tentacleObject = FBXPool::SingleInstance().Borrow("SVFX_Ursula_Skill2_Tentacle");
 	waveObject = FBXPool::SingleInstance().Borrow("SVFX_Ursula_Skill2_Wave");
-	tentacleObject.lock()->GetTransform()->SetWorldScale({ pod.skillScale, pod.skillScale, pod.skillScale });
-	waveObject.lock()->GetTransform()->SetWorldScale({ pod.skillScale, pod.skillScale, pod.skillScale });
+	tentacleObject.lock()->GetTransform()->SetWorldScale({ actualCollideRange, actualCollideRange, actualCollideRange });
+	waveObject.lock()->GetTransform()->SetWorldScale({ actualCollideRange, actualCollideRange, actualCollideRange });
 
 	auto tentacleAnimator = tentacleObject.lock()->GetGameObject()->GetChildren()[0]->GetComponent<yunutyEngine::graphics::Animator>();
 	auto waveAnimator = waveObject.lock()->GetGameObject()->GetChildren()[0]->GetComponent<yunutyEngine::graphics::Animator>();
@@ -140,8 +140,8 @@ coroutine::Coroutine UrsulaParalysisSkill::operator()()
 
 void UrsulaParalysisSkill::OnInterruption()
 {
-	if (!effectColliderCoroutine.expired())
-	{
-		owner.lock()->DeleteCoroutine(effectColliderCoroutine);
-	}
+	//if (!effectColliderCoroutine.expired())
+	//{
+	//	owner.lock()->DeleteCoroutine(effectColliderCoroutine);
+	//}
 }

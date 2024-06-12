@@ -6,10 +6,11 @@ POD_HanselChargeSkill HanselChargeSkill::pod = POD_HanselChargeSkill();
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-const float jumpTimingFrame = 35.0f;
 const float stompTimingFrame = 91.0f;
 const float endFrame = 145.0f;
 const float	duration = 0.7f;
+const float damageDelay = 1.5f;
+const float jumpTiming = 1.05f;
 
 float HanselChargeSkill::GetCastRange()
 {
@@ -18,12 +19,40 @@ float HanselChargeSkill::GetCastRange()
 
 coroutine::Coroutine HanselChargeSkill::operator()()
 {
-    auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
     auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
+
+    Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
+    Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
+    Vector3d direction = deltaPos.Normalized();
+    Vector3d endPos = startPos + deltaPos;
+    Vector3d currentPos = startPos;
+
+    owner.lock()->PlayAnimation(UnitAnimType::Skill1, false);
+    effectColliderCoroutine = owner.lock()->StartCoroutine(SpawningFieldEffect(dynamic_pointer_cast<HanselChargeSkill>(selfWeakPtr.lock())));
+    effectColliderCoroutine.lock()->PushDestroyCallBack([this]()
+        {
+            UnitAcquisitionSphereColliderPool::SingleInstance().Return(stompCollider);
+        });
+
+    co_return;
+}
+
+void HanselChargeSkill::OnInterruption()
+{
+    if (!effectColliderCoroutine.expired())
+    {
+        owner.lock()->DeleteCoroutine(effectColliderCoroutine);
+    }
+}
+
+coroutine::Coroutine HanselChargeSkill::SpawningFieldEffect(std::weak_ptr<HanselChargeSkill> skill)
+{
+    auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
     auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
 
     stompCollider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(owner.lock());
-    stompCollider.lock()->SetRadius(pod.stompRadius);
+    stompCollider.lock()->SetRadius(pod.skillRadius);
+    stompCollider.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
 
     Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
     Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
@@ -32,8 +61,8 @@ coroutine::Coroutine HanselChargeSkill::operator()()
     Vector3d endPos = startPos + deltaPos;
     Vector3d currentPos = startPos;
 
-    owner.lock()->PlayAnimation(UnitAnimType::Skill1, false);
     auto animator = owner.lock()->GetAnimator();
+    auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill1);
 
     float rushSpeed = static_cast<float>(deltaPos.Magnitude()) / duration;
     coroutine::ForSeconds forSeconds{ duration };
@@ -46,13 +75,9 @@ coroutine::Coroutine HanselChargeSkill::operator()()
 
     float vy0 = 4 * pod.maxJumpHeight / duration;
     float acc = (8 * pod.maxJumpHeight) / (duration * duration);
-    while (jumpTimingFrame >= animator.lock()->GetCurrentFrame())
-    {
-        co_await std::suspend_always{};
-    }
 
-    bool isAnimationOncePaused = false;
-    bool isAnimationOnceResumed = false;
+    co_yield coroutine::WaitForSeconds(jumpTiming);
+
     float yPos = 0.0f;
     while (forSeconds.Tick())
     {
@@ -72,31 +97,26 @@ coroutine::Coroutine HanselChargeSkill::operator()()
     {
         each->Damaged(owner, pod.damage);
     }
-    
-    while (stompTimingFrame >= animator.lock()->GetCurrentFrame())
+
+    /*while (stompTimingFrame >= animator.lock()->GetCurrentFrame())
     {
         co_await std::suspend_always{};
-    }
+    }*/
+
+    co_yield coroutine::WaitForSeconds(damageDelay);
 
     for (auto each : stompCollider.lock()->GetEnemies())
     {
         each->Damaged(owner, pod.damage);
     }
 
-	co_yield coroutine::WaitForSeconds(1.2);
-	owner.lock()->PlayAnimation(UnitAnimType::Idle, true);
-	co_yield coroutine::WaitForSeconds(0.2);
+    co_yield coroutine::WaitForSeconds(1.2);
+    owner.lock()->PlayAnimation(UnitAnimType::Idle, true);
+    co_yield coroutine::WaitForSeconds(0.2);
 
     disableNavAgent.reset();
     blockFollowingNavigation.reset();
     owner.lock()->Relocate(currentPos);
 
-    OnInterruption();
     co_return;
-}
-
-void HanselChargeSkill::OnInterruption()
-{
-    stompCollider.lock()->SetRadius(0.5);
-    UnitAcquisitionSphereColliderPool::SingleInstance().Return(stompCollider);
 }

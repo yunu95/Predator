@@ -5,7 +5,7 @@ struct POD_HanselProjectileSkill
 {
     float throwingStartDelay = 1.5f;
     float projectileSpeed = 10.0f;
-    float pieScale = 1.0f;
+    float skillRadius = 1.0f;
     float maxRange = 10.0f;
     float coolTime = 2.0f;
     float skillCost = 10.0f;

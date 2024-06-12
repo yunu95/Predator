@@ -94,9 +94,10 @@ coroutine::Coroutine BossImpaleSkill::operator()()
 				FBXPool::SingleInstance().Return(spearFbxVector[managingIndex]);
 				managingIndex++;
 			});
+		coroutineVector.push_back(spearAriseCoroutine.lock());
 	}
 	
-	co_yield coroutine::WaitForSeconds{ impaleAnim->GetDuration() - impaleStartTime };
+	co_yield coroutine::WaitForSeconds{ 2.0f };
 
 	owner.lock()->PlayAnimation(UnitAnimType::Idle);
 	co_return;
@@ -110,6 +111,7 @@ void BossImpaleSkill::OnInterruption()
 // 창이 한번 불쑥 튀어나왔다가 다시 꺼지는 사이클
 coroutine::Coroutine BossImpaleSkill::SpearArise(std::weak_ptr<BossImpaleSkill> skill, std::weak_ptr<ManagedFBX> fbx, std::weak_ptr<UnitAcquisitionSphereCollider> collider, Vector2d pos)
 {
+	skill.lock();
 	fbx = FBXPool::SingleInstance().Borrow(wanderResources::GetFBXName(wanderResources::WanderFBX::IMPALING_SPIKE));
 	spearFbxVector.push_back(fbx);
 	collider = UnitAcquisitionSphereColliderPool::SingleInstance().Borrow(skill.lock()->owner);
@@ -123,6 +125,7 @@ coroutine::Coroutine BossImpaleSkill::SpearArise(std::weak_ptr<BossImpaleSkill> 
 	co_await std::suspend_always{};
 	if (!skill.expired())
 	{
+		skill.lock();
 		for (auto& each : collider.lock()->GetEnemies())
 		{
 			if (skill.lock()->damagedUnits.contains(each))
@@ -139,6 +142,7 @@ coroutine::Coroutine BossImpaleSkill::SpearArise(std::weak_ptr<BossImpaleSkill> 
 	coroutine::ForSeconds forSeconds{ pod.impaleSkillDurationPerSpear };
 	while (forSeconds.Tick())
 	{
+		skill.lock();
 		float heightAlpha = std::sinf(forSeconds.ElapsedNormalized() * math::PI);
 		float yDelta = math::LerpF(pod.impaleSkillMinHeightPerSpear, pod.impaleSkillMaxHeightPerSpear, heightAlpha);
 		fbx.lock()->GetTransform()->SetWorldPosition(worldPos + Vector3d::up * yDelta);
@@ -150,6 +154,7 @@ coroutine::Coroutine BossImpaleSkill::SpearArise(std::weak_ptr<BossImpaleSkill> 
 
 coroutine::Coroutine BossImpaleSkill::SpawningSkillffect(std::weak_ptr<BossImpaleSkill> skill)
 {
+	skill.lock();
 	Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
 	Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
 	Vector3d direction = deltaPos.Normalized();
