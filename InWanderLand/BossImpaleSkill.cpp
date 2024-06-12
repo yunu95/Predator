@@ -96,7 +96,7 @@ coroutine::Coroutine BossImpaleSkill::operator()()
 			});
 	}
 	
-	co_yield coroutine::WaitForSeconds{ impaleAnim->GetDuration() - impaleStartTime };
+	co_yield coroutine::WaitForSeconds{ 2.0f };
 
 	owner.lock()->PlayAnimation(UnitAnimType::Idle);
 	co_return;

@@ -140,8 +140,8 @@ coroutine::Coroutine UrsulaParalysisSkill::operator()()
 
 void UrsulaParalysisSkill::OnInterruption()
 {
-	if (!effectColliderCoroutine.expired())
-	{
-		owner.lock()->DeleteCoroutine(effectColliderCoroutine);
-	}
+	//if (!effectColliderCoroutine.expired())
+	//{
+	//	owner.lock()->DeleteCoroutine(effectColliderCoroutine);
+	//}
 }
