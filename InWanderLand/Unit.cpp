@@ -788,6 +788,7 @@ void Unit::Init(const application::editor::Unit_TemplateData* unitTemplateData)
 void Unit::Summon(const application::editor::UnitData* unitData)
 {
     this->unitData = unitData;
+    unitData->inGameUnit = GetWeakPtr<Unit>();
     Reset();
     onAttack = unitData->onAttack;
     onAttackHit = unitData->onAttackHit;

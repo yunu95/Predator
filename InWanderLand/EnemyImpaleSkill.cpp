@@ -115,5 +115,5 @@ coroutine::Coroutine EnemyImpaleSkill::operator()()
 
 void EnemyImpaleSkill::OnInterruption()
 {
-    UnitAcquisitionSphereColliderPool::SingleInstance().Return(knockbackCollider);
+    //UnitAcquisitionSphereColliderPool::SingleInstance().Return(knockbackCollider);
 }
