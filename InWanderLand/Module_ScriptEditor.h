@@ -356,6 +356,11 @@ namespace application
                         Action_BossAppear::ImGui_DrawDataPopup(static_cast<Action_BossAppear*>(data));
                         break;
                     }
+                    case application::ActionType::EngageBattle:
+                    {
+                        Action_EngageBattle::ImGui_DrawDataPopup(static_cast<Action_EngageBattle*>(data));
+                        break;
+                    }
                     default:
                         break;
                     }

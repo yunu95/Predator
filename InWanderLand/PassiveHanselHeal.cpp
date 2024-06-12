@@ -2,30 +2,32 @@
 #include "InWanderLand.h"
 
 POD_PassiveHanselHeal PassiveHanselHeal::pod;
+std::weak_ptr<ManagedFBX> PassiveHanselHeal::borrowedFBX = std::weak_ptr<ManagedFBX>();
+std::weak_ptr<UnitAcquisitionSphereCollider> PassiveHanselHeal::borrowedCollider = std::weak_ptr<UnitAcquisitionSphereCollider>();
 coroutine::Coroutine PassiveHanselHeal::CookieLingering(Vector3d pos, std::weak_ptr<Unit> owner)
 {
     pos = SingleNavigationField::Instance().GetClosestPointOnField(pos);
-    auto cookieMesh = FBXPool::SingleInstance().Borrow(wanderResources::GetFBXName(wanderResources::WanderFBX::HEALING_COOKIE));
-    auto collider = UnitAcquisitionSphereColliderPool::Instance().Borrow(owner);
-    collider.lock()->SetRadius(pod.cookieRadius);
-    cookieMesh.lock()->GetTransform()->SetWorldPosition(pos);
-    cookieMesh.lock()->GetTransform()->SetLocalScale(pod.cookieScale * Vector3d::one);
+    borrowedFBX = FBXPool::Instance().Borrow(wanderResources::GetFBXName(wanderResources::WanderFBX::HEALING_COOKIE));
+    borrowedCollider = UnitAcquisitionSphereColliderPool::Instance().Borrow(owner);
+    borrowedCollider.lock()->SetRadius(pod.cookieRadius);
+    borrowedFBX.lock()->GetTransform()->SetWorldPosition(pos);
+    borrowedFBX.lock()->GetTransform()->SetLocalScale(pod.cookieScale * Vector3d::one);
     coroutine::ForSeconds forSeconds{ pod.cookieLifetime };
     while (forSeconds.Tick())
     {
-        for (auto unit : collider.lock()->GetFriends())
+        for (auto unit : borrowedCollider.lock()->GetFriends())
         {
             if (unit->GetTeamIndex() == PlayerController::playerTeamIndex && unit->GetUnitCurrentHp() < unit->GetUnitTemplateData().pod.max_Health)
             {
                 unit->Heal(pod.healAmount);
-                FBXPool::SingleInstance().Return(cookieMesh);
+                FBXPool::Instance().Return(borrowedFBX);
                 co_return;
             }
         }
-        cookieMesh.lock()->GetTransform()->SetWorldPosition(pos);
+        borrowedFBX.lock()->GetTransform()->SetWorldPosition(pos);
         co_await std::suspend_always{};
     }
-    FBXPool::SingleInstance().Return(cookieMesh);
+    FBXPool::Instance().Return(borrowedFBX);
     co_return;
 }
 
@@ -42,7 +44,12 @@ void PassiveHanselHeal::IncrementHitCounter()
     hitCounter++;
     if (hitCounter >= pod.hitsRequired)
     {
-        ContentsCoroutine::StartRoutine(CookieLingering(owner.lock()->GetTransform()->GetWorldPosition(), owner));
+        auto coro = ContentsCoroutine::StartRoutine(CookieLingering(owner.lock()->GetTransform()->GetWorldPosition(), owner));
+        coro.lock()->PushDestroyCallBack([]() 
+            {
+                FBXPool::Instance().Return(borrowedFBX);
+                UnitAcquisitionSphereColliderPool::Instance().Return(borrowedCollider);
+            });
         hitCounter = 0;
     };
 }

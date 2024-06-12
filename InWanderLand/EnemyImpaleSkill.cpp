@@ -49,7 +49,7 @@ const std::vector<Spear> SpearsInfo()
 // 창이 한번 불쑥 튀어나왔다가 다시 꺼지는 사이클
 coroutine::Coroutine EnemyImpaleSkill::SpearArise(std::weak_ptr<EnemyImpaleSkill> skill, std::weak_ptr<ManagedFBX> fbx, Vector2d pos)
 {
-    fbx = FBXPool::SingleInstance().Borrow(wanderResources::GetFBXName(wanderResources::WanderFBX::IMPALING_SPIKE));
+    fbx = FBXPool::Instance().Borrow(wanderResources::GetFBXName(wanderResources::WanderFBX::IMPALING_SPIKE));
     std::weak_ptr<UnitAcquisitionSphereCollider> collider = UnitAcquisitionSphereColliderPool::Instance().Borrow(skill.lock()->owner);
     auto forward = owner.lock()->GetTransform()->GetWorldRotation().Forward();
     auto right = owner.lock()->GetTransform()->GetWorldRotation().Right();
@@ -82,7 +82,7 @@ coroutine::Coroutine EnemyImpaleSkill::SpearArise(std::weak_ptr<EnemyImpaleSkill
         co_await std::suspend_always{};
     }
     UnitAcquisitionSphereColliderPool::Instance().Return(collider);
-    FBXPool::SingleInstance().Return(fbx);
+    FBXPool::Instance().Return(fbx);
     co_return;
 }
 coroutine::Coroutine EnemyImpaleSkill::operator()()

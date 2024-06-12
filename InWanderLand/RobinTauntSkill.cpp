@@ -16,7 +16,7 @@ coroutine::Coroutine RobinTauntSkill::SpawningSkillffect(std::weak_ptr<RobinTaun
 	Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
 	Vector3d direction = deltaPos.Normalized();
 
-	tauntEffect = FBXPool::SingleInstance().Borrow("VFX_Robin_Skill2");
+	tauntEffect = FBXPool::Instance().Borrow("VFX_Robin_Skill2");
 	tauntEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos);
 	tauntEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(actualCollideRange, actualCollideRange, actualCollideRange));
 	tauntEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
@@ -76,7 +76,7 @@ coroutine::Coroutine RobinTauntSkill::operator()()
 		{
 			tauntCollider.lock()->SetRadius(0.5);
 			UnitAcquisitionSphereColliderPool::Instance().Return(tauntCollider);
-			FBXPool::SingleInstance().Return(tauntEffect);
+			FBXPool::Instance().Return(tauntEffect);
 		});
 
 	co_yield coroutine::WaitForSeconds(pod.skillPlayTime);

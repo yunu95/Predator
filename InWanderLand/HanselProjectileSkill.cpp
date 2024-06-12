@@ -18,7 +18,7 @@ coroutine::Coroutine HanselProjectileSkill::ThrowingPie(std::weak_ptr<HanselProj
 
     coroutine::ForSeconds forSeconds{ static_cast<float>(deltaPos.Magnitude()) / pod.projectileSpeed };
     pieCollider = UnitAcquisitionSphereColliderPool::Instance().Borrow(owner.lock());
-    pieObject = FBXPool::SingleInstance().Borrow("SM_Pie");
+    pieObject = FBXPool::Instance().Borrow("SM_Pie");
     pieObject.lock()->GetGameObject()->SetSelfActive(false);
 
     std::unordered_set<Unit*> onceCollidedUnits;
@@ -100,7 +100,7 @@ coroutine::Coroutine HanselProjectileSkill::operator()()
     throwingCoroutine.lock()->PushDestroyCallBack([this]()
         {
             UnitAcquisitionSphereColliderPool::Instance().Return(pieCollider);
-            FBXPool::SingleInstance().Return(pieObject);
+            FBXPool::Instance().Return(pieObject);
         });
 
     coroutine::ForSeconds forIdleSeconds{ 1.0f };

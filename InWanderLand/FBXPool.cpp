@@ -11,7 +11,10 @@ std::weak_ptr<ManagedFBX> FBXPool::Borrow(const std::string& fbxName)
         pool->fbxName = fbxName;
         poolsByMeshName[fbxName] = pool;
     }
-    return poolsByMeshName[fbxName]->Borrow();
+
+    auto wptr = poolsByMeshName[fbxName]->Borrow();
+    borrowedList.insert(wptr);
+    return wptr;
 }
 
 void FBXPool::Return(std::weak_ptr<ManagedFBX> fbx)
@@ -20,20 +23,31 @@ void FBXPool::Return(std::weak_ptr<ManagedFBX> fbx)
     {
         return;
     }
+    borrowedList.erase(fbx);
     poolsByFBX.at(fbx.lock().get()).lock()->Return(fbx);
+}
+
+void FBXPool::OnContentsStop()
+{
+    for (auto each : borrowedList)
+    {
+        poolsByFBX.at(each.lock().get()).lock()->Return(each);
+    }
+    borrowedList.clear();
+    GetComponent()->SetActive(false);
 }
 
 void FBXPool::PoolByMesh::ObjectInitializer(std::weak_ptr<ManagedFBX> mesh)
 {
     auto gameObj = Scene::getCurrentScene()->AddGameObjectFromFBX(fbxName);
     gameObj->SetParent(mesh.lock()->GetGameObject());
-    FBXPool::SingleInstance().poolsByFBX[mesh.lock().get()] = FBXPool::SingleInstance().poolsByMeshName.at(fbxName);
+    FBXPool::Instance().poolsByFBX[mesh.lock().get()] = FBXPool::Instance().poolsByMeshName.at(fbxName);
     mesh.lock()->meshObject = gameObj;
 }
 
 void ManagedFBX::OnContentsStop()
 {
-    FBXPool::SingleInstance().Return(GetWeakPtr<ManagedFBX>());
+    FBXPool::Instance().Return(GetWeakPtr<ManagedFBX>());
 }
 
 std::weak_ptr<VFXAnimator> ManagedFBX::AcquireVFXAnimator()

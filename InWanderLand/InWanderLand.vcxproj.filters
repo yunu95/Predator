@@ -841,6 +841,9 @@
     <Filter Include="Contents_Refactored\UnitController\EnemyController\MeleeEliteController">
       <UniqueIdentifier>{6588c25c-1aa1-4eff-9e71-fadf805fa9c2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor\ScriptSystem\2_Action\List\Action_EngageBattle">
+      <UniqueIdentifier>{37226b75-db20-4884-b9f7-88f698af678a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -2038,6 +2041,9 @@
     <ClInclude Include="MeleeEliteController.h">
       <Filter>Contents_Refactored\UnitController\EnemyController\MeleeEliteController</Filter>
     </ClInclude>
+    <ClInclude Include="Action_EngageBattle.h">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_EngageBattle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -3039,6 +3045,9 @@
     </ClCompile>
     <ClCompile Include="MeleeEliteController.cpp">
       <Filter>Contents_Refactored\UnitController\EnemyController\MeleeEliteController</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_EngageBattle.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_EngageBattle</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
