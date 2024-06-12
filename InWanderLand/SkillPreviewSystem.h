@@ -58,7 +58,7 @@ public:
 
 #pragma region RobinWSkill
     // objectPos는 유닛의 현재 월드 포지션, circleRadius는 스킬 범위 입니다.
-    void ShowRobinWSkill(const Vector3d& objectPos, float circleRadius);
+    void ShowRobinWSkill(Vector3d& objectPos, float circleRadius);
     void HideRobinWSkill();
 #pragma endregion
 

@@ -22,6 +22,7 @@ UnitSkillCommand::UnitSkillCommand(Unit* unit, Vector3d expectedPos, SkillType::
 			if (TacticModeSystem::Instance().robinLastCommand)
 			{
 				this->previewStartPos = TacticModeSystem::Instance().robinLastCommand->GetExpectedPos();
+				previewStartPos.y = unit->GetGameObject()->GetTransform()->GetWorldPosition().y;
 			}
 			else
 			{
@@ -35,6 +36,7 @@ UnitSkillCommand::UnitSkillCommand(Unit* unit, Vector3d expectedPos, SkillType::
 			if (TacticModeSystem::Instance().robinLastCommand)
 			{
 				this->previewStartPos = TacticModeSystem::Instance().robinLastCommand->GetExpectedPos();
+				previewStartPos.y = unit->GetGameObject()->GetTransform()->GetWorldPosition().y;
 				this->expectedPos = TacticModeSystem::Instance().robinLastCommand->GetExpectedPos();
 			}
 			else
@@ -50,6 +52,7 @@ UnitSkillCommand::UnitSkillCommand(Unit* unit, Vector3d expectedPos, SkillType::
 			if (TacticModeSystem::Instance().ursulaLastCommand)
 			{
 				this->previewStartPos = TacticModeSystem::Instance().ursulaLastCommand->GetExpectedPos();
+				previewStartPos.y = unit->GetGameObject()->GetTransform()->GetWorldPosition().y;
 				this->expectedPos = TacticModeSystem::Instance().ursulaLastCommand->GetExpectedPos();
 			}
 			else
@@ -83,6 +86,7 @@ UnitSkillCommand::UnitSkillCommand(Unit* unit, Vector3d expectedPos, SkillType::
 			if (TacticModeSystem::Instance().hanselLastCommand)
 			{
 				this->previewStartPos = TacticModeSystem::Instance().hanselLastCommand->GetExpectedPos();
+				previewStartPos.y = unit->GetGameObject()->GetTransform()->GetWorldPosition().y;
 				this->expectedPos = TacticModeSystem::Instance().hanselLastCommand->GetExpectedPos();
 			}
 			else
@@ -102,7 +106,31 @@ UnitSkillCommand::~UnitSkillCommand()
 
 void UnitSkillCommand::Execute()
 {
+	switch (skillType)
+	{
+		case SkillType::ROBIN_Q:
+			unit->OrderSkill(RobinChargeSkill{  }, expectedPos);
+			break;
+		case SkillType::ROBIN_W:
+			unit->OrderSkill(RobinTauntSkill{  }, expectedPos);
+			break;
+		case SkillType::URSULA_Q:
+			unit->OrderSkill(UrsulaBlindSkill{  }, expectedPos);
+			break;
+		case SkillType::URSULA_W:
+			unit->OrderSkill(UrsulaParalysisSkill{  }, expectedPos);
+			break;
+		case SkillType::HANSEL_Q:
+			unit->OrderSkill(HanselChargeSkill{}, expectedPos);
+			break;
+		case SkillType::HANSEL_W:
+			unit->OrderSkill(HanselProjectileSkill{}, expectedPos);
+			break;
+	}
 
+	unit->OnStateExitCallback()[UnitBehaviourTree::SkillOnGoing].AddVolatileCallback([&]() {
+		this->isDone = true; 
+		});
 }
 
 void UnitSkillCommand::ShowPreviewMesh()
@@ -118,7 +146,7 @@ void UnitSkillCommand::ShowPreviewMesh()
 		else if (this->skillType == SkillType::ROBIN_W)
 		{
 			SkillPreviewSystem::Instance().ShowRobinWSkill(this->previewStartPos,
-				RobinTauntSkill::pod.skillScale);
+				RobinTauntSkill::pod.skillRadius);
 		}
 	}
 	else if (unit->GetUnitTemplateData().GetDataResourceName() == "SKM_Ursula")
@@ -133,11 +161,11 @@ void UnitSkillCommand::ShowPreviewMesh()
 			auto pos1 = UrsulaBlindSkill::GetSkillObjectPos_Left(projectedPoint);
 			auto pos2 = UrsulaBlindSkill::GetSkillObjectPos_Right(projectedPoint);
 			auto pos3 = UrsulaBlindSkill::GetSkillObjectPos_Top(projectedPoint);
-			SkillPreviewSystem::Instance().ShowUrsulaQSkill(pos1, pos2, pos3, Vector3d::one * UrsulaBlindSkill::pod.skillScale);
+			SkillPreviewSystem::Instance().ShowUrsulaQSkill(pos1, pos2, pos3, Vector3d::one * UrsulaBlindSkill::pod.skillRadius);
 		}
 		else if (this->skillType == SkillType::URSULA_W)
 		{
-			SkillPreviewSystem::Instance().ShowUrsulaWSkill(projectedPoint, UrsulaParalysisSkill::pod.skillScale);
+			SkillPreviewSystem::Instance().ShowUrsulaWSkill(projectedPoint, UrsulaParalysisSkill::pod.skillRadius);
 		}
 	}
 	else if (unit->GetUnitTemplateData().GetDataResourceName() == "SKM_Hansel")
@@ -148,7 +176,7 @@ void UnitSkillCommand::ShowPreviewMesh()
 
 		if (this->skillType == SkillType::HANSEL_Q)
 		{
-			SkillPreviewSystem::Instance().ShowHanselQSkill(projectedPoint, HanselChargeSkill::pod.stompRadius);
+			SkillPreviewSystem::Instance().ShowHanselQSkill(projectedPoint, HanselChargeSkill::pod.skillRadius);
 		}
 		else if (this->skillType == SkillType::HANSEL_W)
 		{

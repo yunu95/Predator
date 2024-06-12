@@ -291,16 +291,16 @@ void PlayerController::HandleSkillPreview()
 			auto pos1 = UrsulaBlindSkill::GetSkillObjectPos_Left(GetWorldCursorPosition());
 			auto pos2 = UrsulaBlindSkill::GetSkillObjectPos_Right(GetWorldCursorPosition());
 			auto pos3 = UrsulaBlindSkill::GetSkillObjectPos_Top(GetWorldCursorPosition());
-			SkillPreviewSystem::Instance().ShowUrsulaQSkill(pos1, pos2, pos3, Vector3d::one * UrsulaBlindSkill::pod.skillScale * UrsulaBlindSkill::colliderEffectRatio);
+			SkillPreviewSystem::Instance().ShowUrsulaQSkill(pos1, pos2, pos3, Vector3d::one * UrsulaBlindSkill::pod.skillRadius);
 			SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Ursula, characters[PlayerCharacterType::Ursula].lock()->GetTransform()->GetWorldPosition(), UrsulaBlindSkill::pod.skillRange);
 			break;
 		}
 		case SkillType::URSULA_W:
-			SkillPreviewSystem::Instance().ShowUrsulaWSkill(GetWorldCursorPosition(), UrsulaParalysisSkill::pod.skillScale * UrsulaParalysisSkill::colliderEffectRatio);
+			SkillPreviewSystem::Instance().ShowUrsulaWSkill(GetWorldCursorPosition(), UrsulaParalysisSkill::pod.skillRadius);
 			SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Ursula, characters[PlayerCharacterType::Ursula].lock()->GetTransform()->GetWorldPosition(), UrsulaParalysisSkill::pod.skillRange);
 			break;
 		case SkillType::HANSEL_Q:
-			SkillPreviewSystem::Instance().ShowHanselQSkill(GetWorldCursorPosition(), HanselChargeSkill::pod.stompRadius);
+			SkillPreviewSystem::Instance().ShowHanselQSkill(GetWorldCursorPosition(), HanselChargeSkill::pod.skillRadius);
 			SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Hansel, characters[PlayerCharacterType::Hansel].lock()->GetTransform()->GetWorldPosition(), HanselChargeSkill::pod.maxRange);
 			break;
 		case SkillType::HANSEL_W:
@@ -554,7 +554,7 @@ void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
 		EnqueErrorType errorType = EnqueErrorType::NONE;
 		std::vector<Vector3d> path;
 		path = TacticModeSystem::Instance().GetPathInTacticMode(selectedCharacterType);
-		this->ModifyPathForSkill(path,skillType);
+		this->ModifyPathForSkill(path, skillType);
 		if (!path.empty())
 		{
 			// 이동을 해야한다면
@@ -622,10 +622,7 @@ void PlayerController::SelectSkill(SkillType::Enum skillType)
 	{
 		case SkillType::ROBIN_W:
 		{
-			if (state != State::Tactic)
-			{
-				ActivateSkill(SkillType::ROBIN_W, characters[PlayerCharacterType::Robin].lock()->GetTransform()->GetWorldPosition());
-			}
+			ActivateSkill(SkillType::ROBIN_W, characters[PlayerCharacterType::Robin].lock()->GetTransform()->GetWorldPosition());
 		}
 		break;
 		default:
@@ -1004,22 +1001,26 @@ std::vector<yunutyEngine::Vector3d>& PlayerController::ModifyPathForSkill(std::v
 			break;
 	}
 
-	for (auto it = path.rbegin(); it != path.rend(); ++it)
+	if ((skillType != SkillType::ROBIN_W))
 	{
-		if (it != path.rbegin())
+		for (auto it = path.rbegin(); it != path.rend(); ++it)
 		{
-			auto tempVec = lastElement - *it;
-			float distance = tempVec.Magnitude();
-			if (skillRange < distance - 0.001f)
+			if (it != path.rbegin())
 			{
-				isModify = true;
-				// 조건을 만족하는 요소를 찾으면 그 위치의 다음 요소부터 제거
-				path.erase((it.base() + 1), path.end());
-				break;
+				auto tempVec = lastElement - *it;
+				float distance = tempVec.Magnitude();
+				if (skillRange < distance - 0.001f)
+				{
+					isModify = true;
+					// 조건을 만족하는 요소를 찾으면 그 위치의 다음 요소부터 제거
+					path.erase((it.base() + 1), path.end());
+					break;
+				}
 			}
 		}
 	}
-	if ((!isModify )|| (skillType == SkillType::ROBIN_W))
+
+	if ((!isModify) || (skillType == SkillType::ROBIN_W))
 	{
 		path.clear();
 	}
