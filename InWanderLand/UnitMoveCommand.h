@@ -9,7 +9,7 @@ class yunuGI::IMesh;
 class UnitMoveCommand : public UnitCommand
 {
 public:
-	UnitMoveCommand(Unit* unit, Vector3d expectedPos,yunuGI::IMesh* routeMesh);
+	UnitMoveCommand(Unit* unit, Vector3d expectedPos, std::vector<Vector3d> path, bool isForAttack);
 	virtual ~UnitMoveCommand();
 
 public:
@@ -18,7 +18,8 @@ public:
 	virtual void HidePreviewMesh() override;
 
 private:
-	class yunuGI::IMesh* routeMesh;
-
+	yunuGI::IMesh* routeMesh;
+	std::vector<Vector3d> path;
+	bool isForAttack;
 };
 

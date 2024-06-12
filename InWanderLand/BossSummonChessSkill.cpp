@@ -59,6 +59,11 @@ void BossSummonChessSkill::OnInterruption()
 
 }
 
+void BossSummonChessSkill::OnBossDie()
+{
+	BossSummon::ChessPool::Instance().OnBossDie();
+}
+
 coroutine::Coroutine BossSummonChessSkill::SummonChess(std::weak_ptr<BossSummonChessSkill> skill, Vector2i index)
 {
 	auto sptr = skill.lock();

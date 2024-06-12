@@ -2,14 +2,14 @@
 #include "YunutyEngine.h"
 
 #include "UnitCommand.h"
-
+#include "TacticModeSystem.h"
 class Unit;
 class yunuGI::IMesh;
 
 class UnitAttackCommand : public UnitCommand
 {
 public:
-	UnitAttackCommand(Unit* unit, Vector3d expectedPos);
+	UnitAttackCommand(Unit* unit, Vector3d expectedPos, Unit* enemyUnit, bool isAttackAfterMove);
 	virtual ~UnitAttackCommand();
 
 public:
@@ -19,5 +19,7 @@ public:
 
 private:
 	yunutyEngine::graphics::StaticMeshRenderer* renderer;
+	Unit* enemyUnit;
+
 };
 

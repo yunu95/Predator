@@ -300,9 +300,18 @@ void Unit::EraseBuff(UnitBuffType buffType)
 {
     buffs.erase(buffType);
 }
-void Unit::Damaged(std::weak_ptr<Unit> opponentUnit, float opponentDmg)
+void Unit::Damaged(std::weak_ptr<Unit> opponentUnit, float opponentDmg, DamageType damageType)
 {
-    opponentUnit.lock()->onAttackHit();
+    switch (damageType)
+    {
+    case DamageType::Attack:
+        opponentUnit.lock()->onAttackHit(GetWeakPtr<Unit>());
+        break;
+    case DamageType::Skill:
+        break;
+    default:
+        break;
+    }
     Damaged(opponentDmg);
 }
 
@@ -345,6 +354,11 @@ void Unit::SetCurrentHp(float p_newHp)
 float Unit::GetUnitCurrentHp() const
 {
     return currentHitPoint;
+}
+
+float Unit::GetUnitMaxHp() const
+{
+    return unitTemplateData->pod.max_Health;
 }
 
 void Unit::KnockBack(Vector3d targetPosition, float knockBackDuration)
@@ -607,6 +621,7 @@ void Unit::Init(const application::editor::Unit_TemplateData* unitTemplateData)
     const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
     std::wstring fbxNameW = yutility::GetWString(unitTemplateData->pod.skinnedFBXName);
     //fbxNameW.assign(pod.templateData->pod.skinnedFBXName.begin(), pod.templateData->pod.skinnedFBXName.end());
+    AttachDebugMesh(navAgentComponent.lock()->GetGameObject(), DebugMeshType::Sphere)->GetTransform()->SetLocalScale(Vector3d::one * unitTemplateData->pod.collisionSize);
 
     /// Particle Setting
     for (auto& eachPI : ptm.GetChildrenParticleInstanceList(unitTemplateData->pod.skinnedFBXName))
@@ -787,8 +802,8 @@ void Unit::Summon(const application::editor::UnitData* unitData)
     navObstacle.lock()->AssignToNavigationField(&SingleNavigationField::Instance());
 
     Quaternion quat{ unitData->pod.rotation.w,unitData->pod.rotation.x,unitData->pod.rotation.y ,unitData->pod.rotation.z };
-    GetTransform()->SetWorldRotation(quat);
-    desiredRotation = currentRotation = 90 - quat.Euler().y;
+    auto forward = quat.Forward();
+    desiredRotation = currentRotation = 180 + std::atan2f(forward.z, forward.x) * math::Rad2Deg;
     Reset();
     coroutineBirth = StartCoroutine(BirthCoroutine());
 }
@@ -817,6 +832,42 @@ void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& po
 
     GetTransform()->SetWorldRotation(Vector3d{ 0,90 - rotation,0 });
     desiredRotation = currentRotation = rotation;
+    Reset();
+    if (instant)
+    {
+        onCreated();
+    }
+    else
+    {
+        coroutineBirth = StartCoroutine(BirthCoroutine());
+    }
+}
+void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& position, const Quaternion& rotation, bool instant)
+{
+    this->unitData = nullptr;
+    onAttack.Clear();
+    onAttackHit.Clear();
+    onDamaged.Clear();
+    onCreated.Clear();
+    onRotationFinish.Clear();
+    for (auto& each : onStateEngage)
+    {
+        each.Clear();
+    }
+    for (auto& each : onStateExit)
+    {
+        each.Clear();
+    }
+    Summon(td);
+
+    GetTransform()->SetWorldPosition(Vector3d{ position });
+    navAgentComponent.lock()->GetTransform()->SetWorldPosition(Vector3d{ position });
+    navAgentComponent.lock()->AssignToNavigationField(&SingleNavigationField::Instance());
+    navObstacle.lock()->AssignToNavigationField(&SingleNavigationField::Instance());
+
+    auto forward = rotation.Forward();
+    desiredRotation = currentRotation = 180 + std::atan2f(forward.z, forward.x) * math::Rad2Deg;
+
     Reset();
     if (instant)
     {
@@ -896,8 +947,6 @@ void Unit::Summon(application::editor::Unit_TemplateData* templateData)
     }
     case UnitControllerType::HEART_QUEEN:
     {
-        EnemyAggroController::Instance().RegisterUnit(GetWeakPtr<Unit>());
-        controllers.push_back(&EnemyAggroController::Instance());
         BossController::Instance().RegisterUnit(GetWeakPtr<Unit>());
         controllers.push_back(&BossController::Instance());
         break;
@@ -924,6 +973,7 @@ void Unit::Reset()
     DeleteCoroutine(coroutineDeath);
     ClearCoroutines();
     passiveSkill.reset();
+    buffs.clear();
     liveCountLeft = unitTemplateData->pod.liveCount;
     currentTargetUnit.reset();
     currentOrderType = UnitOrderType::AttackMove;
@@ -1116,10 +1166,10 @@ void Unit::InitBehaviorTree()
             currentOrderType = pendingOrderType;
             OnStateEngage<UnitBehaviourTree::Move>();
         };
-	unitBehaviourTree[UnitBehaviourTree::Move].onExit = [this]()
-		{
-			OnStateExit<UnitBehaviourTree::Move>();
-		};
+    unitBehaviourTree[UnitBehaviourTree::Move].onExit = [this]()
+        {
+            OnStateExit<UnitBehaviourTree::Move>();
+        };
     unitBehaviourTree[UnitBehaviourTree::Move].onUpdate = [this]()
         {
             OnStateUpdate<UnitBehaviourTree::Move>();
@@ -1242,11 +1292,11 @@ yunutyEngine::coroutine::Coroutine Unit::AttackCoroutine(std::weak_ptr<Unit> opp
     defaultAnimationType = UnitAnimType::Idle;
     PlayAnimation(UnitAnimType::Attack, false);
     co_yield coroutine::WaitForSeconds(unitTemplateData->pod.m_attackPreDelay);
-    onAttack();
+    onAttack(opponent);
     switch (unitTemplateData->pod.attackType.enumValue)
     {
     case UnitAttackType::MELEE:
-        opponent.lock()->Damaged(GetWeakPtr<Unit>(), unitTemplateData->pod.m_autoAttackDamage + adderAttackDamage);
+        opponent.lock()->Damaged(GetWeakPtr<Unit>(), unitTemplateData->pod.m_autoAttackDamage + adderAttackDamage, DamageType::Attack);
         break;
     case UnitAttackType::MISSILE:
         auto projectile = ProjectilePool::SingleInstance().Borrow(GetWeakPtr<Unit>(), opponent.lock()->GetTransform()->GetWorldPosition());

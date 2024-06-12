@@ -534,6 +534,11 @@ namespace application
                         action = AddAction<Action_OrnamentFloating>();
                         break;
                     }
+                    case application::ActionType::BossAppear:
+                    {
+                        action = AddAction<Action_BossAppear>();
+                        break;
+                    }
                     default:
                         break;
                     }

@@ -18,6 +18,7 @@
 #include "Adder.h"
 #include "Multiplier.h"
 #include "Reference.h"
+#include "DamageType.h"
 
 class PassiveSkill;
 class UIManager;
@@ -57,6 +58,7 @@ public:
     // 유닛 데이터의 정보에 맞게 이 유닛을 소환한다.
     void Summon(const application::editor::UnitData* unitData);
     void Summon(application::editor::Unit_TemplateData* td, const Vector3d& position, float rotation, bool instant = true);
+    void Summon(application::editor::Unit_TemplateData* td, const Vector3d& position, const Quaternion& rotation, bool instant = true);
     // 유닛의 초기화 구문, 유닛의 체력을 정상상태로 만들며, 버프를 모두 제거하고 상태를 Idle로 만든다.
     void Reset();
     const application::editor::Unit_TemplateData& GetUnitTemplateData()const;
@@ -72,7 +74,7 @@ public:
     template<typename Buff>
     void ApplyBuff(Buff&& buff);
     void EraseBuff(UnitBuffType buffType);
-    void Damaged(std::weak_ptr<Unit> opponentUnit, float opponentAp);	// 데미지 입었을 경우 추적하는 로직 포함
+    void Damaged(std::weak_ptr<Unit> opponentUnit, float opponentAp, DamageType damageType = DamageType::Miscellaneous);	// 데미지 입었을 경우 추적하는 로직 포함
     void Damaged(float dmg);                            // 추적받지 않는 데미지
     void Heal(float healingPoint);
     void SetCurrentHp(float p_newHp);
@@ -90,6 +92,7 @@ public:
     coroutine::Coroutine SettingRotation(float facingAngle, float rotatingTime);
     const UnitBehaviourTree& GetBehaviourTree() const { return unitBehaviourTree; };
     float GetUnitCurrentHp() const;
+    float GetUnitMaxHp() const;
     // AcquireFactor는 수치에 곱연산이 적용될 부분이며, AcquireDelta는 수치에 덧셈 연산이 적용될 부분이다.
     factor::Multiplier<float> multiplierDamage;
     factor::Multiplier<float> multiplierDamageReceive;
@@ -112,20 +115,21 @@ public:
     bool IsAlive()const;
     std::string GetFBXName() const;
     // 유닛의 행동 트리 상태가 전환될 때
-    std::array<DelegateCallback<void()>, UnitBehaviourTree::Keywords::KeywordNum>& OnStateEngageCallback() { return onStateEngage; };
-    std::array<DelegateCallback<void()>, UnitBehaviourTree::Keywords::KeywordNum>& OnStateExitCallback() { return onStateExit; };
+    std::array<DelegateCallback<void>, UnitBehaviourTree::Keywords::KeywordNum>& OnStateEngageCallback() { return onStateEngage; };
+    std::array<DelegateCallback<void>, UnitBehaviourTree::Keywords::KeywordNum>& OnStateExitCallback() { return onStateExit; };
     string name;
     bool playingBattleAnim{ true };
-    // 내가 공격할 때
-    DelegateCallback<void()> onAttack;
+    // 내가 공격할 때, 매개변수는 내가 공격하는 상대
+    DelegateCallback<std::weak_ptr<Unit>> onAttack;
     // 내가 때린 공격이 적에게 맞았을 때, 근거리 공격인 경우라면 onAttack과 호출시점이 같겠으나 원거리 공격인 경우에는 시간차가 있을 수 있다. 
-    DelegateCallback<void()> onAttackHit;
-    // 내가 피해를 입었을 때
-    DelegateCallback<void()> onDamaged;
+    // 매개변수는 피해를 받은 상대
+    DelegateCallback<std::weak_ptr<Unit>> onAttackHit;
+    // 내가 피해를 입었을 때, 매개변수는 피해를 준 상대
+    DelegateCallback<void> onDamaged;
     // 유닛이 새로 생성될 때
-    DelegateCallback<void()> onCreated;
+    DelegateCallback<void> onCreated;
     // 유닛이 회전을 끝냈을 때
-    DelegateCallback<void()> onRotationFinish;
+    DelegateCallback<void> onRotationFinish;
     Reference referencePause;
     Reference referenceBlockFollowingNavAgent;
     Reference referenceBlockAnimLoop;
@@ -175,8 +179,8 @@ private:
     int liveCountLeft{ 0 };
     std::vector<UnitController*> controllers;
     UnitBehaviourTree unitBehaviourTree;
-    std::array<DelegateCallback<void()>, UnitBehaviourTree::Keywords::KeywordNum> onStateEngage;
-    std::array<DelegateCallback<void()>, UnitBehaviourTree::Keywords::KeywordNum> onStateExit;
+    std::array<DelegateCallback<void>, UnitBehaviourTree::Keywords::KeywordNum> onStateEngage;
+    std::array<DelegateCallback<void>, UnitBehaviourTree::Keywords::KeywordNum> onStateExit;
     std::shared_ptr<PassiveSkill> passiveSkill;
     std::shared_ptr<Reference::Guard> enableNavObstacleByState;
     std::shared_ptr<Reference::Guard> disableNavAgentByState;

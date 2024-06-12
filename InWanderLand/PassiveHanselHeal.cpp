@@ -1,10 +1,6 @@
 #include "PassiveHanselHeal.h"
 #include "InWanderLand.h"
 
-//coroutine::YieldInstruction ASD()
-//{
-//    co_return;
-//}
 POD_PassiveHanselHeal PassiveHanselHeal::pod;
 coroutine::Coroutine PassiveHanselHeal::CookieLingering(const Vector3d& pos, std::weak_ptr<Unit> owner)
 {
@@ -22,19 +18,20 @@ coroutine::Coroutine PassiveHanselHeal::CookieLingering(const Vector3d& pos, std
             if (unit->GetTeamIndex() == PlayerController::playerTeamIndex && unit->GetUnitCurrentHp() < unit->GetUnitTemplateData().pod.max_Health)
             {
                 unit->Heal(pod.healAmount);
+                FBXPool::SingleInstance().Return(cookieMesh);
                 co_return;
             }
         }
         cookieMesh.lock()->GetTransform()->SetWorldPosition(newPos);
         co_await std::suspend_always{};
     }
-    //co_await CookieLingering(newPos, owner);
+    FBXPool::SingleInstance().Return(cookieMesh);
     co_return;
 }
 
 void PassiveHanselHeal::Init(std::weak_ptr<Unit> owner)
 {
-    owner.lock()->onAttack.AddCallback([this]()
+    owner.lock()->onAttack.AddCallback([this](std::weak_ptr<Unit>)
         {
             IncrementHitCounter();
         });
@@ -45,6 +42,7 @@ void PassiveHanselHeal::IncrementHitCounter()
     hitCounter++;
     if (hitCounter >= pod.hitsRequired)
     {
+        ContentsCoroutine::StartRoutine(CookieLingering(owner.lock()->GetTransform()->GetWorldPosition(), owner));
         hitCounter = 0;
     };
 }

@@ -34,7 +34,7 @@ namespace application
             float playerAggroRatio{ 1.0f };
             // 화면에 뜨는 체력창의 타입
             POD_Enum<UnitStatusBarType::Enum> unitStatusBar;
-            // 플레이어 유닛인지의 여부와 종류를 나타내는 열거형
+            // 
             POD_Enum<UnitControllerType::Enum> unitControllerType;
             // 체력창을 유닛의 위치로부터 얼마나 멀리 띄울 것인가?
             POD_Vector2<float> statusBarOffset;

@@ -811,6 +811,9 @@
     <Filter Include="Contents_Refactored\UnitCommand\UnitSkillCommand">
       <UniqueIdentifier>{b2063c72-2ebb-4fc2-b61e-d77a7b41d9dc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor\ScriptSystem\2_Action\List\Action_Boss">
+      <UniqueIdentifier>{d4859df6-8135-4806-b3e2-3a50c02a0600}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Contents_Refactored\Skill\PassiveSkill\PassiveUrsulaSpeed">
       <UniqueIdentifier>{8d7611b4-6699-4000-bc5c-acd24db7d01b}</UniqueIdentifier>
     </Filter>
@@ -823,11 +826,20 @@
     <Filter Include="Contents_Refactored\Unit\UnitBuff\UnitBuffHansel">
       <UniqueIdentifier>{30b4f5d3-ed9d-4789-800c-27fcf8eb8da2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Contents_Refactored\wanderCoroutines">
+    <Filter Include="Contents_Refactored\WanderYieldInstrcution">
       <UniqueIdentifier>{0cd58224-0474-47e2-bcc0-e4746ac7f062}</UniqueIdentifier>
     </Filter>
     <Filter Include="Contents_Refactored\Skill\EnemySpinAttackSkill">
       <UniqueIdentifier>{72389f56-33e5-48b8-a182-5e66d434fe6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\ContentsCoroutine">
+      <UniqueIdentifier>{4b1ee376-13c3-478c-bec5-3a359bccf054}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Unit\DamageType">
+      <UniqueIdentifier>{66def7ce-f849-43ad-acfa-20dfee4dfbaa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents\TacticModeSystem\EnqueErrorType">
+      <UniqueIdentifier>{c9f9b400-e913-4dc4-b8fa-dbdaa9900578}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1993,6 +2005,9 @@
     <ClInclude Include="UnitSkillCommand.h">
       <Filter>Contents_Refactored\UnitCommand\UnitSkillCommand</Filter>
     </ClInclude>
+    <ClInclude Include="Action_Boss.h">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_Boss</Filter>
+    </ClInclude>
     <ClInclude Include="PassiveRobinBleed.h">
       <Filter>Contents_Refactored\Skill\PassiveSkill\PassiveRobinBleed</Filter>
     </ClInclude>
@@ -2008,11 +2023,20 @@
     <ClInclude Include="PassiveHanselHeal.h">
       <Filter>Contents_Refactored\Skill\PassiveSkill\PassiveHanselHeal</Filter>
     </ClInclude>
-    <ClInclude Include="wanderCoroutines.h">
-      <Filter>Contents_Refactored\wanderCoroutines</Filter>
+    <ClInclude Include="WanderYieldInstrcution.h">
+      <Filter>Contents_Refactored\WanderYieldInstrcution</Filter>
     </ClInclude>
     <ClInclude Include="EnemySpinAttackSkill.h">
       <Filter>Contents_Refactored\Skill\EnemySpinAttackSkill</Filter>
+    </ClInclude>
+    <ClInclude Include="ContentsCoroutine.h">
+      <Filter>Contents_Refactored\ContentsCoroutine</Filter>
+    </ClInclude>
+    <ClInclude Include="DamageType.h">
+      <Filter>Contents_Refactored\Unit\DamageType</Filter>
+    </ClInclude>
+    <ClInclude Include="EnqueErrorType.h">
+      <Filter>Contents\TacticModeSystem\EnqueErrorType</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2989,6 +3013,9 @@
     <ClCompile Include="UnitSkillCommand.cpp">
       <Filter>Contents_Refactored\UnitCommand\UnitSkillCommand</Filter>
     </ClCompile>
+    <ClCompile Include="Action_Boss.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_Boss</Filter>
+    </ClCompile>
     <ClCompile Include="PassiveRobinBleed.cpp">
       <Filter>Contents_Refactored\Skill\PassiveSkill\PassiveRobinBleed</Filter>
     </ClCompile>
@@ -3004,11 +3031,14 @@
     <ClCompile Include="PassiveHanselHeal.cpp">
       <Filter>Contents_Refactored\Skill\PassiveSkill\PassiveHanselHeal</Filter>
     </ClCompile>
-    <ClCompile Include="wanderCoroutines.cpp">
-      <Filter>Contents_Refactored\wanderCoroutines</Filter>
+    <ClCompile Include="WanderYieldInstrcution.cpp">
+      <Filter>Contents_Refactored\WanderYieldInstrcution</Filter>
     </ClCompile>
     <ClCompile Include="EnemySpinAttackSkill.cpp">
       <Filter>Contents_Refactored\Skill\EnemySpinAttackSkill</Filter>
+    </ClCompile>
+    <ClCompile Include="ContentsCoroutine.cpp">
+      <Filter>Contents_Refactored\ContentsCoroutine</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -9,12 +9,16 @@ namespace BossSummon
 
 struct POD_BossSummonMobSkill
 {
+	int leftMeleeCount = 2;
+	int leftProjectileCount = 2;
 	/// LeftFrame 기준 소환 위치의 offset 입니다.
 	/// -x, +z
 	float leftSummonOffset_x = 10.0f;
 	float leftSummonOffset_z = 10.0f;
 	float leftNoiseRadius = 5.0f;
 
+	int rightMeleeCount = 1;
+	int rightProjectileCount = 1;
 	/// RightFrame 기준 소환 위치의 offset 입니다.
 	/// +x, +z
 	float rightSummonOffset_x = 10.0f;
@@ -39,6 +43,9 @@ public:
 
 	static void SetLeftFrame(BossSummon::LeftFrame* leftFrame);
 	static void SetRightFrame(BossSummon::RightFrame* rightFrame);
+
+	static void OnBossAppear();
+	static void OnBossDie();
 
 private:
 	coroutine::Coroutine StartSummonTimer();

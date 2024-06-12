@@ -112,7 +112,6 @@ public:
     void HideAttackImage(yunutyEngine::graphics::StaticMeshRenderer* renderer);
 #pragma endregion
 
-private:
 #pragma region MoveEnd
     void ShowMoveEndImage(UnitType unitType, Vector3d pos, yunuGI::IMesh* mesh, Vector3d direction);
     void HideShowMoveEndImage(yunuGI::IMesh* mesh);

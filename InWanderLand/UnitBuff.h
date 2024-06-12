@@ -24,7 +24,7 @@ public:
     virtual void OnEnd() {};
     virtual void OnOverlap(UnitBuff&& overlapping)
     {
-        if (durationLeft > overlapping.durationLeft)
+        if (durationLeft < overlapping.durationLeft)
             durationLeft = overlapping.durationLeft;
     };
     virtual ~UnitBuff();
