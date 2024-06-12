@@ -86,6 +86,9 @@ private:
     int commandCount = 0;
     const int MAX_COMMAND_COUNT = 6;
 
+    std::array<std::shared_ptr<Reference::Guard>, 3> playersPauseRevArr;
+    std::vector< std::shared_ptr<Reference::Guard>> activateWaveEnemyUnitPauseRefVec;
+
     friend class PlayerController;
     friend class UnitAttackCommand;
 };

@@ -588,13 +588,44 @@ void SkillPreviewSystem::HideSkillMaxRange()
 	}
 }
 
-yunutyEngine::graphics::StaticMeshRenderer* SkillPreviewSystem::ShowAttackImage(UnitType unitType, Vector3d pos)
+yunutyEngine::graphics::StaticMeshRenderer* SkillPreviewSystem::ShowAttackImage(UnitType unitType, Vector3d pos, Vector3d direction)
 {
+	direction.y = 0.f;
+	direction = direction.Normalize(direction);
 	auto attackRenderer = AttackPreviewPool::SingleInstance().Borrow();
 	this->attackRendererSet.insert({ attackRenderer.lock().get() });
 	pos.y = this->Y_OFFSET;
 	attackRenderer.lock()->GetGameObject()->GetTransform()->SetLocalPosition(pos);
 	attackRenderer.lock()->GetGameObject()->GetTransform()->SetLocalScale(Vector3d{ 2,2,1 });
+
+	auto euler = attackRenderer.lock()->GetGameObject()->GetTransform()->GetLocalRotation().Euler();
+	auto dotProduct = std::clamp(Vector3d::Dot(Vector3d{ 0, 0, 1 }, direction), -1.0, 1.0);
+	auto angle = std::acos(dotProduct) * (180.0 / yunutyEngine::math::PI);
+
+	auto crossProduct = Vector3d::Cross(Vector3d{ 0, 0, 1 }, direction);
+
+	// 반대 방향 회전 문제 해결
+	if (dotProduct > 0.9999)
+	{
+		// 방향이 거의 동일함
+		angle = 0;
+	}
+	else if (dotProduct < -0.9999)
+	{
+		// 방향이 정반대임
+		angle = 180.0;
+	}
+	else
+	{
+		// 일반적인 경우, crossProduct의 y 성분으로 회전 방향 결정
+		if (crossProduct.y < 0)
+		{
+			angle = -angle;
+		}
+	}
+	euler.y = angle;
+	attackRenderer.lock()->GetGameObject()->GetTransform()->SetLocalRotation(Quaternion{ euler });
+
 	switch (unitType)
 	{
 		case SkillPreviewSystem::UnitType::Robin:
@@ -622,6 +653,7 @@ yunutyEngine::graphics::StaticMeshRenderer* SkillPreviewSystem::ShowAttackImage(
 void SkillPreviewSystem::HideAttackImage(yunutyEngine::graphics::StaticMeshRenderer* renderer)
 {
 	auto iter2 = this->attackRendererSet.find(renderer);
+	renderer->GetGameObject()->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{90,0,0 } });
 	AttackPreviewPool::SingleInstance().Return((*iter2)->GetWeakPtr<graphics::StaticMeshRenderer>());
 	this->attackRendererSet.erase(iter2);
 }

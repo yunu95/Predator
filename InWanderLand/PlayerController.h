@@ -125,7 +125,7 @@ private:
     std::array<UIElement*, SkillType::SKILL_NUM> skillCooltimeNumberUI;
     std::array<UIElement*, SkillType::SKILL_NUM> skillCooltimeMaskUI;
     float mana{ 0 };
-    State::Enum state{ State::Battle };
+    State::Enum state{ State::Peace };
     SkillType::Enum selectedSkill = SkillType::NONE;
     PlayerCharacterType::Enum selectedCharacterType = PlayerCharacterType::None;
     std::weak_ptr<UnitAcquisitionSphereCollider> cursorUnitDetector;

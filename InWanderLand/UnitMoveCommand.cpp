@@ -69,4 +69,5 @@ void UnitMoveCommand::CalculateCommandCost()
 		auto dist = path[i] - path[i + 1];
 		distance += dist.Magnitude();
 	}
+	this->commandCost = distance * application::GlobalConstant::GetSingletonInstance().pod.tacticMoveCost;
 }

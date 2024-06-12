@@ -108,7 +108,7 @@ public:
 
 #pragma region AttackImage
     // Pos는 평타치는 월드 포지션입니다.
-    yunutyEngine::graphics::StaticMeshRenderer* ShowAttackImage(UnitType unitType, Vector3d pos);
+    yunutyEngine::graphics::StaticMeshRenderer* ShowAttackImage(UnitType unitType, Vector3d pos, Vector3d direction);
     void HideAttackImage(yunutyEngine::graphics::StaticMeshRenderer* renderer);
 #pragma endregion
 

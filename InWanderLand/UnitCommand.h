@@ -28,6 +28,7 @@ public:
 	const Vector3d& GetExpectedPos() { return expectedPos; }
 	CommandType GetCommandType() { return this->commandType; }
 	float GetCommandCost() { return this->commandCost; }
+	PlayerCharacterType::Enum GetPlayerType() { return  playerType; }
 
 protected:
 	Unit* unit;
@@ -35,5 +36,6 @@ protected:
 	bool isDone;
 	CommandType commandType;
 	float commandCost = 0.f;
+	PlayerCharacterType::Enum playerType;
 };
 

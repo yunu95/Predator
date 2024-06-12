@@ -3,8 +3,8 @@
 #include "GlobalConstant.h"
 
 
-UnitAttackCommand::UnitAttackCommand(Unit* unit, Vector3d expectedPos, Unit* enemyUnit, bool isAttackAfterMove)
-    : UnitCommand(unit, expectedPos), renderer{ nullptr }, enemyUnit(enemyUnit)
+UnitAttackCommand::UnitAttackCommand(Unit* unit, Vector3d expectedPos, Unit* enemyUnit, bool isAttackAfterMove, Vector3d direction)
+	: UnitCommand(unit, expectedPos), renderer{ nullptr }, enemyUnit(enemyUnit), direction(direction)
 {
 	this->commandType = UnitCommand::Attack;
 	this->commandCost = application::GlobalConstant::GetSingletonInstance().pod.tacticAttackCost;
@@ -62,27 +62,27 @@ UnitAttackCommand::~UnitAttackCommand()
 
 void UnitAttackCommand::Execute()
 {
-    unit->OrderAttack(enemyUnit->GetWeakPtr<Unit>());
-    unit->onAttackHit.AddVolatileCallback([this](std::weak_ptr<Unit>) {isDone = true; });
+	unit->OrderAttack(enemyUnit->GetWeakPtr<Unit>());
+	unit->onAttackHit.AddVolatileCallback([this](std::weak_ptr<Unit>) {isDone = true; });
 }
 
 void UnitAttackCommand::ShowPreviewMesh()
 {
-    if (unit->GetUnitTemplateData().GetDataResourceName() == "SKM_Robin")
-    {
-        renderer = SkillPreviewSystem::Instance().ShowAttackImage(SkillPreviewSystem::UnitType::Robin, expectedPos);
-    }
-    else if (unit->GetUnitTemplateData().GetDataResourceName() == "SKM_Ursula")
-    {
-        renderer = SkillPreviewSystem::Instance().ShowAttackImage(SkillPreviewSystem::UnitType::Ursula, expectedPos);
-    }
-    else if (unit->GetUnitTemplateData().GetDataResourceName() == "SKM_Hansel")
-    {
-        renderer = SkillPreviewSystem::Instance().ShowAttackImage(SkillPreviewSystem::UnitType::Hansel, expectedPos);
-    }
+	if (unit->GetUnitTemplateData().GetDataResourceName() == "SKM_Robin")
+	{
+		renderer = SkillPreviewSystem::Instance().ShowAttackImage(SkillPreviewSystem::UnitType::Robin, expectedPos, direction);
+	}
+	else if (unit->GetUnitTemplateData().GetDataResourceName() == "SKM_Ursula")
+	{
+		renderer = SkillPreviewSystem::Instance().ShowAttackImage(SkillPreviewSystem::UnitType::Ursula, expectedPos, direction);
+	}
+	else if (unit->GetUnitTemplateData().GetDataResourceName() == "SKM_Hansel")
+	{
+		renderer = SkillPreviewSystem::Instance().ShowAttackImage(SkillPreviewSystem::UnitType::Hansel, expectedPos, direction);
+	}
 }
 
 void UnitAttackCommand::HidePreviewMesh()
 {
-    SkillPreviewSystem::Instance().HideAttackImage(renderer);
+	SkillPreviewSystem::Instance().HideAttackImage(renderer);
 }

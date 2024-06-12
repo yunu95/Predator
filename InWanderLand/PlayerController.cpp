@@ -435,7 +435,8 @@ void PlayerController::OnRightClick()
 							characters[selectedCharacterType].lock().get()
 							, path.back()
 							, (*cursorUnitDetector.lock()->GetUnits().begin())
-							, true));
+							, true
+							, path.back() - path[path.size()-2]));
 
 						// 이동 명령은 Enque됐지만 공격명령이 Enque되지 않았을 경우 이동 명령까지 지운다
 						if (errorType != EnqueErrorType::Success)
@@ -452,7 +453,9 @@ void PlayerController::OnRightClick()
 						characters[selectedCharacterType].lock().get()
 						, Vector3d::zero
 						, (*cursorUnitDetector.lock()->GetUnits().begin())
-						, false));
+						, false
+						, (*cursorUnitDetector.lock()->GetUnits().begin())->GetGameObject()->GetTransform()->GetWorldPosition() - 
+						characters[selectedCharacterType].lock().get()->GetGameObject()->GetTransform()->GetWorldPosition()));
 					// 에러 타입에 따른 UI활성화
 				}
 			}
