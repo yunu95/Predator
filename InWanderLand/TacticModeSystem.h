@@ -91,5 +91,6 @@ private:
 
     friend class PlayerController;
     friend class UnitAttackCommand;
+    friend class UnitSkillCommand;
 };
 

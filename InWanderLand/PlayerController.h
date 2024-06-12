@@ -118,6 +118,7 @@ private:
     void ApplyTargetedEffect(std::weak_ptr<Unit> unit);
     void InitUnitMouseInteractionEffects();
     std::vector<Vector3d>& ModifyPathForAttack(std::vector<Vector3d>& path);
+    std::vector<Vector3d>& ModifyPathForSkill(std::vector<Vector3d>& path, SkillType::Enum skillType);
     int currentCombo{ 0 };
     std::array<int, 3> comboObjective{ 10, 20, 30 };
     std::array<bool, 3> comboAchieved{ false };

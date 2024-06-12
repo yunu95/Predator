@@ -20,5 +20,6 @@ public:
 private:
 	yunutyEngine::graphics::StaticMeshRenderer* renderer;
 	SkillType::Enum skillType;
+	Vector3d previewStartPos;
 };
 

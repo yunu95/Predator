@@ -11,6 +11,7 @@
 #include "TacticModeSystem.h"
 #include "UnitMoveCommand.h"
 #include "UnitAttackCommand.h"
+#include "UnitSkillCommand.h"
 #include "EnqueErrorType.h"
 
 const std::unordered_map<UIEnumID, SkillUpgradeType::Enum> PlayerController::skillByUI
@@ -438,7 +439,7 @@ void PlayerController::OnRightClick()
 							, path.back()
 							, (*cursorUnitDetector.lock()->GetUnits().begin())
 							, true
-							, path.back() - path[path.size()-2]));
+							, path.back() - path[path.size() - 2]));
 
 						// 이동 명령은 Enque됐지만 공격명령이 Enque되지 않았을 경우 이동 명령까지 지운다
 						if (errorType != EnqueErrorType::Success)
@@ -451,12 +452,12 @@ void PlayerController::OnRightClick()
 				{
 					// 이동없이 공격이 가능하다면 공격 명령
 					EnqueErrorType errorType = EnqueErrorType::NONE;
-					errorType  = TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitAttackCommand>(
+					errorType = TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitAttackCommand>(
 						characters[selectedCharacterType].lock().get()
 						, Vector3d::zero
 						, (*cursorUnitDetector.lock()->GetUnits().begin())
 						, false
-						, (*cursorUnitDetector.lock()->GetUnits().begin())->GetGameObject()->GetTransform()->GetWorldPosition() - 
+						, (*cursorUnitDetector.lock()->GetUnits().begin())->GetGameObject()->GetTransform()->GetWorldPosition() -
 						characters[selectedCharacterType].lock().get()->GetGameObject()->GetTransform()->GetWorldPosition()));
 					// 에러 타입에 따른 UI활성화
 				}
@@ -470,7 +471,7 @@ void PlayerController::OnRightClick()
 
 				errorType = TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitMoveCommand>(characters[selectedCharacterType].lock().get()
 					, GetWorldCursorPosition(),
-					path,false));
+					path, false));
 				// 에러 타입에 따른 UI활성화
 			}
 		}
@@ -514,32 +515,82 @@ void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
 {
 	if (skillCooltimeLeft[skillType] > 0) return;
 	if (state == State::Cinematic) return;
-	SetMana(mana - RequiredManaForSkill(skillType));
-	onSkillActivate[skillType]();
-	SetCooltime(skillType, GetCooltimeForSkill(skillType));
-	switch (skillType)
+	if (state != State::Tactic)
 	{
-		case SkillType::ROBIN_Q:
-			selectedCharacter.lock()->OrderSkill(RobinChargeSkill{  }, pos);
-			break;
-		case SkillType::ROBIN_W:
-			selectedCharacter.lock()->OrderSkill(RobinTauntSkill{  }, pos);
-			break;
-		case SkillType::URSULA_Q:
-			selectedCharacter.lock()->OrderSkill(UrsulaBlindSkill{  }, pos);
-			break;
-		case SkillType::URSULA_W:
-			selectedCharacter.lock()->OrderSkill(UrsulaParalysisSkill{  }, pos);
-			break;
-		case SkillType::HANSEL_Q:
-			selectedCharacter.lock()->OrderSkill(HanselChargeSkill{}, pos);
-			break;
-		case SkillType::HANSEL_W:
-			selectedCharacter.lock()->OrderSkill(HanselProjectileSkill {}, pos);
-			break;
+		// 전술 모드가 아니라면 기존 로직 수행
+		SetMana(mana - RequiredManaForSkill(skillType));
+		onSkillActivate[skillType]();
+		SetCooltime(skillType, GetCooltimeForSkill(skillType));
+		switch (skillType)
+		{
+			case SkillType::ROBIN_Q:
+				selectedCharacter.lock()->OrderSkill(RobinChargeSkill{  }, pos);
+				break;
+			case SkillType::ROBIN_W:
+				selectedCharacter.lock()->OrderSkill(RobinTauntSkill{  }, pos);
+				break;
+			case SkillType::URSULA_Q:
+				selectedCharacter.lock()->OrderSkill(UrsulaBlindSkill{  }, pos);
+				break;
+			case SkillType::URSULA_W:
+				selectedCharacter.lock()->OrderSkill(UrsulaParalysisSkill{  }, pos);
+				break;
+			case SkillType::HANSEL_Q:
+				selectedCharacter.lock()->OrderSkill(HanselChargeSkill{}, pos);
+				break;
+			case SkillType::HANSEL_W:
+				selectedCharacter.lock()->OrderSkill(HanselProjectileSkill{}, pos);
+				break;
+		}
+		UnSelectSkill();
+		// 스킬 프리뷰를 비활성화시킨다.
 	}
-	UnSelectSkill();
-	// 스킬 프리뷰를 비활성화시킨다.
+	else
+	{
+		SkillPreviewSystem::Instance().HideSkillMaxRange();
+		// 전술모드일 때 
+		// Skill
+		// 걸어가서 스킬을 쓰게될 수 있음
+		EnqueErrorType errorType = EnqueErrorType::NONE;
+		std::vector<Vector3d> path;
+		path = TacticModeSystem::Instance().GetPathInTacticMode(selectedCharacterType);
+		this->ModifyPathForSkill(path,skillType);
+		if (!path.empty())
+		{
+			// 이동을 해야한다면
+			// 이동 명령
+			errorType = TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitMoveCommand>(characters[selectedCharacterType].lock().get()
+				, path.back()
+				, path
+				, false
+			));
+
+			// 스킬 명령
+			if (errorType == EnqueErrorType::Success)
+			{
+				errorType = TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitSkillCommand>(characters[selectedCharacterType].lock().get()
+					, GetWorldCursorPosition()
+					, skillType
+				));
+
+				// 이동 명령은 Enque됐지만 공격명령이 Enque되지 않았을 경우 이동 명령까지 지운다
+				if (errorType != EnqueErrorType::Success)
+				{
+					TacticModeSystem::Instance().PopCommand();
+				}
+			}
+		}
+		else
+		{
+			// 이동없이 스킬 사용이 가능하다면 스킬 명령
+			EnqueErrorType errorType = EnqueErrorType::NONE;
+			errorType = TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitSkillCommand>(characters[selectedCharacterType].lock().get()
+				, GetWorldCursorPosition()
+				, skillType
+			));
+			// 에러 타입에 따른 UI활성화
+		}
+	}
 }
 
 void PlayerController::SelectSkill(SkillType::Enum skillType)
@@ -919,6 +970,56 @@ std::vector<yunutyEngine::Vector3d>& PlayerController::ModifyPathForAttack(std::
 		}
 	}
 	if (!isModify)
+	{
+		path.clear();
+	}
+	return path;
+}
+
+std::vector<yunutyEngine::Vector3d>& PlayerController::ModifyPathForSkill(std::vector<Vector3d>& path, SkillType::Enum skillType)
+{
+	bool isModify = false;
+	auto lastElement = path.back();
+
+	float skillRange;
+
+	switch (skillType)
+	{
+		case SkillType::ROBIN_Q:
+			skillRange = RobinChargeSkill::pod.maxDistance;
+			break;
+		case SkillType::ROBIN_W:
+			break;
+		case SkillType::URSULA_Q:
+			skillRange = UrsulaBlindSkill::pod.skillRange;
+			break;
+		case SkillType::URSULA_W:
+			skillRange = UrsulaParalysisSkill::pod.skillRange;
+			break;
+		case SkillType::HANSEL_Q:
+			skillRange = HanselChargeSkill::pod.maxRange;
+			break;
+		case SkillType::HANSEL_W:
+			skillRange = HanselProjectileSkill::pod.maxRange;
+			break;
+	}
+
+	for (auto it = path.rbegin(); it != path.rend(); ++it)
+	{
+		if (it != path.rbegin())
+		{
+			auto tempVec = lastElement - *it;
+			float distance = tempVec.Magnitude();
+			if (skillRange < distance - 0.001f)
+			{
+				isModify = true;
+				// 조건을 만족하는 요소를 찾으면 그 위치의 다음 요소부터 제거
+				path.erase((it.base() + 1), path.end());
+				break;
+			}
+		}
+	}
+	if ((!isModify )|| (skillType == SkillType::ROBIN_W))
 	{
 		path.clear();
 	}
