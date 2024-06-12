@@ -63,6 +63,15 @@ void TacticModeSystem::OnContentsStop()
 	SkillPreviewSystem::Instance().HideTemporaryRoute();
 	this->ClearCommand();
 	GetComponent()->SetActive(false);
+	// 플레이가 중단되면 모든 Pause는 되돌려준다.
+
+	for (auto& each : playersPauseRevArr)
+	{
+		each.reset();
+	}
+	activateWaveEnemyUnitPauseRefVec.clear();
+	this->isExecuting = false;
+	this->isOperating = false;
 }
 
 void TacticModeSystem::EngageTacticSystem()
