@@ -53,23 +53,24 @@ const std::vector<BossSpear> BossSpearsInfo()
 
 coroutine::Coroutine BossImpaleSkill::operator()()
 {
-	//auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
-	auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
-	auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
-	auto enableNavObstacle = owner.lock()->referenceEnableNavObstacle.Acquire();
-	auto animator = owner.lock()->GetAnimator();
-	auto impaleAnim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill2);
-
-	// 창이 생성되는 시간 오프셋은 유닛으로부터의 거리와 정비례한다.
-	owner.lock()->PlayAnimation(UnitAnimType::Skill2);
 	effectCoroutine = owner.lock()->StartCoroutine(SpawningSkillffect(dynamic_pointer_cast<BossImpaleSkill>(selfWeakPtr.lock())));
 	effectCoroutine.lock()->PushDestroyCallBack([this]()
 		{
 			FBXPool::SingleInstance().Return(impaleEffect);
 		});
 
+	co_yield coroutine::WaitForSeconds(0.7f);
+
+	auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
+	auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
+	auto enableNavObstacle = owner.lock()->referenceEnableNavObstacle.Acquire();
+	auto animator = owner.lock()->GetAnimator();
+	auto impaleAnim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill2);
+
+	owner.lock()->PlayAnimation(UnitAnimType::Skill2);
+
 	co_yield coroutine::WaitForSeconds{ impaleStartTime };
-	//coroutine::ForSeconds forSeconds{ pod.impaleSkillDuration };
+
 	coroutine::ForSeconds forSeconds{ pod.impaleSkillDuration };
 	if (managingIndex != 0)
 		managingIndex = 0;
