@@ -4,6 +4,7 @@
 struct POD_PassiveRobinBleed
 {
     float duration = 10.0f;
+    float durationUpgraded = 10.0f;
     float dpsPerStack = 10.0f;
     int maxStack = 10;
 
@@ -16,6 +17,7 @@ class PassiveRobinBleed : public PassiveSkill
 public:
     virtual void Init(std::weak_ptr<Unit> owner) override;
     virtual SkillType::Enum GetSkillType() override { return SkillType::Passive_Robin_Bleeding; };
+    static float BleedDuration(); 
     static POD_PassiveRobinBleed pod;
 private:
 };

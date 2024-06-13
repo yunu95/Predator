@@ -72,7 +72,7 @@ public:
     float GetMana();
     void SetMana(float mana);
     static constexpr int playerTeamIndex = 1;
-    static const std::unordered_map<UIEnumID, SkillUpgradeType::Enum> skillByUI;
+    static const std::unordered_map<UIEnumID, SkillUpgradeType::Enum> skillUpgradeByUI;
     bool blockSkillSelection[(int)SkillType::SKILL_NUM]{ false };
     DelegateCallback<void> onSkillSelect[(int)SkillType::SKILL_NUM];
     DelegateCallback<void> onSkillActivate[(int)SkillType::SKILL_NUM];
