@@ -483,20 +483,16 @@ void TacticModeSystem::InterruptedCommand(Unit* unit)
 {
 	auto unitType = static_cast<PlayerCharacterType::Enum>(unit->GetUnitTemplateData().pod.playerUnitType.enumValue);
 
-	for (auto iter = this->commandList.begin(); iter != this->commandList.end(); )
+	for (auto iter = this->commandList.begin(); iter != this->commandList.end(); ++iter)
 	{
 		if (static_cast<PlayerCharacterType::Enum>((*iter)->GetUnit()->GetUnitTemplateData().pod.playerUnitType.enumValue) == unitType)
 		{
-
+			(*iter)->SetIsDone(true);
+			(*iter)->HidePreviewMesh();
 			if ((*iter)->GetCommandType() == UnitCommand::CommandType::Skill)
 			{
 				useSkill[std::static_pointer_cast<UnitSkillCommand>((*iter))->GetSkillType()] = false;
 			}
-			iter = this->commandList.erase(iter);
-		}
-		else
-		{
-			++iter;
 		}
 	}
 
@@ -542,18 +538,22 @@ yunutyEngine::coroutine::Coroutine TacticModeSystem::ExecuteInternal()
 {
 	for (auto& each : this->commandList)
 	{
-		PlayerController::Instance().SelectPlayerUnit(static_cast<PlayerCharacterType::Enum>(each->GetUnit()->GetUnitTemplateData().pod.playerUnitType.enumValue));
-		// 현재 명령을 수행하는 플레이어 유닛은 움직인다.
-		this->playersPauseRevArr[each->GetPlayerType()].reset();
-		each->Execute();
-		while (!each->IsDone())
+		if (!each->IsDone())
 		{
-			co_await std::suspend_always();
+			PlayerController::Instance().SelectPlayerUnit(static_cast<PlayerCharacterType::Enum>(each->GetUnit()->GetUnitTemplateData().pod.playerUnitType.enumValue));
+			// 현재 명령을 수행하는 플레이어 유닛은 움직인다.
+			this->playersPauseRevArr[each->GetPlayerType()].reset();
+			each->Execute();
+			while (!each->IsDone())
+			{
+				co_await std::suspend_always();
+			}
+			// 명령 수행이 끝나면 다시 멈춘다.
+			this->playersPauseRevArr[each->GetPlayerType()] = PlayerController::Instance().GetPlayers()[each->GetPlayerType()].lock()->referencePause.Acquire();
+			each->HidePreviewMesh();
 		}
-		// 명령 수행이 끝나면 다시 멈춘다.
-		this->playersPauseRevArr[each->GetPlayerType()] = PlayerController::Instance().GetPlayers()[each->GetPlayerType()].lock()->referencePause.Acquire();
-		each->HidePreviewMesh();
 	}
+
 	this->commandList.clear();
 	PlayerController::Instance().SetState(PlayerController::State::Battle);
 
