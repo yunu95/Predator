@@ -6,6 +6,7 @@
 #include "ChessBishop.h"
 #include "GlobalConstant.h"
 #include "YunutyWaitForSeconds.h"
+#include "VFXAnimator.h"
 
 POD_BossSummonChessSkill BossSummonChessSkill::pod = POD_BossSummonChessSkill();
 
@@ -62,6 +63,26 @@ void BossSummonChessSkill::OnInterruption()
 void BossSummonChessSkill::OnBossDie()
 {
 	BossSummon::ChessPool::Instance().OnBossDie();
+}
+
+coroutine::Coroutine BossSummonChessSkill::SpawningFieldEffect(std::weak_ptr<BossSummonChessSkill> skill)
+{
+	Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
+	Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
+	Vector3d direction = deltaPos.Normalized();
+	Vector3d endPos = startPos + deltaPos;
+	Vector3d currentPos = startPos;
+
+	stepEffect = FBXPool::Instance().Borrow("VFX_HeartQueen_Skill3_1");
+	stepEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos);
+	stepEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
+	stepEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(owner.lock()->GetTransform()->GetWorldScale());
+
+	auto stepEffectAnimator = stepEffect.lock()->AcquireVFXAnimator();
+	stepEffectAnimator.lock()->SetAutoActiveFalse();
+	stepEffectAnimator.lock()->Init();
+
+	co_return;
 }
 
 coroutine::Coroutine BossSummonChessSkill::SummonChess(std::weak_ptr<BossSummonChessSkill> skill, Vector2i index)

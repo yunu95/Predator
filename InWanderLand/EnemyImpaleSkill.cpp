@@ -1,5 +1,6 @@
 #include "InWanderLand.h"
 #include "EnemyImpaleSkill.h"
+#include "VFXAnimator.h"
 
 POD_EnemyImpaleSkill EnemyImpaleSkill::pod = POD_EnemyImpaleSkill();
 
@@ -136,6 +137,33 @@ coroutine::Coroutine EnemyImpaleSkill::SpearArise(std::weak_ptr<EnemyImpaleSkill
         float heightAlpha = std::sinf(forSeconds.ElapsedNormalized() * math::PI);
         float yDelta = math::LerpF(pod.impaleSkillMinHeightPerSpear, pod.impaleSkillMaxHeightPerSpear, heightAlpha);
         fbx.lock()->GetTransform()->SetWorldPosition(worldPos + Vector3d::up * yDelta);
+        co_await std::suspend_always{};
+    }
+
+    co_return;
+}
+
+coroutine::Coroutine EnemyImpaleSkill::SpawningSkillffect(std::weak_ptr<EnemyImpaleSkill> skill)
+{
+    skill.lock();
+    Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
+    Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
+    Vector3d direction = deltaPos.Normalized();
+
+    impaleEffect = FBXPool::Instance().Borrow("VFX_Monster2_Skill");
+
+    impaleEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos);
+    impaleEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
+    impaleEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(owner.lock()->GetTransform()->GetWorldScale());
+
+    auto chargeEffectAnimator = impaleEffect.lock()->AcquireVFXAnimator();
+    chargeEffectAnimator.lock()->SetAutoActiveFalse();
+    chargeEffectAnimator.lock()->Init();
+
+    co_await std::suspend_always{};
+
+    while (!chargeEffectAnimator.lock()->IsDone())
+    {
         co_await std::suspend_always{};
     }
 

@@ -53,7 +53,7 @@ coroutine::Coroutine EnemySpinAttackSkill::SpawningSkillffect(std::weak_ptr<Enem
     Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
     Vector3d direction = deltaPos.Normalized();
 
-    chargeEffect = FBXPool::Instance().Borrow("VFX_HeartQueen_Skill1");
+    chargeEffect = FBXPool::Instance().Borrow("VFX_Monster1_Skill");
 
     chargeEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos);
     chargeEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));

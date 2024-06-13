@@ -4,6 +4,7 @@
 #include "RightFrame.h"
 #include "GlobalConstant.h"
 #include "YunutyWaitForSeconds.h"
+#include "VFXAnimator.h"
 
 POD_BossSummonMobSkill BossSummonMobSkill::pod = POD_BossSummonMobSkill();
 
@@ -132,5 +133,25 @@ coroutine::Coroutine BossSummonMobSkill::StartSummonTimer()
 		}
 		co_await std::suspend_always{};
 	}
+	co_return;
+}
+
+coroutine::Coroutine BossSummonMobSkill::SpawningFieldEffect(std::weak_ptr<BossSummonMobSkill> skill)
+{
+	Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
+	Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
+	Vector3d direction = deltaPos.Normalized();
+	Vector3d endPos = startPos + deltaPos;
+	Vector3d currentPos = startPos;
+
+	stepEffect = FBXPool::Instance().Borrow("VFX_HeartQueen_Skill3_1");
+	stepEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos);
+	stepEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
+	stepEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(owner.lock()->GetTransform()->GetWorldScale());
+
+	auto stepEffectAnimator = stepEffect.lock()->AcquireVFXAnimator();
+	stepEffectAnimator.lock()->SetAutoActiveFalse();
+	stepEffectAnimator.lock()->Init();
+
 	co_return;
 }

@@ -1,5 +1,6 @@
 #include "InWanderLand.h"
 #include "HanselChargeSkill.h"
+#include "VFXAnimator.h"
 
 POD_HanselChargeSkill HanselChargeSkill::pod = POD_HanselChargeSkill();
 
@@ -28,6 +29,8 @@ coroutine::Coroutine HanselChargeSkill::operator()()
     effectColliderCoroutine.lock()->PushDestroyCallBack([this]()
         {
             UnitAcquisitionSphereColliderPool::Instance().Return(stompCollider);
+            FBXPool::Instance().Return(stompEffect1);
+            FBXPool::Instance().Return(stompEffect2);
         });
 
     co_yield coroutine::WaitForSeconds(anim->GetDuration());
@@ -46,24 +49,41 @@ void HanselChargeSkill::OnInterruption()
 coroutine::Coroutine HanselChargeSkill::SpawningFieldEffect(std::weak_ptr<HanselChargeSkill> skill)
 {
     auto persistance = skill.lock();
+    colliderEffectRatio = 10.0f * 0.5f;
+    float actualCollideRange = pod.skillRadius * 1 / (colliderEffectRatio);
+
     auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
     auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
     auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
 
+    Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
+    Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
+    Vector3d direction = deltaPos.Normalized();
+    Vector3d endPos = startPos + deltaPos;
+    Vector3d currentPos = startPos;
+    
     stompCollider = UnitAcquisitionSphereColliderPool::Instance().Borrow(owner.lock());
     stompCollider.lock()->SetRadius(pod.skillRadius);
     stompCollider.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
 
     /// 이펙트도 생성
-    stompEffect = FBXPool::Instance().Borrow("VFX_HeartQueen_Skill1");
+    stompEffect1 = FBXPool::Instance().Borrow("VFX_Hansel_Skill1_1");
+    stompEffect1.lock()->GetGameObject()->GetTransform()->SetWorldPosition(targetPos);
+    stompEffect1.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
+    stompEffect1.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(actualCollideRange, actualCollideRange, actualCollideRange));
 
+    stompEffect2 = FBXPool::Instance().Borrow("VFX_Hansel_Skill1_2");
+    stompEffect2.lock()->GetGameObject()->GetTransform()->SetWorldPosition(targetPos);
+    stompEffect2.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
+    stompEffect2.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(actualCollideRange, actualCollideRange, actualCollideRange));
 
-    Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
-    Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
-    Vector3d direction = deltaPos.Normalized();
-    owner.lock()->SetDesiredRotation(direction);
-    Vector3d endPos = startPos + deltaPos;
-    Vector3d currentPos = startPos;
+    auto stompEffect1Animator = stompEffect1.lock()->AcquireVFXAnimator();
+    stompEffect1Animator.lock()->SetAutoActiveFalse();
+    stompEffect1Animator.lock()->Init();
+
+    auto stompEffect2Animator = stompEffect2.lock()->AcquireVFXAnimator();
+    stompEffect2Animator.lock()->SetAutoActiveFalse();
+    stompEffect2Animator.lock()->Init();
 
     auto animator = owner.lock()->GetAnimator();
     auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill1);

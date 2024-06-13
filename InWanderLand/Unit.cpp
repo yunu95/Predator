@@ -10,6 +10,7 @@
 #include "BossSkillSystem.h"
 #include "TacticModeSystem.h"
 #include "IAnimation.h"
+#include "VFXAnimator.h"
 #include "SkillPreviewSystem.h"
 
 #include "BurnEffect.h"
@@ -19,6 +20,7 @@
 #include "UnitBuff.h"
 #include "wanderResources.h"
 #include "FBXPool.h"
+#include "ProjectileType.h"
 
 coroutine::Coroutine ShowPath(const std::vector<Vector3d> paths)
 {
@@ -1344,8 +1346,20 @@ yunutyEngine::coroutine::Coroutine Unit::AttackCoroutine(std::weak_ptr<Unit> opp
     PlayAnimation(UnitAnimType::Attack, false);
 
 	/// VFX 실행
-	//attackVFX = wanderResources::GetVFX(unitTemplateData->pod.skinnedFBXName, UnitAnimType::Attack);
+	attackVFX = wanderResources::GetVFX(unitTemplateData->pod.skinnedFBXName, UnitAnimType::Attack);
+    auto vfxAnimator = attackVFX.lock()->AcquireVFXAnimator();
+    if (vfxAnimator.lock())
+    {
+        vfxAnimator.lock()->SetAutoActiveFalse();
+        vfxAnimator.lock()->Init();
+    }
 	// attackVFX 위치, rotation, scale 만 세팅
+    //Vector3d startPos = GetTransform()->GetWorldPosition();
+    //Vector3d deltaPos = opponent.lock()->GetTransform()->GetWorldPosition() - GetTransform()->GetWorldPosition();
+    //Vector3d direction = deltaPos.Normalized();
+    attackVFX.lock()->GetGameObject()->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
+    attackVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(GetTransform()->GetWorldRotation());
+    attackVFX.lock()->GetGameObject()->GetTransform()->SetWorldScale(GetTransform()->GetWorldScale());
 
     float playSpeed = animatorComponent.lock()->GetGI().GetPlaySpeed();
 
@@ -1358,7 +1372,7 @@ yunutyEngine::coroutine::Coroutine Unit::AttackCoroutine(std::weak_ptr<Unit> opp
         opponent.lock()->Damaged(GetWeakPtr<Unit>(), unitTemplateData->pod.m_autoAttackDamage + adderAttackDamage, DamageType::Attack);
         break;
     case UnitAttackType::MISSILE:
-        auto projectile = ProjectilePool::SingleInstance().Borrow(GetWeakPtr<Unit>(), opponent.lock()->GetTransform()->GetWorldPosition());
+        auto projectile = ProjectilePool::SingleInstance().Borrow(GetWeakPtr<Unit>(), opponent.lock()->GetTransform()->GetWorldPosition(), unitTemplateData->pod.projectileType, unitTemplateData->pod.projectileHoming);
         projectile.lock()->GetTransform()->SetLocalScale(Vector3d::one * unitTemplateData->pod.projectile_scale);
         break;
     }

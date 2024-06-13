@@ -127,8 +127,11 @@ constexpr const std::string wanderResources::GetFBXName(WanderFBX::Enum fbxType)
 
 void InitFBXMap()
 {
-    fbxMap["SKM_Robin"][UnitAnimType::Attack] = "VFX_dlsdknglsk";
-
+    fbxMap["SKM_Robin"][UnitAnimType::Attack] = "VFX_Robin_Attack";
+    fbxMap["SKM_Ursula"][UnitAnimType::Attack] = "VFX_Ursula_Attack_1";
+    fbxMap["SKM_Hansel"][UnitAnimType::Attack] = "VFX_Hansel_Attack_1";
+    fbxMap["SKM_Monster1"][UnitAnimType::Attack] = "VFX_Monster1_Attack";
+    fbxMap["SKM_HeartQueen"][UnitAnimType::Attack] = "VFX_HeartQueen_Attack";
 }
 
 std::weak_ptr<ManagedFBX> wanderResources::GetVFX(const std::string& fbx, UnitAnimType animType)
