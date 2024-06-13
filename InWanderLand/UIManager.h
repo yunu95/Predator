@@ -32,6 +32,9 @@ private:
     void SetUIElementWithEnum(UIEnumID uiEnumID, UIElement* ui);
     void SetUIElementWithIndex(int index, UIElement* ui);
     void SetUIDataWithIndex(int index, const JsonUIData& uiData);
+    coroutine::Coroutine StartGameAfterFadeOutCoro();
+    coroutine::Coroutine ReturnToTitleAfterFadeOutCoro();
+
     SpriteAnimation* moveToSpriteAnim{ nullptr };
     int uiImportingPriority{ 0 };
     struct ButtonCompare
@@ -69,6 +72,8 @@ public:
     UIElement* GetDialogueTimed(const std::string& keyString);
     UIElement* GetDialogueManual(const std::string& keyString);
     UIElement* GetScriptUI(const std::string& keyString);
+    void StartGameAfterFadeOut();
+    void ReturnToTitleAfterFadeOut();
     static constexpr UIEnumID comboNumbers[6]
     {
         UIEnumID::Ingame_Combo_TargetNumFinished1,
@@ -104,6 +109,7 @@ public:
     void FadeOutBottom(float duration = 1);
     void FadeIn(float duration = 1);
     void SetIngameUIVisible(bool visible);
+    void SetLetterBoxVisible(bool visible);
     void ReportButtonOnMouse(UIButton* p_btn);
     void ReportMouseExitButton(UIButton* p_btn);
     void ShowComboObjectives();

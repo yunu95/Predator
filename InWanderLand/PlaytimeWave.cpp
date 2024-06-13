@@ -18,7 +18,10 @@
 
 PlaytimeWave::~PlaytimeWave()
 {
-    waveData->playtimeWave = nullptr;
+    if (waveData->playtimeWave == this)
+    {
+        waveData->playtimeWave = nullptr;
+    }
 }
 std::weak_ptr<PlaytimeWave> PlaytimeWave::GetCurrentOperatingWave()
 {
@@ -52,7 +55,7 @@ void PlaytimeWave::DeActivateWave()
     // 카메라 가동범위 제한
     if (auto rtsCam = dynamic_cast<RTSCam*>(graphics::Camera::GetMainCamera()))
     {
-        PlayerController::Instance().LockCamInRegion(nullptr);
+        PlayerController::Instance().UnlockCamFromRegion();
         //rtsCam->UnConstrainRegion();
     }
 }
