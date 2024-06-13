@@ -19,7 +19,7 @@ coroutine::Coroutine BossSpinAttackSkill::SpawningSkillffect(std::weak_ptr<BossS
 	Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
 	Vector3d direction = deltaPos.Normalized();
 
-	chargeEffect = FBXPool::SingleInstance().Borrow("VFX_HeartQueen_Skill1");
+	chargeEffect = FBXPool::Instance().Borrow("VFX_HeartQueen_Skill1");
 
 	chargeEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos);
 	chargeEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
@@ -80,7 +80,7 @@ coroutine::Coroutine BossSpinAttackSkill::operator()()
     effectColliderCoroutine = owner.lock()->StartCoroutine(SpawningSkillffect(dynamic_pointer_cast<BossSpinAttackSkill>(selfWeakPtr.lock())));
     effectColliderCoroutine.lock()->PushDestroyCallBack([this]()
         {
-            FBXPool::SingleInstance().Return(chargeEffect);
+            FBXPool::Instance().Return(chargeEffect);
             UnitAcquisitionSphereColliderPool::Instance().Return(knockbackCollider);
         });
     co_yield coroutine::WaitForSeconds(spinStartTime);

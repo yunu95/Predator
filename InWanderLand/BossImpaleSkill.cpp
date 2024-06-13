@@ -59,7 +59,7 @@ coroutine::Coroutine BossImpaleSkill::operator()()
 	effectCoroutine = owner.lock()->StartCoroutine(SpawningSkillffect(dynamic_pointer_cast<BossImpaleSkill>(selfWeakPtr.lock())));
 	effectCoroutine.lock()->PushDestroyCallBack([this]()
 		{
-			FBXPool::SingleInstance().Return(impaleEffect);
+			FBXPool::Instance().Return(impaleEffect);
 		});
 
 	co_yield coroutine::WaitForSeconds(0.7f);
@@ -91,7 +91,7 @@ coroutine::Coroutine BossImpaleSkill::operator()()
 				if (knockbackColliderVector.empty() && spearFbxVector.empty())
 					return ;
 				UnitAcquisitionSphereColliderPool::Instance().Return(knockbackColliderVector[managingIndex]);
-				FBXPool::SingleInstance().Return(spearFbxVector[managingIndex]);
+				FBXPool::Instance().Return(spearFbxVector[managingIndex]);
 				managingIndex++;
 			});
 	}
@@ -106,7 +106,7 @@ void BossImpaleSkill::OnInterruption()
 {
 	if (!effectCoroutine.expired())
 	{
-		FBXPool::SingleInstance().Return(impaleEffect);
+		FBXPool::Instance().Return(impaleEffect);
 	}
 }
 
@@ -114,7 +114,7 @@ void BossImpaleSkill::OnInterruption()
 coroutine::Coroutine BossImpaleSkill::SpearArise(std::weak_ptr<BossImpaleSkill> skill, std::weak_ptr<ManagedFBX> fbx, std::weak_ptr<UnitAcquisitionSphereCollider> collider, Vector2d pos)
 {
 	auto temp = skill.lock();
-	fbx = FBXPool::SingleInstance().Borrow(wanderResources::GetFBXName(wanderResources::WanderFBX::IMPALING_SPIKE));
+	fbx = FBXPool::Instance().Borrow(wanderResources::GetFBXName(wanderResources::WanderFBX::IMPALING_SPIKE));
 	skill.lock()->spearFbxVector.push_back(fbx);
 	collider = UnitAcquisitionSphereColliderPool::Instance().Borrow(skill.lock()->owner);
 	skill.lock()->knockbackColliderVector.push_back(collider);
@@ -161,7 +161,7 @@ coroutine::Coroutine BossImpaleSkill::SpawningSkillffect(std::weak_ptr<BossImpal
 	Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
 	Vector3d direction = deltaPos.Normalized();
 
-	impaleEffect = FBXPool::SingleInstance().Borrow("VFX_HeartQueen_Skill2");
+	impaleEffect = FBXPool::Instance().Borrow("VFX_HeartQueen_Skill2");
 
 	impaleEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos);
 	impaleEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));

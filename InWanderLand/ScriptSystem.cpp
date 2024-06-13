@@ -66,6 +66,7 @@ namespace application
         actionList.push_back({ ActionType::OrnamentHide,"OrnamentHide" });
         actionList.push_back({ ActionType::OrnamentFloating,"OrnamentFloating" });
         actionList.push_back({ ActionType::BossAppear,"BossAppear" });
+        actionList.push_back({ ActionType::EngageBattle,"EngageBattle" });
     }
 
     Script* ScriptSystem::CreateScript()

@@ -5,7 +5,7 @@ POD_PassiveHanselHeal PassiveHanselHeal::pod;
 coroutine::Coroutine PassiveHanselHeal::CookieLingering(Vector3d pos, std::weak_ptr<Unit> owner)
 {
     pos = SingleNavigationField::Instance().GetClosestPointOnField(pos);
-    auto cookieMesh = FBXPool::SingleInstance().Borrow(wanderResources::GetFBXName(wanderResources::WanderFBX::HEALING_COOKIE));
+    auto cookieMesh = FBXPool::Instance().Borrow(wanderResources::GetFBXName(wanderResources::WanderFBX::HEALING_COOKIE));
     auto collider = UnitAcquisitionSphereColliderPool::Instance().Borrow(owner);
     collider.lock()->SetRadius(pod.cookieRadius);
     collider.lock()->GetTransform()->SetWorldPosition(pos);
@@ -19,14 +19,14 @@ coroutine::Coroutine PassiveHanselHeal::CookieLingering(Vector3d pos, std::weak_
             if (unit->GetTeamIndex() == PlayerController::playerTeamIndex && unit->GetUnitCurrentHp() < unit->GetUnitTemplateData().pod.max_Health)
             {
                 unit->Heal(pod.healAmount);
-                FBXPool::SingleInstance().Return(cookieMesh);
+                FBXPool::Instance().Return(cookieMesh);
                 co_return;
             }
         }
         cookieMesh.lock()->GetTransform()->SetWorldPosition(pos);
         co_await std::suspend_always{};
     }
-    FBXPool::SingleInstance().Return(cookieMesh);
+    FBXPool::Instance().Return(cookieMesh);
     co_return;
 }
 

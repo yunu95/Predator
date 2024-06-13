@@ -8,6 +8,7 @@
 #include "SFXManager.h"
 
 #include "YunutyWaitForSeconds.h"
+#include "PlayerController.h"
 
 void Interactable_SpikeTrap::Start()
 {
@@ -50,7 +51,7 @@ void Interactable_SpikeTrap::Update()
 void Interactable_SpikeTrap::OnTriggerEnter(physics::Collider* collider)
 {
     if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
-        //GameManager::Instance().IsBattleSystemOperating() &&
+        PlayerController::Instance().GetState() == PlayerController::State::Battle &&
         colliderUnitComponent != nullptr &&
         colliderUnitComponent->IsPlayerUnit() &&
         colliderUnitComponent->IsAlive())
@@ -62,7 +63,6 @@ void Interactable_SpikeTrap::OnTriggerEnter(physics::Collider* collider)
 void Interactable_SpikeTrap::OnTriggerExit(physics::Collider* collider)
 {
     if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
-        //GameManager::Instance().IsBattleSystemOperating() &&
         colliderUnitComponent != nullptr &&
         colliderUnitComponent->IsPlayerUnit())
     {
