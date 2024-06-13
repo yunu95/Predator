@@ -18,7 +18,6 @@ namespace BossSummon
 
 	RightFrame::~RightFrame()
 	{
-		OnBossDie();
 		meleeUnitMold = nullptr;
 		projectileUnitMold = nullptr;
 		BossSummonMobSkill::SetRightFrame(nullptr);

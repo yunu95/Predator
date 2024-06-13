@@ -6,14 +6,14 @@
 
 namespace yunutyEngine
 {
-    // yunutyUtility¿¡´Â ÇÔ¼ö Á¤ÀÇ, È¤Àº functor¸¸ µé¾î°£´Ù.
+    // yunutyUtilityì—ëŠ” í•¨ìˆ˜ ì •ì˜, í˜¹ì€ functorë§Œ ë“¤ì–´ê°„ë‹¤.
     namespace yutility
     {
         inline std::wstring GetWString(const char* arg)
         {
             // Convert std::string to std::wstring using MultiByteToWideChar
             int wstrSize = MultiByteToWideChar(CP_UTF8, 0, arg, -1, nullptr, 0);
-            std::wstring wstr(wstrSize, L'\0');
+            std::wstring wstr(wstrSize - 1, L'\0');
             MultiByteToWideChar(CP_UTF8, 0, arg, -1, &wstr[0], wstrSize);
             return wstr;
         }
@@ -22,7 +22,7 @@ namespace yunutyEngine
         {
             // Convert std::wstring to std::string using WideCharToMultiByte
             int strSize = WideCharToMultiByte(CP_UTF8, 0, arg, -1, nullptr, 0, nullptr, nullptr);
-            std::string str(strSize, '\0');
+            std::string str(strSize - 1, '\0');
             WideCharToMultiByte(CP_UTF8, 0, arg, -1, &str[0], strSize, nullptr, nullptr);
             return str;
         }

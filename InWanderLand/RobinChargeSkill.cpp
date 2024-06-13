@@ -53,9 +53,9 @@ coroutine::Coroutine RobinChargeSkill::operator()()
 	auto effectCoroutine = owner.lock()->StartCoroutine(SpawningSkillffect(dynamic_pointer_cast<RobinChargeSkill>(selfWeakPtr.lock()), startPos));
     effectCoroutine.lock()->PushDestroyCallBack([this]()
         {
-            FBXPool::SingleInstance().Return(chargeEffect);
+            FBXPool::Instance().Return(chargeEffect);
             UnitAcquisitionSphereColliderPool::Instance().Return(knockbackCollider);
-            FBXPool::SingleInstance().Return(chargeEffect);
+            FBXPool::Instance().Return(chargeEffect);
         });
     
     co_await std::suspend_always{};
@@ -88,7 +88,7 @@ coroutine::Coroutine RobinChargeSkill::SpawningSkillffect(std::weak_ptr<RobinCha
     Vector3d deltaPos = targetPos - skillStartPos;
     Vector3d direction = deltaPos.Normalized();
 
-    chargeEffect = FBXPool::SingleInstance().Borrow("VFX_Robin_Skill1");
+    chargeEffect = FBXPool::Instance().Borrow("VFX_Robin_Skill1");
 
     chargeEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos);
     chargeEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));

@@ -8,6 +8,7 @@
 #include "YunutyWaitForSeconds.h"
 #include "SFXManager.h"
 #include "BossSummonChessSkill.h"
+#include "PlayerController.h"
 
 void Interactable_ChessBishop::Start()
 {
@@ -88,6 +89,7 @@ void Interactable_ChessBishop::Update()
 void Interactable_ChessBishop::OnTriggerEnter(physics::Collider* collider)
 {
 	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
+		PlayerController::Instance().GetState() == PlayerController::State::Battle &&
 		colliderUnitComponent != nullptr &&
 		colliderUnitComponent->IsPlayerUnit() &&
 		colliderUnitComponent->IsAlive())

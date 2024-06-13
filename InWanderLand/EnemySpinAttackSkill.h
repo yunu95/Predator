@@ -6,6 +6,7 @@ class ManagedFBX;
 struct POD_EnemySpinAttackSkill
 {
 	float skillPlayTime = 6.0f;
+	float skillCoolTime = 6.0f;
 	float skillDamage = 8.0f;
 	float skillRadius = 1.0f;
 	float knockBackDistance = 15.0f;

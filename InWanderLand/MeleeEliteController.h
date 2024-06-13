@@ -1,7 +1,9 @@
 #pragma once
+#include "EnemyController.h"
 
-class MeleeEliteController
+class MeleeEliteController : public EnemyController, public SingletonComponent<MeleeEliteController>
 {
-    public:
-    private:
+public:
+private:
+    virtual coroutine::Coroutine RoutinePerUnit(std::weak_ptr<Unit> unit)override;
 };

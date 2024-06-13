@@ -20,7 +20,6 @@ namespace BossSummon
 
 	LeftFrame::~LeftFrame()
 	{
-		OnBossDie();
 		meleeUnitMold = nullptr;
 		projectileUnitMold = nullptr;
 		BossSummonMobSkill::SetLeftFrame(nullptr);

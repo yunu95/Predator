@@ -1624,6 +1624,11 @@ namespace application
 									selectedScript->AddAction<Action_BossAppear>();
 									break;
 								}
+								case application::ActionType::EngageBattle:
+								{
+									selectedScript->AddAction<Action_EngageBattle>();
+									break;
+								}
 								default:
 									break;
 							}

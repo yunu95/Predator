@@ -145,6 +145,10 @@ namespace BossSummon
 
 	void ChessPool::Return(std::weak_ptr<ChessPawn> chess)
 	{
+		if (chess.expired())
+		{
+			return;
+		}
 		chess.lock()->OnReturn();
 		borrowedChess.erase(chess);
 		ChessPawnPool::Instance().Return(chess);
@@ -152,6 +156,10 @@ namespace BossSummon
 
 	void ChessPool::Return(std::weak_ptr<ChessRook> chess)
 	{
+		if (chess.expired())
+		{
+			return;
+		}
 		chess.lock()->OnReturn();
 		borrowedChess.erase(chess);
 		ChessRookPool::Instance().Return(chess);
@@ -159,6 +167,10 @@ namespace BossSummon
 
 	void ChessPool::Return(std::weak_ptr<ChessBishop> chess)
 	{
+		if (chess.expired())
+		{
+			return;
+		}
 		chess.lock()->OnReturn();
 		borrowedChess.erase(chess);
 		ChessBishopPool::Instance().Return(chess);

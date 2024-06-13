@@ -32,10 +32,10 @@ coroutine::Coroutine UrsulaBlindSkill::operator()()
             UnitAcquisitionSphereColliderPool::Instance().Return(circle_Top);
             UnitAcquisitionSphereColliderPool::Instance().Return(circle_Left);
             UnitAcquisitionSphereColliderPool::Instance().Return(circle_Right);
-            FBXPool::SingleInstance().Return(onUrsulaPosEffect);
-            FBXPool::SingleInstance().Return(onTargetPosEffect1);
-            FBXPool::SingleInstance().Return(onTargetPosEffect2);
-            FBXPool::SingleInstance().Return(onTargetPosEffect3);
+            FBXPool::Instance().Return(onUrsulaPosEffect);
+            FBXPool::Instance().Return(onTargetPosEffect1);
+            FBXPool::Instance().Return(onTargetPosEffect2);
+            FBXPool::Instance().Return(onTargetPosEffect3);
         });
 
     co_yield coroutine::WaitForSeconds(anim->GetDuration());
@@ -64,10 +64,10 @@ coroutine::Coroutine UrsulaBlindSkill::SpawningFieldEffect(std::weak_ptr<UrsulaB
 
     float actualCollideRange = pod.skillRadius * (1 / colliderEffectRatio);
 
-    onUrsulaPosEffect = FBXPool::SingleInstance().Borrow("VFX_Ursula_Skill1_1");
-    onTargetPosEffect1 = FBXPool::SingleInstance().Borrow("VFX_Ursula_Skill1_2");
-    onTargetPosEffect2 = FBXPool::SingleInstance().Borrow("VFX_Ursula_Skill1_2");
-    onTargetPosEffect3 = FBXPool::SingleInstance().Borrow("VFX_Ursula_Skill1_2");
+    onUrsulaPosEffect = FBXPool::Instance().Borrow("VFX_Ursula_Skill1_1");
+    onTargetPosEffect1 = FBXPool::Instance().Borrow("VFX_Ursula_Skill1_2");
+    onTargetPosEffect2 = FBXPool::Instance().Borrow("VFX_Ursula_Skill1_2");
+    onTargetPosEffect3 = FBXPool::Instance().Borrow("VFX_Ursula_Skill1_2");
 
     UpdatePosition(owner.lock()->GetGameObject()->GetTransform()->GetWorldPosition(), targetPos);
 

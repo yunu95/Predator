@@ -539,6 +539,11 @@ namespace application
                         action = AddAction<Action_BossAppear>();
                         break;
                     }
+                    case application::ActionType::EngageBattle:
+                    {
+                        action = AddAction<Action_EngageBattle>();
+                        break;
+                    }
                     default:
                         break;
                     }
