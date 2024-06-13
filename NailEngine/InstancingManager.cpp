@@ -105,15 +105,15 @@ void InstancingManager::SortByCameraDirection()
 
 
 	// 우선 BoundingRadius 기준으로 정렬
-	std::sort(this->staticMeshDeferredRenderVec.begin(), this->staticMeshDeferredRenderVec.end(),
-		[](const auto& left, const auto& right)
-		{
-			auto lR = left.first.first->GetBoundingRadius();
-			auto rR = right.first.first->GetBoundingRadius();
+	//std::sort(this->staticMeshDeferredRenderVec.begin(), this->staticMeshDeferredRenderVec.end(),
+	//	[](const auto& left, const auto& right)
+	//	{
+	//		auto lR = left.first.first->GetBoundingRadius();
+	//		auto rR = right.first.first->GetBoundingRadius();
 
-			return lR > rR;
-		}
-	);
+	//		return lR > rR;
+	//	}
+	//);
 
 	std::vector<std::pair<InstanceID, std::vector<std::shared_ptr<RenderInfo>>>> noBlend;
 	std::vector<std::pair<InstanceID, std::vector<std::shared_ptr<RenderInfo>>>> blend;
@@ -132,17 +132,37 @@ void InstancingManager::SortByCameraDirection()
 			noBlend.push_back(each);
 		}
 	}
+
+
+	std::sort(noBlend.begin(), noBlend.end(),
+		[](const auto& left, const auto& right)
+		{
+			auto lR = left.first.first->GetBoundingRadius();
+			auto rR = right.first.first->GetBoundingRadius();
+
+			return lR > rR;
+		}
+	);
+	std::sort(blend.begin(), blend.end(),
+		[](const auto& left, const auto& right)
+		{
+			auto lR = left.first.first->GetBoundingRadius();
+			auto rR = right.first.first->GetBoundingRadius();
+
+			return lR < rR;
+		}
+	);
+
 	this->staticMeshDeferredRenderVec.clear();
 	for (auto& each : noBlend)
 	{
 		this->staticMeshDeferredRenderVec.push_back(each);
 	}
-
+	
 	for (auto& each : blend)
 	{
 		this->staticMeshDeferredRenderVec.push_back(each);
 	}
-
 
 	DirectX::SimpleMath::Matrix cameraWTM = CameraManager::Instance.Get().GetMainCamera()->GetWTM();
 	DirectX::SimpleMath::Vector3 pos;
