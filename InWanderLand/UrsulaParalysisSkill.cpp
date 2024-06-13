@@ -6,10 +6,10 @@
 
 
 POD_UrsulaParalysisSkill UrsulaParalysisSkill::pod = POD_UrsulaParalysisSkill();
-float UrsulaParalysisSkill::colliderEffectRatio = 3.0f * 0.5f;
 
 coroutine::Coroutine UrsulaParalysisSkill::operator()()
 {
+	colliderEffectRatio = 3.0f * 0.5f;
     auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
     auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
     auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
@@ -39,6 +39,7 @@ coroutine::Coroutine UrsulaParalysisSkill::operator()()
 
 coroutine::Coroutine UrsulaParalysisSkill::SpawningFieldEffect(std::weak_ptr<UrsulaParalysisSkill> skill)
 {
+	colliderEffectRatio = 3.0f * 0.5f;
 	auto persistance = skill.lock();
 
 	Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();

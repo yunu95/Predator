@@ -36,9 +36,9 @@ public:
     static Vector3d GetSkillObjectPos_Left(const Vector3d& dest);
     static Vector3d GetSkillObjectPos_Right(const Vector3d& dest);
 
-    static float colliderEffectRatio;
-
 private:
+    float colliderEffectRatio;
+
     coroutine::Coroutine SpawningFieldEffect(std::weak_ptr<UrsulaBlindSkill> skill);
 
     std::weak_ptr<coroutine::Coroutine> effectColliderCoroutine;

@@ -54,6 +54,10 @@ coroutine::Coroutine HanselChargeSkill::SpawningFieldEffect(std::weak_ptr<Hansel
     stompCollider.lock()->SetRadius(pod.skillRadius);
     stompCollider.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
 
+    /// 이펙트도 생성
+    stompEffect = FBXPool::Instance().Borrow("VFX_HeartQueen_Skill1");
+
+
     Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
     Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
     Vector3d direction = deltaPos.Normalized();
