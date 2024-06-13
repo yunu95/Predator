@@ -20,14 +20,14 @@ class RobinTauntSkill : public Skill
 public:
     RobinTauntSkill() {}
     virtual SkillType::Enum GetSkillType() { return SkillType::Enum::ROBIN_W; }
-    virtual float GetCastRange() override { return pod.skillRadius * colliderEffectRatio; }
+    virtual float GetCastRange() override { return pod.skillRadius; }
     virtual coroutine::Coroutine operator()()override;
     virtual void OnInterruption()override;
 
     static POD_RobinTauntSkill pod;
-    static float colliderEffectRatio;
 
 private:
+    float colliderEffectRatio;
     coroutine::Coroutine SpawningSkillffect(std::weak_ptr<RobinTauntSkill> skill);
     std::weak_ptr<coroutine::Coroutine> effectColliderCoroutine;
     std::weak_ptr<UnitAcquisitionSphereCollider> tauntCollider;

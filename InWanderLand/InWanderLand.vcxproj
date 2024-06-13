@@ -1067,6 +1067,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="PassiveUrsulaSpeed.h" />
     <ClInclude Include="PlayerCharacterType.h" />
     <ClInclude Include="ProjectilePool.h" />
+    <ClInclude Include="ProjectileType.h" />
     <ClInclude Include="RangedEliteController.h" />
     <ClInclude Include="Reference.h" />
     <ClInclude Include="RightFrame.h" />
