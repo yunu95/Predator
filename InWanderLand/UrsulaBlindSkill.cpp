@@ -209,7 +209,7 @@ Vector3d UrsulaBlindSkill::GetSkillObjectPos_Right(const Vector3d& dest)
 
 float UrsulaBlindSkill::GetSkillRange()
 {
-    return PlayerController::Instance().IsSkillUpgraded(SkillUpgradeType::URSULA_Q_RANGE) ? pod.skillRangeUpgraded : UrsulaBlindSkill::GetSkillRange();
+    return PlayerController::Instance().IsSkillUpgraded(SkillUpgradeType::URSULA_Q_RANGE) ? pod.skillRangeUpgraded : pod.skillRange;
 }
 
 float UrsulaBlindSkill::GetSkillDamage()
