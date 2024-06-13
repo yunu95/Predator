@@ -92,27 +92,18 @@ public:
 class TestComponent4 : public yunutyEngine::Component
 {
 public:
-    GameObject* obj;
     yunutyEngine::graphics::Animator* anim;
+    yunuGI::IAnimation* idle;
+    yunuGI::IAnimation* walk;
     virtual void Update() override
     {
         if (Input::isKeyPushed(yunutyEngine::KeyCode::V))
         {
-            anim->GetGI().SetPlaySpeed(10000);
-            //obj->SetSelfActive(false);
+            anim->ChangeAnimation(idle, 0.3, 1);
         }
         if (Input::isKeyPushed(yunutyEngine::KeyCode::C))
         {
-            anim->GetGI().SetPlaySpeed(1);
-            //obj->SetSelfActive(true);
-        }
-        if (Input::isKeyPushed(yunutyEngine::KeyCode::T))
-        {
-            std::vector<Vector3d> temp;
-            temp.push_back(Vector3d{ 0,0,0 });
-            temp.push_back(Vector3d{ 0,0,0.5 });
-            temp.push_back(Vector3d{ 0,0,1 });
-            SkillPreviewSystem::Instance().ShowRoute(SkillPreviewSystem::UnitType::Robin, temp);
+            anim->ChangeAnimation(walk, 0.3, 1);
         }
     }
 };
@@ -140,14 +131,14 @@ void GraphicsTest()
     yunuGI::IAnimation* animation3 = nullptr;
 
     for (auto& i : animationList)
-    {/*
-        if (i->GetName() == L"Armature.001|BMA_00003")
-        {
-            i->SetLoop(true);
-            animation = i;
-        }*/
+	{
+		if (i->GetName() == L"Ani_Ursula_Idle")
+		{
+			i->SetLoop(true);
+			animation = i;
+		}
 
-        if (i->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Walk")
+        if (i->GetName() == L"Ani_Ursula_Walk")
         {
             i->SetLoop(true);
             animation2 = i;
@@ -161,14 +152,41 @@ void GraphicsTest()
         }
     }
     {
-        //auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("mon_wasp_body");
-        //obj2->GetTransform()->SetLocalScale(Vector3d{ 0.001,0.001,0.001 });
-        //auto anim = obj2->GetComponent<yunutyEngine::graphics::Animator>();
-        //anim->PushAnimation(animation);
-        //anim->Play(animation);
+        auto robin = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
+        robin->GetTransform()->SetLocalPosition(Vector3d{5,0,0});
+        robin->SetSelfActive(false);
 
-        //auto obj1 = Scene::getCurrentScene()->AddGameObject();
-        //obj1->AddComponent<TestComponent4>()->anim = anim;
+		auto robin2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
+        robin2->GetTransform()->SetLocalPosition(Vector3d{ -5,0,0 });
+        robin2->SetSelfActive(false);
+
+
+		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Ursula");
+		auto anim = obj2->GetComponent<yunutyEngine::graphics::Animator>();
+		anim->PushAnimation(animation);
+		anim->Play(animation);
+
+        anim->PushAnimationWithFunc(animation, 10,[=]() {
+            robin->SetSelfActive(true);
+            });
+
+		anim->PushAnimationWithFunc(animation, 239, [=]() {
+			robin->SetSelfActive(false);
+			});
+
+		anim->PushAnimationWithFunc(animation2, 0, [=]() {
+			robin2->SetSelfActive(true);
+			});
+
+		anim->PushAnimationWithFunc(animation2, 20, [=]() {
+			robin2->SetSelfActive(false);
+			});
+
+		auto obj1 = Scene::getCurrentScene()->AddGameObject();
+		auto test = obj1->AddComponent<TestComponent4>();
+        test->anim = anim;
+        test->idle = animation;
+        test->walk = animation2;
     }
     //yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
     yunutyEngine::graphics::Renderer::SingleInstance().SetUseIBL(true);
