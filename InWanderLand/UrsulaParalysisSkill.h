@@ -7,7 +7,9 @@ struct POD_UrsulaParalysisSkill
     float skillCost = 10.0f;
     float skillRange = 6.f;
     float skillRadius = 1.f;
+    float skillRadiusUpgraded = 1.f;
     float skillDamage = 5.f;
+    float skillDamageUpgraded = 5.f;
     float skillParalysisTime = 3.0f;
     float knockBackDuration = 2.0f;
     TO_JSON(POD_UrsulaParalysisSkill)
@@ -22,6 +24,8 @@ public:
     virtual float GetCastRange() override { return pod.skillRange; }
     virtual coroutine::Coroutine operator()()override;
     virtual void OnInterruption()override;
+    static float GetSkillRadius();
+    static float GetSkillDamage();
 
     static POD_UrsulaParalysisSkill pod;
 

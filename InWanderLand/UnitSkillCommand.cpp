@@ -163,7 +163,7 @@ void UnitSkillCommand::ShowPreviewMesh()
         }
         else if (this->skillType == SkillType::URSULA_W)
         {
-            SkillPreviewSystem::Instance().ShowUrsulaWSkill(projectedPoint, UrsulaParalysisSkill::pod.skillRadius);
+            SkillPreviewSystem::Instance().ShowUrsulaWSkill(projectedPoint, UrsulaParalysisSkill::GetSkillRadius());
         }
     }
     else if (unit->GetUnitTemplateData().GetDataResourceName() == "SKM_Hansel")

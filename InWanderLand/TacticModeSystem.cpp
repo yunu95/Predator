@@ -244,7 +244,7 @@ void TacticModeSystem::ShowSkillPreviewInTacticMode(SkillType::Enum skillType)
                 auto pos2 = UrsulaBlindSkill::GetSkillObjectPos_Right(projectedPoint);
                 auto pos3 = UrsulaBlindSkill::GetSkillObjectPos_Top(projectedPoint);
                 SkillPreviewSystem::Instance().ShowUrsulaQSkill(pos1, pos2, pos3, Vector3d::one * UrsulaBlindSkill::pod.skillRadius);
-                SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Ursula, this->ursulaLastCommand->GetExpectedPos(), UrsulaBlindSkill::pod.skillRange);
+                SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Ursula, this->ursulaLastCommand->GetExpectedPos(), UrsulaBlindSkill::GetSkillRange());
             }
             else
             {
@@ -253,7 +253,7 @@ void TacticModeSystem::ShowSkillPreviewInTacticMode(SkillType::Enum skillType)
                 auto pos2 = UrsulaBlindSkill::GetSkillObjectPos_Right(projectedPoint);
                 auto pos3 = UrsulaBlindSkill::GetSkillObjectPos_Top(projectedPoint);
                 SkillPreviewSystem::Instance().ShowUrsulaQSkill(pos1, pos2, pos3, Vector3d::one * UrsulaBlindSkill::pod.skillRadius);
-                SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Ursula, characters[PlayerCharacterType::Ursula].lock()->GetTransform()->GetWorldPosition(), UrsulaBlindSkill::pod.skillRange);
+                SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Ursula, characters[PlayerCharacterType::Ursula].lock()->GetTransform()->GetWorldPosition(), UrsulaBlindSkill::GetSkillRange());
             }
         }
     }
@@ -264,12 +264,12 @@ void TacticModeSystem::ShowSkillPreviewInTacticMode(SkillType::Enum skillType)
         {
             if (this->ursulaLastCommand)
             {
-                SkillPreviewSystem::Instance().ShowUrsulaWSkill(projectedPoint, UrsulaParalysisSkill::pod.skillRadius);
+                SkillPreviewSystem::Instance().ShowUrsulaWSkill(projectedPoint, UrsulaParalysisSkill::GetSkillRadius());
                 SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Ursula, this->ursulaLastCommand->GetExpectedPos(), UrsulaParalysisSkill::pod.skillRange);
             }
             else
             {
-                SkillPreviewSystem::Instance().ShowUrsulaWSkill(projectedPoint, UrsulaParalysisSkill::pod.skillRadius);
+                SkillPreviewSystem::Instance().ShowUrsulaWSkill(projectedPoint, UrsulaParalysisSkill::GetSkillRadius());
                 SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Ursula, characters[PlayerCharacterType::Ursula].lock()->GetTransform()->GetWorldPosition(), UrsulaParalysisSkill::pod.skillRange);
             }
         }
@@ -282,12 +282,12 @@ void TacticModeSystem::ShowSkillPreviewInTacticMode(SkillType::Enum skillType)
             if (this->hanselLastCommand)
             {
                 SkillPreviewSystem::Instance().ShowHanselQSkill(projectedPoint, HanselChargeSkill::pod.skillRadius);
-                SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Hansel, this->hanselLastCommand->GetExpectedPos(), HanselChargeSkill::pod.maxRange);
+                SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Hansel, this->hanselLastCommand->GetExpectedPos(), HanselChargeSkill::GetMaxRange());
             }
             else
             {
                 SkillPreviewSystem::Instance().ShowHanselQSkill(projectedPoint, HanselChargeSkill::pod.skillRadius);
-                SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Hansel, characters[PlayerCharacterType::Hansel].lock()->GetTransform()->GetWorldPosition(), HanselChargeSkill::pod.maxRange);
+                SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Hansel, characters[PlayerCharacterType::Hansel].lock()->GetTransform()->GetWorldPosition(), HanselChargeSkill::GetMaxRange());
             }
         }
     }
@@ -299,12 +299,12 @@ void TacticModeSystem::ShowSkillPreviewInTacticMode(SkillType::Enum skillType)
             if (this->hanselLastCommand)
             {
                 SkillPreviewSystem::Instance().ShowHanselWSkill(this->hanselLastCommand->GetExpectedPos());
-                SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Hansel, this->hanselLastCommand->GetExpectedPos(), HanselProjectileSkill::pod.maxRange);
+                SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Hansel, this->hanselLastCommand->GetExpectedPos(), HanselProjectileSkill::GetMaxRange());
             }
             else
             {
                 SkillPreviewSystem::Instance().ShowHanselWSkill(characters[PlayerCharacterType::Hansel].lock()->GetTransform()->GetWorldPosition());
-                SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Hansel, characters[PlayerCharacterType::Hansel].lock()->GetTransform()->GetWorldPosition(), HanselProjectileSkill::pod.maxRange);
+                SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Hansel, characters[PlayerCharacterType::Hansel].lock()->GetTransform()->GetWorldPosition(), HanselProjectileSkill::GetMaxRange());
             }
         }
     }
