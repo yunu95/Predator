@@ -1,7 +1,7 @@
 [
     {
         "material_name": "VFX_HeartQueen_Skill2_1",
-        "frame_rate": 24,
+        "frame_rate": 30,
         "location_data": [
             {
                 "frame": 0,
@@ -775,7 +775,7 @@
     },
     {
         "material_name": "VFX_HeartQueen_Skill2_2",
-        "frame_rate": 24,
+        "frame_rate": 30,
         "location_data": [
             {
                 "frame": 0,

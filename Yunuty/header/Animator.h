@@ -21,7 +21,6 @@ namespace yunutyEngine::graphics
     {
         unsigned int frame;
         bool isFirst;
-        bool isExecute = false;
         std::function<void()> func;
     };
 

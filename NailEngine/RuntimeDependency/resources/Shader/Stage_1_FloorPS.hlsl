@@ -39,6 +39,7 @@ PS_OUT main(PixelIn input)
     PS_OUT output = (PS_OUT) 0;
     float4 worldPos = mul(input.posV, VTMInv);
     float2 uv = float2(-worldPos.x, worldPos.z);
+    uv *= 0.1f;
     // 알베도 블렌딩
     float4 color = AlbedoMap.Sample(sam, uv);
     float4 blendAlbedo = HeightMap.Sample(sam, uv);
@@ -60,19 +61,10 @@ PS_OUT main(PixelIn input)
     float3x3 matTBN = { input.tangentV, input.biNormalV, input.normalV };
     viewNormal = normalize(mul(finalTangentSpaceNormal, matTBN));
     
-    if (UseTexture(useARM) == 1)
-    {
-        float3 arm = ARMMap.Sample(sam, uv);
-        output.arm.x = arm.x;
-        output.arm.y = arm.y;
-        output.arm.z = arm.z;
-    }
-    else
-    {
-        output.arm.x = 1.f;
-        output.arm.y = 1.f;
-        output.arm.z = 0.f;
-    }
+ 
+    output.arm.x = 1.f;
+    output.arm.y = 1.f;
+    output.arm.z = 0.f;
     
     output.position = input.posV;
     output.normal = float4(viewNormal.xyz, 1.f);

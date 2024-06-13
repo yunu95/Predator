@@ -93,26 +93,15 @@ class TestComponent4 : public yunutyEngine::Component
 {
 public:
 	GameObject* obj;
-	yunutyEngine::graphics::Animator* anim;
 	virtual void Update() override
 	{
 		if (Input::isKeyPushed(yunutyEngine::KeyCode::V))
 		{
-			anim->GetGI().SetPlaySpeed(10000);
-			//obj->SetSelfActive(false);
+			obj->SetSelfActive(false);
 		}
 		if (Input::isKeyPushed(yunutyEngine::KeyCode::C))
 		{
-			anim->GetGI().SetPlaySpeed(1);
-			//obj->SetSelfActive(true);
-		}
-		if (Input::isKeyPushed(yunutyEngine::KeyCode::T))
-		{
-			std::vector<Vector3d> temp;
-			temp.push_back(Vector3d{ 0,0,0 });
-			temp.push_back(Vector3d{ 0,0,0.5 });
-			temp.push_back(Vector3d{ 0,0,1 });
-			SkillPreviewSystem::Instance().ShowRoute(SkillPreviewSystem::UnitType::Robin, temp);
+			obj->SetSelfActive(true);
 		}
 	}
 };
@@ -140,12 +129,12 @@ void GraphicsTest()
 	yunuGI::IAnimation* animation3 = nullptr;
 
 	for (auto& i : animationList)
-	{/*
-		if (i->GetName() == L"Armature.001|BMA_00003")
+	{
+		if (i->GetName() == L"Ani_HeartQueen_Skill2")
 		{
 			i->SetLoop(true);
 			animation = i;
-		}*/
+		}
 
 		if (i->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Walk")
 		{
@@ -161,14 +150,24 @@ void GraphicsTest()
 		}
 	}
 	{
-		//auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("mon_wasp_body");
-		//obj2->GetTransform()->SetLocalScale(Vector3d{ 0.001,0.001,0.001 });
-		//auto anim = obj2->GetComponent<yunutyEngine::graphics::Animator>();
-		//anim->PushAnimation(animation);
-		//anim->Play(animation);
+		auto obj = Scene::getCurrentScene()->AddGameObject();
+		obj->SetSelfActive(false);
+
+		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_HeartQueen");
+		obj2->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{0,180,0} });
+		auto anim = obj2->GetComponent<yunutyEngine::graphics::Animator>();
+		anim->PushAnimation(animation);
+		anim->Play(animation);
+		obj2->SetParent(obj);
+
+		auto obj3 = Scene::getCurrentScene()->AddGameObjectFromFBX("VFX_HeartQueen_Skill2");
+		auto vfx = obj3->AddComponent<VFXAnimator>();
+		vfx->Init();
+		vfx->SetAutoActiveFalse();
+		obj3->SetParent(obj);
 		
-		//auto obj1 = Scene::getCurrentScene()->AddGameObject();
-		//obj1->AddComponent<TestComponent4>()->anim = anim;
+		auto obj1 = Scene::getCurrentScene()->AddGameObject();
+		obj1->AddComponent<TestComponent4>()->obj = obj;
 	}
 	//yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
 	yunutyEngine::graphics::Renderer::SingleInstance().SetUseIBL(true);

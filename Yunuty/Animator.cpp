@@ -24,12 +24,7 @@ void Animator::ClearAnimationEvent(yunuGI::IAnimation* animation)
 {
     for (auto& [key, each] : this->animationEventMap[animation])
     {
-        if (each.isExecute == false)
-        {
-            each.func();
-        }
         each.isFirst = true;
-        each.isExecute = false;
     }
 }
 
@@ -95,38 +90,6 @@ unsigned long long Animator::PushAnimationWithFunc(yunuGI::IAnimation* animation
 
     this->animationEventMap[animation][functorIndex] = animationEvent;
     return functorIndex++;
-
-    //if (func)
-    //{
-    //	AnimationEvent animationEvent;
-    //	animationEvent.frame = frame;
-    //	animationEvent.func = func;
-    //	animationEvent.isFirst = true;
-
-
-    //	auto iter = this->animationEventMap.find(animation);
-
-    //	if (iter == this->animationEventMap.end())
-    //	{
-    //		std::vector<AnimationEvent> tempVec;
-    //		tempVec.emplace_back(animationEvent);
-    //		this->animationEventMap.insert({ animation, tempVec });
-    //	}
-    //	else
-    //	{
-    //		for (auto& each : this->animationEventMap[animation])
-    //		{
-    //          /// frame 값이 같다고 해서 animationEvent 가 등록 안되게 하는지 이유를 잘 모르겠습니다.
-    //          /// 특정 frame 에 여러 이벤트가 발생했을 때에도 대응해야 합니다.
-    //			if (each.frame == frame)
-    //			{
-    //				return;
-    //			}
-    //		}
-
-    //		this->animationEventMap[animation].emplace_back(animationEvent);
-    //	}
-    //}
 }
 
 bool Animator::EraseAnimationFunc(yunuGI::IAnimation* animation, unsigned long long index)
@@ -184,9 +147,6 @@ void Animator::Update()
             desc.curr.sumTime += (gi.GetPlaySpeed() * desc.curr.speed * Time::GetDeltaTime());
             if (desc.curr.sumTime >= currentAnimation->GetDuration())
             {
-                // 현재 애니메이션의 마지막 프레임에 왔다면 이벤트를 클리어해준다.
-                ClearAnimationEvent(currentAnimation);
-
                 if (currentAnimation->GetLoop())
                 {
                     desc.curr.sumTime -= currentAnimation->GetDuration();
@@ -210,7 +170,6 @@ void Animator::Update()
                     {
                         if (each2.isFirst && (each2.func != nullptr))
                         {
-                            each2.isExecute = true;
                             each2.isFirst = false;
                             each2.func();
                         }
@@ -237,6 +196,7 @@ void Animator::Update()
             if (desc.transitionRatio >= 1.f)
             {
                 // 애니메이션 교체과 완료된다면 현재 애니메이션을 바꾸기 전에 현재 애니메이션에 등록된 이벤트를 클리어 해준다.
+                /// 상준이형 여기봐
                 ClearAnimationEvent(gi.GetCurrentAnimation());
 
                 desc.curr = desc.next;
@@ -253,8 +213,6 @@ void Animator::Update()
                 {
                     desc.next.sumTime = 0;
                 }
-                //desc.next.currFrame = 0;
-                //desc.next.nextFrame = 1;
                 desc.next.currFrame = static_cast<__int32>(desc.next.sumTime * ratio);
                 desc.next.currFrame = min(static_cast<int>(desc.next.currFrame), totalFrame - 1);
                 desc.next.nextFrame = min(static_cast<int>(desc.next.currFrame + 1), totalFrame - 1);
@@ -272,7 +230,6 @@ void Animator::Update()
                             {
                                 if (each2.isFirst && (each2.func != nullptr))
                                 {
-                                    each2.isExecute = true;
                                     each2.isFirst = false;
                                     each2.func();
                                 }
