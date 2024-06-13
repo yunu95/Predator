@@ -19,11 +19,12 @@ class HanselChargeSkill : public Skill
 public:
     HanselChargeSkill() {}
     virtual SkillType::Enum GetSkillType() { return SkillType::Enum::HANSEL_Q; }
-    virtual float GetCastRange() override;
+    virtual float GetCastRange() override { return pod.maxRange; }
     virtual coroutine::Coroutine operator()()override;
 
     static POD_HanselChargeSkill pod;
-    virtual void OnInterruption()override;
+    virtual void OnInterruption() override;
+
 private:
     coroutine::Coroutine SpawningFieldEffect(std::weak_ptr<HanselChargeSkill> skill);
     std::weak_ptr<UnitAcquisitionSphereCollider> stompCollider;

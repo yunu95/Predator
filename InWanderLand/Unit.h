@@ -20,6 +20,7 @@
 #include "Reference.h"
 #include "DamageType.h"
 
+class ManagedFBX;
 class PassiveSkill;
 class UIManager;
 class UnitProductor;
@@ -230,6 +231,7 @@ private:
     UnitAnimType defaultAnimationType;
     bool blendWithDefaultAnimTrigger{ false };
     int navAgentEnableFrameCount{ 0 };
+    std::weak_ptr<ManagedFBX> attackVFX = std::weak_ptr<ManagedFBX>();
     friend UnitBuff;
     friend UnitPool;
     friend PlayerController;

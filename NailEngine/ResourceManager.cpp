@@ -1365,12 +1365,16 @@ void ResourceManager::CreateDefaultTexture()
     CreateTexture(L"Texture/Dissolve.jpg");
     CreateTexture(L"Texture/Stage1LightMap_0.exr");
     CreateTexture(L"Texture/Stage1LightMap_1.exr");
+    CreateTexture(L"Texture/Stage1LightMap_2.exr");
+    CreateTexture(L"Texture/Stage1LightMap_3.exr");
 
 
     CreateTexture(L"Texture/Stage2LightMap_0.exr");
     CreateTexture(L"Texture/Stage2LightMap_1.exr");
     CreateTexture(L"Texture/Stage2LightMap_2.exr");
     CreateTexture(L"Texture/Stage2LightMap_3.exr");
+    CreateTexture(L"Texture/Stage2LightMap_4.exr");
+    CreateTexture(L"Texture/Stage2LightMap_5.exr");
 
     std::shared_ptr<Texture> texture = std::make_shared<Texture>();
 
@@ -1378,6 +1382,8 @@ void ResourceManager::CreateDefaultTexture()
     std::vector<yunuGI::ITexture*> tempVec;
     tempVec.push_back(GetTexture(L"Texture/Stage1LightMap_0.exr").get());
     tempVec.push_back(GetTexture(L"Texture/Stage1LightMap_1.exr").get());
+    tempVec.push_back(GetTexture(L"Texture/Stage1LightMap_2.exr").get());
+    tempVec.push_back(GetTexture(L"Texture/Stage1LightMap_3.exr").get());
     texture->CreateLightMapArray(tempVec);
     textureMap.insert({ L"Stage1LightMap", texture });
     textureVec.push_back(texture.get());
@@ -1390,6 +1396,8 @@ void ResourceManager::CreateDefaultTexture()
     tempVec1.push_back(GetTexture(L"Texture/Stage2LightMap_1.exr").get());
     tempVec1.push_back(GetTexture(L"Texture/Stage2LightMap_2.exr").get());
     tempVec1.push_back(GetTexture(L"Texture/Stage2LightMap_3.exr").get());
+    tempVec1.push_back(GetTexture(L"Texture/Stage2LightMap_4.exr").get());
+    tempVec1.push_back(GetTexture(L"Texture/Stage2LightMap_5.exr").get());
     texture1->CreateLightMapArray(tempVec1);
     textureMap.insert({ L"Stage2LightMap", texture1 });
     textureVec.push_back(texture1.get());

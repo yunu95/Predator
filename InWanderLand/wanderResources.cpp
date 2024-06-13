@@ -1,6 +1,7 @@
 #include "wanderResources.h"
-
+#include "FBXPool.h"
 std::unordered_map<std::string, std::unordered_map<UnitAnimType, yunuGI::IAnimation*>> animMap;
+std::unordered_map<std::string, std::unordered_map<UnitAnimType, std::string>> fbxMap;
 std::unordered_map<std::string, std::string> projectileBirthSounds;
 std::unordered_map<std::string, std::string> projectileDeathSounds;
 
@@ -122,4 +123,17 @@ constexpr const std::string wanderResources::GetFBXName(WanderFBX::Enum fbxType)
     default:
         break;
     }
-};
+}
+
+void InitFBXMap()
+{
+    fbxMap["SKM_Robin"][UnitAnimType::Attack] = "VFX_dlsdknglsk";
+
+}
+
+std::weak_ptr<ManagedFBX> wanderResources::GetVFX(const std::string& fbx, UnitAnimType animType)
+{
+    if (fbxMap.empty())
+        InitFBXMap();
+    return FBXPool::Instance().Borrow(fbxMap.at(fbx).at(animType));
+}
