@@ -99,7 +99,7 @@ void PlaytimeWave::Update()
         for (auto& e : m_currentWaveUnitVector)
         {
             // 한 유닛이라도 살아 있다면 bool값을 false로
-            if (e->IsAlive())
+            if (e->IsAlive() && e->GetGameObject()->GetActive())
             {
                 isAllUnitTerminated = false;
                 break;
