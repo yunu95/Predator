@@ -12,14 +12,10 @@ const float	duration = 0.7f;
 const float damageDelay = 1.5f;
 const float jumpTiming = 1.05f;
 
-float HanselChargeSkill::GetCastRange()
-{
-    return pod.maxRange;
-}
-
 coroutine::Coroutine HanselChargeSkill::operator()()
 {
     auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
+    auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill1);
 
     Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
     Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
@@ -34,6 +30,8 @@ coroutine::Coroutine HanselChargeSkill::operator()()
             UnitAcquisitionSphereColliderPool::Instance().Return(stompCollider);
         });
 
+    co_yield coroutine::WaitForSeconds(anim->GetDuration());
+
     co_return;
 }
 
@@ -47,8 +45,10 @@ void HanselChargeSkill::OnInterruption()
 
 coroutine::Coroutine HanselChargeSkill::SpawningFieldEffect(std::weak_ptr<HanselChargeSkill> skill)
 {
+    auto persistance = skill.lock();
     auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
     auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
+    auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
 
     stompCollider = UnitAcquisitionSphereColliderPool::Instance().Borrow(owner.lock());
     stompCollider.lock()->SetRadius(pod.skillRadius);
@@ -64,6 +64,8 @@ coroutine::Coroutine HanselChargeSkill::SpawningFieldEffect(std::weak_ptr<Hansel
     auto animator = owner.lock()->GetAnimator();
     auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill1);
 
+    co_yield coroutine::WaitForSeconds(jumpTiming);
+
     float rushSpeed = static_cast<float>(deltaPos.Magnitude()) / duration;
     coroutine::ForSeconds forSeconds{ duration };
 
@@ -75,10 +77,8 @@ coroutine::Coroutine HanselChargeSkill::SpawningFieldEffect(std::weak_ptr<Hansel
 
     float vy0 = 4 * pod.maxJumpHeight / duration;
     float acc = (8 * pod.maxJumpHeight) / (duration * duration);
-
-    co_yield coroutine::WaitForSeconds(jumpTiming);
-
     float yPos = 0.0f;
+
     while (forSeconds.Tick())
     {
         stompCollider.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
@@ -110,9 +110,7 @@ coroutine::Coroutine HanselChargeSkill::SpawningFieldEffect(std::weak_ptr<Hansel
         each->Damaged(owner, pod.damage);
     }
 
-    co_yield coroutine::WaitForSeconds(1.2);
-    owner.lock()->PlayAnimation(UnitAnimType::Idle, true);
-    co_yield coroutine::WaitForSeconds(0.2);
+    co_yield coroutine::WaitForSeconds(anim->GetDuration() - jumpTiming - duration - damageDelay);
 
     disableNavAgent.reset();
     blockFollowingNavigation.reset();
