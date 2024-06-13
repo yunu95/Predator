@@ -56,18 +56,15 @@ coroutine::Coroutine BossImpaleSkill::operator()()
 	auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
 	auto enableNavObstacle = owner.lock()->referenceEnableNavObstacle.Acquire();
 
+	auto animator = owner.lock()->GetAnimator();
+	auto impaleAnim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill2);
+
+	owner.lock()->PlayAnimation(UnitAnimType::Skill2);
 	effectCoroutine = owner.lock()->StartCoroutine(SpawningSkillffect(dynamic_pointer_cast<BossImpaleSkill>(selfWeakPtr.lock())));
 	effectCoroutine.lock()->PushDestroyCallBack([this]()
 		{
 			FBXPool::SingleInstance().Return(impaleEffect);
 		});
-
-	co_yield coroutine::WaitForSeconds(0.7f);
-
-	auto animator = owner.lock()->GetAnimator();
-	auto impaleAnim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill2);
-
-	owner.lock()->PlayAnimation(UnitAnimType::Skill2);
 
 	co_yield coroutine::WaitForSeconds{ impaleStartTime };
 

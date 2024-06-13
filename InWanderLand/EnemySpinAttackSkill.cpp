@@ -11,6 +11,40 @@ const float eliteSpinAttackingTime = eliteSpinEndTime - eliteSpinStartTime;
 const float eliteAfterSpinDelay = eliteTotalTime - eliteSpinStartTime - eliteSpinAttackingTime;
 float EnemySpinAttackSkill::colliderEffectRatio = 10.0f * 0.5f;
 
+coroutine::Coroutine EnemySpinAttackSkill::operator()()
+{
+    auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
+    auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
+    auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
+
+    owner.lock()->PlayAnimation(UnitAnimType::Spin, true);
+    effectColliderCoroutine = owner.lock()->StartCoroutine(SpawningSkillffect(dynamic_pointer_cast<EnemySpinAttackSkill>(selfWeakPtr.lock())));
+    effectColliderCoroutine.lock()->PushDestroyCallBack([this]()
+        {
+            FBXPool::SingleInstance().Return(chargeEffect);
+            UnitAcquisitionSphereColliderPool::Instance().Return(knockbackCollider);
+        });
+    co_yield coroutine::WaitForSeconds(eliteSpinStartTime);
+
+    coroutine::ForSeconds forSeconds{ eliteSpinAttackingTime };
+
+    disableNavAgent.reset();
+    blockFollowingNavigation.reset();
+    owner.lock()->Relocate(owner.lock()->GetTransform()->GetWorldPosition());
+    co_yield coroutine::WaitForSeconds(eliteAfterSpinDelay);
+    owner.lock()->PlayAnimation(UnitAnimType::Idle, true);
+    co_yield coroutine::WaitForSeconds(0.2);
+    co_return;
+}
+
+void EnemySpinAttackSkill::OnInterruption()
+{
+    if (!effectColliderCoroutine.expired())
+    {
+        owner.lock()->DeleteCoroutine(effectColliderCoroutine);
+    }
+}
+
 coroutine::Coroutine EnemySpinAttackSkill::SpawningSkillffect(std::weak_ptr<EnemySpinAttackSkill> skill)
 {
     float actualCollideRange = pod.skillRadius * (1 - colliderEffectRatio);
@@ -66,39 +100,5 @@ coroutine::Coroutine EnemySpinAttackSkill::SpawningSkillffect(std::weak_ptr<Enem
         co_await std::suspend_always{};
     }
 
-	co_return;
-}
-
-coroutine::Coroutine EnemySpinAttackSkill::operator()()
-{
-    auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
-    auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
-    auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
-
-    owner.lock()->PlayAnimation(UnitAnimType::Spin, true);
-    effectColliderCoroutine = owner.lock()->StartCoroutine(SpawningSkillffect(dynamic_pointer_cast<EnemySpinAttackSkill>(selfWeakPtr.lock())));
-    effectColliderCoroutine.lock()->PushDestroyCallBack([this]()
-        {
-            FBXPool::SingleInstance().Return(chargeEffect);
-            UnitAcquisitionSphereColliderPool::Instance().Return(knockbackCollider);
-        });
-    co_yield coroutine::WaitForSeconds(eliteSpinStartTime);
-
-    coroutine::ForSeconds forSeconds{ eliteSpinAttackingTime };
-
-    disableNavAgent.reset();
-    blockFollowingNavigation.reset();
-    owner.lock()->Relocate(owner.lock()->GetTransform()->GetWorldPosition());
-    co_yield coroutine::WaitForSeconds(eliteAfterSpinDelay);
-    owner.lock()->PlayAnimation(UnitAnimType::Idle, true);
-    co_yield coroutine::WaitForSeconds(0.2);
     co_return;
-}
-
-void EnemySpinAttackSkill::OnInterruption()
-{
-    if (!effectColliderCoroutine.expired())
-    {
-        owner.lock()->DeleteCoroutine(effectColliderCoroutine);
-    }
 }

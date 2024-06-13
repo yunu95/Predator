@@ -25,11 +25,6 @@ struct POD_RobinChargeSkill
 class UnitAcquisitionSphereCollider;
 class RobinChargeSkill : public Skill
 {
-private:
-	coroutine::Coroutine SpawningSkillffect(std::weak_ptr<RobinChargeSkill> skill, Vector3d skillStartPos);
-	std::weak_ptr<UnitAcquisitionSphereCollider> knockbackCollider;
-	std::weak_ptr<ManagedFBX> chargeEffect;
-
 public:
     RobinChargeSkill() {};
     virtual SkillType::Enum GetSkillType() { return SkillType::Enum::ROBIN_Q; }
@@ -38,6 +33,11 @@ public:
     virtual void OnInterruption()override;
 
     static POD_RobinChargeSkill pod;
+
+private:
+    coroutine::Coroutine SpawningSkillffect(std::weak_ptr<RobinChargeSkill> skill, Vector3d skillStartPos);
+    std::weak_ptr<UnitAcquisitionSphereCollider> knockbackCollider;
+    std::weak_ptr<ManagedFBX> chargeEffect;
 };
 
 

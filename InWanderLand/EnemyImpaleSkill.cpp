@@ -46,49 +46,7 @@ const std::vector<Spear> SpearsInfo()
     std::sort(spears.begin(), spears.end(), [](const Spear& a, const Spear& b) { return a.timeOffset < b.timeOffset; });
     return spears;
 }
-// 창이 한번 불쑥 튀어나왔다가 다시 꺼지는 사이클
-coroutine::Coroutine EnemyImpaleSkill::SpearArise(std::weak_ptr<EnemyImpaleSkill> skill, std::weak_ptr<ManagedFBX> fbx, std::weak_ptr<UnitAcquisitionSphereCollider> collider, Vector2d pos)
-{
-    auto temp = skill.lock();
-    fbx = FBXPool::SingleInstance().Borrow(wanderResources::GetFBXName(wanderResources::WanderFBX::IMPALING_SPIKE));
-    skill.lock()->spearFbxVector.push_back(fbx);
-    collider = UnitAcquisitionSphereColliderPool::Instance().Borrow(skill.lock()->owner);
-    skill.lock()->knockbackColliderVector.push_back(collider);
-    auto forward = owner.lock()->GetTransform()->GetWorldRotation().Forward();
-    auto right = owner.lock()->GetTransform()->GetWorldRotation().Right();
-    auto worldPos = owner.lock()->GetTransform()->GetWorldPosition() + forward * pos.y + right * pos.x;
-    fbx.lock()->GetTransform()->SetWorldPosition(worldPos);
-    collider.lock()->SetRadius(0.01);
-    collider.lock()->GetTransform()->SetWorldPosition(worldPos);
-    co_await std::suspend_always{};
-    if (!skill.expired())
-    {
-        skill.lock();
-        for (auto& each : collider.lock()->GetEnemies())
-        {
-            if (skill.lock()->damagedUnits.contains(each))
-            {
-                continue;
-            }
-            skill.lock()->damagedUnits.insert(each);
-            each->Damaged(skill.lock()->owner, pod.impaleSkillDamage);
-            Vector3d knockBackDest = each->GetTransform()->GetWorldPosition() + (each->GetTransform()->GetWorldPosition() - worldPos).Normalized() * pod.impaleSkillKnockbackDistance;
-            each->KnockBack(knockBackDest, pod.impaleSkillKnockbackDuration);
-        }
-    }
 
-    coroutine::ForSeconds forSeconds{ pod.impaleSkillDurationPerSpear };
-    while (forSeconds.Tick())
-    {
-        skill.lock();
-        float heightAlpha = std::sinf(forSeconds.ElapsedNormalized() * math::PI);
-        float yDelta = math::LerpF(pod.impaleSkillMinHeightPerSpear, pod.impaleSkillMaxHeightPerSpear, heightAlpha);
-        fbx.lock()->GetTransform()->SetWorldPosition(worldPos + Vector3d::up * yDelta);
-        co_await std::suspend_always{};
-    }
-
-    co_return;
-}
 coroutine::Coroutine EnemyImpaleSkill::operator()()
 {
     //auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
@@ -137,4 +95,48 @@ coroutine::Coroutine EnemyImpaleSkill::operator()()
 void EnemyImpaleSkill::OnInterruption()
 {
 
+}
+
+// 창이 한번 불쑥 튀어나왔다가 다시 꺼지는 사이클
+coroutine::Coroutine EnemyImpaleSkill::SpearArise(std::weak_ptr<EnemyImpaleSkill> skill, std::weak_ptr<ManagedFBX> fbx, std::weak_ptr<UnitAcquisitionSphereCollider> collider, Vector2d pos)
+{
+    auto temp = skill.lock();
+    fbx = FBXPool::SingleInstance().Borrow(wanderResources::GetFBXName(wanderResources::WanderFBX::IMPALING_SPIKE));
+    skill.lock()->spearFbxVector.push_back(fbx);
+    collider = UnitAcquisitionSphereColliderPool::Instance().Borrow(skill.lock()->owner);
+    skill.lock()->knockbackColliderVector.push_back(collider);
+    auto forward = owner.lock()->GetTransform()->GetWorldRotation().Forward();
+    auto right = owner.lock()->GetTransform()->GetWorldRotation().Right();
+    auto worldPos = owner.lock()->GetTransform()->GetWorldPosition() + forward * pos.y + right * pos.x;
+    fbx.lock()->GetTransform()->SetWorldPosition(worldPos);
+    collider.lock()->SetRadius(0.01);
+    collider.lock()->GetTransform()->SetWorldPosition(worldPos);
+    co_await std::suspend_always{};
+    if (!skill.expired())
+    {
+        skill.lock();
+        for (auto& each : collider.lock()->GetEnemies())
+        {
+            if (skill.lock()->damagedUnits.contains(each))
+            {
+                continue;
+            }
+            skill.lock()->damagedUnits.insert(each);
+            each->Damaged(skill.lock()->owner, pod.impaleSkillDamage);
+            Vector3d knockBackDest = each->GetTransform()->GetWorldPosition() + (each->GetTransform()->GetWorldPosition() - worldPos).Normalized() * pod.impaleSkillKnockbackDistance;
+            each->KnockBack(knockBackDest, pod.impaleSkillKnockbackDuration);
+        }
+    }
+
+    coroutine::ForSeconds forSeconds{ pod.impaleSkillDurationPerSpear };
+    while (forSeconds.Tick())
+    {
+        skill.lock();
+        float heightAlpha = std::sinf(forSeconds.ElapsedNormalized() * math::PI);
+        float yDelta = math::LerpF(pod.impaleSkillMinHeightPerSpear, pod.impaleSkillMaxHeightPerSpear, heightAlpha);
+        fbx.lock()->GetTransform()->SetWorldPosition(worldPos + Vector3d::up * yDelta);
+        co_await std::suspend_always{};
+    }
+
+    co_return;
 }
