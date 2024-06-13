@@ -11,16 +11,16 @@ coroutine::Coroutine RobinChargeSkill::operator()()
     Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
     Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
     Vector3d direction = deltaPos.Normalized();
-    if (deltaPos.Magnitude() > pod.maxDistance)
+    if (deltaPos.Magnitude() > GetMaxDistance())
     {
-        deltaPos = direction * pod.maxDistance;
+        deltaPos = direction * GetMaxDistance();
     }
     Vector3d endPos = startPos + deltaPos;
     Vector3d currentPos = startPos;
 
-	auto animator = owner.lock()->GetAnimator();
-	auto rushAnim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Rush);
-	auto slamAnim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Slam);
+    auto animator = owner.lock()->GetAnimator();
+    auto rushAnim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Rush);
+    auto slamAnim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Slam);
 
     owner.lock()->PlayAnimation(UnitAnimType::Rush, true);
 
@@ -28,7 +28,7 @@ coroutine::Coroutine RobinChargeSkill::operator()()
 
     animator.lock()->Pause();
 
-	co_await std::suspend_always{};
+    co_await std::suspend_always{};
 
     coroutine::ForSeconds forSeconds{ static_cast<float>(deltaPos.Magnitude()) / pod.rushSpeed };
     knockbackCollider = UnitAcquisitionSphereColliderPool::Instance().Borrow(owner.lock());
@@ -43,31 +43,31 @@ coroutine::Coroutine RobinChargeSkill::operator()()
         {
             Vector3d delta = pod.rushKnockbackDistance * (each->GetTransform()->GetWorldPosition() - currentPos).Normalized();
             each->KnockBackRelativeVector(delta, pod.rushKnockbackDuration);
-            each->Damaged(owner, pod.damageRush);
+            each->Damaged(owner, GetDamageRush());
         }
     }
 
     owner.lock()->PlayAnimation(UnitAnimType::Slam);
-	animator.lock()->Resume();
+    animator.lock()->Resume();
     knockbackCollider.lock()->SetRadius(pod.impactKnockbackRadius);
-	auto effectCoroutine = owner.lock()->StartCoroutine(SpawningSkillffect(dynamic_pointer_cast<RobinChargeSkill>(selfWeakPtr.lock()), startPos));
+    auto effectCoroutine = owner.lock()->StartCoroutine(SpawningSkillffect(dynamic_pointer_cast<RobinChargeSkill>(selfWeakPtr.lock()), startPos));
     effectCoroutine.lock()->PushDestroyCallBack([this]()
         {
             FBXPool::Instance().Return(chargeEffect);
             UnitAcquisitionSphereColliderPool::Instance().Return(knockbackCollider);
             FBXPool::Instance().Return(chargeEffect);
         });
-    
+
     co_await std::suspend_always{};
     for (auto& each : knockbackCollider.lock()->GetEnemies())
     {
         Vector3d delta = pod.impactKnockbackDistance * (each->GetTransform()->GetWorldPosition() - currentPos).Normalized();
         each->KnockBack(each->GetTransform()->GetWorldPosition() + delta, pod.impactKnockbackDuration);
         each->Paralyze(pod.impactStunDuration);
-        each->Damaged(owner, pod.damageRush);
+        each->Damaged(owner, GetDamageImpact());
     }
 
-	co_yield coroutine::WaitForSeconds(slamAnim->GetDuration());
+    co_yield coroutine::WaitForSeconds(slamAnim->GetDuration());
 
     disableNavAgent.reset();
     blockFollowingNavigation.reset();
@@ -80,6 +80,21 @@ coroutine::Coroutine RobinChargeSkill::operator()()
 void RobinChargeSkill::OnInterruption()
 {
 
+}
+
+float RobinChargeSkill::GetMaxDistance()
+{
+    return PlayerController::Instance().IsSkillUpgraded(SkillUpgradeType::ROBIN_Q_RANGE) ? pod.maxDistanceUpgraded : pod.maxDistance;
+}
+
+float RobinChargeSkill::GetDamageRush()
+{
+    return PlayerController::Instance().IsSkillUpgraded(SkillUpgradeType::ROBIN_Q_DAMAGE) ? pod.damageRushUpgraded : pod.damageRush;
+}
+
+float RobinChargeSkill::GetDamageImpact()
+{
+    return PlayerController::Instance().IsSkillUpgraded(SkillUpgradeType::ROBIN_Q_DAMAGE) ? pod.damageImpactUpgraded : pod.damageImpact;
 }
 
 coroutine::Coroutine RobinChargeSkill::SpawningSkillffect(std::weak_ptr<RobinChargeSkill> skill, Vector3d skillStartPos)

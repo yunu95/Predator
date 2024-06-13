@@ -646,28 +646,28 @@ void Unit::Init(const application::editor::Unit_TemplateData* unitTemplateData)
     //fbxNameW.assign(pod.templateData->pod.skinnedFBXName.begin(), pod.templateData->pod.skinnedFBXName.end());
     AttachDebugMesh(navAgentComponent.lock()->GetGameObject(), DebugMeshType::Sphere)->GetTransform()->SetLocalScale(Vector3d::one * unitTemplateData->pod.collisionSize);
 
-	/// Particle Setting
-	for (auto& eachPI : ptm.GetChildrenParticleInstanceList(unitTemplateData->pod.skinnedFBXName))
-	{
-		auto pObj = GetGameObject()->AddGameObject();
-		auto sptr = eachPI.lock();
-		pObj->GetTransform()->SetLocalPosition(Vector3d(sptr->offsetPos.x, sptr->offsetPos.y, -sptr->offsetPos.z));
-		pObj->GetTransform()->SetLocalRotation(Quaternion(Vector3d(0,180,0)) * sptr->rotation);
-		pObj->GetTransform()->SetLocalScale(sptr->scale);
-		pObj->setName(sptr->name);
-		auto pr = pObj->AddComponent<graphics::ParticleRenderer>();
-		pr->SetParticleShape((yunutyEngine::graphics::ParticleShape)sptr->particleData.shape);
-		pr->SetParticleMode((yunutyEngine::graphics::ParticleMode)sptr->particleData.particleMode);
-		pr->SetLoop(sptr->particleData.isLoop);
-		pr->SetDuration(sptr->particleData.duration);
-		pr->SetLifeTime(sptr->particleData.lifeTime);
-		pr->SetSpeed(sptr->particleData.speed);
-		pr->SetStartScale(sptr->particleData.startScale);
-		pr->SetEndScale(sptr->particleData.endScale);
-		pr->SetMaxParticle(sptr->particleData.maxParticle);
-		pr->SetPlayAwake(sptr->particleData.playAwake);
-		pr->SetRadius(sptr->particleData.radius);
-		pr->SetAngle(sptr->particleData.angle);
+    /// Particle Setting
+    for (auto& eachPI : ptm.GetChildrenParticleInstanceList(unitTemplateData->pod.skinnedFBXName))
+    {
+        auto pObj = GetGameObject()->AddGameObject();
+        auto sptr = eachPI.lock();
+        pObj->GetTransform()->SetLocalPosition(Vector3d(sptr->offsetPos.x, sptr->offsetPos.y, -sptr->offsetPos.z));
+        pObj->GetTransform()->SetLocalRotation(Quaternion(Vector3d(0, 180, 0)) * sptr->rotation);
+        pObj->GetTransform()->SetLocalScale(sptr->scale);
+        pObj->setName(sptr->name);
+        auto pr = pObj->AddComponent<graphics::ParticleRenderer>();
+        pr->SetParticleShape((yunutyEngine::graphics::ParticleShape)sptr->particleData.shape);
+        pr->SetParticleMode((yunutyEngine::graphics::ParticleMode)sptr->particleData.particleMode);
+        pr->SetLoop(sptr->particleData.isLoop);
+        pr->SetDuration(sptr->particleData.duration);
+        pr->SetLifeTime(sptr->particleData.lifeTime);
+        pr->SetSpeed(sptr->particleData.speed);
+        pr->SetStartScale(sptr->particleData.startScale);
+        pr->SetEndScale(sptr->particleData.endScale);
+        pr->SetMaxParticle(sptr->particleData.maxParticle);
+        pr->SetPlayAwake(sptr->particleData.playAwake);
+        pr->SetRadius(sptr->particleData.radius);
+        pr->SetAngle(sptr->particleData.angle);
 
         pr->SetRateOverTime(sptr->particleData.rateOverTime);
 
@@ -753,18 +753,18 @@ void Unit::Init(const application::editor::Unit_TemplateData* unitTemplateData)
                     }
                 }
 
-					for (int i = 0; i < each->GetTotalFrame(); i++)
-					{
-						animatorComponent.lock()->PushAnimationWithFunc(each, i, [=]()
-							{
-								auto& aem = AnimationEventManager::GetSingletonInstance();
-								auto target = aem.GetLerpPoint(ptr->editData, i);
-								auto pos = target->GetLocalPosition();
-								particle->GetTransform()->SetLocalPosition(Vector3d(pos.x, pos.y, -pos.z));
-								particle->GetTransform()->SetLocalRotation(Quaternion(Vector3d(0, 180, 0)) * target->GetLocalRotation());
-								particle->GetTransform()->SetLocalScale(target->GetLocalScale());
-							});
-					}
+                for (int i = 0; i < each->GetTotalFrame(); i++)
+                {
+                    animatorComponent.lock()->PushAnimationWithFunc(each, i, [=]()
+                        {
+                            auto& aem = AnimationEventManager::GetSingletonInstance();
+                            auto target = aem.GetLerpPoint(ptr->editData, i);
+                            auto pos = target->GetLocalPosition();
+                            particle->GetTransform()->SetLocalPosition(Vector3d(pos.x, pos.y, -pos.z));
+                            particle->GetTransform()->SetLocalRotation(Quaternion(Vector3d(0, 180, 0)) * target->GetLocalRotation());
+                            particle->GetTransform()->SetLocalScale(target->GetLocalScale());
+                        });
+                }
 
                 break;
             }
@@ -937,57 +937,57 @@ void Unit::Summon(application::editor::Unit_TemplateData* templateData)
         break;
     }
 
-	unitCollider.lock()->SetRadius(unitTemplateData->pod.collisionSize);
-	attackRange.lock()->SetRadius(unitTemplateData->pod.m_atkRadius);
-	attackRange.lock()->SetColor(yunuGI::Color::red());
-	acquisitionRange.lock()->SetRadius(unitTemplateData->pod.m_idRadius);
-	acquisitionRange.lock()->SetColor(yunuGI::Color::gray());
-	// 공격 범위
-	//AttachDebugMesh(attackRange.lock()->GetGameObject()->AddGameObject(), DebugMeshType::Sphere)->GetTransform()->SetLocalScale(Vector3d{ 1,0.25,1 } *2 * unitTemplateData->pod.m_atkRadius);
-	// 인식 범위
-	//AttachDebugMesh(acquisitionRange.lock()->GetGameObject()->AddGameObject(), DebugMeshType::Sphere)->GetTransform()->SetLocalScale(Vector3d{ 1,0.25,1 } *2 * unitTemplateData->pod.m_idRadius);
-	// 혹여나 플레이어 캐릭터라면 플레이어로 등록, 플레이어가 아니면 그냥 무시된다.
-	switch (templateData->pod.unitControllerType.enumValue)
-	{
-		case UnitControllerType::PLAYER:
-		{
-			PlayerController::Instance().RegisterUnit(GetWeakPtr<Unit>());
-			controllers.push_back(&PlayerController::Instance());
-			break;
-		}
-		case UnitControllerType::ANGRY_MOB:
-		{
-			EnemyAggroController::Instance().RegisterUnit(GetWeakPtr<Unit>());
-			controllers.push_back(&EnemyAggroController::Instance());
-			break;
-		}
-		case UnitControllerType::MELEE_ELITE:
-		{
-			EnemyAggroController::Instance().RegisterUnit(GetWeakPtr<Unit>());
-			controllers.push_back(&EnemyAggroController::Instance());
-			MeleeEliteController::Instance().RegisterUnit(GetWeakPtr<Unit>());
-			controllers.push_back(&MeleeEliteController::Instance());
-			break;
-		}
-		case UnitControllerType::RANGED_ELITE:
-		{
-			EnemyAggroController::Instance().RegisterUnit(GetWeakPtr<Unit>());
-			controllers.push_back(&EnemyAggroController::Instance());
-			RangedEliteController::Instance().RegisterUnit(GetWeakPtr<Unit>());
-			controllers.push_back(&EnemyAggroController::Instance());
-			break;
-		}
-		case UnitControllerType::HEART_QUEEN:
-		{
-			BossController::Instance().RegisterUnit(GetWeakPtr<Unit>());
-			controllers.push_back(&BossController::Instance());
-			break;
-		}
-	}
-	currentRotationSpeed = unitTemplateData->pod.rotationSpeed;
-	navAgentComponent.lock()->SetRadius(unitTemplateData->pod.collisionSize);
-	navAgentComponent.lock()->SetSpeed(unitTemplateData->pod.m_unitSpeed);
-	navObstacle.lock()->SetRadiusAndHeight(unitTemplateData->pod.collisionSize, 100);
+    unitCollider.lock()->SetRadius(unitTemplateData->pod.collisionSize);
+    attackRange.lock()->SetRadius(unitTemplateData->pod.m_atkRadius);
+    attackRange.lock()->SetColor(yunuGI::Color::red());
+    acquisitionRange.lock()->SetRadius(unitTemplateData->pod.m_idRadius);
+    acquisitionRange.lock()->SetColor(yunuGI::Color::gray());
+    // 공격 범위
+    //AttachDebugMesh(attackRange.lock()->GetGameObject()->AddGameObject(), DebugMeshType::Sphere)->GetTransform()->SetLocalScale(Vector3d{ 1,0.25,1 } *2 * unitTemplateData->pod.m_atkRadius);
+    // 인식 범위
+    //AttachDebugMesh(acquisitionRange.lock()->GetGameObject()->AddGameObject(), DebugMeshType::Sphere)->GetTransform()->SetLocalScale(Vector3d{ 1,0.25,1 } *2 * unitTemplateData->pod.m_idRadius);
+    // 혹여나 플레이어 캐릭터라면 플레이어로 등록, 플레이어가 아니면 그냥 무시된다.
+    switch (templateData->pod.unitControllerType.enumValue)
+    {
+    case UnitControllerType::PLAYER:
+    {
+        PlayerController::Instance().RegisterUnit(GetWeakPtr<Unit>());
+        controllers.push_back(&PlayerController::Instance());
+        break;
+    }
+    case UnitControllerType::ANGRY_MOB:
+    {
+        EnemyAggroController::Instance().RegisterUnit(GetWeakPtr<Unit>());
+        controllers.push_back(&EnemyAggroController::Instance());
+        break;
+    }
+    case UnitControllerType::MELEE_ELITE:
+    {
+        EnemyAggroController::Instance().RegisterUnit(GetWeakPtr<Unit>());
+        controllers.push_back(&EnemyAggroController::Instance());
+        MeleeEliteController::Instance().RegisterUnit(GetWeakPtr<Unit>());
+        controllers.push_back(&MeleeEliteController::Instance());
+        break;
+    }
+    case UnitControllerType::RANGED_ELITE:
+    {
+        EnemyAggroController::Instance().RegisterUnit(GetWeakPtr<Unit>());
+        controllers.push_back(&EnemyAggroController::Instance());
+        RangedEliteController::Instance().RegisterUnit(GetWeakPtr<Unit>());
+        controllers.push_back(&EnemyAggroController::Instance());
+        break;
+    }
+    case UnitControllerType::HEART_QUEEN:
+    {
+        BossController::Instance().RegisterUnit(GetWeakPtr<Unit>());
+        controllers.push_back(&BossController::Instance());
+        break;
+    }
+    }
+    currentRotationSpeed = unitTemplateData->pod.rotationSpeed;
+    navAgentComponent.lock()->SetRadius(unitTemplateData->pod.collisionSize);
+    navAgentComponent.lock()->SetSpeed(unitTemplateData->pod.m_unitSpeed);
+    navObstacle.lock()->SetRadiusAndHeight(unitTemplateData->pod.collisionSize, 100);
 }
 void Unit::Reset()
 {
@@ -1082,6 +1082,10 @@ void Unit::InitBehaviorTree()
     unitBehaviourTree[UnitBehaviourTree::Skill][UnitBehaviourTree::SkillOnGoing].enteringCondtion = [this]()
         {
             return !coroutineSkill.expired();
+        };
+    unitBehaviourTree[UnitBehaviourTree::Skill][UnitBehaviourTree::SkillOnGoing].onEnter = [this]()
+        {
+            OnStateEngage<UnitBehaviourTree::SkillOnGoing>();
         };
     unitBehaviourTree[UnitBehaviourTree::Skill][UnitBehaviourTree::SkillOnGoing].onExit = [this]()
         {

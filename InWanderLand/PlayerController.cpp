@@ -14,23 +14,23 @@
 #include "UnitSkillCommand.h"
 #include "EnqueErrorType.h"
 
-const std::unordered_map<UIEnumID, SkillUpgradeType::Enum> PlayerController::skillByUI
+const std::unordered_map<UIEnumID, SkillUpgradeType::Enum> PlayerController::skillUpgradeByUI
 {
-    {UIEnumID::SkillUpgradeButtonRobin00,SkillUpgradeType::NONE},
-    {UIEnumID::SkillUpgradeButtonRobin11,SkillUpgradeType::NONE},
-    {UIEnumID::SkillUpgradeButtonRobin12,SkillUpgradeType::NONE},
-    {UIEnumID::SkillUpgradeButtonRobin21,SkillUpgradeType::NONE},
-    {UIEnumID::SkillUpgradeButtonRobin22,SkillUpgradeType::NONE},
-    {UIEnumID::SkillUpgradeButtonUrsula00,SkillUpgradeType::NONE},
-    {UIEnumID::SkillUpgradeButtonUrsula11,SkillUpgradeType::NONE},
-    {UIEnumID::SkillUpgradeButtonUrsula12,SkillUpgradeType::NONE},
-    {UIEnumID::SkillUpgradeButtonUrsula21,SkillUpgradeType::NONE},
-    {UIEnumID::SkillUpgradeButtonUrsula22,SkillUpgradeType::NONE},
-    {UIEnumID::SkillUpgradeButtonHansel00,SkillUpgradeType::NONE},
-    {UIEnumID::SkillUpgradeButtonHansel11,SkillUpgradeType::NONE},
-    {UIEnumID::SkillUpgradeButtonHansel12,SkillUpgradeType::NONE},
-    {UIEnumID::SkillUpgradeButtonHansel21,SkillUpgradeType::NONE},
-    {UIEnumID::SkillUpgradeButtonHansel22,SkillUpgradeType::NONE},
+    {UIEnumID::SkillUpgradeButtonRobin00,SkillUpgradeType::ROBIN_PASSIVE_LONGER},
+    {UIEnumID::SkillUpgradeButtonRobin11,SkillUpgradeType::ROBIN_Q_RANGE},
+    {UIEnumID::SkillUpgradeButtonRobin12,SkillUpgradeType::ROBIN_Q_DAMAGE},
+    {UIEnumID::SkillUpgradeButtonRobin21,SkillUpgradeType::ROBIN_W_DAMAGE},
+    {UIEnumID::SkillUpgradeButtonRobin22,SkillUpgradeType::ROBIN_W_RADIUS},
+    {UIEnumID::SkillUpgradeButtonUrsula00,SkillUpgradeType::URSULA_PASSIVE_ENHANCE},
+    {UIEnumID::SkillUpgradeButtonUrsula11,SkillUpgradeType::URSULA_Q_DAMAGE},
+    {UIEnumID::SkillUpgradeButtonUrsula12,SkillUpgradeType::URSULA_Q_RANGE},
+    {UIEnumID::SkillUpgradeButtonUrsula21,SkillUpgradeType::URSULA_W_DAMAGE},
+    {UIEnumID::SkillUpgradeButtonUrsula22,SkillUpgradeType::URSULA_W_RADIUS},
+    {UIEnumID::SkillUpgradeButtonHansel00,SkillUpgradeType::HANSEL_PASSIVE_ENHANCE},
+    {UIEnumID::SkillUpgradeButtonHansel11,SkillUpgradeType::HANSEL_Q_DAMAGE},
+    {UIEnumID::SkillUpgradeButtonHansel12,SkillUpgradeType::HANSEL_Q_RANGE},
+    {UIEnumID::SkillUpgradeButtonHansel21,SkillUpgradeType::HANSEL_W_RANGE},
+    {UIEnumID::SkillUpgradeButtonHansel22,SkillUpgradeType::HANSEL_W_MORE_HITS},
 };
 void PlayerController::RegisterUnit(std::weak_ptr<Unit> unit)
 {
@@ -47,8 +47,9 @@ void PlayerController::RegisterUnit(std::weak_ptr<Unit> unit)
         SelectPlayerUnit(PlayerCharacterType::Robin);
     }
     unit.lock()->onStateEngage[UnitBehaviourTree::Death].AddCallback([this, unit]() { UnSelectSkill(unit); });
+    unit.lock()->onStateEngage[UnitBehaviourTree::Death].AddCallback(std::bind(&PlayerController::OnPlayerChracterDead, this, unit));
     unit.lock()->onStateEngage[UnitBehaviourTree::Paralysis].AddCallback([this, unit]() { UnSelectSkill(unit); });
-    UnSelectSkill(unit);
+    unit.lock()->onStateEngage[UnitBehaviourTree::SkillOnGoing].AddCallback(std::bind_front(static_cast<void(PlayerController::*)(std::weak_ptr<Unit>)>(&PlayerController::SetCooltime), this, unit));
 }
 
 void PlayerController::SetSkillUpgradeTarget(UIEnumID skillUpgradeUITarget)
@@ -61,14 +62,14 @@ bool PlayerController::IsSkillUpgraded(SkillUpgradeType::Enum id)
 }
 bool PlayerController::IsSkillUpgraded(UIEnumID skillUpgradeUITarget)
 {
-    return skillUpgraded.at(skillByUI.at(skillUpgradeUITarget));
+    return skillUpgraded.at(skillUpgradeByUI.at(skillUpgradeUITarget));
 }
 void PlayerController::UpgradeSkill()
 {
     SetSkillPoints(skillPointsLeft - 1);
     static constexpr float gray = 0.3f;
     UIManager::Instance().GetUIElementByEnum(skillUpgradeUITarget)->imageComponent.lock()->GetGI().SetColor({ gray,gray,gray,1 });
-    skillUpgraded[skillByUI.at(skillUpgradeUITarget)] = true;
+    skillUpgraded[skillUpgradeByUI.at(skillUpgradeUITarget)] = true;
 }
 void PlayerController::SetSkillPoints(int points)
 {
@@ -219,61 +220,62 @@ void PlayerController::HandleInput()
         }
     }
 
-	// 전술모드의 마지막 명령을 지우는 키
-	if (Input::isKeyDown(KeyCode::Control) && Input::isKeyPushed(KeyCode::Z) && TacticModeSystem::Instance().IsOperation() && !TacticModeSystem::Instance().IsExecuting())
-	{
-		TacticModeSystem::Instance().PopCommand();
-	}
+    // 전술모드의 마지막 명령을 지우는 키
+    if (Input::isKeyDown(KeyCode::Control) && Input::isKeyPushed(KeyCode::Z) && TacticModeSystem::Instance().IsOperation() && !TacticModeSystem::Instance().IsExecuting())
+    {
+        TacticModeSystem::Instance().PopCommand();
+    }
 
-	if (Input::isKeyPushed(KeyCode::ESC) && TacticModeSystem::Instance().IsOperation() && !TacticModeSystem::Instance().IsExecuting())
-	{
-		TacticModeSystem::Instance().ClearCommand();
-	}
+    if (Input::isKeyPushed(KeyCode::ESC) && TacticModeSystem::Instance().IsOperation() && !TacticModeSystem::Instance().IsExecuting())
+    {
+        TacticModeSystem::Instance().ClearCommand();
+    }
 
-	if ((TacticModeSystem::Instance().IsExecuting() == false))	{
-		if (Input::isKeyPushed(KeyCode::Q))
-		{
-			switch (selectedCharacterType)
-			{
-				case PlayerCharacterType::Robin: SelectSkill(SkillType::ROBIN_Q); break;
-				case PlayerCharacterType::Ursula: SelectSkill(SkillType::URSULA_Q); break;
-				case PlayerCharacterType::Hansel: SelectSkill(SkillType::HANSEL_Q); break;
-			}
-		}
-		if (Input::isKeyPushed(KeyCode::W))
-		{
-			switch (selectedCharacterType)
-			{
-				case PlayerCharacterType::Robin: SelectSkill(SkillType::ROBIN_W); break;
-				case PlayerCharacterType::Ursula: SelectSkill(SkillType::URSULA_W); break;
-				case PlayerCharacterType::Hansel: SelectSkill(SkillType::HANSEL_W); break;
-			}
-		}
-		if (Input::isKeyPushed(KeyCode::NUM_1))
-		{
-			SelectPlayerUnit(PlayerCharacterType::Robin);
-		}
-		if (Input::isKeyPushed(KeyCode::NUM_2))
-		{
-			SelectPlayerUnit(PlayerCharacterType::Ursula);
-		}
-		if (Input::isKeyPushed(KeyCode::NUM_3))
-		{
-			SelectPlayerUnit(PlayerCharacterType::Hansel);
-		}
-		if (Input::isKeyPushed(KeyCode::A))
-		{
-			OrderAttackMove(GetWorldCursorPosition());
-		}
-		if (Input::isKeyPushed(KeyCode::MouseLeftClick) && !UIManager::Instance().IsMouseOnButton())
-		{
-			OnLeftClick();
-		}
-		if (Input::isKeyPushed(KeyCode::MouseRightClick))
-		{
-			OnRightClick();
-		}
-	}
+    if ((TacticModeSystem::Instance().IsExecuting() == false))
+    {
+        if (Input::isKeyPushed(KeyCode::Q))
+        {
+            switch (selectedCharacterType)
+            {
+            case PlayerCharacterType::Robin: SelectSkill(SkillType::ROBIN_Q); break;
+            case PlayerCharacterType::Ursula: SelectSkill(SkillType::URSULA_Q); break;
+            case PlayerCharacterType::Hansel: SelectSkill(SkillType::HANSEL_Q); break;
+            }
+        }
+        if (Input::isKeyPushed(KeyCode::W))
+        {
+            switch (selectedCharacterType)
+            {
+            case PlayerCharacterType::Robin: SelectSkill(SkillType::ROBIN_W); break;
+            case PlayerCharacterType::Ursula: SelectSkill(SkillType::URSULA_W); break;
+            case PlayerCharacterType::Hansel: SelectSkill(SkillType::HANSEL_W); break;
+            }
+        }
+        if (Input::isKeyPushed(KeyCode::NUM_1))
+        {
+            SelectPlayerUnit(PlayerCharacterType::Robin);
+        }
+        if (Input::isKeyPushed(KeyCode::NUM_2))
+        {
+            SelectPlayerUnit(PlayerCharacterType::Ursula);
+        }
+        if (Input::isKeyPushed(KeyCode::NUM_3))
+        {
+            SelectPlayerUnit(PlayerCharacterType::Hansel);
+        }
+        if (Input::isKeyPushed(KeyCode::A))
+        {
+            OrderAttackMove(GetWorldCursorPosition());
+        }
+        if (Input::isKeyPushed(KeyCode::MouseLeftClick) && !UIManager::Instance().IsMouseOnButton())
+        {
+            OnLeftClick();
+        }
+        if (Input::isKeyPushed(KeyCode::MouseRightClick))
+        {
+            OnRightClick();
+        }
+    }
 }
 
 void PlayerController::HandleCamera()
@@ -304,7 +306,7 @@ void PlayerController::HandleSkillPreview()
         {
         case SkillType::ROBIN_Q:
             SkillPreviewSystem::Instance().ShowRobinQSkill(characters[PlayerCharacterType::Robin].lock()->GetTransform()->GetWorldPosition());
-            SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Robin, characters[PlayerCharacterType::Robin].lock()->GetTransform()->GetWorldPosition(), RobinChargeSkill::pod.maxDistance);
+            SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Robin, characters[PlayerCharacterType::Robin].lock()->GetTransform()->GetWorldPosition(), RobinChargeSkill::GetMaxDistance());
             break;
         case SkillType::URSULA_Q:
         {
@@ -407,21 +409,43 @@ void PlayerController::SelectPlayerUnit(PlayerCharacterType::Enum charType)
 
 void PlayerController::OnLeftClick()
 {
-	if (selectedSkill == SkillType::NONE)
-	{
-		if (!cursorUnitDetector.lock()->GetUnits().empty())
-		{
-			SelectUnit((*cursorUnitDetector.lock()->GetUnits().begin())->GetWeakPtr<Unit>());
-		}
-	}
-	else
-	{
-		ActivateSkill(selectedSkill, GetWorldCursorPosition());
-		if (state != State::Tactic)
-		{
-			selectedSkill = SkillType::NONE;
-		}
-	}
+    if (selectedSkill == SkillType::NONE)
+    {
+        if (!cursorUnitDetector.lock()->GetUnits().empty())
+        {
+            SelectUnit((*cursorUnitDetector.lock()->GetUnits().begin())->GetWeakPtr<Unit>());
+        }
+    }
+    else
+    {
+        ActivateSkill(selectedSkill, GetWorldCursorPosition());
+        if (state != State::Tactic)
+        {
+            selectedSkill = SkillType::NONE;
+        }
+    }
+}
+
+void PlayerController::OnPlayerChracterDead(std::weak_ptr<Unit> unit)
+{
+    bool alldead = true;
+    for (auto& each : characters)
+    {
+        if (each.lock()->IsAlive())
+        {
+            alldead = false;
+            break;
+        }
+    }
+    if (alldead)
+    {
+        OnPlayerChracterAllDead();
+    }
+}
+
+void PlayerController::OnPlayerChracterAllDead()
+{
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::DefeatPage)->EnableElement();
 }
 
 void PlayerController::OnRightClick()
@@ -549,7 +573,6 @@ void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
         // 전술 모드가 아니라면 기존 로직 수행
         SetMana(mana - RequiredManaForSkill(skillType));
         onSkillActivate[skillType]();
-        SetCooltime(skillType, GetCooltimeForSkill(skillType));
         switch (skillType)
         {
         case SkillType::ROBIN_Q:
@@ -603,34 +626,34 @@ void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
                     , skillType
                 ));
 
-				// 이동 명령은 Enque됐지만 공격명령이 Enque되지 않았을 경우 이동 명령까지 지운다
-				if (errorType != EnqueErrorType::Success)
-				{
-					TacticModeSystem::Instance().PopCommand();
-				}
-				if(errorType == EnqueErrorType::Success)
-				{
-					selectedSkill = SkillType::NONE;
-				}
-			}
-		}
-		else
-		{
-			// 이동없이 스킬 사용이 가능하다면 스킬 명령
+                // 이동 명령은 Enque됐지만 공격명령이 Enque되지 않았을 경우 이동 명령까지 지운다
+                if (errorType != EnqueErrorType::Success)
+                {
+                    TacticModeSystem::Instance().PopCommand();
+                }
+                if (errorType == EnqueErrorType::Success)
+                {
+                    selectedSkill = SkillType::NONE;
+                }
+            }
+        }
+        else
+        {
+            // 이동없이 스킬 사용이 가능하다면 스킬 명령
 
-			EnqueErrorType errorType = EnqueErrorType::NONE;
-			errorType = TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitSkillCommand>(characters[selectedCharacterType].lock().get()
-				, GetWorldCursorPosition()
-				, skillType
-			));
-			if (errorType == EnqueErrorType::Success)
-			{
-				selectedSkill = SkillType::NONE;
-			}
+            EnqueErrorType errorType = EnqueErrorType::NONE;
+            errorType = TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitSkillCommand>(characters[selectedCharacterType].lock().get()
+                , GetWorldCursorPosition()
+                , skillType
+            ));
+            if (errorType == EnqueErrorType::Success)
+            {
+                selectedSkill = SkillType::NONE;
+            }
 
-			// 에러 타입에 따른 UI활성화
-		}
-	}
+            // 에러 타입에 따른 UI활성화
+        }
+    }
 }
 
 void PlayerController::SelectSkill(SkillType::Enum skillType)
@@ -722,7 +745,7 @@ void PlayerController::Reset()
     for (auto& each : blockSkillSelection) each = false;
     if (cursorUnitDetector.expired())
         cursorUnitDetector = Scene::getCurrentScene()->AddGameObject()->AddComponentAsWeakPtr<UnitAcquisitionSphereCollider>();
-    std::for_each(skillByUI.begin(), skillByUI.end(), [&](auto& pair) {
+    std::for_each(skillUpgradeByUI.begin(), skillUpgradeByUI.end(), [&](auto& pair) {
         auto& [ui, upgrade] = pair;
         UIManager::Instance().GetUIElementByEnum(ui)->imageComponent.lock()->GetGI().SetColor({ 1,1,1,1 });
         skillUpgraded[upgrade] = false;
@@ -855,6 +878,11 @@ void PlayerController::SetCooltime(SkillType::Enum skillType, float cooltime)
     skillCooltimeLeft[skillType] = std::fmax(0.0f, cooltime);
     skillCooltimeNumberUI[skillType]->SetNumber(cooltime);
     skillCooltimeMaskUI[skillType]->adjuster->SetTargetFloat(skillCooltimeLeft[skillType] / GetCooltimeForSkill(skillType));
+}
+
+void PlayerController::SetCooltime(std::weak_ptr<Unit> unit)
+{
+    SetCooltime(unit.lock()->onGoingSkill->GetSkillType(), GetCooltimeForSkill(unit.lock()->onGoingSkill->GetSkillType()));
 }
 
 float PlayerController::GetCooltimeForSkill(SkillType::Enum skillType)
@@ -1029,7 +1057,7 @@ std::vector<yunutyEngine::Vector3d>& PlayerController::ModifyPathForSkill(std::v
     switch (skillType)
     {
     case SkillType::ROBIN_Q:
-        skillRange = RobinChargeSkill::pod.maxDistance;
+        skillRange = RobinChargeSkill::GetMaxDistance();
         break;
     case SkillType::ROBIN_W:
         break;
