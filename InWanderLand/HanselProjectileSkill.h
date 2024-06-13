@@ -24,6 +24,7 @@ private:
     std::weak_ptr<UnitAcquisitionSphereCollider> pieCollider;
     std::weak_ptr<ManagedFBX> pieObject;
 
+    float colliderEffectRatio;
 public:
     HanselProjectileSkill() {}
     virtual SkillType::Enum GetSkillType() { return SkillType::Enum::HANSEL_W; }
@@ -32,7 +33,6 @@ public:
     virtual void OnInterruption() override;
 
     static POD_HanselProjectileSkill pod;
-    static float colliderEffectRatio;
 };
 
 

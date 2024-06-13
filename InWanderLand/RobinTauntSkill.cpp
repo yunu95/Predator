@@ -6,10 +6,9 @@ POD_RobinTauntSkill RobinTauntSkill::pod = POD_RobinTauntSkill();
 
 const float damageTimingFrame = 24.0f;
 
-float RobinTauntSkill::colliderEffectRatio = 6.0f * 0.5f;
-
 coroutine::Coroutine RobinTauntSkill::operator()()
 {
+	colliderEffectRatio = 6.0f * 0.5f;
     auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
     auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
     auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
@@ -46,6 +45,7 @@ void RobinTauntSkill::OnInterruption()
 
 coroutine::Coroutine RobinTauntSkill::SpawningSkillffect(std::weak_ptr<RobinTauntSkill> skill)
 {
+	colliderEffectRatio = 6.0f * 0.5f;
 	float actualCollideRange = RobinTauntSkill::pod.skillRadius * (1 / colliderEffectRatio);
 	auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
 

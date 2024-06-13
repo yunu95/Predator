@@ -27,7 +27,6 @@ public:
 	virtual void OnInterruption() override;
 
 	static POD_EnemySpinAttackSkill pod;
-	static float colliderEffectRatio;
 
 private:
 	coroutine::Coroutine SpawningSkillffect(std::weak_ptr<EnemySpinAttackSkill> skill);

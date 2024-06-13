@@ -4,10 +4,10 @@
 const float throwingPieTimingFrame = 70.0f;
 
 POD_HanselProjectileSkill HanselProjectileSkill::pod = POD_HanselProjectileSkill();
-float HanselProjectileSkill::colliderEffectRatio = 1.0f * 0.5f;
 
 coroutine::Coroutine HanselProjectileSkill::ThrowingPie(std::weak_ptr<HanselProjectileSkill> skill)
 {
+    colliderEffectRatio = 1.0f * 0.5f;
     float actualCollideRange = pod.skillRadius * (1 / colliderEffectRatio);
 
     Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
@@ -77,6 +77,7 @@ float HanselProjectileSkill::GetCastRange()
 
 coroutine::Coroutine HanselProjectileSkill::operator()()
 {
+    colliderEffectRatio = 1.0f * 0.5f;
     auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
 	auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
 	auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();

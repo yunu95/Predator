@@ -9,10 +9,9 @@ Vector3d UrsulaBlindSkill::skillDestination = Vector3d();
 
 POD_UrsulaBlindSkill UrsulaBlindSkill::pod = POD_UrsulaBlindSkill();
 
-float UrsulaBlindSkill::colliderEffectRatio = 3.0f * 0.5f;
-
 coroutine::Coroutine UrsulaBlindSkill::operator()()
 {
+    colliderEffectRatio = 3.0f * 0.5f;
     auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
     auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
     auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
@@ -56,6 +55,8 @@ void UrsulaBlindSkill::OnInterruption()
 
 coroutine::Coroutine UrsulaBlindSkill::SpawningFieldEffect(std::weak_ptr<UrsulaBlindSkill> skill)
 {
+    colliderEffectRatio = 3.0f * 0.5f;
+
     auto persistance = skill.lock();
 
     Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();

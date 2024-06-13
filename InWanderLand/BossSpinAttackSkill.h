@@ -24,13 +24,14 @@ public:
 	virtual void OnInterruption() override;
 
 	static POD_BossSpinAttackSkill pod;
-	static float colliderEffectRatio;
 
 private:
 	coroutine::Coroutine SpawningSkillffect(std::weak_ptr<BossSpinAttackSkill> skill);
 	std::weak_ptr<UnitAcquisitionSphereCollider> knockbackCollider;
 	std::weak_ptr<ManagedFBX> chargeEffect;
 	std::weak_ptr<coroutine::Coroutine> effectColliderCoroutine;
+
+	float colliderEffectRatio;
 };
 
 
