@@ -638,8 +638,8 @@ void Unit::Init(const application::editor::Unit_TemplateData* unitTemplateData)
 	{
 		auto pObj = GetGameObject()->AddGameObject();
 		auto sptr = eachPI.lock();
-		pObj->GetTransform()->SetLocalPosition(sptr->offsetPos);
-		pObj->GetTransform()->SetLocalRotation(sptr->rotation);
+		pObj->GetTransform()->SetLocalPosition(Vector3d(sptr->offsetPos.x, sptr->offsetPos.y, -sptr->offsetPos.z));
+		pObj->GetTransform()->SetLocalRotation(Quaternion(Vector3d(0,180,0)) * sptr->rotation);
 		pObj->GetTransform()->SetLocalScale(sptr->scale);
 		pObj->setName(sptr->name);
 		auto pr = pObj->AddComponent<graphics::ParticleRenderer>();
@@ -746,8 +746,9 @@ void Unit::Init(const application::editor::Unit_TemplateData* unitTemplateData)
 							{
 								auto& aem = AnimationEventManager::GetSingletonInstance();
 								auto target = aem.GetLerpPoint(ptr->editData, i);
-								particle->GetTransform()->SetLocalPosition(target->GetLocalPosition());
-								particle->GetTransform()->SetLocalRotation(target->GetLocalRotation());
+								auto pos = target->GetLocalPosition();
+								particle->GetTransform()->SetLocalPosition(Vector3d(pos.x, pos.y, -pos.z));
+								particle->GetTransform()->SetLocalRotation(Quaternion(Vector3d(0, 180, 0)) * target->GetLocalRotation());
 								particle->GetTransform()->SetLocalScale(target->GetLocalScale());
 							});
 					}
