@@ -94,6 +94,8 @@ private:
     void HandleSkillCooltime();
     void HandleManaRegen();
     void HandleMouseHover();
+    void OnPlayerChracterDead(std::weak_ptr<Unit> unit);
+    void OnPlayerChracterAllDead();
     // character가 NONE일 경우 알아서 현재 선택된 스킬로 귀결된다.
     void OnLeftClick();
     void OnRightClick();
@@ -110,8 +112,9 @@ private:
     // 연속으로 쌓은 콤보를 초기화한다.
     void ResetCombo();
 
-   
+
     void SetCooltime(SkillType::Enum skillType, float cooltime);
+    void SetCooltime(std::weak_ptr<Unit> unit);
     float GetCooltimeForSkill(SkillType::Enum skillType);
     float RequiredManaForSkill(SkillType::Enum skillType);
     void ApplyHoverEffect(std::weak_ptr<Unit> unit);
@@ -149,7 +152,7 @@ private:
     GameObject* allySelectedEffect{ nullptr };
     yunutyEngine::graphics::StaticMeshRenderer* allySelectedEffectRenderer{ nullptr };
     // 유닛이 타겟으로 지정되었을 떄의 효과(사실상 평타 우클릭밖에 없음)
-    std::array<GameObject*,3> enemyTargetedEffect{ nullptr };
+    std::array<GameObject*, 3> enemyTargetedEffect{ nullptr };
     // 마우스 커서가 적 혹은 아군 위에 올라갈 때의 효과
     GameObject* allyHoverEffect{ nullptr };
     yunutyEngine::graphics::StaticMeshRenderer* allyHoverEffectRenderer{ nullptr };
