@@ -1,8 +1,8 @@
 #include "ContentsCoroutine.h"
 
-void ContentsCoroutine::StartRoutine(coroutine::Coroutine&& coroutine)
+std::weak_ptr<coroutine::Coroutine> ContentsCoroutine::StartRoutine(coroutine::Coroutine&& coroutine)
 {
-    Instance().StartCoroutine(std::move(coroutine));
+    return Instance().StartCoroutine(std::move(coroutine));
 }
 
 Component* ContentsCoroutine::GetComponent()

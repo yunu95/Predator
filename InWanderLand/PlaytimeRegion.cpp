@@ -10,7 +10,10 @@
 
 PlaytimeRegion::~PlaytimeRegion()
 {
-    regionData->playtimeRegion = nullptr;
+    if (regionData->playtimeRegion == this)
+    {
+        regionData->playtimeRegion = nullptr;
+    }
     for (auto each : regionData->GetDisablingOrnaments())
     {
         if (auto instance = each->GetPaletteInstance())

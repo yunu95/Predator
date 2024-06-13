@@ -6,6 +6,7 @@ class ManagedFBX;
 struct POD_EnemySpinAttackSkill
 {
 	float skillPlayTime = 6.0f;
+	float skillCoolTime = 6.0f;
 	float skillDamage = 8.0f;
 	float skillRadius = 1.0f;
 	float knockBackDistance = 15.0f;
@@ -19,12 +20,6 @@ struct POD_EnemySpinAttackSkill
 
 class EnemySpinAttackSkill : public Skill
 {
-private:
-	coroutine::Coroutine SpawningSkillffect(std::weak_ptr<EnemySpinAttackSkill> skill);
-	std::weak_ptr<UnitAcquisitionSphereCollider> knockbackCollider;
-	std::weak_ptr<ManagedFBX> chargeEffect;
-	std::weak_ptr<coroutine::Coroutine> effectColliderCoroutine;
-
 public:
 	EnemySpinAttackSkill() {}
 	virtual SkillType::Enum GetSkillType() { return SkillType::Enum::BossSkill_One; }
@@ -33,6 +28,12 @@ public:
 
 	static POD_EnemySpinAttackSkill pod;
 	static float colliderEffectRatio;
+
+private:
+	coroutine::Coroutine SpawningSkillffect(std::weak_ptr<EnemySpinAttackSkill> skill);
+	std::weak_ptr<UnitAcquisitionSphereCollider> knockbackCollider;
+	std::weak_ptr<ManagedFBX> chargeEffect;
+	std::weak_ptr<coroutine::Coroutine> effectColliderCoroutine;
 };
 
 

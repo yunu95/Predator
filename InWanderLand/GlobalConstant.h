@@ -25,12 +25,15 @@ namespace application
         GC<float> enemyAggroUpdateQuota = 2;
         // +- 몇명씩 랜덤하게 분배해주는가
         GC<float> enemyAggroUpdateQuotaNoise = 2;
+        // 유닛들이 등장할 때 등장 시간 오프셋에 대한 노이즈
+        GC<float> unitBirthTimeOffsetNoise = 0.2;
+
         GC<float> peaceFollowingXOffest = 3.0f;
         GC<float> peaceFollowingZOffest = 2.0f;
 
-        GC<float>	tacticSkillCost = 10.0f;
-        GC<float>	tacticMoveCost = 10.0f;
-        GC<float>	tacticAttackCost = 10.0f;
+        GC<float> tacticSkillCost = 10.0f;
+        GC<float> tacticMoveCost = 10.0f;
+        GC<float> tacticAttackCost = 10.0f;
 
         GC<float>	tacticGaugeRecoveryPerSecond = 2.0f;
 
@@ -42,7 +45,7 @@ namespace application
 
         GC<float> bossAppearHeight = 60.f;
         GC<float> bossAppearTime = 2.f;
-        GC<float> bossSkillPeriod_1 = 4.f;   
+        GC<float> bossSkillPeriod_1 = 4.f;
         GC<float> bossSkillPeriod_2 = 4.f;
         GC<float> bossSkillPeriod_3 = 6.f;
         GC<float> bossSkillPeriod_4 = 8.f;

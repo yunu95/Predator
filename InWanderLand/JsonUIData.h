@@ -103,6 +103,7 @@ struct JsonUIData
     string animatedSpriteFolderPath;
     bool animatedSpriteIsRepeat;
     bool duplicate_poolable;
+    float rotatingSpeed;
 
     int customFlags;
     int customFlags2;

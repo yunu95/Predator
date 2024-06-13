@@ -8,6 +8,7 @@
 #include "YunutyWaitForSeconds.h"
 #include "SFXManager.h"
 #include "BossSummonChessSkill.h"
+#include "PlayerController.h"
 
 void Interactable_ChessRook::Start()
 {
@@ -88,6 +89,7 @@ void Interactable_ChessRook::Update()
 void Interactable_ChessRook::OnTriggerEnter(physics::Collider* collider)
 {
 	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
+		PlayerController::Instance().GetState() == PlayerController::State::Battle &&
 		colliderUnitComponent != nullptr &&
 		colliderUnitComponent->IsPlayerUnit() &&
 		colliderUnitComponent->IsAlive())

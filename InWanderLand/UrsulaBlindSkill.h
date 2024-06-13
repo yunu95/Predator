@@ -18,22 +18,6 @@ struct POD_UrsulaBlindSkill
 
 class UrsulaBlindSkill : public Skill
 {
-private:
-	coroutine::Coroutine SpawningFieldEffect(std::weak_ptr<UrsulaBlindSkill> skill);
-
-    std::weak_ptr<coroutine::Coroutine> effectColliderCoroutine;
-
-	static Vector3d skillStart;
-	static Vector3d skillDestination;
-	std::weak_ptr<UnitAcquisitionSphereCollider> circle_Top;
-	std::weak_ptr<UnitAcquisitionSphereCollider> circle_Left;
-	std::weak_ptr<UnitAcquisitionSphereCollider> circle_Right;
-
-	std::weak_ptr<ManagedFBX> onUrsulaPosEffect;
-	std::weak_ptr<ManagedFBX> onTargetPosEffect1;
-	std::weak_ptr<ManagedFBX> onTargetPosEffect2;
-	std::weak_ptr<ManagedFBX> onTargetPosEffect3;
-
 public:
     UrsulaBlindSkill() {}
     virtual SkillType::Enum GetSkillType() { return SkillType::Enum::URSULA_Q; }
@@ -53,6 +37,22 @@ public:
     static Vector3d GetSkillObjectPos_Right(const Vector3d& dest);
 
     static float colliderEffectRatio;
+
+private:
+    coroutine::Coroutine SpawningFieldEffect(std::weak_ptr<UrsulaBlindSkill> skill);
+
+    std::weak_ptr<coroutine::Coroutine> effectColliderCoroutine;
+
+    static Vector3d skillStart;
+    static Vector3d skillDestination;
+    std::weak_ptr<UnitAcquisitionSphereCollider> circle_Top;
+    std::weak_ptr<UnitAcquisitionSphereCollider> circle_Left;
+    std::weak_ptr<UnitAcquisitionSphereCollider> circle_Right;
+
+    std::weak_ptr<ManagedFBX> onUrsulaPosEffect;
+    std::weak_ptr<ManagedFBX> onTargetPosEffect1;
+    std::weak_ptr<ManagedFBX> onTargetPosEffect2;
+    std::weak_ptr<ManagedFBX> onTargetPosEffect3;
 };
 
 

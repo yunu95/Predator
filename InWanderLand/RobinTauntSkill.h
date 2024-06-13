@@ -17,12 +17,6 @@ struct POD_RobinTauntSkill
 class UnitAcquisitionSphereCollider;
 class RobinTauntSkill : public Skill
 {
-private:
-	coroutine::Coroutine SpawningSkillffect(std::weak_ptr<RobinTauntSkill> skill);
-    std::weak_ptr<coroutine::Coroutine> effectColliderCoroutine;
-    std::weak_ptr<UnitAcquisitionSphereCollider> tauntCollider;
-    std::weak_ptr<ManagedFBX> tauntEffect;
-
 public:
     RobinTauntSkill() {}
     virtual SkillType::Enum GetSkillType() { return SkillType::Enum::ROBIN_W; }
@@ -32,6 +26,12 @@ public:
 
     static POD_RobinTauntSkill pod;
     static float colliderEffectRatio;
+
+private:
+    coroutine::Coroutine SpawningSkillffect(std::weak_ptr<RobinTauntSkill> skill);
+    std::weak_ptr<coroutine::Coroutine> effectColliderCoroutine;
+    std::weak_ptr<UnitAcquisitionSphereCollider> tauntCollider;
+    std::weak_ptr<ManagedFBX> tauntEffect;
 };
 
 

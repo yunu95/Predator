@@ -11,14 +11,63 @@ POD_UrsulaBlindSkill UrsulaBlindSkill::pod = POD_UrsulaBlindSkill();
 
 float UrsulaBlindSkill::colliderEffectRatio = 3.0f * 0.5f;
 
+coroutine::Coroutine UrsulaBlindSkill::operator()()
+{
+    auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
+    auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
+    auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
+    auto enableNavObstacle = owner.lock()->referenceEnableNavObstacle.Acquire();
+    owner.lock()->PlayAnimation(UnitAnimType::Skill1, true);
+    auto animator = owner.lock()->GetAnimator();
+    auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill1);
+
+    UpdatePosition(owner.lock()->GetGameObject()->GetTransform()->GetWorldPosition(), targetPos);
+
+    effectColliderCoroutine = owner.lock()->StartCoroutine(SpawningFieldEffect(dynamic_pointer_cast<UrsulaBlindSkill>(selfWeakPtr.lock())));
+    effectColliderCoroutine.lock()->PushDestroyCallBack([this]()
+        {
+            circle_Top.lock()->SetRadius(0.5);
+            circle_Left.lock()->SetRadius(0.5);
+            circle_Right.lock()->SetRadius(0.5);
+            UnitAcquisitionSphereColliderPool::Instance().Return(circle_Top);
+            UnitAcquisitionSphereColliderPool::Instance().Return(circle_Left);
+            UnitAcquisitionSphereColliderPool::Instance().Return(circle_Right);
+            FBXPool::Instance().Return(onUrsulaPosEffect);
+            FBXPool::Instance().Return(onTargetPosEffect1);
+            FBXPool::Instance().Return(onTargetPosEffect2);
+            FBXPool::Instance().Return(onTargetPosEffect3);
+        });
+
+    co_yield coroutine::WaitForSeconds(anim->GetDuration());
+
+    disableNavAgent.reset();
+    blockFollowingNavigation.reset();
+    owner.lock()->Relocate(owner.lock()->GetTransform()->GetWorldPosition());
+    co_return;
+}
+
+void UrsulaBlindSkill::OnInterruption()
+{
+    if (!effectColliderCoroutine.expired())
+    {
+        owner.lock()->DeleteCoroutine(effectColliderCoroutine);
+    }
+}
+
 coroutine::Coroutine UrsulaBlindSkill::SpawningFieldEffect(std::weak_ptr<UrsulaBlindSkill> skill)
 {
+    auto persistance = skill.lock();
+
+    Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
+    Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
+    Vector3d direction = deltaPos.Normalized();
+
     float actualCollideRange = pod.skillRadius * (1 / colliderEffectRatio);
 
-    onUrsulaPosEffect = FBXPool::SingleInstance().Borrow("VFX_Ursula_Skill1_1");
-    onTargetPosEffect1 = FBXPool::SingleInstance().Borrow("VFX_Ursula_Skill1_2");
-    onTargetPosEffect2 = FBXPool::SingleInstance().Borrow("VFX_Ursula_Skill1_2");
-    onTargetPosEffect3 = FBXPool::SingleInstance().Borrow("VFX_Ursula_Skill1_2");
+    onUrsulaPosEffect = FBXPool::Instance().Borrow("VFX_Ursula_Skill1_1");
+    onTargetPosEffect1 = FBXPool::Instance().Borrow("VFX_Ursula_Skill1_2");
+    onTargetPosEffect2 = FBXPool::Instance().Borrow("VFX_Ursula_Skill1_2");
+    onTargetPosEffect3 = FBXPool::Instance().Borrow("VFX_Ursula_Skill1_2");
 
     UpdatePosition(owner.lock()->GetGameObject()->GetTransform()->GetWorldPosition(), targetPos);
 
@@ -26,6 +75,11 @@ coroutine::Coroutine UrsulaBlindSkill::SpawningFieldEffect(std::weak_ptr<UrsulaB
     onTargetPosEffect1.lock()->GetGameObject()->GetTransform()->SetWorldPosition(GetSkillObjectPos_Top(skillDestination));
     onTargetPosEffect2.lock()->GetGameObject()->GetTransform()->SetWorldPosition(GetSkillObjectPos_Left(skillDestination));
     onTargetPosEffect3.lock()->GetGameObject()->GetTransform()->SetWorldPosition(GetSkillObjectPos_Right(skillDestination));
+
+    onUrsulaPosEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
+    onTargetPosEffect1.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
+    onTargetPosEffect2.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
+    onTargetPosEffect3.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
 
     onUrsulaPosEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(actualCollideRange, actualCollideRange, actualCollideRange));
     onTargetPosEffect1.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(actualCollideRange, actualCollideRange, actualCollideRange));
@@ -121,49 +175,6 @@ coroutine::Coroutine UrsulaBlindSkill::SpawningFieldEffect(std::weak_ptr<UrsulaB
     }
 
     co_return;
-}
-
-coroutine::Coroutine UrsulaBlindSkill::operator()()
-{
-    auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
-    auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
-    auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
-    auto enableNavObstacle = owner.lock()->referenceEnableNavObstacle.Acquire();
-    owner.lock()->PlayAnimation(UnitAnimType::Skill1, true);
-    auto animator = owner.lock()->GetAnimator();
-    auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill1);
-
-    UpdatePosition(owner.lock()->GetGameObject()->GetTransform()->GetWorldPosition(), targetPos);
-
-    effectColliderCoroutine = owner.lock()->StartCoroutine(SpawningFieldEffect(dynamic_pointer_cast<UrsulaBlindSkill>(selfWeakPtr.lock())));
-    effectColliderCoroutine.lock()->PushDestroyCallBack([this]()
-        {
-            circle_Top.lock()->SetRadius(0.5);
-            circle_Left.lock()->SetRadius(0.5);
-            circle_Right.lock()->SetRadius(0.5);
-            UnitAcquisitionSphereColliderPool::Instance().Return(circle_Top);
-            UnitAcquisitionSphereColliderPool::Instance().Return(circle_Left);
-            UnitAcquisitionSphereColliderPool::Instance().Return(circle_Right);
-            FBXPool::SingleInstance().Return(onUrsulaPosEffect);
-            FBXPool::SingleInstance().Return(onTargetPosEffect1);
-            FBXPool::SingleInstance().Return(onTargetPosEffect2);
-            FBXPool::SingleInstance().Return(onTargetPosEffect3);
-        });
-
-    co_yield coroutine::WaitForSeconds(anim->GetDuration());
-
-    disableNavAgent.reset();
-    blockFollowingNavigation.reset();
-    owner.lock()->Relocate(owner.lock()->GetTransform()->GetWorldPosition());
-    co_return;
-}
-
-void UrsulaBlindSkill::OnInterruption()
-{
-    if (!effectColliderCoroutine.expired())
-    {
-        owner.lock()->DeleteCoroutine(effectColliderCoroutine);
-    }
 }
 
 void UrsulaBlindSkill::UpdatePosition(const Vector3d& start, const Vector3d& dest)

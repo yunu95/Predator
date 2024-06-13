@@ -1,6 +1,7 @@
 #include "wanderResources.h"
-
+#include "FBXPool.h"
 std::unordered_map<std::string, std::unordered_map<UnitAnimType, yunuGI::IAnimation*>> animMap;
+std::unordered_map<std::string, std::unordered_map<UnitAnimType, std::string>> fbxMap;
 std::unordered_map<std::string, std::string> projectileBirthSounds;
 std::unordered_map<std::string, std::string> projectileDeathSounds;
 
@@ -43,7 +44,7 @@ void InitAnimMap()
     animMap["SKM_Hansel"][UnitAnimType::Rush] = localAnimMap[L"Rig_Robin|Ani_Hansel_Walk"];
     animMap["SKM_Hansel"][UnitAnimType::Attack] = localAnimMap[L"Rig_Robin|Ani_Hansel_Attack "];
     animMap["SKM_Hansel"][UnitAnimType::Taunt] = localAnimMap[L"Rig_Robin|Ani_Hansel_Skill2"];
-    animMap["SKM_Hansel"][UnitAnimType::Slam] = localAnimMap[L"Rig_Robin|Ani_Hansel_Attack"];
+    animMap["SKM_Hansel"][UnitAnimType::Slam] = localAnimMap[L"Rig_Robin|Ani_Hansel_Attack "];
     animMap["SKM_Hansel"][UnitAnimType::Skill1] = localAnimMap[L"Rig_Robin|Ani_Hansel_Skill1"];
     animMap["SKM_Hansel"][UnitAnimType::Throw] = localAnimMap[L"Rig_Robin|Ani_Hansel_Skill2"];
 
@@ -57,6 +58,7 @@ void InitAnimMap()
     animMap["SKM_Monster1"][UnitAnimType::Move] = localAnimMap[L"Ani_Monster1_Walk"];
     animMap["SKM_Monster1"][UnitAnimType::BattleMove] = localAnimMap[L"Ani_Monster1_Walk"];
     animMap["SKM_Monster1"][UnitAnimType::Death] = localAnimMap[L"Ani_Monster1_Death"];
+    animMap["SKM_Monster1"][UnitAnimType::Spin] = localAnimMap[L"Ani_Monster1_Skill"];
 
     animMap["SKM_Monster2"][UnitAnimType::Attack] = localAnimMap[L"Ani_Monster2_Attack"];
     animMap["SKM_Monster2"][UnitAnimType::Paralysis] = localAnimMap[L"Ani_Monster2_HitCC"];
@@ -121,4 +123,17 @@ constexpr const std::string wanderResources::GetFBXName(WanderFBX::Enum fbxType)
     default:
         break;
     }
-};
+}
+
+void InitFBXMap()
+{
+    fbxMap["SKM_Robin"][UnitAnimType::Attack] = "VFX_dlsdknglsk";
+
+}
+
+std::weak_ptr<ManagedFBX> wanderResources::GetVFX(const std::string& fbx, UnitAnimType animType)
+{
+    if (fbxMap.empty())
+        InitFBXMap();
+    return FBXPool::Instance().Borrow(fbxMap.at(fbx).at(animType));
+}

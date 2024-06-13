@@ -92,19 +92,33 @@ void UIManager::FadeIn(float duration)
         elm->DisableElement();
     }
 }
+
+// 플레이어가 캐릭터를 조작중일 때 보이는 UI들을 껐다가 키는 함수
+// 시네마틱 모드 접근, 타이틀 화면 - 인게임 스테이지 전환에 사용된다.
 void UIManager::SetIngameUIVisible(bool visible)
 {
     if (visible)
     {
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Bottom_Layout)->EnableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_MenuButton)->EnableElement();
-        UIManager::Instance().GetUIElementByEnum(UIEnumID::LetterBox_Bottom)->DisableElement();
-        UIManager::Instance().GetUIElementByEnum(UIEnumID::LetterBox_Top)->DisableElement();
     }
     else
     {
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Bottom_Layout)->DisableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_MenuButton)->DisableElement();
+    }
+}
+
+// 게임이 시네마틱 모드일 때 보이는 레터박스를 끄고 키는 함수
+void UIManager::SetLetterBoxVisible(bool visible)
+{
+    if (visible)
+    {
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::LetterBox_Bottom)->DisableElement();
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::LetterBox_Top)->DisableElement();
+    }
+    else
+    {
         UIManager::Instance().GetUIElementByEnum(UIEnumID::LetterBox_Bottom)->EnableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::LetterBox_Top)->EnableElement();
     }
@@ -355,6 +369,54 @@ void UIManager::SetUIDataWithIndex(int index, const JsonUIData& uiData)
     {
         uidatasByIndex[index] = uiData;
     }
+}
+void UIManager::StartGameAfterFadeOut()
+{
+    static std::weak_ptr<coroutine::Coroutine> coro;
+    if (coro.expired())
+    {
+        coro = StartCoroutine(StartGameAfterFadeOutCoro());
+    }
+}
+void UIManager::ReturnToTitleAfterFadeOut()
+{
+    static std::weak_ptr<coroutine::Coroutine> coro;
+    if (coro.expired())
+    {
+        coro = StartCoroutine(ReturnToTitleAfterFadeOutCoro());
+    }
+}
+coroutine::Coroutine UIManager::StartGameAfterFadeOutCoro()
+{
+    FadeOutLeft(1.0f);
+    SetIngameUIVisible(false);
+    co_yield coroutine::WaitForSeconds{ 1.2f, true };
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::VictoryPage)->DisableElement();
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::DefeatPage)->DisableElement();
+    auto cl = static_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
+    cl->StopContents(ContentsStopFlag::None);
+    cl->PlayContents(ContentsPlayFlag::None);
+    FadeIn(1.0f);
+
+    GetUIElementByEnum(UIEnumID::TitleRoot)->DisableElement();
+    SetIngameUIVisible(true);
+    co_return;
+}
+coroutine::Coroutine UIManager::ReturnToTitleAfterFadeOutCoro()
+{
+    FadeOutRight(1.0f);
+    SetIngameUIVisible(false);
+    co_yield coroutine::WaitForSeconds{ 1.2f, true };
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::VictoryPage)->DisableElement();
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::DefeatPage)->DisableElement();
+    auto cl = static_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
+    FadeIn(1.0f);
+
+    auto cam = Scene::getCurrentScene()->AddGameObject()->AddComponentAsWeakPtr<graphics::Camera>();
+    cam.lock()->SetCameraMain();
+    cl->StopContents(ContentsStopFlag::None);
+    GetUIElementByEnum(UIEnumID::TitleRoot)->EnableElement();
+    co_return;
 }
 void UIManager::Update()
 {
@@ -670,6 +732,14 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
         element->spriteAnimationOnEnable->Init();
         element->spriteAnimationOnEnable->ActivateTimer();
     }
+    if (uiData.customFlags2 & (int)UIExportFlag2::StartGameButton)
+    {
+        element->button->AddButtonClickFunction([]() {UIManager::Instance().StartGameAfterFadeOut(); });
+    }
+    if (uiData.customFlags2 & (int)UIExportFlag2::ReturnToTitleButton)
+    {
+        element->button->AddButtonClickFunction([]() {UIManager::Instance().ReturnToTitleAfterFadeOut(); });
+    }
 
     Vector3d pivotPos{ 0,0,0 };
     // offset by anchor
@@ -943,6 +1013,17 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
         }
 #endif
     }
+    if (uiData.customFlags & (int)UIExportFlag::IsDigitFont)
+    {
+        int number = 0;
+        for (auto each : element->GetGameObject()->GetChildren())
+        {
+            if (auto img = each->GetComponent<UIImage>())
+            {
+                digitFonts[element][number++] = img->GetGI().GetImage();
+            }
+        }
+    }
     if (uiData.customFlags2 & (int)UIExportFlag2::Duplicatable)
     {
         //element->localUIdatasByIndex[uiData.uiIndex] = uiData;
@@ -994,34 +1075,6 @@ bool UIManager::ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* 
                     co_return;
                     }());
             });
-        break;
-    case UIEnumID::BlackMask_GameLoad:
-        ImportDefaultAction(uiData, GetUIElementWithIndex(uiData.uiIndex));
-        element->colorTintOnEnable->onCompleteFunction = [=]()
-            {
-                auto cl = static_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-
-                cl->PlayContents(ContentsPlayFlag::None);
-                GetUIElementByEnum(UIEnumID::TitleRoot)->DisableElement();
-                SetIngameUIVisible(true);
-                /*for (auto each : uisByIndex)
-                {
-                    ImportDefaultAction_Post(each.second->importedUIData, each.second);
-                }*/
-                element->DisableElement();
-            };
-        break;
-    case UIEnumID::BlackMask_GameEnd:
-        ImportDefaultAction(uiData, GetUIElementWithIndex(uiData.uiIndex));
-        element->colorTintOnEnable->onCompleteFunction = [=]()
-            {
-                auto cl = static_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-                auto cam = Scene::getCurrentScene()->AddGameObject()->AddComponentAsWeakPtr<graphics::Camera>();
-                cam.lock()->SetCameraMain();
-                cl->StopContents(ContentsStopFlag::None);
-                GetUIElementByEnum(UIEnumID::TitleRoot)->EnableElement();
-                element->DisableElement();
-            };
         break;
     default:
         return false;

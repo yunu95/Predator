@@ -119,4 +119,6 @@ enum class UIEnumID
     MoveTargetFeedbackAnimSprites,
     ErrorPopup_NoMana,
     ErrorPopup_Cooltime,
+    VictoryPage,
+    DefeatPage,
 };

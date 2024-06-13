@@ -8,6 +8,7 @@
 #include "YunutyWaitForSeconds.h"
 #include "SFXManager.h"
 #include "BossSummonChessSkill.h"
+#include "PlayerController.h"
 
 void Interactable_ChessPawn::Start()
 {
@@ -71,6 +72,7 @@ void Interactable_ChessPawn::Update()
 void Interactable_ChessPawn::OnTriggerEnter(physics::Collider* collider)
 {
 	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
+		PlayerController::Instance().GetState() == PlayerController::State::Battle &&
 		colliderUnitComponent != nullptr &&
 		colliderUnitComponent->IsPlayerUnit() &&
 		colliderUnitComponent->IsAlive())

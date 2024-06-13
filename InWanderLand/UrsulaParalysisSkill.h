@@ -16,14 +16,6 @@ struct POD_UrsulaParalysisSkill
 
 class UrsulaParalysisSkill : public Skill
 {
-private:
-	coroutine::Coroutine SpawningFieldEffect(std::weak_ptr<UrsulaParalysisSkill> skill);
-	std::weak_ptr<coroutine::Coroutine> effectColliderCoroutine;
-	std::weak_ptr<UnitAcquisitionSphereCollider> damageCollider;
-	std::weak_ptr<UnitAcquisitionSphereCollider> knockBackCollider;
-	std::weak_ptr<ManagedFBX> tentacleObject;
-	std::weak_ptr<ManagedFBX> waveObject;
-
 public:
     UrsulaParalysisSkill() {}
     virtual SkillType::Enum GetSkillType() { return SkillType::Enum::URSULA_W; }
@@ -33,6 +25,14 @@ public:
 
     static POD_UrsulaParalysisSkill pod;
     static float colliderEffectRatio;
+
+private:
+    coroutine::Coroutine SpawningFieldEffect(std::weak_ptr<UrsulaParalysisSkill> skill);
+    std::weak_ptr<coroutine::Coroutine> effectColliderCoroutine;
+    std::weak_ptr<UnitAcquisitionSphereCollider> damageCollider;
+    std::weak_ptr<UnitAcquisitionSphereCollider> knockBackCollider;
+    std::weak_ptr<ManagedFBX> tentacleObject;
+    std::weak_ptr<ManagedFBX> waveObject;
 };
 
 
