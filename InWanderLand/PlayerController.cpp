@@ -230,8 +230,7 @@ void PlayerController::HandleInput()
 		TacticModeSystem::Instance().ClearCommand();
 	}
 
-	if ((TacticModeSystem::Instance().IsExecuting() == false))
-	{
+	if ((TacticModeSystem::Instance().IsExecuting() == false))	{
 		if (Input::isKeyPushed(KeyCode::Q))
 		{
 			switch (selectedCharacterType)
