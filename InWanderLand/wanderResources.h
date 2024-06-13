@@ -12,7 +12,6 @@ namespace wanderResources
 
     std::weak_ptr<ManagedFBX> GetVFX(const std::string& fbx, UnitAnimType animType);
 
-
     namespace texture
     {
         const std::wstring MAX_SKILL_RANGE_TEXTURE{ L"Texture/T_VFX_SkillRange_Cicle.dds" };
