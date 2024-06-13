@@ -91,4 +91,7 @@ enum class UIExportFlag2
     AnimatedSprite = 1 << 15,
     ScriptUI = 1 << 16,
     EnumSound = 1 << 17,
+    Rotating = 1 << 18,
+    StartGameButton = 1 << 19,
+    ReturnToTitleButton = 1 << 20,
 };

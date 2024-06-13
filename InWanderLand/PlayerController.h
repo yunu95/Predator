@@ -67,6 +67,7 @@ public:
     int GetSkillPoints();
     void IncrementSkillPoint();
     void LockCamInRegion(const application::editor::RegionData* camLockRegion);
+    void UnlockCamFromRegion();
     bool CanUnitSelectSkill(std::weak_ptr<Unit> unit);
     float GetMana();
     void SetMana(float mana);

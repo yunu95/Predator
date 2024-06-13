@@ -28,6 +28,7 @@ void BurnEffect::Appear()
 	isAppear = true;
 	isDone = false;
 	isFirst = true;
+	Update();
 }
 
 bool BurnEffect::IsDone()
