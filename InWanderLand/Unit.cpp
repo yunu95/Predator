@@ -18,6 +18,7 @@
 #include "CinematicManager.h"
 #include "UnitBuff.h"
 #include "wanderResources.h"
+#include "FBXPool.h"
 
 coroutine::Coroutine ShowPath(const std::vector<Vector3d> paths)
 {
@@ -212,7 +213,16 @@ void Unit::OnStateUpdate<UnitBehaviourTree::Attack>()
 	}
 	SetDesiredRotation(currentTargetUnit.lock()->GetTransform()->GetWorldPosition() - GetTransform()->GetWorldPosition());
 	if (!referenceBlockAttack.BeingReferenced())
+	{
 		coroutineAttack = StartCoroutine(AttackCoroutine(currentTargetUnit));
+		coroutineAttack.lock()->PushDestroyCallBack([this]() 
+			{
+				if (!attackVFX.expired())
+				{
+					FBXPool::Instance().Return(attackVFX);
+				}
+			});
+	}
 }
 template<>
 void Unit::OnStateEngage<UnitBehaviourTree::Move>()
@@ -1327,6 +1337,11 @@ yunutyEngine::coroutine::Coroutine Unit::AttackCoroutine(std::weak_ptr<Unit> opp
         animatorComponent.lock()->GetGI().SetPlaySpeed(animMinimumTime / finalAttackCooltime);
     }
     PlayAnimation(UnitAnimType::Attack, false);
+
+	/// VFX 실행
+	//attackVFX = wanderResources::GetVFX(unitTemplateData->pod.skinnedFBXName, UnitAnimType::Attack);
+	// attackVFX 위치, rotation, scale 만 세팅
+
     float playSpeed = animatorComponent.lock()->GetGI().GetPlaySpeed();
 
     co_yield coroutine::WaitForSeconds(unitTemplateData->pod.m_attackPreDelay * attackDelayMultiplier);
