@@ -9,7 +9,6 @@ const float spinEndTime = 3.15f;
 const float spinStartTime = 2.07f;
 const float spinAttackingTime = spinEndTime - spinStartTime;
 const float afterSpinDelay = totalTime - spinStartTime - spinAttackingTime;
-float BossSpinAttackSkill::colliderEffectRatio = 10.0f * 0.5f;
 
 coroutine::Coroutine BossSpinAttackSkill::operator()()
 {
@@ -47,6 +46,8 @@ void BossSpinAttackSkill::OnInterruption()
 
 coroutine::Coroutine BossSpinAttackSkill::SpawningSkillffect(std::weak_ptr<BossSpinAttackSkill> skill)
 {
+    colliderEffectRatio = 10.0f * 0.5f;
+
     float actualCollideRange = pod.skillRadius * 1 / (colliderEffectRatio);
 
     Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();

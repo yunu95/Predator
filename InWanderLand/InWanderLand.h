@@ -60,6 +60,7 @@
 #include "UnitAcquisitionSphereColliderPool.h"
 #include "UnitBuff.h"
 #include "Projectile.h"
+#include "ProjectileType.h"
 #include "ProjectilePool.h"
 #include "FBXPool.h"
 #include "PlayerController.h"

@@ -2044,6 +2044,9 @@
     <ClInclude Include="Action_EngageBattle.h">
       <Filter>Editor\ScriptSystem\2_Action\List\Action_EngageBattle</Filter>
     </ClInclude>
+    <ClInclude Include="ProjectileType.h">
+      <Filter>Contents_Refactored\Projectile</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
