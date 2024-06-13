@@ -14,6 +14,8 @@ struct POD_PassiveHanselHeal
         FROM_JSON(POD_PassiveHanselHeal)
 };
 
+class ManagedFBX;
+class UnitAcquisitionSphereCollider;
 class PassiveHanselHeal : public PassiveSkill
 {
 public:

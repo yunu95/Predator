@@ -38,6 +38,10 @@ std::weak_ptr<Projectile> ProjectilePool::Borrow(std::weak_ptr<Unit> owner, Vect
 
 void ProjectilePool::Return(std::weak_ptr<Projectile> projectile)
 {
+    if (projectile.expired())
+    {
+        return;
+    }
     projectile.lock()->traveling = false;
     poolsByProjectile.at(projectile.lock().get()).lock()->Return(projectile);
 }

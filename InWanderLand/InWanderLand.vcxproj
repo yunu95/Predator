@@ -1010,6 +1010,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="Action_BlockSkillCancel.h" />
     <ClInclude Include="Action_BlockSkillSelection.h" />
     <ClInclude Include="Action_Boss.h" />
+    <ClInclude Include="Action_EngageBattle.h" />
     <ClInclude Include="Action_Ornament.h" />
     <ClInclude Include="Action_PauseWaves.h" />
     <ClInclude Include="Action_PlayerSelect.h" />
@@ -1056,6 +1057,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="HanselProjectileSkill.h" />
     <ClInclude Include="FBXPool.h" />
     <ClInclude Include="LeftFrame.h" />
+    <ClInclude Include="MeleeEliteController.h" />
     <ClInclude Include="Module_Skill.h" />
     <ClInclude Include="MoveEndPreviewPool.h" />
     <ClInclude Include="Multiplier.h" />
@@ -2081,6 +2083,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="Action_BlockSkillCancel.cpp" />
     <ClCompile Include="Action_BlockSkillSelection.cpp" />
     <ClCompile Include="Action_Boss.cpp" />
+    <ClCompile Include="Action_EngageBattle.cpp" />
     <ClCompile Include="Action_Ornament.cpp" />
     <ClCompile Include="Action_PauseWaves.cpp" />
     <ClCompile Include="Action_PlayerSelect.cpp" />
@@ -2300,6 +2303,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="LocalTimeEntity.cpp" />
     <ClCompile Include="LocalTimeEntityManager.cpp" />
     <ClCompile Include="LinearClippingTimer.cpp" />
+    <ClCompile Include="MeleeEliteController.cpp" />
     <ClCompile Include="Module_Skill.cpp" />
     <ClCompile Include="MoveEndPreviewPool.cpp" />
     <ClCompile Include="ObservationTarget.cpp" />

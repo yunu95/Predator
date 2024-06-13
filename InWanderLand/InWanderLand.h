@@ -66,6 +66,7 @@
 #include "EnemyController.h"
 #include "EnemyAggroController.h"
 #include "RangedEliteController.h"
+#include "MeleeEliteController.h"
 #include "BossController.h"
 #include "PlaytimeWave.h"
 #include "SingleNavigationField.h"

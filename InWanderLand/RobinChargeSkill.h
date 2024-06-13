@@ -33,6 +33,7 @@ private:
 public:
     RobinChargeSkill() {};
     virtual SkillType::Enum GetSkillType() { return SkillType::Enum::ROBIN_Q; }
+    virtual float GetCastRange() override { return pod.maxDistance; };
     virtual coroutine::Coroutine operator()()override;
     virtual void OnInterruption()override;
 

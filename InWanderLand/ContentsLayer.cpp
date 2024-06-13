@@ -336,12 +336,12 @@ void application::contents::ContentsLayer::PlayContents(ContentsPlayFlag playFla
 
     auto rsrcMgr = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
-    /// Playable 동작들을 일괄 처리할 부분입니다.
-    PlayableComponent::OnGameStartAll();
-
     ContentsObserver::Instance().OnPlayContents();
     SkillPreviewSystem::Instance().camObj = RTSCam::Instance().GetGameObject();
     TacticModeSystem::Instance();
+
+	/// Playable 동작들을 일괄 처리할 부분입니다.
+	PlayableComponent::OnGameStartAll();
 }
 
 void application::contents::ContentsLayer::PauseContents()
@@ -374,11 +374,10 @@ void application::contents::ContentsLayer::StopContents(ContentsStopFlag stopFla
     yunutyEngine::graphics::Renderer::SingleInstance().SetUseIBL(true);
     yunutyEngine::graphics::Renderer::SingleInstance().SetLightMap(L"Stage1LightMap");
 
+	ContentsObserver::Instance().OnStopContents();
 
     /// Playable 동작들을 일괄 처리할 부분입니다.
     PlayableComponent::OnGameStopAll();
-
-    ContentsObserver::Instance().OnStopContents();
 
     if (bool(stopFlag & ContentsStopFlag::ClearUI))
         UIManager::Instance().Clear();

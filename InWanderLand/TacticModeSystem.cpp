@@ -95,9 +95,8 @@ void TacticModeSystem::EngageTacticSystem()
 EnqueErrorType TacticModeSystem::EnqueueCommand(std::shared_ptr<UnitCommand> command)
 {
 	EnqueErrorType errorType = EnqueErrorType::NONE;
-
 	// 큐가 가득 차 있는지 검사하는 코드
-	if (this->commandCount == this->MAX_COMMAND_COUNT)
+	if (this->commandList.size() == this->MAX_COMMAND_COUNT)
 	{
 		errorType = EnqueErrorType::QueueFull;
 		return errorType;
@@ -122,9 +121,8 @@ EnqueErrorType TacticModeSystem::EnqueueCommand(std::shared_ptr<UnitCommand> com
 	}
 
 	PlayerController::Instance().SetMana(mana - command->GetCommandCost());
-	this->commandCount++;
 
-	this->commandQueue.push_back(command);
+	this->commandList.push_back(command);
 
 	command->ShowPreviewMesh();
 
@@ -420,41 +418,26 @@ bool TacticModeSystem::CanSelectSkill(SkillType::Enum skillType)
 
 void TacticModeSystem::PopCommand()
 {
-	if (this->commandCount == 0) return;
+	if (this->commandList.empty()) return;
 
-	this->commandCount--;
-
-
-	
-	for (auto it = commandQueue.rbegin(); it != commandQueue.rend(); ++it)
+	auto command = this->commandList.back();
+	if (command->GetCommandType() == UnitCommand::Skill)
 	{
-		auto command = *it;
-		if (!command->IsDone())
-		{
-			if (command->GetCommandType() == UnitCommand::Skill)
-			{
-				this->useSkill[std::static_pointer_cast<UnitSkillCommand>(command)->GetSkillType()] = false;
-			}
-
-			command->SetIsDone(true);
-			command->HidePreviewMesh();
-
-			PlayerController::Instance().SetMana(PlayerController::Instance().GetMana() + command->GetCommandCost());
-			break;
-		}
+		this->useSkill[std::static_pointer_cast<UnitSkillCommand>(command)->GetSkillType()] = false;
 	}
-	
+	command->HidePreviewMesh();
+	PlayerController::Instance().SetMana(PlayerController::Instance().GetMana() + command->GetCommandCost());
+	this->commandList.pop_back();
+
 	bool robinCommand = false;
 	bool ursulaCommand = false;
 	bool hanselCommand = false;
 
-	for (auto it = commandQueue.rbegin(); it != commandQueue.rend(); ++it)
+	for (auto it = commandList.rbegin(); it != commandList.rend(); ++it)
 	{
-		auto command = *it;
 		auto commandUnitType = static_cast<PlayerCharacterType::Enum>(command->GetUnit()->GetUnitTemplateData().pod.playerUnitType.enumValue);
-
-		if ((!command->IsDone()) &&
-			(commandUnitType == static_cast<PlayerCharacterType::Enum>(command->GetUnit()->GetUnitTemplateData().pod.playerUnitType.enumValue)))
+		auto command = *it;
+		if ((commandUnitType == static_cast<PlayerCharacterType::Enum>(command->GetUnit()->GetUnitTemplateData().pod.playerUnitType.enumValue)))
 		{
 			switch (commandUnitType)
 			{
@@ -481,6 +464,7 @@ void TacticModeSystem::PopCommand()
 			break;
 		}
 	}
+
 	if (!robinCommand)
 	{
 		this->robinLastCommand = nullptr;
@@ -499,16 +483,15 @@ void TacticModeSystem::InterruptedCommand(Unit* unit)
 {
 	auto unitType = static_cast<PlayerCharacterType::Enum>(unit->GetUnitTemplateData().pod.playerUnitType.enumValue);
 
-	for (auto& each : commandQueue)
+	for (auto iter = this->commandList.begin(); iter != this->commandList.end(); ++iter)
 	{
-		if (static_cast<PlayerCharacterType::Enum>(each->GetUnit()->GetUnitTemplateData().pod.playerUnitType.enumValue) == unitType)
+		if (static_cast<PlayerCharacterType::Enum>((*iter)->GetUnit()->GetUnitTemplateData().pod.playerUnitType.enumValue) == unitType)
 		{
-			each->SetIsDone(true);
-			this->commandCount--;
-
-			if (each->GetCommandType() == UnitCommand::CommandType::Skill)
+			(*iter)->SetIsDone(true);
+			(*iter)->HidePreviewMesh();
+			if ((*iter)->GetCommandType() == UnitCommand::CommandType::Skill)
 			{
-				useSkill[std::static_pointer_cast<UnitSkillCommand>(each)->GetSkillType()] = false;
+				useSkill[std::static_pointer_cast<UnitSkillCommand>((*iter))->GetSkillType()] = false;
 			}
 		}
 	}
@@ -535,17 +518,17 @@ void TacticModeSystem::InterruptedCommand(Unit* unit)
 
 void TacticModeSystem::ClearCommand()
 {
-	for (auto& each : this->commandQueue)
+	for (auto& each : this->commandList)
 	{
 		each->HidePreviewMesh();
+		PlayerController::Instance().SetMana(PlayerController::Instance().GetMana() + each->GetCommandCost());
 	}
+
+	this->commandList.clear();
 	for (auto& each : this->useSkill)
 	{
 		each = false;
 	}
-	this->commandCount = 0;
-	this->commandQueue.clear();
-	PlayerController::Instance().SetState(PlayerController::State::None);
 	this->robinLastCommand = nullptr;
 	this->ursulaLastCommand = nullptr;
 	this->hanselLastCommand = nullptr;
@@ -553,9 +536,9 @@ void TacticModeSystem::ClearCommand()
 
 yunutyEngine::coroutine::Coroutine TacticModeSystem::ExecuteInternal()
 {
-	if (commandCount != 0)
+	for (auto& each : this->commandList)
 	{
-		for (auto& each : commandQueue)
+		if (!each->IsDone())
 		{
 			PlayerController::Instance().SelectPlayerUnit(static_cast<PlayerCharacterType::Enum>(each->GetUnit()->GetUnitTemplateData().pod.playerUnitType.enumValue));
 			// 현재 명령을 수행하는 플레이어 유닛은 움직인다.
@@ -567,15 +550,11 @@ yunutyEngine::coroutine::Coroutine TacticModeSystem::ExecuteInternal()
 			}
 			// 명령 수행이 끝나면 다시 멈춘다.
 			this->playersPauseRevArr[each->GetPlayerType()] = PlayerController::Instance().GetPlayers()[each->GetPlayerType()].lock()->referencePause.Acquire();
-			if (this->commandCount != 0)
-			{
-				this->commandCount--;
-			}
 			each->HidePreviewMesh();
 		}
 	}
 
-	this->commandQueue.clear();
+	this->commandList.clear();
 	PlayerController::Instance().SetState(PlayerController::State::Battle);
 
 	this->isExecuting = false;

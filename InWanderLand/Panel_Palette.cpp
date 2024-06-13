@@ -857,7 +857,8 @@ namespace application
             {
                 if(ImGui::Button("Delete Wave"))
                 {
-                    /// Delete 로직
+                    wp.OnDeletion();
+                    return;
                 }
 
                 if (imgui::BeginSection_2Col(countIdx, "Wave info", ImGui::GetContentRegionAvail().x))

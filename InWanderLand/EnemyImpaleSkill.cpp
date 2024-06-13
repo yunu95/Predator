@@ -2,7 +2,6 @@
 #include "EnemyImpaleSkill.h"
 
 POD_EnemyImpaleSkill EnemyImpaleSkill::pod = POD_EnemyImpaleSkill();
-int EnemyImpaleSkill::managingIndex = 0;
 
 struct Spear
 {
@@ -51,7 +50,7 @@ const std::vector<Spear> SpearsInfo()
 coroutine::Coroutine EnemyImpaleSkill::SpearArise(std::weak_ptr<EnemyImpaleSkill> skill, std::weak_ptr<ManagedFBX> fbx, std::weak_ptr<UnitAcquisitionSphereCollider> collider, Vector2d pos)
 {
     auto temp = skill.lock();
-    fbx = FBXPool::SingleInstance().Borrow(wanderResources::GetFBXName(wanderResources::WanderFBX::IMPALING_SPIKE));
+    fbx = FBXPool::Instance().Borrow(wanderResources::GetFBXName(wanderResources::WanderFBX::IMPALING_SPIKE));
     skill.lock()->spearFbxVector.push_back(fbx);
     collider = UnitAcquisitionSphereColliderPool::Instance().Borrow(skill.lock()->owner);
     skill.lock()->knockbackColliderVector.push_back(collider);
@@ -105,8 +104,7 @@ coroutine::Coroutine EnemyImpaleSkill::operator()()
     co_yield coroutine::WaitForSeconds{ pod.impaleStartDelay };
     //coroutine::ForSeconds forSeconds{ pod.impaleSkillDuration };
     coroutine::ForSeconds forSeconds{ pod.impaleSkillDuration };
-    if (managingIndex != 0)
-        managingIndex = 0;
+    managingIndex = 0;
 
     for (auto& each : SpearsInfo())
     {
@@ -125,7 +123,7 @@ coroutine::Coroutine EnemyImpaleSkill::operator()()
                 if (knockbackColliderVector.empty() && spearFbxVector.empty())
                     return;
                 UnitAcquisitionSphereColliderPool::Instance().Return(knockbackColliderVector[managingIndex]);
-                FBXPool::SingleInstance().Return(spearFbxVector[managingIndex]);
+                FBXPool::Instance().Return(spearFbxVector[managingIndex]);
                 managingIndex++;
             });
     }

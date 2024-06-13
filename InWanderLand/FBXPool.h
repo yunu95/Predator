@@ -20,12 +20,25 @@ public:
 
 // FBXPool은 fbx 이름별로 여러가지 풀들을 갖고 있다.
 // FBXPool은 풀 집합체와 같다고 할 수 있다.
-class FBXPool : public SingletonClass<FBXPool>
+class FBXPool 
+    : public SingletonComponent<FBXPool>, public Component, public PermanentObservee
 {
 public:
     std::weak_ptr<ManagedFBX> Borrow(const string& fbxName);
     void Return(std::weak_ptr<ManagedFBX>);
+    virtual void OnContentsStop() override;
+    virtual Component* GetComponent() override { return this; }
 private:
+    struct CustomCompare
+    {
+        bool operator()(const std::weak_ptr<ManagedFBX>& lp, const std::weak_ptr<ManagedFBX>& rp) const
+        {
+            return lp.lock().get() > rp.lock().get();
+        }
+    };
+
+    std::set<std::weak_ptr<ManagedFBX>, CustomCompare> borrowedList = std::set<std::weak_ptr<ManagedFBX>, CustomCompare>();
+
     class PoolByMesh : public GameObjectPool<ManagedFBX>
     {
     public:

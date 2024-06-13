@@ -451,6 +451,12 @@ void SkillPreviewSystem::ShowTemporaryRoute(UnitType unitType, std::vector<Vecto
 	// 버텍스가 1개만 들어오는 일은 없을 것으로 예상 혹시모르니 return
 	if (vertexList.size() < 2)
 	{
+		if (temporaryRouteMesh)
+		{
+			_resourceManager->DeleteMesh(temporaryRouteMesh);
+			temporaryRouteMesh = nullptr;
+		}
+		temporaryRouteMeshRendererObj->SetSelfActive(false);
 		return;
 	}
 	// 이 함수는 계속 불릴 함수이기 때문에 이미 메쉬가 생성된 것이 있다면 삭제해줘야함

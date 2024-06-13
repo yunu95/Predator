@@ -31,3 +31,4 @@
 #include "Action_UISetActive.h"
 #include "Action_Ornament.h"
 #include "Action_Boss.h"
+#include "Action_EngageBattle.h"

@@ -219,57 +219,62 @@ void PlayerController::HandleInput()
         }
     }
 
-    // 전술모드의 마지막 명령을 지우는 키
-    if (Input::isKeyDown(KeyCode::Control) && Input::isKeyPushed(KeyCode::Z) && TacticModeSystem::Instance().IsOperation() && !TacticModeSystem::Instance().IsExecuting())
-    {
-        TacticModeSystem::Instance().PopCommand();
-    }
+	// 전술모드의 마지막 명령을 지우는 키
+	if (Input::isKeyDown(KeyCode::Control) && Input::isKeyPushed(KeyCode::Z) && TacticModeSystem::Instance().IsOperation() && !TacticModeSystem::Instance().IsExecuting())
+	{
+		TacticModeSystem::Instance().PopCommand();
+	}
 
-    if ((TacticModeSystem::Instance().IsExecuting() == false))
-    {
-        if (Input::isKeyPushed(KeyCode::Q))
-        {
-            switch (selectedCharacterType)
-            {
-            case PlayerCharacterType::Robin: SelectSkill(SkillType::ROBIN_Q); break;
-            case PlayerCharacterType::Ursula: SelectSkill(SkillType::URSULA_Q); break;
-            case PlayerCharacterType::Hansel: SelectSkill(SkillType::HANSEL_Q); break;
-            }
-        }
-        if (Input::isKeyPushed(KeyCode::W))
-        {
-            switch (selectedCharacterType)
-            {
-            case PlayerCharacterType::Robin: SelectSkill(SkillType::ROBIN_W); break;
-            case PlayerCharacterType::Ursula: SelectSkill(SkillType::URSULA_W); break;
-            case PlayerCharacterType::Hansel: SelectSkill(SkillType::HANSEL_W); break;
-            }
-        }
-        if (Input::isKeyPushed(KeyCode::NUM_1))
-        {
-            SelectPlayerUnit(PlayerCharacterType::Robin);
-        }
-        if (Input::isKeyPushed(KeyCode::NUM_2))
-        {
-            SelectPlayerUnit(PlayerCharacterType::Ursula);
-        }
-        if (Input::isKeyPushed(KeyCode::NUM_3))
-        {
-            SelectPlayerUnit(PlayerCharacterType::Hansel);
-        }
-        if (Input::isKeyPushed(KeyCode::A))
-        {
-            OrderAttackMove(GetWorldCursorPosition());
-        }
-        if (Input::isKeyPushed(KeyCode::MouseLeftClick) && !UIManager::Instance().IsMouseOnButton())
-        {
-            OnLeftClick();
-        }
-        if (Input::isKeyPushed(KeyCode::MouseRightClick))
-        {
-            OnRightClick();
-        }
-    }
+	if (Input::isKeyPushed(KeyCode::ESC) && TacticModeSystem::Instance().IsOperation() && !TacticModeSystem::Instance().IsExecuting())
+	{
+		TacticModeSystem::Instance().ClearCommand();
+	}
+
+	if ((TacticModeSystem::Instance().IsExecuting() == false))
+	{
+		if (Input::isKeyPushed(KeyCode::Q))
+		{
+			switch (selectedCharacterType)
+			{
+				case PlayerCharacterType::Robin: SelectSkill(SkillType::ROBIN_Q); break;
+				case PlayerCharacterType::Ursula: SelectSkill(SkillType::URSULA_Q); break;
+				case PlayerCharacterType::Hansel: SelectSkill(SkillType::HANSEL_Q); break;
+			}
+		}
+		if (Input::isKeyPushed(KeyCode::W))
+		{
+			switch (selectedCharacterType)
+			{
+				case PlayerCharacterType::Robin: SelectSkill(SkillType::ROBIN_W); break;
+				case PlayerCharacterType::Ursula: SelectSkill(SkillType::URSULA_W); break;
+				case PlayerCharacterType::Hansel: SelectSkill(SkillType::HANSEL_W); break;
+			}
+		}
+		if (Input::isKeyPushed(KeyCode::NUM_1))
+		{
+			SelectPlayerUnit(PlayerCharacterType::Robin);
+		}
+		if (Input::isKeyPushed(KeyCode::NUM_2))
+		{
+			SelectPlayerUnit(PlayerCharacterType::Ursula);
+		}
+		if (Input::isKeyPushed(KeyCode::NUM_3))
+		{
+			SelectPlayerUnit(PlayerCharacterType::Hansel);
+		}
+		if (Input::isKeyPushed(KeyCode::A))
+		{
+			OrderAttackMove(GetWorldCursorPosition());
+		}
+		if (Input::isKeyPushed(KeyCode::MouseLeftClick) && !UIManager::Instance().IsMouseOnButton())
+		{
+			OnLeftClick();
+		}
+		if (Input::isKeyPushed(KeyCode::MouseRightClick))
+		{
+			OnRightClick();
+		}
+	}
 }
 
 void PlayerController::HandleCamera()
@@ -403,18 +408,21 @@ void PlayerController::SelectPlayerUnit(PlayerCharacterType::Enum charType)
 
 void PlayerController::OnLeftClick()
 {
-    if (selectedSkill == SkillType::NONE)
-    {
-        if (!cursorUnitDetector.lock()->GetUnits().empty())
-        {
-            SelectUnit((*cursorUnitDetector.lock()->GetUnits().begin())->GetWeakPtr<Unit>());
-        }
-    }
-    else
-    {
-        ActivateSkill(selectedSkill, GetWorldCursorPosition());
-        selectedSkill = SkillType::NONE;
-    }
+	if (selectedSkill == SkillType::NONE)
+	{
+		if (!cursorUnitDetector.lock()->GetUnits().empty())
+		{
+			SelectUnit((*cursorUnitDetector.lock()->GetUnits().begin())->GetWeakPtr<Unit>());
+		}
+	}
+	else
+	{
+		ActivateSkill(selectedSkill, GetWorldCursorPosition());
+		if (state != State::Tactic)
+		{
+			selectedSkill = SkillType::NONE;
+		}
+	}
 }
 
 void PlayerController::OnRightClick()
@@ -596,25 +604,34 @@ void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
                     , skillType
                 ));
 
-                // 이동 명령은 Enque됐지만 공격명령이 Enque되지 않았을 경우 이동 명령까지 지운다
-                if (errorType != EnqueErrorType::Success)
-                {
-                    TacticModeSystem::Instance().PopCommand();
-                }
-            }
-        }
-        else
-        {
-            // 이동없이 스킬 사용이 가능하다면 스킬 명령
+				// 이동 명령은 Enque됐지만 공격명령이 Enque되지 않았을 경우 이동 명령까지 지운다
+				if (errorType != EnqueErrorType::Success)
+				{
+					TacticModeSystem::Instance().PopCommand();
+				}
+				if(errorType == EnqueErrorType::Success)
+				{
+					selectedSkill = SkillType::NONE;
+				}
+			}
+		}
+		else
+		{
+			// 이동없이 스킬 사용이 가능하다면 스킬 명령
 
-            EnqueErrorType errorType = EnqueErrorType::NONE;
-            errorType = TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitSkillCommand>(characters[selectedCharacterType].lock().get()
-                , GetWorldCursorPosition()
-                , skillType
-            ));
-            // 에러 타입에 따른 UI활성화
-        }
-    }
+			EnqueErrorType errorType = EnqueErrorType::NONE;
+			errorType = TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitSkillCommand>(characters[selectedCharacterType].lock().get()
+				, GetWorldCursorPosition()
+				, skillType
+			));
+			if (errorType == EnqueErrorType::Success)
+			{
+				selectedSkill = SkillType::NONE;
+			}
+
+			// 에러 타입에 따른 UI활성화
+		}
+	}
 }
 
 void PlayerController::SelectSkill(SkillType::Enum skillType)

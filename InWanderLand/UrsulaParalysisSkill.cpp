@@ -21,8 +21,8 @@ coroutine::Coroutine UrsulaParalysisSkill::SpawningFieldEffect(std::weak_ptr<Urs
 	knockBackCollider.lock()->SetRadius(pod.skillRadius);
 	knockBackCollider.lock()->GetTransform()->SetWorldPosition(targetPos);
 
-	tentacleObject = FBXPool::SingleInstance().Borrow("SVFX_Ursula_Skill2_Tentacle");
-	waveObject = FBXPool::SingleInstance().Borrow("SVFX_Ursula_Skill2_Wave");
+	tentacleObject = FBXPool::Instance().Borrow("SVFX_Ursula_Skill2_Tentacle");
+	waveObject = FBXPool::Instance().Borrow("SVFX_Ursula_Skill2_Wave");
 	tentacleObject.lock()->GetTransform()->SetWorldScale({ actualCollideRange, actualCollideRange, actualCollideRange });
 	waveObject.lock()->GetTransform()->SetWorldScale({ actualCollideRange, actualCollideRange, actualCollideRange });
 
@@ -117,8 +117,8 @@ coroutine::Coroutine UrsulaParalysisSkill::operator()()
 	effectColliderCoroutine = owner.lock()->StartCoroutine(SpawningFieldEffect(dynamic_pointer_cast<UrsulaParalysisSkill>(selfWeakPtr.lock())));
 	effectColliderCoroutine.lock()->PushDestroyCallBack([this]()
 		{
-			FBXPool::SingleInstance().Return(tentacleObject);
-			FBXPool::SingleInstance().Return(waveObject);
+			FBXPool::Instance().Return(tentacleObject);
+			FBXPool::Instance().Return(waveObject);
 			UnitAcquisitionSphereColliderPool::Instance().Return(damageCollider);
 			UnitAcquisitionSphereColliderPool::Instance().Return(knockBackCollider);
 		});

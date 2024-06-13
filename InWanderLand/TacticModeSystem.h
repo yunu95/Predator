@@ -75,7 +75,7 @@ private:
     coroutine::Coroutine ExecuteInternal();
 
 private:
-    std::deque<std::shared_ptr<UnitCommand>> commandQueue;
+    std::list<std::shared_ptr<UnitCommand>> commandList;
     std::shared_ptr<UnitCommand> robinLastCommand;
     std::shared_ptr<UnitCommand> ursulaLastCommand;
     std::shared_ptr<UnitCommand> hanselLastCommand;
@@ -86,12 +86,12 @@ private:
     float coolTime;
     float elapsedTime;
 
-    int commandCount = 0;
     const int MAX_COMMAND_COUNT = 6;
 
     std::array<std::shared_ptr<Reference::Guard>, 3> playersPauseRevArr;
     std::vector< std::shared_ptr<Reference::Guard>> activateWaveEnemyUnitPauseRefVec;
     std::array<bool, 6> useSkill;
+
     friend class PlayerController;
     friend class UnitAttackCommand;
     friend class UnitSkillCommand;
