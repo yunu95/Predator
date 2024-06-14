@@ -2,6 +2,9 @@
 
 #include "NailCamera.h"
 
+#include "NailEngine.h"
+#include "RenderTargetGroup.h"
+
 LazyObjects<CameraManager> CameraManager::Instance;
 
 void CameraManager::RegisterCamera(yunuGI::ICamera* adapter, std::shared_ptr<NailCamera> camera)
@@ -22,6 +25,16 @@ void CameraManager::ChangeMainCamera(yunuGI::ICamera* adapter)
 std::map<yunuGI::ICamera*, std::shared_ptr<NailCamera>>& CameraManager::GetCamearaList()
 {
     return cameraMap;
+}
+
+void CameraManager::SetClearColor(yunuGI::Color color)
+{
+    auto& rtGroup =  NailEngine::Instance.Get().GetRenderTargetGroup();
+    auto& rt = rtGroup[static_cast<int>(RENDER_TARGET_TYPE::FINAL)]->GetRT(0);
+    rt.clearColor[0] = color.r;
+    rt.clearColor[1] = color.g;
+    rt.clearColor[2] = color.b;
+    rt.clearColor[3] = color.a;
 }
 
 void CameraManager::SetWorldTM(yunuGI::ICamera* adapter, DirectX::SimpleMath::Matrix wtm)

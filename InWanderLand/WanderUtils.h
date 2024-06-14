@@ -11,6 +11,18 @@
 using namespace application;
 namespace wanderUtils
 {
+	void ChangeStageToOne()
+	{
+		graphics::Camera::GetMainCamera()->GetGI().SetClearColor(yunuGI::Color{ 0.7686,0.8784,0.9451,1 });
+		yunutyEngine::graphics::Renderer::SingleInstance().SetLightMap(L"Stage1LightMap");
+	}
+
+    void ChangeStageToTwo()
+    {
+        graphics::Camera::GetMainCamera()->GetGI().SetClearColor(yunuGI::Color{0,0,0,1});
+        yunutyEngine::graphics::Renderer::SingleInstance().SetLightMap(L"Stage2LightMap");
+    }
+
     struct CompareDistance
     {
         Vector3d from;

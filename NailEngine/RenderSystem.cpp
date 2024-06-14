@@ -192,8 +192,6 @@ void RenderSystem::Render()
     PushCameraData();
     PushLightData();
 
-
-
     // 스태틱 오브젝트 렌더
     RenderObject();
 
@@ -237,9 +235,6 @@ void RenderSystem::RenderObject()
 {
     auto& renderTargetGroup = NailEngine::Instance.Get().GetRenderTargetGroup();
     renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->OMSetRenderTarget();
-
-
-
 
     MatrixBuffer matrixBuffer;
     //matrixBuffer.WTM = e.wtm;

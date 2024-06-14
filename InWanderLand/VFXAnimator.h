@@ -17,7 +17,9 @@ public:
 	void SetAutoActiveFalse();
 	bool IsDone();
 	void SetLoop(bool isLoop) { this->isLoop = isLoop; }
-
+	void Play();
+	void Pause();
+	void Resume();
 private:
 	
 	void Reset();
@@ -32,6 +34,7 @@ private:
 	};
 
 private:
+	bool isPlay = false;
 	bool isInit = false;
 	bool isAutoActivFalse = true;
 	bool isLoop = false;

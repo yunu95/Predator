@@ -163,6 +163,16 @@ float yunutyEngine::graphics::ParticleRenderer::GetDuration()
 	return GetGI().GetDuration();
 }
 
+void ParticleRenderer::Resume()
+{
+	this->isPause = false;
+}
+
+void ParticleRenderer::Pause()
+{
+	this->isPause = true;
+}
+
 void ParticleRenderer::Reset()
 {
 	if (isLoop) return;
@@ -183,6 +193,8 @@ void ParticleRenderer::Reset()
 		this->accTime = 0.f;
 		this->curCreationCycle -= (1.f / rateOverTime);
 	}
+
+
 }
 
 void ParticleRenderer::SetTexture(yunuGI::ITexture* texture)
@@ -284,7 +296,34 @@ void ParticleRenderer::SetMaxParticle(unsigned int maxParticle)
 
 void ParticleRenderer::Play()
 {
-	isPlay = true;
+	this->playAwake = this->originPlayAwake;
+
+	for (auto iter = this->ableParticles.begin(); iter != this->ableParticles.end();)
+	{
+		auto& each = *iter;
+
+		each.Reset();
+		this->disableParticles.push_back(*iter);
+
+		iter = this->ableParticles.erase(iter);
+	}
+
+	this->isPlay = true;
+
+	this->accTime = 0.f;
+	this->curCreationCycle -= (1.f / rateOverTime);
+
+
+	if (this->particleMode == ParticleMode::Bursts)
+	{
+		this->curCreationCycle = 0.f;
+		this->playAwake = this->originPlayAwake;
+	}
+	else
+	{
+		this->accTime = 0.f;
+		this->curCreationCycle -= (1.f / rateOverTime);
+	}
 }
 
 void ParticleRenderer::Update()
@@ -292,7 +331,7 @@ void ParticleRenderer::Update()
 	auto& gi = GetGI();
 
 	// 현재 파티클이 재생된 총 시간량이 Duration보다 작을 때 만 Update 돌기
-	if ((accTime <= gi.GetDuration()) && isPlay)
+	if ((accTime <= gi.GetDuration()) && isPlay && !isPause)
 	{
 		accTime += Time::GetDeltaTime();
 		curCreationCycle += Time::GetDeltaTime();
@@ -383,10 +422,9 @@ void ParticleRenderer::Update()
 		// 생성된 입자들은 포지션, 스케일 업데이트
 		ParticleUpdate();
 	}
-	else
+	else if(!isPause)
 	{
 		isPlay = false;
-
 
 		if (isLoop)
 		{
