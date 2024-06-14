@@ -158,7 +158,7 @@ void InstancingManager::SortByCameraDirection()
 	{
 		this->staticMeshDeferredRenderVec.push_back(each);
 	}
-	
+
 	for (auto& each : blend)
 	{
 		this->staticMeshDeferredRenderVec.push_back(each);
