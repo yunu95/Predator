@@ -1184,14 +1184,14 @@ void ResourceManager::CreateDefaultMaterial()
         material->SetTexture(yunuGI::Texture_Type::ALBEDO,
             renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(ALBEDO)).get());
 
-        material->SetTexture(yunuGI::Texture_Type::NORMAL,
-            GetTexture(L"Texture/asdDiffuseHDR.dds").get());
+        //material->SetTexture(yunuGI::Texture_Type::NORMAL,
+        //    GetTexture(L"Texture/asdDiffuseHDR.dds").get());
 
-        material->SetTexture(yunuGI::Texture_Type::HEIGHT,
-            GetTexture(L"Texture/asdSpecularHDR.dds").get());
+        //material->SetTexture(yunuGI::Texture_Type::HEIGHT,
+        //    GetTexture(L"Texture/asdSpecularHDR.dds").get());
 
-        material->SetTexture(yunuGI::Texture_Type::EMISSION,
-            GetTexture(L"Texture/asdBrdf.dds").get());
+        //material->SetTexture(yunuGI::Texture_Type::EMISSION,
+        //    GetTexture(L"Texture/asdBrdf.dds").get());
 
         material->SetTexture(yunuGI::Texture_Type::ARM,
             renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(ARM)).get());
@@ -1355,10 +1355,15 @@ void ResourceManager::CreateDefaultMaterial()
 void ResourceManager::CreateDefaultTexture()
 {
     CreateTexture(L"Texture/room.dds");
-    CreateTexture(L"Texture/asdEnvHDR.dds");
-    CreateTexture(L"Texture/asdBrdf.dds");
-    CreateTexture(L"Texture/asdDiffuseHDR.dds");
-    CreateTexture(L"Texture/asdSpecularHDR.dds");
+    CreateTexture(L"Texture/Stage1EnvHDR.dds");
+    CreateTexture(L"Texture/Stage1Brdf.dds");
+    CreateTexture(L"Texture/Stage1DiffuseHDR.dds");
+    CreateTexture(L"Texture/Stage1SpecularHDR.dds");
+
+	CreateTexture(L"Texture/Stage2EnvHDR.dds");
+	CreateTexture(L"Texture/Stage2Brdf.dds");
+	CreateTexture(L"Texture/Stage2DiffuseHDR.dds");
+	CreateTexture(L"Texture/Stage2SpecularHDR.dds");
 
     CreateTexture(L"Texture/Particle/default.dds");
     CreateTexture(L"Texture/TempTexture.dds");

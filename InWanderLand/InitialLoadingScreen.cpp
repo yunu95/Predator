@@ -21,9 +21,7 @@ coroutine::Coroutine InitialLoadingScreen::ShowLoadingScreen()
     auto videoJustLoading = graphics::Renderer::SingleInstance().GetResourceManager()->GetVideoData(L"Texture/LoadingScreen/LoadingResources.mp4");
     uiImage->GetGI().SetVideo(videoYunuty.lock()->GetName());
     videoPlayer->SetVideo(videoYunuty);
-    videoNailEngine.lock()->SetRepeat(false);
-    videoYunuty.lock()->SetRepeat(false);
-    videoJustLoading.lock()->SetRepeat(true);
+    videoPlayer->loop = false;
 
     while (!videoYunuty.lock()->IsDonePlaying())
     {
@@ -53,6 +51,7 @@ coroutine::Coroutine InitialLoadingScreen::ShowLoadingScreen()
     }
     uiImage->GetGI().SetVideo(videoJustLoading.lock()->GetName());
     videoPlayer->SetVideo(videoJustLoading);
+    videoPlayer->loop = true;
     while (wanderUtils::ResourceRecursiveLoader::IsLoadingResources())
     {
         co_await std::suspend_always{};

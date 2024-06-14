@@ -65,7 +65,6 @@ void NailEngine::Init(UINT64 hWnd)
         reinterpret_cast<VertexShader*>(ResourceManager::Instance.Get().GetShader(L"SkinnedShadowVS.cso").get()));
 
     SkyBoxPass::Instance.Get().Init(
-        ResourceManager::Instance.Get().GetTexture(L"Texture/asdEnvHDR.dds").get(),
         ResourceManager::Instance.Get().GetMesh(L"Sphere").get(),
         ResourceManager::Instance.Get().GetShader(L"SkyBoxVS.cso").get(),
         ResourceManager::Instance.Get().GetShader(L"SkyBoxPS.cso").get());
@@ -126,6 +125,8 @@ void NailEngine::Finalize()
 void NailEngine::SetLightMap(const std::wstring& lightMapName)
 {
     this->lightMap = ResourceManager::Instance.Get().GetTexture(lightMapName).get();
+    std::wstring stageName = lightMapName.substr(0, 6);
+    SkyBoxPass::Instance.Get().StageName(stageName);
 }
 
 Texture* NailEngine::GetLightMap()

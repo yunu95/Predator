@@ -1,11 +1,12 @@
 #include "Projectile.h"
+#include "ProjectileType.h"
 #include "ProjectilePool.h"
 #include "InWanderLand.h"
 #include <DirectXMath.h>
 
 // Borrow 함수는 먼저 해당 fbx 이름에 맞는 풀이 존재하는지 확인하고, 없으면 새로 만든다.
 // 해당 풀이 있다면 
-std::weak_ptr<Projectile> ProjectilePool::Borrow(std::weak_ptr<Unit> owner, Vector3d destination)
+std::weak_ptr<Projectile> ProjectilePool::Borrow(std::weak_ptr<Unit> owner, Vector3d destination, ProjectileType::Enum projectileType, ProjectileHoming::Enum projectileHoming)
 {
     const std::string& fbxname = owner.lock()->GetUnitTemplateData().pod.projectile_staticFBXName;
     if (!poolsByFBX.contains(fbxname))

@@ -6,11 +6,13 @@ struct POD_UrsulaBlindSkill
     float skillCoolTime = 2.0f;
     float skillCost = 10.0f;
     float skillRange = 6.f;
+    float skillRangeUpgraded = 6.f;
     float skillRadius = 1.0f;
     float skillOffset = 1.f;
     float skillDamage = 5.f;
+    float skillDamageUpgraded = 5.f;
     float skillBlindTime = 3.0f;
-    
+
 
     TO_JSON(POD_UrsulaBlindSkill)
         FROM_JSON(POD_UrsulaBlindSkill)
@@ -21,7 +23,7 @@ class UrsulaBlindSkill : public Skill
 public:
     UrsulaBlindSkill() {}
     virtual SkillType::Enum GetSkillType() { return SkillType::Enum::URSULA_Q; }
-    virtual float GetCastRange() override { return pod.skillRange; }
+    virtual float GetCastRange() override { return GetSkillRange(); }
     virtual coroutine::Coroutine operator()()override;
     virtual void OnInterruption()override;
 
@@ -36,6 +38,8 @@ public:
     static Vector3d GetSkillObjectPos_Left(const Vector3d& dest);
     static Vector3d GetSkillObjectPos_Right(const Vector3d& dest);
 
+    static float GetSkillRange();
+    static float GetSkillDamage();
 private:
     float colliderEffectRatio;
 

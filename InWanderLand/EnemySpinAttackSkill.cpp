@@ -47,13 +47,13 @@ void EnemySpinAttackSkill::OnInterruption()
 
 coroutine::Coroutine EnemySpinAttackSkill::SpawningSkillffect(std::weak_ptr<EnemySpinAttackSkill> skill)
 {
-    float actualCollideRange = pod.skillRadius * (1 - colliderEffectRatio);
+    float actualCollideRange = pod.skillRadius * (1 / colliderEffectRatio);
 
     Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
     Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
     Vector3d direction = deltaPos.Normalized();
 
-    chargeEffect = FBXPool::Instance().Borrow("VFX_HeartQueen_Skill1");
+    chargeEffect = FBXPool::Instance().Borrow("VFX_Monster1_Skill");
 
     chargeEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos);
     chargeEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
@@ -63,6 +63,7 @@ coroutine::Coroutine EnemySpinAttackSkill::SpawningSkillffect(std::weak_ptr<Enem
     auto chargeEffectAnimator = chargeEffect.lock()->AcquireVFXAnimator();
     chargeEffectAnimator.lock()->SetAutoActiveFalse();
     chargeEffectAnimator.lock()->Init();
+    chargeEffectAnimator.lock()->Play();
 
     knockbackCollider = UnitAcquisitionSphereColliderPool::Instance().Borrow(owner.lock());
     knockbackCollider.lock()->SetRadius(pod.skillRadius * owner.lock()->GetTransform()->GetWorldScale().x);

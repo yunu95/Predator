@@ -65,6 +65,8 @@ private:
     std::vector<std::string> dialogueManual_KeyStrings;
     std::unordered_map<std::string, UIElement*> scriptUI;
     std::vector<std::string> scriptUI_KeyStrings;
+    std::unordered_map<std::wstring, std::weak_ptr<graphics::VideoPlayer>> videoPlayers;
+    //std::unordered_map<std::wstring, std::weak_ptr<graphics::VideoPlayer>> videoPlayersScaled;
 public:
     const std::vector<std::string>& GetDialogueTimed_KeyStrings();
     const std::vector<std::string>& GetDialogueManual_KeyStrings();

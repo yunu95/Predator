@@ -10,6 +10,7 @@
 #include "BossSkillSystem.h"
 #include "TacticModeSystem.h"
 #include "IAnimation.h"
+#include "VFXAnimator.h"
 #include "SkillPreviewSystem.h"
 
 #include "BurnEffect.h"
@@ -19,6 +20,8 @@
 #include "UnitBuff.h"
 #include "wanderResources.h"
 #include "FBXPool.h"
+#include "ProjectileType.h"
+#include "RTSCam.h"
 
 coroutine::Coroutine ShowPath(const std::vector<Vector3d> paths)
 {
@@ -198,6 +201,7 @@ template<>
 void Unit::OnStateExit<UnitBehaviourTree::Attack>()
 {
     DeleteCoroutine(coroutineAttack);
+    DeleteCoroutine(coroutineAttackEffect);
     animatorComponent.lock()->GetGI().SetPlaySpeed(1);
     onStateExit[UnitBehaviourTree::Attack]();
     enableNavObstacleByState.reset();
@@ -215,13 +219,6 @@ void Unit::OnStateUpdate<UnitBehaviourTree::Attack>()
 	if (!referenceBlockAttack.BeingReferenced())
 	{
 		coroutineAttack = StartCoroutine(AttackCoroutine(currentTargetUnit));
-		coroutineAttack.lock()->PushDestroyCallBack([this]() 
-			{
-				if (!attackVFX.expired())
-				{
-					FBXPool::Instance().Return(attackVFX);
-				}
-			});
 	}
 }
 template<>
@@ -325,6 +322,16 @@ void Unit::Damaged(std::weak_ptr<Unit> opponentUnit, float opponentDmg, DamageTy
     switch (damageType)
     {
     case DamageType::Attack:
+        if (opponentUnit.lock()->GetFBXName() == "SKM_Ursula" || opponentUnit.lock()->GetFBXName() == "SKM_Hansel")
+        {
+            if (!coroutineDamagedEffect.expired())
+                FBXPool::Instance().Return(damagedVFX);
+            coroutineDamagedEffect = StartCoroutine(DamagedEffectCoroutine(opponentUnit));
+            coroutineDamagedEffect.lock()->PushDestroyCallBack([this]()
+                {
+                    FBXPool::Instance().Return(damagedVFX);
+                });
+        }
         opponentUnit.lock()->onAttackHit(GetWeakPtr<Unit>());
         break;
     case DamageType::Skill:
@@ -341,6 +348,32 @@ void Unit::Damaged(float dmg)
     SetCurrentHp(currentHitPoint -= dmg);
     onDamaged();
 }
+
+yunutyEngine::coroutine::Coroutine Unit::DamagedEffectCoroutine(std::weak_ptr<Unit> opponent)
+{
+    damagedVFX = wanderResources::GetVFX(opponent.lock()->unitTemplateData->pod.skinnedFBXName, UnitAnimType::Damaged);
+    co_await std::suspend_always{};
+    auto vfxAnimator = damagedVFX.lock()->AcquireVFXAnimator();
+    vfxAnimator.lock()->SetAutoActiveFalse();
+    vfxAnimator.lock()->Init();
+    vfxAnimator.lock()->Play();
+    Vector3d startPos = GetTransform()->GetWorldPosition();
+    Vector3d deltaPos = RTSCam::Instance().GetTransform()->GetWorldPosition() - GetTransform()->GetWorldPosition();
+    Vector3d direction = deltaPos.Normalized();
+    direction *= -1;
+    damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos + direction * 2 * (-1));
+    damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
+    //damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(direction);
+    //damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldScale(GetTransform()->GetWorldScale());
+
+    while (!vfxAnimator.lock()->IsDone())
+    {
+        co_await std::suspend_always{};
+    }
+
+    co_return;
+}
+
 
 void Unit::Heal(float healingPoint)
 {
@@ -1356,9 +1389,21 @@ yunutyEngine::coroutine::Coroutine Unit::AttackCoroutine(std::weak_ptr<Unit> opp
     }
     PlayAnimation(UnitAnimType::Attack);
 
-	/// VFX 실행
-	//attackVFX = wanderResources::GetVFX(unitTemplateData->pod.skinnedFBXName, UnitAnimType::Attack);
-	// attackVFX 위치, rotation, scale 만 세팅
+    switch (unitTemplateData->pod.attackType.enumValue)
+    {
+        case UnitAttackType::MELEE:
+        {
+            if (!coroutineAttackEffect.expired())
+                FBXPool::Instance().Return(attackVFX);
+
+            coroutineAttackEffect = StartCoroutine(MeleeAttackEffectCoroutine(opponent));
+            coroutineAttackEffect.lock()->PushDestroyCallBack([this]()
+                {
+                    FBXPool::Instance().Return(attackVFX);
+                });
+            break;
+        }
+    }
 
     float playSpeed = animatorComponent.lock()->GetGI().GetPlaySpeed();
 
@@ -1368,12 +1413,21 @@ yunutyEngine::coroutine::Coroutine Unit::AttackCoroutine(std::weak_ptr<Unit> opp
     switch (unitTemplateData->pod.attackType.enumValue)
     {
     case UnitAttackType::MELEE:
+    {
         opponent.lock()->Damaged(GetWeakPtr<Unit>(), unitTemplateData->pod.m_autoAttackDamage + adderAttackDamage, DamageType::Attack);
+        if (!coroutineAttackEffect.expired())
+        {
+            attackVFX.lock()->GetGameObject()->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
+            attackVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(GetTransform()->GetWorldRotation());
+        }
         break;
-    case UnitAttackType::MISSILE:
-        auto projectile = ProjectilePool::SingleInstance().Borrow(GetWeakPtr<Unit>(), opponent.lock()->GetTransform()->GetWorldPosition());
-        projectile.lock()->GetTransform()->SetLocalScale(Vector3d::one * unitTemplateData->pod.projectile_scale);
-        break;
+    }
+     case UnitAttackType::MISSILE:
+     {
+         auto projectile = ProjectilePool::SingleInstance().Borrow(GetWeakPtr<Unit>(), opponent.lock()->GetTransform()->GetWorldPosition(), static_cast<ProjectileType::Enum>(unitTemplateData->pod.projectileType.enumValue), static_cast<ProjectileHoming::Enum>(unitTemplateData->pod.projectileHoming.enumValue));
+         projectile.lock()->GetTransform()->SetLocalScale(Vector3d::one * unitTemplateData->pod.projectile_scale);
+         break;
+     }
     }
     StartCoroutine(referenceBlockAttack.AcquireForSecondsCoroutine(finalAttackCooltime - unitTemplateData->pod.m_attackPreDelay * attackDelayMultiplier));
     auto blockCommand = referenceBlockPendingOrder.Acquire();
@@ -1381,6 +1435,31 @@ yunutyEngine::coroutine::Coroutine Unit::AttackCoroutine(std::weak_ptr<Unit> opp
     playSpeed = animatorComponent.lock()->GetGI().GetPlaySpeed();
     blockCommand.reset();
     animatorComponent.lock()->GetGI().SetPlaySpeed(1);
+    co_return;
+}
+yunutyEngine::coroutine::Coroutine Unit::MeleeAttackEffectCoroutine(std::weak_ptr<Unit> opponent)
+{
+    /// VFX 실행
+    attackVFX = wanderResources::GetVFX(unitTemplateData->pod.skinnedFBXName, UnitAnimType::Attack);
+
+    co_await std::suspend_always{};
+
+    auto vfxAnimator = attackVFX.lock()->AcquireVFXAnimator();
+    vfxAnimator.lock()->SetAutoActiveFalse();
+    vfxAnimator.lock()->Init();
+    vfxAnimator.lock()->Play();
+    Vector3d startPos = GetTransform()->GetWorldPosition();
+    Vector3d deltaPos = opponent.lock()->GetTransform()->GetWorldPosition() - GetTransform()->GetWorldPosition();
+    Vector3d direction = deltaPos.Normalized();
+    attackVFX.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos);
+    attackVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(GetTransform()->GetWorldRotation());
+    attackVFX.lock()->GetGameObject()->GetTransform()->SetWorldScale(GetTransform()->GetWorldScale());
+
+    while (!vfxAnimator.lock()->IsDone())
+    {
+        co_await std::suspend_always{};
+    }
+
     co_return;
 }
 float Unit::DistanceTo(const Vector3d& target)

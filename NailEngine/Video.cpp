@@ -477,7 +477,7 @@ bool Video::open(const wchar_t* filename) {
     clock_time = 0.0f;
 
     // Just to ensure we have something as the first frame, and also ensure we have the real required size (height % 16 should be 0)
-    update(0.0f);
+    //update(0.0f, false);
 
     return true;
 }
@@ -497,7 +497,8 @@ bool Video::IsDonePlaying()
 //{
 //
 //}
-void Video::update(float deltaTime) {
+void Video::update(float deltaTime, bool autoloop)
+{
 
     if (paused)
         return;
@@ -618,10 +619,19 @@ void Video::update(float deltaTime) {
         SAFE_RELEASE(pVideoSample);
     }
 }
-void Video::SetRepeat(bool repeat)
+void Video::ResetVideo()
 {
-    autoloop = repeat;
+    dbg("\tEnd of stream.\n");
+    PROPVARIANT var = { 0 };
+    var.vt = VT_I8;
+    auto hr = pSourceReader->SetCurrentPosition(GUID_NULL, var);
+    if (hr != S_OK) { dbg("Failed to set source reader position."); }
+    clock_time = 0.0f;
 }
+//void Video::SetRepeat(bool repeat)
+//{
+//    autoloop = repeat;
+//}
 bool Video::updateTextureWithIYUV(const uint8_t* data, size_t data_size) {
     assert(data);
     D3D11_MAPPED_SUBRESOURCE ms;

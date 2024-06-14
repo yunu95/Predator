@@ -5,6 +5,7 @@ struct POD_PassiveHanselHeal
 {
     float cookieLifetime = 10.0f;
     float healAmount = 10.0f;
+    float healAmountUpgraded = 10.0f;
     int hitsRequired = 5;
     int cookieBatchSize = 5;
     float cookieScale = 1.0f;
@@ -21,11 +22,12 @@ class PassiveHanselHeal : public PassiveSkill
 public:
     virtual void Init(std::weak_ptr<Unit> owner) override;
     virtual SkillType::Enum GetSkillType() { return SkillType::Passive_Hansel_Heal; };
+    static float GetHealAmount();
     static POD_PassiveHanselHeal pod;
 private:
     int hitCounter{ 0 };
     void IncrementHitCounter();
-    coroutine::Coroutine CookieLingering( Vector3d pos, std::weak_ptr<Unit> owner);
+    coroutine::Coroutine CookieLingering(Vector3d pos, std::weak_ptr<Unit> owner);
     //coroutine::Coroutine CookieDisappear(const Vector3d& pos, std::weak_ptr<Unit> owner);
 };
 

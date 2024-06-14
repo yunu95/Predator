@@ -112,6 +112,7 @@ coroutine::Coroutine RobinChargeSkill::SpawningSkillffect(std::weak_ptr<RobinCha
     auto chargeEffectAnimator = chargeEffect.lock()->AcquireVFXAnimator();
     chargeEffectAnimator.lock()->SetAutoActiveFalse();
     chargeEffectAnimator.lock()->Init();
+    chargeEffectAnimator.lock()->Play();
 
     co_await std::suspend_always{};
 

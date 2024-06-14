@@ -31,6 +31,9 @@ namespace yunuGI
         virtual yunuGI::Vector2 GetScreenPos(const yunuGI::Vector3& worldPos) = 0;
         virtual yunuGI::Vector3 GetViewPos(const yunuGI::Vector3& worldPos) = 0;
 
+
+        // 백그라운드 색상을 바꾸는 함수
+        virtual void SetClearColor(yunuGI::Color color) = 0;
     };
     struct ICameraDesc
     {

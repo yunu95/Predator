@@ -61,6 +61,10 @@ namespace yunutyEngine::graphics
 		virtual void Update() override;
 		virtual void OnDisable() override;
 
+		void Play();
+		void Pause();
+		void Resume();
+
 		void Reset();
 
 		void ParticleUpdate();
@@ -72,7 +76,7 @@ namespace yunutyEngine::graphics
 		void SetParticleMode(ParticleMode particleMode);
 		void SetMaxParticle(unsigned int maxParticle);
 		void SetRateOverTime(float rateOverTime);
-		void Play();
+	
 		void SetLoop(bool isLoop);
 		void SetLifeTime(float lifeTime);
 		void SetSpeed(float speed);
@@ -95,9 +99,9 @@ namespace yunutyEngine::graphics
 		yunuGI::Vector2 GetRandomPointInCircle(double centerX, double centerY, double radius);
 
 	private:
-		ParticleShape particleType = ParticleShape::Cone;
-
+		bool isPause = false;
 		bool isPlay = false;
+		ParticleShape particleType = ParticleShape::Cone;
 
 		double accTime = 0.f;
 		bool isLoop = false;

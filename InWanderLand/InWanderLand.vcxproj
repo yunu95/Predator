@@ -1056,6 +1056,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="HanselChargeSkill.h" />
     <ClInclude Include="HanselProjectileSkill.h" />
     <ClInclude Include="FBXPool.h" />
+    <ClInclude Include="ITacticObject.h" />
+    <ClInclude Include="JsonUIFloatType.h" />
     <ClInclude Include="LeftFrame.h" />
     <ClInclude Include="MeleeEliteController.h" />
     <ClInclude Include="Module_Skill.h" />
@@ -1072,11 +1074,13 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="Reference.h" />
     <ClInclude Include="RightFrame.h" />
     <ClInclude Include="RobinTauntSkill.h" />
+    <ClInclude Include="RotatingUI.h" />
     <ClInclude Include="SkillList.h" />
     <ClInclude Include="SkillManager.h" />
     <ClInclude Include="SkillType.h" />
     <ClInclude Include="SkillUpgradeType.h" />
     <ClInclude Include="BossSummonObject.h" />
+    <ClInclude Include="UIVideoPlayer.h" />
     <ClInclude Include="UnitAcquisitionSphereColliderPool.h" />
     <ClInclude Include="UnitAnimationType.h" />
     <ClInclude Include="AttackSystem.h">
@@ -2395,6 +2399,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseGraphicsExe|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugEditorExe|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="RotatingUI.cpp" />
     <ClCompile Include="Script.cpp" />
     <ClCompile Include="ScriptSystem.cpp" />
     <ClCompile Include="SFXManager.cpp" />
@@ -2975,6 +2980,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="UIPanel.cpp" />
     <ClCompile Include="UIPriorityLayout.cpp" />
     <ClCompile Include="UISpriteAnimation.cpp" />
+    <ClCompile Include="UIVideoPlayer.cpp" />
     <ClCompile Include="UnitAcquisitionSphereCollider.cpp" />
     <ClCompile Include="UnitAcquisitionSphereColliderPool.cpp" />
     <ClCompile Include="UnitAttackCommand.cpp" />

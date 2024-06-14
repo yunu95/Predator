@@ -6,6 +6,7 @@
 #include "ChessBishop.h"
 #include "GlobalConstant.h"
 #include "YunutyWaitForSeconds.h"
+#include "VFXAnimator.h"
 
 POD_BossSummonChessSkill BossSummonChessSkill::pod = POD_BossSummonChessSkill();
 
@@ -20,6 +21,11 @@ coroutine::Coroutine BossSummonChessSkill::operator()()
 	auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
 	auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
 	owner.lock()->PlayAnimation(UnitAnimType::Skill4, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
+	effectCoroutine = owner.lock()->StartCoroutine(SpawningFieldEffect(std::dynamic_pointer_cast<BossSummonChessSkill>(selfWeakPtr.lock())));
+	effectCoroutine.lock()->PushDestroyCallBack([this]()
+		{
+			FBXPool::Instance().Return(stepEffect);
+		});
 	auto animator = owner.lock()->GetAnimator();
 	auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill4);
 	coroutine::ForSeconds forSeconds{ anim->GetDuration() };
@@ -50,18 +56,45 @@ coroutine::Coroutine BossSummonChessSkill::operator()()
 	disableNavAgent.reset();
 	blockFollowingNavigation.reset();
 	owner.lock()->Relocate(owner.lock()->GetTransform()->GetWorldPosition());
-	OnInterruption();
 	co_return;
 }
 
 void BossSummonChessSkill::OnInterruption()
 {
-
+	if (!effectCoroutine.expired())
+	{
+		owner.lock()->DeleteCoroutine(effectCoroutine);
+	}
 }
 
 void BossSummonChessSkill::OnBossDie()
 {
 	BossSummon::ChessPool::Instance().OnBossDie();
+}
+
+coroutine::Coroutine BossSummonChessSkill::SpawningFieldEffect(std::weak_ptr<BossSummonChessSkill> skill)
+{
+	Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
+	Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
+	Vector3d direction = deltaPos.Normalized();
+	Vector3d endPos = startPos + deltaPos;
+	Vector3d currentPos = startPos;
+
+	stepEffect = FBXPool::Instance().Borrow("VFX_HeartQueen_Skill3_1");
+	stepEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos);
+	stepEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
+	stepEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(owner.lock()->GetTransform()->GetWorldScale());
+
+	auto stepEffectAnimator = stepEffect.lock()->AcquireVFXAnimator();
+	stepEffectAnimator.lock()->SetAutoActiveFalse();
+	stepEffectAnimator.lock()->Init();
+	stepEffectAnimator.lock()->Play();
+
+	auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill3);
+
+	co_yield coroutine::WaitForSeconds(anim->GetDuration());
+
+	co_return;
 }
 
 coroutine::Coroutine BossSummonChessSkill::SummonChess(std::weak_ptr<BossSummonChessSkill> skill, Vector2i index)

@@ -90,18 +90,22 @@ coroutine::Coroutine UrsulaBlindSkill::SpawningFieldEffect(std::weak_ptr<UrsulaB
     auto onUrsulaPosAnimator = onUrsulaPosEffect.lock()->AcquireVFXAnimator();
     onUrsulaPosAnimator.lock()->SetAutoActiveFalse();
     onUrsulaPosAnimator.lock()->Init();
+    onUrsulaPosAnimator.lock()->Play();
 
     auto onTargetPosAnimator1 = onTargetPosEffect1.lock()->AcquireVFXAnimator();
     onTargetPosAnimator1.lock()->SetAutoActiveFalse();
     onTargetPosAnimator1.lock()->Init();
+    onTargetPosAnimator1.lock()->Play();
 
     auto onTargetPosAnimator2 = onTargetPosEffect2.lock()->AcquireVFXAnimator();
     onTargetPosAnimator2.lock()->SetAutoActiveFalse();
     onTargetPosAnimator2.lock()->Init();
+    onTargetPosAnimator2.lock()->Play();
 
     auto onTargetPosAnimator3 = onTargetPosEffect3.lock()->AcquireVFXAnimator();
     onTargetPosAnimator3.lock()->SetAutoActiveFalse();
     onTargetPosAnimator3.lock()->Init();
+    onTargetPosAnimator3.lock()->Play();
 
     auto animator = owner.lock()->GetAnimator();
 
@@ -146,21 +150,21 @@ coroutine::Coroutine UrsulaBlindSkill::SpawningFieldEffect(std::weak_ptr<UrsulaB
 
             for (auto& each : circle_Top.lock()->GetEnemies())
             {
-                each->Damaged(owner, pod.skillDamage);
+                each->Damaged(owner, GetSkillDamage());
                 /// 실명
                 /// 실명 대상은 skillBlindTime 동안 실명 상태
             }
 
             for (auto& each : circle_Left.lock()->GetEnemies())
             {
-                each->Damaged(owner, pod.skillDamage);
+                each->Damaged(owner, GetSkillDamage());
                 /// 실명
                 /// 실명 대상은 skillBlindTime 동안 실명 상태
             }
 
             for (auto& each : circle_Right.lock()->GetEnemies())
             {
-                each->Damaged(owner, pod.skillDamage);
+                each->Damaged(owner, GetSkillDamage());
                 /// 실명
                 /// 실명 대상은 skillBlindTime 동안 실명 상태
             }
@@ -205,6 +209,16 @@ Vector3d UrsulaBlindSkill::GetSkillObjectPos_Right(const Vector3d& dest)
     auto skillDir = (dest - skillStart).Normalized();
     auto right = Vector3d::Cross(-skillDir, Vector3d::up).Normalized();
     return dest - std::sqrt(3) / 6 * skillDir * length + right * length / 2;
+}
+
+float UrsulaBlindSkill::GetSkillRange()
+{
+    return PlayerController::Instance().IsSkillUpgraded(SkillUpgradeType::URSULA_Q_RANGE) ? pod.skillRangeUpgraded : pod.skillRange;
+}
+
+float UrsulaBlindSkill::GetSkillDamage()
+{
+    return PlayerController::Instance().IsSkillUpgraded(SkillUpgradeType::URSULA_Q_DAMAGE) ? pod.skillDamageUpgraded : pod.skillDamage;
 }
 
 

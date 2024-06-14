@@ -167,6 +167,7 @@ coroutine::Coroutine BossImpaleSkill::SpawningSkillffect(std::weak_ptr<BossImpal
 	auto chargeEffectAnimator = impaleEffect.lock()->AcquireVFXAnimator();
 	chargeEffectAnimator.lock()->SetAutoActiveFalse();
 	chargeEffectAnimator.lock()->Init();
+	chargeEffectAnimator.lock()->Play();
 
 	co_await std::suspend_always{};
 

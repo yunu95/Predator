@@ -78,6 +78,7 @@ public:
     void EraseBuff(UnitBuffType buffType);
     void Damaged(std::weak_ptr<Unit> opponentUnit, float opponentAp, DamageType damageType = DamageType::Miscellaneous);	// 데미지 입었을 경우 추적하는 로직 포함
     void Damaged(float dmg);                            // 추적받지 않는 데미지
+    coroutine::Coroutine DamagedEffectCoroutine(std::weak_ptr<Unit> opponent);
     void Heal(float healingPoint);
     void SetCurrentHp(float p_newHp);
     void KnockBack(Vector3d targetPosition, float knockBackDuration);
@@ -178,6 +179,7 @@ private:
     // 유닛이 죽을 때 애니메이션, 번 이펙트와 함께 사라지고 유닛 풀에 반환되는 코루틴
     yunutyEngine::coroutine::Coroutine DeathCoroutine();
     yunutyEngine::coroutine::Coroutine AttackCoroutine(std::weak_ptr<Unit> opponent);
+    yunutyEngine::coroutine::Coroutine MeleeAttackEffectCoroutine(std::weak_ptr<Unit> opponent);
     float DistanceTo(const Vector3d& target);
     void ReturnToPool();
     int liveCountLeft{ 0 };
@@ -229,11 +231,14 @@ private:
     std::weak_ptr<yunutyEngine::coroutine::Coroutine> coroutineKnockBack;
     std::weak_ptr<yunutyEngine::coroutine::Coroutine> coroutineRevival;
     std::weak_ptr<yunutyEngine::coroutine::Coroutine> coroutineAttack;
+    std::weak_ptr<yunutyEngine::coroutine::Coroutine> coroutineAttackEffect;
+    std::weak_ptr<yunutyEngine::coroutine::Coroutine> coroutineDamagedEffect;
     std::weak_ptr<yunutyEngine::coroutine::Coroutine> coroutineSkill;
     UnitAnimType defaultAnimationType;
     bool blendWithDefaultAnimTrigger{ false };
     int navAgentEnableFrameCount{ 0 };
     std::weak_ptr<ManagedFBX> attackVFX = std::weak_ptr<ManagedFBX>();
+    std::weak_ptr<ManagedFBX> damagedVFX = std::weak_ptr<ManagedFBX>();
     friend UnitBuff;
     friend UnitPool;
     friend PlayerController;

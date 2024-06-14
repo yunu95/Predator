@@ -37,13 +37,13 @@ coroutine::Coroutine HanselProjectileSkill::ThrowingPie(std::weak_ptr<HanselProj
     {
         currentPos += direction * pod.projectileSpeed * Time::GetDeltaTime();
         pieCollider.lock()->GetTransform()->SetWorldPosition(currentPos + direction * pod.pieOffsetX + Vector3d(0, pod.pieOffsetY, 0));
-        pieObject.lock()->GetTransform()->SetWorldPosition(currentPos + direction * pod.pieOffsetX + Vector3d(0, pod.pieOffsetY, 0 ));
+        pieObject.lock()->GetTransform()->SetWorldPosition(currentPos + direction * pod.pieOffsetX + Vector3d(0, pod.pieOffsetY, 0));
 
         rotatePerFrame += pod.pieRotateSpeed * Time::GetDeltaTime();
 
         Vector3d directionPerFrame = (endPos - currentPos).Normalized();
-		//pieObject->GetTransform()->SetWorldRotation(pieObject->GetTransform()->GetWorldRotation() + Vector3d(rotatePerFrame, 0, 0));
-        auto euler =  pieObject.lock()->GetTransform()->GetLocalRotation().Euler();
+        //pieObject->GetTransform()->SetWorldRotation(pieObject->GetTransform()->GetWorldRotation() + Vector3d(rotatePerFrame, 0, 0));
+        auto euler = pieObject.lock()->GetTransform()->GetLocalRotation().Euler();
         euler.x = rotatePerFrame;
         pieObject.lock()->GetTransform()->SetWorldRotation(Quaternion{ euler });
         co_await std::suspend_always{};
@@ -66,21 +66,21 @@ coroutine::Coroutine HanselProjectileSkill::ThrowingPie(std::weak_ptr<HanselProj
             }
         }
     }
-   
+
     co_return;
 }
 
 float HanselProjectileSkill::GetCastRange()
 {
-    return pod.maxRange;
+    return GetMaxRange();
 }
 
 coroutine::Coroutine HanselProjectileSkill::operator()()
 {
     colliderEffectRatio = 1.0f * 0.5f;
     auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
-	auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
-	auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
+    auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
+    auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
 
     auto animator = owner.lock()->GetAnimator();
 
@@ -109,9 +109,9 @@ coroutine::Coroutine HanselProjectileSkill::operator()()
     owner.lock()->PlayAnimation(UnitAnimType::Idle);
     co_yield coroutine::WaitForSeconds{ 0.3f };
 
-	disableNavAgent.reset();
-	blockFollowingNavigation.reset();
-	owner.lock()->Relocate(owner.lock()->GetTransform()->GetWorldPosition());
+    disableNavAgent.reset();
+    blockFollowingNavigation.reset();
+    owner.lock()->Relocate(owner.lock()->GetTransform()->GetWorldPosition());
     OnInterruption();
     co_return;
 }
@@ -119,4 +119,14 @@ coroutine::Coroutine HanselProjectileSkill::operator()()
 void HanselProjectileSkill::OnInterruption()
 {
 
+}
+
+float HanselProjectileSkill::GetMaxRange()
+{
+    return PlayerController::Instance().IsSkillUpgraded(SkillUpgradeType::HANSEL_W_RANGE) ? pod.maxRangeUpgraded : pod.maxRange;
+}
+
+int HanselProjectileSkill::GetHitCount()
+{
+    return PlayerController::Instance().IsSkillUpgraded(SkillUpgradeType::HANSEL_W_MORE_HITS) ? pod.hitCountUpgraded : pod.hitCount;
 }
