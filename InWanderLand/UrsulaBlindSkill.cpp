@@ -90,18 +90,22 @@ coroutine::Coroutine UrsulaBlindSkill::SpawningFieldEffect(std::weak_ptr<UrsulaB
     auto onUrsulaPosAnimator = onUrsulaPosEffect.lock()->AcquireVFXAnimator();
     onUrsulaPosAnimator.lock()->SetAutoActiveFalse();
     onUrsulaPosAnimator.lock()->Init();
+    onUrsulaPosAnimator.lock()->Play();
 
     auto onTargetPosAnimator1 = onTargetPosEffect1.lock()->AcquireVFXAnimator();
     onTargetPosAnimator1.lock()->SetAutoActiveFalse();
     onTargetPosAnimator1.lock()->Init();
+    onTargetPosAnimator1.lock()->Play();
 
     auto onTargetPosAnimator2 = onTargetPosEffect2.lock()->AcquireVFXAnimator();
     onTargetPosAnimator2.lock()->SetAutoActiveFalse();
     onTargetPosAnimator2.lock()->Init();
+    onTargetPosAnimator2.lock()->Play();
 
     auto onTargetPosAnimator3 = onTargetPosEffect3.lock()->AcquireVFXAnimator();
     onTargetPosAnimator3.lock()->SetAutoActiveFalse();
     onTargetPosAnimator3.lock()->Init();
+    onTargetPosAnimator3.lock()->Play();
 
     auto animator = owner.lock()->GetAnimator();
 

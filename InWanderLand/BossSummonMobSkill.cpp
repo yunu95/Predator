@@ -159,6 +159,7 @@ coroutine::Coroutine BossSummonMobSkill::SpawningFieldEffect(std::weak_ptr<BossS
 	auto stepEffectAnimator = stepEffect.lock()->AcquireVFXAnimator();
 	stepEffectAnimator.lock()->SetAutoActiveFalse();
 	stepEffectAnimator.lock()->Init();
+	stepEffectAnimator.lock()->Play();
 
 	auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill3);
 
