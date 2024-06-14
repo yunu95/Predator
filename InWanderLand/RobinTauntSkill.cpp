@@ -68,6 +68,7 @@ coroutine::Coroutine RobinTauntSkill::SpawningSkillffect(std::weak_ptr<RobinTaun
     auto chargeEffectAnimator = tauntEffect.lock()->AcquireVFXAnimator();
     chargeEffectAnimator.lock()->SetAutoActiveFalse();
     chargeEffectAnimator.lock()->Init();
+    chargeEffectAnimator.lock()->Play();
 
     auto animator = owner.lock()->GetAnimator();
     auto tauntAnim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Taunt);

@@ -78,6 +78,7 @@ public:
     void EraseBuff(UnitBuffType buffType);
     void Damaged(std::weak_ptr<Unit> opponentUnit, float opponentAp, DamageType damageType = DamageType::Miscellaneous);	// 데미지 입었을 경우 추적하는 로직 포함
     void Damaged(float dmg);                            // 추적받지 않는 데미지
+    coroutine::Coroutine DamagedEffectCoroutine(std::weak_ptr<Unit> opponent);
     void Heal(float healingPoint);
     void SetCurrentHp(float p_newHp);
     void KnockBack(Vector3d targetPosition, float knockBackDuration);
@@ -229,11 +230,13 @@ private:
     std::weak_ptr<yunutyEngine::coroutine::Coroutine> coroutineRevival;
     std::weak_ptr<yunutyEngine::coroutine::Coroutine> coroutineAttack;
     std::weak_ptr<yunutyEngine::coroutine::Coroutine> coroutineAttackEffect;
+    std::weak_ptr<yunutyEngine::coroutine::Coroutine> coroutineDamagedEffect;
     std::weak_ptr<yunutyEngine::coroutine::Coroutine> coroutineSkill;
     UnitAnimType defaultAnimationType;
     bool blendWithDefaultAnimTrigger{ false };
     int navAgentEnableFrameCount{ 0 };
     std::weak_ptr<ManagedFBX> attackVFX = std::weak_ptr<ManagedFBX>();
+    std::weak_ptr<ManagedFBX> damagedVFX = std::weak_ptr<ManagedFBX>();
     friend UnitBuff;
     friend UnitPool;
     friend PlayerController;

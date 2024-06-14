@@ -132,6 +132,9 @@ void InitFBXMap()
     fbxMap["SKM_Hansel"][UnitAnimType::Attack] = "VFX_Hansel_Attack_1";
     fbxMap["SKM_Monster1"][UnitAnimType::Attack] = "VFX_Monster1_Attack";
     fbxMap["SKM_HeartQueen"][UnitAnimType::Attack] = "VFX_HeartQueen_Attack";
+
+    fbxMap["SKM_Ursula"][UnitAnimType::Damaged] = "VFX_Ursula_Attack_2";
+    fbxMap["SKM_Hansel"][UnitAnimType::Damaged] = "VFX_Hansel_Attack_2";
 }
 
 std::weak_ptr<ManagedFBX> wanderResources::GetVFX(const std::string& fbx, UnitAnimType animType)
