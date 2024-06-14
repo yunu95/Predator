@@ -7,11 +7,14 @@ struct POD_HanselProjectileSkill
     float projectileSpeed = 10.0f;
     float skillRadius = 1.0f;
     float maxRange = 10.0f;
+    float maxRangeUpgraded = 10.0f;
     float coolTime = 2.0f;
     float skillCost = 10.0f;
     float pieRotateSpeed = 1080.0f;
     float pieOffsetY = 2.0f;
     float pieOffsetX = 0.0f;
+    int hitCount = 1;
+    int hitCountUpgraded = 1;
 
     TO_JSON(POD_HanselProjectileSkill)
         FROM_JSON(POD_HanselProjectileSkill)
@@ -31,6 +34,8 @@ public:
     virtual float GetCastRange() override;
     virtual coroutine::Coroutine operator()() override;
     virtual void OnInterruption() override;
+    static float GetMaxRange();
+    static int GetHitCount();
 
     static POD_HanselProjectileSkill pod;
 };

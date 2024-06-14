@@ -21,6 +21,7 @@ namespace yunutyEngine::graphics
     {
         unsigned int frame;
         bool isFirst;
+        bool must;
         std::function<void()> func;
     };
 
@@ -49,7 +50,7 @@ namespace yunutyEngine::graphics
 
         /// AnimationEvent 의 경우, Push 뿐만이 아니라 Erase 에 대한 대처도 필요합니다.
         /// 일반적인 Push 상황과 별개로 functor 를 등록하는 경우에는 Index 를 리턴받도록 합니다.
-        unsigned long long PushAnimationWithFunc(yunuGI::IAnimation* animation, unsigned int frame, std::function<void()> func);
+        unsigned long long PushAnimationWithFunc(yunuGI::IAnimation* animation, unsigned int frame, std::function<void()> func, bool must = false);
         bool EraseAnimationFunc(yunuGI::IAnimation* animation, unsigned long long index);
 
         /// Animation 이 플레이 중인 경우 해당 프레임을 반환하는 함수입니다.
