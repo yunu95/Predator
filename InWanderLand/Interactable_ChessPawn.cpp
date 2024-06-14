@@ -152,7 +152,7 @@ yunutyEngine::coroutine::Coroutine Interactable_ChessPawn::DoInteraction()
 		each->Damaged(damage);
 	}
 
-	SFXManager::PlaySoundfile3D("sounds/trap/EXPLOSION_gimmik.mp3", GetTransform()->GetWorldPosition());
+	SFXManager::PlaySoundfile3D("sounds/trap/Explosion.mp3", GetTransform()->GetWorldPosition());
 
 	if (particleEffectTime == 0)
 	{

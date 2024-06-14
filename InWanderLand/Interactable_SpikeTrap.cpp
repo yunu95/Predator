@@ -90,7 +90,7 @@ yunutyEngine::coroutine::Coroutine Interactable_SpikeTrap::DoInteraction()
     {
         each->KnockBackRelativeVector(5 * (each->GetTransform()->GetWorldPosition() - GetTransform()->GetWorldPosition()).Normalized(), 1);
         each->Damaged(damage);
-        SFXManager::PlaySoundfile3D("sounds/trap/Damage_Zone.wav", each->GetTransform()->GetWorldPosition());
+        SFXManager::PlaySoundfile3D("sounds/trap/Spike damage.wav", each->GetTransform()->GetWorldPosition());
     }
 
     co_yield yunutyEngine::coroutine::WaitForSeconds(delayTime, false);

@@ -71,7 +71,7 @@ void Interactable_TrapSwitch::OnTriggerEnter(physics::Collider* collider)
 		{
 			OnInteractableTriggerEnter();
 			isInteracting = true;
-			SFXManager::PlaySoundfile3D("sounds/trap/Trigger_Active.wav", GetGameObject()->GetTransform()->GetWorldPosition());
+			SFXManager::PlaySoundfile3D("sounds/trap/Scaffold trigger.wav", GetGameObject()->GetTransform()->GetWorldPosition());
 		}
 	}
 }

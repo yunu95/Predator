@@ -182,8 +182,8 @@ coroutine::Coroutine BossSummonChessSkill::SummonChess(std::weak_ptr<BossSummonC
 			{
 				tempPos.y = 0;
 				chessList[i].lock()->GetSummonComponent()->GetTransform()->SetWorldPosition(tempPos);
-				/// 낙하할 때 사운드 관련 작업 필요
 				chessList[i].lock()->SetReady();
+				SFXManager::PlaySoundfile3D("sounds/Heart Queen/Heart Queen chess summon.wav", tempPos);
 			}
 		}
 		co_await std::suspend_always{};
