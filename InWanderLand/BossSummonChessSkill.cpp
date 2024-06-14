@@ -21,6 +21,11 @@ coroutine::Coroutine BossSummonChessSkill::operator()()
 	auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
 	auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
 	owner.lock()->PlayAnimation(UnitAnimType::Skill4, true);
+	effectCoroutine = owner.lock()->StartCoroutine(SpawningFieldEffect(std::dynamic_pointer_cast<BossSummonChessSkill>(selfWeakPtr.lock())));
+	effectCoroutine.lock()->PushDestroyCallBack([this]()
+		{
+			FBXPool::Instance().Return(stepEffect);
+		});
 	auto animator = owner.lock()->GetAnimator();
 	auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill4);
 	coroutine::ForSeconds forSeconds{ anim->GetDuration() };
@@ -51,13 +56,15 @@ coroutine::Coroutine BossSummonChessSkill::operator()()
 	disableNavAgent.reset();
 	blockFollowingNavigation.reset();
 	owner.lock()->Relocate(owner.lock()->GetTransform()->GetWorldPosition());
-	OnInterruption();
 	co_return;
 }
 
 void BossSummonChessSkill::OnInterruption()
 {
-
+	if (!effectCoroutine.expired())
+	{
+		owner.lock()->DeleteCoroutine(effectCoroutine);
+	}
 }
 
 void BossSummonChessSkill::OnBossDie()
@@ -81,6 +88,10 @@ coroutine::Coroutine BossSummonChessSkill::SpawningFieldEffect(std::weak_ptr<Bos
 	auto stepEffectAnimator = stepEffect.lock()->AcquireVFXAnimator();
 	stepEffectAnimator.lock()->SetAutoActiveFalse();
 	stepEffectAnimator.lock()->Init();
+
+	auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill3);
+
+	co_yield coroutine::WaitForSeconds(anim->GetDuration());
 
 	co_return;
 }

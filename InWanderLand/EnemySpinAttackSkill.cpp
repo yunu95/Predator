@@ -47,7 +47,7 @@ void EnemySpinAttackSkill::OnInterruption()
 
 coroutine::Coroutine EnemySpinAttackSkill::SpawningSkillffect(std::weak_ptr<EnemySpinAttackSkill> skill)
 {
-    float actualCollideRange = pod.skillRadius * (1 - colliderEffectRatio);
+    float actualCollideRange = pod.skillRadius * (1 / colliderEffectRatio);
 
     Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
     Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();

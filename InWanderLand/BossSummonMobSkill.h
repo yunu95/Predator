@@ -52,6 +52,7 @@ private:
 	coroutine::Coroutine SpawningFieldEffect(std::weak_ptr<BossSummonMobSkill> skill);
 
 	static std::weak_ptr<coroutine::Coroutine> summonCoroutine;
+	std::weak_ptr<coroutine::Coroutine> effectCoroutine;
 	std::weak_ptr<ManagedFBX> stepEffect;
 	static BossSummon::LeftFrame * leftFrame;
 	static BossSummon::RightFrame* rightFrame;

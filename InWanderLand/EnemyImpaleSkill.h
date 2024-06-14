@@ -43,6 +43,7 @@ private:
     coroutine::Coroutine SpawningSkillffect(std::weak_ptr<EnemyImpaleSkill> skill);
 
     std::weak_ptr<ManagedFBX> impaleEffect;
+    std::weak_ptr<coroutine::Coroutine> effectCoroutine;
     std::vector<std::weak_ptr<UnitAcquisitionSphereCollider>> knockbackColliderVector;
     std::vector<std::weak_ptr<ManagedFBX>> spearFbxVector;
     std::unordered_set<Unit*> damagedUnits;

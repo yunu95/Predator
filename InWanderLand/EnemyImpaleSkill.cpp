@@ -59,7 +59,11 @@ coroutine::Coroutine EnemyImpaleSkill::operator()()
 
     // 창이 생성되는 시간 오프셋은 유닛으로부터의 거리와 정비례한다.
     owner.lock()->PlayAnimation(UnitAnimType::Skill2);
-
+    effectCoroutine = owner.lock()->StartCoroutine(SpawningSkillffect(std::dynamic_pointer_cast<EnemyImpaleSkill>(selfWeakPtr.lock())));
+    effectCoroutine.lock()->PushDestroyCallBack([this]()
+        {
+            FBXPool::Instance().Return(impaleEffect);
+        });
     co_yield coroutine::WaitForSeconds{ pod.impaleStartDelay };
     //coroutine::ForSeconds forSeconds{ pod.impaleSkillDuration };
     coroutine::ForSeconds forSeconds{ pod.impaleSkillDuration };
