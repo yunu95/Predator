@@ -22,5 +22,6 @@ enum class UnitAnimType
     Spin,
     BattleStart,  // 전투 시작
     BattleEnd,   // 전투 끝
+    Damaged,
     End
 };

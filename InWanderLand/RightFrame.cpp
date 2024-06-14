@@ -10,6 +10,7 @@
 #include "BossSummonMobSkill.h"
 #include "GlobalConstant.h"
 #include "UnitPool.h"
+#include "VFXAnimator.h"
 
 namespace BossSummon
 {
@@ -172,6 +173,30 @@ namespace BossSummon
 		Vector3d pivotPos = GetGameObject()->GetTransform()->GetWorldPosition() + Vector3d(BossSummonMobSkill::pod.rightSummonOffset_x, 0, BossSummonMobSkill::pod.rightSummonOffset_z);
 		Quaternion summonRot = GetGameObject()->GetTransform()->GetWorldRotation();
 
+		/// 1. VFX 실행을 한다(Set Auto 어쩌고로 내가 Active 관리)
+		auto summonEffect = FBXPool::Instance().Borrow("VFX_Frame_Summon");
+		summonEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
+		summonEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(GetTransform()->GetWorldRotation());
+		auto summonEffectAnimator = summonEffect.lock()->AcquireVFXAnimator();
+		summonEffectAnimator.lock()->SetAutoActiveFalse();
+		summonEffectAnimator.lock()->Init();
+		/// 2. 특정 시간 만큼 기다린다. (VFX Summon Animation 끝날 때까지 co_await suspend always / IsDone)
+		while (!summonEffectAnimator.lock()->IsDone())
+		{
+			co_await std::suspend_always{};
+		}
+		/// 3. VFX 바꿔서 실행한다(VFX Summoning, 기존 거는 Active false 하고(?) 반납)
+		FBXPool::Instance().Return(summonEffect);
+		auto summoningEffect = FBXPool::Instance().Borrow("VFX_Frame_Summoning");
+		summoningEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
+		summoningEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(GetTransform()->GetWorldRotation());
+		auto summoningEffectAnimator = summoningEffect.lock()->AcquireVFXAnimator();
+		summoningEffectAnimator.lock()->SetLoop(true);
+		summoningEffectAnimator.lock()->SetAutoActiveFalse();
+		summoningEffectAnimator.lock()->Init();
+
+		co_await std::suspend_always{};
+
 		int meleeSummonCount = 0;
 		int projectileSummonCount = 0;
 		while (forSeconds.Tick())
@@ -266,6 +291,10 @@ namespace BossSummon
 			}
 			co_await std::suspend_always();
 		}
+
+		/// 4. VFX_Summoning 반납
+		FBXPool::Instance().Return(summoningEffect);
+
 		co_return;
 	}
 }

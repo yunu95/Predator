@@ -21,6 +21,7 @@
 #include "wanderResources.h"
 #include "FBXPool.h"
 #include "ProjectileType.h"
+#include "RTSCam.h"
 
 coroutine::Coroutine ShowPath(const std::vector<Vector3d> paths)
 {
@@ -321,6 +322,16 @@ void Unit::Damaged(std::weak_ptr<Unit> opponentUnit, float opponentDmg, DamageTy
     switch (damageType)
     {
     case DamageType::Attack:
+        if (opponentUnit.lock()->GetFBXName() == "SKM_Ursula" || opponentUnit.lock()->GetFBXName() == "SKM_Hansel")
+        {
+            if (!coroutineDamagedEffect.expired())
+                FBXPool::Instance().Return(damagedVFX);
+            coroutineDamagedEffect = StartCoroutine(DamagedEffectCoroutine(opponentUnit));
+            coroutineDamagedEffect.lock()->PushDestroyCallBack([this]()
+                {
+                    FBXPool::Instance().Return(damagedVFX);
+                });
+        }
         opponentUnit.lock()->onAttackHit(GetWeakPtr<Unit>());
         break;
     case DamageType::Skill:
@@ -336,6 +347,31 @@ void Unit::Damaged(float dmg)
     SetCurrentHp(currentHitPoint -= dmg);
     onDamaged();
 }
+
+yunutyEngine::coroutine::Coroutine Unit::DamagedEffectCoroutine(std::weak_ptr<Unit> opponent)
+{
+    damagedVFX = wanderResources::GetVFX(opponent.lock()->unitTemplateData->pod.skinnedFBXName, UnitAnimType::Damaged);
+    co_await std::suspend_always{};
+    auto vfxAnimator = damagedVFX.lock()->AcquireVFXAnimator();
+    vfxAnimator.lock()->SetAutoActiveFalse();
+    vfxAnimator.lock()->Init();
+    Vector3d startPos = GetTransform()->GetWorldPosition();
+    Vector3d deltaPos = RTSCam::Instance().GetTransform()->GetWorldPosition() - GetTransform()->GetWorldPosition();
+    Vector3d direction = deltaPos.Normalized();
+    direction *= -1;
+    damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos + direction * 2 * (-1));
+    damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
+    //damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(direction);
+    //damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldScale(GetTransform()->GetWorldScale());
+
+    while (!vfxAnimator.lock()->IsDone())
+    {
+        co_await std::suspend_always{};
+    }
+
+    co_return;
+}
+
 
 void Unit::Heal(float healingPoint)
 {
@@ -1412,8 +1448,6 @@ yunutyEngine::coroutine::Coroutine Unit::MeleeAttackEffectCoroutine(std::weak_pt
     {
         co_await std::suspend_always{};
     }
-
-    FBXPool::Instance().Return(attackVFX);
 
     co_return;
 }
