@@ -59,8 +59,8 @@ public:
     void Init(const application::editor::Unit_TemplateData* unitTemplateData);
     // 유닛 데이터의 정보에 맞게 이 유닛을 소환한다.
     void Summon(const application::editor::UnitData* unitData);
-    void Summon(application::editor::Unit_TemplateData* td, const Vector3d& position, float rotation, bool instant = true);
-    void Summon(application::editor::Unit_TemplateData* td, const Vector3d& position, const Quaternion& rotation, bool instant = true);
+    void Summon(application::editor::Unit_TemplateData* td, const Vector3d& position, float rotation, bool instant = false);
+    void Summon(application::editor::Unit_TemplateData* td, const Vector3d& position, const Quaternion& rotation, bool instant = false);
     // 유닛의 초기화 구문, 유닛의 체력을 정상상태로 만들며, 버프를 모두 제거하고 상태를 Idle로 만든다.
     void Reset();
     const application::editor::Unit_TemplateData& GetUnitTemplateData()const;
@@ -86,7 +86,7 @@ public:
     void KnockBackRelativeVector(Vector3d relativeVector, float knockBackDuration);
     void Paralyze(float paralyzeDuration);
     yunutyEngine::coroutine::Coroutine KnockBackCoroutine(Vector3d targetPosition, float knockBackDuration, bool relative = false);
-    void PlayAnimation(UnitAnimType animType, bool repeat = false);
+    void PlayAnimation(UnitAnimType animType, Animation::PlayFlag playFlag = Animation::PlayFlag_::Blending) ;
     void BlendWithDefaultAnimation();
     void SetDefaultAnimation(UnitAnimType animType);
     void SetDesiredRotation(const Vector3d& facingDirection);
@@ -128,6 +128,8 @@ public:
     // 매개변수는 피해를 받은 상대
     DelegateCallback<std::weak_ptr<Unit>> onAttackHit;
     // 내가 피해를 입었을 때, 매개변수는 피해를 준 상대
+    DelegateCallback<std::weak_ptr<Unit>> onDamagedFromUnit;
+    // 상대가 특정되지 않고 일반적으로 대미지 받은 모든 경우에 호출되는 callback
     DelegateCallback<void> onDamaged;
     // 유닛이 새로 생성될 때
     DelegateCallback<void> onCreated;

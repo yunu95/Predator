@@ -157,7 +157,7 @@ yunutyEngine::coroutine::Coroutine Interactable_TrapArms::DoInteraction()
 
 	particleObj->SetSelfActive(true);
 	particleObj->GetComponent<graphics::ParticleRenderer>()->Play();
-	SFXManager::PlaySoundfile3D("sounds/trap/Trigger_Impact.wav", GetGameObject()->GetTransform()->GetWorldPosition());
+	SFXManager::PlaySoundfile3D("sounds/trap/Scaffold Impact.wav", GetGameObject()->GetTransform()->GetWorldPosition());
 
 	for (auto each : triggerStay)
 	{

@@ -165,7 +165,9 @@ namespace BossSummon
 		auto disableNavAgent = unitFrame.lock()->referenceDisableNavAgent.Acquire();
 		auto blockStateChange = unitFrame.lock()->referencePause.Acquire();
 
-		unitFrame.lock()->PlayAnimation(UnitAnimType::Skill1, false);
+		co_await std::suspend_always();
+
+		unitFrame.lock()->PlayAnimation(UnitAnimType::Skill1, Animation::PlayFlag_::None);
 		auto animator = unitFrame.lock()->GetAnimator();
 		auto anim = wanderResources::GetAnimation(unitFrame.lock()->GetFBXName(), UnitAnimType::Skill1);
 		coroutine::ForSeconds forSeconds{ anim->GetDuration() };

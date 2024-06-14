@@ -318,7 +318,7 @@ void application::contents::ContentsLayer::GUIProgress()
 
 void application::contents::ContentsLayer::Finalize()
 {
-
+    
 }
 
 void application::contents::ContentsLayer::PlayContents(ContentsPlayFlag playFlag)

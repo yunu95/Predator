@@ -24,7 +24,7 @@ coroutine::Coroutine HanselChargeSkill::operator()()
     Vector3d endPos = startPos + deltaPos;
     Vector3d currentPos = startPos;
 
-    owner.lock()->PlayAnimation(UnitAnimType::Skill1, false);
+    owner.lock()->PlayAnimation(UnitAnimType::Skill1);
     effectColliderCoroutine = owner.lock()->StartCoroutine(SpawningFieldEffect(dynamic_pointer_cast<HanselChargeSkill>(selfWeakPtr.lock())));
     effectColliderCoroutine.lock()->PushDestroyCallBack([this]()
         {

@@ -11,20 +11,22 @@ void BurnEffect::SetEdgeThickness(float edgeThickness)
 	this->edgeThickness = edgeThickness;
 }
 
-void BurnEffect::SetSpeed(float speed)
+void BurnEffect::SetDuration(float duration)
 {
-	this->speed = speed;
+	this->duration = duration;
 }
 
 void BurnEffect::Disappear()
 {
 	isDisAppear = true;
+	isAppear = false;
 	isDone = false;
 	isFirst = true;
 }
 
 void BurnEffect::Appear()
 {
+	isDisAppear = false;
 	isAppear = true;
 	isDone = false;
 	isFirst = true;
@@ -87,20 +89,29 @@ void BurnEffect::Update()
 			}
 		}
 
+		if (duration == 0)
+		{
+			for (int i = 0; i < originMaterialVec.size(); ++i)
+			{
+				renderer->GetGI().GetMaterial(i)->SetFloat(0, 0);
+			}
+			isDone = true;
+			return;
+		}
+
 		// 1 ~ 0 -> 나타남
-		amount -= (speed * Time::GetDeltaTime());
-		
+		amount -= (1 / duration * Time::GetDeltaTime());
+
+		if (amount <= 0)
+		{
+			amount = 0;
+			isDone = true;
+		}
+
 		for (int i = 0; i < originMaterialVec.size(); ++i)
 		{
 			renderer->GetGI().GetMaterial(i)->SetFloat(0,amount);
 		}
-
-		if (amount <= 0.f)
-		{
-			// 효과가 끝남
-			Reset();
-		}
-
 	}
 	else if(isDisAppear && !isDone)
 	{
@@ -117,18 +128,28 @@ void BurnEffect::Update()
 			}
 		}
 
+		if (duration == 0)
+		{
+			for (int i = 0; i < originMaterialVec.size(); ++i)
+			{
+				renderer->GetGI().GetMaterial(i)->SetFloat(0, 1);
+			}
+			isDone = true;
+			return;
+		}
+
 		// 0 ~ 1 -> 사라짐
-		amount += (speed * Time::GetDeltaTime());
+		amount += (1 / duration * Time::GetDeltaTime());
+
+		if (amount >= 1)
+		{
+			amount = 1;
+			isDone = true;
+		}
 
 		for (int i = 0; i < originMaterialVec.size(); ++i)
 		{
 			renderer->GetGI().GetMaterial(i)->SetFloat(0, amount);
-		}
-
-		if (amount >= 1.f)
-		{
-			// 효과가 끝남
-			Reset();
 		}
 	}
 }
@@ -139,6 +160,9 @@ void BurnEffect::Reset()
 	isAppear = false;
 	isFirst = true;
 	isDone = true;
+	edgeThickness = 0.01f;
+	duration = 0.2f;
+	amount = 0.f;
 	
 	for (int i = 0; i < originMaterialVec.size(); ++i)
 	{

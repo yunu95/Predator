@@ -16,7 +16,7 @@ coroutine::Coroutine UrsulaBlindSkill::operator()()
     auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
     auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
     auto enableNavObstacle = owner.lock()->referenceEnableNavObstacle.Acquire();
-    owner.lock()->PlayAnimation(UnitAnimType::Skill1, true);
+    owner.lock()->PlayAnimation(UnitAnimType::Skill1, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
     auto animator = owner.lock()->GetAnimator();
     auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill1);
 
