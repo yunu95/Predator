@@ -19,7 +19,7 @@ coroutine::Coroutine BossSummonChessSkill::operator()()
 	auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
 	auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
 	auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
-	owner.lock()->PlayAnimation(UnitAnimType::Skill4, true);
+	owner.lock()->PlayAnimation(UnitAnimType::Skill4, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
 	auto animator = owner.lock()->GetAnimator();
 	auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill4);
 	coroutine::ForSeconds forSeconds{ anim->GetDuration() };

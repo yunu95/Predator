@@ -16,7 +16,7 @@ coroutine::Coroutine BossSpinAttackSkill::operator()()
     auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
     auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
 
-    owner.lock()->PlayAnimation(UnitAnimType::Skill1, true);
+    owner.lock()->PlayAnimation(UnitAnimType::Skill1, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
     effectColliderCoroutine = owner.lock()->StartCoroutine(SpawningSkillffect(dynamic_pointer_cast<BossSpinAttackSkill>(selfWeakPtr.lock())));
     effectColliderCoroutine.lock()->PushDestroyCallBack([this]()
         {
@@ -31,7 +31,7 @@ coroutine::Coroutine BossSpinAttackSkill::operator()()
     blockFollowingNavigation.reset();
     owner.lock()->Relocate(owner.lock()->GetTransform()->GetWorldPosition());
     co_yield coroutine::WaitForSeconds(afterSpinDelay);
-    owner.lock()->PlayAnimation(UnitAnimType::Idle, true);
+    owner.lock()->PlayAnimation(UnitAnimType::Idle, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
     co_yield coroutine::WaitForSeconds(0.2);
     co_return;
 }

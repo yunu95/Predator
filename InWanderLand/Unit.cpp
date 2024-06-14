@@ -131,13 +131,13 @@ template<>
 void Unit::OnStateEngage<UnitBehaviourTree::Paralysis>()
 {
     onStateEngage[UnitBehaviourTree::Paralysis]();
-    PlayAnimation(UnitAnimType::Paralysis, true);
+    PlayAnimation(UnitAnimType::Paralysis, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
 }
 template<>
 void Unit::OnStateExit<UnitBehaviourTree::Paralysis>()
 {
     onStateExit[UnitBehaviourTree::Paralysis]();
-    PlayAnimation(UnitAnimType::Paralysis, true);
+    PlayAnimation(UnitAnimType::Paralysis, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
 }
 template<>
 void Unit::OnStateEngage<UnitBehaviourTree::Pause>()
@@ -147,7 +147,7 @@ void Unit::OnStateEngage<UnitBehaviourTree::Pause>()
     enableNavObstacleByState = referenceEnableNavObstacle.Acquire();
     disableNavAgentByState = referenceDisableNavAgent.Acquire();
     onStateEngage[UnitBehaviourTree::Pause]();
-    //PlayAnimation(UnitAnimType::Idle, true);
+    //PlayAnimation(UnitAnimType::Idle, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
     animatorComponent.lock()->Pause();
     enableNavObstacleByState = referenceEnableNavObstacle.Acquire();
     disableNavAgentByState = referenceDisableNavAgent.Acquire();
@@ -156,7 +156,7 @@ template<>
 void Unit::OnStateExit<UnitBehaviourTree::Pause>()
 {
     onStateExit[UnitBehaviourTree::Pause]();
-    //PlayAnimation(UnitAnimType::Idle, true);
+    //PlayAnimation(UnitAnimType::Idle, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
     animatorComponent.lock()->Resume();
     enableNavObstacleByState.reset();
     disableNavAgentByState.reset();
@@ -230,7 +230,7 @@ void Unit::OnStateEngage<UnitBehaviourTree::Move>()
     onStateEngage[UnitBehaviourTree::Move]();
     navAgentComponent.lock()->SetSpeed(unitTemplateData->pod.m_unitSpeed);
     StartCoroutine(ShowPath(SingleNavigationField::Instance().GetSmoothPath(GetTransform()->GetWorldPosition() + GetTransform()->GetWorldRotation().Forward() * unitTemplateData->pod.collisionSize, moveDestination)));
-    PlayAnimation(UnitAnimType::Move, true);
+    PlayAnimation(UnitAnimType::Move, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
 }
 template<>
 void Unit::OnStateUpdate<UnitBehaviourTree::Move>()
@@ -272,7 +272,7 @@ template<>
 void Unit::OnStateEngage<UnitBehaviourTree::Stop>()
 {
     onStateEngage[UnitBehaviourTree::Stop]();
-    PlayAnimation(UnitAnimType::Idle, true);
+    PlayAnimation(UnitAnimType::Idle, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
     enableNavObstacleByState = referenceEnableNavObstacle.Acquire();
     disableNavAgentByState = referenceDisableNavAgent.Acquire();
 }
@@ -332,6 +332,7 @@ void Unit::Damaged(std::weak_ptr<Unit> opponentUnit, float opponentDmg, DamageTy
     default:
         break;
     }
+    onDamagedFromUnit(opponentUnit);
     Damaged(opponentDmg);
 }
 
@@ -438,7 +439,7 @@ yunutyEngine::coroutine::Coroutine Unit::KnockBackCoroutine(Vector3d targetPosit
     }
     co_return;
 }
-void Unit::PlayAnimation(UnitAnimType animType, bool repeat)
+void Unit::PlayAnimation(UnitAnimType animType, Animation::PlayFlag playFlag)
 {
     if (playingBattleAnim)
     {
@@ -450,7 +451,9 @@ void Unit::PlayAnimation(UnitAnimType animType, bool repeat)
     }
     auto anim = wanderResources::GetAnimation(unitTemplateData->pod.skinnedFBXName, animType);
 
-    if (animatorComponent.lock()->GetGI().GetCurrentAnimation() == nullptr || animatorComponent.lock()->GetGI().GetCurrentAnimation() == anim)
+    if (animatorComponent.lock()->GetGI().GetCurrentAnimation() == nullptr
+        || animatorComponent.lock()->GetGI().GetCurrentAnimation() == anim
+        || !(playFlag & Animation::PlayFlag_::Blending))
     {
         animatorComponent.lock()->Play(anim);
     }
@@ -458,7 +461,8 @@ void Unit::PlayAnimation(UnitAnimType animType, bool repeat)
     {
         animatorComponent.lock()->ChangeAnimation(anim, GlobalConstant::GetSingletonInstance().pod.defaultAnimBlendTime, 1);
     }
-    if (repeat)
+
+    if (playFlag & Animation::PlayFlag_::Repeat)
     {
         blendWithDefaultAnimTrigger = true;
         defaultAnimationType = animType;
@@ -1008,6 +1012,10 @@ void Unit::Reset()
     buffs.clear();
     liveCountLeft = unitTemplateData->pod.liveCount;
     currentTargetUnit.reset();
+    if (!burnEffect.expired())
+    {
+        burnEffect.lock()->Reset();
+    }
     currentOrderType = UnitOrderType::AttackMove;
     pendingOrderType = UnitOrderType::AttackMove;
     attackMoveDestination = moveDestination = GetGameObject()->GetTransform()->GetWorldPosition();
@@ -1277,10 +1285,10 @@ Vector3d Unit::GetAttackPosition(std::weak_ptr<Unit> opponent)
 yunutyEngine::coroutine::Coroutine Unit::RevivalCoroutine()
 {
     float birthAnimDuration = wanderResources::GetAnimation(unitTemplateData->pod.skinnedFBXName, UnitAnimType::Birth)->GetDuration();
-    PlayAnimation(UnitAnimType::Death, false);
+    PlayAnimation(UnitAnimType::Death);
     SetDefaultAnimation(UnitAnimType::None);
     co_yield coroutine::WaitForSeconds(unitTemplateData->pod.revivalDuration - birthAnimDuration);
-    PlayAnimation(UnitAnimType::Birth, false);
+    PlayAnimation(UnitAnimType::Birth);
     co_yield coroutine::WaitForSeconds(birthAnimDuration);
     SetCurrentHp(unitTemplateData->pod.max_Health);
     SetIsAlive(true);
@@ -1301,9 +1309,9 @@ yunutyEngine::coroutine::Coroutine Unit::BirthCoroutine()
     //co_yield coroutine::WaitForSeconds{ math::Random::GetRandomFloat(0, gc.unitBirthTimeOffsetNoise) };
     //animatorComponent.lock()->GetGameObject()->SetSelfActive(true);
     float animSpeed = wanderResources::GetAnimation(unitTemplateData->pod.skinnedFBXName, UnitAnimType::Birth)->GetDuration() / unitTemplateData->pod.birthTime;
-    PlayAnimation(UnitAnimType::Birth, false);
-    animatorComponent.lock()->GetGI().SetPlaySpeed(animSpeed);
-    burnEffect.lock()->SetSpeed(1 / unitTemplateData->pod.birthTime);
+    PlayAnimation(UnitAnimType::Birth, Animation::PlayFlag_::None);
+    //animatorComponent.lock()->GetGI().SetPlaySpeed(animSpeed);
+    burnEffect.lock()->SetDuration(unitTemplateData->pod.birthTime);
     burnEffect.lock()->SetEdgeColor({ unitTemplateData->pod.birthBurnEdgeColor.x,unitTemplateData->pod.birthBurnEdgeColor.y,unitTemplateData->pod.birthBurnEdgeColor.z });
     burnEffect.lock()->SetEdgeThickness(unitTemplateData->pod.birthBurnEdgeThickness);
     burnEffect.lock()->Appear();
@@ -1320,8 +1328,9 @@ yunutyEngine::coroutine::Coroutine Unit::DeathCoroutine()
         co_return;
     }
     float animSpeed = wanderResources::GetAnimation(unitTemplateData->pod.skinnedFBXName, UnitAnimType::Death)->GetDuration() / unitTemplateData->pod.deathBurnTime;
-    PlayAnimation(UnitAnimType::Death, false);
-    animatorComponent.lock()->GetGI().SetPlaySpeed(animSpeed);
+    PlayAnimation(UnitAnimType::Death);
+    //animatorComponent.lock()->GetGI().SetPlaySpeed(animSpeed);
+    burnEffect.lock()->SetDuration(unitTemplateData->pod.deathBurnTime);
     burnEffect.lock()->SetEdgeColor({ unitTemplateData->pod.deathBurnEdgeColor.x,unitTemplateData->pod.deathBurnEdgeColor.y,unitTemplateData->pod.deathBurnEdgeColor.z });
     burnEffect.lock()->SetEdgeThickness(unitTemplateData->pod.deathBurnEdgeThickness);
     burnEffect.lock()->Disappear();
@@ -1345,7 +1354,7 @@ yunutyEngine::coroutine::Coroutine Unit::AttackCoroutine(std::weak_ptr<Unit> opp
         attackDelayMultiplier = finalAttackCooltime / animMinimumTime;
         animatorComponent.lock()->GetGI().SetPlaySpeed(animMinimumTime / finalAttackCooltime);
     }
-    PlayAnimation(UnitAnimType::Attack, false);
+    PlayAnimation(UnitAnimType::Attack);
 
 	/// VFX 실행
 	//attackVFX = wanderResources::GetVFX(unitTemplateData->pod.skinnedFBXName, UnitAnimType::Attack);
@@ -1380,13 +1389,13 @@ float Unit::DistanceTo(const Vector3d& target)
 }
 void Unit::ReturnToPool()
 {
-    Reset();
     if (!unitStatusUI.expired())
     {
         Scene::getCurrentScene()->DestroyGameObject(unitStatusUI.lock()->GetGameObject());
         unitStatusUI.reset();
     }
     unitStatusPortraitUI.reset();
+    Reset();
     UnitPool::SingleInstance().Return(GetWeakPtr<Unit>());
 }
 const editor::Unit_TemplateData& Unit::GetUnitTemplateData()const

@@ -21,7 +21,7 @@ coroutine::Coroutine UrsulaParalysisSkill::operator()()
 			UnitAcquisitionSphereColliderPool::Instance().Return(damageCollider);
 			UnitAcquisitionSphereColliderPool::Instance().Return(knockBackCollider);
 		});
-    owner.lock()->PlayAnimation(UnitAnimType::Skill2, true);
+    owner.lock()->PlayAnimation(UnitAnimType::Skill2, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
     auto animator = owner.lock()->GetAnimator();
     auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill2);
     coroutine::ForSeconds forSeconds{ anim->GetDuration() };

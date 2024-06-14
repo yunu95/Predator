@@ -22,6 +22,7 @@ private:
 
 	std::weak_ptr<Unit> boss = std::weak_ptr<Unit>();
 	int summonState = 0;
+	bool summonDone = true;
 	int currentState = 0;
 	int beforeSkillIndex = 0;
 	virtual coroutine::Coroutine RoutinePerUnit(std::weak_ptr<Unit> unit) override;

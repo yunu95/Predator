@@ -49,7 +49,7 @@ coroutine::Coroutine BossSummonMobSkill::operator()()
 	auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
 	auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
 	auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
-	owner.lock()->PlayAnimation(UnitAnimType::Skill3, true);
+	owner.lock()->PlayAnimation(UnitAnimType::Skill3, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
 	auto animator = owner.lock()->GetAnimator();
 	auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill3);
 	coroutine::ForSeconds forSeconds{ anim->GetDuration() };

@@ -24,3 +24,14 @@ enum class UnitAnimType
     BattleEnd,   // 전투 끝
     End
 };
+
+namespace Animation
+{
+    typedef int PlayFlag;
+    enum PlayFlag_
+    {
+        None = 0,
+        Blending = 1 << 0,
+        Repeat = 1 << 1,
+    };
+}

@@ -90,7 +90,7 @@ coroutine::Coroutine HanselProjectileSkill::operator()()
 
     coroutine::ForSeconds forThrowingSeconds{ pod.throwingStartDelay };
 
-    owner.lock()->PlayAnimation(UnitAnimType::Throw, true);
+    owner.lock()->PlayAnimation(UnitAnimType::Throw, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
 
     while (throwingPieTimingFrame >= animator.lock()->GetCurrentFrame())
     {

@@ -17,7 +17,7 @@ coroutine::Coroutine EnemySpinAttackSkill::operator()()
     auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
     auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
 
-    owner.lock()->PlayAnimation(UnitAnimType::Spin, true);
+    owner.lock()->PlayAnimation(UnitAnimType::Spin, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
     effectColliderCoroutine = owner.lock()->StartCoroutine(SpawningSkillffect(dynamic_pointer_cast<EnemySpinAttackSkill>(selfWeakPtr.lock())));
     effectColliderCoroutine.lock()->PushDestroyCallBack([this]()
         {
@@ -32,7 +32,7 @@ coroutine::Coroutine EnemySpinAttackSkill::operator()()
     blockFollowingNavigation.reset();
     owner.lock()->Relocate(owner.lock()->GetTransform()->GetWorldPosition());
     co_yield coroutine::WaitForSeconds(eliteAfterSpinDelay);
-    owner.lock()->PlayAnimation(UnitAnimType::Idle, true);
+    owner.lock()->PlayAnimation(UnitAnimType::Idle, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
     co_yield coroutine::WaitForSeconds(0.2);
     co_return;
 }
