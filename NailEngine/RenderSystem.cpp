@@ -265,16 +265,16 @@ void RenderSystem::RenderSkinnedDeferred()
 
 void RenderSystem::RenderSkinnedForward()
 {
-	MatrixBuffer matrixBuffer;
-	//matrixBuffer.WTM = e.wtm;
-	matrixBuffer.VTM = CameraManager::Instance.Get().GetMainCamera()->GetVTM();
-	matrixBuffer.PTM = CameraManager::Instance.Get().GetMainCamera()->GetPTM();
-	matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
-	matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
-	//matrixBuffer.objectID = DirectX::SimpleMath::Vector4{};
-	NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX));
+    MatrixBuffer matrixBuffer;
+    //matrixBuffer.WTM = e.wtm;
+    matrixBuffer.VTM = CameraManager::Instance.Get().GetMainCamera()->GetVTM();
+    matrixBuffer.PTM = CameraManager::Instance.Get().GetMainCamera()->GetPTM();
+    matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
+    matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
+    //matrixBuffer.objectID = DirectX::SimpleMath::Vector4{};
+    NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX));
 
-	InstancingManager::Instance.Get().RenderSkinnedForward();
+    InstancingManager::Instance.Get().RenderSkinnedForward();
 }
 
 void RenderSystem::RenderShadow()
@@ -587,7 +587,7 @@ void RenderSystem::RenderUI()
         auto texture = ((Texture*)(std::static_pointer_cast<UIImage>(i)->GetTexture()));
         if (auto srv = uiImage->GetSRV())
         {
-            this->spriteBatch->Draw(srv, drawRect, uiImage->GetColor());
+            this->spriteBatch->Draw(srv, drawRect, nullptr, uiImage->GetColor(), uiImage->GetRotation());
         }
     }
     this->spriteBatch->End();

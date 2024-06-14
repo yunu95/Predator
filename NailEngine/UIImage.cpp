@@ -62,7 +62,12 @@ float UIImage::GetXPivot()
 float UIImage::GetYPivot()
 {
     return yPivot;
-};
+}
+float UIImage::GetRotation()
+{
+    return rotation;
+}
+;
 void UIImage::SetXPivot(float xPivot)
 {
     this->xPivot = xPivot;
@@ -78,7 +83,12 @@ void UIImage::SetWidth(float width)
 void UIImage::SetHeight(float height)
 {
     this->height = height;
-};
+}
+void UIImage::SetRotation(float rotation)
+{
+    this->rotation = rotation;
+}
+;
 bool UIImage::operator<(const UIImage& other) const
 {
     return layer < other.layer;

@@ -86,7 +86,7 @@ public:
     LONGLONG  video_time = 0;
     bool      finished = false;
     bool      paused = false;
-    bool      autoloop = true;
+    //bool      autoloop = true;
 
     bool readOutputMediaFormat();
     bool createVideoTexture(uint32_t new_xres, uint32_t new_yres, DXGI_FORMAT new_format, bool is_dynamic);
@@ -96,8 +96,9 @@ public:
     virtual float GetHeight() override;
     virtual bool IsDonePlaying();
     //virtual float GetDuration() override;
-    virtual void update(float deltaTime)override;
-    virtual void SetRepeat(bool repeat) override;
+    virtual void update(float deltaTime, bool autoloop)override;
+    virtual void ResetVideo() override;
+    //virtual void SetRepeat(bool repeat) override;
     bool updateTextureWithIYUV(const uint8_t* data, size_t data_size);
     bool renderToLocalTexture();
 };

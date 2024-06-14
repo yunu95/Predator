@@ -4,10 +4,11 @@
 using namespace yunutyEngine::graphics;
 
 yunutyEngine::graphics::UIImage::UIImage() :
-	Renderable<yunuGI::IUIImage>(_YunuGIObjects::SingleInstance().factory->CreateUIImage({}))
+    Renderable<yunuGI::IUIImage>(_YunuGIObjects::SingleInstance().factory->CreateUIImage({}))
 {
 }
-void yunutyEngine::graphics::UIImage::Update()
+void yunutyEngine::graphics::UIImage::OnTransformUpdate()
 {
-	GetGI().SetWorldTM(GetTransform()->GetWorldTM());
+    GetGI().SetWorldTM(GetTransform()->GetWorldTM());
+    GetGI().SetRotation(GetTransform()->GetWorldRotation().Euler().z);
 }

@@ -16,6 +16,8 @@
 #include "PopupOnEnable.h"
 #include "PopDownOnDisable.h"
 #include "UIOffsetTransition.h"
+#include "RotatingUI.h"
+#include "UIVideoPlayer.h"
 #include "UIButton.h"
 #include "UIText.h"
 #include "UIImage.h"

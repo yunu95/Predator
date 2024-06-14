@@ -19,7 +19,7 @@ namespace yunutyEngine::graphics
 	{
 	private:
 	protected:
-		virtual void Update() override;
+		virtual void OnTransformUpdate() override;
 	public:
 		// GI는 Graphics Interface라는 뜻임.
 		yunuGI::IUIImage& GetGI() { return Renderable<yunuGI::IUIImage>::GetGI(); }

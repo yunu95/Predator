@@ -3,6 +3,8 @@
 #include "JsonUIData.h"
 #include "UIImage.h"
 #include "UIEnumID.h"
+#include "RotatingUI.h"
+#include "UIVideoPlayer.h"
 
 class LinearClippingTimer;
 class UIButton;
@@ -20,6 +22,8 @@ class TimerComponent;
 // 임포트된 UI 요소에 대한 정보를 잔뜩 저장하는 클래스
 class UIElement : public Component
 {
+public:
+    JsonUIData importedUIData;
 private:
     // 복제된 UIElement의 하위 요소들에 대한 정보
     int uiPriority{ 0 };
@@ -32,7 +36,6 @@ public:
     bool GetUIEnabled() { return enabled; }
     virtual void Start() override;
     int duplicatePriorityOffset = 0;
-    JsonUIData importedUIData;
     PopupOnEnable* scalePopUpTransition{ nullptr };
     PopDownOnDisable* scalePopDownTransition{ nullptr };
     UIOffsetTransition* enableTransition{ nullptr };
@@ -47,6 +50,8 @@ public:
     UISpriteAnimation* spriteAnimationOnEnable{ nullptr };
     TimerComponent* disableAfterEnable{ nullptr };
     std::weak_ptr<graphics::UIImage> imageComponent{};
+    std::weak_ptr<RotatingUI> rotator{};
+    std::weak_ptr<UIVideoPlayer> uiVideoPlayer{};
     graphics::UIText* textComponent{ nullptr };
     UIPriorityLayout* priorityLayout{ nullptr };
     UIPriorityLayout* parentPriorityLayout{ nullptr };

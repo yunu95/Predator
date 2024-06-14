@@ -26,6 +26,12 @@ namespace yunutyEngine::graphics
         {
             return video;
         };
+        void ResetVideo()
+        {
+            video.lock()->ResetVideo();
+        };
         virtual void Update() override;
+        bool usingUnscaledTime{ true };
+        bool loop{ true };
     };
 }

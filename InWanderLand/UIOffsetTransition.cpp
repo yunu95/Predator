@@ -11,15 +11,15 @@ void UIOffsetTransition::Init(const JsonUIData& jsonData, bool isEnableEffect)
     if (isEnableEffect)
     {
         startPosition += Vector3d{ jsonData.enableOffset[0],-jsonData.enableOffset[1], 0 };
-        delay = jsonData.enableDelay;
-        pushDuration = delay + jsonData.enableDuration;
+        delay = jsonData.floats[JsonUIFloatType::enableDelay];
+        pushDuration = delay + jsonData.floats[JsonUIFloatType::enableDuration];
         curveType = jsonData.enableCurveType;
     }
     else
     {
         endPosition += Vector3d{ jsonData.disableOffset[0],-jsonData.disableOffset[1], 0 };
-        delay = jsonData.disableDelay;
-        pushDuration = delay + jsonData.disableDuration;
+        delay = jsonData.floats[JsonUIFloatType::disableDelay];
+        pushDuration = delay + jsonData.floats[JsonUIFloatType::disableDuration];
         curveType = jsonData.disableCurveType;
     }
     isRealtime = true;
