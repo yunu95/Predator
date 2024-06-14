@@ -21,7 +21,7 @@ public:
 	friend LazyObjects<SkyBoxPass>;
 
 public:
-	void Init(Texture* texture, Mesh* mesh, yunuGI::IShader* vs, yunuGI::IShader* ps);
+	void Init(Mesh* mesh, yunuGI::IShader* vs, yunuGI::IShader* ps);
 	void Render();
 
 	void BuildIrradianceMap();
@@ -29,9 +29,9 @@ public:
 	void BuildLUT();
 
 	void BindIBLTexture();
+	void StageName(std::wstring name) { this->stage = name; };
 
 private:
-	Texture* texture;
 	Mesh* mesh;
 	VertexShader* vs;
 	PixelShader* ps;
@@ -41,5 +41,11 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> lutSRV;
 
 	Microsoft::WRL::ComPtr<ID3D11SamplerState> samplerState;
+
+	std::wstring stage = L"Stage1";
+	std::wstring env = L"EnvHDR.dds";
+	std::wstring diffuse = L"DiffuseHDR.dds";
+	std::wstring specular = L"SpecularHDR.dds";
+	std::wstring brdf = L"Brdf.dds";
 };
 
