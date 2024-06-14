@@ -15,10 +15,12 @@ public:
     float GetHeight();
     float GetXPivot();
     float GetYPivot();
+    float GetRotation();
     void SetXPivot(float xPivot);
     void SetYPivot(float yPivot);
     void SetWidth(float width);
     void SetHeight(float height);
+    void SetRotation(float xPivot);
     bool operator<(const UIImage& other) const;
     bool IsUsingProcessedTexture();
     int GetLayer();
@@ -42,6 +44,7 @@ public:
     void SetLinearClippingStartPoint(float x, float y);
     void SetLinearClippingDirection(float x, float y);
 private:
+    float rotation;
     std::weak_ptr<Video> video;
     bool isRadialFillMode{ false };
     float radialFillDegree{ 360 };
