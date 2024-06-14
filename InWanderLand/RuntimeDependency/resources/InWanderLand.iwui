@@ -63491,9 +63491,7 @@
             "parentUIIndex": 552,
             "imagePath": "Texture/Ingame/New Folder/Button_Yes.png",
             "imagePriority": -1,
-            "openTargets": [
-                625
-            ],
+            "openTargets": [],
             "closeTargets": [
                 552,
                 91,
@@ -63603,7 +63601,7 @@
             "animatedSpriteIsRepeat": false,
             "duplicate_poolable": false,
             "rotatingSpeed": 0.0,
-            "customFlags": 1049223,
+            "customFlags": 1048707,
             "customFlags2": 1048576,
             "enumID": 0,
             "soundEnumID": 0

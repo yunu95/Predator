@@ -4,8 +4,11 @@
 struct POD_PassiveUrsulaSpeed
 {
     float duration = 10.0f;
+    float durationUpgraded = 10.0f;
     float attackSpeedBonusPerStack = 0.1f;
+    float attackSpeedBonusPerStackUpgraded = 0.1f;
     float attackDamageBonusPerStack = 0.1f;
+    float attackDamageBonusPerStackUpgraded = 0.1f;
     int maxStack = 10;
 
     TO_JSON(POD_PassiveUrsulaSpeed)
@@ -18,6 +21,9 @@ public:
     virtual void Init(std::weak_ptr<Unit> owner) override;
     virtual SkillType::Enum GetSkillType() override { return SkillType::Passive_Ursula_Speed; };
     static POD_PassiveUrsulaSpeed pod;
+    static float GetDuration();
+    static float GetAttackSpeedBonusPerStack();
+    static float GetAttackDamageBonusPerStack();
 private:
 };
 

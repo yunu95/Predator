@@ -46,6 +46,16 @@ void HanselChargeSkill::OnInterruption()
     }
 }
 
+float HanselChargeSkill::GetMaxRange()
+{
+    return PlayerController::Instance().IsSkillUpgraded(SkillUpgradeType::HANSEL_Q_RANGE) ? pod.maxRangeUpgraded : pod.maxRange;
+}
+
+float HanselChargeSkill::GetDamage()
+{
+    return PlayerController::Instance().IsSkillUpgraded(SkillUpgradeType::HANSEL_Q_DAMAGE) ? pod.damageUpgraded : pod.damage;
+}
+
 coroutine::Coroutine HanselChargeSkill::SpawningFieldEffect(std::weak_ptr<HanselChargeSkill> skill)
 {
     auto persistance = skill.lock();
@@ -119,7 +129,7 @@ coroutine::Coroutine HanselChargeSkill::SpawningFieldEffect(std::weak_ptr<Hansel
 
     for (auto each : stompCollider.lock()->GetEnemies())
     {
-        each->Damaged(owner, pod.damage);
+        each->Damaged(owner, GetDamage());
     }
 
     /*while (stompTimingFrame >= animator.lock()->GetCurrentFrame())
@@ -131,7 +141,7 @@ coroutine::Coroutine HanselChargeSkill::SpawningFieldEffect(std::weak_ptr<Hansel
 
     for (auto each : stompCollider.lock()->GetEnemies())
     {
-        each->Damaged(owner, pod.damage);
+        each->Damaged(owner, GetDamage());
     }
 
     co_yield coroutine::WaitForSeconds(anim->GetDuration() - jumpTiming - duration - damageDelay);
