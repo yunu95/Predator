@@ -1056,6 +1056,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="HanselChargeSkill.h" />
     <ClInclude Include="HanselProjectileSkill.h" />
     <ClInclude Include="FBXPool.h" />
+    <ClInclude Include="ITacticObject.h" />
     <ClInclude Include="JsonUIFloatType.h" />
     <ClInclude Include="LeftFrame.h" />
     <ClInclude Include="MeleeEliteController.h" />

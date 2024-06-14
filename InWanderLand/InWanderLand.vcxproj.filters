@@ -853,6 +853,9 @@
     <Filter Include="UI\UnityRelated\JsonUIData\JsonUIFloatType">
       <UniqueIdentifier>{162e3614-7489-4fe0-9fb3-a23ac1ee4f8f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents\TacticModeSystem\ITacticObject">
+      <UniqueIdentifier>{b12f3552-2555-4de0-b53b-226f40f34213}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -2064,6 +2067,9 @@
     </ClInclude>
     <ClInclude Include="JsonUIFloatType.h">
       <Filter>UI\UnityRelated\JsonUIData\JsonUIFloatType</Filter>
+    </ClInclude>
+    <ClInclude Include="ITacticObject.h">
+      <Filter>Contents\TacticModeSystem\ITacticObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
