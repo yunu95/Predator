@@ -83,5 +83,11 @@ namespace yunuGIAdapter
             yunuGI::Vector2 retVal = reinterpret_cast<const yunuGI::Vector2&>(screenPos);
             return retVal;
         }
+
+        virtual void SetClearColor(yunuGI::Color color) override
+        {
+            CameraManager::Instance.Get().SetClearColor(color);
+        };
     };
+
 }

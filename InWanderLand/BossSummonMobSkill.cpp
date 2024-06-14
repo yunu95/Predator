@@ -4,6 +4,7 @@
 #include "RightFrame.h"
 #include "GlobalConstant.h"
 #include "YunutyWaitForSeconds.h"
+#include "VFXAnimator.h"
 
 POD_BossSummonMobSkill BossSummonMobSkill::pod = POD_BossSummonMobSkill();
 
@@ -50,6 +51,11 @@ coroutine::Coroutine BossSummonMobSkill::operator()()
 	auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
 	auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
 	owner.lock()->PlayAnimation(UnitAnimType::Skill3, true);
+	effectCoroutine = owner.lock()->StartCoroutine(SpawningFieldEffect(std::dynamic_pointer_cast<BossSummonMobSkill>(selfWeakPtr.lock())));
+	effectCoroutine.lock()->PushDestroyCallBack([this]()
+		{
+			FBXPool::Instance().Return(stepEffect);
+		});
 	auto animator = owner.lock()->GetAnimator();
 	auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill3);
 	coroutine::ForSeconds forSeconds{ anim->GetDuration() };
@@ -82,13 +88,15 @@ coroutine::Coroutine BossSummonMobSkill::operator()()
 	blockFollowingNavigation.reset();
 	owner.lock()->Relocate(owner.lock()->GetTransform()->GetWorldPosition());
 
-	OnInterruption();
 	co_return;
 }
 
 void BossSummonMobSkill::OnInterruption()
 {
-
+	if (!effectCoroutine.expired())
+	{
+		owner.lock()->DeleteCoroutine(effectCoroutine);
+	}
 }
 
 coroutine::Coroutine BossSummonMobSkill::StartSummonTimer()
@@ -132,5 +140,29 @@ coroutine::Coroutine BossSummonMobSkill::StartSummonTimer()
 		}
 		co_await std::suspend_always{};
 	}
+	co_return;
+}
+
+coroutine::Coroutine BossSummonMobSkill::SpawningFieldEffect(std::weak_ptr<BossSummonMobSkill> skill)
+{
+	Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
+	Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
+	Vector3d direction = deltaPos.Normalized();
+	Vector3d endPos = startPos + deltaPos;
+	Vector3d currentPos = startPos;
+
+	stepEffect = FBXPool::Instance().Borrow("VFX_HeartQueen_Skill3_1");
+	stepEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos);
+	stepEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
+	stepEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(owner.lock()->GetTransform()->GetWorldScale());
+
+	auto stepEffectAnimator = stepEffect.lock()->AcquireVFXAnimator();
+	stepEffectAnimator.lock()->SetAutoActiveFalse();
+	stepEffectAnimator.lock()->Init();
+
+	auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill3);
+
+	co_yield coroutine::WaitForSeconds(anim->GetDuration());
+
 	co_return;
 }

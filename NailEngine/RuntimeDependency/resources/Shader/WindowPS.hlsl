@@ -43,6 +43,7 @@ PS_OUT main(PixelIn input)
     if (UseTexture(useAlbedo) == 1)
     {
         color = AlbedoMap.Sample(sam, input.uv);
+        color.a = color.r;
         color = pow(color, 2.2f);
     }
 

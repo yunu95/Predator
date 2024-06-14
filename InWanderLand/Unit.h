@@ -176,6 +176,7 @@ private:
     // 유닛이 죽을 때 애니메이션, 번 이펙트와 함께 사라지고 유닛 풀에 반환되는 코루틴
     yunutyEngine::coroutine::Coroutine DeathCoroutine();
     yunutyEngine::coroutine::Coroutine AttackCoroutine(std::weak_ptr<Unit> opponent);
+    yunutyEngine::coroutine::Coroutine MeleeAttackEffectCoroutine(std::weak_ptr<Unit> opponent);
     float DistanceTo(const Vector3d& target);
     void ReturnToPool();
     int liveCountLeft{ 0 };
@@ -227,6 +228,7 @@ private:
     std::weak_ptr<yunutyEngine::coroutine::Coroutine> coroutineKnockBack;
     std::weak_ptr<yunutyEngine::coroutine::Coroutine> coroutineRevival;
     std::weak_ptr<yunutyEngine::coroutine::Coroutine> coroutineAttack;
+    std::weak_ptr<yunutyEngine::coroutine::Coroutine> coroutineAttackEffect;
     std::weak_ptr<yunutyEngine::coroutine::Coroutine> coroutineSkill;
     UnitAnimType defaultAnimationType;
     bool blendWithDefaultAnimTrigger{ false };

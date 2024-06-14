@@ -29,6 +29,8 @@ public:
 
     std::map<yunuGI::ICamera*, std::shared_ptr<NailCamera>>& GetCamearaList();
 
+    void SetClearColor(yunuGI::Color color);
+
 public:
     void SetWorldTM(yunuGI::ICamera* adapter, DirectX::SimpleMath::Matrix wtm);
     void SetVerticalFOV(yunuGI::ICamera* adapter, float fov);

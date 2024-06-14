@@ -23,13 +23,11 @@ namespace application
         }
         if (index == 1)
         {
-            yunutyEngine::graphics::Renderer::SingleInstance().SetUseIBL(true);
-            yunutyEngine::graphics::Renderer::SingleInstance().SetLightMap(L"Stage1LightMap");
+            wanderUtils::ChangeStageToOne();
         }
         if (index == 2)
         {
-            yunutyEngine::graphics::Renderer::SingleInstance().SetUseIBL(false);
-            yunutyEngine::graphics::Renderer::SingleInstance().SetLightMap(L"Stage2LightMap");
+            wanderUtils::ChangeStageToTwo();
         }
         co_return;
     }

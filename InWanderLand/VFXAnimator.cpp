@@ -10,50 +10,53 @@ void VFXAnimator::Start()
 
 void VFXAnimator::Update()
 {
-	for (int i = 0; i < this->frameInfoVec.size(); ++i)
+	if (this->isPlay)
 	{
-		int totalframe = this->frameInfoVec[i].size();
-		float duration = totalframe / this->frameRate;
-		__int32 ratio = static_cast<__int32>(totalframe / duration);
-
-		this->curFrameVec[i].sumTime += Time::GetDeltaTime();
-
-		for (int j = 0; j < this->frameInfoVec[i].size(); ++j)
+		for (int i = 0; i < this->frameInfoVec.size(); ++i)
 		{
-			if (this->curFrameVec[i].sumTime >= duration)
+			int totalframe = this->frameInfoVec[i].size();
+			float duration = totalframe / this->frameRate;
+			__int32 ratio = static_cast<__int32>(totalframe / duration);
+
+			this->curFrameVec[i].sumTime += Time::GetDeltaTime();
+
+			for (int j = 0; j < this->frameInfoVec[i].size(); ++j)
 			{
-				if (this->isLoop == false)
+				if (this->curFrameVec[i].sumTime >= duration)
 				{
-					this->curFrameVec[i].isDone = true;
-					continue;
+					if (this->isLoop == false)
+					{
+						this->curFrameVec[i].isDone = true;
+						continue;
+					}
+					else
+					{
+						this->curFrameVec[i].sumTime = 0.f;
+					}
 				}
-				else
-				{
-					this->curFrameVec[i].sumTime = 0.f;
-				}
+
+				this->curFrameVec[i].curFrame = static_cast<__int32>(this->curFrameVec[i].sumTime * ratio);
+				this->curFrameVec[i].curFrame = min(static_cast<int>(this->curFrameVec[i].curFrame), totalframe - 1);
+				this->curFrameVec[i].nextFrame = min(static_cast<int>(this->curFrameVec[i].curFrame + 1), totalframe - 1);
+				float lerpratio = static_cast<float>(this->curFrameVec[i].sumTime - static_cast<float>(this->curFrameVec[i].curFrame) / ratio);
+
+				auto lerLocation = yunuGI::Vector2::Lerp(this->frameInfoVec[i][this->curFrameVec[i].curFrame].location, this->frameInfoVec[i][this->curFrameVec[i].nextFrame].location, lerpratio);
+				this->renderer->GetMaterial(i)->SetFloat(0, lerLocation.x);
+				this->renderer->GetMaterial(i)->SetFloat(1, lerLocation.y);
 			}
-
-			this->curFrameVec[i].curFrame = static_cast<__int32>(this->curFrameVec[i].sumTime * ratio);
-			this->curFrameVec[i].curFrame = min(static_cast<int>(this->curFrameVec[i].curFrame), totalframe - 1);
-			this->curFrameVec[i].nextFrame = min(static_cast<int>(this->curFrameVec[i].curFrame + 1), totalframe - 1);
-			float lerpratio = static_cast<float>(this->curFrameVec[i].sumTime - static_cast<float>(this->curFrameVec[i].curFrame) / ratio);
-
-			auto lerLocation = yunuGI::Vector2::Lerp(this->frameInfoVec[i][this->curFrameVec[i].curFrame].location, this->frameInfoVec[i][this->curFrameVec[i].nextFrame].location, lerpratio);
-			this->renderer->GetMaterial(i)->SetFloat(0, lerLocation.x);
-			this->renderer->GetMaterial(i)->SetFloat(1, lerLocation.y);
 		}
-	}
 
-	for (auto& each : this->curFrameVec)
-	{
-		if (each.isDone == false)
+		for (auto& each : this->curFrameVec)
 		{
-			continue;
-		}
-		this->isPlayDone = true;
-		if (this->isAutoActivFalse == true)
-		{
-			GetGameObject()->SetSelfActive(false);
+			if (each.isDone == false)
+			{
+				continue;
+			}
+			this->isPlayDone = true;
+			if (this->isAutoActivFalse == true)
+			{
+				GetGameObject()->SetSelfActive(false);
+			}
 		}
 	}
 }
@@ -143,6 +146,22 @@ void VFXAnimator::SetAutoActiveFalse()
 bool VFXAnimator::IsDone()
 {
 	return this->isPlayDone;
+}
+
+void VFXAnimator::Play()
+{
+	this->isPlay = true;
+	this->Reset();
+}
+
+void VFXAnimator::Pause()
+{
+	this->isPlay = false;
+}
+
+void VFXAnimator::Resume()
+{
+	this->isPlay = true;
 }
 
 void VFXAnimator::Reset()
