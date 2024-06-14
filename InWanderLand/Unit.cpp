@@ -355,6 +355,7 @@ yunutyEngine::coroutine::Coroutine Unit::DamagedEffectCoroutine(std::weak_ptr<Un
     auto vfxAnimator = damagedVFX.lock()->AcquireVFXAnimator();
     vfxAnimator.lock()->SetAutoActiveFalse();
     vfxAnimator.lock()->Init();
+    vfxAnimator.lock()->Play();
     Vector3d startPos = GetTransform()->GetWorldPosition();
     Vector3d deltaPos = RTSCam::Instance().GetTransform()->GetWorldPosition() - GetTransform()->GetWorldPosition();
     Vector3d direction = deltaPos.Normalized();
@@ -1437,6 +1438,7 @@ yunutyEngine::coroutine::Coroutine Unit::MeleeAttackEffectCoroutine(std::weak_pt
     auto vfxAnimator = attackVFX.lock()->AcquireVFXAnimator();
     vfxAnimator.lock()->SetAutoActiveFalse();
     vfxAnimator.lock()->Init();
+    vfxAnimator.lock()->Play();
     Vector3d startPos = GetTransform()->GetWorldPosition();
     Vector3d deltaPos = opponent.lock()->GetTransform()->GetWorldPosition() - GetTransform()->GetWorldPosition();
     Vector3d direction = deltaPos.Normalized();

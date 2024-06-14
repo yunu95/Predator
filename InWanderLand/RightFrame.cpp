@@ -180,6 +180,7 @@ namespace BossSummon
 		auto summonEffectAnimator = summonEffect.lock()->AcquireVFXAnimator();
 		summonEffectAnimator.lock()->SetAutoActiveFalse();
 		summonEffectAnimator.lock()->Init();
+		summonEffectAnimator.lock()->Play();
 		/// 2. 특정 시간 만큼 기다린다. (VFX Summon Animation 끝날 때까지 co_await suspend always / IsDone)
 		while (!summonEffectAnimator.lock()->IsDone())
 		{
@@ -194,6 +195,7 @@ namespace BossSummon
 		summoningEffectAnimator.lock()->SetLoop(true);
 		summoningEffectAnimator.lock()->SetAutoActiveFalse();
 		summoningEffectAnimator.lock()->Init();
+		summoningEffectAnimator.lock()->Play();
 
 		co_await std::suspend_always{};
 

@@ -63,6 +63,7 @@ coroutine::Coroutine EnemySpinAttackSkill::SpawningSkillffect(std::weak_ptr<Enem
     auto chargeEffectAnimator = chargeEffect.lock()->AcquireVFXAnimator();
     chargeEffectAnimator.lock()->SetAutoActiveFalse();
     chargeEffectAnimator.lock()->Init();
+    chargeEffectAnimator.lock()->Play();
 
     knockbackCollider = UnitAcquisitionSphereColliderPool::Instance().Borrow(owner.lock());
     knockbackCollider.lock()->SetRadius(pod.skillRadius * owner.lock()->GetTransform()->GetWorldScale().x);

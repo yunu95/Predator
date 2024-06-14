@@ -90,10 +90,12 @@ coroutine::Coroutine HanselChargeSkill::SpawningFieldEffect(std::weak_ptr<Hansel
     auto stompEffect1Animator = stompEffect1.lock()->AcquireVFXAnimator();
     stompEffect1Animator.lock()->SetAutoActiveFalse();
     stompEffect1Animator.lock()->Init();
+    stompEffect1Animator.lock()->Play();
 
     //auto stompEffect2Animator = stompEffect2.lock()->AcquireVFXAnimator();
     //stompEffect2Animator.lock()->SetAutoActiveFalse();
     //stompEffect2Animator.lock()->Init();
+    //stompEffect2Animator.lock()->Play();
 
     auto animator = owner.lock()->GetAnimator();
     auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill1);
