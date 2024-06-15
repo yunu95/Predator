@@ -576,8 +576,10 @@ yunutyEngine::coroutine::Coroutine TacticModeSystem::ExecuteInternal()
     }
 
     // Wave의 시간도 흐른다.
-    auto wave = PlaytimeWave::GetCurrentOperatingWave();
-    wave.lock()->ResumeWaveElapsedTime();
+    if (auto wave = PlaytimeWave::GetCurrentOperatingWave().lock(); wave)
+    {
+        wave->ResumeWaveElapsedTime();
+    }
     // Wave의 적 유닛들도 움직인다.
     activateWaveEnemyUnitPauseRefVec.clear();
 }

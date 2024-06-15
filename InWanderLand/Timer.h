@@ -30,5 +30,6 @@ public:
 
     void ActivateTimer();
     void StopTimer();
+    bool IsActivated() { return m_isActivated; };
     void SetUsingRealtime(bool);
 };

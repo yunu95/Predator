@@ -121,4 +121,5 @@ enum class UIEnumID
     ErrorPopup_Cooltime,
     VictoryPage,
     DefeatPage,
+    TacticModeIngameUI,
 };

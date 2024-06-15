@@ -126,7 +126,7 @@ void UIManager::SetLetterBoxVisible(bool visible)
 
 void UIManager::ReportButtonOnMouse(UIButton* p_btn)
 {
-    m_selectedButtons.insert(p_btn);
+    m_selectedButtons[p_btn] = p_btn->GetWeakPtr<UIButton>();
     UpdateHighestPriorityButton();
 }
 
@@ -166,7 +166,7 @@ void UIManager::SetPortraitsClickable(bool clickable)
 void UIManager::UpdateHighestPriorityButton()
 {
     // 현재 하이라이트된 버튼이 적법한 버튼이라면, 더 이상의 처리는 필요없습니다.
-    if (!m_selectedButtons.empty() && m_highestPriorityButton == *m_selectedButtons.begin())
+    if (!m_selectedButtons.empty() && m_highestPriorityButton == m_selectedButtons.begin()->first)
         return;
     // 하이라이트된 버튼이 바뀌어야 한다면, 기존 버튼의 Exit 이벤트부터 처리합니다.
     if (m_highestPriorityButton)
@@ -178,11 +178,11 @@ void UIManager::UpdateHighestPriorityButton()
         }
     }
     // 혹시 앞 버튼의 Exit 이벤트로 인해 새로 하이라이트된 버튼이 비활성화될수도 있으니, 비활성화된 버튼은 제거합니다. 
-    while (!m_selectedButtons.empty() && (*m_selectedButtons.begin())->GetGameObject()->GetActive() == false)
+    while (!m_selectedButtons.empty() && m_selectedButtons.begin()->first->GetGameObject()->GetActive() == false)
     {
-        m_selectedButtons.erase(*m_selectedButtons.begin());
+        m_selectedButtons.erase(m_selectedButtons.begin()->first);
     }
-    m_highestPriorityButton = m_selectedButtons.empty() ? nullptr : *m_selectedButtons.begin();
+    m_highestPriorityButton = m_selectedButtons.empty() ? nullptr : m_selectedButtons.begin()->first;
 
     if (isButtonActiviated = m_highestPriorityButton != nullptr)
     {
@@ -832,6 +832,10 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
                 }
             });
     }
+    if (uiData.customFlags & (int)UIExportFlag2::PropagateDisable)
+    {
+        std::transform(uiData.disablePropagationTargets.begin(), uiData.disablePropagationTargets.end(), std::back_inserter(element->disablePropagationTargets), [=](int id) {return GetUIElementWithIndex(id); });
+    }
     // 만약 열기 버튼이라면...
     if (uiData.customFlags & (int)UIExportFlag::OpeningButton)
     {
@@ -909,6 +913,8 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
     {
         element->scalePopUpTransition = element->GetGameObject()->AddComponent<PopupOnEnable>();
         element->scalePopUpTransition->pushDuration = uiData.floats[JsonUIFloatType::popUpDuration];
+        element->scalePopUpTransition->popUpFrom = uiData.floats[JsonUIFloatType::popUpFrom];
+        element->scalePopUpTransition->popUpTo = uiData.floats[JsonUIFloatType::popUpTo];
         element->scalePopUpTransition->x = uiData.popUpX;
         element->scalePopUpTransition->y = uiData.popUpY;
         element->scalePopUpTransition->z = uiData.popUpZ;
@@ -918,6 +924,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
     {
         element->scalePopDownTransition = element->GetGameObject()->AddComponent<PopDownOnDisable>();
         element->scalePopDownTransition->pushDuration = uiData.floats[JsonUIFloatType::popDownDuration];
+        element->scalePopDownTransition->popDownTo = uiData.floats[JsonUIFloatType::popDownTo];
         element->scalePopDownTransition->x = uiData.popDownX;
         element->scalePopDownTransition->y = uiData.popDownY;
         element->scalePopDownTransition->z = uiData.popDownZ;
@@ -926,6 +933,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
     if (uiData.customFlags & (int)UIExportFlag::IsPulsing)
     {
         auto pulsingUI = element->GetGameObject()->AddComponent<PulsingUI>();
+        pulsingUI->uiElement = element;
         pulsingUI->pushDuration = uiData.floats[JsonUIFloatType::pulsingPeriod];
         pulsingUI->pulsingMin = uiData.floats[JsonUIFloatType::pulsingMin];
         pulsingUI->pulsingMax = uiData.floats[JsonUIFloatType::pulsingMax];

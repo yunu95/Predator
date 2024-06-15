@@ -101,6 +101,11 @@ void UIElement::EnableElement()
             each->EnableElement();
         }
     }
+    for (auto each : disablePropagationTargets)
+    {
+        each->enabled = false;
+        each->EnableElement();
+    }
 }
 void UIElement::DisableElement()
 {
@@ -184,9 +189,9 @@ void UIElement::DisableElement()
             SoundSystem::SetMusicVolume(SoundSystem::GetMusicVolume() * 1 / importedUIData.floats[JsonUIFloatType::musicMultiplyVolumeOnEnableDisable_enableFactor]);
         }
     }
-    if (parentPriorityLayout)
+    for (auto each : disablePropagationTargets)
     {
-        parentPriorityLayout->DisableChildUI(GetGameObject());
+        each->DisableElement();
     }
 }
 void UIElement::SetNumber(float number)
