@@ -15,8 +15,12 @@ namespace yunuGI
         virtual float GetHeight() = 0;
         virtual void SetWidth(float width) = 0;
         virtual void SetHeight(float height) = 0;
+        virtual float GetXScale() = 0;
+        virtual float GetYScale() = 0;
         virtual float GetXPivot() = 0;
         virtual float GetYPivot() = 0;
+        virtual void SetXScale(float xScale) = 0;
+        virtual void SetYScale(float yScale) = 0;
         virtual void SetXPivot(float xPivot) = 0;
         virtual void SetYPivot(float yPivot) = 0;
         virtual int GetLayer() = 0;

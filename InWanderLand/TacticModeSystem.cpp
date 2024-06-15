@@ -84,11 +84,13 @@ void TacticModeSystem::EngageTacticSystem()
     playersPauseRevArr[1] = PlayerController::Instance().GetPlayers()[1].lock()->referencePause.Acquire();
     playersPauseRevArr[2] = PlayerController::Instance().GetPlayers()[2].lock()->referencePause.Acquire();
 
-    auto wave = PlaytimeWave::GetCurrentOperatingWave();
-    wave.lock()->StopWaveElapsedTime();
-    for (auto& each : wave.lock()->m_currentWaveUnitVector)
+    if (auto wave = PlaytimeWave::GetCurrentOperatingWave().lock(); wave)
     {
-        activateWaveEnemyUnitPauseRefVec.push_back(each->referencePause.Acquire());
+        wave->StopWaveElapsedTime();
+        for (auto& each : wave->m_currentWaveUnitVector)
+        {
+            activateWaveEnemyUnitPauseRefVec.push_back(each->referencePause.Acquire());
+        }
     }
 }
 

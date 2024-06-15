@@ -46,6 +46,7 @@
 
 #include "StaticMesh.h"
 #include "PixelShader.h"
+#include "DirectXMath.h"
 
 #include <iostream>
 #include <fstream>
@@ -580,14 +581,25 @@ void RenderSystem::RenderUI()
         ;
         RECT drawRect;
         const auto& tm = uiImage->GetWorldTM();
-        drawRect.left = tm._41 - uiImage->GetXPivot() * uiImage->GetWidth() * tm._11;
-        drawRect.right = tm._41 + (1 - uiImage->GetXPivot()) * uiImage->GetWidth() * tm._11;
-        drawRect.top = tm._42 - uiImage->GetYPivot() * uiImage->GetHeight() * tm._22;
-        drawRect.bottom = tm._42 + (1 - uiImage->GetYPivot()) * uiImage->GetHeight() * tm._22;
-        auto texture = ((Texture*)(std::static_pointer_cast<UIImage>(i)->GetTexture()));
+        auto primitiveTextureSize{ uiImage->GetPrimitiveTextureSize() };
+        float pivotX = primitiveTextureSize.x * uiImage->GetXPivot();
+        float pivotY = primitiveTextureSize.y * uiImage->GetYPivot();
+        DirectX::XMFLOAT2 scale = { uiImage->GetWidth() * uiImage->GetXScale(), uiImage->GetHeight() * uiImage->GetYScale() };
+        //DirectX::XMFLOAT2 scale = { uiImage->GetWidth() , uiImage->GetHeight() };
+        /*drawRect.left = tm._41 - uiImage->GetXPivot() * uiImage->GetWidth() * uiImage->GetXScale();
+        drawRect.right = tm._41 + (1 - uiImage->GetXPivot()) * uiImage->GetWidth() * uiImage->GetXScale();
+        drawRect.top = tm._42 - uiImage->GetYPivot() * uiImage->GetHeight() * uiImage->GetYScale();
+        drawRect.bottom = tm._42 + (1 - uiImage->GetYPivot()) * uiImage->GetHeight() * uiImage->GetYScale();*/
+        //drawRect.left = tm._41 - 0.5 * uiImage->GetWidth() * uiImage->GetXScale();
+        //drawRect.right = tm._41 + 0.5 * uiImage->GetWidth() * uiImage->GetXScale();
+        //drawRect.top = tm._42 - 0.5 * uiImage->GetHeight() * uiImage->GetYScale();
+        //drawRect.bottom = tm._42 + 0.5 * uiImage->GetHeight() * uiImage->GetYScale();
+        //auto texture = ((Texture*)(std::static_pointer_cast<UIImage>(i)->GetTexture()));
         if (auto srv = uiImage->GetSRV())
         {
-            this->spriteBatch->Draw(srv, drawRect, nullptr, uiImage->GetColor(), uiImage->GetRotation());
+            scale.x /= primitiveTextureSize.x;
+            scale.y /= primitiveTextureSize.y;
+            this->spriteBatch->Draw(srv, DirectX::XMFLOAT2{ tm._41,tm._42 }, nullptr, uiImage->GetColor(), uiImage->GetRotation() * 3.14f / 180.0f, { pivotX ,pivotY }, scale, DirectX::SpriteEffects_None, -uiImage->GetLayer());
         }
     }
     this->spriteBatch->End();

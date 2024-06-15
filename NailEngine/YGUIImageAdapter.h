@@ -36,15 +36,6 @@ namespace yunuGIAdapter
         virtual void SetActive(bool isActive)
         {
             renderable->SetActive(isActive);
-            /*if (isActive)
-            {
-                RenderSystem::Instance.Get().PushUIObject(renderable);
-                RenderSystem::Instance.Get().ReSortUIObject(std::static_pointer_cast<UIImage>(renderable)->layer, renderable);
-            }
-            else
-            {
-                RenderSystem::Instance.Get().PopUIObject(renderable);
-            }*/
         };
         virtual bool IsActive() override
         {
@@ -101,6 +92,22 @@ namespace yunuGIAdapter
         virtual void SetYPivot(float yPivot) override
         {
             renderable->SetYPivot(yPivot);
+        }
+        virtual float GetXScale() override
+        {
+            return renderable->GetXScale();
+        }
+        virtual float GetYScale() override
+        {
+            return renderable->GetYScale();
+        }
+        virtual void SetXScale(float xScale) override
+        {
+            renderable->SetXScale(xScale);
+        }
+        virtual void SetYScale(float yScale) override
+        {
+            renderable->SetYScale(yScale);
         }
         virtual int GetLayer() override
         {

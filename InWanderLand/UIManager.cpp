@@ -803,6 +803,8 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
         }
     }
     // offset by offset
+    UIEnumID debugToken = (UIEnumID)uiData.enumID;
+
     pivotPos.x += uiData.anchoredPosition[0];
     pivotPos.y -= uiData.anchoredPosition[1];
 

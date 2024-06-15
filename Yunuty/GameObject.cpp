@@ -106,6 +106,7 @@ void yunutyEngine::GameObject::SetParent(IGameObjectParent* parent)
     bool activeAfter = GetActive();
     PropagateActiveEvent(activeBefore, activeAfter);
     parent->HandleChildUpdateState(this);
+    GetTransform()->InvokeTransformUpdateEvent(this);
 
     ancestorNumberCached = -1;
     DoThingsOnSelfAndChildrenRecursive([](GameObject* child) {child->ancestorNumberCached = -1; });
