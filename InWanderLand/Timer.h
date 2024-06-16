@@ -13,7 +13,7 @@ public:
     bool m_isRepeated{ false };
 
     float m_elapsed{ 0 };
-    float pushDuration{ 0 };
+    float duration{ 0 };
     bool isRealtime{ false };
 
 public:
@@ -30,5 +30,6 @@ public:
 
     void ActivateTimer();
     void StopTimer();
+    bool IsActivated() { return m_isActivated; };
     void SetUsingRealtime(bool);
 };

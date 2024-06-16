@@ -5,12 +5,11 @@ void PopDownOnDisable::Init()
     isRealtime = true;
     onUpdate = [this](float t)
         {
-            float scale = (t - 1) * (t - 1);
-            GetTransform()->SetLocalScale({ x ? scale : 1,y ? scale : 1,z ? scale : 1 });
+            GetTransform()->SetLocalScale(Vector3f::Lerp(popDownFrom, Vector3f::one * popDownTo, (1 - (1 - t) * (1 - t))));
         };
     onActivation = [this]()
         {
-            GetTransform()->SetLocalScale(Vector3d::one);
+            popDownFrom = GetTransform()->GetLocalScale();
         };
     onCompleteFunction = [this]()
         {

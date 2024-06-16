@@ -7,6 +7,9 @@ enum class UIEnumID
     CharInfo_Robin,
     CharInfo_Ursula,
     CharInfo_Hansel,
+    CharInfo_Robin_Left,
+    CharInfo_Ursula_Left,
+    CharInfo_Hansel_Left,
     CharInfo_Portrait,
     CharInfo_PortraitBloodOverlay,
     CharInfo_NameTag,
@@ -121,4 +124,5 @@ enum class UIEnumID
     ErrorPopup_Cooltime,
     VictoryPage,
     DefeatPage,
+    TacticModeIngameUI,
 };

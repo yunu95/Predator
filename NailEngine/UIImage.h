@@ -9,13 +9,18 @@ class UIImage : public nail::IRenderable
 public:
     void SetTexture(yunuGI::ITexture* texture);
     yunuGI::ITexture* GetTexture();
+    DirectX::XMFLOAT2 GetPrimitiveTextureSize();
     ID3D11Texture2D* GetProcessedTexture();
     ID3D11ShaderResourceView* GetSRV();
     float GetWidth();
     float GetHeight();
+    float GetXScale();
+    float GetYScale();
     float GetXPivot();
     float GetYPivot();
     float GetRotation();
+    void SetXScale(float xScale);
+    void SetYScale(float yScale);
     void SetXPivot(float xPivot);
     void SetYPivot(float yPivot);
     void SetWidth(float width);
@@ -55,6 +60,8 @@ private:
     DirectX::SimpleMath::Vector2 linearClippingStart{ 0, 0.5f };
     DirectX::SimpleMath::Vector2 linearClippingDirection{ 0, 1 };
 
+    float xScale = 1;
+    float yScale = 1;
     float width{ -1 };
     float height{ -1 };
     // 0,0은 왼쪽 위

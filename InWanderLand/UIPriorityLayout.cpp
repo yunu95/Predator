@@ -13,6 +13,7 @@ void UIPriorityLayout::DisableChildUI(GameObject* ui)
 }
 void UIPriorityLayout::StartTransition(GameObject* newlyEnabledElement)
 {
+    startPositions.clear();
     std::transform(enabledUIs.begin(), enabledUIs.end(), std::back_inserter(startPositions), [](GameObject* ui) { return ui->GetTransform()->GetLocalPosition(); });
     if (newlyEnabledElement)
     {

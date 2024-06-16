@@ -6,6 +6,8 @@
 class PopDownOnDisable : public TimerComponent
 {
 public:
+    Vector3f popDownFrom;
+    float popDownTo;
     bool x = true, y = false, z = false;
     void Init();
 };

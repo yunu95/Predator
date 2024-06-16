@@ -44,7 +44,7 @@ private:
             return lhs->GetLayer() > rhs->GetLayer();
         }
     };
-    std::set<UIButton*, ButtonCompare> m_selectedButtons;
+    std::map<UIButton*, std::weak_ptr<UIButton>, ButtonCompare> m_selectedButtons;
 
     std::function<void(Vector3d pos)> m_beforeUIEnterFunction;
 
