@@ -27,22 +27,15 @@ namespace yunuGIAdapter
         virtual void SetWorldTM(const yunuGI::Matrix4x4& worldTM)
         {
             renderable->SetWorldTM(reinterpret_cast<const DirectX::SimpleMath::Matrix&>(worldTM));
-            //renderable->pos.x = worldTM.m41;
-            //renderable->pos.y = worldTM.m42;
+        };
+        virtual void SetRotation(const float rotation)
+        {
+            renderable->SetRotation(rotation);
         };
 
         virtual void SetActive(bool isActive)
         {
             renderable->SetActive(isActive);
-            /*if (isActive)
-            {
-                RenderSystem::Instance.Get().PushUIObject(renderable);
-                RenderSystem::Instance.Get().ReSortUIObject(std::static_pointer_cast<UIImage>(renderable)->layer, renderable);
-            }
-            else
-            {
-                RenderSystem::Instance.Get().PopUIObject(renderable);
-            }*/
         };
         virtual bool IsActive() override
         {
@@ -99,6 +92,22 @@ namespace yunuGIAdapter
         virtual void SetYPivot(float yPivot) override
         {
             renderable->SetYPivot(yPivot);
+        }
+        virtual float GetXScale() override
+        {
+            return renderable->GetXScale();
+        }
+        virtual float GetYScale() override
+        {
+            return renderable->GetYScale();
+        }
+        virtual void SetXScale(float xScale) override
+        {
+            renderable->SetXScale(xScale);
+        }
+        virtual void SetYScale(float yScale) override
+        {
+            renderable->SetYScale(yScale);
         }
         virtual int GetLayer() override
         {

@@ -94,4 +94,6 @@ enum class UIExportFlag2
     Rotating = 1 << 18,
     StartGameButton = 1 << 19,
     ReturnToTitleButton = 1 << 20,
+    Video = 1 << 21,
+    PropagateDisable = 1 << 22,
 };

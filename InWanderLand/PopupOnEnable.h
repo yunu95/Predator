@@ -7,6 +7,8 @@
 class PopupOnEnable : public TimerComponent
 {
 public:
+    float popUpFrom;
+    float popUpTo;
     bool x = true, y = false, z = false;
     void Init();
 };

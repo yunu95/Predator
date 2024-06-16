@@ -22,7 +22,7 @@ coroutine::Coroutine RobinChargeSkill::operator()()
     auto rushAnim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Rush);
     auto slamAnim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Slam);
 
-    owner.lock()->PlayAnimation(UnitAnimType::Rush, true);
+    owner.lock()->PlayAnimation(UnitAnimType::Rush, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
 
     co_yield coroutine::WaitForSeconds(rushAnim->GetDuration());
 
@@ -72,7 +72,7 @@ coroutine::Coroutine RobinChargeSkill::operator()()
     disableNavAgent.reset();
     blockFollowingNavigation.reset();
     owner.lock()->Relocate(currentPos);
-    owner.lock()->PlayAnimation(UnitAnimType::Idle, true);
+    owner.lock()->PlayAnimation(UnitAnimType::Idle, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
     co_yield coroutine::WaitForSeconds(0.2);
     co_return;
 }

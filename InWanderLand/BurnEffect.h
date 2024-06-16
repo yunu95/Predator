@@ -8,7 +8,7 @@ class BurnEffect : public Component
 public:
 	void SetEdgeColor(yunuGI::Color color);
 	void SetEdgeThickness(float edgeThickness);
-	void SetSpeed(float speed);
+	void SetDuration(float duration);
 
 	void Disappear();
 	void Appear();
@@ -17,14 +17,13 @@ public:
 	void Start() override;
 	void Update() override;
 
-private:
 	void Reset();
 
 private:
 	yunuGI::Color edgeColor{ 1,1,1,1 };
 
 	float edgeThickness = 0.01f;
-	float speed = 0.2f;
+	float duration = 0.2f;
 	float amount = 0.f;
 
 	bool isFirst = true;

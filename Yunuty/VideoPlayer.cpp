@@ -6,7 +6,7 @@ namespace yunutyEngine::graphics
     {
         if (auto gi = video.lock(); gi)
         {
-            gi->update(Time::GetDeltaTimeUnscaled());
+            gi->update(usingUnscaledTime?Time::GetDeltaTimeUnscaled():Time::GetDeltaTime(), loop);
         }
     }
 }

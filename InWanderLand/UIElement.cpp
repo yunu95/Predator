@@ -3,11 +3,6 @@
 void UIElement::Start()
 {
     application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-    // 게임이 끝나면 삭제되도록 설정
-    /*if (GetGameObject()->GetParentGameObject() == nullptr)
-    {
-        contentsLayer->RegisterToEditorObjectContainer(GetGameObject());
-    }*/
     // 만약 숫자 UI라면 먼저 숫자들을 모두 비활성화
     if (!numberSetBefore)
     {
@@ -63,8 +58,8 @@ void UIElement::EnableElement()
     if (importedUIData.customFlags2 & (int)UIExportFlag2::PlayMusicOnEnable)
     {
         auto musicPlayTimer = Scene::getCurrentScene()->AddGameObject()->AddComponent<PlayMusicTimer>();
-        musicPlayTimer->fadeInTime = importedUIData.musicPlayOnEnable_fadeIn;
-        musicPlayTimer->fadeOutTime = importedUIData.musicPlayOnEnable_fadeOut;
+        musicPlayTimer->fadeInTime = importedUIData.floats[JsonUIFloatType::musicPlayOnEnable_fadeIn];
+        musicPlayTimer->fadeOutTime = importedUIData.floats[JsonUIFloatType::musicPlayOnEnable_fadeOut];
         musicPlayTimer->musicPath = importedUIData.musicPlayOnEnable_musicClip;
         musicPlayTimer->Init();
         musicPlayTimer->ActivateTimer();
@@ -87,7 +82,16 @@ void UIElement::EnableElement()
     }
     if (importedUIData.customFlags2 & (int)UIExportFlag2::MultiplyMusicVolumeOnEnableDisable)
     {
-        SoundSystem::SetMusicVolume(SoundSystem::GetMusicVolume() * importedUIData.musicMultiplyVolumeOnEnableDisable_enableFactor);
+        SoundSystem::SetMusicVolume(SoundSystem::GetMusicVolume() * importedUIData.floats[JsonUIFloatType::musicMultiplyVolumeOnEnableDisable_enableFactor]);
+    }
+    if (auto rot = rotator.lock())
+    {
+        rot->zRot = rot->initialRotation;
+        rot->Update();
+    }
+    if (auto vid = uiVideoPlayer.lock())
+    {
+        vid->Enable();
     }
     for (auto each : children)
     {
@@ -96,6 +100,11 @@ void UIElement::EnableElement()
             each->enabled = false;
             each->EnableElement();
         }
+    }
+    for (auto each : disablePropagationTargets)
+    {
+        each->enabled = false;
+        each->EnableElement();
     }
 }
 void UIElement::DisableElement()
@@ -147,8 +156,8 @@ void UIElement::DisableElement()
     if (importedUIData.customFlags2 & (int)UIExportFlag2::PlayMusicOnDisable)
     {
         auto musicPlayTimer = Scene::getCurrentScene()->AddGameObject()->AddComponent<PlayMusicTimer>();
-        musicPlayTimer->fadeInTime = importedUIData.musicPlayOnDisable_fadeIn;
-        musicPlayTimer->fadeOutTime = importedUIData.musicPlayOnDisable_fadeOut;
+        musicPlayTimer->fadeInTime = importedUIData.floats[JsonUIFloatType::musicPlayOnDisable_fadeIn];
+        musicPlayTimer->fadeOutTime = importedUIData.floats[JsonUIFloatType::musicPlayOnDisable_fadeOut];
         musicPlayTimer->musicPath = importedUIData.musicPlayOnDisable_musicClip;
         musicPlayTimer->Init();
         musicPlayTimer->ActivateTimer();
@@ -156,6 +165,10 @@ void UIElement::DisableElement()
     if (disablingHandled == false)
     {
         GetGameObject()->SetSelfActive(false);
+    }
+    if (parentPriorityLayout)
+    {
+        parentPriorityLayout->DisableChildUI(GetGameObject());
     }
     if (importedUIData.customFlags & (int)UIExportFlag::TimeContinueOnDisable)
     {
@@ -171,18 +184,18 @@ void UIElement::DisableElement()
     }
     if (importedUIData.customFlags2 & (int)UIExportFlag2::MultiplyMusicVolumeOnEnableDisable)
     {
-        if (importedUIData.musicMultiplyVolumeOnEnableDisable_enableFactor == 0)
+        if (importedUIData.floats[JsonUIFloatType::musicMultiplyVolumeOnEnableDisable_enableFactor] == 0)
         {
             SoundSystem::SetMusicVolume(1);
         }
         else
         {
-            SoundSystem::SetMusicVolume(SoundSystem::GetMusicVolume() * 1 / importedUIData.musicMultiplyVolumeOnEnableDisable_enableFactor);
+            SoundSystem::SetMusicVolume(SoundSystem::GetMusicVolume() * 1 / importedUIData.floats[JsonUIFloatType::musicMultiplyVolumeOnEnableDisable_enableFactor]);
         }
     }
-    if (parentPriorityLayout)
+    for (auto each : disablePropagationTargets)
     {
-        parentPriorityLayout->DisableChildUI(GetGameObject());
+        each->DisableElement();
     }
 }
 void UIElement::SetNumber(float number)

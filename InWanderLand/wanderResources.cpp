@@ -117,8 +117,9 @@ constexpr const std::string wanderResources::GetFBXName(WanderFBX::Enum fbxType)
     switch (fbxType)
     {
     case wanderResources::WanderFBX::None: return "";
-    case wanderResources::WanderFBX::IMPALING_SPIKE: return "SM_Spike01";
+    case wanderResources::WanderFBX::IMPALING_SPIKE: return "Spear";
     case wanderResources::WanderFBX::HEALING_COOKIE: return "SM_Pie";
+    case wanderResources::WanderFBX::BOSS_SPIKE: return "SM_Spike02";
     case wanderResources::WanderFBX::NUM: return "";
     default:
         break;

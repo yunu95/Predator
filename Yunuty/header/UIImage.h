@@ -14,15 +14,16 @@
 
 namespace yunutyEngine::graphics
 {
-	class YunutyCycle;
-	class YUNUTY_API UIImage : public Renderable<yunuGI::IUIImage>
-	{
-	private:
-	protected:
-		virtual void Update() override;
-	public:
-		// GI는 Graphics Interface라는 뜻임.
-		yunuGI::IUIImage& GetGI() { return Renderable<yunuGI::IUIImage>::GetGI(); }
-		UIImage();
-	};
+    class YunutyCycle;
+    class YUNUTY_API UIImage : public Renderable<yunuGI::IUIImage>
+    {
+    private:
+    protected:
+        //virtual void Update() { OnTransformUpdate(); };
+        virtual void OnTransformUpdate() override;
+    public:
+        // GI는 Graphics Interface라는 뜻임.
+        yunuGI::IUIImage& GetGI() { return Renderable<yunuGI::IUIImage>::GetGI(); }
+        UIImage();
+    };
 }

@@ -25,6 +25,20 @@ yunuGI::ITexture* UIImage::GetTexture()
 {
     return this->texture;
 }
+
+DirectX::XMFLOAT2 UIImage::GetPrimitiveTextureSize()
+{
+    if (IsVideoPlayMode())
+    {
+        if (auto videoTexture = video.lock()->videoTexture)
+        {
+            return { videoTexture->GetWidth(), videoTexture->GetHeight() };
+        }
+        return { 0,0 };
+    }
+    return { this->texture->GetWidth() ,this->texture->GetHeight() };
+}
+
 ID3D11Texture2D* UIImage::GetProcessedTexture()
 {
     return processedTexture.Get();
@@ -43,7 +57,7 @@ ID3D11ShaderResourceView* UIImage::GetSRV()
     {
         return processedTextureSRV.Get();
     }
-    return static_cast<Texture*>(GetTexture())->GetSRV().Get();
+    return  static_cast<Texture*>(this->texture)->GetSRV().Get();
 }
 
 float UIImage::GetWidth()
@@ -54,7 +68,16 @@ float UIImage::GetWidth()
 float UIImage::GetHeight()
 {
     return height;
-};
+}
+float UIImage::GetXScale()
+{
+    return xScale;
+}
+float UIImage::GetYScale()
+{
+    return yScale;
+}
+;
 float UIImage::GetXPivot()
 {
     return xPivot;
@@ -62,7 +85,20 @@ float UIImage::GetXPivot()
 float UIImage::GetYPivot()
 {
     return yPivot;
-};
+}
+float UIImage::GetRotation()
+{
+    return rotation;
+}
+void UIImage::SetXScale(float xScale)
+{
+    this->xScale = xScale;
+}
+void UIImage::SetYScale(float yScale)
+{
+    this->yScale = yScale;
+}
+;
 void UIImage::SetXPivot(float xPivot)
 {
     this->xPivot = xPivot;
@@ -78,7 +114,12 @@ void UIImage::SetWidth(float width)
 void UIImage::SetHeight(float height)
 {
     this->height = height;
-};
+}
+void UIImage::SetRotation(float rotation)
+{
+    this->rotation = rotation;
+}
+;
 bool UIImage::operator<(const UIImage& other) const
 {
     return layer < other.layer;

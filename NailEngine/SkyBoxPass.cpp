@@ -15,9 +15,8 @@
 
 LazyObjects<SkyBoxPass> SkyBoxPass::Instance;
 
-void SkyBoxPass::Init(Texture* texture, Mesh* mesh, yunuGI::IShader* vs, yunuGI::IShader* ps)
+void SkyBoxPass::Init(Mesh* mesh, yunuGI::IShader* vs, yunuGI::IShader* ps)
 {
-    this->texture = texture;
     this->mesh = mesh;
     this->vs = reinterpret_cast<VertexShader*>(vs);
     this->ps = reinterpret_cast<PixelShader*>(ps);
@@ -176,7 +175,7 @@ void SkyBoxPass::BuildIrradianceMap()
         ResourceBuilder::Instance.Get().device->GetDeviceContext()->OMSetRenderTargets(1, &renderTargetViewArray[i], nullptr);
 
         // Bind Texture
-        this->texture->Bind(9);
+        //this->texture->Bind(9);
 
         // Bind Shader
         std::static_pointer_cast<VertexShader>(ResourceManager::Instance.Get().GetShader(L"IrradianceVS.cso"))->Bind();
@@ -300,7 +299,7 @@ void SkyBoxPass::BuildSpecularMap()
         ResourceBuilder::Instance.Get().device->GetDeviceContext()->OMSetRenderTargets(1, &renderTargetViewArray[i], nullptr);
 
         // Bind Texture
-        this->texture->Bind(9);
+        //this->texture->Bind(9);
 
         // Bind Shader
         std::static_pointer_cast<VertexShader>(ResourceManager::Instance.Get().GetShader(L"PreFilteredVS.cso"))->Bind();
@@ -386,7 +385,7 @@ void SkyBoxPass::BuildLUT()
     ResourceBuilder::Instance.Get().device->GetDeviceContext()->OMSetRenderTargets(1, &renderTargetViewArray, nullptr);
 
     // Bind Texture
-    this->texture->Bind(9);
+    //this->texture->Bind(9);
 
     // Bind Shader
     std::static_pointer_cast<VertexShader>(ResourceManager::Instance.Get().GetShader(L"SpecLUTVS.cso"))->Bind();
@@ -413,11 +412,51 @@ void SkyBoxPass::BindIBLTexture()
 {
     ResourceBuilder::Instance.Get().device->GetDeviceContext()->PSSetSamplers(2, 1, samplerState.GetAddressOf());
 
-    this->texture->Bind(19);
-    static auto asdDiffuseHDR = ResourceManager::Instance.Get().GetTexture(L"Texture/asdDiffuseHDR.dds");
-    static auto asdSpecularHDR = ResourceManager::Instance.Get().GetTexture(L"Texture/asdSpecularHDR.dds");
-    static auto asdBrdf = ResourceManager::Instance.Get().GetTexture(L"Texture/asdBrdf.dds");
-    asdDiffuseHDR->Bind(20);
-    asdSpecularHDR->Bind(21);
-    asdBrdf->Bind(22);
+    /*std::wstring stage = L"Stage1";
+    std::wstring env = L"EnvHDR.dds";
+    std::wstring diffuse = L"DiffuseHDR.dds";
+    std::wstring specular = L"SpecularHDR.dds";
+    std::wstring brdf = L"Brdf.dds";*/
+
+    std::wstring texture = L"Texture/";
+    texture += stage;
+    texture += env;
+
+    static std::shared_ptr<Texture> envTexture;
+    if (stageChanged)
+    {
+        envTexture = ResourceManager::Instance.Get().GetTexture(texture);
+    }
+    envTexture->Bind(19);
+    texture.clear();
+    texture = L"Texture/";
+    texture += stage;
+    texture += diffuse;
+    static std::shared_ptr<Texture> diffuseTexture;
+    if (stageChanged)
+    {
+        diffuseTexture = ResourceManager::Instance.Get().GetTexture(texture);
+    }
+    diffuseTexture->Bind(20);
+    texture.clear();
+    texture = L"Texture/";
+    texture += stage;
+    texture += specular;
+    static std::shared_ptr<Texture> specularTexture;
+    if (stageChanged)
+    {
+        specularTexture = ResourceManager::Instance.Get().GetTexture(texture);
+    }
+    specularTexture->Bind(21);
+    texture.clear();
+    texture = L"Texture/";
+    texture += stage;
+    texture += brdf;
+    static std::shared_ptr<Texture> brdfTexture;
+    if (stageChanged)
+    {
+        brdfTexture = ResourceManager::Instance.Get().GetTexture(texture);
+    }
+    brdfTexture->Bind(22);
+    stageChanged = false;
 }

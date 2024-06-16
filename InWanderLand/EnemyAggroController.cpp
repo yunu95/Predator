@@ -12,7 +12,7 @@ coroutine::Coroutine EnemyAggroController::RoutineGlobal()
 	auto idealProp = PlayerController::Instance().GetAggroProportions();
 	IdealAggros[PlayerCharacterType::Ursula] = ceil(idealProp[PlayerCharacterType::Ursula] * unitRoutines.size());
 	IdealAggros[PlayerCharacterType::Hansel] = ceil(idealProp[PlayerCharacterType::Hansel] * unitRoutines.size());
-	IdealAggros[PlayerCharacterType::Robin] = unitRoutines.size() - idealProp[PlayerCharacterType::Ursula] - idealProp[PlayerCharacterType::Hansel];
+	IdealAggros[PlayerCharacterType::Robin] = unitRoutines.size() - IdealAggros[PlayerCharacterType::Ursula] - IdealAggros[PlayerCharacterType::Hansel];
 	currentAggros.fill(0);
 
 	// 어그로가 어떻게 분포되어 있는지 먼저 확인한다.
