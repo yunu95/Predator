@@ -1011,6 +1011,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="Action_BlockSkillSelection.h" />
     <ClInclude Include="Action_Boss.h" />
     <ClInclude Include="Action_EngageBattle.h" />
+    <ClInclude Include="Action_EngagePeace.h" />
     <ClInclude Include="Action_Ornament.h" />
     <ClInclude Include="Action_PauseWaves.h" />
     <ClInclude Include="Action_PlayerSelect.h" />
@@ -1037,6 +1038,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="ChessPawn.h" />
     <ClInclude Include="ChessRook.h" />
     <ClInclude Include="AttackPreviewPool.h" />
+    <ClInclude Include="Condition_TacticMode.h" />
     <ClInclude Include="ContentsCoroutine.h" />
     <ClInclude Include="DamageType.h" />
     <ClInclude Include="EnemyAggroController.h" />
@@ -2092,6 +2094,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="Action_BlockSkillSelection.cpp" />
     <ClCompile Include="Action_Boss.cpp" />
     <ClCompile Include="Action_EngageBattle.cpp" />
+    <ClCompile Include="Action_EngagePeace.cpp" />
     <ClCompile Include="Action_Ornament.cpp" />
     <ClCompile Include="Action_PauseWaves.cpp" />
     <ClCompile Include="Action_PlayerSelect.cpp" />
@@ -2118,6 +2121,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="ChessPawn.cpp" />
     <ClCompile Include="ChessRook.cpp" />
     <ClCompile Include="AttackPreviewPool.cpp" />
+    <ClCompile Include="Condition_TacticMode.cpp" />
     <ClCompile Include="ContentsCoroutine.cpp" />
     <ClCompile Include="EnemyAggroController.cpp" />
     <ClCompile Include="AnimationEventManager.cpp" />
@@ -2307,6 +2311,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="Interactable_TemplateData.cpp" />
     <ClCompile Include="Interactable_TriggerBox.cpp" />
     <ClCompile Include="Interactable_TriggerSphere.cpp" />
+    <ClCompile Include="ITacticObject.cpp" />
     <ClCompile Include="LeftFrame.cpp" />
     <ClCompile Include="LocalTimeEntity.cpp" />
     <ClCompile Include="LocalTimeEntityManager.cpp" />

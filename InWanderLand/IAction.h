@@ -60,6 +60,7 @@ namespace application
         OrnamentFloating,
         BossAppear,
         EngageBattle,
+        EngagePeace,
     };
 
     struct IAction

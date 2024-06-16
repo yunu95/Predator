@@ -5,12 +5,19 @@
 #include "EditorLayer.h"
 #include "EditorPopupManager.h"
 #include "BossController.h"
+#include "Action_WaitForSeconds.h"
+#include "GlobalConstant.h"
 
 namespace application
 {
 	CoroutineObject<void> Action_BossAppear::DoAction()
 	{
 		BossController::Instance().BossAppear();
+		auto coroutine = Action_WaitForRealSeconds(GlobalConstant::GetSingletonInstance().pod.bossAppearTime + wanderResources::GetAnimation(BossController::Instance().GetBoss().lock()->GetFBXName(), UnitAnimType::Birth)->GetDuration()).DoAction();
+		for (const auto& val : coroutine)
+		{
+			co_await std::suspend_always();
+		}
 		co_return;
 	}
 

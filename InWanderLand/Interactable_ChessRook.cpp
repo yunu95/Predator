@@ -70,7 +70,12 @@ void Interactable_ChessRook::Start()
 
 void Interactable_ChessRook::Update()
 {
-	if (triggerOn)
+	if (!unitSet.empty())
+	{
+		OnInteractableTriggerEnter();
+	}
+
+	if (!isPause && triggerOn)
 	{
 		if (!isInteracting)
 		{
@@ -94,7 +99,17 @@ void Interactable_ChessRook::OnTriggerEnter(physics::Collider* collider)
 		colliderUnitComponent->IsPlayerUnit() &&
 		colliderUnitComponent->IsAlive())
 	{
-		OnInteractableTriggerEnter();
+		unitSet.insert(colliderUnitComponent);
+	}
+}
+
+void Interactable_ChessRook::OnTriggerExit(physics::Collider* collider)
+{
+	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
+		colliderUnitComponent != nullptr &&
+		colliderUnitComponent->IsPlayerUnit())
+	{
+		unitSet.erase(colliderUnitComponent);
 	}
 }
 
@@ -111,6 +126,11 @@ yunutyEngine::coroutine::Coroutine Interactable_ChessRook::DoInteraction()
 
 	while (ratio < 1)
 	{
+		while (isPause)
+		{
+			co_await std::suspend_always();
+		}
+
 		ratio = localTimer / delayTime;
 
 		if (ratio > 1)
@@ -197,4 +217,24 @@ void Interactable_ChessRook::SetDataFromEditorData(const application::editor::In
 	damage = data.pod.templateData->pod.damage;
 	delayTime = data.pod.templateData->pod.delayTime;
 	particleEffectTime = data.pod.templateData->pod.particleEffectTime;
+}
+
+void Interactable_ChessRook::OnPause()
+{
+	isPause = true;
+
+	for (auto each : bombObjList)
+	{
+		each->GetComponent<ChessBombComponent>()->OnPause();
+	}
+}
+
+void Interactable_ChessRook::OnResume()
+{
+	isPause = false;
+
+	for (auto each : bombObjList)
+	{
+		each->GetComponent<ChessBombComponent>()->OnResume();
+	}
 }

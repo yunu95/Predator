@@ -11,6 +11,7 @@
 #include "UnitCommand.h"
 #include "UnitSkillCommand.h"
 #include "InWanderLand.h"
+#include "ITacticObject.h"
 
 static constexpr std::array<UIEnumID, 12> commandIcons
 {
@@ -100,14 +101,18 @@ void TacticModeSystem::EngageTacticSystem()
     playersPauseRevArr[1] = PlayerController::Instance().GetPlayers()[1].lock()->referencePause.Acquire();
     playersPauseRevArr[2] = PlayerController::Instance().GetPlayers()[2].lock()->referencePause.Acquire();
 
-    if (auto wave = PlaytimeWave::GetCurrentOperatingWave().lock(); wave)
+    auto wave = PlaytimeWave::GetCurrentOperatingWave();
+    if (!wave.expired())
     {
-        wave->StopWaveElapsedTime();
-        for (auto& each : wave->m_currentWaveUnitVector)
+        wave.lock()->StopWaveElapsedTime();
+        for (auto& each : wave.lock()->m_currentWaveUnitVector)
         {
             activateWaveEnemyUnitPauseRefVec.push_back(each->referencePause.Acquire());
         }
     }
+  
+    SFXManager::PlaySoundfile("sounds/Tactical mode/Tactical mode on.wav");
+    ITacticObject::OnPauseAll();
     SyncWithTacticCommandQueueUI();
 }
 
@@ -160,6 +165,7 @@ EnqueErrorType TacticModeSystem::EnqueueCommand(std::shared_ptr<UnitCommand> com
     }
 
     errorType = EnqueErrorType::Success;
+    SFXManager::PlaySoundfile("sounds/Tactical mode/Tactical mode skill registration.wav");
     SyncWithTacticCommandQueueUI();
     return errorType;
 }
@@ -599,12 +605,16 @@ yunutyEngine::coroutine::Coroutine TacticModeSystem::ExecuteInternal()
     }
 
     // Wave의 시간도 흐른다.
-    if (auto wave = PlaytimeWave::GetCurrentOperatingWave().lock(); wave)
+    auto wave = PlaytimeWave::GetCurrentOperatingWave();
+    if (!wave.expired())
     {
-        wave->ResumeWaveElapsedTime();
+        wave.lock()->ResumeWaveElapsedTime();
     }
     // Wave의 적 유닛들도 움직인다.
     activateWaveEnemyUnitPauseRefVec.clear();
+
+    SFXManager::PlaySoundfile("sounds/Tactical mode/Tactical mode off.wav");
+    ITacticObject::OnResumeAll();
 }
 
 void TacticModeSystem::SyncWithTacticCommandQueueUI()

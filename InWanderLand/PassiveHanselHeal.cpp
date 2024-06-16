@@ -11,6 +11,9 @@ coroutine::Coroutine PassiveHanselHeal::CookieLingering(Vector3d pos, std::weak_
     collider.lock()->GetTransform()->SetWorldPosition(pos);
     cookieMesh.lock()->GetTransform()->SetWorldPosition(pos);
     cookieMesh.lock()->GetTransform()->SetLocalScale(pod.cookieScale * Vector3d::one);
+
+    SFXManager::PlaySoundfile("sounds/Hansel/Hansel passive.wav");
+
     coroutine::ForSeconds forSeconds{ pod.cookieLifetime };
     while (forSeconds.Tick())
     {

@@ -26,6 +26,10 @@ public:
 
 	/// Pool 에서 사용하기 위한 초기화 함수입니다.
 	void OnReturn();
+	
+	/// ChessObject 에서 사용하기 위한 함수입니다.
+	void OnPause();
+	void OnResume();
 
 private:
 	GameObject* guideObj = nullptr;
@@ -33,6 +37,7 @@ private:
 	std::unordered_set<Unit*> unitSet = std::unordered_set<Unit*>();
 	float bombTime = 0;
 	bool coroutineStart = false;
+	bool isPause = false;
 	std::weak_ptr<yunutyEngine::coroutine::Coroutine> lastCoroutine = std::weak_ptr<yunutyEngine::coroutine::Coroutine>();
 };
 

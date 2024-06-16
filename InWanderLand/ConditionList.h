@@ -7,3 +7,4 @@
 
 #include "Condition_CinematicMode.h"
 #include "Condition_TutorialMode.h"
+#include "Condition_TacticMode.h"

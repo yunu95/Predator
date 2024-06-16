@@ -27,6 +27,8 @@ namespace application
         conditionList.push_back({ ConditionType::CinematicModeOff, "CinematicModeOff" });
         conditionList.push_back({ ConditionType::TutorialModeOn, "TutorialModeOn" });
         conditionList.push_back({ ConditionType::TutorialModeOff, "TutorialModeOff" });
+        conditionList.push_back({ ConditionType::TacticModeOn, "TacticModeOn" });
+        conditionList.push_back({ ConditionType::TacticModeOff, "TacticModeOff" });
 
         /// Action
         actionList.push_back({ ActionType::WaitPreviousActionEnd, "WaitPreviousActionEnd" });
@@ -67,6 +69,7 @@ namespace application
         actionList.push_back({ ActionType::OrnamentFloating,"OrnamentFloating" });
         actionList.push_back({ ActionType::BossAppear,"BossAppear" });
         actionList.push_back({ ActionType::EngageBattle,"EngageBattle" });
+        actionList.push_back({ ActionType::EngagePeace,"EngagePeace" });
     }
 
     Script* ScriptSystem::CreateScript()
