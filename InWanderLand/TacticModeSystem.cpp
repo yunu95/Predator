@@ -13,6 +13,22 @@
 #include "InWanderLand.h"
 #include "ITacticObject.h"
 
+static constexpr std::array<UIEnumID, 12> commandIcons
+{
+    UIEnumID::TacticModeCommandIcon1,
+    UIEnumID::TacticModeCommandIcon2,
+    UIEnumID::TacticModeCommandIcon3,
+    UIEnumID::TacticModeCommandIcon4,
+    UIEnumID::TacticModeCommandIcon5,
+    UIEnumID::TacticModeCommandIcon6,
+    UIEnumID::TacticModeCommandIcon7,
+    UIEnumID::TacticModeCommandIcon8,
+    UIEnumID::TacticModeCommandIcon9,
+    UIEnumID::TacticModeCommandIcon10,
+    UIEnumID::TacticModeCommandIcon11,
+    UIEnumID::TacticModeCommandIcon12
+};
+
 void TacticModeSystem::OnEnable()
 {
 
@@ -94,9 +110,10 @@ void TacticModeSystem::EngageTacticSystem()
             activateWaveEnemyUnitPauseRefVec.push_back(each->referencePause.Acquire());
         }
     }
-
+  
     SFXManager::PlaySoundfile("sounds/Tactical mode/Tactical mode on.wav");
     ITacticObject::OnPauseAll();
+    SyncWithTacticCommandQueueUI();
 }
 
 EnqueErrorType TacticModeSystem::EnqueueCommand(std::shared_ptr<UnitCommand> command)
@@ -148,9 +165,8 @@ EnqueErrorType TacticModeSystem::EnqueueCommand(std::shared_ptr<UnitCommand> com
     }
 
     errorType = EnqueErrorType::Success;
-
     SFXManager::PlaySoundfile("sounds/Tactical mode/Tactical mode skill registration.wav");
-
+    SyncWithTacticCommandQueueUI();
     return errorType;
 }
 
@@ -487,6 +503,7 @@ void TacticModeSystem::PopCommand()
     {
         this->hanselLastCommand = nullptr;
     }
+    SyncWithTacticCommandQueueUI();
 }
 
 void TacticModeSystem::InterruptedCommand(Unit* unit)
@@ -542,10 +559,12 @@ void TacticModeSystem::ClearCommand()
     this->robinLastCommand = nullptr;
     this->ursulaLastCommand = nullptr;
     this->hanselLastCommand = nullptr;
+    SyncWithTacticCommandQueueUI();
 }
 
 yunutyEngine::coroutine::Coroutine TacticModeSystem::ExecuteInternal()
 {
+    int iconIndex = 0;
     for (auto& each : this->commandList)
     {
         if (!each->IsDone())
@@ -562,6 +581,8 @@ yunutyEngine::coroutine::Coroutine TacticModeSystem::ExecuteInternal()
             this->playersPauseRevArr[each->GetPlayerType()] = PlayerController::Instance().GetPlayers()[each->GetPlayerType()].lock()->referencePause.Acquire();
             each->HidePreviewMesh();
         }
+        UIManager::Instance().GetUIElementByEnum(commandIcons[iconIndex])->DisableElement();
+        iconIndex++;
     }
 
     this->commandList.clear();
@@ -594,4 +615,22 @@ yunutyEngine::coroutine::Coroutine TacticModeSystem::ExecuteInternal()
 
     SFXManager::PlaySoundfile("sounds/Tactical mode/Tactical mode off.wav");
     ITacticObject::OnResumeAll();
+}
+
+void TacticModeSystem::SyncWithTacticCommandQueueUI()
+{
+    int idx = 0;
+    for (auto& eachCmd : commandList)
+    {
+        eachCmd->GetCommandType();
+        auto uiElement = UIManager::Instance().GetUIElementByEnum(commandIcons[idx]);
+        uiElement->EnableElement();
+        uiElement->imageComponent.lock()->GetGI().SetImage(eachCmd->GetIconTexture());
+        idx++;
+    }
+    while (idx < commandIcons.size())
+    {
+        UIManager::Instance().GetUIElementByEnum(commandIcons[idx])->DisableElement();
+        idx++;
+    }
 }

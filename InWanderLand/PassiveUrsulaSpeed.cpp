@@ -21,10 +21,10 @@ float PassiveUrsula::GetDuration()
 
 float PassiveUrsula::GetAttackSpeedBonusPerStack()
 {
-    return PlayerController::Instance().IsSkillUpgraded(SkillUpgradeType::URSULA_PASSIVE_ENHANCE) ? pod.attackDamageBonusPerStackUpgraded : pod.attackDamageBonusPerStack;
+    return PlayerController::Instance().IsSkillUpgraded(SkillUpgradeType::URSULA_PASSIVE_ENHANCE) ? pod.critChanceBonusPerStackUpgraded : pod.critChanceBonusPerStack;
 }
 
-float PassiveUrsula::GetAttackDamageBonusPerStack()
+float PassiveUrsula::GetCritChanceBonusPerStack()
 {
-    return PlayerController::Instance().IsSkillUpgraded(SkillUpgradeType::URSULA_PASSIVE_ENHANCE) ? pod.attackDamageBonusPerStack : pod.attackDamageBonusPerStackUpgraded;
+    return PlayerController::Instance().IsSkillUpgraded(SkillUpgradeType::URSULA_PASSIVE_ENHANCE) ? pod.critChanceBonusPerStack : pod.critChanceBonusPerStackUpgraded;
 }

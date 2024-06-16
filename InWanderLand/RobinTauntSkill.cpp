@@ -95,6 +95,7 @@ coroutine::Coroutine RobinTauntSkill::SpawningSkillffect(std::weak_ptr<RobinTaun
                     tauntList.insert(each);
                     /// 도발
                     /// 도발 대상은 skillTauntTime 동안 Robin 공격하게 되어야 함
+                    each->ApplyBuff(UnitBuffTaunted{ owner });
                     each->OrderAttack(owner);
                     each->Damaged(owner, GetSkillDamage());
                 }

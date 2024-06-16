@@ -7,8 +7,8 @@ struct POD_PassiveUrsulaSpeed
     float durationUpgraded = 10.0f;
     float attackSpeedBonusPerStack = 0.1f;
     float attackSpeedBonusPerStackUpgraded = 0.1f;
-    float attackDamageBonusPerStack = 0.1f;
-    float attackDamageBonusPerStackUpgraded = 0.1f;
+    float critChanceBonusPerStack = 0.1f;
+    float critChanceBonusPerStackUpgraded = 0.1f;
     int maxStack = 10;
 
     TO_JSON(POD_PassiveUrsulaSpeed)
@@ -23,7 +23,7 @@ public:
     static POD_PassiveUrsulaSpeed pod;
     static float GetDuration();
     static float GetAttackSpeedBonusPerStack();
-    static float GetAttackDamageBonusPerStack();
+    static float GetCritChanceBonusPerStack();
 private:
 };
 

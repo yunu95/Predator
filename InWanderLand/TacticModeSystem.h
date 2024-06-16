@@ -73,6 +73,8 @@ public:
 private:
     // 전술모드 내부에서 등록된 명령들을 실행해주는 함수입니다.
     coroutine::Coroutine ExecuteInternal();
+    // 커맨드 큐 상태와 커맨드 큐 UI의 상태를 서로 동기화시켜줍니다.
+    void SyncWithTacticCommandQueueUI();
 
 private:
     std::list<std::shared_ptr<UnitCommand>> commandList;
@@ -86,7 +88,7 @@ private:
     float coolTime;
     float elapsedTime;
 
-    const int MAX_COMMAND_COUNT = 6;
+    static constexpr int MAX_COMMAND_COUNT = 6;
 
     std::array<std::shared_ptr<Reference::Guard>, 3> playersPauseRevArr;
     std::vector< std::shared_ptr<Reference::Guard>> activateWaveEnemyUnitPauseRefVec;
