@@ -102,6 +102,26 @@ UnitSkillCommand::~UnitSkillCommand()
 
 }
 
+yunuGI::ITexture* UnitSkillCommand::GetIconTexture()
+{
+    static yunuGI::ITexture* iconRobinQ = graphics::Renderer::SingleInstance().GetResourceManager()->GetTexture(L"Texture/Ingame/NewFolder/Skill_RobinQ.dds");
+    static yunuGI::ITexture* iconRobinW = graphics::Renderer::SingleInstance().GetResourceManager()->GetTexture(L"Texture/Ingame/NewFolder/Skill_RobinW.dds");
+    static yunuGI::ITexture* iconUrsulaQ = graphics::Renderer::SingleInstance().GetResourceManager()->GetTexture(L"Texture/Ingame/NewFolder/Skill_UrsulaQ.dds");
+    static yunuGI::ITexture* iconUrsulaW = graphics::Renderer::SingleInstance().GetResourceManager()->GetTexture(L"Texture/Ingame/NewFolder/Skill_UrsulaW.dds");
+    static yunuGI::ITexture* HanselQ = graphics::Renderer::SingleInstance().GetResourceManager()->GetTexture(L"Texture/Ingame/NewFolder/Skill_HanselQ.dds");
+    static yunuGI::ITexture* HanselW = graphics::Renderer::SingleInstance().GetResourceManager()->GetTexture(L"Texture/Ingame/NewFolder/Skill_HanselW.dds");
+    switch (skillType)
+    {
+    case SkillType::ROBIN_Q: return iconRobinQ;
+    case SkillType::ROBIN_W: return iconRobinW;
+    case SkillType::URSULA_Q: return iconUrsulaQ;
+    case SkillType::URSULA_W: return iconUrsulaW;
+    case SkillType::HANSEL_Q: return HanselQ;
+    case SkillType::HANSEL_W: return HanselW;
+    }
+    return nullptr;
+}
+
 void UnitSkillCommand::Execute()
 {
     switch (skillType)

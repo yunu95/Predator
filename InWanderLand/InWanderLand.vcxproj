@@ -1970,8 +1970,11 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="UnitBehaviourTree.h" />
     <ClInclude Include="UnitBuff.h" />
     <ClInclude Include="UnitBuffBleeding.h" />
-    <ClInclude Include="UnitBuffHansel.h" />
+    <ClInclude Include="UnitBuffBlinded.h" />
+    <ClInclude Include="UnitBuffHanselBuff.h" />
+    <ClInclude Include="UnitBuffHanselDebuff.h" />
     <ClInclude Include="UnitBuffInvulenerability.h" />
+    <ClInclude Include="UnitBuffTaunted.h" />
     <ClInclude Include="UnitBuffType.h" />
     <ClInclude Include="UnitBuffUrsula.h" />
     <ClInclude Include="UnitCommand.h" />
@@ -2987,8 +2990,11 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="UnitBrush.cpp" />
     <ClCompile Include="UnitBuff.cpp" />
     <ClCompile Include="UnitBuffBleeding.cpp" />
-    <ClCompile Include="UnitBuffHansel.cpp" />
+    <ClCompile Include="UnitBuffBlinded.cpp" />
+    <ClCompile Include="UnitBuffHanselBuff.cpp" />
+    <ClCompile Include="UnitBuffHanselDebuff.cpp" />
     <ClCompile Include="UnitBuffInvulenerability.cpp" />
+    <ClCompile Include="UnitBuffTaunted.cpp" />
     <ClCompile Include="UnitBuffUrsula.cpp" />
     <ClCompile Include="UnitCommand.cpp" />
     <ClCompile Include="UnitController.cpp" />

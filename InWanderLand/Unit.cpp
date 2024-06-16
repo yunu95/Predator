@@ -210,16 +210,16 @@ void Unit::OnStateExit<UnitBehaviourTree::Attack>()
 template<>
 void Unit::OnStateUpdate<UnitBehaviourTree::Attack>()
 {
-	if (currentTargetUnit.expired())
-	{
-		OrderHold();
-		return;
-	}
-	SetDesiredRotation(currentTargetUnit.lock()->GetTransform()->GetWorldPosition() - GetTransform()->GetWorldPosition());
-	if (!referenceBlockAttack.BeingReferenced())
-	{
-		coroutineAttack = StartCoroutine(AttackCoroutine(currentTargetUnit));
-	}
+    if (currentTargetUnit.expired())
+    {
+        OrderHold();
+        return;
+    }
+    SetDesiredRotation(currentTargetUnit.lock()->GetTransform()->GetWorldPosition() - GetTransform()->GetWorldPosition());
+    if (!referenceBlockAttack.BeingReferenced())
+    {
+        coroutineAttack = StartCoroutine(AttackCoroutine(currentTargetUnit));
+    }
 }
 template<>
 void Unit::OnStateEngage<UnitBehaviourTree::Move>()
@@ -845,6 +845,7 @@ void Unit::Summon(const application::editor::UnitData* unitData)
 {
     this->unitData = unitData;
     unitData->inGameUnit = GetWeakPtr<Unit>();
+    Summon(unitData->GetUnitTemplateData());
 
     GetTransform()->SetWorldPosition(Vector3d{ unitData->pod.position });
     navAgentComponent.lock()->GetTransform()->SetWorldPosition(Vector3d{ unitData->pod.position });
@@ -860,7 +861,6 @@ void Unit::Summon(const application::editor::UnitData* unitData)
     onRotationFinish = unitData->onRotationFinish;
     onStateEngage = unitData->onStateEngage;
     onStateExit = unitData->onStateExit;
-    Summon(unitData->GetUnitTemplateData());
 
     Quaternion quat{ unitData->pod.rotation.w,unitData->pod.rotation.x,unitData->pod.rotation.y ,unitData->pod.rotation.z };
     auto forward = quat.Forward();
@@ -870,6 +870,7 @@ void Unit::Summon(const application::editor::UnitData* unitData)
 void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& position, float rotation, bool instant)
 {
     this->unitData = nullptr;
+    Summon(td);
     Reset();
     onAttack.Clear();
     onAttackHit.Clear();
@@ -884,7 +885,6 @@ void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& po
     {
         each.Clear();
     }
-    Summon(td);
 
     GetTransform()->SetWorldPosition(Vector3d{ position });
     navAgentComponent.lock()->GetTransform()->SetWorldPosition(Vector3d{ position });
@@ -905,6 +905,7 @@ void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& po
 void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& position, const Quaternion& rotation, bool instant)
 {
     this->unitData = nullptr;
+    Summon(td);
     Reset();
     onAttack.Clear();
     onAttackHit.Clear();
@@ -919,7 +920,6 @@ void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& po
     {
         each.Clear();
     }
-    Summon(td);
 
     GetTransform()->SetWorldPosition(Vector3d{ position });
     navAgentComponent.lock()->GetTransform()->SetWorldPosition(Vector3d{ position });
@@ -1391,18 +1391,18 @@ yunutyEngine::coroutine::Coroutine Unit::AttackCoroutine(std::weak_ptr<Unit> opp
 
     switch (unitTemplateData->pod.attackType.enumValue)
     {
-        case UnitAttackType::MELEE:
-        {
-            if (!coroutineAttackEffect.expired())
-                FBXPool::Instance().Return(attackVFX);
+    case UnitAttackType::MELEE:
+    {
+        if (!coroutineAttackEffect.expired())
+            FBXPool::Instance().Return(attackVFX);
 
-            coroutineAttackEffect = StartCoroutine(MeleeAttackEffectCoroutine(opponent));
-            coroutineAttackEffect.lock()->PushDestroyCallBack([this]()
-                {
-                    FBXPool::Instance().Return(attackVFX);
-                });
-            break;
-        }
+        coroutineAttackEffect = StartCoroutine(MeleeAttackEffectCoroutine(opponent));
+        coroutineAttackEffect.lock()->PushDestroyCallBack([this]()
+            {
+                FBXPool::Instance().Return(attackVFX);
+            });
+        break;
+    }
     }
 
     float playSpeed = animatorComponent.lock()->GetGI().GetPlaySpeed();
@@ -1414,7 +1414,10 @@ yunutyEngine::coroutine::Coroutine Unit::AttackCoroutine(std::weak_ptr<Unit> opp
     {
     case UnitAttackType::MELEE:
     {
-        opponent.lock()->Damaged(GetWeakPtr<Unit>(), unitTemplateData->pod.m_autoAttackDamage + adderAttackDamage, DamageType::Attack);
+        if (!referenceBlindness.BeingReferenced())
+        {
+            opponent.lock()->Damaged(GetWeakPtr<Unit>(), unitTemplateData->pod.m_autoAttackDamage + adderAttackDamage, DamageType::Attack);
+        }
         if (!coroutineAttackEffect.expired())
         {
             attackVFX.lock()->GetGameObject()->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
@@ -1422,12 +1425,12 @@ yunutyEngine::coroutine::Coroutine Unit::AttackCoroutine(std::weak_ptr<Unit> opp
         }
         break;
     }
-     case UnitAttackType::MISSILE:
-     {
-         auto projectile = ProjectilePool::SingleInstance().Borrow(GetWeakPtr<Unit>(), opponent.lock()->GetTransform()->GetWorldPosition(), static_cast<ProjectileType::Enum>(unitTemplateData->pod.projectileType.enumValue), static_cast<ProjectileHoming::Enum>(unitTemplateData->pod.projectileHoming.enumValue));
-         projectile.lock()->GetTransform()->SetLocalScale(Vector3d::one * unitTemplateData->pod.projectile_scale);
-         break;
-     }
+    case UnitAttackType::MISSILE:
+    {
+        auto projectile = ProjectilePool::SingleInstance().Borrow(GetWeakPtr<Unit>(), opponent.lock()->GetTransform()->GetWorldPosition(), static_cast<ProjectileType::Enum>(unitTemplateData->pod.projectileType.enumValue), static_cast<ProjectileHoming::Enum>(unitTemplateData->pod.projectileHoming.enumValue));
+        projectile.lock()->GetTransform()->SetLocalScale(Vector3d::one * unitTemplateData->pod.projectile_scale);
+        break;
+    }
     }
     StartCoroutine(referenceBlockAttack.AcquireForSecondsCoroutine(finalAttackCooltime - unitTemplateData->pod.m_attackPreDelay * attackDelayMultiplier));
     auto blockCommand = referenceBlockPendingOrder.Acquire();
