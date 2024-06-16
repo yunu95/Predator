@@ -41,7 +41,7 @@ void UIManager::FadeOutRight(float duration)
 {
     if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_LeftToRight); !elm->GetGameObject()->GetActive())
     {
-        elm->enableTransition->pushDuration = duration;
+        elm->enableTransition->duration = duration;
         elm->EnableElement();
     }
 }
@@ -49,7 +49,7 @@ void UIManager::FadeOutLeft(float duration)
 {
     if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_RightToLeft); !elm->GetGameObject()->GetActive())
     {
-        elm->enableTransition->pushDuration = duration;
+        elm->enableTransition->duration = duration;
         elm->EnableElement();
     }
 }
@@ -57,7 +57,7 @@ void UIManager::FadeOutBottom(float duration)
 {
     if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_TopToBottom); !elm->GetGameObject()->GetActive())
     {
-        elm->enableTransition->pushDuration = duration;
+        elm->enableTransition->duration = duration;
         elm->EnableElement();
     }
 }
@@ -65,7 +65,7 @@ void UIManager::FadeOutTop(float duration)
 {
     if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_BottomToTop); !elm->GetGameObject()->GetActive())
     {
-        elm->enableTransition->pushDuration = duration;
+        elm->enableTransition->duration = duration;
         elm->EnableElement();
     }
 }
@@ -73,22 +73,22 @@ void UIManager::FadeIn(float duration)
 {
     if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_TopToBottom); elm->GetGameObject()->GetActive())
     {
-        elm->disableTransition->pushDuration = duration;
+        elm->disableTransition->duration = duration;
         elm->DisableElement();
     }
     if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_RightToLeft); elm->GetGameObject()->GetActive())
     {
-        elm->disableTransition->pushDuration = duration;
+        elm->disableTransition->duration = duration;
         elm->DisableElement();
     }
     if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_BottomToTop); elm->GetGameObject()->GetActive())
     {
-        elm->disableTransition->pushDuration = duration;
+        elm->disableTransition->duration = duration;
         elm->DisableElement();
     }
     if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_LeftToRight); elm->GetGameObject()->GetActive())
     {
-        elm->disableTransition->pushDuration = duration;
+        elm->disableTransition->duration = duration;
         elm->DisableElement();
     }
 }
@@ -620,7 +620,7 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
     if (uiData.customFlags & (int)UIExportFlag::TimeStopOnEnable)
     {
         element->timePauseOnEnable = uiObject->AddComponent<TimePauseTimer>();
-        element->timePauseOnEnable->pushDuration = uiData.floats[JsonUIFloatType::timeStoppingDuration];
+        element->timePauseOnEnable->duration = uiData.floats[JsonUIFloatType::timeStoppingDuration];
         element->timePauseOnEnable->Init();
     };
     if (uiData.customFlags & (int)UIExportFlag::ColorTintOnEnable)
@@ -629,7 +629,7 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
         element->colorTintOnEnable->uiImage = element->imageComponent.lock().get();
         element->colorTintOnEnable->startColor = yunuGI::Color{ uiData.colorTintOnEnableStart[0],uiData.colorTintOnEnableStart[1],uiData.colorTintOnEnableStart[2],uiData.colorTintOnEnableStart[3] };
         element->colorTintOnEnable->endColor = yunuGI::Color{ uiData.colorTintOnEnableEnd[0],uiData.colorTintOnEnableEnd[1],uiData.colorTintOnEnableEnd[2],uiData.colorTintOnEnableEnd[3] };
-        element->colorTintOnEnable->pushDuration = uiData.floats[JsonUIFloatType::colorTintOnEnableDuration];
+        element->colorTintOnEnable->duration = uiData.floats[JsonUIFloatType::colorTintOnEnableDuration];
         element->colorTintOnEnable->uiCurveType = uiData.colorTintOnEnableCurveType;
         element->colorTintOnEnable->disableOnEnd = false;
         element->colorTintOnEnable->Init();
@@ -640,7 +640,7 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
         element->colorTintOnDisable->uiImage = element->imageComponent.lock().get();
         element->colorTintOnDisable->startColor = yunuGI::Color{ uiData.colorTintOnDisableStart[0],uiData.colorTintOnDisableStart[1],uiData.colorTintOnDisableStart[2],uiData.colorTintOnDisableStart[3] };
         element->colorTintOnDisable->endColor = yunuGI::Color{ uiData.colorTintOnDisableEnd[0],uiData.colorTintOnDisableEnd[1],uiData.colorTintOnDisableEnd[2],uiData.colorTintOnDisableEnd[3] };
-        element->colorTintOnDisable->pushDuration = uiData.floats[JsonUIFloatType::colorTintOnDisableDuration];
+        element->colorTintOnDisable->duration = uiData.floats[JsonUIFloatType::colorTintOnDisableDuration];
         element->colorTintOnDisable->uiCurveType = uiData.colorTintOnDisableCurveType;
         element->colorTintOnDisable->disableOnEnd = true;
         element->colorTintOnDisable->Init();
@@ -651,7 +651,7 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
         element->linearClippingTimerOnEnable->uiImage = element->imageComponent.lock().get();
         element->linearClippingTimerOnEnable->clipDirection = { uiData.linearClipOnEnableDir[0], uiData.linearClipOnEnableDir[1] };
         element->linearClippingTimerOnEnable->disableOnEnd = false;
-        element->linearClippingTimerOnEnable->pushDuration = uiData.floats[JsonUIFloatType::linearClipOnEnableDuration];
+        element->linearClippingTimerOnEnable->duration = uiData.floats[JsonUIFloatType::linearClipOnEnableDuration];
         element->linearClippingTimerOnEnable->startPos = { uiData.linearClipOnEnableStart[0], uiData.linearClipOnEnableStart[1] };
         element->linearClippingTimerOnEnable->uiCurveType = uiData.linearClipOnEnableCurveType;
         element->linearClippingTimerOnEnable->reverseOffset = false;
@@ -663,7 +663,7 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
         element->linearClippingTimerOnDisable->uiImage = element->imageComponent.lock().get();
         element->linearClippingTimerOnDisable->clipDirection = { uiData.linearClipOnDisableDir[0], uiData.linearClipOnDisableDir[1] };
         element->linearClippingTimerOnDisable->disableOnEnd = true;
-        element->linearClippingTimerOnDisable->pushDuration = uiData.floats[JsonUIFloatType::linearClipOnDisableDuration];
+        element->linearClippingTimerOnDisable->duration = uiData.floats[JsonUIFloatType::linearClipOnDisableDuration];
         element->linearClippingTimerOnDisable->startPos = { uiData.linearClipOnDisableStart[0], uiData.linearClipOnDisableStart[1] };
         element->linearClippingTimerOnDisable->uiCurveType = uiData.linearClipOnDisableCurveType;
         element->linearClippingTimerOnDisable->reverseOffset = true;
@@ -704,7 +704,7 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
     {
         element->disableAfterEnable = element->GetGameObject()->AddComponent<TimerComponent>();
         element->disableAfterEnable->isRealtime = true;
-        element->disableAfterEnable->pushDuration = uiData.floats[JsonUIFloatType::disableAfterEnable_delayUntilDisable];
+        element->disableAfterEnable->duration = uiData.floats[JsonUIFloatType::disableAfterEnable_delayUntilDisable];
         element->disableAfterEnable->onCompleteFunction = [=]() {element->DisableElement(); };
     }
     if (uiData.customFlags2 & (int)UIExportFlag2::Dialogue_Manual)
@@ -912,7 +912,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
     if (uiData.customFlags & (int)UIExportFlag::IsPoppingUp)
     {
         element->scalePopUpTransition = element->GetGameObject()->AddComponent<PopupOnEnable>();
-        element->scalePopUpTransition->pushDuration = uiData.floats[JsonUIFloatType::popUpDuration];
+        element->scalePopUpTransition->duration = uiData.floats[JsonUIFloatType::popUpDuration];
         element->scalePopUpTransition->popUpFrom = uiData.floats[JsonUIFloatType::popUpFrom];
         element->scalePopUpTransition->popUpTo = uiData.floats[JsonUIFloatType::popUpTo];
         element->scalePopUpTransition->x = uiData.popUpX;
@@ -923,7 +923,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
     if (uiData.customFlags & (int)UIExportFlag::IsPoppingDown)
     {
         element->scalePopDownTransition = element->GetGameObject()->AddComponent<PopDownOnDisable>();
-        element->scalePopDownTransition->pushDuration = uiData.floats[JsonUIFloatType::popDownDuration];
+        element->scalePopDownTransition->duration = uiData.floats[JsonUIFloatType::popDownDuration];
         element->scalePopDownTransition->popDownTo = uiData.floats[JsonUIFloatType::popDownTo];
         element->scalePopDownTransition->x = uiData.popDownX;
         element->scalePopDownTransition->y = uiData.popDownY;
@@ -934,7 +934,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
     {
         auto pulsingUI = element->GetGameObject()->AddComponent<PulsingUI>();
         pulsingUI->uiElement = element;
-        pulsingUI->pushDuration = uiData.floats[JsonUIFloatType::pulsingPeriod];
+        pulsingUI->duration = uiData.floats[JsonUIFloatType::pulsingPeriod];
         pulsingUI->pulsingMin = uiData.floats[JsonUIFloatType::pulsingMin];
         pulsingUI->pulsingMax = uiData.floats[JsonUIFloatType::pulsingMax];
         pulsingUI->Init();
@@ -953,7 +953,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
     {
         element->soundOnClick = element->GetGameObject()->AddComponent<SoundPlayingTimer>();
         element->soundOnClick->soundPath = uiData.soundOnClick;
-        element->soundOnClick->pushDuration = uiData.floats[JsonUIFloatType::soundOnClick_delay];
+        element->soundOnClick->duration = uiData.floats[JsonUIFloatType::soundOnClick_delay];
         element->button->AddButtonClickFunction([=]()
             {
                 element->soundOnClick->ActivateTimer();
@@ -964,7 +964,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
     {
         element->soundOnHover = element->GetGameObject()->AddComponent<SoundPlayingTimer>();
         element->soundOnHover->soundPath = uiData.soundOnHover;
-        element->soundOnHover->pushDuration = uiData.floats[JsonUIFloatType::soundOnHover_delay];
+        element->soundOnHover->duration = uiData.floats[JsonUIFloatType::soundOnHover_delay];
         element->button->AddButtonOnMouseFunction([=]()
             {
                 element->soundOnHover->ActivateTimer();
@@ -975,20 +975,21 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
     {
         element->soundOnEnable = element->GetGameObject()->AddComponent<SoundPlayingTimer>();
         element->soundOnEnable->soundPath = uiData.soundOnEnable;
-        element->soundOnEnable->pushDuration = uiData.floats[JsonUIFloatType::soundOnEnable_delay];
+        element->soundOnEnable->duration = uiData.floats[JsonUIFloatType::soundOnEnable_delay];
         element->soundOnEnable->Init();
     }
     if (uiData.customFlags & (int)UIExportFlag::PlaySoundOnDisable)
     {
         element->soundOnDisable = element->GetGameObject()->AddComponent<SoundPlayingTimer>();
         element->soundOnDisable->soundPath = uiData.soundOnDisable;
-        element->soundOnDisable->pushDuration = uiData.floats[JsonUIFloatType::soundOnDisable_delay];
+        element->soundOnDisable->duration = uiData.floats[JsonUIFloatType::soundOnDisable_delay];
         element->soundOnDisable->Init();
     }
 
     if (uiData.customFlags & (int)UIExportFlag::PriorityLayout)
     {
         element->priorityLayout = element->GetGameObject()->AddComponent<UIPriorityLayout>();
+        element->priorityLayout->duration = uiData.floats[JsonUIFloatType::layoutNormalizingTime];
         for (auto each : element->GetGameObject()->GetChildren())
         {
             if (auto child = each->GetComponent<UIElement>())

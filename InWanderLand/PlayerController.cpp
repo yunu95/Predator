@@ -705,6 +705,7 @@ void PlayerController::SetState(State::Enum newState)
     {
     case PlayerController::State::Tactic:
         UIManager::Instance().GetUIElementByEnum(UIEnumID::TacticModeIngameUI)->DisableElement();
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Bottom_Layout)->EnableElement();
         break;
     }
     state = newState;
@@ -726,6 +727,7 @@ void PlayerController::SetState(State::Enum newState)
         break;
     case State::Tactic:
         UIManager::Instance().GetUIElementByEnum(UIEnumID::TacticModeIngameUI)->EnableElement();
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Bottom_Layout)->DisableElement();
         UnSelectSkill();
         break;
     }
