@@ -19,8 +19,12 @@ public:
 private:
 	void ChangeAttackTarget(const std::weak_ptr<Unit>& unit);
 	coroutine::Coroutine BossAppearCoroutine();
+	coroutine::Coroutine BossAppearEffectCoroutine();
 
+	std::weak_ptr<coroutine::Coroutine> appearEffectCorountine = std::weak_ptr<coroutine::Coroutine>();
 	std::weak_ptr<Unit> boss = std::weak_ptr<Unit>();
+	std::weak_ptr<ManagedFBX> appearEffect = std::weak_ptr<ManagedFBX>();
+
 	int summonState = 0;
 	bool summonDone = true;
 	int currentState = 0;

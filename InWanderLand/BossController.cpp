@@ -1,5 +1,6 @@
 #include "BossController.h"
 #include "InWanderLand.h"
+#include "VFXAnimator.h"
 
 #include "LeftFrame.h"
 #include "RightFrame.h"
@@ -138,6 +139,11 @@ coroutine::Coroutine BossController::BossAppearCoroutine()
 
 	boss.lock()->GetTransform()->SetWorldPosition(boss.lock()->GetTransform()->GetWorldPosition() - Vector3d(0, 0.5, 0));
 	boss.lock()->PlayAnimation(UnitAnimType::Birth, Animation::PlayFlag_::None);
+	appearEffectCorountine = boss.lock()->StartCoroutine(BossAppearCoroutine());
+	appearEffectCorountine.lock()->PushDestroyCallBack([this]()
+		{
+			FBXPool::Instance().Return(appearEffect);
+		});
 	auto anim = wanderResources::GetAnimation(boss.lock()->GetFBXName(), UnitAnimType::Birth);
 	coroutine::ForSeconds forSeconds{ anim->GetDuration() };
 
@@ -145,6 +151,20 @@ coroutine::Coroutine BossController::BossAppearCoroutine()
 	{
 		co_await std::suspend_always();
 	}
+	co_return;
+}
+
+coroutine::Coroutine BossController::BossAppearEffectCoroutine()
+{
+	appearEffect = FBXPool::Instance().Borrow("VFX_HeartQueen_Appear");
+	appearEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(boss.lock()->GetTransform()->GetWorldPosition());
+	appearEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(boss.lock()->GetTransform()->GetWorldRotation());
+	auto appearEffectAnimator = appearEffect.lock()->AcquireVFXAnimator();
+	appearEffectAnimator.lock()->SetLoop(true);
+	appearEffectAnimator.lock()->SetAutoActiveFalse();
+	appearEffectAnimator.lock()->Init();
+	appearEffectAnimator.lock()->Play();
+	
 	co_return;
 }
 
