@@ -80,7 +80,7 @@ void Interactable_TrapArms::Start()
 
 void Interactable_TrapArms::Update()
 {
-	if (triggerOn)
+	if (!isPause && triggerOn)
 	{
 		if (!isInteracting)
 		{
@@ -93,8 +93,6 @@ void Interactable_TrapArms::Update()
 			OnInteractableTriggerExit();
 		}
 	}
-
-	/// 내부로 들어온 유닛이 죽었을 때, 리스트에서 제외하는 로직 필요함
 }
 
 void Interactable_TrapArms::OnTriggerEnter(physics::Collider* collider)
@@ -129,6 +127,11 @@ yunutyEngine::coroutine::Coroutine Interactable_TrapArms::DoInteraction()
 	{
 		while (ratio < 1)
 		{
+			while (isPause)
+			{
+				co_await std::suspend_always();
+			}
+
 			animationTimer += yunutyEngine::Time::GetDeltaTime();
 			ratio = animationTimer / delayTime;
 			if (ratio > 1)
@@ -144,6 +147,11 @@ yunutyEngine::coroutine::Coroutine Interactable_TrapArms::DoInteraction()
 	animationTimer = 0;
 	while (ratio < 1)
 	{
+		while (isPause)
+		{
+			co_await std::suspend_always();
+		}
+
 		animationTimer += yunutyEngine::Time::GetDeltaTime();
 		ratio = animationTimer / 0.3;
 		if (ratio > 1)
@@ -170,6 +178,11 @@ yunutyEngine::coroutine::Coroutine Interactable_TrapArms::DoInteraction()
 	animationTimer = 0;
 	while (ratio < 1)
 	{
+		while (isPause)
+		{
+			co_await std::suspend_always();
+		}
+
 		animationTimer += yunutyEngine::Time::GetDeltaTime();
 		ratio = animationTimer / 0.5;
 		if (ratio > 1)
@@ -199,4 +212,24 @@ void Interactable_TrapArms::SetDataFromEditorData(const application::editor::Int
 	initScale.z = data.pod.scale.z;
 	delayTime = data.pod.templateData->pod.delayTime;
 	damage = data.pod.templateData->pod.damage;
+}
+
+void Interactable_TrapArms::OnPause()
+{
+	isPause = true;
+
+	if (particleObj)
+	{
+		particleObj->GetComponent<graphics::ParticleRenderer>()->Pause();
+	}
+}
+
+void Interactable_TrapArms::OnResume()
+{
+	isPause = false;
+
+	if (particleObj)
+	{
+		particleObj->GetComponent<graphics::ParticleRenderer>()->Resume();
+	}
 }

@@ -61,6 +61,8 @@ namespace BossSummon
 
 		void OnBossDie();
 
+		static std::set<std::weak_ptr<ChessObject>, CustomCompChessObject>& GetSummonChesses();
+
 	private:
 		std::map<std::weak_ptr<ChessObject>, int, CustomCompChessObject> borrowedChess = std::map<std::weak_ptr<ChessObject>, int, CustomCompChessObject>();
 	};

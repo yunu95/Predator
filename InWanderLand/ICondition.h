@@ -21,7 +21,9 @@ namespace application
 		CinematicModeOn,
 		CinematicModeOff,
 		TutorialModeOn,
-		TutorialModeOff
+		TutorialModeOff,
+		TacticModeOn,
+		TacticModeOff,
 	};
 
 	struct ICondition

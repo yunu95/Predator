@@ -36,5 +36,8 @@ namespace BossSummon
 
 		virtual Component* GetComponent() override { return this; }
 		virtual Component* GetSummonComponent() override { return this; }
+
+		virtual void OnPause() override;
+		virtual void OnResume() override;
 	};
 }

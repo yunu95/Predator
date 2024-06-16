@@ -856,6 +856,9 @@
     <Filter Include="Contents\TacticModeSystem\ITacticObject">
       <UniqueIdentifier>{b12f3552-2555-4de0-b53b-226f40f34213}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor\ScriptSystem\2_Action\List\Action_EngagePeace">
+      <UniqueIdentifier>{0b2355b1-29dc-49bf-a5ac-437da5f5bb5a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -2071,6 +2074,12 @@
     <ClInclude Include="ITacticObject.h">
       <Filter>Contents\TacticModeSystem\ITacticObject</Filter>
     </ClInclude>
+    <ClInclude Include="Action_EngagePeace.h">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_EngagePeace</Filter>
+    </ClInclude>
+    <ClInclude Include="Condition_TacticMode.h">
+      <Filter>Editor\ScriptSystem\1_Condition\List</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -3081,6 +3090,15 @@
     </ClCompile>
     <ClCompile Include="UIVideoPlayer.cpp">
       <Filter>UI\Effect\UIVideoPlayer</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_EngagePeace.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_EngagePeace</Filter>
+    </ClCompile>
+    <ClCompile Include="Condition_TacticMode.cpp">
+      <Filter>Editor\ScriptSystem\1_Condition\List</Filter>
+    </ClCompile>
+    <ClCompile Include="ITacticObject.cpp">
+      <Filter>Contents\TacticModeSystem\ITacticObject</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

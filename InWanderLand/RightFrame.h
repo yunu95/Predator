@@ -43,6 +43,9 @@ namespace BossSummon
 		virtual Component* GetComponent() override { return this; }
 		virtual Component* GetSummonComponent() override { return this; }
 
+		virtual void OnPause() override;
+		virtual void OnResume() override;
+
 		bool HasChangedUnit() const { return !unitFrame.expired(); }
 		bool IsAlive() const;
 
@@ -65,6 +68,7 @@ namespace BossSummon
 		std::set<std::weak_ptr<Unit>, CustomCompUnit> summonUnit = std::set<std::weak_ptr<Unit>, CustomCompUnit>();
 		static application::editor::Unit_TemplateData* meleeUnitMold;
 		static application::editor::Unit_TemplateData* projectileUnitMold;
+		bool isPause = false;
 	};
 
 }

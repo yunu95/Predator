@@ -4,6 +4,8 @@
 #pragma once
 
 #include "YunutyEngine.h"
+#include "ITacticObject.h"
+
 #include <memory>
 
 namespace application
@@ -17,6 +19,7 @@ namespace application
 namespace BossSummon
 {
 	class BossSummonObject
+		: public ITacticObject
 	{
 	public:
 		/// Pool 에서 templateData 를 기준으로 필요한 데이터를 초기화하는 함수입니다.
@@ -35,6 +38,9 @@ namespace BossSummon
 		/// 해당 BossSummonObject 를 상속받는 구체화된 Component 에서
 		/// 자기 자신을 반환하여 이를 통한 작업이 가능하도록 해야합니다.
 		virtual Component* GetSummonComponent() = 0;
+
+		virtual void OnPause() = 0;
+		virtual void OnResume() = 0;
 
 	protected:
 		/// Pool 로 관리할 때, 사용하기 위한 weak_ptr 입니다.

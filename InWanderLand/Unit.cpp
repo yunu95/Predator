@@ -292,6 +292,17 @@ Unit::~Unit()
         Scene::getCurrentScene()->DestroyGameObject(navAgentComponent.lock()->GetGameObject());
     }
 }
+
+void Unit::OnPause()
+{
+    ///
+}
+
+void Unit::OnResume()
+{
+    ///
+}
+
 bool Unit::IsPlayerUnit() const
 {
     return unitTemplateData->pod.playerUnitType.enumValue != PlayerCharacterType::None;

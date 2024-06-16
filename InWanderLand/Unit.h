@@ -19,6 +19,7 @@
 #include "Multiplier.h"
 #include "Reference.h"
 #include "DamageType.h"
+#include "ITacticObject.h"
 
 class ManagedFBX;
 class PassiveSkill;
@@ -42,7 +43,7 @@ namespace application
         class Unit_TemplateData;
     }
 }
-class Unit : public Component, public PermanentObservee
+class Unit : public Component, public PermanentObservee, public ITacticObject
 {
 public:
     static Vector3d FromTo(std::weak_ptr<Unit> from, std::weak_ptr<Unit> to);
@@ -113,6 +114,10 @@ public:
     virtual void Update() override;
     virtual void OnDestroy() override;
     virtual ~Unit();
+
+    virtual void OnPause() override;
+    virtual void OnResume() override;
+
     bool IsPlayerUnit() const;
     bool IsInvulenerable() const;
     bool IsAlive()const;

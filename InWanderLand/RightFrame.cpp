@@ -114,6 +114,26 @@ namespace BossSummon
 		summonCorountine = StartCoroutine(SummonMoldUnit());
 	}
 
+	void RightFrame::OnPause()
+	{
+		isPause = true;
+
+		if (!HasChangedUnit())
+		{
+			GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->Pause();
+		}
+	}
+
+	void RightFrame::OnResume()
+	{
+		isPause = false;
+
+		if (!HasChangedUnit())
+		{
+			GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->Resume();
+		}
+	}
+
 	bool RightFrame::IsAlive() const
 	{
 		return HasChangedUnit() && unitFrame.lock()->IsAlive();

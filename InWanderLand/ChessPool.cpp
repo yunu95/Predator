@@ -198,4 +198,17 @@ namespace BossSummon
 			each.lock()->OnBossDie();
 		}
 	}
+
+	std::set<std::weak_ptr<ChessObject>, CustomCompChessObject>& ChessPool::GetSummonChesses()
+	{
+		static std::set<std::weak_ptr<ChessObject>, CustomCompChessObject> container = std::set<std::weak_ptr<ChessObject>, CustomCompChessObject>();
+		container.clear();
+
+		for (auto [each, idx] : ChessPool::Instance().borrowedChess)
+		{
+			container.insert(each);
+		}
+
+		return container;
+	}
 }

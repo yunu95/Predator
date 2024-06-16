@@ -11,6 +11,7 @@
 #include "UnitCommand.h"
 #include "UnitSkillCommand.h"
 #include "InWanderLand.h"
+#include "ITacticObject.h"
 
 void TacticModeSystem::OnEnable()
 {
@@ -85,11 +86,17 @@ void TacticModeSystem::EngageTacticSystem()
     playersPauseRevArr[2] = PlayerController::Instance().GetPlayers()[2].lock()->referencePause.Acquire();
 
     auto wave = PlaytimeWave::GetCurrentOperatingWave();
-    wave.lock()->StopWaveElapsedTime();
-    for (auto& each : wave.lock()->m_currentWaveUnitVector)
+    if (!wave.expired())
     {
-        activateWaveEnemyUnitPauseRefVec.push_back(each->referencePause.Acquire());
+        wave.lock()->StopWaveElapsedTime();
+        for (auto& each : wave.lock()->m_currentWaveUnitVector)
+        {
+            activateWaveEnemyUnitPauseRefVec.push_back(each->referencePause.Acquire());
+        }
     }
+
+    SFXManager::PlaySoundfile("sounds/Tactical mode/Tactical mode on.wav");
+    ITacticObject::OnPauseAll();
 }
 
 EnqueErrorType TacticModeSystem::EnqueueCommand(std::shared_ptr<UnitCommand> command)
@@ -141,6 +148,9 @@ EnqueErrorType TacticModeSystem::EnqueueCommand(std::shared_ptr<UnitCommand> com
     }
 
     errorType = EnqueErrorType::Success;
+
+    SFXManager::PlaySoundfile("sounds/Tactical mode/Tactical mode skill registration.wav");
+
     return errorType;
 }
 
@@ -575,7 +585,13 @@ yunutyEngine::coroutine::Coroutine TacticModeSystem::ExecuteInternal()
 
     // Wave의 시간도 흐른다.
     auto wave = PlaytimeWave::GetCurrentOperatingWave();
-    wave.lock()->ResumeWaveElapsedTime();
+    if (!wave.expired())
+    {
+        wave.lock()->ResumeWaveElapsedTime();
+    }
     // Wave의 적 유닛들도 움직인다.
     activateWaveEnemyUnitPauseRefVec.clear();
+
+    SFXManager::PlaySoundfile("sounds/Tactical mode/Tactical mode off.wav");
+    ITacticObject::OnResumeAll();
 }
