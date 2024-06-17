@@ -19,6 +19,7 @@
 #include "Multiplier.h"
 #include "Reference.h"
 #include "DamageType.h"
+#include "ITacticObject.h"
 
 class ManagedFBX;
 class PassiveSkill;
@@ -28,6 +29,7 @@ class SkillSystem;
 class BurnEffect;
 class Skill;
 class UnitBuff;
+class UnitBuffTaunted;
 class UnitBehaviourTree;
 class UnitAcquisitionSphereCollider;
 class UnitPool;
@@ -42,7 +44,7 @@ namespace application
         class Unit_TemplateData;
     }
 }
-class Unit : public Component, public PermanentObservee
+class Unit : public Component, public PermanentObservee, public ITacticObject
 {
 public:
     static Vector3d FromTo(std::weak_ptr<Unit> from, std::weak_ptr<Unit> to);
@@ -87,7 +89,7 @@ public:
     void Paralyze(float paralyzeDuration);
     coroutine::Coroutine ParalyzeEffectCoroutine(float paralyzeDuration);
     yunutyEngine::coroutine::Coroutine KnockBackCoroutine(Vector3d targetPosition, float knockBackDuration, bool relative = false);
-    void PlayAnimation(UnitAnimType animType, Animation::PlayFlag playFlag = Animation::PlayFlag_::Blending) ;
+    void PlayAnimation(UnitAnimType animType, Animation::PlayFlag playFlag = Animation::PlayFlag_::Blending);
     void BlendWithDefaultAnimation();
     void SetDefaultAnimation(UnitAnimType animType);
     void SetDesiredRotation(const Vector3d& facingDirection);
@@ -98,13 +100,13 @@ public:
     float GetUnitCurrentHp() const;
     float GetUnitMaxHp() const;
     // AcquireFactor는 수치에 곱연산이 적용될 부분이며, AcquireDelta는 수치에 덧셈 연산이 적용될 부분이다.
-    factor::Multiplier<float> multiplierDamage;
-    factor::Multiplier<float> multiplierDamageReceive;
+    factor::Adder<float> multiplierDamage;
+    factor::Adder<float> multiplierDamageReceive;
     factor::Adder<float> adderAttackDamage;
     // adderAttackSpeed에 담긴 값들은 합연산되어 공격 주기에 1 / (1 + adderAttackSpeed)의 수치로 곱해진다.
     factor::Adder<float> adderAttackSpeed;
     factor::Multiplier<float> multiplierAttackSpeed;
-    factor::Adder<float> adderCrit;
+    factor::Adder<float> adderCritChance;
     virtual void OnContentsPlay() override { }
     virtual void OnContentsStop() override;
     virtual Component* GetComponent() override { return this; }
@@ -114,6 +116,10 @@ public:
     virtual void Update() override;
     virtual void OnDestroy() override;
     virtual ~Unit();
+
+    virtual void OnPause() override;
+    virtual void OnResume() override;
+
     bool IsPlayerUnit() const;
     bool IsInvulenerable() const;
     bool IsAlive()const;
@@ -142,6 +148,7 @@ public:
     Reference referenceParalysis;
     Reference referenceBlockPendingOrder;
     Reference referenceBlockRotation;
+    Reference referenceBlindness;
     Reference referenceInvulnerable;
     Reference referenceBlockAttack;
     // NavAgent 객체를 아예 비활성화함.
@@ -245,6 +252,7 @@ private:
     friend UnitPool;
     friend PlayerController;
     friend BossController;
+    friend UnitBuffTaunted;
 };
 template<UnitOrderType orderType>
 bool Unit::CanProcessOrder()

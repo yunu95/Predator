@@ -460,6 +460,7 @@ void PlayerController::OnRightClick()
             }
             else
             {
+                SFXManager::PlaySoundfile("sounds/Etc/Character move click.mp3");
                 OrderMove(GetWorldCursorPosition());
             }
         }

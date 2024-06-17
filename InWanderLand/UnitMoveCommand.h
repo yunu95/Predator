@@ -13,6 +13,7 @@ public:
 	virtual ~UnitMoveCommand();
 
 public:
+	virtual yunuGI::ITexture* GetIconTexture() override;
 	virtual void Execute() override;
 	virtual void ShowPreviewMesh() override;
 	virtual void HidePreviewMesh() override;

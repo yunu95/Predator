@@ -2,6 +2,9 @@
 #include "YunutyEngine.h"
 #include "WanderFBX.h"
 #include "UnitAnimationType.h"
+#include "SkillType.h"
+#include "Command.h"
+#include "UnitCommand.h"
 
 class ManagedFBX;
 namespace wanderResources

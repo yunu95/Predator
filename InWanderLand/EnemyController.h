@@ -2,6 +2,7 @@
 #include "WanderUtils.h"
 #include "UnitController.h"
 
+class Unit;
 class EnemyController : public UnitController
 {
 public:

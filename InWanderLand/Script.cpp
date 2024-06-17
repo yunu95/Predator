@@ -321,6 +321,16 @@ namespace application
                     condition = AddCondition<Condition_TutorialModeOff>();
                     break;
                 }
+                case application::ConditionType::TacticModeOn:
+                {
+                    condition = AddCondition<Condition_TacticModeOn>();
+                    break;
+                }
+                case application::ConditionType::TacticModeOff:
+                {
+                    condition = AddCondition<Condition_TacticModeOff>();
+                    break;
+                }
                 default:
                     break;
                 }
@@ -542,6 +552,11 @@ namespace application
                     case application::ActionType::EngageBattle:
                     {
                         action = AddAction<Action_EngageBattle>();
+                        break;
+                    }
+                    case application::ActionType::EngagePeace:
+                    {
+                        action = AddAction<Action_EngagePeace>();
                         break;
                     }
                     default:

@@ -109,6 +109,11 @@ yunutyEngine::coroutine::Coroutine ChessBombComponent::AwakeBomb()
 
 	while (ratio < 1)
 	{
+		while (isPause)
+		{
+			co_await std::suspend_always();
+		}
+
 		ratio = localTimer / bombTime;
 		auto renderer = guideObj->GetComponent<graphics::StaticMeshRenderer>();
 		if (ratio > 1)
@@ -129,6 +134,7 @@ yunutyEngine::coroutine::Coroutine ChessBombComponent::AwakeBomb()
 void ChessBombComponent::OnReturn()
 {
 	coroutineStart = false;
+	isPause = false;
 	unitSet.clear();
 
 	if (particleObj)
@@ -136,8 +142,33 @@ void ChessBombComponent::OnReturn()
 		particleObj->SetSelfActive(false);
 	}
 
+	if (guideObj)
+	{
+		guideObj->SetSelfActive(false);
+	}
+
 	if (!lastCoroutine.expired())
 	{
 		DeleteCoroutine(lastCoroutine);
+	}
+}
+
+void ChessBombComponent::OnPause()
+{
+	isPause = true;
+
+	if (particleObj && particleObj->GetActive())
+	{
+		particleObj->GetComponent<graphics::ParticleRenderer>()->Pause();
+	}
+}
+
+void ChessBombComponent::OnResume()
+{
+	isPause = false;
+
+	if (particleObj && particleObj->GetActive())
+	{
+		particleObj->GetComponent<graphics::ParticleRenderer>()->Resume();
 	}
 }

@@ -8,8 +8,9 @@ class UnitBuffUrsula : public UnitBuff
 public:
     UnitBuffUrsula();
     std::shared_ptr<float> attackSpeedAdder;
-    std::shared_ptr<float> attackDamageAdder;
+    std::shared_ptr<float> critChanceAdder;
     virtual UnitBuffType GetBuffType() { return UnitBuffType::UrsulaBuff; };
+    virtual UIEnumID GetUIEnumID() { return UIEnumID::CharInfo_Buff_UrsulaSelf; };
 private:
     virtual void OnStart();
     virtual void OnUpdate() {};

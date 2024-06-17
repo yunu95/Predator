@@ -1375,6 +1375,16 @@ namespace application
 									selectedScript->AddCondition<Condition_TutorialModeOff>();
 									break;
 								}
+								case application::ConditionType::TacticModeOn:
+								{
+									selectedScript->AddCondition<Condition_TacticModeOn>();
+									break;
+								}
+								case application::ConditionType::TacticModeOff:
+								{
+									selectedScript->AddCondition<Condition_TacticModeOff>();
+									break;
+								}
 								default:
 									break;
 							}
@@ -1627,6 +1637,11 @@ namespace application
 								case application::ActionType::EngageBattle:
 								{
 									selectedScript->AddAction<Action_EngageBattle>();
+									break;
+								}
+								case application::ActionType::EngagePeace:
+								{
+									selectedScript->AddAction<Action_EngagePeace>();
 									break;
 								}
 								default:

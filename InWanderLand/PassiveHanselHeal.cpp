@@ -20,6 +20,9 @@ coroutine::Coroutine PassiveHanselHeal::CookieLingering(Vector3d pos, std::weak_
 	cookieEffectAnimator.lock()->Init();
 	cookieEffectAnimator.lock()->Play();
 
+
+    SFXManager::PlaySoundfile("sounds/Hansel/Hansel passive.wav");
+
     coroutine::ForSeconds forSeconds{ pod.cookieLifetime };
     while (forSeconds.Tick())
     {

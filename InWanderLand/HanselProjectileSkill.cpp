@@ -56,6 +56,7 @@ coroutine::Coroutine HanselProjectileSkill::ThrowingPie(std::weak_ptr<HanselProj
                 /// 충돌한 적군에게는 실명(디버프)을 부여합니다.
                 onceCollidedUnits.insert(each);
                 each->StartCoroutine(SpawningSkillffect(each));
+                each->ApplyBuff(UnitBuffHanselDebuff{});
             }
         }
 
@@ -65,6 +66,7 @@ coroutine::Coroutine HanselProjectileSkill::ThrowingPie(std::weak_ptr<HanselProj
             {
                 /// 충돌한 아군에게는 음향버프를 부여합니다.
                 onceCollidedUnits.insert(each);
+                each->ApplyBuff(UnitBuffHanselBuff{});
             }
         }
     }

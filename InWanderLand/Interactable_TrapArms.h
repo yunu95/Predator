@@ -4,9 +4,10 @@
 #pragma once
 
 #include "IInteractableComponent.h"
+#include "ITacticObject.h"
 
 class Interactable_TrapArms
-	: public IInteractableComponent
+	: public IInteractableComponent, public ITacticObject
 {
 public:
 	virtual void Start() override;
@@ -19,6 +20,9 @@ public:
 
 	virtual void SetDataFromEditorData(const application::editor::InteractableData& data) override;
 
+	virtual void OnPause() override;
+	virtual void OnResume() override;
+
 private:
 	std::unordered_set<physics::Collider*> triggerStay = std::unordered_set<physics::Collider*>();
 	Vector3d initPos = Vector3d(0, 0, 0);
@@ -29,5 +33,6 @@ private:
 	float offset_Y = 14;
 	GameObject* mesh = nullptr;
 	GameObject* particleObj = nullptr;
+	bool isPause = false;
 };
 
