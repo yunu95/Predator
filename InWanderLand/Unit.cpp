@@ -877,14 +877,6 @@ void Unit::Summon(const application::editor::UnitData* unitData)
 {
     this->unitData = unitData;
     unitData->inGameUnit = GetWeakPtr<Unit>();
-    Summon(unitData->GetUnitTemplateData());
-
-    GetTransform()->SetWorldPosition(Vector3d{ unitData->pod.position });
-    navAgentComponent.lock()->GetTransform()->SetWorldPosition(Vector3d{ unitData->pod.position });
-    navAgentComponent.lock()->AssignToNavigationField(&SingleNavigationField::Instance());
-    navObstacle.lock()->AssignToNavigationField(&SingleNavigationField::Instance());
-
-    Reset();
 
     onAttack = unitData->onAttack;
     onAttackHit = unitData->onAttackHit;
@@ -894,6 +886,15 @@ void Unit::Summon(const application::editor::UnitData* unitData)
     onStateEngage = unitData->onStateEngage;
     onStateExit = unitData->onStateExit;
 
+    Summon(unitData->GetUnitTemplateData());
+
+    GetTransform()->SetWorldPosition(Vector3d{ unitData->pod.position });
+    navAgentComponent.lock()->GetTransform()->SetWorldPosition(Vector3d{ unitData->pod.position });
+    navAgentComponent.lock()->AssignToNavigationField(&SingleNavigationField::Instance());
+    navObstacle.lock()->AssignToNavigationField(&SingleNavigationField::Instance());
+
+    Reset();
+
     Quaternion quat{ unitData->pod.rotation.w,unitData->pod.rotation.x,unitData->pod.rotation.y ,unitData->pod.rotation.z };
     auto forward = quat.Forward();
     desiredRotation = currentRotation = 180 + std::atan2f(forward.z, forward.x) * math::Rad2Deg;
@@ -902,8 +903,6 @@ void Unit::Summon(const application::editor::UnitData* unitData)
 void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& position, float rotation, bool instant)
 {
     this->unitData = nullptr;
-    Summon(td);
-    Reset();
     onAttack.Clear();
     onAttackHit.Clear();
     onDamaged.Clear();
@@ -917,6 +916,9 @@ void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& po
     {
         each.Clear();
     }
+
+    Summon(td);
+    Reset();
 
     GetTransform()->SetWorldPosition(Vector3d{ position });
     navAgentComponent.lock()->GetTransform()->SetWorldPosition(Vector3d{ position });
@@ -937,8 +939,6 @@ void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& po
 void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& position, const Quaternion& rotation, bool instant)
 {
     this->unitData = nullptr;
-    Summon(td);
-    Reset();
     onAttack.Clear();
     onAttackHit.Clear();
     onDamaged.Clear();
@@ -952,6 +952,9 @@ void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& po
     {
         each.Clear();
     }
+
+    Summon(td);
+    Reset();
 
     GetTransform()->SetWorldPosition(Vector3d{ position });
     navAgentComponent.lock()->GetTransform()->SetWorldPosition(Vector3d{ position });
