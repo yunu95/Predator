@@ -58,7 +58,7 @@ coroutine::Coroutine BossSpinAttackSkill::SpawningSkillffect(std::weak_ptr<BossS
 	chargeEffect = FBXPool::Instance().Borrow("VFX_HeartQueen_Skill1");
 
     chargeEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos);
-    chargeEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
+    chargeEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(owner.lock()->GetTransform()->GetWorldRotation());
     chargeEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(actualCollideRange * owner.lock()->GetTransform()->GetWorldScale().x,
         actualCollideRange * owner.lock()->GetTransform()->GetWorldScale().y,
         actualCollideRange * owner.lock()->GetTransform()->GetWorldScale().z));
@@ -88,7 +88,7 @@ coroutine::Coroutine BossSpinAttackSkill::SpawningSkillffect(std::weak_ptr<BossS
             knockBackList.insert(each);
             Vector3d delta = pod.knockBackDistance * (each->GetTransform()->GetWorldPosition() - owner.lock()->GetTransform()->GetWorldPosition()).Normalized();
             each->Damaged(owner, pod.skillDamage);
-            each->Paralyze(pod.paralyzingDuration);
+            //each->Paralyze(pod.paralyzingDuration);
             each->KnockBack(owner.lock()->GetTransform()->GetWorldPosition() + delta, pod.knockBackDuration);
         }
     }
