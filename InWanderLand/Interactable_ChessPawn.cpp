@@ -53,6 +53,21 @@ void Interactable_ChessPawn::Start()
 
 void Interactable_ChessPawn::Update()
 {
+	static auto eraseList = unitSet;
+	for (auto each : unitSet)
+	{
+		if (each->GetGameObject()->GetComponent<Unit>()->IsAlive())
+		{
+			eraseList.erase(each);
+		}
+	}
+	for (auto each : eraseList)
+	{
+		unitSet.erase(each);
+	}
+
+	eraseList.clear();
+
 	if (!unitSet.empty())
 	{
 		OnInteractableTriggerEnter();
