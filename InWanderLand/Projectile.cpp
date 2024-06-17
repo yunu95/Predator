@@ -30,10 +30,6 @@ void Projectile::SetSpeed(Vector3d speed)
     this->speed = speed;
     GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(speed, Vector3d::up));
 }
-void Projectile::OnContentsStop()
-{
-    ProjectilePool<Projectile>::SingleInstance().Return(GetWeakPtr<Projectile>());
-}
 //void Projectile::SetSpeed(Vector3d startPosition, Vector3d endPosition, float projectileSpeed)
 //{
 //    auto delta = endPosition - startPosition;

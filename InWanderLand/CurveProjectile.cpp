@@ -37,3 +37,8 @@ void CurveProjectile::Update()
 		}
 	}
 }
+
+void CurveProjectile::OnContentsStop()
+{
+	ProjectilePool<CurveProjectile>::SingleInstance().Return(GetWeakPtr<CurveProjectile>());
+}

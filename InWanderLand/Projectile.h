@@ -18,7 +18,7 @@ protected:
     bool traveling = false;
     void SetSpeed(Vector3d speed);
     virtual void OnContentsPlay()override {};
-    virtual void OnContentsStop()override;
+    virtual void OnContentsStop() = 0;
     virtual Component* GetComponent() { return this; };
 
     virtual void OnPause() override {}

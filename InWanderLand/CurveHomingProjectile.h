@@ -7,6 +7,8 @@ class CurveHomingProjectile : public Projectile
 private:
 	virtual void Update() override;
 
+	virtual void OnContentsStop() override;
+
 public:
 	virtual void Init() override;
 	friend ProjectilePool<CurveHomingProjectile>;
