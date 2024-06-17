@@ -90,7 +90,7 @@ private:
 
     static constexpr int MAX_COMMAND_COUNT = 6;
 
-    std::array<std::shared_ptr<Reference::Guard>, 3> playersPauseRevArr;
+    std::array<std::shared_ptr<Reference::Guard>, 3> playersTacticRevArr;
     std::array<bool, 6> useSkill;
 
     friend class PlayerController;

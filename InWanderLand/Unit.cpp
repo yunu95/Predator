@@ -326,6 +326,12 @@ bool Unit::IsPreempted() const
 	return (*unitBehaviourTree.GetActiveNodes().rbegin())->GetNodeKey() == UnitBehaviourTree::Knockback;
 }
 
+bool Unit::IsTacTicReady() const
+{
+	/// 상준이형 여기봐
+	return true;
+}
+
 std::string Unit::GetFBXName() const
 {
 	if (!skinnedMeshGameObject)
