@@ -381,6 +381,14 @@ void NailEngine::CreateRenderTargetGroup()
             static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
         ));
 
+		rtVec[3].texture = std::static_pointer_cast<Texture>(ResourceManager::Instance.Get().CreateTexture(
+			L"SpecularTarget",
+			this->windowInfo.width,
+			this->windowInfo.height,
+			DXGI_FORMAT_R8G8B8A8_UNORM,
+			static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
+		));
+
         this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)] = std::make_shared<RenderTargetGroup>();
         this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->SetRenderTargetVec(rtVec);
     }

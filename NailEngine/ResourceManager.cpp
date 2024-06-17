@@ -1184,15 +1184,6 @@ void ResourceManager::CreateDefaultMaterial()
         material->SetTexture(yunuGI::Texture_Type::ALBEDO,
             renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(ALBEDO)).get());
 
-        //material->SetTexture(yunuGI::Texture_Type::NORMAL,
-        //    GetTexture(L"Texture/asdDiffuseHDR.dds").get());
-
-        //material->SetTexture(yunuGI::Texture_Type::HEIGHT,
-        //    GetTexture(L"Texture/asdSpecularHDR.dds").get());
-
-        //material->SetTexture(yunuGI::Texture_Type::EMISSION,
-        //    GetTexture(L"Texture/asdBrdf.dds").get());
-
         material->SetTexture(yunuGI::Texture_Type::ARM,
             renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(ARM)).get());
 
@@ -1243,6 +1234,9 @@ void ResourceManager::CreateDefaultMaterial()
             renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(UTIL)).get());
         material->SetTexture(yunuGI::Texture_Type::Temp5,
             renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->GetRTTexture(static_cast<int>(AMBIENT)).get());
+
+		material->SetTexture(yunuGI::Texture_Type::Temp6,
+			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->GetRTTexture(static_cast<int>(SPECULAR_LIGHT)).get());
     }
 
     // BackBuffer
