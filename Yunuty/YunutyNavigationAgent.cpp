@@ -38,6 +38,7 @@ void yunutyEngine::NavigationAgent::OnEnable()
         navField->agents.insert(this);
         Vector3f pos = GetTransform()->GetWorldPosition();
         impl->agentIdx = impl->crowd->addAgent(reinterpret_cast<float*>(&pos), &impl->agentParams);
+        Relocate(pos);
     }
 }
 void yunutyEngine::NavigationAgent::OnDisable()
@@ -103,9 +104,9 @@ float yunutyEngine::NavigationAgent::GetRadius()
 }
 void yunutyEngine::NavigationAgent::Relocate(Vector3f destination)
 {
-    GetTransform()->SetWorldPosition(destination);
     if (impl->agentIdx == -1)
     {
+        GetTransform()->SetWorldPosition(destination);
         return;
     }
     const float* pos = &destination.x;

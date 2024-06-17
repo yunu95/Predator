@@ -222,10 +222,18 @@ void Unit::OnStateExit<UnitBehaviourTree::Attack>()
 template<>
 void Unit::OnStateUpdate<UnitBehaviourTree::Attack>()
 {
-    if (currentTargetUnit.expired())
+    auto currentTarget = currentTargetUnit.lock();
+    if (!currentTarget)
     {
-        OrderHold();
         return;
+    }
+    else
+    {
+        if (!currentTarget->IsAlive() || currentTarget->IsInvulenerable())
+        {
+            currentTargetUnit.reset();
+            return;
+        }
     }
     SetDesiredRotation(currentTargetUnit.lock()->GetTransform()->GetWorldPosition() - GetTransform()->GetWorldPosition());
     if (!referenceBlockAttack.BeingReferenced())
@@ -502,10 +510,11 @@ yunutyEngine::coroutine::Coroutine Unit::KnockbackCoroutine(std::shared_ptr<Refe
     }
 
     navAgentComponent.lock()->Relocate(targetPosition);
-    navAgentComponent.lock()->MoveTo(targetPosition);
 
     while (forSeconds.Tick())
     {
+        bool isNavAgentActive = navAgentComponent.lock()->GetActive();
+        navAgentComponent.lock()->MoveTo(targetPosition + Vector3d::one * 0.0001);
         y = vy0 * forSeconds.Elapsed() - 0.5 * constant.gravitySpeed * forSeconds.Elapsed() * forSeconds.Elapsed();
         Vector3d pos = Vector3d::Lerp(startPos, navAgentComponent.lock()->GetTransform()->GetWorldPosition(), forSeconds.ElapsedNormalized());
         pos.y = y;
@@ -714,8 +723,9 @@ void Unit::Init(const application::editor::Unit_TemplateData* unitTemplateData)
     skinnedMeshGameObject->GetTransform()->SetLocalRotation(Quaternion{ {0,180,0} });
     skinnedMeshGameObject->GetTransform()->SetLocalScale(Vector3d::one * unitTemplateData->pod.unit_scale);
     //wanderResources::PushAnimations(animatorComponent.lock().get(), unitTemplateData->pod.skinnedFBXName);
-    unitCollider = GetGameObject()->AddComponentAsWeakPtr<physics::SphereCollider>();
-    auto rigidBody = GetGameObject()->AddComponentAsWeakPtr<physics::RigidBody>();
+    unitCollider = GetGameObject()->AddGameObject()->AddComponentAsWeakPtr<UnitCapsuleCollider>();
+    unitCollider.lock()->owner = GetWeakPtr<Unit>();
+    auto rigidBody = unitCollider.lock()->GetGameObject()->AddComponentAsWeakPtr<physics::RigidBody>();
     rigidBody.lock()->SetAsKinematic(true);
     InitBehaviorTree();
     // 애니메이션에 이벤트 삽입
@@ -889,6 +899,8 @@ void Unit::Summon(const application::editor::UnitData* unitData)
     unitData->inGameUnit = GetWeakPtr<Unit>();
 
     GetTransform()->SetWorldPosition(Vector3d{ unitData->pod.position });
+    navAgentComponent.lock()->SetActive(true);
+    navObstacle.lock()->SetActive(true);
     navAgentComponent.lock()->GetTransform()->SetWorldPosition(Vector3d{ unitData->pod.position });
     navAgentComponent.lock()->AssignToNavigationField(&SingleNavigationField::Instance());
     navObstacle.lock()->AssignToNavigationField(&SingleNavigationField::Instance());
@@ -912,7 +924,6 @@ void Unit::Summon(const application::editor::UnitData* unitData)
 void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& position, float rotation, bool instant)
 {
     this->unitData = nullptr;
-    Reset();
     onAttack.Clear();
     onAttackHit.Clear();
     onDamaged.Clear();
@@ -928,7 +939,12 @@ void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& po
     }
     Summon(td);
 
+    Summon(td);
+    Reset();
+
     GetTransform()->SetWorldPosition(Vector3d{ position });
+    navAgentComponent.lock()->SetActive(true);
+    navObstacle.lock()->SetActive(true);
     navAgentComponent.lock()->GetTransform()->SetWorldPosition(Vector3d{ position });
     navAgentComponent.lock()->AssignToNavigationField(&SingleNavigationField::Instance());
     navObstacle.lock()->AssignToNavigationField(&SingleNavigationField::Instance());
@@ -947,7 +963,6 @@ void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& po
 void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& position, const Quaternion& rotation, bool instant)
 {
     this->unitData = nullptr;
-    Reset();
     onAttack.Clear();
     onAttackHit.Clear();
     onDamaged.Clear();
@@ -962,6 +977,9 @@ void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& po
         each.Clear();
     }
     Summon(td);
+
+    Summon(td);
+    Reset();
 
     GetTransform()->SetWorldPosition(Vector3d{ position });
     navAgentComponent.lock()->GetTransform()->SetWorldPosition(Vector3d{ position });
@@ -1018,6 +1036,10 @@ void Unit::Summon(application::editor::Unit_TemplateData* templateData)
     }
 
     unitCollider.lock()->SetRadius(unitTemplateData->pod.collisionSize);
+    unitCollider.lock()->SetHalfHeight(unitTemplateData->pod.collisionHeight * 0.5f);
+    unitCollider.lock()->GetTransform()->SetLocalRotation(Vector3d{ 0,0,90 });
+    unitCollider.lock()->GetTransform()->SetLocalPosition(Vector3d::up * unitTemplateData->pod.collisionHeight * 0.5f);
+
     attackRange.lock()->SetRadius(unitTemplateData->pod.m_atkRadius);
     attackRange.lock()->SetColor(yunuGI::Color::red());
     acquisitionRange.lock()->SetRadius(unitTemplateData->pod.m_idRadius);
@@ -1528,6 +1550,8 @@ void Unit::ReturnToPool()
         Scene::getCurrentScene()->DestroyGameObject(unitStatusUI.lock()->GetGameObject());
         unitStatusUI.reset();
     }
+    navAgentComponent.lock()->SetActive(false);
+    navObstacle.lock()->SetActive(false);
     unitStatusPortraitUI.reset();
     Reset();
     UnitPool::SingleInstance().Return(GetWeakPtr<Unit>());

@@ -60,6 +60,7 @@ namespace application
             //float m_criticalDamageDecreaseMultiplier;	// 피격 시 치명타 피해 감소 배율
 
             float collisionSize = 0.5f;
+            float collisionHeight = 0.5f;
             float m_idRadius;
             float m_atkRadius;
             float m_atkCooltime = 2.1f;

@@ -36,6 +36,7 @@ class UnitPool;
 class PlayerController;
 class UnitController;
 class BossController;
+class UnitCapsuleCollider;
 namespace application
 {
     namespace editor
@@ -207,7 +208,7 @@ private:
     std::weak_ptr<yunutyEngine::NavigationAgent> navAgentComponent;
     // 유닛들이 가만히 있을 때 장애물로 인식하게 만들기 위함.
     std::weak_ptr<yunutyEngine::NavigationObstacle> navObstacle;
-    std::weak_ptr<yunutyEngine::physics::SphereCollider> unitCollider;
+    std::weak_ptr<UnitCapsuleCollider> unitCollider;
     std::unordered_map<UnitBuffType, std::shared_ptr<UnitBuff>> buffs;
     std::shared_ptr<Skill> onGoingSkill;
     std::shared_ptr<Skill> pendingSkill;

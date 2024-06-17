@@ -7,6 +7,7 @@
 #include "DelegateCallback.h"   
 #include "PlayerCharacterType.h"
 #include "SkillType.h"
+#include "UnitAcquisitionBoxCollider.h"
 
 // 사용자 입력을 받고 플레이어 유닛들의 행동을 관리하는 클래스
 // 짬통 중의 짬통이다.
@@ -94,6 +95,7 @@ private:
     void HandleSkillCooltime();
     void HandleManaRegen();
     void HandleMouseHover();
+    void HandleUnitPickingCollider();
     void OnPlayerChracterDead(std::weak_ptr<Unit> unit);
     void OnPlayerChracterAllDead();
     // character가 NONE일 경우 알아서 현재 선택된 스킬로 귀결된다.
@@ -134,7 +136,7 @@ private:
     State::Enum state{ State::Peace };
     SkillType::Enum selectedSkill = SkillType::NONE;
     PlayerCharacterType::Enum selectedCharacterType = PlayerCharacterType::None;
-    std::weak_ptr<UnitAcquisitionSphereCollider> cursorUnitDetector;
+    std::weak_ptr<UnitAcquisitionBoxCollider> cursorUnitDetector;
     std::array<std::weak_ptr<Unit>, (int)PlayerCharacterType::Num> characters;
     std::weak_ptr<Unit> selectedCharacter;
     std::weak_ptr<Unit> selectedDebugCharacter;

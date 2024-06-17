@@ -577,9 +577,6 @@
     <Filter Include="Contents_Refactored\Projectile">
       <UniqueIdentifier>{b4c54747-02b8-4112-8689-258612d883a2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Contents_Refactored\Unit\UnitAcquisitionSphereCollider">
-      <UniqueIdentifier>{31a09584-6a93-430e-9d48-1301fd29b65e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Contents_Refactored\Unit\UnitAnimationType">
       <UniqueIdentifier>{fa5977b3-5e7d-453b-bdb0-117238e21f7f}</UniqueIdentifier>
     </Filter>
@@ -588,9 +585,6 @@
     </Filter>
     <Filter Include="Contents_Refactored\Unit\UnitPool">
       <UniqueIdentifier>{1a0bad55-1fe6-4717-8a20-bc8006fd970c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Contents_Refactored\Unit\UnitAcquisitionSphereCollider\UnitAcquisitionSphereColliderPool">
-      <UniqueIdentifier>{31376ee3-bb5e-4230-8fac-aaf6d572d579}</UniqueIdentifier>
     </Filter>
     <Filter Include="Contents_Refactored\Unit\UnitBuff\UnitBuffBleeding">
       <UniqueIdentifier>{20b5062c-32f2-4381-bb1b-beb4474f2625}</UniqueIdentifier>
@@ -867,6 +861,24 @@
     </Filter>
     <Filter Include="Contents_Refactored\Unit\UnitBuff\UnitBuffHanselDebuff">
       <UniqueIdentifier>{554f8c4c-b096-4c3a-9f29-24ffdd3d860f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Unit\UnitAcquisitionCollider">
+      <UniqueIdentifier>{072e6055-705b-486a-bd4f-e1b3bc78e4e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Unit\UnitAcquisitionCollider\UnitAcquisitionSphereCollider">
+      <UniqueIdentifier>{31a09584-6a93-430e-9d48-1301fd29b65e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Unit\UnitAcquisitionCollider\UnitAcquisitionSphereCollider\UnitAcquisitionSphereColliderPool">
+      <UniqueIdentifier>{31376ee3-bb5e-4230-8fac-aaf6d572d579}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Unit\UnitAcquisitionCollider\UnitAcquisitionBoxCollider">
+      <UniqueIdentifier>{1ea4ebcd-8c2c-4a66-b765-1e8b01b5c062}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Unit\UnitAcquisitionCollider\UnitCollider">
+      <UniqueIdentifier>{c661eb0f-4311-4aa1-a26e-0aa62efbe323}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Unit\UnitAcquisitionCollider\UnitCollider\UnitCapsuleCollider">
+      <UniqueIdentifier>{fcc3eb20-a332-44a5-8f35-b8503be25f27}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1835,7 +1847,7 @@
       <Filter>Contents_Refactored\Projectile</Filter>
     </ClInclude>
     <ClInclude Include="UnitAcquisitionSphereCollider.h">
-      <Filter>Contents_Refactored\Unit\UnitAcquisitionSphereCollider</Filter>
+      <Filter>Contents_Refactored\Unit\UnitAcquisitionCollider\UnitAcquisitionSphereCollider</Filter>
     </ClInclude>
     <ClInclude Include="UnitAnimationType.h">
       <Filter>Contents_Refactored\Unit\UnitAnimationType</Filter>
@@ -1847,7 +1859,7 @@
       <Filter>Contents_Refactored\UnitController</Filter>
     </ClInclude>
     <ClInclude Include="UnitAcquisitionSphereColliderPool.h">
-      <Filter>Contents_Refactored\Unit\UnitAcquisitionSphereCollider\UnitAcquisitionSphereColliderPool</Filter>
+      <Filter>Contents_Refactored\Unit\UnitAcquisitionCollider\UnitAcquisitionSphereCollider\UnitAcquisitionSphereColliderPool</Filter>
     </ClInclude>
     <ClInclude Include="UnitBuffBleeding.h">
       <Filter>Contents_Refactored\Unit\UnitBuff\UnitBuffBleeding</Filter>
@@ -2097,6 +2109,18 @@
     </ClInclude>
     <ClInclude Include="UnitBuffHanselDebuff.h">
       <Filter>Contents_Refactored\Unit\UnitBuff\UnitBuffHanselDebuff</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitAcquisitionBoxCollider.h">
+      <Filter>Contents_Refactored\Unit\UnitAcquisitionCollider\UnitAcquisitionBoxCollider</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitAcquisitionCollider.h">
+      <Filter>Contents_Refactored\Unit\UnitAcquisitionCollider</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitCollider.h">
+      <Filter>Contents_Refactored\Unit\UnitAcquisitionCollider\UnitCollider</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitCapsuleCollider.h">
+      <Filter>Contents_Refactored\Unit\UnitAcquisitionCollider\UnitCollider\UnitCapsuleCollider</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2936,13 +2960,13 @@
       <Filter>Contents_Refactored\Projectile</Filter>
     </ClCompile>
     <ClCompile Include="UnitAcquisitionSphereCollider.cpp">
-      <Filter>Contents_Refactored\Unit\UnitAcquisitionSphereCollider</Filter>
+      <Filter>Contents_Refactored\Unit\UnitAcquisitionCollider\UnitAcquisitionSphereCollider</Filter>
     </ClCompile>
     <ClCompile Include="UnitController.cpp">
       <Filter>Contents_Refactored\UnitController</Filter>
     </ClCompile>
     <ClCompile Include="UnitAcquisitionSphereColliderPool.cpp">
-      <Filter>Contents_Refactored\Unit\UnitAcquisitionSphereCollider\UnitAcquisitionSphereColliderPool</Filter>
+      <Filter>Contents_Refactored\Unit\UnitAcquisitionCollider\UnitAcquisitionSphereCollider\UnitAcquisitionSphereColliderPool</Filter>
     </ClCompile>
     <ClCompile Include="UnitBuffBleeding.cpp">
       <Filter>Contents_Refactored\Unit\UnitBuff\UnitBuffBleeding</Filter>
@@ -3126,6 +3150,18 @@
     </ClCompile>
     <ClCompile Include="UnitBuffHanselDebuff.cpp">
       <Filter>Contents_Refactored\Unit\UnitBuff\UnitBuffHanselDebuff</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitAcquisitionBoxCollider.cpp">
+      <Filter>Contents_Refactored\Unit\UnitAcquisitionCollider\UnitAcquisitionBoxCollider</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitAcquisitionCollider.cpp">
+      <Filter>Contents_Refactored\Unit\UnitAcquisitionCollider</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitCollider.cpp">
+      <Filter>Contents_Refactored\Unit\UnitAcquisitionCollider\UnitCollider</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitCapsuleCollider.cpp">
+      <Filter>Contents_Refactored\Unit\UnitAcquisitionCollider\UnitCollider\UnitCapsuleCollider</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

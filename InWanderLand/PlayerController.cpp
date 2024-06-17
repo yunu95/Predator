@@ -106,9 +106,8 @@ void PlayerController::Start()
 void PlayerController::OnContentsPlay()
 {
     SetActive(true);
-    cursorUnitDetector = Scene::getCurrentScene()->AddGameObject()->AddComponentAsWeakPtr<UnitAcquisitionSphereCollider>();
+    cursorUnitDetector = Scene::getCurrentScene()->AddGameObject()->AddComponentAsWeakPtr<UnitAcquisitionBoxCollider>();
     AttachDebugMesh(cursorUnitDetector.lock()->GetGameObject(), DebugMeshType::Cube, yunuGI::Color::white());
-    cursorUnitDetector.lock()->SetRadius(0.01f);
     skillCooltimeNumberUI[SkillType::ROBIN_Q] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_Q_Cooltime_Number);
     skillCooltimeNumberUI[SkillType::ROBIN_W] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_W_Cooltime_Number);
     skillCooltimeNumberUI[SkillType::URSULA_Q] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Ursula)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_Q_Cooltime_Number);
@@ -141,6 +140,7 @@ void PlayerController::Update()
     HandleSkillCooltime();
     HandleManaRegen();
     HandleMouseHover();
+    HandleUnitPickingCollider();
 #ifdef EDITOR
     static yunutyEngine::graphics::UIText* text_State{ nullptr };
     if (text_State == nullptr)
@@ -370,6 +370,22 @@ void PlayerController::HandleMouseHover()
     {
         DisableHoverEffect();
     }
+}
+// 카메라의 near plane으로부터 far plane까지 뻗는 직선의 형태로
+// 셀렉션 박스의 트랜스폼을 변경합니다.
+// screenSpacePos는 x,y좌표가 -0.5에서 0.5 사이의 값을 가지는 정규화된 스크린좌표입니다.
+// 화면의 중심이 {0,0} 상단이 0.5, 하단이 -0.5인 좌단이 -0.5, 우단이 0.5입니다.
+void PlayerController::HandleUnitPickingCollider()
+{
+    auto cam = graphics::Camera::GetMainCamera();
+
+    Input::getMouseScreenPositionNormalizedZeroCenter();
+    auto nearPoint = cam->GetTransform()->GetWorldPosition() - cam->GetTransform()->GetWorldRotation().Forward() * cam->GetGI().GetNear();
+    auto farPoint = cam->GetProjectedPoint(Input::getMouseScreenPositionNormalizedZeroCenter(), 2000);
+    auto transform = cursorUnitDetector.lock()->GetTransform();
+    transform->SetLocalScale({ 0.1,0.1, (nearPoint - farPoint).Magnitude() });
+    transform->SetWorldPosition((nearPoint + farPoint) / 2.0);
+    transform->SetWorldRotation(Quaternion::MakeWithForwardUp(farPoint - nearPoint, cam->GetTransform()->GetWorldRotation().Up()));
 }
 
 void PlayerController::SelectPlayerUnit(PlayerCharacterType::Enum charType)
@@ -754,7 +770,7 @@ void PlayerController::Reset()
     for (auto& each : onSkillSelect) each.Clear();
     for (auto& each : blockSkillSelection) each = false;
     if (cursorUnitDetector.expired())
-        cursorUnitDetector = Scene::getCurrentScene()->AddGameObject()->AddComponentAsWeakPtr<UnitAcquisitionSphereCollider>();
+        cursorUnitDetector = Scene::getCurrentScene()->AddGameObject()->AddComponentAsWeakPtr<UnitAcquisitionBoxCollider>();
     std::for_each(skillUpgradeByUI.begin(), skillUpgradeByUI.end(), [&](auto& pair) {
         auto& [ui, upgrade] = pair;
         UIManager::Instance().GetUIElementByEnum(ui)->imageComponent.lock()->GetGI().SetColor({ 1,1,1,1 });
