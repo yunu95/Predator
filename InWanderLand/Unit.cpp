@@ -1462,7 +1462,7 @@ yunutyEngine::coroutine::Coroutine Unit::AttackCoroutine(std::weak_ptr<Unit> opp
     }
     case UnitAttackType::MISSILE:
     {
-        auto projectile = ProjectilePool::SingleInstance().Borrow(GetWeakPtr<Unit>(), opponent.lock()->GetTransform()->GetWorldPosition(), static_cast<ProjectileType::Enum>(unitTemplateData->pod.projectileType.enumValue), static_cast<ProjectileHoming::Enum>(unitTemplateData->pod.projectileHoming.enumValue));
+        auto projectile = ProjectileSelector::SingleInstance().RequestProjectile(GetWeakPtr<Unit>(), opponent.lock(), static_cast<ProjectileType::Enum>(unitTemplateData->pod.projectileType.enumValue), static_cast<ProjectileHoming::Enum>(unitTemplateData->pod.projectileHoming.enumValue));
         projectile.lock()->GetTransform()->SetLocalScale(Vector3d::one * unitTemplateData->pod.projectile_scale);
         break;
     }

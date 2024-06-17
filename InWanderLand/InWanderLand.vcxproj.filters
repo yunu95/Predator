@@ -2098,6 +2098,21 @@
     <ClInclude Include="UnitBuffHanselDebuff.h">
       <Filter>Contents_Refactored\Unit\UnitBuff\UnitBuffHanselDebuff</Filter>
     </ClInclude>
+    <ClInclude Include="CurveProjectile.h">
+      <Filter>Contents_Refactored\Projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectileSelector.h">
+      <Filter>Contents_Refactored\Projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectProjectile.h">
+      <Filter>Contents_Refactored\Projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectHomingProjectile.h">
+      <Filter>Contents_Refactored\Projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="CurveHomingProjectile.h">
+      <Filter>Contents_Refactored\Projectile</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -3126,6 +3141,21 @@
     </ClCompile>
     <ClCompile Include="UnitBuffHanselDebuff.cpp">
       <Filter>Contents_Refactored\Unit\UnitBuff\UnitBuffHanselDebuff</Filter>
+    </ClCompile>
+    <ClCompile Include="CurveProjectile.cpp">
+      <Filter>Contents_Refactored\Projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="ProjectileSelector.cpp">
+      <Filter>Contents_Refactored\Projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectProjectile.cpp">
+      <Filter>Contents_Refactored\Projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectHomingProjectile.cpp">
+      <Filter>Contents_Refactored\Projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="CurveHomingProjectile.cpp">
+      <Filter>Contents_Refactored\Projectile</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

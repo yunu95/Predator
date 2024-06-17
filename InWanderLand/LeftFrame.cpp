@@ -99,7 +99,8 @@ namespace BossSummon
 		mesh->SetSelfActive(false);
 		auto idle = wanderResources::GetAnimation("SKM_Frame1", UnitAnimType::Idle);
 		idle->SetLoop(false);
-		unitFrame = UnitPool::SingleInstance().Borrow(frameData);
+		unitFrame = UnitPool::SingleInstance().Borrow(frameData); 
+		unitFrame.lock()->SetDefaultAnimation(UnitAnimType::Idle);
 	}
 
 	void LeftFrame::SummonUnit()
@@ -235,7 +236,8 @@ namespace BossSummon
 		/// 3. VFX 바꿔서 실행한다(VFX Summoning, 기존 거는 Active false 하고(?) 반납)
 		summonEffect.lock()->GetGameObject()->SetSelfActive(false);
 		summoningEffect.lock()->GetGameObject()->SetSelfActive(true);
-		//unitFrame.lock()->PlayAnimation(UnitAnimType::Idle, false);
+		blockAnimLoop.reset();
+		//unitFrame.lock()->PlayAnimation(UnitAnimType::Idle, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
 		summoningEffectAnimator.lock()->Play();
 
 		co_await std::suspend_always{};
