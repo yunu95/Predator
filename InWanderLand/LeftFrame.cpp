@@ -197,6 +197,7 @@ namespace BossSummon
 		summoningEffectAnimator.lock()->SetLoop(true);
 		summoningEffectAnimator.lock()->SetAutoActiveFalse();
 		summoningEffectAnimator.lock()->Init();
+		summoningEffect.lock()->SetActive(false);
 
 		summonEffectAnimator.lock()->Play();
 		/// 2. 특정 시간 만큼 기다린다. (VFX Summon Animation 끝날 때까지 co_await suspend always / IsDone)
@@ -206,8 +207,8 @@ namespace BossSummon
 		}
 		/// 3. VFX 바꿔서 실행한다(VFX Summoning, 기존 거는 Active false 하고(?) 반납)
 		summonEffect.lock()->SetActive(false);
+		summoningEffect.lock()->SetActive(true);
 		unitFrame.lock()->PlayAnimation(UnitAnimType::Idle, false);
-
 		summoningEffectAnimator.lock()->Play();
 
 		co_await std::suspend_always{};

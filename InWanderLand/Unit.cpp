@@ -439,6 +439,27 @@ void Unit::KnockBackRelativeVector(Vector3d relativeVector, float knockBackDurat
 void Unit::Paralyze(float paralyzeDuration)
 {
     StartCoroutine(referenceParalysis.AcquireForSecondsCoroutine(paralyzeDuration));
+    auto paralCoroutine = StartCoroutine(ParalyzeEffectCoroutine(paralyzeDuration));
+    paralCoroutine.lock()->PushDestroyCallBack([this]()
+        {
+			FBXPool::Instance().Return(paralysisVFX);
+        });
+}
+
+yunutyEngine::coroutine::Coroutine Unit::ParalyzeEffectCoroutine(float paralyzeDuration)
+{
+    paralysisVFX = FBXPool::Instance().Borrow("VFX_Monster_HitCC");
+    paralysisVFX.lock()->GetGameObject()->SetParent(this->GetGameObject());
+    paralysisVFX.lock()->GetTransform()->SetWorldScale(GetTransform()->GetWorldScale());
+
+	auto paralysisEffectAnimator = paralysisVFX.lock()->AcquireVFXAnimator();
+	paralysisEffectAnimator.lock()->SetAutoActiveFalse();
+	paralysisEffectAnimator.lock()->Init();
+	paralysisEffectAnimator.lock()->Play();
+
+	co_yield coroutine::WaitForSeconds(paralyzeDuration);
+
+    co_return;
 }
 
 yunutyEngine::coroutine::Coroutine Unit::KnockBackCoroutine(Vector3d targetPosition, float knockBackDuration, bool relative)

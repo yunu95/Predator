@@ -139,7 +139,7 @@ coroutine::Coroutine BossController::BossAppearCoroutine()
 
 	boss.lock()->GetTransform()->SetWorldPosition(boss.lock()->GetTransform()->GetWorldPosition() - Vector3d(0, 0.5, 0));
 	boss.lock()->PlayAnimation(UnitAnimType::Birth, Animation::PlayFlag_::None);
-	appearEffectCorountine = boss.lock()->StartCoroutine(BossAppearCoroutine());
+	appearEffectCorountine = boss.lock()->StartCoroutine(BossAppearEffectCoroutine());
 	appearEffectCorountine.lock()->PushDestroyCallBack([this]()
 		{
 			FBXPool::Instance().Return(appearEffect);
@@ -160,11 +160,15 @@ coroutine::Coroutine BossController::BossAppearEffectCoroutine()
 	appearEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(boss.lock()->GetTransform()->GetWorldPosition());
 	appearEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(boss.lock()->GetTransform()->GetWorldRotation());
 	auto appearEffectAnimator = appearEffect.lock()->AcquireVFXAnimator();
-	appearEffectAnimator.lock()->SetLoop(true);
 	appearEffectAnimator.lock()->SetAutoActiveFalse();
 	appearEffectAnimator.lock()->Init();
 	appearEffectAnimator.lock()->Play();
 	
+	while (!appearEffectAnimator.lock()->IsDone())
+	{
+		co_await std::suspend_always();
+	}
+
 	co_return;
 }
 

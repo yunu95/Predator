@@ -85,6 +85,7 @@ public:
     /// Unit 의 위치로부터 입력한 위치벡터(월드 좌표계 기준)에 KnockBack 을 수행합니다.
     void KnockBackRelativeVector(Vector3d relativeVector, float knockBackDuration);
     void Paralyze(float paralyzeDuration);
+    coroutine::Coroutine ParalyzeEffectCoroutine(float paralyzeDuration);
     yunutyEngine::coroutine::Coroutine KnockBackCoroutine(Vector3d targetPosition, float knockBackDuration, bool relative = false);
     void PlayAnimation(UnitAnimType animType, Animation::PlayFlag playFlag = Animation::PlayFlag_::Blending) ;
     void BlendWithDefaultAnimation();
@@ -239,6 +240,7 @@ private:
     int navAgentEnableFrameCount{ 0 };
     std::weak_ptr<ManagedFBX> attackVFX = std::weak_ptr<ManagedFBX>();
     std::weak_ptr<ManagedFBX> damagedVFX = std::weak_ptr<ManagedFBX>();
+	std::weak_ptr<ManagedFBX> paralysisVFX = std::weak_ptr<ManagedFBX>();
     friend UnitBuff;
     friend UnitPool;
     friend PlayerController;

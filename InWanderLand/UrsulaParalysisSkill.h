@@ -33,6 +33,7 @@ private:
     float colliderEffectRatio;
 
     coroutine::Coroutine SpawningFieldEffect(std::weak_ptr<UrsulaParalysisSkill> skill);
+
     std::weak_ptr<coroutine::Coroutine> effectColliderCoroutine;
     std::weak_ptr<UnitAcquisitionSphereCollider> damageCollider;
     std::weak_ptr<UnitAcquisitionSphereCollider> knockBackCollider;
