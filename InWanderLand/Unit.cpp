@@ -143,6 +143,18 @@ void Unit::OnStateExit<UnitBehaviourTree::Paralysis>()
     PlayAnimation(UnitAnimType::Paralysis, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
 }
 template<>
+void Unit::OnStateEngage<UnitBehaviourTree::Knockback>()
+{
+    onStateEngage[UnitBehaviourTree::Knockback]();
+    blockFollowingNavAgentByState = referenceBlockFollowingNavAgent.Acquire();
+}
+template<>
+void Unit::OnStateExit<UnitBehaviourTree::Knockback>()
+{
+    onStateExit[UnitBehaviourTree::Knockback]();
+    blockFollowingNavAgentByState.reset();
+}
+template<>
 void Unit::OnStateEngage<UnitBehaviourTree::Pause>()
 {
     onStateEngage[UnitBehaviourTree::Pause]();
@@ -434,7 +446,7 @@ void Unit::KnockBack(Vector3d targetPosition, float knockBackDuration)
     if (IsAlive())
     {
         DeleteCoroutine(coroutineKnockBack);
-        coroutineKnockBack = StartCoroutine(KnockBackCoroutine(targetPosition, knockBackDuration));
+        coroutineKnockBack = StartCoroutine(KnockbackCoroutine(referenceParalysis.Acquire(), targetPosition, knockBackDuration));
     }
 }
 
@@ -443,7 +455,7 @@ void Unit::KnockBackRelativeVector(Vector3d relativeVector, float knockBackDurat
     if (IsAlive())
     {
         DeleteCoroutine(coroutineKnockBack);
-        coroutineKnockBack = StartCoroutine(KnockBackCoroutine(relativeVector, knockBackDuration, true));
+        coroutineKnockBack = StartCoroutine(KnockbackCoroutine(referenceParalysis.Acquire(), relativeVector, knockBackDuration, true));
     }
 }
 
@@ -453,7 +465,7 @@ void Unit::Paralyze(float paralyzeDuration)
     auto paralCoroutine = StartCoroutine(ParalyzeEffectCoroutine(paralyzeDuration));
     paralCoroutine.lock()->PushDestroyCallBack([this]()
         {
-			FBXPool::Instance().Return(paralysisVFX);
+            FBXPool::Instance().Return(paralysisVFX);
         });
 }
 
@@ -463,20 +475,18 @@ yunutyEngine::coroutine::Coroutine Unit::ParalyzeEffectCoroutine(float paralyzeD
     paralysisVFX.lock()->GetGameObject()->SetParent(this->GetGameObject());
     paralysisVFX.lock()->GetTransform()->SetWorldScale(GetTransform()->GetWorldScale());
 
-	auto paralysisEffectAnimator = paralysisVFX.lock()->AcquireVFXAnimator();
-	paralysisEffectAnimator.lock()->SetAutoActiveFalse();
-	paralysisEffectAnimator.lock()->Init();
-	paralysisEffectAnimator.lock()->Play();
+    auto paralysisEffectAnimator = paralysisVFX.lock()->AcquireVFXAnimator();
+    paralysisEffectAnimator.lock()->SetAutoActiveFalse();
+    paralysisEffectAnimator.lock()->Init();
+    paralysisEffectAnimator.lock()->Play();
 
-	co_yield coroutine::WaitForSeconds(paralyzeDuration);
+    co_yield coroutine::WaitForSeconds(paralyzeDuration);
 
     co_return;
 }
 
-yunutyEngine::coroutine::Coroutine Unit::KnockBackCoroutine(Vector3d targetPosition, float knockBackDuration, bool relative)
+yunutyEngine::coroutine::Coroutine Unit::KnockbackCoroutine(std::shared_ptr<Reference::Guard> paralysisGuard, Vector3d targetPosition, float knockBackDuration, bool relative)
 {
-    auto blockFollowingNavAgent = referenceBlockFollowingNavAgent.Acquire();
-    auto paralyzed = referenceParalysis.Acquire();
     coroutine::ForSeconds forSeconds{ knockBackDuration };
     const auto& constant = GlobalConstant::GetSingletonInstance().pod;
     constant.gravitySpeed;
@@ -877,7 +887,6 @@ void Unit::Summon(const application::editor::UnitData* unitData)
 {
     this->unitData = unitData;
     unitData->inGameUnit = GetWeakPtr<Unit>();
-    Summon(unitData->GetUnitTemplateData());
 
     GetTransform()->SetWorldPosition(Vector3d{ unitData->pod.position });
     navAgentComponent.lock()->GetTransform()->SetWorldPosition(Vector3d{ unitData->pod.position });
@@ -893,6 +902,7 @@ void Unit::Summon(const application::editor::UnitData* unitData)
     onRotationFinish = unitData->onRotationFinish;
     onStateEngage = unitData->onStateEngage;
     onStateExit = unitData->onStateExit;
+    Summon(unitData->GetUnitTemplateData());
 
     Quaternion quat{ unitData->pod.rotation.w,unitData->pod.rotation.x,unitData->pod.rotation.y ,unitData->pod.rotation.z };
     auto forward = quat.Forward();
@@ -902,7 +912,6 @@ void Unit::Summon(const application::editor::UnitData* unitData)
 void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& position, float rotation, bool instant)
 {
     this->unitData = nullptr;
-    Summon(td);
     Reset();
     onAttack.Clear();
     onAttackHit.Clear();
@@ -917,6 +926,7 @@ void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& po
     {
         each.Clear();
     }
+    Summon(td);
 
     GetTransform()->SetWorldPosition(Vector3d{ position });
     navAgentComponent.lock()->GetTransform()->SetWorldPosition(Vector3d{ position });
@@ -937,7 +947,6 @@ void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& po
 void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& position, const Quaternion& rotation, bool instant)
 {
     this->unitData = nullptr;
-    Summon(td);
     Reset();
     onAttack.Clear();
     onAttackHit.Clear();
@@ -952,6 +961,7 @@ void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& po
     {
         each.Clear();
     }
+    Summon(td);
 
     GetTransform()->SetWorldPosition(Vector3d{ position });
     navAgentComponent.lock()->GetTransform()->SetWorldPosition(Vector3d{ position });
@@ -976,6 +986,7 @@ void Unit::AddPassiveSkill(std::shared_ptr<PassiveSkill> skill)
     passiveSkill->owner = GetWeakPtr<Unit>();
     passiveSkill->Init(GetWeakPtr<Unit>());
 }
+// 패시브 스킬을 추가하며 유닛의 여러 콜백 함수에 영향을 미친다.
 void Unit::Summon(application::editor::Unit_TemplateData* templateData)
 {
     skinnedMeshGameObject->GetTransform()->SetLocalScale(Vector3d::one * unitTemplateData->pod.unit_scale);
@@ -1057,6 +1068,7 @@ void Unit::Summon(application::editor::Unit_TemplateData* templateData)
     navAgentComponent.lock()->SetRadius(unitTemplateData->pod.collisionSize);
     navAgentComponent.lock()->SetSpeed(unitTemplateData->pod.m_unitSpeed);
     navObstacle.lock()->SetRadiusAndHeight(unitTemplateData->pod.collisionSize, 100);
+    SetCurrentHp(unitTemplateData->pod.max_Health);
 }
 void Unit::Reset()
 {
@@ -1111,6 +1123,14 @@ void Unit::InitBehaviorTree()
     unitBehaviourTree[UnitBehaviourTree::Paralysis][UnitBehaviourTree::Knockback].enteringCondtion = [this]()
         {
             return !coroutineKnockBack.expired();
+        };
+    unitBehaviourTree[UnitBehaviourTree::Paralysis][UnitBehaviourTree::Knockback].onEnter = [this]()
+        {
+            OnStateEngage<UnitBehaviourTree::Knockback>();
+        };
+    unitBehaviourTree[UnitBehaviourTree::Paralysis][UnitBehaviourTree::Knockback].onExit = [this]()
+        {
+            OnStateExit<UnitBehaviourTree::Knockback>();
         };
     unitBehaviourTree[UnitBehaviourTree::Paralysis][UnitBehaviourTree::Stun].enteringCondtion = [this]()
         {

@@ -88,7 +88,7 @@ public:
     void KnockBackRelativeVector(Vector3d relativeVector, float knockBackDuration);
     void Paralyze(float paralyzeDuration);
     coroutine::Coroutine ParalyzeEffectCoroutine(float paralyzeDuration);
-    yunutyEngine::coroutine::Coroutine KnockBackCoroutine(Vector3d targetPosition, float knockBackDuration, bool relative = false);
+    yunutyEngine::coroutine::Coroutine KnockbackCoroutine(std::shared_ptr<Reference::Guard> paralysisGuard, Vector3d targetPosition, float knockBackDuration, bool relative = false);
     void PlayAnimation(UnitAnimType animType, Animation::PlayFlag playFlag = Animation::PlayFlag_::Blending);
     void BlendWithDefaultAnimation();
     void SetDefaultAnimation(UnitAnimType animType);
@@ -197,6 +197,7 @@ private:
     std::array<DelegateCallback<void>, UnitBehaviourTree::Keywords::KeywordNum> onStateExit;
     std::shared_ptr<PassiveSkill> passiveSkill;
     std::shared_ptr<Reference::Guard> enableNavObstacleByState;
+    std::shared_ptr<Reference::Guard> blockFollowingNavAgentByState;
     std::shared_ptr<Reference::Guard> disableNavAgentByState;
     std::shared_ptr<Reference::Guard> invulnerabilityByState;
     // 공격범위와 적 포착범위
@@ -247,7 +248,7 @@ private:
     int navAgentEnableFrameCount{ 0 };
     std::weak_ptr<ManagedFBX> attackVFX = std::weak_ptr<ManagedFBX>();
     std::weak_ptr<ManagedFBX> damagedVFX = std::weak_ptr<ManagedFBX>();
-	std::weak_ptr<ManagedFBX> paralysisVFX = std::weak_ptr<ManagedFBX>();
+    std::weak_ptr<ManagedFBX> paralysisVFX = std::weak_ptr<ManagedFBX>();
     friend UnitBuff;
     friend UnitPool;
     friend PlayerController;

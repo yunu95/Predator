@@ -103,9 +103,9 @@ float yunutyEngine::NavigationAgent::GetRadius()
 }
 void yunutyEngine::NavigationAgent::Relocate(Vector3f destination)
 {
+    GetTransform()->SetWorldPosition(destination);
     if (impl->agentIdx == -1)
     {
-        GetTransform()->SetWorldPosition(destination);
         return;
     }
     const float* pos = &destination.x;
