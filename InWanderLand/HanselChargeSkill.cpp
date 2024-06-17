@@ -30,7 +30,7 @@ coroutine::Coroutine HanselChargeSkill::operator()()
         {
             UnitAcquisitionSphereColliderPool::Instance().Return(stompCollider);
             FBXPool::Instance().Return(stompEffect1);
-            //FBXPool::Instance().Return(stompEffect2);
+            FBXPool::Instance().Return(stompEffect2);
         });
 
     co_yield coroutine::WaitForSeconds(anim->GetDuration());
@@ -79,23 +79,23 @@ coroutine::Coroutine HanselChargeSkill::SpawningFieldEffect(std::weak_ptr<Hansel
     /// 이펙트도 생성
     stompEffect1 = FBXPool::Instance().Borrow("VFX_Hansel_Skill1_1");
     stompEffect1.lock()->GetGameObject()->GetTransform()->SetWorldPosition(targetPos);
-    //stompEffect1.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
+    stompEffect1.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
     stompEffect1.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(actualCollideRange, actualCollideRange, actualCollideRange));
+    stompEffect1.lock()->GetGameObject()->SetSelfActive(false);
 
-    //stompEffect2 = FBXPool::Instance().Borrow("VFX_Hansel_Skill1_2");
-    //stompEffect2.lock()->GetGameObject()->GetTransform()->SetWorldPosition(targetPos);
-    //stompEffect2.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
-    //stompEffect2.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(actualCollideRange, actualCollideRange, actualCollideRange));
+    stompEffect2 = FBXPool::Instance().Borrow("VFX_Hansel_Skill1_2");
+    stompEffect2.lock()->GetGameObject()->GetTransform()->SetWorldPosition(targetPos);
+    stompEffect2.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
+    stompEffect2.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(actualCollideRange, actualCollideRange, actualCollideRange));
+    stompEffect2.lock()->GetGameObject()->SetSelfActive(false);
 
     auto stompEffect1Animator = stompEffect1.lock()->AcquireVFXAnimator();
     stompEffect1Animator.lock()->SetAutoActiveFalse();
     stompEffect1Animator.lock()->Init();
-    stompEffect1Animator.lock()->Play();
 
-    //auto stompEffect2Animator = stompEffect2.lock()->AcquireVFXAnimator();
-    //stompEffect2Animator.lock()->SetAutoActiveFalse();
-    //stompEffect2Animator.lock()->Init();
-    //stompEffect2Animator.lock()->Play();
+    auto stompEffect2Animator = stompEffect2.lock()->AcquireVFXAnimator();
+    stompEffect2Animator.lock()->SetAutoActiveFalse();
+    stompEffect2Animator.lock()->Init();
 
     auto animator = owner.lock()->GetAnimator();
     auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill1);
@@ -128,6 +128,12 @@ coroutine::Coroutine HanselChargeSkill::SpawningFieldEffect(std::weak_ptr<Hansel
 
     stompCollider.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
     co_await std::suspend_always{};
+
+    stompEffect1.lock()->GetGameObject()->SetSelfActive(true);
+    stompEffect2.lock()->GetGameObject()->SetSelfActive(true);
+
+    stompEffect1Animator.lock()->Play();
+    stompEffect2Animator.lock()->Play();
 
     for (auto each : stompCollider.lock()->GetEnemies())
     {

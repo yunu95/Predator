@@ -55,7 +55,6 @@ coroutine::Coroutine RobinChargeSkill::operator()()
         {
             FBXPool::Instance().Return(chargeEffect);
             UnitAcquisitionSphereColliderPool::Instance().Return(knockbackCollider);
-            FBXPool::Instance().Return(chargeEffect);
         });
 
     co_await std::suspend_always{};
@@ -63,7 +62,7 @@ coroutine::Coroutine RobinChargeSkill::operator()()
     {
         Vector3d delta = pod.impactKnockbackDistance * (each->GetTransform()->GetWorldPosition() - currentPos).Normalized();
         each->KnockBack(each->GetTransform()->GetWorldPosition() + delta, pod.impactKnockbackDuration);
-        each->Paralyze(pod.impactStunDuration);
+        //each->Paralyze(pod.impactStunDuration);
         each->Damaged(owner, GetDamageImpact());
     }
 

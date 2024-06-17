@@ -161,7 +161,7 @@ coroutine::Coroutine BossImpaleSkill::SpawningSkillffect(std::weak_ptr<BossImpal
 	impaleEffect = FBXPool::Instance().Borrow("VFX_HeartQueen_Skill2");
 
 	impaleEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos);
-	impaleEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
+	impaleEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(owner.lock()->GetTransform()->GetWorldRotation());
 	impaleEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(owner.lock()->GetTransform()->GetWorldScale());
 	
 	auto chargeEffectAnimator = impaleEffect.lock()->AcquireVFXAnimator();
