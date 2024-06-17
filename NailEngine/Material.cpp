@@ -42,6 +42,10 @@ void Material::SetVertexShader(const yunuGI::IShader* shader)
 
 void Material::SetPixelShader(const yunuGI::IShader* shader)
 {
+	if (shader->GetName() == L"TexturePS.cso")
+	{
+		int a = 1;
+	}
 	ps = std::static_pointer_cast<PixelShader>(ResourceManager::Instance.Get().GetShader(shader));
 }
 

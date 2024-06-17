@@ -32,7 +32,7 @@ const std::vector<SpriteAnimation::Sprite>* SpriteAnimation::GetSprites(const wc
                     auto texture = rsrcMgr->GetTexture(relativePath);
                     newMat->SetTexture(yunuGI::Texture_Type::Temp0, texture);
                     newMat->SetVertexShader(rsrcMgr->GetShader(L"TextureVS.cso"));
-                    newMat->SetPixelShader(rsrcMgr->GetShader(L"TexturePS.cso"));
+                    newMat->SetPixelShader(rsrcMgr->GetShader(L"SpritePS.cso"));
                     wsmatch match;
                     double interval = 0;
                     std::regex_match(relativePath, match, wregex(L".*?(\\d+)ms.*"));
