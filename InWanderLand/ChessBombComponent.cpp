@@ -81,7 +81,7 @@ void ChessBombComponent::Update()
 
 void ChessBombComponent::OnTriggerEnter(physics::Collider* collider)
 {
-	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
+	if (Unit* colliderUnitComponent = UnitCollider::AcquireUnit(collider);
 		colliderUnitComponent != nullptr &&
 		colliderUnitComponent->IsPlayerUnit())
 	{
@@ -91,7 +91,7 @@ void ChessBombComponent::OnTriggerEnter(physics::Collider* collider)
 
 void ChessBombComponent::OnTriggerExit(physics::Collider* collider)
 {
-	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
+	if (Unit* colliderUnitComponent = UnitCollider::AcquireUnit(collider);
 		colliderUnitComponent != nullptr &&
 		colliderUnitComponent->IsPlayerUnit())
 	{

@@ -20,6 +20,7 @@
 #include "Reference.h"
 #include "DamageType.h"
 #include "ITacticObject.h"
+#include "UnitCollider.h"
 
 class ManagedFBX;
 class PassiveSkill;
@@ -28,6 +29,7 @@ class UnitProductor;
 class SkillSystem;
 class BurnEffect;
 class Skill;
+class UnitCollider;
 class UnitBuff;
 class UnitBuffTaunted;
 class UnitBehaviourTree;

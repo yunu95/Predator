@@ -4,7 +4,7 @@
 void StatusEffectTrigger::OnTriggerEnter(physics::Collider* collider)
 {
     // Request StatusTimer To TimerPool here
-    if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
+    if (Unit* colliderUnitComponent = UnitCollider::AcquireUnit(collider);
         colliderUnitComponent != nullptr &&
         colliderUnitComponent->GetUnitSide() != m_ownerUnit->GetUnitSide())
     {

@@ -60,7 +60,7 @@ void Interactable_TriggerSphere::Update()
 
 void Interactable_TriggerSphere::OnTriggerEnter(physics::Collider* collider)
 {
-	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
+	if (Unit* colliderUnitComponent = UnitCollider::AcquireUnit(collider);
 		colliderUnitComponent != nullptr &&
 		colliderUnitComponent->IsPlayerUnit() &&
 		colliderUnitComponent->IsAlive())
@@ -89,7 +89,7 @@ void Interactable_TriggerSphere::OnTriggerEnter(physics::Collider* collider)
 
 void Interactable_TriggerSphere::OnTriggerExit(physics::Collider* collider)
 {
-	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
+	if (Unit* colliderUnitComponent = UnitCollider::AcquireUnit(collider);
 		colliderUnitComponent != nullptr &&
 		colliderUnitComponent->IsPlayerUnit())
 	{

@@ -93,7 +93,7 @@ void Interactable_ChessBishop::Update()
 
 void Interactable_ChessBishop::OnTriggerEnter(physics::Collider* collider)
 {
-	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
+	if (Unit* colliderUnitComponent = UnitCollider::AcquireUnit(collider);
 		PlayerController::Instance().GetState() == PlayerController::State::Battle &&
 		colliderUnitComponent != nullptr &&
 		colliderUnitComponent->IsPlayerUnit() &&
@@ -105,7 +105,7 @@ void Interactable_ChessBishop::OnTriggerEnter(physics::Collider* collider)
 
 void Interactable_ChessBishop::OnTriggerExit(physics::Collider* collider)
 {
-	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
+	if (Unit* colliderUnitComponent = UnitCollider::AcquireUnit(collider);
 		colliderUnitComponent != nullptr &&
 		colliderUnitComponent->IsPlayerUnit())
 	{

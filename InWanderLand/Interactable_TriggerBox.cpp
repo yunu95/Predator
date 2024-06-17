@@ -59,7 +59,7 @@ void Interactable_TriggerBox::Update()
 
 void Interactable_TriggerBox::OnTriggerEnter(physics::Collider* collider)
 {
-	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
+	if (Unit* colliderUnitComponent = UnitCollider::AcquireUnit(collider);
 		colliderUnitComponent != nullptr &&
         colliderUnitComponent->IsPlayerUnit() &&
 		colliderUnitComponent->IsAlive())
@@ -88,7 +88,7 @@ void Interactable_TriggerBox::OnTriggerEnter(physics::Collider* collider)
 
 void Interactable_TriggerBox::OnTriggerExit(physics::Collider* collider)
 {
-	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
+	if (Unit* colliderUnitComponent = UnitCollider::AcquireUnit(collider);
 		colliderUnitComponent != nullptr &&
         colliderUnitComponent->IsPlayerUnit())
 	{
