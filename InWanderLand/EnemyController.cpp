@@ -35,6 +35,7 @@ void EnemyController::Update()
         }
     }
 }
+
 //
 //const std::vector<std::weak_ptr<Unit>>& EnemyController::GetClosestUnits(const Vector3d& from std::weak_ptr<Unit> unit)
 //{

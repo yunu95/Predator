@@ -138,6 +138,7 @@ namespace BossSummon
 			each->GetComponent<ChessBombComponent>()->OnReturn();
 		}
 		localSummonedTime = 0;
+		isPause = false;
 	}
 
 	void ChessPawn::OnBossDie()
@@ -148,6 +149,7 @@ namespace BossSummon
 			{
 				DeleteCoroutine(lastCoroutine);
 			}
+			GetGameObject()->SetSelfActive(false);
 		}
 	}
 
@@ -160,7 +162,7 @@ namespace BossSummon
 
 	void ChessPawn::Update()
 	{
-		if (!ready || !timerStart)
+		if (!ready || !timerStart || isPause)
 		{
 			return;
 		}
@@ -243,6 +245,11 @@ namespace BossSummon
 
 		while (ratio < 1)
 		{
+			while (isPause)
+			{
+				co_await std::suspend_always();
+			}
+
 			ratio = localTimer / delayTime;
 
 			if (ratio > 1)
@@ -301,7 +308,7 @@ namespace BossSummon
 			each->Damaged(damage);
 		}
 
-		SFXManager::PlaySoundfile3D("sounds/trap/EXPLOSION_gimmik.mp3", GetTransform()->GetWorldPosition());
+		SFXManager::PlaySoundfile3D("sounds/trap/Explosion.mp3", GetTransform()->GetWorldPosition());
 
 		if (particleEffectTime == 0)
 		{
@@ -309,5 +316,51 @@ namespace BossSummon
 		}
 
 		co_yield yunutyEngine::coroutine::WaitForSeconds(particleEffectTime, false);
+	}
+
+	void ChessPawn::OnPause()
+	{
+		isPause = true;
+
+		if (ready)
+		{
+			if (!timerStart)
+			{
+				if (particleObj)
+				{
+					particleObj->GetComponent<graphics::ParticleRenderer>()->Pause();
+				}
+			}
+			else
+			{
+				for (auto each : bombObjList)
+				{
+					each->GetComponent<ChessBombComponent>()->OnPause();
+				}
+			}
+		}
+	}
+
+	void ChessPawn::OnResume()
+	{
+		isPause = false;
+
+		if (ready)
+		{
+			if (!timerStart)
+			{
+				if (particleObj)
+				{
+					particleObj->GetComponent<graphics::ParticleRenderer>()->Resume();
+				}
+			}
+			else
+			{
+				for (auto each : bombObjList)
+				{
+					each->GetComponent<ChessBombComponent>()->OnResume();
+				}
+			}
+		}
 	}
 }

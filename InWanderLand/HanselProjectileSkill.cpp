@@ -1,5 +1,6 @@
 #include "InWanderLand.h"
 #include "HanselProjectileSkill.h"
+#include "VFXAnimator.h"
 
 const float throwingPieTimingFrame = 70.0f;
 
@@ -54,6 +55,8 @@ coroutine::Coroutine HanselProjectileSkill::ThrowingPie(std::weak_ptr<HanselProj
             {
                 /// 충돌한 적군에게는 실명(디버프)을 부여합니다.
                 onceCollidedUnits.insert(each);
+                each->StartCoroutine(SpawningSkillffect(each));
+                each->ApplyBuff(UnitBuffHanselDebuff{});
             }
         }
 
@@ -63,11 +66,34 @@ coroutine::Coroutine HanselProjectileSkill::ThrowingPie(std::weak_ptr<HanselProj
             {
                 /// 충돌한 아군에게는 음향버프를 부여합니다.
                 onceCollidedUnits.insert(each);
+                each->ApplyBuff(UnitBuffHanselBuff{});
             }
         }
     }
 
     co_return;
+}
+
+coroutine::Coroutine HanselProjectileSkill::SpawningSkillffect(Unit* unit)
+{
+	auto pieEffect = FBXPool::Instance().Borrow("VFX_Hansel_Skill2");
+    pieEffect.lock()->GetGameObject()->SetParent(unit->GetGameObject());
+    pieEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(unit->GetTransform()->GetWorldPosition());
+	pieEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(unit->GetTransform()->GetWorldScale());
+
+	auto pieEffectAnimator = pieEffect.lock()->AcquireVFXAnimator();
+	pieEffectAnimator.lock()->SetAutoActiveFalse();
+	pieEffectAnimator.lock()->Init();
+	pieEffectAnimator.lock()->Play();
+
+    while (!pieEffectAnimator.lock()->IsDone())
+    {
+		co_await std::suspend_always{};
+    }
+
+    FBXPool::Instance().Return(pieEffect);
+
+	co_return;
 }
 
 float HanselProjectileSkill::GetCastRange()
@@ -90,7 +116,7 @@ coroutine::Coroutine HanselProjectileSkill::operator()()
 
     coroutine::ForSeconds forThrowingSeconds{ pod.throwingStartDelay };
 
-    owner.lock()->PlayAnimation(UnitAnimType::Throw, true);
+    owner.lock()->PlayAnimation(UnitAnimType::Throw, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
 
     while (throwingPieTimingFrame >= animator.lock()->GetCurrentFrame())
     {

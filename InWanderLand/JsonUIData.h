@@ -16,6 +16,7 @@ struct JsonUIData
     std::vector<int> openTargets;
     // 만약 플래그에 diablingButton이 있다면 버튼을 눌렀을 때 비활성화시킬 UI 창을 의미한다.
     std::vector<int> closeTargets;
+    std::vector<int> disablePropagationTargets;
     std::vector<int> hoverEnableTargets;
     std::vector<float> color;
     std::vector<float> pivot;

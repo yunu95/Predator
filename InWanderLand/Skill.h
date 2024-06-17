@@ -1,9 +1,11 @@
 #pragma once
 #include "YunutyEngine.h"
 #include "SkillType.h"
+#include "ITacticObject.h"
 
 class Unit;
 class Skill
+    : public ITacticObject
 {
 protected:
     Vector3d targetPos;
@@ -16,6 +18,9 @@ public:
     virtual float GetCastRange() { return 8; };
 
     virtual void OnInterruption() {};
+
+    virtual void OnPause() override {}
+    virtual void OnResume() override {}
 
     static bool SkillPodFieldPreEncoding(SkillType::Enum type, json& data);
     static bool SkillPodFieldPostEncoding(SkillType::Enum type, json& data);

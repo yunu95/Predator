@@ -9,7 +9,10 @@ void Projectile::Update()
     {
         if (!enemies.empty())
         {
-            (*enemies.begin())->Damaged(owner, damage, DamageType::Attack);
+            if (!owner.lock()->referenceBlindness.BeingReferenced())
+            {
+                (*enemies.begin())->Damaged(owner, damage, DamageType::Attack);
+            }
             ProjectilePool::SingleInstance().Return(GetWeakPtr<Projectile>());
             return;
         }

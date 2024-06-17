@@ -112,6 +112,31 @@ namespace BossSummon
 			DeleteCoroutine(summonCorountine);
 		}
 		summonCorountine = StartCoroutine(SummonMoldUnit());
+		if (!summonCorountine.expired())
+		{
+			FBXPool::Instance().Return(summonEffect);
+			FBXPool::Instance().Return(summoningEffect);
+		}
+	}
+
+	void RightFrame::OnPause()
+	{
+		isPause = true;
+
+		if (!HasChangedUnit())
+		{
+			GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->Pause();
+		}
+	}
+
+	void RightFrame::OnResume()
+	{
+		isPause = false;
+
+		if (!HasChangedUnit())
+		{
+			GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->Resume();
+		}
 	}
 
 	bool RightFrame::IsAlive() const
@@ -165,21 +190,34 @@ namespace BossSummon
 		auto disableNavAgent = unitFrame.lock()->referenceDisableNavAgent.Acquire();
 		auto blockStateChange = unitFrame.lock()->referencePause.Acquire();
 
-		unitFrame.lock()->PlayAnimation(UnitAnimType::Skill1, false);
+		co_await std::suspend_always();
+
+		unitFrame.lock()->PlayAnimation(UnitAnimType::Skill1, Animation::PlayFlag_::None);
 		auto animator = unitFrame.lock()->GetAnimator();
 		auto anim = wanderResources::GetAnimation(unitFrame.lock()->GetFBXName(), UnitAnimType::Skill1);
+		
 		coroutine::ForSeconds forSeconds{ anim->GetDuration() };
 
 		Vector3d pivotPos = GetGameObject()->GetTransform()->GetWorldPosition() + Vector3d(BossSummonMobSkill::pod.rightSummonOffset_x, 0, BossSummonMobSkill::pod.rightSummonOffset_z);
 		Quaternion summonRot = GetGameObject()->GetTransform()->GetWorldRotation();
 
 		/// 1. VFX 실행을 한다(Set Auto 어쩌고로 내가 Active 관리)
-		auto summonEffect = FBXPool::Instance().Borrow("VFX_Frame_Summon");
+		summonEffect = FBXPool::Instance().Borrow("VFX_Frame_Summon");
 		summonEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
 		summonEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(GetTransform()->GetWorldRotation());
 		auto summonEffectAnimator = summonEffect.lock()->AcquireVFXAnimator();
 		summonEffectAnimator.lock()->SetAutoActiveFalse();
 		summonEffectAnimator.lock()->Init();
+
+		summoningEffect = FBXPool::Instance().Borrow("VFX_Frame_Summoning");
+		summoningEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
+		summoningEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(GetTransform()->GetWorldRotation());
+		auto summoningEffectAnimator = summoningEffect.lock()->AcquireVFXAnimator();
+		summoningEffectAnimator.lock()->SetLoop(true);
+		summoningEffectAnimator.lock()->SetAutoActiveFalse();
+		summoningEffectAnimator.lock()->Init();
+		summoningEffect.lock()->SetActive(false);
+
 		summonEffectAnimator.lock()->Play();
 		/// 2. 특정 시간 만큼 기다린다. (VFX Summon Animation 끝날 때까지 co_await suspend always / IsDone)
 		while (!summonEffectAnimator.lock()->IsDone())
@@ -187,14 +225,9 @@ namespace BossSummon
 			co_await std::suspend_always{};
 		}
 		/// 3. VFX 바꿔서 실행한다(VFX Summoning, 기존 거는 Active false 하고(?) 반납)
-		FBXPool::Instance().Return(summonEffect);
-		auto summoningEffect = FBXPool::Instance().Borrow("VFX_Frame_Summoning");
-		summoningEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
-		summoningEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(GetTransform()->GetWorldRotation());
-		auto summoningEffectAnimator = summoningEffect.lock()->AcquireVFXAnimator();
-		summoningEffectAnimator.lock()->SetLoop(true);
-		summoningEffectAnimator.lock()->SetAutoActiveFalse();
-		summoningEffectAnimator.lock()->Init();
+		summonEffect.lock()->SetActive(false);
+		summoningEffect.lock()->SetActive(true);
+		unitFrame.lock()->PlayAnimation(UnitAnimType::Idle, false);
 		summoningEffectAnimator.lock()->Play();
 
 		co_await std::suspend_always{};
@@ -293,9 +326,6 @@ namespace BossSummon
 			}
 			co_await std::suspend_always();
 		}
-
-		/// 4. VFX_Summoning 반납
-		FBXPool::Instance().Return(summoningEffect);
 
 		co_return;
 	}

@@ -820,9 +820,6 @@
     <Filter Include="Contents_Refactored\Unit\UnitBuff\UnitBuffUrsula">
       <UniqueIdentifier>{3c5e05c5-b64b-44a6-a080-5518de005d5d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Contents_Refactored\Unit\UnitBuff\UnitBuffHansel">
-      <UniqueIdentifier>{30b4f5d3-ed9d-4789-800c-27fcf8eb8da2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Contents_Refactored\WanderYieldInstrcution">
       <UniqueIdentifier>{0cd58224-0474-47e2-bcc0-e4746ac7f062}</UniqueIdentifier>
     </Filter>
@@ -855,6 +852,21 @@
     </Filter>
     <Filter Include="Contents\TacticModeSystem\ITacticObject">
       <UniqueIdentifier>{b12f3552-2555-4de0-b53b-226f40f34213}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\ScriptSystem\2_Action\List\Action_EngagePeace">
+      <UniqueIdentifier>{0b2355b1-29dc-49bf-a5ac-437da5f5bb5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Unit\UnitBuff\UnitBuffTaunted">
+      <UniqueIdentifier>{a16c2fc5-ea49-4b85-9231-98235f7bd7df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Unit\UnitBuff\UnitBuffBlinded">
+      <UniqueIdentifier>{378e8528-0ed5-45a3-9424-c5dd1221d192}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Unit\UnitBuff\UnitBuffHanselBuff">
+      <UniqueIdentifier>{30b4f5d3-ed9d-4789-800c-27fcf8eb8da2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\Unit\UnitBuff\UnitBuffHanselDebuff">
+      <UniqueIdentifier>{554f8c4c-b096-4c3a-9f29-24ffdd3d860f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2029,8 +2041,8 @@
     <ClInclude Include="UnitBuffUrsula.h">
       <Filter>Contents_Refactored\Unit\UnitBuff\UnitBuffUrsula</Filter>
     </ClInclude>
-    <ClInclude Include="UnitBuffHansel.h">
-      <Filter>Contents_Refactored\Unit\UnitBuff\UnitBuffHansel</Filter>
+    <ClInclude Include="UnitBuffHanselBuff.h">
+      <Filter>Contents_Refactored\Unit\UnitBuff\UnitBuffHanselBuff</Filter>
     </ClInclude>
     <ClInclude Include="PassiveHanselHeal.h">
       <Filter>Contents_Refactored\Skill\PassiveSkill\PassiveHanselHeal</Filter>
@@ -2070,6 +2082,21 @@
     </ClInclude>
     <ClInclude Include="ITacticObject.h">
       <Filter>Contents\TacticModeSystem\ITacticObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Action_EngagePeace.h">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_EngagePeace</Filter>
+    </ClInclude>
+    <ClInclude Include="Condition_TacticMode.h">
+      <Filter>Editor\ScriptSystem\1_Condition\List</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitBuffTaunted.h">
+      <Filter>Contents_Refactored\Unit\UnitBuff\UnitBuffTaunted</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitBuffBlinded.h">
+      <Filter>Contents_Refactored\Unit\UnitBuff\UnitBuffBlinded</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitBuffHanselDebuff.h">
+      <Filter>Contents_Refactored\Unit\UnitBuff\UnitBuffHanselDebuff</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -3055,8 +3082,8 @@
     <ClCompile Include="UnitBuffUrsula.cpp">
       <Filter>Contents_Refactored\Unit\UnitBuff\UnitBuffUrsula</Filter>
     </ClCompile>
-    <ClCompile Include="UnitBuffHansel.cpp">
-      <Filter>Contents_Refactored\Unit\UnitBuff\UnitBuffHansel</Filter>
+    <ClCompile Include="UnitBuffHanselBuff.cpp">
+      <Filter>Contents_Refactored\Unit\UnitBuff\UnitBuffHanselBuff</Filter>
     </ClCompile>
     <ClCompile Include="PassiveHanselHeal.cpp">
       <Filter>Contents_Refactored\Skill\PassiveSkill\PassiveHanselHeal</Filter>
@@ -3081,6 +3108,24 @@
     </ClCompile>
     <ClCompile Include="UIVideoPlayer.cpp">
       <Filter>UI\Effect\UIVideoPlayer</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_EngagePeace.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_EngagePeace</Filter>
+    </ClCompile>
+    <ClCompile Include="Condition_TacticMode.cpp">
+      <Filter>Editor\ScriptSystem\1_Condition\List</Filter>
+    </ClCompile>
+    <ClCompile Include="ITacticObject.cpp">
+      <Filter>Contents\TacticModeSystem\ITacticObject</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitBuffTaunted.cpp">
+      <Filter>Contents_Refactored\Unit\UnitBuff\UnitBuffTaunted</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitBuffBlinded.cpp">
+      <Filter>Contents_Refactored\Unit\UnitBuff\UnitBuffBlinded</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitBuffHanselDebuff.cpp">
+      <Filter>Contents_Refactored\Unit\UnitBuff\UnitBuffHanselDebuff</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

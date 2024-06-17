@@ -211,7 +211,7 @@ void PlayerController::HandleInput()
     {
         if ((TacticModeSystem::Instance().IsCoolTime() == false) && (TacticModeSystem::Instance().IsExecuting() == false))
         {
-            state = State::Tactic;
+            SetState(State::Tactic);
             TacticModeSystem::Instance().EngageTacticSystem();
         }
         else if ((TacticModeSystem::Instance().IsOperation() == true) && (TacticModeSystem::Instance().IsExecuting() == false))
@@ -460,6 +460,7 @@ void PlayerController::OnRightClick()
             }
             else
             {
+                SFXManager::PlaySoundfile("sounds/Etc/Character move click.mp3");
                 OrderMove(GetWorldCursorPosition());
             }
         }
@@ -701,6 +702,13 @@ void PlayerController::SelectSkill(SkillType::Enum skillType)
 }
 void PlayerController::SetState(State::Enum newState)
 {
+    switch (state)
+    {
+    case PlayerController::State::Tactic:
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::TacticModeIngameUI)->DisableElement();
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Bottom_Layout)->EnableElement();
+        break;
+    }
     state = newState;
     switch (state)
     {
@@ -719,6 +727,8 @@ void PlayerController::SetState(State::Enum newState)
         }
         break;
     case State::Tactic:
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::TacticModeIngameUI)->EnableElement();
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Bottom_Layout)->DisableElement();
         UnSelectSkill();
         break;
     }

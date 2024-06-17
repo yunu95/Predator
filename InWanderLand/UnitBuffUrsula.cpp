@@ -10,8 +10,8 @@ void UnitBuffUrsula::OnStart()
 {
     attackSpeedAdder = owner.lock()->adderAttackSpeed.AcquireFactor();
     *attackSpeedAdder = PassiveUrsula::GetAttackSpeedBonusPerStack();
-    attackDamageAdder = owner.lock()->adderAttackDamage.AcquireFactor();
-    *attackDamageAdder = PassiveUrsula::GetAttackDamageBonusPerStack();
+    critChanceAdder = owner.lock()->adderCritChance.AcquireFactor();
+    *critChanceAdder = PassiveUrsula::GetCritChanceBonusPerStack();
 };
 
 void UnitBuffUrsula::OnOverlap(UnitBuff&& overlapping)
@@ -20,6 +20,6 @@ void UnitBuffUrsula::OnOverlap(UnitBuff&& overlapping)
     if (auto sameUrsulaBuff = dynamic_cast<UnitBuffUrsula*>(&overlapping); sameUrsulaBuff)
     {
         *attackSpeedAdder = std::fmin(PassiveUrsula::GetAttackSpeedBonusPerStack() * PassiveUrsula::pod.maxStack, *attackSpeedAdder + PassiveUrsula::GetAttackSpeedBonusPerStack());
-        *attackDamageAdder = std::fmin(PassiveUrsula::GetAttackDamageBonusPerStack() * PassiveUrsula::pod.maxStack, *attackDamageAdder + PassiveUrsula::GetAttackDamageBonusPerStack());
+        *critChanceAdder = std::fmin(PassiveUrsula::GetCritChanceBonusPerStack() * PassiveUrsula::pod.maxStack, *critChanceAdder + PassiveUrsula::GetCritChanceBonusPerStack());
     }
 }

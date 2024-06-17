@@ -19,6 +19,9 @@ namespace BossSummon
 		virtual void SetReady() = 0;
 		virtual void StartTimer() { timerStart = true; }
 
+		virtual void OnPause() = 0;
+		virtual void OnResume() = 0;
+
 	protected:
 		bool ready = false;
 		bool timerStart = false;
@@ -37,5 +40,6 @@ namespace BossSummon
 		std::vector<GameObject*> bombObjList = std::vector<GameObject*>();
 		float guideUp_Y = 0.01;
 		float localSummonedTime = 0;
+		bool isPause = false;
 	};
 }

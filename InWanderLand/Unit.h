@@ -19,6 +19,7 @@
 #include "Multiplier.h"
 #include "Reference.h"
 #include "DamageType.h"
+#include "ITacticObject.h"
 
 class ManagedFBX;
 class PassiveSkill;
@@ -28,6 +29,7 @@ class SkillSystem;
 class BurnEffect;
 class Skill;
 class UnitBuff;
+class UnitBuffTaunted;
 class UnitBehaviourTree;
 class UnitAcquisitionSphereCollider;
 class UnitPool;
@@ -42,7 +44,7 @@ namespace application
         class Unit_TemplateData;
     }
 }
-class Unit : public Component, public PermanentObservee
+class Unit : public Component, public PermanentObservee, public ITacticObject
 {
 public:
     static Vector3d FromTo(std::weak_ptr<Unit> from, std::weak_ptr<Unit> to);
@@ -59,8 +61,8 @@ public:
     void Init(const application::editor::Unit_TemplateData* unitTemplateData);
     // 유닛 데이터의 정보에 맞게 이 유닛을 소환한다.
     void Summon(const application::editor::UnitData* unitData);
-    void Summon(application::editor::Unit_TemplateData* td, const Vector3d& position, float rotation, bool instant = true);
-    void Summon(application::editor::Unit_TemplateData* td, const Vector3d& position, const Quaternion& rotation, bool instant = true);
+    void Summon(application::editor::Unit_TemplateData* td, const Vector3d& position, float rotation, bool instant = false);
+    void Summon(application::editor::Unit_TemplateData* td, const Vector3d& position, const Quaternion& rotation, bool instant = false);
     // 유닛의 초기화 구문, 유닛의 체력을 정상상태로 만들며, 버프를 모두 제거하고 상태를 Idle로 만든다.
     void Reset();
     const application::editor::Unit_TemplateData& GetUnitTemplateData()const;
@@ -85,8 +87,9 @@ public:
     /// Unit 의 위치로부터 입력한 위치벡터(월드 좌표계 기준)에 KnockBack 을 수행합니다.
     void KnockBackRelativeVector(Vector3d relativeVector, float knockBackDuration);
     void Paralyze(float paralyzeDuration);
+    coroutine::Coroutine ParalyzeEffectCoroutine(float paralyzeDuration);
     yunutyEngine::coroutine::Coroutine KnockBackCoroutine(Vector3d targetPosition, float knockBackDuration, bool relative = false);
-    void PlayAnimation(UnitAnimType animType, bool repeat = false);
+    void PlayAnimation(UnitAnimType animType, Animation::PlayFlag playFlag = Animation::PlayFlag_::Blending);
     void BlendWithDefaultAnimation();
     void SetDefaultAnimation(UnitAnimType animType);
     void SetDesiredRotation(const Vector3d& facingDirection);
@@ -97,13 +100,13 @@ public:
     float GetUnitCurrentHp() const;
     float GetUnitMaxHp() const;
     // AcquireFactor는 수치에 곱연산이 적용될 부분이며, AcquireDelta는 수치에 덧셈 연산이 적용될 부분이다.
-    factor::Multiplier<float> multiplierDamage;
-    factor::Multiplier<float> multiplierDamageReceive;
+    factor::Adder<float> multiplierDamage;
+    factor::Adder<float> multiplierDamageReceive;
     factor::Adder<float> adderAttackDamage;
     // adderAttackSpeed에 담긴 값들은 합연산되어 공격 주기에 1 / (1 + adderAttackSpeed)의 수치로 곱해진다.
     factor::Adder<float> adderAttackSpeed;
     factor::Multiplier<float> multiplierAttackSpeed;
-    factor::Adder<float> adderCrit;
+    factor::Adder<float> adderCritChance;
     virtual void OnContentsPlay() override { }
     virtual void OnContentsStop() override;
     virtual Component* GetComponent() override { return this; }
@@ -113,6 +116,10 @@ public:
     virtual void Update() override;
     virtual void OnDestroy() override;
     virtual ~Unit();
+
+    virtual void OnPause() override;
+    virtual void OnResume() override;
+
     bool IsPlayerUnit() const;
     bool IsInvulenerable() const;
     bool IsAlive()const;
@@ -128,6 +135,8 @@ public:
     // 매개변수는 피해를 받은 상대
     DelegateCallback<std::weak_ptr<Unit>> onAttackHit;
     // 내가 피해를 입었을 때, 매개변수는 피해를 준 상대
+    DelegateCallback<std::weak_ptr<Unit>> onDamagedFromUnit;
+    // 상대가 특정되지 않고 일반적으로 대미지 받은 모든 경우에 호출되는 callback
     DelegateCallback<void> onDamaged;
     // 유닛이 새로 생성될 때
     DelegateCallback<void> onCreated;
@@ -139,6 +148,7 @@ public:
     Reference referenceParalysis;
     Reference referenceBlockPendingOrder;
     Reference referenceBlockRotation;
+    Reference referenceBlindness;
     Reference referenceInvulnerable;
     Reference referenceBlockAttack;
     // NavAgent 객체를 아예 비활성화함.
@@ -237,10 +247,12 @@ private:
     int navAgentEnableFrameCount{ 0 };
     std::weak_ptr<ManagedFBX> attackVFX = std::weak_ptr<ManagedFBX>();
     std::weak_ptr<ManagedFBX> damagedVFX = std::weak_ptr<ManagedFBX>();
+	std::weak_ptr<ManagedFBX> paralysisVFX = std::weak_ptr<ManagedFBX>();
     friend UnitBuff;
     friend UnitPool;
     friend PlayerController;
     friend BossController;
+    friend UnitBuffTaunted;
 };
 template<UnitOrderType orderType>
 bool Unit::CanProcessOrder()

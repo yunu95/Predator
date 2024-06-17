@@ -70,7 +70,12 @@ void Interactable_ChessBishop::Start()
 
 void Interactable_ChessBishop::Update()
 {
-	if (triggerOn)
+	if (!unitSet.empty())
+	{
+		OnInteractableTriggerEnter();
+	}
+
+	if (!isPause && triggerOn)
 	{
 		if (!isInteracting)
 		{
@@ -94,7 +99,17 @@ void Interactable_ChessBishop::OnTriggerEnter(physics::Collider* collider)
 		colliderUnitComponent->IsPlayerUnit() &&
 		colliderUnitComponent->IsAlive())
 	{
-		OnInteractableTriggerEnter();
+		unitSet.insert(colliderUnitComponent);
+	}
+}
+
+void Interactable_ChessBishop::OnTriggerExit(physics::Collider* collider)
+{
+	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
+		colliderUnitComponent != nullptr &&
+		colliderUnitComponent->IsPlayerUnit())
+	{
+		unitSet.erase(colliderUnitComponent);
 	}
 }
 
@@ -111,6 +126,11 @@ yunutyEngine::coroutine::Coroutine Interactable_ChessBishop::DoInteraction()
 
 	while (ratio < 1)
 	{
+		while (isPause)
+		{
+			co_await std::suspend_always();
+		}
+
 		ratio = localTimer / delayTime;
 
 		if (ratio > 1)
@@ -169,7 +189,7 @@ yunutyEngine::coroutine::Coroutine Interactable_ChessBishop::DoInteraction()
 		each->Damaged(damage);
 	}
 
-	SFXManager::PlaySoundfile3D("sounds/trap/EXPLOSION_gimmik.mp3", GetTransform()->GetWorldPosition());
+	SFXManager::PlaySoundfile3D("sounds/trap/Explosion.mp3", GetTransform()->GetWorldPosition());
 
 	if (particleEffectTime == 0)
 	{
@@ -197,4 +217,24 @@ void Interactable_ChessBishop::SetDataFromEditorData(const application::editor::
 	damage = data.pod.templateData->pod.damage;
 	delayTime = data.pod.templateData->pod.delayTime;
 	particleEffectTime = data.pod.templateData->pod.particleEffectTime;
+}
+
+void Interactable_ChessBishop::OnPause()
+{
+	isPause = true;
+
+	for (auto each : bombObjList)
+	{
+		each->GetComponent<ChessBombComponent>()->OnPause();
+	}
+}
+
+void Interactable_ChessBishop::OnResume()
+{
+	isPause = false;
+
+	for (auto each : bombObjList)
+	{
+		each->GetComponent<ChessBombComponent>()->OnResume();
+	}
 }

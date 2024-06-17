@@ -39,6 +39,29 @@ void Interactable_TrapSwitch::Start()
 
 void Interactable_TrapSwitch::Update()
 {
+	auto eraseList = triggerStay;
+	for (auto each : triggerStay)
+	{
+		if (each->GetGameObject()->GetComponent<Unit>()->IsAlive())
+		{
+			eraseList.erase(each);
+		}
+	}
+	for (auto each : eraseList)
+	{
+		triggerStay.erase(each);
+	}
+
+	if (triggerOn && triggerStay.size() == 0)
+	{
+		triggerOn = false;
+	}
+
+	if (isPause)
+	{
+		return;
+	}
+
 	if (triggerOn)
 	{
 		if (mesh)
@@ -53,8 +76,6 @@ void Interactable_TrapSwitch::Update()
 			mesh->GetTransform()->SetLocalPosition(Vector3d(0, 0, 0));
 		}
 	}
-
-	/// 내부로 들어온 유닛이 죽었을 때, 리스트에서 제외하는 로직 필요함
 }
 
 void Interactable_TrapSwitch::OnTriggerEnter(physics::Collider* collider)
@@ -67,11 +88,11 @@ void Interactable_TrapSwitch::OnTriggerEnter(physics::Collider* collider)
 	{
 		triggerStay.insert(collider);
 		triggerOn = true;
-		if (triggerStay.size() == 1 && !isInteracting)
+		if (!isPause && triggerStay.size() == 1 && !isInteracting)
 		{
 			OnInteractableTriggerEnter();
 			isInteracting = true;
-			SFXManager::PlaySoundfile3D("sounds/trap/Trigger_Active.wav", GetGameObject()->GetTransform()->GetWorldPosition());
+			SFXManager::PlaySoundfile3D("sounds/trap/Scaffold trigger.wav", GetGameObject()->GetTransform()->GetWorldPosition());
 		}
 	}
 }
@@ -82,10 +103,6 @@ void Interactable_TrapSwitch::OnTriggerExit(physics::Collider* collider)
 		colliderUnitComponent != nullptr &&
 		colliderUnitComponent->IsPlayerUnit())
 	{
-		if (triggerStay.size() == 1 && triggerOn)
-		{
-			triggerOn = false;
-		}
 		triggerStay.erase(collider);
 	}
 }
@@ -102,4 +119,14 @@ void Interactable_TrapSwitch::SetDataFromEditorData(const application::editor::I
 	initScale.x = data.pod.scale.x;
 	initScale.y = data.pod.scale.y;
 	initScale.z = data.pod.scale.z;
+}
+
+void Interactable_TrapSwitch::OnPause()
+{
+	isPause = true;
+}
+
+void Interactable_TrapSwitch::OnResume()
+{
+	isPause = false;
 }

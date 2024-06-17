@@ -156,6 +156,16 @@ namespace application
                         Condition_TutorialModeOff::ImGui_DrawDataPopup(static_cast<Condition_TutorialModeOff*>(data));
                         break;
                     }
+                    case application::ConditionType::TacticModeOn:
+                    {
+                        Condition_TacticModeOn::ImGui_DrawDataPopup(static_cast<Condition_TacticModeOn*>(data));
+                        break;
+                    }
+                    case application::ConditionType::TacticModeOff:
+                    {
+                        Condition_TacticModeOff::ImGui_DrawDataPopup(static_cast<Condition_TacticModeOff*>(data));
+                        break;
+                    }
                     default:
                         break;
                     }
@@ -359,6 +369,11 @@ namespace application
                     case application::ActionType::EngageBattle:
                     {
                         Action_EngageBattle::ImGui_DrawDataPopup(static_cast<Action_EngageBattle*>(data));
+                        break;
+                    }
+                    case application::ActionType::EngagePeace:
+                    {
+                        Action_EngagePeace::ImGui_DrawDataPopup(static_cast<Action_EngagePeace*>(data));
                         break;
                     }
                     default:

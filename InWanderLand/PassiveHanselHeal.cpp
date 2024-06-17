@@ -1,16 +1,28 @@
 #include "PassiveHanselHeal.h"
 #include "InWanderLand.h"
+#include "VFXAnimator.h"
 
 POD_PassiveHanselHeal PassiveHanselHeal::pod;
 coroutine::Coroutine PassiveHanselHeal::CookieLingering(Vector3d pos, std::weak_ptr<Unit> owner)
 {
     pos = SingleNavigationField::Instance().GetClosestPointOnField(pos);
-    auto cookieMesh = FBXPool::Instance().Borrow(wanderResources::GetFBXName(wanderResources::WanderFBX::HEALING_COOKIE));
+	auto cookieMesh = FBXPool::Instance().Borrow("VFX_HealPack");
+
     auto collider = UnitAcquisitionSphereColliderPool::Instance().Borrow(owner);
     collider.lock()->SetRadius(pod.cookieRadius);
     collider.lock()->GetTransform()->SetWorldPosition(pos);
     cookieMesh.lock()->GetTransform()->SetWorldPosition(pos);
     cookieMesh.lock()->GetTransform()->SetLocalScale(pod.cookieScale * Vector3d::one);
+    
+	auto cookieEffectAnimator = cookieMesh.lock()->AcquireVFXAnimator();
+    cookieEffectAnimator.lock()->SetLoop(true);
+	cookieEffectAnimator.lock()->SetAutoActiveFalse();
+	cookieEffectAnimator.lock()->Init();
+	cookieEffectAnimator.lock()->Play();
+
+
+    SFXManager::PlaySoundfile("sounds/Hansel/Hansel passive.wav");
+
     coroutine::ForSeconds forSeconds{ pod.cookieLifetime };
     while (forSeconds.Tick())
     {

@@ -16,7 +16,7 @@ coroutine::Coroutine UrsulaBlindSkill::operator()()
     auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
     auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
     auto enableNavObstacle = owner.lock()->referenceEnableNavObstacle.Acquire();
-    owner.lock()->PlayAnimation(UnitAnimType::Skill1, true);
+    owner.lock()->PlayAnimation(UnitAnimType::Skill1, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
     auto animator = owner.lock()->GetAnimator();
     auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill1);
 
@@ -150,6 +150,7 @@ coroutine::Coroutine UrsulaBlindSkill::SpawningFieldEffect(std::weak_ptr<UrsulaB
 
             for (auto& each : circle_Top.lock()->GetEnemies())
             {
+                each->ApplyBuff(UnitBuffBlinded{});
                 each->Damaged(owner, GetSkillDamage());
                 /// 실명
                 /// 실명 대상은 skillBlindTime 동안 실명 상태
@@ -157,6 +158,7 @@ coroutine::Coroutine UrsulaBlindSkill::SpawningFieldEffect(std::weak_ptr<UrsulaB
 
             for (auto& each : circle_Left.lock()->GetEnemies())
             {
+                each->ApplyBuff(UnitBuffBlinded{});
                 each->Damaged(owner, GetSkillDamage());
                 /// 실명
                 /// 실명 대상은 skillBlindTime 동안 실명 상태
@@ -164,6 +166,7 @@ coroutine::Coroutine UrsulaBlindSkill::SpawningFieldEffect(std::weak_ptr<UrsulaB
 
             for (auto& each : circle_Right.lock()->GetEnemies())
             {
+                each->ApplyBuff(UnitBuffBlinded{});
                 each->Damaged(owner, GetSkillDamage());
                 /// 실명
                 /// 실명 대상은 skillBlindTime 동안 실명 상태

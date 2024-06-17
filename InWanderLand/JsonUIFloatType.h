@@ -5,7 +5,11 @@ struct JsonUIFloatType
     enum Enum {
         NONE,
         popUpDuration,
+        popUpFrom,
+        popUpTo,
         popDownDuration,
+        popDownFrom,
+        popDownTo,
         soundOnClick_delay,
         soundOnHover_delay,
         soundOnEnable_delay,

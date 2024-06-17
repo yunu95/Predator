@@ -21,7 +21,7 @@ coroutine::Coroutine UrsulaParalysisSkill::operator()()
             UnitAcquisitionSphereColliderPool::Instance().Return(damageCollider);
             UnitAcquisitionSphereColliderPool::Instance().Return(knockBackCollider);
         });
-    owner.lock()->PlayAnimation(UnitAnimType::Skill2, true);
+    owner.lock()->PlayAnimation(UnitAnimType::Skill2, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
     auto animator = owner.lock()->GetAnimator();
     auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill2);
     coroutine::ForSeconds forSeconds{ anim->GetDuration() };
@@ -134,6 +134,7 @@ coroutine::Coroutine UrsulaParalysisSkill::SpawningFieldEffect(std::weak_ptr<Urs
             for (auto& each : knockBackCollider.lock()->GetEnemies())
             {
                 each->KnockBack(targetPos, pod.knockBackDuration);
+				each->Paralyze(pod.knockBackDuration);
             }
         }
         co_await std::suspend_always{};

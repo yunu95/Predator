@@ -412,30 +412,51 @@ void SkyBoxPass::BindIBLTexture()
 {
     ResourceBuilder::Instance.Get().device->GetDeviceContext()->PSSetSamplers(2, 1, samplerState.GetAddressOf());
 
-	/*std::wstring stage = L"Stage1";
-	std::wstring env = L"EnvHDR.dds";
-	std::wstring diffuse = L"DiffuseHDR.dds";
-	std::wstring specular = L"SpecularHDR.dds";
-	std::wstring brdf = L"Brdf.dds";*/
+    /*std::wstring stage = L"Stage1";
+    std::wstring env = L"EnvHDR.dds";
+    std::wstring diffuse = L"DiffuseHDR.dds";
+    std::wstring specular = L"SpecularHDR.dds";
+    std::wstring brdf = L"Brdf.dds";*/
 
     std::wstring texture = L"Texture/";
     texture += stage;
     texture += env;
 
-    ResourceManager::Instance.Get().GetTexture(texture).get()->Bind(19);
+    static std::shared_ptr<Texture> envTexture;
+    if (stageChanged)
+    {
+        envTexture = ResourceManager::Instance.Get().GetTexture(texture);
+    }
+    envTexture->Bind(19);
     texture.clear();
     texture = L"Texture/";
     texture += stage;
     texture += diffuse;
-    ResourceManager::Instance.Get().GetTexture(texture)->Bind(20);
-	texture.clear();
-	texture = L"Texture/";
-	texture += stage;
-	texture += specular;
-    ResourceManager::Instance.Get().GetTexture(texture)->Bind(21);
-	texture.clear();
-	texture = L"Texture/";
-	texture += stage;
-	texture += brdf;
-    ResourceManager::Instance.Get().GetTexture(texture)->Bind(22);
+    static std::shared_ptr<Texture> diffuseTexture;
+    if (stageChanged)
+    {
+        diffuseTexture = ResourceManager::Instance.Get().GetTexture(texture);
+    }
+    diffuseTexture->Bind(20);
+    texture.clear();
+    texture = L"Texture/";
+    texture += stage;
+    texture += specular;
+    static std::shared_ptr<Texture> specularTexture;
+    if (stageChanged)
+    {
+        specularTexture = ResourceManager::Instance.Get().GetTexture(texture);
+    }
+    specularTexture->Bind(21);
+    texture.clear();
+    texture = L"Texture/";
+    texture += stage;
+    texture += brdf;
+    static std::shared_ptr<Texture> brdfTexture;
+    if (stageChanged)
+    {
+        brdfTexture = ResourceManager::Instance.Get().GetTexture(texture);
+    }
+    brdfTexture->Bind(22);
+    stageChanged = false;
 }

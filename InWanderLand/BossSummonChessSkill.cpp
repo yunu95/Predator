@@ -20,7 +20,7 @@ coroutine::Coroutine BossSummonChessSkill::operator()()
 	auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
 	auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
 	auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
-	owner.lock()->PlayAnimation(UnitAnimType::Skill4, true);
+	owner.lock()->PlayAnimation(UnitAnimType::Skill4, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
 	effectCoroutine = owner.lock()->StartCoroutine(SpawningFieldEffect(std::dynamic_pointer_cast<BossSummonChessSkill>(selfWeakPtr.lock())));
 	effectCoroutine.lock()->PushDestroyCallBack([this]()
 		{
@@ -215,8 +215,8 @@ coroutine::Coroutine BossSummonChessSkill::SummonChess(std::weak_ptr<BossSummonC
 			{
 				tempPos.y = 0;
 				chessList[i].lock()->GetSummonComponent()->GetTransform()->SetWorldPosition(tempPos);
-				/// 낙하할 때 사운드 관련 작업 필요
 				chessList[i].lock()->SetReady();
+				SFXManager::PlaySoundfile3D("sounds/Heart Queen/Heart Queen chess summon.wav", tempPos);
 			}
 		}
 		co_await std::suspend_always{};
