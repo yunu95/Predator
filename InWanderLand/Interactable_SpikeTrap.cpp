@@ -12,6 +12,9 @@
 
 void Interactable_SpikeTrap::Start()
 {
+    frame = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_SpikeFrame");
+    frame->SetParent(GetGameObject());
+
     auto ts = GetGameObject()->GetTransform();
     ts->SetWorldPosition(initPos);
     ts->SetWorldRotation(initRotation);
@@ -28,7 +31,7 @@ void Interactable_SpikeTrap::Start()
         auto renderer = each->GetComponent<graphics::StaticMeshRenderer>();
         if (renderer)
         {
-            mesh = each;
+            spike = each;
             break;
         }
     }
@@ -36,6 +39,35 @@ void Interactable_SpikeTrap::Start()
 
 void Interactable_SpikeTrap::Update()
 {
+    if (PlayerController::Instance().GetState() == PlayerController::State::Battle)
+    {
+        spike->SetSelfActive(true);
+    }
+    else
+    {
+        spike->SetSelfActive(false);
+    }
+
+    static auto eraseList = triggerStay;
+    for (auto each : triggerStay)
+    {
+        if (each->GetGameObject()->GetComponent<Unit>()->IsAlive())
+        {
+            eraseList.erase(each);
+        }
+    }
+    for (auto each : eraseList)
+    {
+        triggerStay.erase(each);
+    }
+
+    eraseList.clear();
+
+    if (triggerOn && triggerStay.size() == 0)
+    {
+        OnInteractableTriggerExit();
+    }
+
     for (auto each : triggerStay)
     {
         if (!interactingList.contains(each))
@@ -44,8 +76,6 @@ void Interactable_SpikeTrap::Update()
             lastCoroutine = StartCoroutine(DoInteraction());
         }
     }
-
-    /// 내부로 들어온 유닛이 죽었을 때, 리스트에서 제외하는 로직 필요함
 }
 
 void Interactable_SpikeTrap::OnTriggerEnter(physics::Collider* collider)
@@ -66,10 +96,6 @@ void Interactable_SpikeTrap::OnTriggerExit(physics::Collider* collider)
         colliderUnitComponent != nullptr &&
         colliderUnitComponent->IsPlayerUnit())
     {
-        if (triggerStay.size() == 1 && triggerOn)
-        {
-            OnInteractableTriggerExit();
-        }
         triggerStay.erase(collider);
     }
 }

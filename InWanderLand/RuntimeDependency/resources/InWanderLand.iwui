@@ -111088,18 +111088,13 @@
             ],
             "uiIndex": 874,
             "parentUIIndex": -1,
-            "imagePath": "Texture/Ingame/_0008_Icon_Heal.png",
+            "imagePath": "",
             "imagePriority": -1,
             "openTargets": [],
             "closeTargets": [],
             "disablePropagationTargets": [],
             "hoverEnableTargets": [],
-            "color": [
-                1.0,
-                1.0,
-                1.0,
-                1.0
-            ],
+            "color": [],
             "pivot": [
                 0.5,
                 0.5
