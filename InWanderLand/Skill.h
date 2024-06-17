@@ -3,6 +3,7 @@
 #include "SkillType.h"
 #include "ITacticObject.h"
 
+class VFXAnimator;
 class Unit;
 class Skill
     : public ITacticObject

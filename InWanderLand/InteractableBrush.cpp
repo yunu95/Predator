@@ -34,6 +34,25 @@ namespace application
                 {
                     brushObj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Sphere");
                 }
+                else if (name == "SM_Spike01")
+                {
+                    brushObj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(name);
+                    auto frameObj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_SpikeFrame");
+                    for (auto each : frameObj->GetChildren())
+                    {
+                        auto comp = each->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+
+                        if (comp)
+                        {
+                            for (int i = 0; i < comp->GetGI().GetMaterialCount(); ++i)
+                            {
+                                comp->GetGI().GetMaterial(i)->SetPixelShader(erm.GetShader("Debug_AlphaPS.cso"));
+                                comp->GetGI().GetMaterial(i)->SetColor(yunuGI::Color{ 1,1,1,0.1 });
+                            }
+                        }
+                    }
+                    frameObj->SetParent(brushObj);
+                }
                 else
                 {
                     brushObj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(name);
@@ -79,6 +98,25 @@ namespace application
                 else if (fbxName == "Trigger_Sphere")
                 {
                     brushObj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Sphere");
+                }
+                else if (fbxName == "SM_Spike01")
+                {
+                    brushObj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(fbxName);
+                    auto frameObj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_SpikeFrame");
+                    for (auto each : frameObj->GetChildren())
+                    {
+                        auto comp = each->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+
+                        if (comp)
+                        {
+                            for (int i = 0; i < comp->GetGI().GetMaterialCount(); ++i)
+                            {
+                                comp->GetGI().GetMaterial(i)->SetPixelShader(erm.GetShader("Debug_AlphaPS.cso"));
+                                comp->GetGI().GetMaterial(i)->SetColor(yunuGI::Color{ 1,1,1,0.1 });
+                            }
+                        }
+                    }
+                    frameObj->SetParent(brushObj);
                 }
                 else
                 {

@@ -203,3 +203,27 @@ Vector3d wanderUtils::GetInitSpeedOfFreeFall(float duration, Vector3d startPos, 
 
     return Vector3d(deltaPos.x / duration, init_Y, deltaPos.z / duration);
 }
+
+namespace wanderUtils
+{
+    namespace UnitCoroutine
+    {
+        ForSecondsFromUnit::ForSecondsFromUnit(std::weak_ptr<Unit> unit, float duration) : duration(duration), unit(unit) {}
+        bool ForSecondsFromUnit::Tick()
+        {
+            if (unit.expired() || elapsed == duration)
+                return false;
+            elapsed += yunutyEngine::Time::GetDeltaTime() * unit.lock()->localTimeScale;
+            elapsed = std::min(elapsed, duration);
+            return true;
+        }
+        float ForSecondsFromUnit::Elapsed()
+        {
+            return elapsed;
+        }
+        float ForSecondsFromUnit::ElapsedNormalized()
+        {
+            return elapsed / duration;
+        }
+    }
+}

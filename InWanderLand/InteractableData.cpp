@@ -168,7 +168,7 @@ namespace application
             {
                 comp = obj->AddComponent<Interactable_ChessBishop>();
             }
-            else if (pod.templateData->pod.fBXName == "SM_Spike01" || pod.templateData->pod.fBXName == "SM_Spike02" || pod.templateData->pod.fBXName == "SM_Spike03")
+            else if (pod.templateData->pod.fBXName == "SM_Spike01")
             {
                 comp = obj->AddComponent<Interactable_SpikeTrap>();
             }

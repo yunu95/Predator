@@ -114,13 +114,13 @@ void UIManager::SetLetterBoxVisible(bool visible)
 {
     if (visible)
     {
-        UIManager::Instance().GetUIElementByEnum(UIEnumID::LetterBox_Bottom)->DisableElement();
-        UIManager::Instance().GetUIElementByEnum(UIEnumID::LetterBox_Top)->DisableElement();
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::LetterBox_Bottom)->EnableElement();
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::LetterBox_Top)->EnableElement();
     }
     else
     {
-        UIManager::Instance().GetUIElementByEnum(UIEnumID::LetterBox_Bottom)->EnableElement();
-        UIManager::Instance().GetUIElementByEnum(UIEnumID::LetterBox_Top)->EnableElement();
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::LetterBox_Bottom)->DisableElement();
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::LetterBox_Top)->DisableElement();
     }
 }
 
