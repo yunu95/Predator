@@ -346,8 +346,13 @@ void PlayerController::HandleSkillPreview()
 
 void PlayerController::HandleSkillCooltime()
 {
+    /// 수정 중!!
     for (int skillType = SkillType::ROBIN_Q; skillType <= SkillType::HANSEL_W; skillType++)
     {
+        if (skillType == SkillType::ROBIN_Q || SkillType::ROBIN_W)
+        {
+            SetCooltime((SkillType::Enum)skillType, skillCooltimeLeft[skillType] - Time::GetDeltaTime() * characters[PlayerCharacterType::Robin].lock()->localTimeScale);
+        }
         SetCooltime((SkillType::Enum)skillType, skillCooltimeLeft[skillType] - Time::GetDeltaTime());
     }
 }
