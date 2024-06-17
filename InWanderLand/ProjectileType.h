@@ -25,8 +25,8 @@ struct ProjectileHoming
 {
     enum Enum
     {
-        YES,
         NO,
+        YES,
     };
 };
 
@@ -35,8 +35,8 @@ const std::unordered_map<int, std::string>& application::POD_Enum<ProjectileHomi
 {
     static std::unordered_map<int, std::string> enumNameMap
     {
-        {static_cast<int>(ProjectileHoming::YES), "YES"},
         {static_cast<int>(ProjectileHoming::NO), "NO"},
+        {static_cast<int>(ProjectileHoming::YES), "YES"},
     };
     return enumNameMap;
 }

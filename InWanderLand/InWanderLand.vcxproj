@@ -1040,7 +1040,11 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="AttackPreviewPool.h" />
     <ClInclude Include="Condition_TacticMode.h" />
     <ClInclude Include="ContentsCoroutine.h" />
+    <ClInclude Include="CurveHomingProjectile.h" />
+    <ClInclude Include="CurveProjectile.h" />
     <ClInclude Include="DamageType.h" />
+    <ClInclude Include="DirectHomingProjectile.h" />
+    <ClInclude Include="DirectProjectile.h" />
     <ClInclude Include="EnemyAggroController.h" />
     <ClInclude Include="AnimationEventManager.h" />
     <ClInclude Include="AnimationEvents.h" />
@@ -1071,6 +1075,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="PassiveUrsulaSpeed.h" />
     <ClInclude Include="PlayerCharacterType.h" />
     <ClInclude Include="ProjectilePool.h" />
+    <ClInclude Include="ProjectileSelector.h" />
     <ClInclude Include="ProjectileType.h" />
     <ClInclude Include="RangedEliteController.h" />
     <ClInclude Include="Reference.h" />
@@ -2123,6 +2128,10 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="AttackPreviewPool.cpp" />
     <ClCompile Include="Condition_TacticMode.cpp" />
     <ClCompile Include="ContentsCoroutine.cpp" />
+    <ClCompile Include="CurveHomingProjectile.cpp" />
+    <ClCompile Include="CurveProjectile.cpp" />
+    <ClCompile Include="DirectHomingProjectile.cpp" />
+    <ClCompile Include="DirectProjectile.cpp" />
     <ClCompile Include="EnemyAggroController.cpp" />
     <ClCompile Include="AnimationEventManager.cpp" />
     <ClCompile Include="AttackSystem.cpp">
@@ -2378,6 +2387,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="PopupOnEnable.cpp" />
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="ProjectilePool.cpp" />
+    <ClCompile Include="ProjectileSelector.cpp" />
     <ClCompile Include="PulsingUI.cpp" />
     <ClCompile Include="RangedEliteController.cpp" />
     <ClCompile Include="ResurrectionSystem.cpp">

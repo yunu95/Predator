@@ -1456,38 +1456,38 @@ yunutyEngine::coroutine::Coroutine Unit::AttackCoroutine(std::weak_ptr<Unit> opp
 
 	float playSpeed = animatorComponent.lock()->GetGI().GetPlaySpeed();
 
-	co_yield coroutine::WaitForSeconds(unitTemplateData->pod.m_attackPreDelay * attackDelayMultiplier);
-	onAttack(opponent);
-	playSpeed = animatorComponent.lock()->GetGI().GetPlaySpeed();
-	switch (unitTemplateData->pod.attackType.enumValue)
-	{
-		case UnitAttackType::MELEE:
-		{
-			if (!referenceBlindness.BeingReferenced())
-			{
-				opponent.lock()->Damaged(GetWeakPtr<Unit>(), unitTemplateData->pod.m_autoAttackDamage + adderAttackDamage, DamageType::Attack);
-			}
-			if (!coroutineAttackEffect.expired())
-			{
-				attackVFX.lock()->GetGameObject()->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
-				attackVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(GetTransform()->GetWorldRotation());
-			}
-			break;
-		}
-		case UnitAttackType::MISSILE:
-		{
-			auto projectile = ProjectilePool::SingleInstance().Borrow(GetWeakPtr<Unit>(), opponent.lock()->GetTransform()->GetWorldPosition(), static_cast<ProjectileType::Enum>(unitTemplateData->pod.projectileType.enumValue), static_cast<ProjectileHoming::Enum>(unitTemplateData->pod.projectileHoming.enumValue));
-			projectile.lock()->GetTransform()->SetLocalScale(Vector3d::one * unitTemplateData->pod.projectile_scale);
-			break;
-		}
-	}
-	StartCoroutine(referenceBlockAttack.AcquireForSecondsCoroutine(finalAttackCooltime - unitTemplateData->pod.m_attackPreDelay * attackDelayMultiplier));
-	auto blockCommand = referenceBlockPendingOrder.Acquire();
-	co_yield coroutine::WaitForSeconds(unitTemplateData->pod.m_attackPostDelay * attackDelayMultiplier);
-	playSpeed = animatorComponent.lock()->GetGI().GetPlaySpeed();
-	blockCommand.reset();
-	animatorComponent.lock()->GetGI().SetPlaySpeed(1);
-	co_return;
+    co_yield coroutine::WaitForSeconds(unitTemplateData->pod.m_attackPreDelay * attackDelayMultiplier);
+    onAttack(opponent);
+    playSpeed = animatorComponent.lock()->GetGI().GetPlaySpeed();
+    switch (unitTemplateData->pod.attackType.enumValue)
+    {
+    case UnitAttackType::MELEE:
+    {
+        if (!referenceBlindness.BeingReferenced())
+        {
+            opponent.lock()->Damaged(GetWeakPtr<Unit>(), unitTemplateData->pod.m_autoAttackDamage + adderAttackDamage, DamageType::Attack);
+        }
+        if (!coroutineAttackEffect.expired())
+        {
+            attackVFX.lock()->GetGameObject()->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
+            attackVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(GetTransform()->GetWorldRotation());
+        }
+        break;
+    }
+    case UnitAttackType::MISSILE:
+    {
+        auto projectile = ProjectileSelector::SingleInstance().RequestProjectile(GetWeakPtr<Unit>(), opponent.lock(), static_cast<ProjectileType::Enum>(unitTemplateData->pod.projectileType.enumValue), static_cast<ProjectileHoming::Enum>(unitTemplateData->pod.projectileHoming.enumValue));
+        projectile.lock()->GetTransform()->SetLocalScale(Vector3d::one * unitTemplateData->pod.projectile_scale);
+        break;
+    }
+    }
+    StartCoroutine(referenceBlockAttack.AcquireForSecondsCoroutine(finalAttackCooltime - unitTemplateData->pod.m_attackPreDelay * attackDelayMultiplier));
+    auto blockCommand = referenceBlockPendingOrder.Acquire();
+    co_yield coroutine::WaitForSeconds(unitTemplateData->pod.m_attackPostDelay * attackDelayMultiplier);
+    playSpeed = animatorComponent.lock()->GetGI().GetPlaySpeed();
+    blockCommand.reset();
+    animatorComponent.lock()->GetGI().SetPlaySpeed(1);
+    co_return;
 }
 yunutyEngine::coroutine::Coroutine Unit::MeleeAttackEffectCoroutine(std::weak_ptr<Unit> opponent)
 {
