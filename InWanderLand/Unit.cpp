@@ -299,13 +299,18 @@ void Unit::OnPause()
 	if (!IsPlayerUnit())
 	{
 		localTimeScale = FLT_MIN;
+		animatorComponent.lock()->Pause();
 	}
 }
 
 void Unit::OnResume()
 {
 	isPaused = false;
-	localTimeScale = 1.0f;
+	if (!IsPlayerUnit())
+	{
+		localTimeScale = 1.0f;
+		animatorComponent.lock()->Resume();
+	}
 }
 
 bool Unit::IsPlayerUnit() const
