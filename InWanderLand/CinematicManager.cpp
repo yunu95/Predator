@@ -50,7 +50,7 @@ namespace application
             // 인게임 UI 비활성화
             UIManager::Instance().SetIngameUIVisible(false);
             UIManager::Instance().SetLetterBoxVisible(true);
-            PlayerController::Instance().SetState(PlayerController::State::Cinematic);
+            PlayerController::Instance().SetStateInAction(PlayerController::State::Cinematic,true);
         }
         else if (this->isCinematicMode && !isCinematicMode)
         {
@@ -65,7 +65,7 @@ namespace application
             // 인게임 UI 활성화
             UIManager::Instance().SetIngameUIVisible(true);
             UIManager::Instance().SetLetterBoxVisible(false);
-            PlayerController::Instance().SetState(PlayerController::State::Peace);
+            PlayerController::Instance().SetStateInAction(PlayerController::State::Cinematic,false);
         }
     }
 }

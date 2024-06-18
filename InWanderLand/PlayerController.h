@@ -37,28 +37,27 @@ public:
             None,
             // 전투중
             Battle,
-            // 전술모드
-            Tactic,
             // 평화상태, 애들이 선두 유닛을 졸졸 따라다님.
             Peace,
+			// 전술모드
+			Tactic,
             // 시네마틱 상태, 사용자의 모든 입력이 막히고 컨트롤러가 유닛들에 일절 개입하지 않는다.
             Cinematic,
         };
     };
     virtual void RegisterUnit(std::weak_ptr<Unit> unit)override;
     virtual void UnRegisterUnit(std::weak_ptr<Unit> unit) override {};
+    
     void SelectPlayerUnit(PlayerCharacterType::Enum charType);
     void SelectSkill(SkillType::Enum skillType);
     State::Enum GetState() const { return state; }
-    void SetState(State::Enum newState);
+   
     const std::array<std::weak_ptr<Unit>, (int)PlayerCharacterType::Num>& GetPlayers() const { return characters; }
     std::array<float, (int)PlayerCharacterType::Num> GetAggroProportions()const;
     void Reset();
     void SetCameraOffset();
     void SetComboObjectives(const std::array<int, 3>& targetCombos);
     void AddCombo();
-    void OnWaveStart(std::weak_ptr<PlaytimeWave> p_wave);
-    void OnWaveEnd(std::weak_ptr<PlaytimeWave> p_wave);
     void SetSkillUpgradeTarget(UIEnumID skillUpgradeUITarget);
     bool IsSkillUpgraded(SkillUpgradeType::Enum id);
     bool IsSkillUpgraded(UIEnumID skillUpgradeUITarget);
@@ -80,14 +79,21 @@ public:
     virtual void OnPause() override;
     virtual void OnResume() override;
 
+    // 시네마틱 모드가 되면 아래의 레퍼런스를 사용한다.
+    Reference referenceCinematic;
+
+    void SetStateInAction(State::Enum newState,bool val);
+
     // 스킬 업그레이드와 관련된 부분
     // 어떤 스킬을 업그레이드 할 것인지 미리 정한다. 미리 지정만 하는 것이지 바로 업그레이드까지 직행하는 것은 아니다.
 private:
+    void SetState(State::Enum newState);
     virtual Component* GetComponent() override { return this; }
     virtual void Start() override;
     virtual void OnContentsPlay() override;
     virtual void OnContentsStop() override;
     virtual void Update() override;
+   
     void HandleByState();
     // 사용자 입력을 받기 위해 매 프레임 불린다.
     void HandleInput();
@@ -117,7 +123,6 @@ private:
     Vector3d GetWorldCursorPosition();
     // 연속으로 쌓은 콤보를 초기화한다.
     void ResetCombo();
-
 
     void SetCooltime(SkillType::Enum skillType, float cooltime);
     void SetCooltime(std::weak_ptr<Unit> unit);
@@ -164,4 +169,7 @@ private:
     yunutyEngine::graphics::StaticMeshRenderer* allyHoverEffectRenderer{ nullptr };
     GameObject* enemyHoverEffect{ nullptr };
     yunutyEngine::graphics::StaticMeshRenderer* enemyHoverEffectRenderer{ nullptr };
+
+    std::array<bool, State::Cinematic> stateInActionArr;
+    bool isStateAction = false;
 };

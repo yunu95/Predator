@@ -10,7 +10,7 @@ namespace application
 {
 	CoroutineObject<void> Action_EngageBattle::DoAction()
 	{
-		PlayerController::Instance().SetState(PlayerController::State::Battle);
+		PlayerController::Instance().SetStateInAction(PlayerController::State::Battle,true);
 		co_return;
 	}
 

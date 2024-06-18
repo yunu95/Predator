@@ -10,7 +10,7 @@ namespace application
 {
 	CoroutineObject<void> Action_EngagePeace::DoAction()
 	{
-		PlayerController::Instance().SetState(PlayerController::State::Peace);
+		PlayerController::Instance().SetStateInAction(PlayerController::State::Peace,true);
 		co_return;
 	}
 
