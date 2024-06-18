@@ -174,7 +174,7 @@ coroutine::Coroutine BossController::BossAppearEffectCoroutine()
 
 coroutine::Coroutine BossController::RoutinePerUnit(std::weak_ptr<Unit> unit)
 {
-	if (!unit.lock()->IsAlive())
+	if (unit.lock()->GetActive() && !unit.lock()->IsAlive())
 	{
 		co_return;
 	}
