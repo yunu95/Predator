@@ -334,13 +334,19 @@ void PlayerController::HandleSkillPreview()
     }
     else
     {
-        TacticModeSystem::Instance().ShowSkillPreviewInTacticMode(selectedSkill);
+        if (selectedCharacter.lock()->IsTacTicReady())
+        {
+            TacticModeSystem::Instance().ShowSkillPreviewInTacticMode(selectedSkill);
+        }
     }
 
     // 임시 이동 경로 보여주는 부분
     if ((state == State::Tactic) && (selectedSkill == SkillType::NONE))
     {
-        TacticModeSystem::Instance().ShowTemporaryRouteInTacticMode(this->selectedCharacterType);
+        if (selectedCharacter.lock()->IsTacTicReady())
+        {
+            TacticModeSystem::Instance().ShowTemporaryRouteInTacticMode(this->selectedCharacterType);
+        }
     }
 }
 
