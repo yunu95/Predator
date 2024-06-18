@@ -8,6 +8,7 @@ class UIElement;
 // 유닛에게 적용된 버프는 최초로 적용될 때 OnStart()가 호출되고, 만료할 때 OnEnd()가 호출된다.
 // 타입이 같은 버프가 연속적으로 적용될 경우 이미 적용되어 있는 버프로부터 OnOverlap 함수가 호출된다.
 class UnitBuff
+    : public ITacticObject
 {
 private:
     std::weak_ptr<UIElement> buffIcon1;
@@ -28,5 +29,9 @@ public:
             durationLeft = overlapping.durationLeft;
     };
     virtual ~UnitBuff();
+
+    virtual void OnPause() {}
+    virtual void OnResume() {}
+
     friend Unit;
 };

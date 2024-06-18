@@ -8,6 +8,7 @@ class ITacticObject
 {
 public:
 	ITacticObject();
+	ITacticObject(const ITacticObject& copy);
 	virtual ~ITacticObject();
 
 	static void OnPauseAll();
