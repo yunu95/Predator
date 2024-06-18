@@ -52,4 +52,7 @@ public:
     void StopWaveElapsedTime();
     void ResumeWaveElapsedTime();
     virtual Component* GetComponent() override { return this; }
+
+    std::unordered_map<int, std::vector<std::function<void()>>> waveStartCallbackMap = std::unordered_map<int, std::vector<std::function<void()>>>();
+    std::unordered_map<int, std::vector<std::function<void()>>> waveEndCallbackMap = std::unordered_map<int, std::vector<std::function<void()>>>();
 };

@@ -1,5 +1,5 @@
-/// 2024. 06. 16 김상준
-/// Peace 상태로 진입하는 Action 입니다. 
+/// 2024. 06. 12 김상준
+/// Battle 상태로 진입하는 Action 입니다. 
 
 #pragma once
 
@@ -16,15 +16,15 @@ namespace application
 		class Module_ScriptEditor;
 	}
 
-	class Action_EngagePeace
+	class Action_RequestBattle
 		: public IAction
 	{
 		friend class editor::Module_ScriptEditor;
 
 	public:
-		DEFINE_ACTION(EngagePeace)
+		DEFINE_ACTION(RequestBattle)
 
-			virtual CoroutineObject<void> DoAction() override;
+		virtual CoroutineObject<void> DoAction() override;
 
 		virtual bool PreEncoding(json& data) const override;
 		virtual bool PostEncoding(json& data) const override;
