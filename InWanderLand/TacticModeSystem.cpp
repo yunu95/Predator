@@ -576,7 +576,7 @@ yunutyEngine::coroutine::Coroutine TacticModeSystem::ExecuteInternal()
             // 현재 명령을 수행하는 플레이어 유닛은 움직인다.
             this->playersTacticRevArr[each->GetPlayerType()].reset();
             each->Execute();
-            while (!each->IsDone() && EnemyController::IsPreempted())
+            while (!each->IsDone() || EnemyController::IsPreempted())
             {
                 co_await std::suspend_always();
             }
@@ -586,6 +586,11 @@ yunutyEngine::coroutine::Coroutine TacticModeSystem::ExecuteInternal()
         }
         UIManager::Instance().GetUIElementByEnum(commandIcons[iconIndex])->DisableElement();
         iconIndex++;
+    }
+
+    for (auto& each : this->playersTacticRevArr)
+    {
+        each.reset();
     }
 
     this->commandList.clear();
