@@ -76,6 +76,10 @@ public:
     bool blockSkillSelection[(int)SkillType::SKILL_NUM]{ false };
     DelegateCallback<void> onSkillSelect[(int)SkillType::SKILL_NUM];
     DelegateCallback<void> onSkillActivate[(int)SkillType::SKILL_NUM];
+
+    virtual void OnPause() override;
+    virtual void OnResume() override;
+
     // 스킬 업그레이드와 관련된 부분
     // 어떤 스킬을 업그레이드 할 것인지 미리 정한다. 미리 지정만 하는 것이지 바로 업그레이드까지 직행하는 것은 아니다.
 private:
@@ -158,4 +162,6 @@ private:
     yunutyEngine::graphics::StaticMeshRenderer* allyHoverEffectRenderer{ nullptr };
     GameObject* enemyHoverEffect{ nullptr };
     yunutyEngine::graphics::StaticMeshRenderer* enemyHoverEffectRenderer{ nullptr };
+
+    std::array<std::shared_ptr<Reference::Guard>, (int)PlayerCharacterType::Num> tacticRef;
 };
