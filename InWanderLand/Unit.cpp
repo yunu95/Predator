@@ -86,7 +86,7 @@ void Unit::Update()
     for (auto& [buffID, buff] : buffs)
     {
         buff.get()->OnUpdate();
-        buff.get()->durationLeft -= Time::GetDeltaTime();
+        buff.get()->durationLeft -= Time::GetDeltaTime() * localTimeScale;
         if (buff.get()->durationLeft < 0)
             buff.get()->OnEnd();
     }
@@ -315,12 +315,17 @@ Unit::~Unit()
 
 void Unit::OnPause()
 {
-    ///
+    isPaused = true;
+    if (!IsPlayerUnit())
+    {
+        localTimeScale = FLT_MIN;
+    }
 }
 
 void Unit::OnResume()
 {
-    ///
+    isPaused = false;
+    localTimeScale = 1.0f;
 }
 
 bool Unit::IsPlayerUnit() const
@@ -335,6 +340,12 @@ bool Unit::IsAlive() const
 {
     return isAlive;
 }
+
+bool Unit::IsPreempted() const
+{
+    return (*unitBehaviourTree.GetActiveNodes().rbegin())->GetNodeKey() == UnitBehaviourTree::Knockback;
+}
+
 std::string Unit::GetFBXName() const
 {
     if (!skinnedMeshGameObject)
@@ -424,7 +435,7 @@ void Unit::SetCurrentHp(float p_newHp)
     }
     if (!unitStatusUI.expired())
     {
-        unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::StatusBar_HP_Fill)->adjuster->SetTargetFloat(1 - currentHitPoint / unitTemplateData->pod.max_Health);
+        unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::StatusBar_HP_Fill)->adjuster->SetTargetFloat(1-currentHitPoint / unitTemplateData->pod.max_Health);
         if (unitStatusUI.lock()->GetLocalUIsByEnumID().contains(UIEnumID::StatusBar_HP_Number_Current))
         {
             unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::StatusBar_HP_Number_Current)->SetNumber(currentHitPoint);
@@ -569,7 +580,7 @@ float normalizeAngle(float angle) {
 void Unit::SetDesiredRotation(const Vector3d& facingDirection)
 {
     static constexpr float epsilon = 1.0f;
-    if (facingDirection.MagnitudeSqr() < epsilon * Time::GetDeltaTime() * Time::GetDeltaTime())
+    if (facingDirection.MagnitudeSqr() < epsilon * Time::GetDeltaTime() * localTimeScale * Time::GetDeltaTime() * localTimeScale)
         return;
     desiredRotation = std::atan2(facingDirection.z, facingDirection.x) * math::Rad2Deg;
 }
@@ -608,14 +619,14 @@ void Unit::UpdateRotation()
     float difference = desiredRotation - currentRotation;
     difference = getDeltaAngle(difference);
 
-    if (std::fabs(difference) < currentRotationSpeed * Time::GetDeltaTime()) {
+    if (std::fabs(difference) < currentRotationSpeed * Time::GetDeltaTime() * localTimeScale) {
         currentRotation = desiredRotation;
     }
     else if (difference > 0) {
-        currentRotation = normalizeAngle(currentRotation + currentRotationSpeed * Time::GetDeltaTime());
+        currentRotation = normalizeAngle(currentRotation + currentRotationSpeed * Time::GetDeltaTime() * localTimeScale);
     }
     else {
-        currentRotation = normalizeAngle(currentRotation - currentRotationSpeed * Time::GetDeltaTime());
+        currentRotation = normalizeAngle(currentRotation - currentRotationSpeed * Time::GetDeltaTime() * localTimeScale);
     }
     GetTransform()->SetWorldRotation(Vector3d(0, -currentRotation + 90, 0));
 }
@@ -1118,6 +1129,9 @@ void Unit::Reset()
     currentOrderType = UnitOrderType::AttackMove;
     pendingOrderType = UnitOrderType::AttackMove;
     attackMoveDestination = moveDestination = GetGameObject()->GetTransform()->GetWorldPosition();
+
+    isPaused = false;
+    localTimeScale = 1.0f;
 }
 void Unit::InitBehaviorTree()
 {
@@ -1501,7 +1515,7 @@ yunutyEngine::coroutine::Coroutine Unit::AttackCoroutine(std::weak_ptr<Unit> opp
     }
     case UnitAttackType::MISSILE:
     {
-        auto projectile = ProjectilePool::SingleInstance().Borrow(GetWeakPtr<Unit>(), opponent.lock()->GetTransform()->GetWorldPosition(), static_cast<ProjectileType::Enum>(unitTemplateData->pod.projectileType.enumValue), static_cast<ProjectileHoming::Enum>(unitTemplateData->pod.projectileHoming.enumValue));
+        auto projectile = ProjectileSelector::SingleInstance().RequestProjectile(GetWeakPtr<Unit>(), opponent.lock(), static_cast<ProjectileType::Enum>(unitTemplateData->pod.projectileType.enumValue), static_cast<ProjectileHoming::Enum>(unitTemplateData->pod.projectileHoming.enumValue));
         projectile.lock()->GetTransform()->SetLocalScale(Vector3d::one * unitTemplateData->pod.projectile_scale);
         break;
     }

@@ -14,7 +14,7 @@ private:
     virtual Component* GetComponent() { return this; };
 public:
     std::weak_ptr<VFXAnimator> AcquireVFXAnimator();
-    friend ProjectilePool;
+    friend ProjectilePool<Projectile> ;
     friend FBXPool;
 };
 

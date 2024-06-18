@@ -27,6 +27,7 @@ private:
 	Vector3d initScale = Vector3d(1, 1, 1);
 	float delayTime = 0;
 	float damage = 0;
-	GameObject* mesh = nullptr;
+	GameObject* spike = nullptr;
+	GameObject* frame = nullptr;
 };
 

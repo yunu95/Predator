@@ -9,6 +9,8 @@ public:
     virtual void OnContentsPlay() { GetComponent()->SetActive(true); GetComponent()->Start(); }
     virtual void OnContentsStop() { GetComponent()->SetActive(false); ClearCoroutines(); }
     virtual Component* GetComponent() override;
+    static std::weak_ptr<coroutine::Coroutine> FadeMusicVolume(float targetVolume, float duration);
 private:
+    static coroutine::Coroutine FadeMusicVolumeInternal(float targetVolume, float duration);
     friend SingletonComponent<ContentsCoroutine>;
 };

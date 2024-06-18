@@ -50,6 +50,8 @@ public:
     SoundPlayingTimer* soundOnDisable{ nullptr };
     UISpriteAnimation* spriteAnimationOnEnable{ nullptr };
     TimerComponent* disableAfterEnable{ nullptr };
+    TimerComponent* lerpMusicVolumeOnEnable{ nullptr };
+    TimerComponent* lerpMusicVolumeOnDisable{ nullptr };
     std::weak_ptr<graphics::UIImage> imageComponent{};
     std::weak_ptr<RotatingUI> rotator{};
     std::weak_ptr<UIVideoPlayer> uiVideoPlayer{};

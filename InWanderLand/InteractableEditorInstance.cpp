@@ -90,6 +90,11 @@ namespace application::editor::palette
             }
             AttachDebugMesh(obj, DebugMeshType::Sphere, yunuGI::Color::green());
         }
+        else if(interactableTemplateData->pod.fBXName == "SM_Spike01")
+        {
+            obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(interactableTemplateData->pod.fBXName, &boundingMin, &boundingMax);
+            yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_SpikeFrame")->SetParent(obj);
+        }
         else
         {
             obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(interactableTemplateData->pod.fBXName, &boundingMin, &boundingMax);
@@ -164,6 +169,11 @@ namespace application::editor::palette
                 }
             }
             AttachDebugMesh(obj, DebugMeshType::Sphere, yunuGI::Color::green());
+        }
+        else if (interactableTemplateData->pod.fBXName == "SM_Spike01")
+        {
+            obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(interactableTemplateData->pod.fBXName, &boundingMin, &boundingMax);
+            yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("SM_SpikeFrame")->SetParent(obj);
         }
         else
         {

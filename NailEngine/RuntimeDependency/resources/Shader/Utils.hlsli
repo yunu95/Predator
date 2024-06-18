@@ -332,6 +332,7 @@ float CalcShadowFactor(SamplerComparisonState samShadow,
 
 void CalculateDirectionalPBR(int lightIndex, float3 normal, float3 pos, out float4 diffuse, out float4 ambient, out float4 specular, float3 albedo, float ao, float metalness, float roughness, float diffuseExposure, float ambientExposure, int useLightMap, out float shadowFactor)
 {
+    shadowFactor = 1.f;
        // 나는 별도의 렌더타겟에 View Space에 대한 정보가 담겨 있어 연산은 View Space에서 이루어진다.
     diffuse = float4(0.f, 0.f, 0.f, 0.f);
     ambient = float4(0.f, 0.f, 0.f, 0.f);
@@ -392,8 +393,6 @@ void CalculateDirectionalPBR(int lightIndex, float3 normal, float3 pos, out floa
         float4 shadowClipPos = mul(worldPos, shadowVP);
             
         shadowFactor = CalcShadowFactor(shadowSam, Temp2Map, shadowClipPos);
-            
-        specular = (float4) 0;
     }
         ///
         
@@ -434,6 +433,7 @@ void CalculateDirectionalPBR(int lightIndex, float3 normal, float3 pos, out floa
 
 void CalculatePointPBR(int lightIndex, float3 normal, float3 pos, out float4 diffuse, out float4 ambient, out float4 specular, float3 albedo, float ao, float metalness, float roughness, float diffuseExposure, float ambientExposure, int useLightMap, out float shadowFactor)
 {
+    shadowFactor = 1.f;
        // 나는 별도의 렌더타겟에 View Space에 대한 정보가 담겨 있어 연산은 View Space에서 이루어진다.
     diffuse = float4(0.f, 0.f, 0.f, 0.f);
     ambient = float4(0.f, 0.f, 0.f, 0.f);

@@ -39,10 +39,10 @@ void Interactable_TrapSwitch::Start()
 
 void Interactable_TrapSwitch::Update()
 {
-	auto eraseList = triggerStay;
+	static auto eraseList = triggerStay;
 	for (auto each : triggerStay)
 	{
-		if (each->GetGameObject()->GetComponent<Unit>()->IsAlive())
+		if (each->GetGameObject()->GetComponent<UnitCollider>()->owner.lock()->IsAlive())
 		{
 			eraseList.erase(each);
 		}
@@ -51,6 +51,8 @@ void Interactable_TrapSwitch::Update()
 	{
 		triggerStay.erase(each);
 	}
+
+	eraseList.clear();
 
 	if (triggerOn && triggerStay.size() == 0)
 	{

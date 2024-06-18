@@ -8,7 +8,7 @@ void UIVideoPlayer::Enable()
     }
     else
     {
-        videoPlayer1.lock()->ResetVideo();
+        //videoPlayer1.lock()->ResetVideo();
         uiImage.lock()->GetGI().SetVideo(videoPlayer1.lock()->GetVideo().lock()->GetName());
     }
 }
@@ -16,10 +16,10 @@ void UIVideoPlayer::Enable()
 // videoPath2가 존재할때만 실행되는 코루틴
 coroutine::Coroutine UIVideoPlayer::EnableCoro()
 {
-    videoPlayer1.lock()->ResetVideo();
+    //videoPlayer1.lock()->ResetVideo();
     uiImage.lock()->GetGI().SetVideo(videoPlayer1.lock()->GetVideo().lock()->GetName());
     co_yield coroutine::WaitForSeconds{ video1Duration, true };
-    videoPlayer2.lock()->ResetVideo();
+    //videoPlayer2.lock()->ResetVideo();
     uiImage.lock()->GetGI().SetVideo(videoPlayer2.lock()->GetVideo().lock()->GetName());
     co_return;
 }

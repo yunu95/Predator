@@ -87,7 +87,6 @@ void TacticModeSystem::OnContentsStop()
     {
         each.reset();
     }
-    activateWaveEnemyUnitPauseRefVec.clear();
     this->isExecuting = false;
     this->isOperating = false;
 }
@@ -105,10 +104,6 @@ void TacticModeSystem::EngageTacticSystem()
     if (!wave.expired())
     {
         wave.lock()->StopWaveElapsedTime();
-        for (auto& each : wave.lock()->m_currentWaveUnitVector)
-        {
-            activateWaveEnemyUnitPauseRefVec.push_back(each->referencePause.Acquire());
-        }
     }
   
     SFXManager::PlaySoundfile("sounds/Tactical mode/Tactical mode on.wav");
@@ -610,8 +605,6 @@ yunutyEngine::coroutine::Coroutine TacticModeSystem::ExecuteInternal()
     {
         wave.lock()->ResumeWaveElapsedTime();
     }
-    // Wave의 적 유닛들도 움직인다.
-    activateWaveEnemyUnitPauseRefVec.clear();
 
     SFXManager::PlaySoundfile("sounds/Tactical mode/Tactical mode off.wav");
     ITacticObject::OnResumeAll();

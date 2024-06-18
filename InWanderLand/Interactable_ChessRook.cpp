@@ -70,6 +70,21 @@ void Interactable_ChessRook::Start()
 
 void Interactable_ChessRook::Update()
 {
+	static auto eraseList = unitSet;
+	for (auto each : unitSet)
+	{
+		if (each->GetGameObject()->GetComponent<UnitCollider>()->owner.lock()->IsAlive())
+		{
+			eraseList.erase(each);
+		}
+	}
+	for (auto each : eraseList)
+	{
+		unitSet.erase(each);
+	}
+
+	eraseList.clear();
+
 	if (!unitSet.empty())
 	{
 		OnInteractableTriggerEnter();

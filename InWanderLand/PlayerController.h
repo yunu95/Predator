@@ -71,7 +71,9 @@ public:
     void UnlockCamFromRegion();
     bool CanUnitSelectSkill(std::weak_ptr<Unit> unit);
     float GetMana();
+    void SetManaFull();
     void SetMana(float mana);
+    Unit* GetUnitOnCursor();
     static constexpr int playerTeamIndex = 1;
     static const std::unordered_map<UIEnumID, SkillUpgradeType::Enum> skillUpgradeByUI;
     bool blockSkillSelection[(int)SkillType::SKILL_NUM]{ false };
@@ -133,7 +135,7 @@ private:
     std::array<UIElement*, SkillType::SKILL_NUM> skillCooltimeNumberUI;
     std::array<UIElement*, SkillType::SKILL_NUM> skillCooltimeMaskUI;
     float mana{ 0 };
-    State::Enum state{ State::Peace };
+    State::Enum state{ State::Battle };
     SkillType::Enum selectedSkill = SkillType::NONE;
     PlayerCharacterType::Enum selectedCharacterType = PlayerCharacterType::None;
     std::weak_ptr<UnitAcquisitionBoxCollider> cursorUnitDetector;

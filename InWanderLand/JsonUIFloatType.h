@@ -47,6 +47,7 @@ struct JsonUIFloatType
         musicPlayOnDisable_fadeOut,
         musicPlayOnDisable_fadeIn,
         musicMultiplyVolumeOnEnableDisable_enableFactor,
+        musicMultiplyVolumeOnEnableDisable_fadeDuration,
         disableAfterEnable_delayUntilDisable,
         rotatingSpeed,
         rotatingInitialRotation,

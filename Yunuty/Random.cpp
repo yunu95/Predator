@@ -23,6 +23,10 @@ float Random::GetRandomFloat(float amplitude)
     std::uniform_real_distribution<float> dis(-amplitude, amplitude);
     return dis(SingleInstance()->gen);
 }
+bool yunutyEngine::math::Random::ByRandomChance(float chance)
+{
+    return GetRandomFloat(0.f, 1.f) < chance;
+}
 Random* Random::SingleInstance()
 {
     if (instance == nullptr)

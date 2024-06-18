@@ -120,6 +120,8 @@ void PlayerController::OnContentsPlay()
     skillCooltimeMaskUI[SkillType::URSULA_W] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Ursula)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_W_Overlay);
     skillCooltimeMaskUI[SkillType::HANSEL_Q] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_Q_Overlay);
     skillCooltimeMaskUI[SkillType::HANSEL_W] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_W_Overlay);
+    SetSkillPoints(0);
+    SetManaFull();
     SetState(State::Peace);
     InitUnitMouseInteractionEffects();
 }
@@ -165,7 +167,7 @@ void PlayerController::Update()
         wsstream << L"\nattack target pos : " << selectedDebugCharacter.lock()->attackMoveDestination;
         if (!cursorUnitDetector.lock()->GetUnits().empty())
         {
-            wsstream << L"\nhovering unit : " << yutility::GetWString((*cursorUnitDetector.lock()->GetUnits().begin())->name);
+            wsstream << L"\nhovering unit : " << yutility::GetWString(GetUnitOnCursor()->name);
         }
 
         text_State->GetGI().SetText(wsstream.str());
@@ -346,8 +348,13 @@ void PlayerController::HandleSkillPreview()
 
 void PlayerController::HandleSkillCooltime()
 {
+    /// 수정 중!!
     for (int skillType = SkillType::ROBIN_Q; skillType <= SkillType::HANSEL_W; skillType++)
     {
+        if (skillType == SkillType::ROBIN_Q || SkillType::ROBIN_W)
+        {
+            SetCooltime((SkillType::Enum)skillType, skillCooltimeLeft[skillType] - Time::GetDeltaTime() * characters[PlayerCharacterType::Robin].lock()->localTimeScale);
+        }
         SetCooltime((SkillType::Enum)skillType, skillCooltimeLeft[skillType] - Time::GetDeltaTime());
     }
 }
@@ -364,7 +371,7 @@ void PlayerController::HandleMouseHover()
 {
     if (!cursorUnitDetector.lock()->GetUnits().empty())
     {
-        ApplyHoverEffect((*cursorUnitDetector.lock()->GetUnits().begin())->GetWeakPtr<Unit>());
+        ApplyHoverEffect(GetUnitOnCursor()->GetWeakPtr<Unit>());
     }
     else
     {
@@ -429,7 +436,7 @@ void PlayerController::OnLeftClick()
     {
         if (!cursorUnitDetector.lock()->GetUnits().empty())
         {
-            SelectUnit((*cursorUnitDetector.lock()->GetUnits().begin())->GetWeakPtr<Unit>());
+            SelectUnit(GetUnitOnCursor()->GetWeakPtr<Unit>());
         }
     }
     else
@@ -470,9 +477,9 @@ void PlayerController::OnRightClick()
     {
         if (state != State::Tactic)
         {
-            if (!cursorUnitDetector.lock()->GetUnits().empty() && (*cursorUnitDetector.lock()->GetUnits().begin())->teamIndex != playerTeamIndex)
+            if (!cursorUnitDetector.lock()->GetUnits().empty() && GetUnitOnCursor()->teamIndex != playerTeamIndex)
             {
-                OrderAttack((*cursorUnitDetector.lock()->GetUnits().begin())->GetWeakPtr<Unit>());
+                OrderAttack(GetUnitOnCursor()->GetWeakPtr<Unit>());
             }
             else
             {
@@ -483,13 +490,13 @@ void PlayerController::OnRightClick()
         else
         {
             SkillPreviewSystem::Instance().HideTemporaryRoute();
-            if (!cursorUnitDetector.lock()->GetUnits().empty() && (*cursorUnitDetector.lock()->GetUnits().begin())->teamIndex != playerTeamIndex)
+            if (!cursorUnitDetector.lock()->GetUnits().empty() && GetUnitOnCursor()->teamIndex != playerTeamIndex)
             {
                 // Attack
                 // 걸어가서 공격을 하게 될 수 있음
                 EnqueErrorType errorType = EnqueErrorType::NONE;
                 std::vector<Vector3d> path;
-                path = TacticModeSystem::Instance().GetPathInTacticMode(selectedCharacterType, (*cursorUnitDetector.lock()->GetUnits().begin()));
+                path = TacticModeSystem::Instance().GetPathInTacticMode(selectedCharacterType, GetUnitOnCursor());
                 this->ModifyPathForAttack(path);
                 if (!path.empty())
                 {
@@ -507,7 +514,7 @@ void PlayerController::OnRightClick()
                         errorType = TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitAttackCommand>(
                             characters[selectedCharacterType].lock().get()
                             , path.back()
-                            , (*cursorUnitDetector.lock()->GetUnits().begin())
+                            , GetUnitOnCursor()
                             , true
                             , path.back() - path[path.size() - 2]));
 
@@ -525,9 +532,9 @@ void PlayerController::OnRightClick()
                     errorType = TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitAttackCommand>(
                         characters[selectedCharacterType].lock().get()
                         , Vector3d::zero
-                        , (*cursorUnitDetector.lock()->GetUnits().begin())
+                        , GetUnitOnCursor()
                         , false
-                        , (*cursorUnitDetector.lock()->GetUnits().begin())->GetGameObject()->GetTransform()->GetWorldPosition() -
+                        , GetUnitOnCursor()->GetGameObject()->GetTransform()->GetWorldPosition() -
                         characters[selectedCharacterType].lock().get()->GetGameObject()->GetTransform()->GetWorldPosition()));
                     // 에러 타입에 따른 UI활성화
                 }
@@ -693,7 +700,7 @@ void PlayerController::SelectSkill(SkillType::Enum skillType)
         return;
     }
     // 이 부분은 협의가 필요함
-    if ((state == State::Peace) || (state == State::Cinematic)) return;
+    ///if ((state == State::Peace) || (state == State::Cinematic)) return;
     onSkillSelect[skillType]();
     switch (skillType)
     {
@@ -887,11 +894,28 @@ void PlayerController::ResetCombo()
 {
 }
 
+void PlayerController::SetManaFull()
+{
+    SetMana(GlobalConstant::GetSingletonInstance().pod.maxMana);
+}
 void PlayerController::SetMana(float mana)
 {
     const auto& gc = GlobalConstant::GetSingletonInstance().pod;
     this->mana = std::fmin(gc.maxMana, mana);
     UIManager::Instance().GetUIElementByEnum(UIEnumID::ManaFill)->adjuster->SetTargetFloat(1 - mana / gc.maxMana);
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::Mana_Text_MaxMP)->SetNumber(gc.maxMana);
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::Mana_Text_CurrentMP)->SetNumber(mana);
+}
+
+Unit* PlayerController::GetUnitOnCursor()
+{
+    if (cursorUnitDetector.lock()->GetUnits().empty()) return nullptr;
+
+    auto mainCamPos = graphics::Camera::GetMainCamera()->GetTransform()->GetWorldPosition();
+    return *std::min_element(cursorUnitDetector.lock()->GetUnits().begin(), cursorUnitDetector.lock()->GetUnits().end(),
+        [&mainCamPos](Unit* a, Unit* b) {
+            return a->DistanceSquare(mainCamPos) < b->DistanceSquare(mainCamPos);
+        });
 }
 
 float PlayerController::GetMana()

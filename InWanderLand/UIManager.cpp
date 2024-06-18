@@ -682,7 +682,7 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
                 element->imageComponent.lock()->GetGI().SetLinearClippingDirection(1, 0);
                 element->imageComponent.lock()->GetGI().SetLinearClippingStartPoint(1 / widthFactor, 0);
             };
-    }
+    };
     if (uiData.customFlags2 & (int)UIExportFlag2::AdjustLinearClip)
     {
         element->adjuster = uiObject->AddComponent<FloatFollower>();
@@ -1090,7 +1090,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
             }
         }
     }
-}
+        }
 // 특별한 로직이 적용되어야 하는 경우 참, 그렇지 않으면 거짓을 반환합니다.
 bool UIManager::ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* element)
 {

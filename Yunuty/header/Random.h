@@ -19,6 +19,8 @@ namespace yunutyEngine
             static int GetRandomInt(int min, int max);
             static float GetRandomFloat(float min, float max);
             static float GetRandomFloat(float amplitude);
+            // chance : 0~1
+            static bool ByRandomChance(float chance);
         private:
             Random();
             static Random* SingleInstance();
