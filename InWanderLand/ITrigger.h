@@ -28,7 +28,9 @@ namespace application
 		UnitAppear,
 		UnitDie,
 		InteractableTriggerEnter,
-		InteractableTriggerExit
+		InteractableTriggerExit,
+		StartWave,
+		EndWave,
 	};
 
 	struct ITrigger
