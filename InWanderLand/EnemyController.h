@@ -10,6 +10,10 @@ public:
 
     virtual void RegisterUnit(std::weak_ptr<Unit> unit) override;
     virtual void UnRegisterUnit(std::weak_ptr<Unit> unit) override;
+
+    virtual void OnPause() override;
+    virtual void OnResume() override;
+
 protected:
     virtual void Start() override;
     virtual void OnContentsStop() override;
@@ -24,5 +28,5 @@ protected:
     std::unordered_map<Unit*, std::weak_ptr<coroutine::Coroutine>> unitRoutines;
 
 private:
-    static std::unordered_set<std::shared_ptr<Reference::Guard>> enemyDeathBlockRefSet;
+    static std::unordered_map<Unit*, std::shared_ptr<Reference::Guard>> enemyDeathBlockRefMap;
 };

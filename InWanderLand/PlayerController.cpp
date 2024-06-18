@@ -352,13 +352,13 @@ void PlayerController::HandleSkillPreview()
 
 void PlayerController::HandleSkillCooltime()
 {
-    /// 수정 중!!
+    if (state == State::Tactic)
+    {
+        return;
+    }
+
     for (int skillType = SkillType::ROBIN_Q; skillType <= SkillType::HANSEL_W; skillType++)
     {
-        if (skillType == SkillType::ROBIN_Q || SkillType::ROBIN_W)
-        {
-            SetCooltime((SkillType::Enum)skillType, skillCooltimeLeft[skillType] - Time::GetDeltaTime() * characters[PlayerCharacterType::Robin].lock()->localTimeScale);
-        }
         SetCooltime((SkillType::Enum)skillType, skillCooltimeLeft[skillType] - Time::GetDeltaTime());
     }
 }
@@ -772,6 +772,11 @@ void PlayerController::Reset()
         skillUpgraded[upgrade] = false;
         });
     skillPointsLeft = 0;
+
+    for (auto each : tacticRef)
+    {
+        each.reset();
+    }
 }
 
 // 현재 카메라의 위치에 따라 카메라의 플레이어 기준 오프셋 위치와 회전각을 결정합니다.
@@ -887,6 +892,22 @@ void PlayerController::SetMana(float mana)
     const auto& gc = GlobalConstant::GetSingletonInstance().pod;
     this->mana = std::fmin(gc.maxMana, mana);
     UIManager::Instance().GetUIElementByEnum(UIEnumID::ManaFill)->adjuster->SetTargetFloat(1 - mana / gc.maxMana);
+}
+
+void PlayerController::OnPause()
+{
+    for (int i = 0; i < characters.size(); i++)
+    {
+        tacticRef[i] = characters[i].lock()->referenceTactic.Acquire();
+    }
+}
+
+void PlayerController::OnResume()
+{
+    for (auto each : tacticRef)
+    {
+        each.reset();
+    }
 }
 
 float PlayerController::GetMana()
