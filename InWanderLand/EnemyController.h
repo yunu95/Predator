@@ -6,8 +6,14 @@ class Unit;
 class EnemyController : public UnitController
 {
 public:
+    static bool IsPreempted();
+
     virtual void RegisterUnit(std::weak_ptr<Unit> unit) override;
     virtual void UnRegisterUnit(std::weak_ptr<Unit> unit) override;
+
+    virtual void OnPause() override;
+    virtual void OnResume() override;
+
 protected:
     virtual void Start() override;
     virtual void OnContentsStop() override;
@@ -20,5 +26,7 @@ protected:
     virtual coroutine::Coroutine RoutinePerUnit(std::weak_ptr<Unit> unit) { co_yield coroutine::WaitForSeconds{ 10 }; };
     std::weak_ptr<coroutine::Coroutine> globalRoutine;
     std::unordered_map<Unit*, std::weak_ptr<coroutine::Coroutine>> unitRoutines;
+
 private:
+    static std::unordered_map<Unit*, std::shared_ptr<Reference::Guard>> enemyDeathBlockRefMap;
 };

@@ -315,17 +315,22 @@ Unit::~Unit()
 
 void Unit::OnPause()
 {
-    isPaused = true;
-    if (!IsPlayerUnit())
-    {
-        localTimeScale = FLT_MIN;
-    }
+	isPaused = true;
+	if (!IsPlayerUnit())
+	{
+		localTimeScale = FLT_MIN * 10000;
+		animatorComponent.lock()->Pause();
+	}
 }
 
 void Unit::OnResume()
 {
-    isPaused = false;
-    localTimeScale = 1.0f;
+	isPaused = false;
+	if (!IsPlayerUnit())
+	{
+		localTimeScale = 1.0f;
+		animatorComponent.lock()->Resume();
+	}
 }
 
 bool Unit::IsPlayerUnit() const
@@ -344,6 +349,19 @@ bool Unit::IsAlive() const
 bool Unit::IsPreempted() const
 {
     return (*unitBehaviourTree.GetActiveNodes().rbegin())->GetNodeKey() == UnitBehaviourTree::Knockback;
+}
+
+bool Unit::IsTacTicReady() const
+{
+	for (auto each : unitBehaviourTree.GetActiveNodes())
+	{
+		if (each->GetNodeKey() == UnitBehaviourTree::Tactic)
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
 
 std::string Unit::GetFBXName() const
@@ -498,10 +516,21 @@ yunutyEngine::coroutine::Coroutine Unit::ParalyzeEffectCoroutine(float paralyzeD
     paralysisEffectAnimator.lock()->SetAutoActiveFalse();
     paralysisEffectAnimator.lock()->Init();
     paralysisEffectAnimator.lock()->Play();
+	paralysisEffectAnimator.lock()->SetLoop(true);
 
-    co_yield coroutine::WaitForSeconds(paralyzeDuration);
+	float localTimer = 0;
+	while (localTimer >= paralyzeDuration)
+	{
+		while (isPaused)
+		{
+			co_await std::suspend_always();
+		}
 
-    co_return;
+		co_await std::suspend_always();
+		localTimer += Time::GetDeltaTime();
+	}
+
+	co_return;
 }
 
 yunutyEngine::coroutine::Coroutine Unit::KnockbackCoroutine(std::shared_ptr<Reference::Guard> paralysisGuard, Vector3d targetPosition, float knockBackDuration, bool relative)
@@ -595,18 +624,25 @@ std::weak_ptr<coroutine::Coroutine> Unit::SetRotation(float facingAngle, float r
 }
 coroutine::Coroutine Unit::SettingRotation(float facingAngle, float rotatingTime)
 {
-    auto pauseGuard = referencePause.Acquire();
-    desiredRotation = facingAngle;
-    if (rotatingTime != 0)
-    {
-        currentRotationSpeed = std::fabs(getDeltaAngle(desiredRotation - currentRotation)) / rotatingTime;
-    }
-    else
-    {
-        currentRotationSpeed = 1000000000;
-    }
-    co_yield coroutine::WaitForSeconds(rotatingTime);
-    currentRotationSpeed = unitTemplateData->pod.rotationSpeed;
+	auto pauseGuard = referencePause.Acquire();
+	desiredRotation = facingAngle;
+	if (rotatingTime != 0)
+	{
+		currentRotationSpeed = std::fabs(getDeltaAngle(desiredRotation - currentRotation)) / rotatingTime;
+	}
+	else
+	{
+		currentRotationSpeed = 1000000000;
+	}
+
+	wanderUtils::UnitCoroutine::ForSecondsFromUnit waitRotating{ GetWeakPtr<Unit>(), rotatingTime};
+
+	while (waitRotating.Tick())
+	{
+		co_await std::suspend_always();
+	}
+
+	currentRotationSpeed = unitTemplateData->pod.rotationSpeed;
 }
 void Unit::SetIsAlive(bool isAlive)
 {
@@ -1135,121 +1171,124 @@ void Unit::Reset()
 }
 void Unit::InitBehaviorTree()
 {
-    // 이 행동 트리에 대한 설계문서는 Document/프로그래밍 폴더 내부의 파일 "InWanderLand Behaviour tree.drawio"입니다.
-    unitBehaviourTree[UnitBehaviourTree::Death].enteringCondtion = [this]()
-        {
-            return !isAlive && liveCountLeft < 0;
-        };
-    unitBehaviourTree[UnitBehaviourTree::Death].onEnter = [this]()
-        {
-            OnStateEngage<UnitBehaviourTree::Death>();
-        };
-    unitBehaviourTree[UnitBehaviourTree::Death].onExit = [this]()
-        {
-            OnStateExit<UnitBehaviourTree::Death>();
-        };
-    unitBehaviourTree[UnitBehaviourTree::Paralysis].enteringCondtion = [this]()
-        {
-            return referenceParalysis.BeingReferenced();
-        };
-    unitBehaviourTree[UnitBehaviourTree::Paralysis].onEnter = [this]()
-        {
-            OnStateEngage<UnitBehaviourTree::Paralysis>();
-        };
-    unitBehaviourTree[UnitBehaviourTree::Paralysis][UnitBehaviourTree::Knockback].enteringCondtion = [this]()
-        {
-            return !coroutineKnockBack.expired();
-        };
-    unitBehaviourTree[UnitBehaviourTree::Paralysis][UnitBehaviourTree::Knockback].onEnter = [this]()
-        {
-            OnStateEngage<UnitBehaviourTree::Knockback>();
-        };
-    unitBehaviourTree[UnitBehaviourTree::Paralysis][UnitBehaviourTree::Knockback].onExit = [this]()
-        {
-            OnStateExit<UnitBehaviourTree::Knockback>();
-        };
-    unitBehaviourTree[UnitBehaviourTree::Paralysis][UnitBehaviourTree::Stun].enteringCondtion = [this]()
-        {
-            return true;
-        };
-    unitBehaviourTree[UnitBehaviourTree::Pause].enteringCondtion = [this]()
-        {
-            return referencePause.BeingReferenced();
-        };
-    unitBehaviourTree[UnitBehaviourTree::Pause].onEnter = [this]()
-        {
-            OnStateEngage<UnitBehaviourTree::Pause>();
-        };
-    unitBehaviourTree[UnitBehaviourTree::Pause].onExit = [this]()
-        {
-            OnStateExit<UnitBehaviourTree::Pause>();
-        };
-    unitBehaviourTree[UnitBehaviourTree::Reviving].enteringCondtion = [this]()
-        {
-            return !isAlive;
-        };
-    unitBehaviourTree[UnitBehaviourTree::Reviving].onEnter = [this]()
-        {
-            OnStateEngage<UnitBehaviourTree::Reviving>();
-        };
-    unitBehaviourTree[UnitBehaviourTree::Reviving].onExit = [this]()
-        {
-            OnStateExit<UnitBehaviourTree::Reviving>();
-        };
-    unitBehaviourTree[UnitBehaviourTree::Skill].enteringCondtion = [this]()
-        {
-            return !coroutineSkill.expired() || (CanProcessOrder<UnitOrderType::Skill>() && pendingSkill.get());
-        };
-    unitBehaviourTree[UnitBehaviourTree::Skill].onEnter = [this]()
-        {
-            OnStateEngage<UnitBehaviourTree::Skill>();
-        };
-    unitBehaviourTree[UnitBehaviourTree::Skill].onExit = [this]()
-        {
-            OnStateExit<UnitBehaviourTree::Skill>();
-        };
-    unitBehaviourTree[UnitBehaviourTree::Skill][UnitBehaviourTree::SkillOnGoing].enteringCondtion = [this]()
-        {
-            return !coroutineSkill.expired();
-        };
-    unitBehaviourTree[UnitBehaviourTree::Skill][UnitBehaviourTree::SkillOnGoing].onEnter = [this]()
-        {
-            OnStateEngage<UnitBehaviourTree::SkillOnGoing>();
-        };
-    unitBehaviourTree[UnitBehaviourTree::Skill][UnitBehaviourTree::SkillOnGoing].onExit = [this]()
-        {
-            OnStateExit<UnitBehaviourTree::SkillOnGoing>();
-        };
-    unitBehaviourTree[UnitBehaviourTree::Skill][UnitBehaviourTree::SkillCasting].enteringCondtion = [this]()
-        {
-            return DistanceTo(pendingSkill.get()->targetPos) < pendingSkill.get()->GetCastRange();
-        };
-    unitBehaviourTree[UnitBehaviourTree::Skill][UnitBehaviourTree::SkillCasting].onEnter = [this]()
-        {
-            OnStateEngage<UnitBehaviourTree::SkillCasting>();
-        };
-    unitBehaviourTree[UnitBehaviourTree::Skill][UnitBehaviourTree::SkillCasting].onExit = [this]()
-        {
-            OnStateExit<UnitBehaviourTree::SkillCasting>();
-        };
-    unitBehaviourTree[UnitBehaviourTree::Skill][UnitBehaviourTree::Move].enteringCondtion = [this]()
-        {
-            return true;
-        };
-    unitBehaviourTree[UnitBehaviourTree::Skill][UnitBehaviourTree::Move].onEnter = [this]()
-        {
-            moveDestination = pendingSkill.get()->targetPos;
-            OnStateEngage<UnitBehaviourTree::Move>();
-        };
-    unitBehaviourTree[UnitBehaviourTree::Skill][UnitBehaviourTree::Move].onUpdate = [this]()
-        {
-            OnStateUpdate<UnitBehaviourTree::Move>();
-        };
-    unitBehaviourTree[UnitBehaviourTree::Skill][UnitBehaviourTree::Move].onExit = [this]()
-        {
-            OnStateExit<UnitBehaviourTree::Move>();
-        };
-
+	// 이 행동 트리에 대한 설계문서는 Document/프로그래밍 폴더 내부의 파일 "InWanderLand Behaviour tree.drawio"입니다.
+	unitBehaviourTree[UnitBehaviourTree::Death].enteringCondtion = [this]()
+		{
+			return !referenceBlockDeath.BeingReferenced() && !isAlive && liveCountLeft < 0;
+		};
+	unitBehaviourTree[UnitBehaviourTree::Death].onEnter = [this]()
+		{
+			OnStateEngage<UnitBehaviourTree::Death>();
+		};
+	unitBehaviourTree[UnitBehaviourTree::Death].onExit = [this]()
+		{
+			OnStateExit<UnitBehaviourTree::Death>();
+		};
+	unitBehaviourTree[UnitBehaviourTree::Paralysis].enteringCondtion = [this]()
+		{
+			return referenceParalysis.BeingReferenced();
+		};
+	unitBehaviourTree[UnitBehaviourTree::Paralysis].onEnter = [this]()
+		{
+			OnStateEngage<UnitBehaviourTree::Paralysis>();
+		};
+	unitBehaviourTree[UnitBehaviourTree::Paralysis][UnitBehaviourTree::Knockback].enteringCondtion = [this]()
+		{
+			return !coroutineKnockBack.expired();
+		};
+	unitBehaviourTree[UnitBehaviourTree::Paralysis][UnitBehaviourTree::Stun].enteringCondtion = [this]()
+		{
+			return true;
+		};
+	unitBehaviourTree[UnitBehaviourTree::Pause].enteringCondtion = [this]()
+		{
+			return referencePause.BeingReferenced();
+		};
+	unitBehaviourTree[UnitBehaviourTree::Pause].onEnter = [this]()
+		{
+			OnStateEngage<UnitBehaviourTree::Pause>();
+		};
+	unitBehaviourTree[UnitBehaviourTree::Pause].onExit = [this]()
+		{
+			OnStateExit<UnitBehaviourTree::Pause>();
+		};
+	unitBehaviourTree[UnitBehaviourTree::Reviving].enteringCondtion = [this]()
+		{
+			return !isAlive;
+		};
+	unitBehaviourTree[UnitBehaviourTree::Reviving].onEnter = [this]()
+		{
+			OnStateEngage<UnitBehaviourTree::Reviving>();
+		};
+	unitBehaviourTree[UnitBehaviourTree::Reviving].onExit = [this]()
+		{
+			OnStateExit<UnitBehaviourTree::Reviving>();
+		};
+	unitBehaviourTree[UnitBehaviourTree::Skill].enteringCondtion = [this]()
+		{
+			return !coroutineSkill.expired() || (CanProcessOrder<UnitOrderType::Skill>() && pendingSkill.get());
+		};
+	unitBehaviourTree[UnitBehaviourTree::Skill].onEnter = [this]()
+		{
+			OnStateEngage<UnitBehaviourTree::Skill>();
+		};
+	unitBehaviourTree[UnitBehaviourTree::Skill].onExit = [this]()
+		{
+			OnStateExit<UnitBehaviourTree::Skill>();
+		};
+	unitBehaviourTree[UnitBehaviourTree::Skill][UnitBehaviourTree::SkillOnGoing].enteringCondtion = [this]()
+		{
+			return !coroutineSkill.expired();
+		};
+	unitBehaviourTree[UnitBehaviourTree::Skill][UnitBehaviourTree::SkillOnGoing].onEnter = [this]()
+		{
+			OnStateEngage<UnitBehaviourTree::SkillOnGoing>();
+		};
+	unitBehaviourTree[UnitBehaviourTree::Skill][UnitBehaviourTree::SkillOnGoing].onExit = [this]()
+		{
+			OnStateExit<UnitBehaviourTree::SkillOnGoing>();
+		};
+	unitBehaviourTree[UnitBehaviourTree::Skill][UnitBehaviourTree::SkillCasting].enteringCondtion = [this]()
+		{
+			return DistanceTo(pendingSkill.get()->targetPos) < pendingSkill.get()->GetCastRange();
+		};
+	unitBehaviourTree[UnitBehaviourTree::Skill][UnitBehaviourTree::SkillCasting].onEnter = [this]()
+		{
+			OnStateEngage<UnitBehaviourTree::SkillCasting>();
+		};
+	unitBehaviourTree[UnitBehaviourTree::Skill][UnitBehaviourTree::SkillCasting].onExit = [this]()
+		{
+			OnStateExit<UnitBehaviourTree::SkillCasting>();
+		};
+	unitBehaviourTree[UnitBehaviourTree::Skill][UnitBehaviourTree::Move].enteringCondtion = [this]()
+		{
+			return true;
+		};
+	unitBehaviourTree[UnitBehaviourTree::Skill][UnitBehaviourTree::Move].onEnter = [this]()
+		{
+			moveDestination = pendingSkill.get()->targetPos;
+			OnStateEngage<UnitBehaviourTree::Move>();
+		};
+	unitBehaviourTree[UnitBehaviourTree::Skill][UnitBehaviourTree::Move].onUpdate = [this]()
+		{
+			OnStateUpdate<UnitBehaviourTree::Move>();
+		};
+	unitBehaviourTree[UnitBehaviourTree::Skill][UnitBehaviourTree::Move].onExit = [this]()
+		{
+			OnStateExit<UnitBehaviourTree::Move>();
+		};
+	unitBehaviourTree[UnitBehaviourTree::Tactic].enteringCondtion = [this]()
+		{
+			return referenceTactic.BeingReferenced();
+		};
+	unitBehaviourTree[UnitBehaviourTree::Tactic].onEnter = [this]()
+		{
+			OnStateEngage<UnitBehaviourTree::Tactic>();
+		};
+	unitBehaviourTree[UnitBehaviourTree::Tactic].onExit = [this]()
+		{
+			OnStateExit<UnitBehaviourTree::Tactic>();
+		};
     unitBehaviourTree[UnitBehaviourTree::Chasing].enteringCondtion = [this]()
         {
             return ((!pendingTargetUnit.expired() && pendingTargetUnit.lock()->IsAlive()) ||

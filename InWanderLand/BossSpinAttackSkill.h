@@ -18,7 +18,7 @@ struct POD_BossSpinAttackSkill
 class BossSpinAttackSkill : public Skill
 {
 public:
-	BossSpinAttackSkill() {}
+	BossSpinAttackSkill() = default;
 	virtual SkillType::Enum GetSkillType() { return SkillType::Enum::BossSkill_One; }
 	virtual coroutine::Coroutine operator()() override;
 	virtual void OnInterruption() override;
@@ -32,6 +32,7 @@ private:
 	coroutine::Coroutine SpawningSkillffect(std::weak_ptr<BossSpinAttackSkill> skill);
 	std::weak_ptr<UnitAcquisitionSphereCollider> knockbackCollider;
 	std::weak_ptr<ManagedFBX> chargeEffect;
+	std::weak_ptr<ManagedFBX> previewEffect;
 	std::weak_ptr<VFXAnimator> chargeEffectAnimator;
 	std::weak_ptr<coroutine::Coroutine> effectColliderCoroutine;
 

@@ -21,6 +21,7 @@ coroutine::Coroutine BossSpinAttackSkill::operator()()
     effectColliderCoroutine.lock()->PushDestroyCallBack([this]()
         {
             FBXPool::Instance().Return(chargeEffect);
+            FBXPool::Instance().Return(previewEffect);
             UnitAcquisitionSphereColliderPool::Instance().Return(knockbackCollider);
         });
 
@@ -81,8 +82,18 @@ coroutine::Coroutine BossSpinAttackSkill::SpawningSkillffect(std::weak_ptr<BossS
     Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
     Vector3d direction = deltaPos.Normalized();
 
-	chargeEffect = FBXPool::Instance().Borrow("VFX_HeartQueen_Skill1");
+    previewEffect = FBXPool::Instance().Borrow("VFX_HeartQueen_Skill1_Preview");
+    previewEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos);
+    previewEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(owner.lock()->GetTransform()->GetWorldRotation());
+    previewEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(actualCollideRange * owner.lock()->GetTransform()->GetWorldScale().x,
+        actualCollideRange * owner.lock()->GetTransform()->GetWorldScale().y,
+        actualCollideRange * owner.lock()->GetTransform()->GetWorldScale().z));
+    auto previewEffectAnimator = previewEffect.lock()->AcquireVFXAnimator();
+    previewEffectAnimator.lock()->SetAutoActiveFalse();
+    previewEffectAnimator.lock()->Init();
+    previewEffectAnimator.lock()->Play();
 
+	chargeEffect = FBXPool::Instance().Borrow("VFX_HeartQueen_Skill1");
     chargeEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos);
     chargeEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(owner.lock()->GetTransform()->GetWorldRotation());
     chargeEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(actualCollideRange * owner.lock()->GetTransform()->GetWorldScale().x,

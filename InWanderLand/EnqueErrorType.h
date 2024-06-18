@@ -6,5 +6,6 @@ enum class EnqueErrorType
     NotEnoughMana,
     QueueFull,
     UseSkill,
+    NotReady,
 	Success,
 };

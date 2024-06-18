@@ -1,39 +1,66 @@
 #include "EnemyController.h"
 #include "InWanderLand.h"
 
+std::unordered_map<Unit*, std::shared_ptr<Reference::Guard>> EnemyController::enemyDeathBlockRefMap = std::unordered_map<Unit*, std::shared_ptr<Reference::Guard>>();
+
 void EnemyController::OnContentsStop()
 {
-    PermanentObservee::OnContentsStop();
-    DeleteCoroutine(globalRoutine);
+	PermanentObservee::OnContentsStop();
+	DeleteCoroutine(globalRoutine);
 }
 void EnemyController::Start()
 {
 }
 
+bool EnemyController::IsPreempted()
+{
+	for (auto& [unit, ref] : enemyDeathBlockRefMap)
+	{
+		if (unit->IsPreempted())
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 void EnemyController::RegisterUnit(std::weak_ptr<Unit> unit)
 {
-    unitRoutines[unit.lock().get()] = StartCoroutine(RoutinePerUnit(unit));
+	unitRoutines[unit.lock().get()] = StartCoroutine(RoutinePerUnit(unit));
 }
 
 void EnemyController::UnRegisterUnit(std::weak_ptr<Unit> unit)
 {
-    DeleteCoroutine(unitRoutines[unit.lock().get()]);
-    unitRoutines.erase(unit.lock().get());
+	DeleteCoroutine(unitRoutines[unit.lock().get()]);
+	unitRoutines.erase(unit.lock().get());
+}
+
+void EnemyController::OnPause()
+{
+	for (auto& [unit, coro] : unitRoutines)
+	{
+		enemyDeathBlockRefMap[unit] = unit->referenceBlockDeath.Acquire();
+	}
+}
+
+void EnemyController::OnResume()
+{
+	enemyDeathBlockRefMap.clear();
 }
 
 void EnemyController::Update()
 {
-    if (globalRoutine.expired())
-    {
-        globalRoutine = StartCoroutine(RoutineGlobal());
-    }
-    for (auto& each : unitRoutines)
-    {
-        if (each.second.expired())
-        {
-            each.second = StartCoroutine(RoutinePerUnit(each.first->GetWeakPtr<Unit>()));
-        }
-    }
+	if (globalRoutine.expired())
+	{
+		globalRoutine = StartCoroutine(RoutineGlobal());
+	}
+	for (auto& each : unitRoutines)
+	{
+		if (each.second.expired())
+		{
+			each.second = StartCoroutine(RoutinePerUnit(each.first->GetWeakPtr<Unit>()));
+		}
+	}
 }
 
 //

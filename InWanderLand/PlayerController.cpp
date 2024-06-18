@@ -336,25 +336,31 @@ void PlayerController::HandleSkillPreview()
     }
     else
     {
-        TacticModeSystem::Instance().ShowSkillPreviewInTacticMode(selectedSkill);
+        if (selectedCharacter.lock()->IsTacTicReady())
+        {
+            TacticModeSystem::Instance().ShowSkillPreviewInTacticMode(selectedSkill);
+        }
     }
 
     // 임시 이동 경로 보여주는 부분
     if ((state == State::Tactic) && (selectedSkill == SkillType::NONE))
     {
-        TacticModeSystem::Instance().ShowTemporaryRouteInTacticMode(this->selectedCharacterType);
+        if (selectedCharacter.lock()->IsTacTicReady())
+        {
+            TacticModeSystem::Instance().ShowTemporaryRouteInTacticMode(this->selectedCharacterType);
+        }
     }
 }
 
 void PlayerController::HandleSkillCooltime()
 {
-    /// 수정 중!!
+    if (state == State::Tactic)
+    {
+        return;
+    }
+
     for (int skillType = SkillType::ROBIN_Q; skillType <= SkillType::HANSEL_W; skillType++)
     {
-        if (skillType == SkillType::ROBIN_Q || SkillType::ROBIN_W)
-        {
-            SetCooltime((SkillType::Enum)skillType, skillCooltimeLeft[skillType] - Time::GetDeltaTime() * characters[PlayerCharacterType::Robin].lock()->localTimeScale);
-        }
         SetCooltime((SkillType::Enum)skillType, skillCooltimeLeft[skillType] - Time::GetDeltaTime());
     }
 }
@@ -916,6 +922,15 @@ Unit* PlayerController::GetUnitOnCursor()
         [&mainCamPos](Unit* a, Unit* b) {
             return a->DistanceSquare(mainCamPos) < b->DistanceSquare(mainCamPos);
         });
+}
+
+void PlayerController::OnPause()
+{
+
+}
+
+void PlayerController::OnResume()
+{
 }
 
 float PlayerController::GetMana()

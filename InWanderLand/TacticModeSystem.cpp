@@ -83,7 +83,7 @@ void TacticModeSystem::OnContentsStop()
     GetComponent()->SetActive(false);
     // 플레이가 중단되면 모든 Pause는 되돌려준다.
 
-    for (auto& each : playersPauseRevArr)
+    for (auto& each : playersTacticRevArr)
     {
         each.reset();
     }
@@ -96,9 +96,9 @@ void TacticModeSystem::EngageTacticSystem()
     this->isOperating = true;
     this->isCoolTime = true;
 
-    playersPauseRevArr[0] = PlayerController::Instance().GetPlayers()[0].lock()->referencePause.Acquire();
-    playersPauseRevArr[1] = PlayerController::Instance().GetPlayers()[1].lock()->referencePause.Acquire();
-    playersPauseRevArr[2] = PlayerController::Instance().GetPlayers()[2].lock()->referencePause.Acquire();
+    playersTacticRevArr[0] = PlayerController::Instance().GetPlayers()[0].lock()->referenceTactic.Acquire();
+    playersTacticRevArr[1] = PlayerController::Instance().GetPlayers()[1].lock()->referenceTactic.Acquire();
+    playersTacticRevArr[2] = PlayerController::Instance().GetPlayers()[2].lock()->referenceTactic.Acquire();
 
     auto wave = PlaytimeWave::GetCurrentOperatingWave();
     if (!wave.expired())
@@ -114,6 +114,14 @@ void TacticModeSystem::EngageTacticSystem()
 EnqueErrorType TacticModeSystem::EnqueueCommand(std::shared_ptr<UnitCommand> command)
 {
     EnqueErrorType errorType = EnqueErrorType::NONE;
+
+    // 현재 들어온 명령을 수행하는 유닛이 준비가 되었는지 검사하는 코드
+    if (command->GetUnit()->IsTacTicReady() == false)
+    {
+		errorType = EnqueErrorType::NotReady;
+		return errorType;
+    }
+
     // 큐가 가득 차 있는지 검사하는 코드
     if (this->commandList.size() == this->MAX_COMMAND_COUNT)
     {
@@ -566,22 +574,26 @@ yunutyEngine::coroutine::Coroutine TacticModeSystem::ExecuteInternal()
         {
             PlayerController::Instance().SelectPlayerUnit(static_cast<PlayerCharacterType::Enum>(each->GetUnit()->GetUnitTemplateData().pod.playerUnitType.enumValue));
             // 현재 명령을 수행하는 플레이어 유닛은 움직인다.
-            this->playersPauseRevArr[each->GetPlayerType()].reset();
+            this->playersTacticRevArr[each->GetPlayerType()].reset();
             each->Execute();
-            while (!each->IsDone())
+            while (!each->IsDone() || EnemyController::IsPreempted())
             {
                 co_await std::suspend_always();
             }
             // 명령 수행이 끝나면 다시 멈춘다.
-            this->playersPauseRevArr[each->GetPlayerType()] = PlayerController::Instance().GetPlayers()[each->GetPlayerType()].lock()->referencePause.Acquire();
+            this->playersTacticRevArr[each->GetPlayerType()] = PlayerController::Instance().GetPlayers()[each->GetPlayerType()].lock()->referenceTactic.Acquire();
             each->HidePreviewMesh();
         }
         UIManager::Instance().GetUIElementByEnum(commandIcons[iconIndex])->DisableElement();
         iconIndex++;
     }
 
+    for (auto& each : this->playersTacticRevArr)
+    {
+        each.reset();
+    }
+
     this->commandList.clear();
-    PlayerController::Instance().SetState(PlayerController::State::Battle);
 
     this->isExecuting = false;
     this->isOperating = false;
@@ -590,7 +602,7 @@ yunutyEngine::coroutine::Coroutine TacticModeSystem::ExecuteInternal()
     this->hanselLastCommand = nullptr;
 
     // 전술모드 명령이 끝나면 플레이어들은 다시 움직인다.
-    for (auto& each : playersPauseRevArr)
+    for (auto& each : playersTacticRevArr)
     {
         each.reset();
     }
