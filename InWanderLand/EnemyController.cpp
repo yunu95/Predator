@@ -10,6 +10,12 @@ void EnemyController::Start()
 {
 }
 
+bool EnemyController::IsPreempted()
+{
+    /// 상준이형 여기봐
+    return false;
+}
+
 void EnemyController::RegisterUnit(std::weak_ptr<Unit> unit)
 {
     unitRoutines[unit.lock().get()] = StartCoroutine(RoutinePerUnit(unit));

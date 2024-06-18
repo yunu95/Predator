@@ -57,6 +57,44 @@
         "texturePath": "Texture/Particle/Interactable_Dust.dds"
     },
     {
+        "angle": 6.0,
+        "burstsCount": 30,
+        "duration": 5.0,
+        "endScale": 1.0,
+        "interval": 5.0,
+        "isLoop": true,
+        "lifeTime": 2.0,
+        "maxParticle": 5,
+        "name": "LiveParticle1",
+        "particleMode": 0,
+        "playAwake": true,
+        "radius": 1.0,
+        "rateOverTime": 5.0,
+        "shape": 0,
+        "speed": 3.0,
+        "startScale": 0.20000000298023224,
+        "texturePath": "Texture/Particle/T_Particle_Live.dds"
+    },
+    {
+        "angle": 6.0,
+        "burstsCount": 30,
+        "duration": 5.0,
+        "endScale": 1.0,
+        "interval": 5.0,
+        "isLoop": true,
+        "lifeTime": 2.0,
+        "maxParticle": 5,
+        "name": "LiveParticle2",
+        "particleMode": 0,
+        "playAwake": true,
+        "radius": 1.0,
+        "rateOverTime": 5.0,
+        "shape": 0,
+        "speed": 3.0,
+        "startScale": 0.20000000298023224,
+        "texturePath": "Texture/Particle/T_Particle_Light.dds"
+    },
+    {
         "angle": 30.0,
         "burstsCount": 1,
         "duration": 0.0,
@@ -110,7 +148,7 @@
         "rateOverTime": 10.0,
         "shape": 0,
         "speed": 3.0,
-        "startScale": 1.0,
+        "startScale": 0.800000011920929,
         "texturePath": "Texture/Particle/Interactable_Dust.dds"
     }
 ]

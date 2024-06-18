@@ -109,6 +109,11 @@ coroutine::Coroutine BossSummonMobSkill::StartSummonTimer()
 		{
 			co_await std::suspend_always{};
 		}
+
+		if (!leftFrame->IsAlive() && !rightFrame->IsAlive())
+		{
+			break;
+		}
 		
 		bool summonUnit = false;
 		while (!summonUnit)

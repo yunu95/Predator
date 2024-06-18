@@ -80,6 +80,21 @@ void Interactable_TrapArms::Start()
 
 void Interactable_TrapArms::Update()
 {
+	static auto eraseList = triggerStay;
+	for (auto each : triggerStay)
+	{
+		if (each->GetGameObject()->GetComponent<Unit>()->IsAlive())
+		{
+			eraseList.erase(each);
+		}
+	}
+	for (auto each : eraseList)
+	{
+		triggerStay.erase(each);
+	}
+
+	eraseList.clear();
+
 	if (!isPause && triggerOn)
 	{
 		if (!isInteracting)

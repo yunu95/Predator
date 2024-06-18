@@ -24,14 +24,25 @@ coroutine::Coroutine BossSpinAttackSkill::operator()()
             FBXPool::Instance().Return(previewEffect);
             UnitAcquisitionSphereColliderPool::Instance().Return(knockbackCollider);
         });
-    co_yield coroutine::WaitForSeconds(spinStartTime);
 
-    coroutine::ForSeconds forSeconds{ spinAttackingTime };
+    wanderUtils::UnitCoroutine::ForSecondsFromUnit waitSpinStart{ owner, spinStartTime };
+
+    while (waitSpinStart.Tick())
+    {
+        co_await std::suspend_always();
+    }
 
     disableNavAgent.reset();
     blockFollowingNavigation.reset();
     owner.lock()->Relocate(owner.lock()->GetTransform()->GetWorldPosition());
-    co_yield coroutine::WaitForSeconds(afterSpinDelay);
+
+    wanderUtils::UnitCoroutine::ForSecondsFromUnit afterSpinDelayTimer{ owner, afterSpinDelay };
+
+    while (afterSpinDelayTimer.Tick())
+    {
+        co_await std::suspend_always();
+    }
+
     owner.lock()->PlayAnimation(UnitAnimType::Idle, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
     co_yield coroutine::WaitForSeconds(0.2);
     co_return;
@@ -42,6 +53,22 @@ void BossSpinAttackSkill::OnInterruption()
     if (!effectColliderCoroutine.expired())
     {
         owner.lock()->DeleteCoroutine(effectColliderCoroutine);
+    }
+}
+
+void BossSpinAttackSkill::OnPause()
+{
+    if (!chargeEffectAnimator.expired())
+    {
+        chargeEffectAnimator.lock()->Pause();
+    }
+}
+
+void BossSpinAttackSkill::OnResume()
+{
+    if (!chargeEffectAnimator.expired())
+    {
+        chargeEffectAnimator.lock()->Resume();
     }
 }
 
@@ -72,7 +99,7 @@ coroutine::Coroutine BossSpinAttackSkill::SpawningSkillffect(std::weak_ptr<BossS
     chargeEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(actualCollideRange * owner.lock()->GetTransform()->GetWorldScale().x,
         actualCollideRange * owner.lock()->GetTransform()->GetWorldScale().y,
         actualCollideRange * owner.lock()->GetTransform()->GetWorldScale().z));
-    auto chargeEffectAnimator = chargeEffect.lock()->AcquireVFXAnimator();
+    chargeEffectAnimator = chargeEffect.lock()->AcquireVFXAnimator();
     chargeEffectAnimator.lock()->SetAutoActiveFalse();
     chargeEffectAnimator.lock()->Init();
     chargeEffectAnimator.lock()->Play();
@@ -83,9 +110,16 @@ coroutine::Coroutine BossSpinAttackSkill::SpawningSkillffect(std::weak_ptr<BossS
 
     std::unordered_set<Unit*> knockBackList;
 
-    co_yield coroutine::WaitForSeconds(spinStartTime);
 
-    coroutine::ForSeconds forSeconds{ spinAttackingTime };
+    wanderUtils::UnitCoroutine::ForSecondsFromUnit waitSpinStart{ owner, spinStartTime };
+
+    while (waitSpinStart.Tick())
+    {
+        co_await std::suspend_always();
+    }
+
+
+    wanderUtils::UnitCoroutine::ForSecondsFromUnit forSeconds{ owner, spinAttackingTime };
     while (forSeconds.Tick())
     {
         co_await std::suspend_always{};
@@ -105,14 +139,12 @@ coroutine::Coroutine BossSpinAttackSkill::SpawningSkillffect(std::weak_ptr<BossS
 
     co_await std::suspend_always{};
 
-    float elapsed = 0.0f;
+    wanderUtils::UnitCoroutine::ForSecondsFromUnit afterDamagedDelay{ owner, pod.skillEndTimeAfterDamaged };
 
-    while (elapsed <= pod.skillEndTimeAfterDamaged)
+    while (afterDamagedDelay.Tick())
     {
-        elapsed += Time::GetDeltaTime();
-        co_await std::suspend_always{};
+        co_await std::suspend_always();
     }
-
 
     co_return;
 }

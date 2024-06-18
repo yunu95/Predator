@@ -36,6 +36,15 @@ class UnitPool;
 class PlayerController;
 class UnitController;
 class BossController;
+
+namespace wanderUtils
+{
+    namespace UnitCoroutine
+    {
+        class ForSecondsFromUnit;
+    }
+}
+
 namespace application
 {
     namespace editor
@@ -123,6 +132,9 @@ public:
     bool IsPlayerUnit() const;
     bool IsInvulenerable() const;
     bool IsAlive()const;
+    bool IsPaused() const { return isPaused; }
+    bool IsPreempted() const;
+    bool IsTacTicReady() const;
     std::string GetFBXName() const;
     // 유닛의 행동 트리 상태가 전환될 때
     std::array<DelegateCallback<void>, UnitBehaviourTree::Keywords::KeywordNum>& OnStateEngageCallback() { return onStateEngage; };
@@ -155,6 +167,9 @@ public:
     Reference referenceDisableNavAgent;
     // NavObstacle 객체를 활성화함.
     Reference referenceEnableNavObstacle;
+    // 전술모드에서 명령을 내릴 수 있는지에 대한 Ref
+    Reference referenceTactic;
+    Reference referenceBlockDeath;
 
     std::weak_ptr<yunutyEngine::graphics::Animator> GetAnimator() { return animatorComponent; }
 private:
@@ -248,11 +263,16 @@ private:
     std::weak_ptr<ManagedFBX> attackVFX = std::weak_ptr<ManagedFBX>();
     std::weak_ptr<ManagedFBX> damagedVFX = std::weak_ptr<ManagedFBX>();
 	std::weak_ptr<ManagedFBX> paralysisVFX = std::weak_ptr<ManagedFBX>();
+
+    bool isPaused = false;
+    float localTimeScale = 1.0f;
+
     friend UnitBuff;
     friend UnitPool;
     friend PlayerController;
     friend BossController;
     friend UnitBuffTaunted;
+    friend wanderUtils::UnitCoroutine::ForSecondsFromUnit;
 };
 template<UnitOrderType orderType>
 bool Unit::CanProcessOrder()

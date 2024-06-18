@@ -13,6 +13,7 @@ struct PixelIn
 // Temp3Map : Emissive Map
 // Temp4Map : Util
 // Temp5Map : Ambient Light
+// Temp5Map : Specular Light
 
 float4 main(PixelIn input) : SV_Target
 {
@@ -30,6 +31,8 @@ float4 main(PixelIn input) : SV_Target
     
     float4 util = Temp4Map.Sample(sam, input.uv);
     
+    float4 specular = Temp6Map.Sample(sam, input.uv);
+    
     if (util.x == -1)
     {
         output = diffuseLight * (1 - (shadowFactor.x)) + ambientLight + emissive;
@@ -43,7 +46,8 @@ float4 main(PixelIn input) : SV_Target
             shadowColor = 0.8;
         }
 
-        float4 temp = (albedoColor * shadowColor);
+        //float4 temp = (albedoColor + specular) * shadowColor;
+        float4 temp = (albedoColor) * shadowColor;
 
         output = temp + emissive;
     }
