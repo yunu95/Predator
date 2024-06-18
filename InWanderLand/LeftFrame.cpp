@@ -136,6 +136,16 @@ namespace BossSummon
 		{
 			GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->Pause();
 		}
+
+		if (!summonEffectAnimator.expired())
+		{
+			summonEffectAnimator.lock()->Pause();
+		}
+
+		if (!summoningEffectAnimator.expired())
+		{
+			summoningEffectAnimator.lock()->Pause();
+		}
 	}
 
 	void LeftFrame::OnResume()
@@ -145,6 +155,16 @@ namespace BossSummon
 		if (!HasChangedUnit())
 		{
 			GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>()->Resume();
+		}
+
+		if (!summonEffectAnimator.expired())
+		{
+			summonEffectAnimator.lock()->Resume();
+		}
+
+		if (!summoningEffectAnimator.expired())
+		{
+			summoningEffectAnimator.lock()->Resume();
 		}
 	}
 
@@ -158,7 +178,8 @@ namespace BossSummon
 		auto& gc = GlobalConstant::GetSingletonInstance().pod;
 
 		mesh->SetSelfActive(true);
-		coroutine::ForSeconds preAppear{ gc.bossAppearTime };
+		wanderUtils::UnitCoroutine::ForSecondsFromUnit preAppear{ unitFrame, gc.bossAppearTime };
+
 		mesh->GetTransform()->SetLocalPosition(Vector3d(0, gc.bossAppearHeight, 0));
 
 		auto initVel = wanderUtils::GetInitSpeedOfFreeFall(gc.bossAppearTime, Vector3d(0, gc.bossAppearHeight, 0), Vector3d(0, 1, 0));
@@ -180,7 +201,7 @@ namespace BossSummon
 		auto anim = wanderResources::GetAnimation("SKM_Frame1", UnitAnimType::Birth);
 		animator->Play(anim);
 
-		coroutine::ForSeconds forSeconds{ anim->GetDuration() };
+		wanderUtils::UnitCoroutine::ForSecondsFromUnit forSeconds{ unitFrame, anim->GetDuration() };
 
 		while (forSeconds.Tick())
 		{
@@ -204,7 +225,7 @@ namespace BossSummon
 		unitFrame.lock()->PlayAnimation(UnitAnimType::Skill1, Animation::PlayFlag_::None);
 		auto animator = unitFrame.lock()->GetAnimator();
 		auto anim = wanderResources::GetAnimation(unitFrame.lock()->GetFBXName(), UnitAnimType::Skill1);
-		coroutine::ForSeconds forSeconds{ anim->GetDuration() };
+		wanderUtils::UnitCoroutine::ForSecondsFromUnit forSeconds{ unitFrame, anim->GetDuration() };
 
 		Vector3d pivotPos = GetGameObject()->GetTransform()->GetWorldPosition() + Vector3d(-BossSummonMobSkill::pod.leftSummonOffset_x, 0, BossSummonMobSkill::pod.leftSummonOffset_z);
 		Quaternion summonRot = GetGameObject()->GetTransform()->GetWorldRotation();
@@ -214,14 +235,14 @@ namespace BossSummon
 		summonEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition() + GetTransform()->GetWorldRotation().Forward() * -1.5);
 		summonEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(GetTransform()->GetWorldRotation());
 
-		auto summonEffectAnimator = summonEffect.lock()->AcquireVFXAnimator();
+		summonEffectAnimator = summonEffect.lock()->AcquireVFXAnimator();
 		summonEffectAnimator.lock()->SetAutoActiveFalse();
 		summonEffectAnimator.lock()->Init();
 
 		summoningEffect = FBXPool::Instance().Borrow("VFX_Frame_Summoning");
 		summoningEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition() + GetTransform()->GetWorldRotation().Forward() * -1.5);
 		summoningEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(GetTransform()->GetWorldRotation());
-		auto summoningEffectAnimator = summoningEffect.lock()->AcquireVFXAnimator();
+		summoningEffectAnimator = summoningEffect.lock()->AcquireVFXAnimator();
 		summoningEffectAnimator.lock()->SetLoop(true);
 		summoningEffectAnimator.lock()->SetAutoActiveFalse();
 		summoningEffectAnimator.lock()->Init();

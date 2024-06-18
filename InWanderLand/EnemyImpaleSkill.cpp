@@ -65,16 +65,22 @@ coroutine::Coroutine EnemyImpaleSkill::operator()()
             FBXPool::Instance().Return(impaleEffect);
             FBXPool::Instance().Return(previewEffect);
         });
-    co_yield coroutine::WaitForSeconds{ pod.impaleStartDelay };
-    //coroutine::ForSeconds forSeconds{ pod.impaleSkillDuration };
-    coroutine::ForSeconds forSeconds{ pod.impaleSkillDuration };
+
+    wanderUtils::UnitCoroutine::ForSecondsFromUnit waitImpaleStart{ owner, pod.impaleStartDelay };
+
+    while (waitImpaleStart.Tick())
+    {
+        co_await std::suspend_always();
+    }
+
+    wanderUtils::UnitCoroutine::ForSecondsFromUnit waitImpaleDuration{ owner, pod.impaleSkillDuration };
     managingIndex = 0;
 
     for (auto& each : SpearsInfo())
     {
-        while (each.timeOffset > forSeconds.Elapsed())
+        while (each.timeOffset > waitImpaleDuration.Elapsed())
         {
-            forSeconds.Tick();
+            waitImpaleDuration.Tick();
             co_await std::suspend_always{};
         }
 
@@ -87,15 +93,19 @@ coroutine::Coroutine EnemyImpaleSkill::operator()()
                 if (knockbackColliderVector.empty() && spearFbxVector.empty())
                     return;
                 UnitAcquisitionSphereColliderPool::Instance().Return(knockbackColliderVector[managingIndex]);
-
                 FBXPool::Instance().Return(spearFbxVector[managingIndex]);
                 managingIndex++;
             });
     }
 
-    co_yield coroutine::WaitForSeconds{ 2.0f };
+    wanderUtils::UnitCoroutine::ForSecondsFromUnit waitImpaleAfter{ owner, 2.0f };
 
-    owner.lock()->PlayAnimation(UnitAnimType::Idle);
+    while (waitImpaleAfter.Tick())
+    {
+        co_await std::suspend_always();
+    }
+
+    owner.lock()->PlayAnimation(UnitAnimType::Idle, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
     co_return;
 }
 
@@ -104,6 +114,32 @@ void EnemyImpaleSkill::OnInterruption()
     if (!effectCoroutine.expired())
     {
         owner.lock()->DeleteCoroutine(effectCoroutine);
+    }
+}
+
+void EnemyImpaleSkill::OnPause()
+{
+    if (!impaleEffectAnimator.expired())
+    {
+        impaleEffectAnimator.lock()->Pause();
+    }
+
+    if (!previewEffectAnimator.expired())
+    {
+        previewEffectAnimator.lock()->Pause();
+    }
+}
+
+void EnemyImpaleSkill::OnResume()
+{
+    if (!impaleEffectAnimator.expired())
+    {
+        impaleEffectAnimator.lock()->Resume();
+    }
+
+    if (!previewEffectAnimator.expired())
+    {
+        previewEffectAnimator.lock()->Resume();
     }
 }
 
@@ -138,11 +174,12 @@ coroutine::Coroutine EnemyImpaleSkill::SpearArise(std::weak_ptr<EnemyImpaleSkill
         }
     }
 
-    coroutine::ForSeconds forSeconds{ pod.impaleSkillDurationPerSpear };
-    while (forSeconds.Tick())
+    wanderUtils::UnitCoroutine::ForSecondsFromUnit waitPerSpear{ owner, pod.impaleSkillDurationPerSpear };
+
+    while (waitPerSpear.Tick())
     {
         skill.lock();
-        float heightAlpha = std::sinf(forSeconds.ElapsedNormalized() * math::PI);
+        float heightAlpha = std::sinf(waitPerSpear.ElapsedNormalized() * math::PI);
         float yDelta = math::LerpF(pod.impaleSkillMinHeightPerSpear, pod.impaleSkillMaxHeightPerSpear, heightAlpha);
         fbx.lock()->GetTransform()->SetWorldPosition(worldPos + Vector3d::up * yDelta);
         co_await std::suspend_always{};
@@ -168,7 +205,7 @@ coroutine::Coroutine EnemyImpaleSkill::SpawningSkillffect(std::weak_ptr<EnemyImp
         1,
         pod.impaleSkillRange / colliderEffectRatio));
 
-    auto previewEffectAnimator = previewEffect.lock()->AcquireVFXAnimator();
+    previewEffectAnimator = previewEffect.lock()->AcquireVFXAnimator();
     previewEffectAnimator.lock()->SetAutoActiveFalse();
     previewEffectAnimator.lock()->Init();
     previewEffectAnimator.lock()->Play();
@@ -176,17 +213,17 @@ coroutine::Coroutine EnemyImpaleSkill::SpawningSkillffect(std::weak_ptr<EnemyImp
     impaleEffect = FBXPool::Instance().Borrow("VFX_Monster2_Skill");
 
     impaleEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos);
-    impaleEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
+    impaleEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(owner.lock()->GetTransform()->GetWorldRotation());
     impaleEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(owner.lock()->GetTransform()->GetWorldScale());
 
-    auto chargeEffectAnimator = impaleEffect.lock()->AcquireVFXAnimator();
-    chargeEffectAnimator.lock()->SetAutoActiveFalse();
-    chargeEffectAnimator.lock()->Init();
-    chargeEffectAnimator.lock()->Play();
+    impaleEffectAnimator = impaleEffect.lock()->AcquireVFXAnimator();
+    impaleEffectAnimator.lock()->SetAutoActiveFalse();
+    impaleEffectAnimator.lock()->Init();
+    impaleEffectAnimator.lock()->Play();
 
     co_await std::suspend_always{};
 
-    while (!chargeEffectAnimator.lock()->IsDone())
+    while (!impaleEffectAnimator.lock()->IsDone())
     {
         co_await std::suspend_always{};
     }

@@ -28,7 +28,8 @@ coroutine::Coroutine BossSummonChessSkill::operator()()
 		});
 	auto animator = owner.lock()->GetAnimator();
 	auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill4);
-	coroutine::ForSeconds forSeconds{ anim->GetDuration() };
+	wanderUtils::UnitCoroutine::ForSecondsFromUnit forSeconds{ owner, anim->GetDuration() };
+
 	Vector3d farUnitPos = Vector3d();
 	Vector3d ownerPos = owner.lock()->GetTransform()->GetWorldPosition();
 	/// Player 유닛만 받아서 가장 먼 거리 계산
@@ -67,6 +68,22 @@ void BossSummonChessSkill::OnInterruption()
 	}
 }
 
+void BossSummonChessSkill::OnPause()
+{
+	if (!stepEffectAnimator.expired())
+	{
+		stepEffectAnimator.lock()->Pause();
+	}
+}
+
+void BossSummonChessSkill::OnResume()
+{
+	if (!stepEffectAnimator.expired())
+	{
+		stepEffectAnimator.lock()->Resume();
+	}
+}
+
 void BossSummonChessSkill::OnBossDie()
 {
 	BossSummon::ChessPool::Instance().OnBossDie();
@@ -85,15 +102,19 @@ coroutine::Coroutine BossSummonChessSkill::SpawningFieldEffect(std::weak_ptr<Bos
 	stepEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(owner.lock()->GetTransform()->GetWorldRotation());
 	stepEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(owner.lock()->GetTransform()->GetWorldScale());
 
-	auto stepEffectAnimator = stepEffect.lock()->AcquireVFXAnimator();
+	stepEffectAnimator = stepEffect.lock()->AcquireVFXAnimator();
 	stepEffectAnimator.lock()->SetAutoActiveFalse();
 	stepEffectAnimator.lock()->Init();
 	stepEffectAnimator.lock()->Play();
 
 	auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill3);
 
-	co_yield coroutine::WaitForSeconds(anim->GetDuration());
-
+	wanderUtils::UnitCoroutine::ForSecondsFromUnit forSeconds{ owner, anim->GetDuration() };
+	while (forSeconds.Tick())
+	{
+		co_await std::suspend_always();
+	}
+	
 	co_return;
 }
 
@@ -176,14 +197,15 @@ coroutine::Coroutine BossSummonChessSkill::SummonChess(std::weak_ptr<BossSummonC
 		}
 	}
 
-	coroutine::ForSeconds preSeconds{ pod.summonPreDelay };
+	wanderUtils::UnitCoroutine::ForSecondsFromUnit preSeconds{ owner, pod.summonPreDelay };
 
 	while (preSeconds.Tick())
 	{
 		co_await std::suspend_always{};
 	}
 
-	coroutine::ForSeconds forSeconds{ pod.summonTime };
+	wanderUtils::UnitCoroutine::ForSecondsFromUnit forSeconds{ owner, pod.summonTime };
+
 	Vector3d indivVelocity = Vector3d();
 	int summoned = 1;
 	if (!pod.intervalSummon)

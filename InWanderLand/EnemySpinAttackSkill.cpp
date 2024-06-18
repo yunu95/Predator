@@ -25,14 +25,25 @@ coroutine::Coroutine EnemySpinAttackSkill::operator()()
             FBXPool::Instance().Return(previewEffect);
             UnitAcquisitionSphereColliderPool::Instance().Return(knockbackCollider);
         });
-    co_yield coroutine::WaitForSeconds(eliteSpinStartTime);
 
-    coroutine::ForSeconds forSeconds{ eliteSpinAttackingTime };
+    wanderUtils::UnitCoroutine::ForSecondsFromUnit waitSpinStart{ owner, eliteSpinStartTime };
+
+    while (waitSpinStart.Tick())
+    {
+        co_await std::suspend_always();
+    }
 
     disableNavAgent.reset();
     blockFollowingNavigation.reset();
     owner.lock()->Relocate(owner.lock()->GetTransform()->GetWorldPosition());
-    co_yield coroutine::WaitForSeconds(eliteAfterSpinDelay);
+
+    wanderUtils::UnitCoroutine::ForSecondsFromUnit afterSpinDelayTimer{ owner, eliteAfterSpinDelay };
+
+    while (afterSpinDelayTimer.Tick())
+    {
+        co_await std::suspend_always();
+    }
+
     owner.lock()->PlayAnimation(UnitAnimType::Idle, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
     co_yield coroutine::WaitForSeconds(0.2);
     co_return;
@@ -43,6 +54,32 @@ void EnemySpinAttackSkill::OnInterruption()
     if (!effectColliderCoroutine.expired())
     {
         owner.lock()->DeleteCoroutine(effectColliderCoroutine);
+    }
+}
+
+void EnemySpinAttackSkill::OnPause()
+{
+    if (!chargeEffectAnimator.expired())
+    {
+        chargeEffectAnimator.lock()->Pause();
+    }
+
+    if (!previewEffectAnimator.expired())
+    {
+        previewEffectAnimator.lock()->Pause();
+    }
+}
+
+void EnemySpinAttackSkill::OnResume()
+{
+    if (!chargeEffectAnimator.expired())
+    {
+        chargeEffectAnimator.lock()->Resume();
+    }
+
+    if (!previewEffectAnimator.expired())
+    {
+        previewEffectAnimator.lock()->Resume();
     }
 }
 
@@ -60,7 +97,7 @@ coroutine::Coroutine EnemySpinAttackSkill::SpawningSkillffect(std::weak_ptr<Enem
     previewEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(actualCollideRange * owner.lock()->GetTransform()->GetWorldScale().x,
         actualCollideRange * owner.lock()->GetTransform()->GetWorldScale().y,
         actualCollideRange * owner.lock()->GetTransform()->GetWorldScale().z));
-    auto previewEffectAnimator = previewEffect.lock()->AcquireVFXAnimator();
+    previewEffectAnimator = previewEffect.lock()->AcquireVFXAnimator();
     previewEffectAnimator.lock()->SetAutoActiveFalse();
     previewEffectAnimator.lock()->Init();
     previewEffectAnimator.lock()->Play();
@@ -72,7 +109,7 @@ coroutine::Coroutine EnemySpinAttackSkill::SpawningSkillffect(std::weak_ptr<Enem
     chargeEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(actualCollideRange * owner.lock()->GetTransform()->GetWorldScale().x,
         actualCollideRange * owner.lock()->GetTransform()->GetWorldScale().y,
         actualCollideRange * owner.lock()->GetTransform()->GetWorldScale().z));
-    auto chargeEffectAnimator = chargeEffect.lock()->AcquireVFXAnimator();
+    chargeEffectAnimator = chargeEffect.lock()->AcquireVFXAnimator();
     chargeEffectAnimator.lock()->SetAutoActiveFalse();
     chargeEffectAnimator.lock()->Init();
     chargeEffectAnimator.lock()->Play();
@@ -83,9 +120,14 @@ coroutine::Coroutine EnemySpinAttackSkill::SpawningSkillffect(std::weak_ptr<Enem
 
     std::unordered_set<Unit*> knockBackList;
 
-    co_yield coroutine::WaitForSeconds(eliteSpinStartTime);
+    wanderUtils::UnitCoroutine::ForSecondsFromUnit waitSpinStart{ owner, eliteSpinStartTime };
 
-    coroutine::ForSeconds forSeconds{ eliteSpinAttackingTime };
+    while (waitSpinStart.Tick())
+    {
+        co_await std::suspend_always();
+    }
+
+    wanderUtils::UnitCoroutine::ForSecondsFromUnit forSeconds{ owner, eliteSpinAttackingTime };
     while (forSeconds.Tick())
     {
         co_await std::suspend_always{};
@@ -105,12 +147,11 @@ coroutine::Coroutine EnemySpinAttackSkill::SpawningSkillffect(std::weak_ptr<Enem
 
     co_await std::suspend_always{};
 
-    float elapsed = 0.0f;
+    wanderUtils::UnitCoroutine::ForSecondsFromUnit afterDamagedDelay{ owner, pod.skillEndTimeAfterDamaged };
 
-    while (elapsed <= pod.skillEndTimeAfterDamaged)
+    while (afterDamagedDelay.Tick())
     {
-        elapsed += Time::GetDeltaTime();
-        co_await std::suspend_always{};
+        co_await std::suspend_always();
     }
 
     co_return;
