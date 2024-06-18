@@ -26,9 +26,14 @@ namespace application
 
 		virtual CoroutineObject<void> DoAction() override;
 
+		void SetRequest(bool requestOn);
+
 		virtual bool PreEncoding(json& data) const override;
 		virtual bool PostEncoding(json& data) const override;
 		virtual bool PreDecoding(const json& data) override;
 		virtual bool PostDecoding(const json& data) override;
+
+	private:
+		bool requestOn = true;
 	};
 }

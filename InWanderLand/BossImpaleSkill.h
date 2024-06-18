@@ -33,6 +33,9 @@ public:
 	virtual coroutine::Coroutine operator()() override;
 	virtual void OnInterruption() override;
 
+	virtual void OnPause() override;
+	virtual void OnResume() override;
+
 	static POD_BossImpaleSkill pod;
 
 private:
@@ -43,6 +46,8 @@ private:
 	std::weak_ptr<coroutine::Coroutine> effectCoroutine;
 	std::weak_ptr<ManagedFBX> previewEffect;
 	std::weak_ptr<ManagedFBX> impaleEffect;
+	std::weak_ptr<VFXAnimator> previewEffectAnimator;
+	std::weak_ptr<VFXAnimator> impaleEffectAnimator;
 	std::vector<std::weak_ptr<UnitAcquisitionSphereCollider>> knockbackColliderVector;
 	std::vector<std::weak_ptr<ManagedFBX>> spearFbxVector;
 	std::unordered_set<Unit*> damagedUnits;

@@ -40,6 +40,22 @@ void BossSummonMobSkill::OnBossDie()
 	}
 }
 
+void BossSummonMobSkill::OnPause()
+{
+	if (!stepEffectAnimator.expired())
+	{
+		stepEffectAnimator.lock()->Pause();
+	}
+}
+
+void BossSummonMobSkill::OnResume()
+{
+	if (!stepEffectAnimator.expired())
+	{
+		stepEffectAnimator.lock()->Resume();
+	}
+}
+
 coroutine::Coroutine BossSummonMobSkill::operator()()
 {
 	if (leftFrame == nullptr || rightFrame == nullptr || leftFrame->HasChangedUnit())
@@ -58,8 +74,9 @@ coroutine::Coroutine BossSummonMobSkill::operator()()
 		});
 	auto animator = owner.lock()->GetAnimator();
 	auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill3);
-	coroutine::ForSeconds forSeconds{ anim->GetDuration() };
-
+	
+	wanderUtils::UnitCoroutine::ForSecondsFromUnit forSeconds{ owner, anim->GetDuration() };
+	
 	if (rightFrame->HasChangedUnit())
 	{
 		leftFrame->ChangeUnit();
@@ -103,7 +120,7 @@ coroutine::Coroutine BossSummonMobSkill::StartSummonTimer()
 {
 	while (true)
 	{
-		coroutine::ForSeconds forSeconds{ pod.summonPeriod };
+		wanderUtils::UnitCoroutine::ForSecondsFromUnit forSeconds{ owner, pod.summonPeriod };
 
 		while (forSeconds.Tick())
 		{
@@ -161,14 +178,19 @@ coroutine::Coroutine BossSummonMobSkill::SpawningFieldEffect(std::weak_ptr<BossS
 	stepEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(owner.lock()->GetTransform()->GetWorldRotation());
 	stepEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(owner.lock()->GetTransform()->GetWorldScale());
 
-	auto stepEffectAnimator = stepEffect.lock()->AcquireVFXAnimator();
+	stepEffectAnimator = stepEffect.lock()->AcquireVFXAnimator();
 	stepEffectAnimator.lock()->SetAutoActiveFalse();
 	stepEffectAnimator.lock()->Init();
 	stepEffectAnimator.lock()->Play();
 
 	auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill3);
 
-	co_yield coroutine::WaitForSeconds(anim->GetDuration());
+	wanderUtils::UnitCoroutine::ForSecondsFromUnit animSeconds{ owner, anim->GetDuration() };
+
+	while (animSeconds.Tick())
+	{
+		co_await std::suspend_always();
+	}
 
 	co_return;
 }

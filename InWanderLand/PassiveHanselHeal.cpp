@@ -31,6 +31,7 @@ coroutine::Coroutine PassiveHanselHeal::CookieLingering(Vector3d pos, std::weak_
             if (unit->GetTeamIndex() == PlayerController::playerTeamIndex && unit->GetUnitCurrentHp() < unit->GetUnitTemplateData().pod.max_Health)
             {
                 unit->Heal(PassiveHanselHeal::GetHealAmount());
+
                 FBXPool::Instance().Return(cookieMesh);
                 co_return;
             }

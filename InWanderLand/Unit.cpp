@@ -421,6 +421,31 @@ void Unit::Heal(float healingPoint)
 	SetCurrentHp(currentHitPoint += healingPoint);
 	if (currentHitPoint >= unitTemplateData->pod.max_Health)
 		SetCurrentHp(unitTemplateData->pod.max_Health);
+
+	coroutineHealEffect = StartCoroutine(HealEffectCoroutine());
+	coroutineHealEffect.lock()->PushDestroyCallBack([this]()
+		{
+			FBXPool::Instance().Return(healVFX);
+		});
+}
+
+yunutyEngine::coroutine::Coroutine Unit::HealEffectCoroutine()
+{
+	healVFX = FBXPool::Instance().Borrow("VFX_Buff_Healing");
+	co_await std::suspend_always{};
+	auto vfxAnimator = healVFX.lock()->AcquireVFXAnimator();
+	vfxAnimator.lock()->SetAutoActiveFalse();
+	vfxAnimator.lock()->Init();
+	vfxAnimator.lock()->Play();
+
+	healVFX.lock()->GetGameObject()->SetParent(GetWeakPtr<Unit>().lock()->GetGameObject());
+
+	while (!vfxAnimator.lock()->IsDone())
+	{
+		co_await std::suspend_always{};
+	}
+
+	co_return;
 }
 
 void Unit::SetCurrentHp(float p_newHp)
@@ -1093,7 +1118,7 @@ void Unit::Summon(application::editor::Unit_TemplateData* templateData)
 			EnemyAggroController::Instance().RegisterUnit(GetWeakPtr<Unit>());
 			controllers.push_back(&EnemyAggroController::Instance());
 			RangedEliteController::Instance().RegisterUnit(GetWeakPtr<Unit>());
-			controllers.push_back(&EnemyAggroController::Instance());
+			controllers.push_back(&RangedEliteController::Instance());
 			break;
 		}
 		case UnitControllerType::HEART_QUEEN:
