@@ -23,6 +23,11 @@ ITacticObject::ITacticObject()
 	tacticObjects.insert(this);
 }
 
+ITacticObject::ITacticObject(const ITacticObject& copy)
+{
+	tacticObjects.insert(this);
+}
+
 ITacticObject::~ITacticObject()
 {
  	tacticObjects.erase(this);
