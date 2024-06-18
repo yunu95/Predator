@@ -28,5 +28,6 @@ protected:
     std::unordered_map<Unit*, std::weak_ptr<coroutine::Coroutine>> unitRoutines;
 
 private:
+    static std::unordered_map<Unit*, std::shared_ptr<Reference::Guard>> enemyTacticRefMap;
     static std::unordered_map<Unit*, std::shared_ptr<Reference::Guard>> enemyDeathBlockRefMap;
 };
