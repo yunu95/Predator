@@ -34,6 +34,7 @@ private:
     std::vector<UnitProductor*> productorSelector;
 
     bool isStoppedByTacticMode{ false };
+    bool isAllUnitTerminated;
 
 public:
     static std::weak_ptr<PlaytimeWave> GetCurrentOperatingWave();
@@ -41,6 +42,8 @@ public:
 	std::vector<Unit*> m_currentWaveUnitVector;
     Unit* inGameUnit;
     virtual ~PlaytimeWave();
+
+    bool IsRemainEnemyAndWave();
 
     void ActivateWave();
     void DeActivateWave();

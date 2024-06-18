@@ -135,6 +135,7 @@ void PlayerController::Update()
 {
     cursorUnitDetector.lock()->GetGameObject()->GetTransform()->SetWorldPosition(GetWorldCursorPosition());
     HandleInput();
+    HandleState();
     HandleCamera();
     HandleSkillPreview();
     HandleByState();
@@ -276,6 +277,11 @@ void PlayerController::HandleInput()
             OnRightClick();
         }
     }
+}
+
+void PlayerController::HandleState()
+{
+    //if(PlaytimeWave::GetCurrentOperatingWave().lock()->IsRemainEnemyAndWave() || 
 }
 
 void PlayerController::HandleCamera()

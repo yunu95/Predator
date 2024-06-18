@@ -91,6 +91,8 @@ private:
     void HandleByState();
     // 사용자 입력을 받기 위해 매 프레임 불린다.
     void HandleInput();
+    // PlayerController의 State를 매 프레임 관리한다.
+    void HandleState();
     // 카메라의 상태를 매 프레임마다 업데이트시켜주는 함수
     void HandleCamera();
     // 스킬들의 프리뷰 이미지를 매 프레임마다 업데이트시켜주는 함수

@@ -23,6 +23,12 @@ PlaytimeWave::~PlaytimeWave()
         waveData->playtimeWave = nullptr;
     }
 }
+
+bool PlaytimeWave::IsRemainEnemyAndWave()
+{
+    return isAllUnitTerminated && (currentSequenceIndex >= waveData->pod.waveSizes.size());
+}
+
 std::weak_ptr<PlaytimeWave> PlaytimeWave::GetCurrentOperatingWave()
 {
     return currentOperativeWave;
@@ -94,7 +100,7 @@ void PlaytimeWave::Update()
     // 현재 웨이브에서 소환 대상이 되는 유닛들이 다 소환된 경우
     else
     {
-        bool isAllUnitTerminated = true;
+        isAllUnitTerminated = true;
 
         for (auto& e : m_currentWaveUnitVector)
         {
