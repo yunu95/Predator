@@ -29,7 +29,9 @@ void FBXPool::Return(std::weak_ptr<ManagedFBX> fbx)
 
 void FBXPool::OnContentsStop()
 {
-    for (auto each : borrowedList)
+    static auto eraseList = borrowedList;
+    eraseList = borrowedList;
+    for (auto each : eraseList)
     {
         poolsByFBX.at(each.lock().get()).lock()->Return(each);
     }
