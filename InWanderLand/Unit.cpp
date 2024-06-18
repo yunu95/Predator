@@ -478,8 +478,19 @@ yunutyEngine::coroutine::Coroutine Unit::ParalyzeEffectCoroutine(float paralyzeD
 	paralysisEffectAnimator.lock()->SetAutoActiveFalse();
 	paralysisEffectAnimator.lock()->Init();
 	paralysisEffectAnimator.lock()->Play();
+	paralysisEffectAnimator.lock()->SetLoop(true);
 
-	co_yield coroutine::WaitForSeconds(paralyzeDuration);
+	float localTimer = 0;
+	while (localTimer >= paralyzeDuration)
+	{
+		while (isPaused)
+		{
+			co_await std::suspend_always();
+		}
+
+		co_await std::suspend_always();
+		localTimer += Time::GetDeltaTime();
+	}
 
 	co_return;
 }
