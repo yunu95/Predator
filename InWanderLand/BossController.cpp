@@ -54,10 +54,14 @@ void BossController::RegisterUnit(std::weak_ptr<Unit> unit)
 		}
 	);
 
-	unit.lock()->OnStateEngageCallback()[UnitBehaviourTree::Death].AddVolatileCallback([]()
+	unit.lock()->OnStateEngageCallback()[UnitBehaviourTree::Death].AddVolatileCallback([this]()
 		{
 			BossSummonMobSkill::OnBossDie();
 			BossSummonChessSkill::OnBossDie();
+			for (auto& each : onBossDieCallback)
+			{
+				each();
+			}
 		});
 
 	unit.lock()->GetGameObject()->SetSelfActive(false);
@@ -69,6 +73,7 @@ void BossController::OnContentsStop()
 	summonDone = true;
 	currentState = 0;
 	beforeSkillIndex = 0;
+	onBossDieCallback.clear();
 	EnemyController::OnContentsStop();
 }
 
