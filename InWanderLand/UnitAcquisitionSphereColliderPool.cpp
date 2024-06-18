@@ -20,6 +20,8 @@ void UnitAcquisitionSphereColliderPool::Return(std::weak_ptr<UnitAcquisitionSphe
 
 void UnitAcquisitionSphereColliderPool::OnContentsStop()
 {
+    static auto eraseList = borrowedList;
+    eraseList = borrowedList;
     for (auto each : borrowedList)
     {
         each.lock()->SetActive(false);

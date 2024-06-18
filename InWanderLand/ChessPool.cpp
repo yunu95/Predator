@@ -94,6 +94,8 @@ namespace BossSummon
 
 	void ChessPool::OnContentsStop()
 	{
+		static auto eraseList = borrowedChess;
+		eraseList = borrowedChess;
 		for (auto [ptr, index] : borrowedChess)
 		{
 			switch (index)
@@ -117,6 +119,7 @@ namespace BossSummon
 					break;
 			}
 		}
+		borrowedChess.clear();
 	}
 
 	std::weak_ptr<ChessPawn> ChessPool::BorrowPawn()

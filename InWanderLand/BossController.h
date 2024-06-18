@@ -16,6 +16,8 @@ public:
 
 	std::weak_ptr<Unit> GetBoss();
 
+	std::vector<std::function<void()>> onBossDieCallback = std::vector<std::function<void()>>();
+
 private:
 	void ChangeAttackTarget(const std::weak_ptr<Unit>& unit);
 	coroutine::Coroutine BossAppearCoroutine();
