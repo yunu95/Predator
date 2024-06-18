@@ -2,14 +2,18 @@
 #include "InWanderLand.h"
 
 std::unordered_map<Unit*, std::shared_ptr<Reference::Guard>> EnemyController::enemyDeathBlockRefMap = std::unordered_map<Unit*, std::shared_ptr<Reference::Guard>>();
+std::unordered_map<Unit*, std::shared_ptr<Reference::Guard>> EnemyController::enemyTacticRefMap = std::unordered_map<Unit*, std::shared_ptr<Reference::Guard>>();
 
 void EnemyController::OnContentsStop()
 {
 	PermanentObservee::OnContentsStop();
 	DeleteCoroutine(globalRoutine);
+	enemyDeathBlockRefMap.clear();
+	enemyTacticRefMap.clear();
 }
 void EnemyController::Start()
 {
+
 }
 
 bool EnemyController::IsPreempted()
@@ -40,12 +44,14 @@ void EnemyController::OnPause()
 	for (auto& [unit, coro] : unitRoutines)
 	{
 		enemyDeathBlockRefMap[unit] = unit->referenceBlockDeath.Acquire();
+		enemyTacticRefMap[unit] = unit->referenceTactic.Acquire();
 	}
 }
 
 void EnemyController::OnResume()
 {
 	enemyDeathBlockRefMap.clear();
+	enemyTacticRefMap.clear();
 }
 
 void EnemyController::Update()
