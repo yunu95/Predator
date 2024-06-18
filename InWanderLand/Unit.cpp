@@ -328,8 +328,15 @@ bool Unit::IsPreempted() const
 
 bool Unit::IsTacTicReady() const
 {
-	/// 상준이형 여기봐
-	return true;
+	for (auto each : unitBehaviourTree.GetActiveNodes())
+	{
+		if (each->GetNodeKey() == UnitBehaviourTree::Tactic)
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
 
 std::string Unit::GetFBXName() const
@@ -603,7 +610,14 @@ coroutine::Coroutine Unit::SettingRotation(float facingAngle, float rotatingTime
 	{
 		currentRotationSpeed = 1000000000;
 	}
-	co_yield coroutine::WaitForSeconds(rotatingTime);
+
+	wanderUtils::UnitCoroutine::ForSecondsFromUnit waitRotating{ GetWeakPtr<Unit>(), rotatingTime};
+
+	while (waitRotating.Tick())
+	{
+		co_await std::suspend_always();
+	}
+
 	currentRotationSpeed = unitTemplateData->pod.rotationSpeed;
 }
 void Unit::SetIsAlive(bool isAlive)
@@ -1124,7 +1138,7 @@ void Unit::InitBehaviorTree()
 	// 이 행동 트리에 대한 설계문서는 Document/프로그래밍 폴더 내부의 파일 "InWanderLand Behaviour tree.drawio"입니다.
 	unitBehaviourTree[UnitBehaviourTree::Death].enteringCondtion = [this]()
 		{
-			return !isAlive && liveCountLeft < 0;
+			return !referenceBlockDeath.BeingReferenced() && !isAlive && liveCountLeft < 0;
 		};
 	unitBehaviourTree[UnitBehaviourTree::Death].onEnter = [this]()
 		{
@@ -1227,7 +1241,18 @@ void Unit::InitBehaviorTree()
 		{
 			OnStateExit<UnitBehaviourTree::Move>();
 		};
-
+	unitBehaviourTree[UnitBehaviourTree::Tactic].enteringCondtion = [this]()
+		{
+			return referenceTactic.BeingReferenced();
+		};
+	unitBehaviourTree[UnitBehaviourTree::Tactic].onEnter = [this]()
+		{
+			OnStateEngage<UnitBehaviourTree::Tactic>();
+		};
+	unitBehaviourTree[UnitBehaviourTree::Tactic].onExit = [this]()
+		{
+			OnStateExit<UnitBehaviourTree::Tactic>();
+		};
 	unitBehaviourTree[UnitBehaviourTree::Chasing].enteringCondtion = [this]()
 		{
 			return ((!pendingTargetUnit.expired() && pendingTargetUnit.lock()->IsAlive()) ||

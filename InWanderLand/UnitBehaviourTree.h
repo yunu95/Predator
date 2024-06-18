@@ -21,6 +21,7 @@ public:
         SkillCasting,
         SkillOnGoing,
         Hold,
+        Tactic,
         KeywordNum,
     };
 };
@@ -44,6 +45,7 @@ const std::unordered_map<int, std::string>& application::POD_Enum<UnitBehaviourT
         {UnitBehaviourTree::SkillCasting, "SkillCasting"},
         {UnitBehaviourTree::SkillOnGoing, "SkillOnGoing"},
         {UnitBehaviourTree::Hold, "Hold"},
+        {UnitBehaviourTree::Tactic, "Tactic"},
     };
     return enumNameMap;
 }
