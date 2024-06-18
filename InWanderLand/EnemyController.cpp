@@ -1,6 +1,8 @@
 #include "EnemyController.h"
 #include "InWanderLand.h"
 
+std::unordered_map<Unit*, std::shared_ptr<Reference::Guard>> EnemyController::enemyDeathBlockRefMap = std::unordered_map<Unit*, std::shared_ptr<Reference::Guard>>();
+
 void EnemyController::OnContentsStop()
 {
 	PermanentObservee::OnContentsStop();
