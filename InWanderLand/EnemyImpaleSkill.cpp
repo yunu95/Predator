@@ -63,6 +63,7 @@ coroutine::Coroutine EnemyImpaleSkill::operator()()
     effectCoroutine.lock()->PushDestroyCallBack([this]()
         {
             FBXPool::Instance().Return(impaleEffect);
+            FBXPool::Instance().Return(previewEffect);
         });
     co_yield coroutine::WaitForSeconds{ pod.impaleStartDelay };
     //coroutine::ForSeconds forSeconds{ pod.impaleSkillDuration };
@@ -100,7 +101,10 @@ coroutine::Coroutine EnemyImpaleSkill::operator()()
 
 void EnemyImpaleSkill::OnInterruption()
 {
-
+    if (!effectCoroutine.expired())
+    {
+        owner.lock()->DeleteCoroutine(effectCoroutine);
+    }
 }
 
 // 창이 한번 불쑥 튀어나왔다가 다시 꺼지는 사이클
@@ -149,10 +153,25 @@ coroutine::Coroutine EnemyImpaleSkill::SpearArise(std::weak_ptr<EnemyImpaleSkill
 
 coroutine::Coroutine EnemyImpaleSkill::SpawningSkillffect(std::weak_ptr<EnemyImpaleSkill> skill)
 {
+    const float colliderEffectRatio = 12.0f;
+
     skill.lock();
     Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
     Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
     Vector3d direction = deltaPos.Normalized();
+
+    previewEffect = FBXPool::Instance().Borrow("VFX_Monster2_Skill_Preview");
+
+    previewEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos + owner.lock()->GetTransform()->GetWorldRotation().Forward() * pod.impaleSkillRange / 2);
+    previewEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(owner.lock()->GetTransform()->GetWorldRotation());
+    previewEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(pod.impaleSkillWidth / colliderEffectRatio,
+        1,
+        pod.impaleSkillRange / colliderEffectRatio));
+
+    auto previewEffectAnimator = previewEffect.lock()->AcquireVFXAnimator();
+    previewEffectAnimator.lock()->SetAutoActiveFalse();
+    previewEffectAnimator.lock()->Init();
+    previewEffectAnimator.lock()->Play();
 
     impaleEffect = FBXPool::Instance().Borrow("VFX_Monster2_Skill");
 

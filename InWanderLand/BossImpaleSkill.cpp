@@ -64,6 +64,7 @@ coroutine::Coroutine BossImpaleSkill::operator()()
 	effectCoroutine.lock()->PushDestroyCallBack([this]()
 		{
 			FBXPool::Instance().Return(impaleEffect);
+			FBXPool::Instance().Return(previewEffect);
 		});
 
 	co_yield coroutine::WaitForSeconds{ impaleStartTime };
@@ -103,7 +104,7 @@ void BossImpaleSkill::OnInterruption()
 {
 	if (!effectCoroutine.expired())
 	{
-		FBXPool::Instance().Return(impaleEffect);
+		owner.lock()->DeleteCoroutine(effectCoroutine);
 	}
 }
 
@@ -153,10 +154,25 @@ coroutine::Coroutine BossImpaleSkill::SpearArise(std::weak_ptr<BossImpaleSkill> 
 
 coroutine::Coroutine BossImpaleSkill::SpawningSkillffect(std::weak_ptr<BossImpaleSkill> skill)
 {
+	const float colliderEffectRatio = 12.0f;
+
 	skill.lock();
 	Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
 	Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
 	Vector3d direction = deltaPos.Normalized();
+
+	previewEffect = FBXPool::Instance().Borrow("VFX_HeartQueen_Skill2_Preview");
+
+	previewEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos + owner.lock()->GetTransform()->GetWorldRotation().Forward() * pod.impaleSkillRange / 2);
+	previewEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(owner.lock()->GetTransform()->GetWorldRotation());
+	previewEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(pod.impaleSkillWidth / colliderEffectRatio,
+		1,
+		pod.impaleSkillRange / colliderEffectRatio));
+
+	auto previewEffectAnimator = previewEffect.lock()->AcquireVFXAnimator();
+	previewEffectAnimator.lock()->SetAutoActiveFalse();
+	previewEffectAnimator.lock()->Init();
+	previewEffectAnimator.lock()->Play();
 
 	impaleEffect = FBXPool::Instance().Borrow("VFX_HeartQueen_Skill2");
 
