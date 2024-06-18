@@ -54,6 +54,7 @@ void PlaytimeWave::ActivateWave()
 void PlaytimeWave::DeActivateWave()
 {
 	waveDataIndex = 0;
+	currentOperativeWave.reset();
 	UIManager::Instance().HideComboObjectvies();
 	this->SetActive(false);
 	// 카메라 가동범위 제한

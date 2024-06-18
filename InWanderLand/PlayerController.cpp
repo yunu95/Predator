@@ -316,6 +316,10 @@ void PlayerController::HandleState()
 		{
 			this->SetState(State::Battle);
 		}
+		else
+		{
+			this->SetState(State::Peace);
+		}
 	}
 	else
 	{
@@ -1004,6 +1008,7 @@ void PlayerController::ApplyHoverEffect(std::weak_ptr<Unit> unit)
 		enemyHoverEffect->SetSelfActive(false);
 		allyHoverEffect->SetSelfActive(true);
 		allyHoverEffect->GetTransform()->SetLocalPosition(unit.lock()->GetGameObject()->GetTransform()->GetWorldPosition());
+		allyHoverEffectAnimator->Resume();
 
 		switch (unit.lock()->unitTemplateData->pod.playerUnitType.enumValue)
 		{
@@ -1023,6 +1028,7 @@ void PlayerController::ApplyHoverEffect(std::weak_ptr<Unit> unit)
 		enemyHoverEffect->SetSelfActive(true);
 		allyHoverEffect->SetSelfActive(false);
 		enemyHoverEffect->GetTransform()->SetLocalPosition(unit.lock()->GetGameObject()->GetTransform()->GetWorldPosition());
+		enemyHoverEffectAnimator->Resume();
 	}
 }
 
@@ -1058,6 +1064,7 @@ void PlayerController::ApplyTargetedEffect(std::weak_ptr<Unit> unit)
 	if (!mouseInteractionEffectInitalized) return;
 
 	enemyTargetedEffect[selectedCharacterType]->SetSelfActive(true);
+	enemyTargetedEffectAnimator[selectedCharacterType]->Play();
 	enemyTargetedEffect[selectedCharacterType]->SetParent(unit.lock()->GetGameObject());
 }
 
@@ -1073,12 +1080,15 @@ void PlayerController::InitUnitMouseInteractionEffects()
 		allySelectedEffect->SetSelfActive(false);
 	}
 	{
+		int i = 0;
 		for (auto& each : enemyTargetedEffect)
 		{
 			each = Scene::getCurrentScene()->AddGameObjectFromFBX("VFX_AttackSelected");
 			each->GetChildren()[0]->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>()->GetGI().GetMaterial()->SetColor(wanderResources::unitColor::ENEMY_COLOR);
-			each->AddComponent<VFXAnimator>()->Init();
 			each->SetSelfActive(false);
+			enemyTargetedEffectAnimator[i] = each->AddComponent<VFXAnimator>();
+			enemyTargetedEffectAnimator[i]->Init();
+			++i;
 		}
 	}
 	{
@@ -1087,9 +1097,9 @@ void PlayerController::InitUnitMouseInteractionEffects()
 		allyHoverEffectRenderer = allyHoverEffect->GetChildren()[0]->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
 		allyHoverEffectRenderer->GetGI().GetMaterial()->SetPixelShader(_resourceManager->GetShader(L"VFX_PS.cso"));
 
-		auto vfx = allyHoverEffect->AddComponent<VFXAnimator>();
-		vfx->Init();
-		vfx->SetLoop(true);
+		allyHoverEffectAnimator = allyHoverEffect->AddComponent<VFXAnimator>();
+		allyHoverEffectAnimator->Init();
+		allyHoverEffectAnimator->SetLoop(true);
 	}
 	{
 		enemyHoverEffect = Scene::getCurrentScene()->AddGameObjectFromFBX("VFX_CharacterSelected");
@@ -1098,9 +1108,9 @@ void PlayerController::InitUnitMouseInteractionEffects()
 		enemyHoverEffectRenderer->GetGI().GetMaterial()->SetPixelShader(_resourceManager->GetShader(L"VFX_PS.cso"));
 		enemyHoverEffectRenderer->GetGI().GetMaterial()->SetColor(wanderResources::unitColor::ENEMY_COLOR);
 
-		auto vfx = enemyHoverEffect->AddComponent<VFXAnimator>();
-		vfx->Init();
-		vfx->SetLoop(true);
+		enemyHoverEffectAnimator = enemyHoverEffect->AddComponent<VFXAnimator>();
+		enemyHoverEffectAnimator->Init();
+		enemyHoverEffectAnimator->SetLoop(true);
 	}
 }
 
