@@ -244,8 +244,9 @@ void SkillPreviewSystem::ShowRobinQSkill(const Vector3d& objectPos)
 	auto centeredPosition = Input::getMouseScreenPositionNormalizedZeroCenter();
 
 	Vector3d mouseWorldPos = camObj->GetComponent<yunutyEngine::graphics::Camera>()->GetProjectedPoint(centeredPosition, distToXZPlane, Vector3d(0, 1, 0));
+	mouseWorldPos.y = objectPos.y;
 	Vector3d mouseVector = mouseWorldPos - objectPos;
-	mouseWorldPos.y = 0.f;
+	//mouseWorldPos.y = 0.f;
 	auto normalizedPos = mouseVector.Normalize(mouseVector);
 
 
@@ -265,7 +266,6 @@ void SkillPreviewSystem::ShowRobinQSkill(const Vector3d& objectPos)
 	this->robinQSkillPreviewObj->GetChildren()[static_cast<int>(RobinQSkillInfo::ArrowBody)]->GetTransform()->SetLocalRotation(Quaternion{ Vector3f{0.f,angle,0.f} });
 
 	float distance = sqrt(pow(objectPos.x - mouseWorldPos.x, 2) + pow(objectPos.y - mouseWorldPos.y, 2) + pow(objectPos.z - mouseWorldPos.z, 2));
-
 	if (distance > OFFSET)
 	{
 		this->robinQSkillPreviewObj->GetChildren()[static_cast<int>(RobinQSkillInfo::ArrowBody)]->GetTransform()->SetLocalScale(Vector3d{ (distance - OFFSET) / 2 ,1.0,1.0 });
@@ -403,8 +403,9 @@ void SkillPreviewSystem::ShowHanselWSkill(const Vector3d& objectPos)
 	auto centeredPosition = Input::getMouseScreenPositionNormalizedZeroCenter();
 
 	Vector3d mouseWorldPos = camObj->GetComponent<yunutyEngine::graphics::Camera>()->GetProjectedPoint(centeredPosition, distToXZPlane, Vector3d(0, 1, 0));
+	mouseWorldPos.y = objectPos.y;
 	Vector3d mouseVector = mouseWorldPos - objectPos;
-	mouseWorldPos.y = 0.f;
+	//mouseWorldPos.y = 0.f;
 	auto normalizedPos = mouseVector.Normalize(mouseVector);
 
 

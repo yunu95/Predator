@@ -41,6 +41,7 @@ private:
 
 
 	std::weak_ptr<coroutine::Coroutine> effectCoroutine;
+	std::weak_ptr<ManagedFBX> previewEffect;
 	std::weak_ptr<ManagedFBX> impaleEffect;
 	std::vector<std::weak_ptr<UnitAcquisitionSphereCollider>> knockbackColliderVector;
 	std::vector<std::weak_ptr<ManagedFBX>> spearFbxVector;

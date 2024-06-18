@@ -114,6 +114,14 @@ void TacticModeSystem::EngageTacticSystem()
 EnqueErrorType TacticModeSystem::EnqueueCommand(std::shared_ptr<UnitCommand> command)
 {
     EnqueErrorType errorType = EnqueErrorType::NONE;
+
+    // 현재 들어온 명령을 수행하는 유닛이 준비가 되었는지 검사하는 코드
+    if (command->GetUnit()->IsTacTicReady() == false)
+    {
+		errorType = EnqueErrorType::NotReady;
+		return errorType;
+    }
+
     // 큐가 가득 차 있는지 검사하는 코드
     if (this->commandList.size() == this->MAX_COMMAND_COUNT)
     {
@@ -581,7 +589,6 @@ yunutyEngine::coroutine::Coroutine TacticModeSystem::ExecuteInternal()
     }
 
     this->commandList.clear();
-    PlayerController::Instance().SetState(PlayerController::State::Battle);
 
     this->isExecuting = false;
     this->isOperating = false;

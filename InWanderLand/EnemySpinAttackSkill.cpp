@@ -22,6 +22,7 @@ coroutine::Coroutine EnemySpinAttackSkill::operator()()
     effectColliderCoroutine.lock()->PushDestroyCallBack([this]()
         {
             FBXPool::Instance().Return(chargeEffect);
+            FBXPool::Instance().Return(previewEffect);
             UnitAcquisitionSphereColliderPool::Instance().Return(knockbackCollider);
         });
     co_yield coroutine::WaitForSeconds(eliteSpinStartTime);
@@ -53,8 +54,19 @@ coroutine::Coroutine EnemySpinAttackSkill::SpawningSkillffect(std::weak_ptr<Enem
     Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
     Vector3d direction = deltaPos.Normalized();
 
-    chargeEffect = FBXPool::Instance().Borrow("VFX_Monster1_Skill");
+    previewEffect = FBXPool::Instance().Borrow("VFX_Monster1_Skill_Preview");
+    previewEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos);
+    previewEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(owner.lock()->GetTransform()->GetWorldRotation());
+    previewEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(actualCollideRange * owner.lock()->GetTransform()->GetWorldScale().x,
+        actualCollideRange * owner.lock()->GetTransform()->GetWorldScale().y,
+        actualCollideRange * owner.lock()->GetTransform()->GetWorldScale().z));
+    auto previewEffectAnimator = previewEffect.lock()->AcquireVFXAnimator();
+    previewEffectAnimator.lock()->SetAutoActiveFalse();
+    previewEffectAnimator.lock()->Init();
+    previewEffectAnimator.lock()->Play();
 
+
+    chargeEffect = FBXPool::Instance().Borrow("VFX_Monster1_Skill");
     chargeEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos);
     chargeEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
     chargeEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(actualCollideRange * owner.lock()->GetTransform()->GetWorldScale().x,
