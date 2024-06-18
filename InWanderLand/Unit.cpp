@@ -298,7 +298,7 @@ void Unit::OnPause()
 	isPaused = true;
 	if (!IsPlayerUnit())
 	{
-		localTimeScale = FLT_MIN;
+		localTimeScale = FLT_MIN * 10000;
 		animatorComponent.lock()->Pause();
 	}
 }
