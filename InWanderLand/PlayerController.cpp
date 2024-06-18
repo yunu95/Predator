@@ -772,11 +772,6 @@ void PlayerController::Reset()
         skillUpgraded[upgrade] = false;
         });
     skillPointsLeft = 0;
-
-    for (auto each : tacticRef)
-    {
-        each.reset();
-    }
 }
 
 // 현재 카메라의 위치에 따라 카메라의 플레이어 기준 오프셋 위치와 회전각을 결정합니다.
@@ -896,18 +891,11 @@ void PlayerController::SetMana(float mana)
 
 void PlayerController::OnPause()
 {
-    for (int i = 0; i < characters.size(); i++)
-    {
-        tacticRef[i] = characters[i].lock()->referenceTactic.Acquire();
-    }
+
 }
 
 void PlayerController::OnResume()
 {
-    for (auto each : tacticRef)
-    {
-        each.reset();
-    }
 }
 
 float PlayerController::GetMana()

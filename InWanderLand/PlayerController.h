@@ -162,6 +162,4 @@ private:
     yunutyEngine::graphics::StaticMeshRenderer* allyHoverEffectRenderer{ nullptr };
     GameObject* enemyHoverEffect{ nullptr };
     yunutyEngine::graphics::StaticMeshRenderer* enemyHoverEffectRenderer{ nullptr };
-
-    std::array<std::shared_ptr<Reference::Guard>, (int)PlayerCharacterType::Num> tacticRef;
 };
