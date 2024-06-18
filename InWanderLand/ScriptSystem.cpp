@@ -21,6 +21,8 @@ namespace application
         triggerList.push_back({ TriggerType::UnitDie, "UnitDie" });
         triggerList.push_back({ TriggerType::InteractableTriggerEnter, "InteractableTriggerEnter" });
         triggerList.push_back({ TriggerType::InteractableTriggerExit, "InteractableTriggerExit" });
+        triggerList.push_back({ TriggerType::StartWave, "StartWave" });
+        triggerList.push_back({ TriggerType::EndWave, "EndWave" });
 
         /// Condition
         conditionList.push_back({ ConditionType::CinematicModeOn, "CinematicModeOn" });
@@ -68,8 +70,8 @@ namespace application
         actionList.push_back({ ActionType::OrnamentHide,"OrnamentHide" });
         actionList.push_back({ ActionType::OrnamentFloating,"OrnamentFloating" });
         actionList.push_back({ ActionType::BossAppear,"BossAppear" });
-        actionList.push_back({ ActionType::EngageBattle,"EngageBattle" });
-        actionList.push_back({ ActionType::EngagePeace,"EngagePeace" });
+        actionList.push_back({ ActionType::RequestBattle,"RequestBattle" });
+        actionList.push_back({ ActionType::RequestPeace,"RequestPeace" });
     }
 
     Script* ScriptSystem::CreateScript()

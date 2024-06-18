@@ -65,6 +65,9 @@ public:
 	virtual coroutine::Coroutine operator()()override;
 	virtual void OnInterruption() override;
 
+	virtual void OnPause() override;
+	virtual void OnResume() override;
+
 	static POD_BossSummonChessSkill pod;
 
 	static void OnBossDie();
@@ -77,6 +80,7 @@ private:
 	std::set<std::weak_ptr<BossSummon::ChessBishop>, BossSkill::CustomCompBishop> borrowedBishops = std::set<std::weak_ptr<BossSummon::ChessBishop>, BossSkill::CustomCompBishop>();
 	std::weak_ptr<coroutine::Coroutine> effectCoroutine;
 	std::weak_ptr<ManagedFBX> stepEffect;
+	std::weak_ptr<VFXAnimator> stepEffectAnimator;
 	coroutine::Coroutine SummonChess(std::weak_ptr<BossSummonChessSkill> skill, Vector2i index);
 	Vector2i GetPlaceableIndex(Vector3d pos);
 };

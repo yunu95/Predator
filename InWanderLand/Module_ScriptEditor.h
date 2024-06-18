@@ -121,6 +121,16 @@ namespace application
                         Trigger_InteractableTriggerExit::ImGui_DrawDataPopup(static_cast<Trigger_InteractableTriggerExit*>(data));
                         break;
                     }
+                    case application::TriggerType::StartWave:
+                    {
+                        Trigger_StartWave::ImGui_DrawDataPopup(static_cast<Trigger_StartWave*>(data));
+                        break;
+                    }
+                    case application::TriggerType::EndWave:
+                    {
+                        Trigger_EndWave::ImGui_DrawDataPopup(static_cast<Trigger_EndWave*>(data));
+                        break;
+                    }
                     default:
                         break;
                     }
@@ -366,14 +376,14 @@ namespace application
                         Action_BossAppear::ImGui_DrawDataPopup(static_cast<Action_BossAppear*>(data));
                         break;
                     }
-                    case application::ActionType::EngageBattle:
+                    case application::ActionType::RequestBattle:
                     {
-                        Action_EngageBattle::ImGui_DrawDataPopup(static_cast<Action_EngageBattle*>(data));
+                        Action_RequestBattle::ImGui_DrawDataPopup(static_cast<Action_RequestBattle*>(data));
                         break;
                     }
-                    case application::ActionType::EngagePeace:
+                    case application::ActionType::RequestPeace:
                     {
-                        Action_EngagePeace::ImGui_DrawDataPopup(static_cast<Action_EngagePeace*>(data));
+                        Action_RequestPeace::ImGui_DrawDataPopup(static_cast<Action_RequestPeace*>(data));
                         break;
                     }
                     default:
