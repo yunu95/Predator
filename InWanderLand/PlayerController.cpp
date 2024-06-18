@@ -281,31 +281,32 @@ void PlayerController::HandleInput()
 void PlayerController::HandleState()
 {
 	///
-	// 액션쪽에서 활성화한 스테이트가 있는지 판단하는 부분
-	this->isStateAction = false;
-	for (int i = 0; i < this->stateInActionArr.size(); ++i)
-	{
-		if (this->stateInActionArr[i])
-		{
-			this->isStateAction = true;
-			this->SetState(static_cast<State::Enum>(i));
-		}
-	}
-	if (this->isStateAction)
+// 액션쪽에서 활성화한 스테이트가 있는지 판단하는 부분
+	//this->isStateAction = false;
+	/*if (this->isStateAction)
 	{
 		return;
+	}*/
+	//
+	if (application::CinematicManager::Instance().IsCinematicMode())
+	{
+		SetState(State::Cinematic);
+		return;
 	}
-	///
-
-	//if (referenceCinematic.BeingReferenced())
-	//{
-	//	this->SetState(State::Cinematic);
- //       return;
-	//}
-
 	if ((TacticModeSystem::Instance().IsOperation() == true) || (TacticModeSystem::Instance().IsExecuting() == true))
 	{
 		this->SetState(State::Tactic);
+		return;
+	}
+
+	if (stateRequestedByAction[State::Battle])
+	{
+		this->SetState(State::Battle);
+		return;
+	}
+	else if (stateRequestedByAction[State::Peace])
+	{
+		this->SetState(State::Peace);
 		return;
 	}
 
@@ -321,17 +322,17 @@ void PlayerController::HandleState()
 		this->SetState(State::Peace);
 	}
 
-	if (BossController::Instance().GetBoss().lock())
-	{
-		if (BossController::Instance().GetBoss().lock()->IsAlive())
-		{
-			this->SetState(State::Battle);
-		}
-		else
-		{
-			this->SetState(State::Peace);
-		}
-	}
+	//if (BossController::Instance().GetBoss().lock())
+	//{
+	//	if (BossController::Instance().GetBoss().lock()->IsAlive())
+	//	{
+	//		this->SetState(State::Battle);
+	//	}
+	//	else
+	//	{
+	//		this->SetState(State::Peace);
+	//	}
+	//}
 }
 
 void PlayerController::HandleCamera()
@@ -769,6 +770,8 @@ void PlayerController::SelectSkill(SkillType::Enum skillType)
 }
 void PlayerController::SetState(State::Enum newState)
 {
+	if (newState == state)
+		return;
 	switch (state)
 	{
 		case PlayerController::State::Tactic:
@@ -799,7 +802,7 @@ void PlayerController::SetState(State::Enum newState)
 			UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Bottom_Layout)->DisableElement();
 			UnSelectSkill();
 		}
-			break;
+		break;
 	}
 }
 std::array<float, (int)PlayerCharacterType::Num> PlayerController::GetAggroProportions() const
@@ -946,9 +949,9 @@ void PlayerController::OnResume()
 {
 }
 
-void PlayerController::SetStateInAction(State::Enum newState, bool val)
+void PlayerController::RequestStateFromAction(State::Enum newState, bool val)
 {
-	this->stateInActionArr[static_cast<int>(newState)] = val;
+	this->stateRequestedByAction[static_cast<int>(newState)] = val;
 }
 
 float PlayerController::GetMana()

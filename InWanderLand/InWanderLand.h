@@ -7,6 +7,7 @@
 #include "TemplateDataManager.h"
 #include "DelegateCallback.h"
 #include "SkillPreviewSystem.h"
+#include "CinematicManager.h"
 
 // UI
 #include "UIElement.h"

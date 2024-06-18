@@ -82,7 +82,7 @@ public:
     // 시네마틱 모드가 되면 아래의 레퍼런스를 사용한다.
     Reference referenceCinematic;
 
-    void SetStateInAction(State::Enum newState,bool val);
+    void RequestStateFromAction(State::Enum newState,bool val);
 
     // 스킬 업그레이드와 관련된 부분
     // 어떤 스킬을 업그레이드 할 것인지 미리 정한다. 미리 지정만 하는 것이지 바로 업그레이드까지 직행하는 것은 아니다.
@@ -170,6 +170,6 @@ private:
     GameObject* enemyHoverEffect{ nullptr };
     yunutyEngine::graphics::StaticMeshRenderer* enemyHoverEffectRenderer{ nullptr };
 
-    std::array<bool, State::Cinematic> stateInActionArr;
+    std::array<bool, State::Cinematic> stateRequestedByAction;
     bool isStateAction = false;
 };
