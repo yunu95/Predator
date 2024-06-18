@@ -25,5 +25,5 @@ ITacticObject::ITacticObject()
 
 ITacticObject::~ITacticObject()
 {
-	tacticObjects.erase(this);
+ 	tacticObjects.erase(this);
 }

@@ -83,7 +83,7 @@ public:
     void OrderAttack(std::weak_ptr<Unit> opponent);
     void OrderHold();
     template<typename SkillType>
-    void OrderSkill(const SkillType& skill, Vector3d pos);
+    void OrderSkill(SkillType&& skill, Vector3d pos);
     template<typename Buff>
     void ApplyBuff(Buff&& buff);
     void EraseBuff(UnitBuffType buffType);
@@ -282,16 +282,19 @@ bool Unit::CanProcessOrder()
             (!referenceBlockPendingOrder.BeingReferenced() && pendingOrderType == orderType);
     };
 }
+
 template<typename SkillType>
-void Unit::OrderSkill(const SkillType& skill, Vector3d pos)
+void Unit::OrderSkill(SkillType&& skill, Vector3d pos)
 {
-    static_assert(std::is_base_of<Skill, SkillType>::value, "SkillType must be derived from Skill");
-    pendingSkill = std::make_shared<SkillType>(skill);
-    static_cast<Skill*>(pendingSkill.get())->owner = GetWeakPtr<Unit>();
-    static_cast<Skill*>(pendingSkill.get())->selfWeakPtr = std::dynamic_pointer_cast<Skill>(pendingSkill);
-    static_cast<Skill*>(pendingSkill.get())->targetPos = pos;
-    pendingOrderType = UnitOrderType::Skill;
+	static_assert(std::is_base_of<Skill, SkillType>::value, "SkillType must be derived from Skill");
+	pendingSkill = std::make_shared<SkillType>();
+    *pendingSkill = skill;
+	static_cast<Skill*>(pendingSkill.get())->owner = GetWeakPtr<Unit>();
+	static_cast<Skill*>(pendingSkill.get())->selfWeakPtr = std::dynamic_pointer_cast<Skill>(pendingSkill);
+	static_cast<Skill*>(pendingSkill.get())->targetPos = pos;
+	pendingOrderType = UnitOrderType::Skill;
 }
+
 template<typename Buff>
 void Unit::ApplyBuff(Buff&& buff)
 {
@@ -302,7 +305,9 @@ void Unit::ApplyBuff(Buff&& buff)
     }
     else
     {
-        buffs[buff.GetBuffType()] = std::make_shared<Buff>(buff);
+        auto tempBuff = std::make_shared<Buff>();
+        *tempBuff = buff;
+        buffs[buff.GetBuffType()] = tempBuff;
         buffs[buff.GetBuffType()]->Init(GetWeakPtr<Unit>());
         buffs[buff.GetBuffType()]->OnStart();
     }

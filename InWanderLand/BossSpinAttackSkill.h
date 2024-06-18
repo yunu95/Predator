@@ -18,7 +18,7 @@ struct POD_BossSpinAttackSkill
 class BossSpinAttackSkill : public Skill
 {
 public:
-	BossSpinAttackSkill() {}
+	BossSpinAttackSkill() = default;
 	virtual SkillType::Enum GetSkillType() { return SkillType::Enum::BossSkill_One; }
 	virtual coroutine::Coroutine operator()() override;
 	virtual void OnInterruption() override;
