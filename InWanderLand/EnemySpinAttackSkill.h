@@ -32,6 +32,7 @@ private:
 	coroutine::Coroutine SpawningSkillffect(std::weak_ptr<EnemySpinAttackSkill> skill);
 	std::weak_ptr<UnitAcquisitionSphereCollider> knockbackCollider;
 	std::weak_ptr<ManagedFBX> chargeEffect;
+	std::weak_ptr<ManagedFBX> previewEffect;
 	std::weak_ptr<coroutine::Coroutine> effectColliderCoroutine;
 };
 
