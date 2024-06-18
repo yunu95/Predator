@@ -12,6 +12,7 @@ struct PS_OUT
     float4 diffuse : SV_Target0;
     float4 ambient : SV_Target1;
     float4 lightShadow : SV_Target2;
+    float4 specular : SV_Target3;
 };
 
 // Deferred_DirectionalLight
@@ -51,7 +52,8 @@ PS_OUT main(PixelIn input)
     //albedo = float4(pow(float3(albedo.xyz), 1.0 / 2.2), 1.0);
     
     float shadowFactor = 1.f;
-    CalculateDirectionalPBR(temp_int0, viewNormal, viewPos, color.diffuse, color.ambient, color.specular, albedo,
+    float4 specular = float4(0,0,0,0);
+    CalculateDirectionalPBR(temp_int0, viewNormal, viewPos, color.diffuse, color.ambient, specular, albedo,
     arm.r, arm.b, arm.g, util.y, util.z, util.x, shadowFactor);
     
     if (util.x != -1 && useLightMap)
@@ -68,7 +70,7 @@ PS_OUT main(PixelIn input)
     output.diffuse.w = 1;
     output.ambient.w = 1;
     output.lightShadow = float4(1 - shadowFactor, 1 - shadowFactor, 1 - shadowFactor, 1.f);
-    
+    output.specular = specular;
     
     return output;
 }
