@@ -20,6 +20,8 @@ coroutine::Coroutine BossSummonChessSkill::operator()()
 	auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
 	auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
 	auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
+	auto rotRef = owner.lock()->referenceBlockRotation.Acquire();
+
 	owner.lock()->PlayAnimation(UnitAnimType::Skill4, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
 	effectCoroutine = owner.lock()->StartCoroutine(SpawningFieldEffect(std::dynamic_pointer_cast<BossSummonChessSkill>(selfWeakPtr.lock())));
 	effectCoroutine.lock()->PushDestroyCallBack([this]()

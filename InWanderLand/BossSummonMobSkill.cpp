@@ -77,6 +77,8 @@ coroutine::Coroutine BossSummonMobSkill::operator()()
 	auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
 	auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
 	auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
+	auto rotRef = owner.lock()->referenceBlockRotation.Acquire();
+
 	owner.lock()->PlayAnimation(UnitAnimType::Skill3, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
 	effectCoroutine = owner.lock()->StartCoroutine(SpawningFieldEffect(std::dynamic_pointer_cast<BossSummonMobSkill>(selfWeakPtr.lock())));
 	effectCoroutine.lock()->PushDestroyCallBack([this]()

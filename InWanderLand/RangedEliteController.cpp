@@ -22,5 +22,10 @@ coroutine::Coroutine RangedEliteController::RoutinePerUnit(std::weak_ptr<Unit> u
             co_await std::suspend_always();
         }
     }
-    co_yield coroutine::WaitForSeconds{ EnemyImpaleSkill::pod.impaleSkillCoolTime };
+    wanderUtils::UnitCoroutine::ForSecondsFromUnit waitCoolDown{ unit, EnemyImpaleSkill::pod.impaleSkillCoolTime };
+
+    while (waitCoolDown.Tick())
+    {
+        co_await std::suspend_always();
+    }
 }

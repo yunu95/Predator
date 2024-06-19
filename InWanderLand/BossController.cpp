@@ -126,7 +126,8 @@ coroutine::Coroutine BossController::BossAppearCoroutine()
 
 	BossSummonMobSkill::OnBossAppear();
 
-	coroutine::ForSeconds preAppear{ gc.bossAppearTime };
+	wanderUtils::UnitCoroutine::ForSecondsFromUnit preAppear{ boss, gc.bossAppearTime };
+
 	auto initVel = wanderUtils::GetInitSpeedOfFreeFall(gc.bossAppearTime, Vector3d(0, gc.bossAppearHeight, 0), Vector3d(0, 0.5, 0));
 	while (preAppear.Tick())
 	{
@@ -150,7 +151,7 @@ coroutine::Coroutine BossController::BossAppearCoroutine()
 			FBXPool::Instance().Return(appearEffect);
 		});
 	auto anim = wanderResources::GetAnimation(boss.lock()->GetFBXName(), UnitAnimType::Birth);
-	coroutine::ForSeconds forSeconds{ anim->GetDuration() };
+	wanderUtils::UnitCoroutine::ForSecondsFromUnit forSeconds{ boss, anim->GetDuration() };
 
 	while (forSeconds.Tick())
 	{
@@ -201,7 +202,12 @@ coroutine::Coroutine BossController::RoutinePerUnit(std::weak_ptr<Unit> unit)
 		}
 		case 1:
 		{
-			co_yield coroutine::WaitForSeconds{ gc.bossSkillPeriod_4 };
+			wanderUtils::UnitCoroutine::ForSecondsFromUnit waitPeriod_4 { boss, gc.bossSkillPeriod_4 };
+
+			while (waitPeriod_4.Tick())
+			{
+				co_await std::suspend_always();
+			}
 
 			beforeSkillIndex = math::Random::GetRandomInt(1, 2);
 			switch (beforeSkillIndex)
@@ -249,7 +255,12 @@ coroutine::Coroutine BossController::RoutinePerUnit(std::weak_ptr<Unit> unit)
 		}
 		case 2:
 		{
-			co_yield coroutine::WaitForSeconds{ gc.bossSkillPeriod_1 };
+			wanderUtils::UnitCoroutine::ForSecondsFromUnit waitPeriod_1{ boss, gc.bossSkillPeriod_1 };
+
+			while (waitPeriod_1.Tick())
+			{
+				co_await std::suspend_always();
+			}
 
 			switch (beforeSkillIndex)
 			{
@@ -297,7 +308,12 @@ coroutine::Coroutine BossController::RoutinePerUnit(std::weak_ptr<Unit> unit)
 		}
 		case 3:
 		{
-			co_yield coroutine::WaitForSeconds{ gc.bossSkillPeriod_2 };
+			wanderUtils::UnitCoroutine::ForSecondsFromUnit waitPeriod_2{ boss, gc.bossSkillPeriod_2 };
+
+			while (waitPeriod_2.Tick())
+			{
+				co_await std::suspend_always();
+			}
 
 			auto randSkill = math::Random::GetRandomInt(1, 2);
 			switch(randSkill)
@@ -345,7 +361,12 @@ coroutine::Coroutine BossController::RoutinePerUnit(std::weak_ptr<Unit> unit)
 		}
 		case 4:
 		{
-			co_yield coroutine::WaitForSeconds{ gc.bossSkillPeriod_3 };
+			wanderUtils::UnitCoroutine::ForSecondsFromUnit waitPeriod_3{ boss, gc.bossSkillPeriod_3 };
+
+			while (waitPeriod_3.Tick())
+			{
+				co_await std::suspend_always();
+			}
 
 			unit.lock()->OrderSkill(BossSummonChessSkill{}, unit.lock()->GetTransform()->GetWorldPosition());
 

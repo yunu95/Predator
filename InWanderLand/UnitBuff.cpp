@@ -15,6 +15,7 @@ void UnitBuff::Init(std::weak_ptr<Unit> owner)
     if (!buffIcon2.expired())
         buffIcon2.lock()->EnableElement();
 }
+
 UnitBuff::~UnitBuff()
 {
     if (!buffIcon1.expired())

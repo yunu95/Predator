@@ -269,6 +269,7 @@ private:
 
     bool isPaused = false;
     float localTimeScale = 1.0f;
+    float localBuffTimeScale = 1.0f;
 
     friend UnitBuff;
     friend UnitPool;

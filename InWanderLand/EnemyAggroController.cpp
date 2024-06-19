@@ -51,8 +51,13 @@ coroutine::Coroutine EnemyAggroController::RoutineGlobal()
 
 	tauntUpdate(tauntTarget);
 	if (coroStop())
-	{
+	{		
 		co_yield coroutine::WaitForSeconds{ gc.enemyAggroUpdateInterval + Random::GetRandomFloat(gc.enemyAggroUpdateIntervalNoise) };
+		//wanderUtils::UnitCoroutine::ForSecondsFromUnit forseconds{ GetWeakPtr<Unit>(), gc.enemyAggroUpdateInterval + Random::GetRandomFloat(gc.enemyAggroUpdateIntervalNoise) };
+		//while (forseconds.Tick())
+		//{
+		//	co_await std::suspend_always();
+		//}
 		co_return;
 	}
 
@@ -82,5 +87,10 @@ coroutine::Coroutine EnemyAggroController::RoutineGlobal()
 		}
 	}
 	co_yield coroutine::WaitForSeconds{ gc.enemyAggroUpdateInterval + Random::GetRandomFloat(gc.enemyAggroUpdateIntervalNoise) };
+	//wanderUtils::UnitCoroutine::ForSecondsFromUnit forseconds{ GetWeakPtr<Unit>(), gc.enemyAggroUpdateInterval + Random::GetRandomFloat(gc.enemyAggroUpdateIntervalNoise) };
+	//while (forseconds.Tick())
+	//{
+	//	co_await std::suspend_always();
+	//}
 	co_return;
 }
