@@ -62,8 +62,8 @@ namespace BossSummon
 		};
 
 		std::weak_ptr<coroutine::Coroutine> summonCorountine = std::weak_ptr<coroutine::Coroutine>();
-		std::weak_ptr<ManagedFBX> summonEffect;
-		std::weak_ptr<ManagedFBX> summoningEffect;
+		static std::weak_ptr<ManagedFBX> summonEffect;
+		static std::weak_ptr<ManagedFBX> summoningEffect;
 		std::weak_ptr<VFXAnimator> summonEffectAnimator;
 		std::weak_ptr<VFXAnimator> summoningEffectAnimator;
 		GameObject* mesh = nullptr;

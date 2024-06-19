@@ -6,6 +6,8 @@ POD_PassiveHanselHeal PassiveHanselHeal::pod;
 
 coroutine::Coroutine PassiveHanselHeal::CookieLingering(Vector3d pos, std::weak_ptr<Unit> owner)
 {
+    auto persistance = owner.lock();
+
 	auto cookieMesh = FBXPool::Instance().Borrow("VFX_HealPack");
 
     auto collider = UnitAcquisitionSphereColliderPool::Instance().Borrow(owner);

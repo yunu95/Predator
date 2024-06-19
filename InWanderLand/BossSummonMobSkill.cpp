@@ -199,7 +199,7 @@ coroutine::Coroutine BossSummonMobSkill::SpawningFieldEffect(std::weak_ptr<BossS
 
 	auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill3);
 
-	wanderUtils::UnitCoroutine::ForSecondsFromUnit animSeconds{ owner, anim->GetDuration() };
+	wanderUtils::UnitCoroutine::ForSecondsFromUnit animSeconds{ skill.lock()->owner, anim->GetDuration() };
 
 	while (animSeconds.Tick())
 	{

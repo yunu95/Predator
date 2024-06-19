@@ -54,6 +54,9 @@ float RobinTauntSkill::GetSkillDamage()
 coroutine::Coroutine RobinTauntSkill::SpawningSkillffect(std::weak_ptr<RobinTauntSkill> skill)
 {
     colliderEffectRatio = 6.0f * 0.5f;
+
+    auto persistance = skill.lock();
+
     float actualCollideRange = GetSkillRadius() * (1 / colliderEffectRatio);
     auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
 

@@ -16,11 +16,15 @@
 
 namespace BossSummon
 {
+	std::weak_ptr<ManagedFBX> LeftFrame::summonEffect = std::weak_ptr<ManagedFBX>();
+	std::weak_ptr<ManagedFBX> LeftFrame::summoningEffect = std::weak_ptr<ManagedFBX>();
 	application::editor::Unit_TemplateData* LeftFrame::meleeUnitMold = nullptr;
 	application::editor::Unit_TemplateData* LeftFrame::projectileUnitMold = nullptr;
 
 	LeftFrame::~LeftFrame()
 	{
+		summonEffect = std::weak_ptr<ManagedFBX>();
+		summoningEffect = std::weak_ptr<ManagedFBX>();
 		meleeUnitMold = nullptr;
 		projectileUnitMold = nullptr;
 		BossSummonMobSkill::SetLeftFrame(nullptr);
@@ -115,13 +119,8 @@ namespace BossSummon
 			DeleteCoroutine(summonCorountine);
 		}
 		summonCorountine = StartCoroutine(SummonMoldUnit());
-		summonCorountine.lock()->PushDestroyCallBack([this]()
+		summonCorountine.lock()->PushDestroyCallBack([]()
 			{
-				if (GetWeakPtr<LeftFrame>().expired())
-				{
-					return;
-				}
-
 				if (!summonEffect.expired())
 				{
 					FBXPool::Instance().Return(summonEffect);

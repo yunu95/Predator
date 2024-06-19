@@ -147,7 +147,7 @@ void EnemyImpaleSkill::OnResume()
 // 창이 한번 불쑥 튀어나왔다가 다시 꺼지는 사이클
 coroutine::Coroutine EnemyImpaleSkill::SpearArise(std::weak_ptr<EnemyImpaleSkill> skill, std::weak_ptr<ManagedFBX> fbx, std::weak_ptr<UnitAcquisitionSphereCollider> collider, Vector2d pos)
 {
-    auto temp = skill.lock();
+    auto persistance = skill.lock();
     fbx = FBXPool::Instance().Borrow(wanderResources::GetFBXName(wanderResources::WanderFBX::IMPALING_SPIKE));
     skill.lock()->spearFbxVector.push_back(fbx);
     collider = UnitAcquisitionSphereColliderPool::Instance().Borrow(skill.lock()->owner);
@@ -175,7 +175,7 @@ coroutine::Coroutine EnemyImpaleSkill::SpearArise(std::weak_ptr<EnemyImpaleSkill
         }
     }
 
-    wanderUtils::UnitCoroutine::ForSecondsFromUnit waitPerSpear{ owner, pod.impaleSkillDurationPerSpear };
+    wanderUtils::UnitCoroutine::ForSecondsFromUnit waitPerSpear{ skill.lock()->owner, pod.impaleSkillDurationPerSpear};
 
     while (waitPerSpear.Tick())
     {
@@ -193,7 +193,8 @@ coroutine::Coroutine EnemyImpaleSkill::SpawningSkillffect(std::weak_ptr<EnemyImp
 {
     const float colliderEffectRatio = 12.0f;
 
-    skill.lock();
+    auto persistance = skill.lock();
+
     Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
     Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
     Vector3d direction = deltaPos.Normalized();
