@@ -6,8 +6,7 @@ namespace application
 {
     bool Condition_TutorialModeOn::IsConditionMet()
     {
-        //return TutorialManager::Instance().IsTutorialMode();
-        return true;
+        return TutorialManager::Instance().IsTutorialMode();    
     }
 
     bool Condition_TutorialModeOn::PreEncoding(json& data) const
@@ -37,8 +36,7 @@ namespace application
 
     bool Condition_TutorialModeOff::IsConditionMet()
     {
-        //return !TutorialManager::Instance().IsTutorialMode();
-        return true;
+        return !TutorialManager::Instance().IsTutorialMode();
     }
 
     bool Condition_TutorialModeOff::PreEncoding(json& data) const
