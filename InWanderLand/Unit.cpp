@@ -86,7 +86,7 @@ void Unit::Update()
     for (auto& [buffID, buff] : buffs)
     {
         buff.get()->OnUpdate();
-        buff.get()->durationLeft -= Time::GetDeltaTime() * localTimeScale;
+        buff.get()->durationLeft -= Time::GetDeltaTime() * localBuffTimeScale;
         if (buff.get()->durationLeft < 0)
             buff.get()->OnEnd();
     }
@@ -331,6 +331,7 @@ Unit::~Unit()
 void Unit::OnPause()
 {
     isPaused = true;
+    localBuffTimeScale = FLT_MIN * 10000;
     if (!IsPlayerUnit())
     {
         localTimeScale = FLT_MIN * 10000;
@@ -341,6 +342,7 @@ void Unit::OnPause()
 void Unit::OnResume()
 {
     isPaused = false;
+    localBuffTimeScale = 1.0f;
     if (!IsPlayerUnit())
     {
         localTimeScale = 1.0f;
@@ -1000,6 +1002,8 @@ void Unit::Summon(const application::editor::UnitData* unitData)
 
     Reset();
 
+    Summon(unitData->GetUnitTemplateData());
+
     onAttack = unitData->onAttack;
     onAttackHit = unitData->onAttackHit;
     onDamaged = unitData->onDamaged;
@@ -1030,10 +1034,10 @@ void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& po
     {
         each.Clear();
     }
+    Reset();
     Summon(td);
 
     Summon(td);
-    Reset();
 
     GetTransform()->SetWorldPosition(Vector3d{ position });
     navAgentComponent.lock()->SetActive(true);
@@ -1069,10 +1073,10 @@ void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& po
     {
         each.Clear();
     }
+    Reset();
     Summon(td);
 
     Summon(td);
-    Reset();
 
     GetTransform()->SetWorldPosition(Vector3d{ position });
     navAgentComponent.lock()->GetTransform()->SetWorldPosition(Vector3d{ position });

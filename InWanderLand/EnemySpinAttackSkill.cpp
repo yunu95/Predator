@@ -16,6 +16,7 @@ coroutine::Coroutine EnemySpinAttackSkill::operator()()
     auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
     auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
     auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
+    auto rotRef = owner.lock()->referenceBlockRotation.Acquire();
 
     owner.lock()->PlayAnimation(UnitAnimType::Spin, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
     effectColliderCoroutine = owner.lock()->StartCoroutine(SpawningSkillffect(dynamic_pointer_cast<EnemySpinAttackSkill>(selfWeakPtr.lock())));

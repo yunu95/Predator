@@ -3,6 +3,12 @@
 
 coroutine::Coroutine MeleeEliteController::RoutinePerUnit(std::weak_ptr<Unit> unit)
 {
-	co_yield coroutine::WaitForSeconds{ EnemySpinAttackSkill::pod.skillCoolTime };
+    wanderUtils::UnitCoroutine::ForSecondsFromUnit waitCoolDown{ unit, EnemySpinAttackSkill::pod.skillCoolTime };
+
+    while (waitCoolDown.Tick())
+    {
+        co_await std::suspend_always();
+    }
+
 	unit.lock()->OrderSkill(EnemySpinAttackSkill{}, unit.lock()->GetTransform()->GetWorldPosition());
 }

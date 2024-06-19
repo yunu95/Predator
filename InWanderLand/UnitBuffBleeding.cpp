@@ -3,9 +3,46 @@
 #include "Unit.h"
 #include "InWanderLand.h"
 
-void UnitBuffBleeding::OnUpdate()
+coroutine::Coroutine UnitBuffBleeding::EffectCoroutine()
 {
-    owner.lock()->Damaged(Inflictor, damagePerSecond * yunutyEngine::Time::GetDeltaTime());
+    buffEffect = FBXPool::Instance().Borrow("VFX_DeBuff_Bleeding");
+    buffEffect.lock()->GetGameObject()->SetParent(owner.lock()->GetGameObject());
+
+    buffEffectAnimator = buffEffect.lock()->AcquireVFXAnimator();
+    buffEffectAnimator.lock()->SetAutoActiveFalse();
+    buffEffectAnimator.lock()->SetLoop(true);
+    buffEffectAnimator.lock()->Init();
+    buffEffectAnimator.lock()->Play();
+
+    co_return;
+}
+
+void UnitBuffBleeding::OnStart()
+{
+    owner.lock()->StartCoroutine(EffectCoroutine());
+}
+
+void UnitBuffBleeding::OnUpdate() 
+{
+    if (!isPaused)
+    {
+        owner.lock()->Damaged(Inflictor, damagePerSecond * yunutyEngine::Time::GetDeltaTime());
+    }
+}
+
+void UnitBuffBleeding::OnEnd()
+{
+    FBXPool::Instance().Return(buffEffect);
+}
+
+void UnitBuffBleeding::OnPause()
+{
+    isPaused = true;
+}
+
+void UnitBuffBleeding::OnResume()
+{
+    isPaused = false;
 }
 
 void UnitBuffBleeding::OnOverlap(UnitBuff&& overlapping)
@@ -15,4 +52,6 @@ void UnitBuffBleeding::OnOverlap(UnitBuff&& overlapping)
     {
         damagePerSecond = std::fmin(PassiveRobinBleed::pod.dpsPerStack * PassiveRobinBleed::pod.maxStack, damagePerSecond + sameBleeding->damagePerSecond);
     }
+    FBXPool::Instance().Return(buffEffect);
+    owner.lock()->StartCoroutine(EffectCoroutine());
 };
