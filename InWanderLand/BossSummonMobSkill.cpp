@@ -25,11 +25,21 @@ void BossSummonMobSkill::SetRightFrame(BossSummon::RightFrame* rightFrame)
 
 std::weak_ptr<Unit> BossSummonMobSkill::GetLeftFrameUnit()
 {
+	if (leftFrame == nullptr)
+	{
+		return std::weak_ptr<Unit>();
+	}
+
 	return leftFrame->unitFrame;
 }
 
 std::weak_ptr<Unit> BossSummonMobSkill::GetRightFrameUnit()
 {
+	if (rightFrame == nullptr)
+	{
+		return std::weak_ptr<Unit>();
+	}
+
 	return rightFrame->unitFrame;
 }
 
