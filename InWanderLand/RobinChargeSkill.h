@@ -34,6 +34,7 @@ public:
     virtual float GetCastRange() override { return GetMaxDistance(); };
     virtual coroutine::Coroutine operator()()override;
     virtual void OnInterruption()override;
+    //virtual bool ShouldTargetOnNavfield() override { return true; };
 
     static POD_RobinChargeSkill pod;
     static float GetMaxDistance();

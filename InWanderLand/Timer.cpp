@@ -44,7 +44,10 @@ void TimerComponent::ActivateTimer()
 {
     m_elapsed = 0.0f;
     m_isActivated = true;
-    onActivation();
+    if (onActivation)
+    {
+        onActivation();
+    }
     if (duration == 0)
     {
         onUpdate(1);

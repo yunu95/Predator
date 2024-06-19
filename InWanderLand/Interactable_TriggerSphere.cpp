@@ -65,7 +65,7 @@ void Interactable_TriggerSphere::OnTriggerEnter(physics::Collider* collider)
 		colliderUnitComponent->IsPlayerUnit() &&
 		colliderUnitComponent->IsAlive())
 	{
-		triggerStay.insert(collider);
+		triggerStay.insert(colliderUnitComponent);
 		if (activeInteractable)
 		{
 			if (repetition)
@@ -112,7 +112,7 @@ void Interactable_TriggerSphere::OnTriggerExit(physics::Collider* collider)
 				OnInteractableTriggerExit();
 			}
 		}
-		triggerStay.erase(collider);
+		triggerStay.erase(colliderUnitComponent);
 	}
 }
 

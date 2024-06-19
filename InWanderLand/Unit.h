@@ -130,8 +130,11 @@ public:
     virtual void OnDestroy() override;
     virtual ~Unit();
 
+    std::weak_ptr<UnitCapsuleCollider> GetUnitCollider() { return unitCollider; }
+
     virtual void OnPause() override;
     virtual void OnResume() override;
+
 
     bool IsPlayerUnit() const;
     bool IsInvulenerable() const;
@@ -160,6 +163,7 @@ public:
     DelegateCallback<void> onCreated;
     // 유닛이 회전을 끝냈을 때
     DelegateCallback<void> onRotationFinish;
+
     Reference referencePause;
     Reference referenceBlockFollowingNavAgent;
     Reference referenceBlockAnimLoop;
@@ -221,6 +225,10 @@ private:
     std::shared_ptr<Reference::Guard> blockFollowingNavAgentByState;
     std::shared_ptr<Reference::Guard> disableNavAgentByState;
     std::shared_ptr<Reference::Guard> invulnerabilityByState;
+
+    /// Reset 시에 획득했던 Reference::Guard 를 모두 reset 합니다.
+    void ResetSharedRef();
+
     // 공격범위와 적 포착범위
     std::weak_ptr<UnitAcquisitionSphereCollider> attackRange;
     std::weak_ptr<UnitAcquisitionSphereCollider> acquisitionRange;
@@ -276,6 +284,9 @@ private:
     bool isPaused = false;
     float localTimeScale = 1.0f;
     float localBuffTimeScale = 1.0f;
+
+    void ResetCallbacks();
+
 
     friend UnitBuff;
     friend UnitPool;

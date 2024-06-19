@@ -157,15 +157,12 @@ void Unit::OnStateExit<UnitBehaviourTree::Knockback>()
 template<>
 void Unit::OnStateEngage<UnitBehaviourTree::Pause>()
 {
-    onStateEngage[UnitBehaviourTree::Pause]();
-    defaultAnimationType = UnitAnimType::Idle;
-    enableNavObstacleByState = referenceEnableNavObstacle.Acquire();
-    disableNavAgentByState = referenceDisableNavAgent.Acquire();
-    onStateEngage[UnitBehaviourTree::Pause]();
-    //PlayAnimation(UnitAnimType::Idle, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
-    animatorComponent.lock()->Pause();
-    enableNavObstacleByState = referenceEnableNavObstacle.Acquire();
-    disableNavAgentByState = referenceDisableNavAgent.Acquire();
+	onStateEngage[UnitBehaviourTree::Pause]();
+	defaultAnimationType = UnitAnimType::Idle;
+	enableNavObstacleByState = referenceEnableNavObstacle.Acquire();
+	disableNavAgentByState = referenceDisableNavAgent.Acquire();
+	//PlayAnimation(UnitAnimType::Idle, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
+	animatorComponent.lock()->Pause();
 }
 template<>
 void Unit::OnStateExit<UnitBehaviourTree::Pause>()
@@ -291,6 +288,22 @@ void Unit::OnStateEngage<UnitBehaviourTree::Tactic>()
     onStateEngage[UnitBehaviourTree::Tactic]();
     enableNavObstacleByState = referenceEnableNavObstacle.Acquire();
     disableNavAgentByState = referenceDisableNavAgent.Acquire();
+    localBuffTimeScale = FLT_MIN * 10000;
+    if (!IsPlayerUnit())
+    {
+        localTimeScale = FLT_MIN * 10000;
+        animatorComponent.lock()->Pause();
+        enableNavObstacleByState = referenceEnableNavObstacle.Acquire();
+        disableNavAgentByState = referenceDisableNavAgent.Acquire();
+
+        for (auto& each : GetGameObject()->GetChildren())
+        {
+            if (auto ptr = each->GetComponent<graphics::ParticleRenderer>())
+            {
+                ptr->Pause();
+            }
+        }
+    }
 }
 template<>
 void Unit::OnStateExit<UnitBehaviourTree::Tactic>()
@@ -298,6 +311,22 @@ void Unit::OnStateExit<UnitBehaviourTree::Tactic>()
     onStateExit[UnitBehaviourTree::Tactic]();
     enableNavObstacleByState.reset();
     disableNavAgentByState.reset();
+    localBuffTimeScale = 1.0f;
+    if (!IsPlayerUnit())
+    {
+        localTimeScale = 1.0f;
+        animatorComponent.lock()->Resume();
+        enableNavObstacleByState.reset();
+        disableNavAgentByState.reset();
+
+        for (auto& each : GetGameObject()->GetChildren())
+        {
+            if (auto ptr = each->GetComponent<graphics::ParticleRenderer>())
+            {
+                ptr->Resume();
+            }
+        }
+    }
 }
 
 template<>
@@ -331,39 +360,11 @@ Unit::~Unit()
 void Unit::OnPause()
 {
 	isPaused = true;
-	localBuffTimeScale = FLT_MIN * 10000;
-	if (!IsPlayerUnit())
-	{
-		localTimeScale = FLT_MIN * 10000;
-		animatorComponent.lock()->Pause();
-
-		for (auto& each : GetGameObject()->GetChildren())
-		{
-			if (auto ptr = each->GetComponent<graphics::ParticleRenderer>())
-			{
-				ptr->Pause();
-			}
-		}
-	}
 }
 
 void Unit::OnResume()
 {
 	isPaused = false;
-	localBuffTimeScale = 1.0f;
-	if (!IsPlayerUnit())
-	{
-		localTimeScale = 1.0f;
-		animatorComponent.lock()->Resume();
-
-		for (auto& each : GetGameObject()->GetChildren())
-		{
-			if (auto ptr = each->GetComponent<graphics::ParticleRenderer>())
-			{
-				ptr->Resume();
-			}
-		}
-	}
 }
 
 bool Unit::IsPlayerUnit() const
@@ -1016,9 +1017,8 @@ void Unit::Summon(const application::editor::UnitData* unitData)
     navAgentComponent.lock()->AssignToNavigationField(&SingleNavigationField::Instance());
     navObstacle.lock()->AssignToNavigationField(&SingleNavigationField::Instance());
 
+    ResetCallbacks();
     Reset();
-
-    Summon(unitData->GetUnitTemplateData());
 
     onAttack = unitData->onAttack;
     onAttackHit = unitData->onAttackHit;
@@ -1027,6 +1027,7 @@ void Unit::Summon(const application::editor::UnitData* unitData)
     onRotationFinish = unitData->onRotationFinish;
     onStateEngage = unitData->onStateEngage;
     onStateExit = unitData->onStateExit;
+
     Summon(unitData->GetUnitTemplateData());
 
     Quaternion quat{ unitData->pod.rotation.w,unitData->pod.rotation.x,unitData->pod.rotation.y ,unitData->pod.rotation.z };
@@ -1037,33 +1038,19 @@ void Unit::Summon(const application::editor::UnitData* unitData)
 void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& position, float rotation, bool instant)
 {
     this->unitData = nullptr;
-    onAttack.Clear();
-    onAttackHit.Clear();
-    onDamaged.Clear();
-    onCreated.Clear();
-    onRotationFinish.Clear();
-    for (auto& each : onStateEngage)
-    {
-        each.Clear();
-    }
-    for (auto& each : onStateExit)
-    {
-        each.Clear();
-    }
+
+    ResetCallbacks();
     Reset();
     Summon(td);
 
-    Summon(td);
-
     GetTransform()->SetWorldPosition(Vector3d{ position });
-    navAgentComponent.lock()->SetActive(true);
-    navObstacle.lock()->SetActive(true);
     navAgentComponent.lock()->GetTransform()->SetWorldPosition(Vector3d{ position });
     navAgentComponent.lock()->AssignToNavigationField(&SingleNavigationField::Instance());
     navObstacle.lock()->AssignToNavigationField(&SingleNavigationField::Instance());
 
     GetTransform()->SetWorldRotation(Vector3d{ 0,90 - rotation,0 });
     desiredRotation = currentRotation = rotation;
+
     if (instant)
     {
         onCreated();
@@ -1075,41 +1062,9 @@ void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& po
 }
 void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& position, const Quaternion& rotation, bool instant)
 {
-    this->unitData = nullptr;
-    onAttack.Clear();
-    onAttackHit.Clear();
-    onDamaged.Clear();
-    onCreated.Clear();
-    onRotationFinish.Clear();
-    for (auto& each : onStateEngage)
-    {
-        each.Clear();
-    }
-    for (auto& each : onStateExit)
-    {
-        each.Clear();
-    }
-    Reset();
-    Summon(td);
-
-    Summon(td);
-
-    GetTransform()->SetWorldPosition(Vector3d{ position });
-    navAgentComponent.lock()->GetTransform()->SetWorldPosition(Vector3d{ position });
-    navAgentComponent.lock()->AssignToNavigationField(&SingleNavigationField::Instance());
-    navObstacle.lock()->AssignToNavigationField(&SingleNavigationField::Instance());
-
     auto forward = rotation.Forward();
-    desiredRotation = currentRotation = 180 + std::atan2f(forward.z, forward.x) * math::Rad2Deg;
-
-    if (instant)
-    {
-        onCreated();
-    }
-    else
-    {
-        coroutineBirth = StartCoroutine(BirthCoroutine());
-    }
+    auto finalRot = 180 + std::atan2f(forward.z, forward.x) * math::Rad2Deg;
+    Summon(td, position, finalRot, instant);
 }
 void Unit::AddPassiveSkill(std::shared_ptr<PassiveSkill> skill)
 {
@@ -1234,6 +1189,8 @@ void Unit::Reset()
 
     isPaused = false;
     localTimeScale = 1.0f;
+
+    ResetSharedRef();
 }
 void Unit::InitBehaviorTree()
 {
@@ -1674,6 +1631,29 @@ void Unit::ReturnToPool()
     unitStatusPortraitUI.reset();
     Reset();
     UnitPool::SingleInstance().Return(GetWeakPtr<Unit>());
+}
+void Unit::ResetSharedRef()
+{
+    enableNavObstacleByState.reset();
+    blockFollowingNavAgentByState.reset();
+    disableNavAgentByState.reset();
+    invulnerabilityByState.reset();
+}
+void Unit::ResetCallbacks()
+{
+    onAttack.Clear();
+    onAttackHit.Clear();
+    onDamaged.Clear();
+    onCreated.Clear();
+    onRotationFinish.Clear();
+    for (auto& each : onStateEngage)
+    {
+        each.Clear();
+    }
+    for (auto& each : onStateExit)
+    {
+        each.Clear();
+    }
 }
 const editor::Unit_TemplateData& Unit::GetUnitTemplateData()const
 {

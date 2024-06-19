@@ -23,6 +23,7 @@ public:
     virtual SkillType::Enum GetSkillType() { return SkillType::Enum::HANSEL_Q; }
     virtual float GetCastRange() override { return HanselChargeSkill::GetMaxRange(); }
     virtual coroutine::Coroutine operator()()override;
+    //virtual bool ShouldTargetOnNavfield() override { return true; };
 
     static POD_HanselChargeSkill pod;
     virtual void OnInterruption() override;

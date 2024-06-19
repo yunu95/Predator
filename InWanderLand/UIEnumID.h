@@ -125,6 +125,7 @@ enum class UIEnumID
     MoveTargetFeedbackAnimSprites,
     ErrorPopup_NoMana,
     ErrorPopup_Cooltime,
+    ErrorPopup_CantLand,
     VictoryPage,
     DefeatPage,
     TacticModeIngameUI,

@@ -17,6 +17,8 @@ public:
     virtual coroutine::Coroutine operator()() = 0;
     virtual SkillType::Enum GetSkillType() { return SkillType::NONE; };
     virtual float GetCastRange() { return 8; };
+    // 목표지점에 착지하는 스킬인가? 착지를 한다면 스킬의 목표 지점은 navmesh 위에 있어야 한다.
+    //virtual bool ShouldTargetOnNavfield() { return false; };
 
     virtual void OnInterruption() {};
 
