@@ -5,6 +5,7 @@
 
 #include "IInteractableComponent.h"
 
+class Unit;
 class Interactable_SpikeTrap
 	: public IInteractableComponent
 {
@@ -20,8 +21,8 @@ public:
 	virtual void SetDataFromEditorData(const application::editor::InteractableData& data) override;
 
 private:
-	std::unordered_set<physics::Collider*> triggerStay = std::unordered_set<physics::Collider*>();
-	std::unordered_set<physics::Collider*> interactingList = std::unordered_set<physics::Collider*>();
+	std::unordered_set<Unit*> triggerStay = std::unordered_set<Unit*>();
+	std::unordered_set<Unit*> interactingList = std::unordered_set<Unit*>();
 	Vector3d initPos = Vector3d(0, 0, 0);
 	Quaternion initRotation = Quaternion();
 	Vector3d initScale = Vector3d(1, 1, 1);
