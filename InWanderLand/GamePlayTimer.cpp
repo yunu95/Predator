@@ -11,22 +11,26 @@ namespace application
 
 	void GamePlayTimer::Update()
 	{
-		if (shouldCheck)
+		if (Application::GetInstance().IsContentsPlaying())
 		{
-			playTime += Time::GetDeltaTime();
-			playRealTime += Time::GetDeltaTimeUnscaled();
-
-			for (auto& [time, func] : repeatCallback)
+			if (shouldCheck)
 			{
-				if (playTime - repeatTimeChecker[time] >= time)
+				playTime += Time::GetDeltaTime();
+
+				for (auto& [time, func] : repeatCallback)
 				{
-					for (auto& each : func)
+					if (playTime - repeatTimeChecker[time] >= time)
 					{
-						each();
+						for (auto& each : func)
+						{
+							each();
+						}
+						repeatTimeChecker[time] = playTime;
 					}
-					repeatTimeChecker[time] = playTime;
 				}
 			}
+
+			playRealTime += Time::GetDeltaTimeUnscaled();
 
 			for (auto& [time, func] : repeatCallbackReal)
 			{
@@ -61,12 +65,12 @@ namespace application
 
 		for (auto& [time, func] : repeatCallback)
 		{
-			repeatTimeChecker[time] = time;
+			repeatTimeChecker[time] = 0;
 		}
 
 		for (auto& [time, func] : repeatCallbackReal)
 		{
-			repeatTimeCheckerReal[time] = time;
+			repeatTimeCheckerReal[time] = 0;
 		}
 	}
 
@@ -93,17 +97,11 @@ namespace application
 
 	void GamePlayTimer::PauseTimer()
 	{
-		if (Application::GetInstance().IsContentsPlaying())
-		{
-			shouldCheck = false;
-		}
+		shouldCheck = false;
 	}
 
 	void GamePlayTimer::ResumeTimer()
 	{
-		if (Application::GetInstance().IsContentsPlaying())
-		{
-			shouldCheck = true;
-		}
+		shouldCheck = true;
 	}
 }

@@ -105,7 +105,7 @@ namespace BossSummon
 
 	void LeftFrame::SummonUnit()
 	{
-		if (!unitFrame.lock()->IsAlive())
+		if (!IsAlive())
 		{
 			return;
 		}
@@ -117,11 +117,6 @@ namespace BossSummon
 		summonCorountine = StartCoroutine(SummonMoldUnit());
 		summonCorountine.lock()->PushDestroyCallBack([this]()
 			{
-				if (GetWeakPtr<LeftFrame>().expired())
-				{
-					return;
-				}
-
 				if (!summonEffect.expired())
 				{
 					FBXPool::Instance().Return(summonEffect);
@@ -175,7 +170,7 @@ namespace BossSummon
 
 	bool LeftFrame::IsAlive() const
 	{
-		return HasChangedUnit() && unitFrame.lock()->IsAlive();
+		return HasChangedUnit() && unitFrame.lock()->GetActive() && unitFrame.lock()->IsAlive();
 	}
 
 	coroutine::Coroutine LeftFrame::OnAppear()

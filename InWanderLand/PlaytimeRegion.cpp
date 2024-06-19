@@ -41,7 +41,7 @@ void PlaytimeRegion::OnTriggerEnter(physics::Collider* collider)
         colliderUnitComponent != nullptr && colliderUnitComponent->IsPlayerUnit())
     {
         enteredPlayerColliders.insert(collider);
-        if (!isOnceActivated)
+        if (!isOnceActivatedEnter)
         {
             for (auto& each : OnEnter)
             {
@@ -64,7 +64,7 @@ void PlaytimeRegion::OnTriggerEnter(physics::Collider* collider)
             }
         }
 
-        isOnceActivated = true;
+        isOnceActivatedEnter = true;
     }
 }
 void PlaytimeRegion::OnTriggerExit(physics::Collider* collider)
@@ -76,9 +76,13 @@ void PlaytimeRegion::OnTriggerExit(physics::Collider* collider)
         enteredPlayerColliders.erase(collider);
         if (enteredPlayerColliders.empty())
         {
-            for (auto& each : OnLeave)
+            if (!isOnceActivatedLeave)
             {
-                each();
+                for (auto& each : OnLeave)
+                {
+                    each();
+                }
+                isOnceActivatedLeave = true;
             }
             disablingReferences.clear();
         }

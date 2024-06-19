@@ -60,7 +60,7 @@
             "animationName": "Ani_Frame1_Death",
             "fbxName": "SKM_Frame1",
             "frame": 27.0,
-            "rscPath": "sounds/Heart Queen/Heart Queen destroym summonGate.wav",
+            "rscPath": "sounds/Heart Queen/Heart Queen destroy summonGate.wav",
             "type": 3
         },
         {
@@ -74,7 +74,7 @@
             "animationName": "Ani_Frame1_Summon",
             "fbxName": "SKM_Frame1",
             "frame": 0.0,
-            "rscPath": "sounds/Heart Queen/Heart Queenm summonGatem activate.wav",
+            "rscPath": "sounds/Heart Queen/Heart Queen summonGate activate.wav",
             "type": 3
         },
         {
@@ -151,7 +151,7 @@
             "animationName": "Ani_Frame2_Summon",
             "fbxName": "SKM_Frame2",
             "frame": 0.0,
-            "rscPath": "sounds/Heart Queen/Heart Queenm summonGatem activate.wav",
+            "rscPath": "sounds/Heart Queen/Heart Queen summonGate activate.wav",
             "type": 3
         },
         {
@@ -165,7 +165,7 @@
             "animationName": "Ani_Frame2_Death",
             "fbxName": "SKM_Frame2",
             "frame": 26.0,
-            "rscPath": "sounds/Heart Queen/Heart Queen destroym summonGate.wav",
+            "rscPath": "sounds/Heart Queen/Heart Queen destroy summonGate.wav",
             "type": 3
         },
         {
