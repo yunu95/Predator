@@ -31,5 +31,4 @@
 #include "Action_UISetActive.h"
 #include "Action_Ornament.h"
 #include "Action_Boss.h"
-#include "Action_RequestBattle.h"
-#include "Action_RequestPeace.h"
+#include "Action_RequestState.h"

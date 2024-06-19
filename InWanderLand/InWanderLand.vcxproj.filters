@@ -862,11 +862,8 @@
     <Filter Include="Contents_Refactored\Unit\UnitBuff\UnitBuffHanselDebuff">
       <UniqueIdentifier>{554f8c4c-b096-4c3a-9f29-24ffdd3d860f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Editor\ScriptSystem\2_Action\List\Action_RequestBattle">
+    <Filter Include="Editor\ScriptSystem\2_Action\List\Action_RequestState">
       <UniqueIdentifier>{37226b75-db20-4884-b9f7-88f698af678a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Editor\ScriptSystem\2_Action\List\Action_RequestPeace">
-      <UniqueIdentifier>{0b2355b1-29dc-49bf-a5ac-437da5f5bb5a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2065,8 +2062,8 @@
     <ClInclude Include="MeleeEliteController.h">
       <Filter>Contents_Refactored\UnitController\EnemyController\MeleeEliteController</Filter>
     </ClInclude>
-    <ClInclude Include="Action_RequestBattle.h">
-      <Filter>Editor\ScriptSystem\2_Action\List\Action_RequestBattle</Filter>
+    <ClInclude Include="Action_RequestState.h">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_RequestState</Filter>
     </ClInclude>
     <ClInclude Include="ProjectileType.h">
       <Filter>Contents_Refactored\Projectile</Filter>
@@ -2082,9 +2079,6 @@
     </ClInclude>
     <ClInclude Include="ITacticObject.h">
       <Filter>Contents\TacticModeSystem\ITacticObject</Filter>
-    </ClInclude>
-    <ClInclude Include="Action_RequestPeace.h">
-      <Filter>Editor\ScriptSystem\2_Action\List\Action_RequestPeace</Filter>
     </ClInclude>
     <ClInclude Include="Condition_TacticMode.h">
       <Filter>Editor\ScriptSystem\1_Condition\List</Filter>
@@ -3118,17 +3112,14 @@
     <ClCompile Include="MeleeEliteController.cpp">
       <Filter>Contents_Refactored\UnitController\EnemyController\MeleeEliteController</Filter>
     </ClCompile>
-    <ClCompile Include="Action_RequestBattle.cpp">
-      <Filter>Editor\ScriptSystem\2_Action\List\Action_RequestBattle</Filter>
+    <ClCompile Include="Action_RequestState.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_RequestState</Filter>
     </ClCompile>
     <ClCompile Include="RotatingUI.cpp">
       <Filter>UI\Effect\RotatingUI</Filter>
     </ClCompile>
     <ClCompile Include="UIVideoPlayer.cpp">
       <Filter>UI\Effect\UIVideoPlayer</Filter>
-    </ClCompile>
-    <ClCompile Include="Action_RequestPeace.cpp">
-      <Filter>Editor\ScriptSystem\2_Action\List\Action_RequestPeace</Filter>
     </ClCompile>
     <ClCompile Include="Condition_TacticMode.cpp">
       <Filter>Editor\ScriptSystem\1_Condition\List</Filter>

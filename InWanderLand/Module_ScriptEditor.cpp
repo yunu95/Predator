@@ -1714,16 +1714,11 @@ namespace application
 									selectedScript->AddAction<Action_BossAppear>();
 									break;
 								}
-								case application::ActionType::RequestBattle:
+								case application::ActionType::RequestState:
 								{
-									selectedScript->AddAction<Action_RequestBattle>();
+									selectedScript->AddAction<Action_RequestState>();
 									break;
-								}
-								case application::ActionType::RequestPeace:
-								{
-									selectedScript->AddAction<Action_RequestPeace>();
-									break;
-								}
+								}	
 								default:
 									break;
 							}

@@ -145,6 +145,7 @@ coroutine::Coroutine BossSummonChessSkill::SummonChess(std::weak_ptr<BossSummonC
 
 	std::unordered_set<unsigned int> chessIndex = std::unordered_set<unsigned int>();
 	std::vector<std::weak_ptr<BossSummon::ChessObject>> chessList = std::vector<std::weak_ptr<BossSummon::ChessObject>>();
+	std::vector<bool> ready = std::vector<bool>(pod.summonCount, false);
 	for (int i = 0; i < pod.summonCount; i++)
 	{
 		int arrIdx = -1;
@@ -227,7 +228,6 @@ coroutine::Coroutine BossSummonChessSkill::SummonChess(std::weak_ptr<BossSummonC
 			summoned++;
 		}
 
-		auto itr = chessList.begin();
 		for (int i = 0; i < summoned; i++)
 		{
 			velocityList[i] += Vector3d::down * gc.gravitySpeed * forSeconds.Elapsed();
@@ -237,9 +237,14 @@ coroutine::Coroutine BossSummonChessSkill::SummonChess(std::weak_ptr<BossSummonC
 			{
 				tempPos.y = 0;
 				chessList[i].lock()->GetSummonComponent()->GetTransform()->SetWorldPosition(tempPos);
-				chessList[i].lock()->SetReady();
-				SFXManager::PlaySoundfile3D("sounds/Heart Queen/Heart Queen chess summon.wav", tempPos);
+				if (!ready[i])
+				{
+					chessList[i].lock()->SetReady();
+					SFXManager::PlaySoundfile3D("sounds/Heart Queen/Heart Queen chess summon.wav", tempPos);
+					ready[i] = true;
+				}
 			}
+
 		}
 		co_await std::suspend_always{};
 	}
