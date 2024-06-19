@@ -10,3 +10,4 @@
 #include "Trigger_RepeatPeriodically.h"
 #include "Trigger_Unit.h"
 #include "Trigger_Interactable.h"
+#include "Trigger_Wave.h"

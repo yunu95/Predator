@@ -16,19 +16,24 @@ namespace application
 		class Module_ScriptEditor;
 	}
 
-	class Action_EngageBattle
+	class Action_RequestBattle
 		: public IAction
 	{
 		friend class editor::Module_ScriptEditor;
 
 	public:
-		DEFINE_ACTION(EngageBattle)
+		DEFINE_ACTION(RequestBattle)
 
 		virtual CoroutineObject<void> DoAction() override;
+
+		void SetRequest(bool requestOn);
 
 		virtual bool PreEncoding(json& data) const override;
 		virtual bool PostEncoding(json& data) const override;
 		virtual bool PreDecoding(const json& data) override;
 		virtual bool PostDecoding(const json& data) override;
+
+	private:
+		bool requestOn = true;
 	};
 }

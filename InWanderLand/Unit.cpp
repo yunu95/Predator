@@ -392,7 +392,7 @@ Vector3d Unit::GetRandomPositionInsideCapsuleCollider()
 {
     const auto& pod = GetUnitTemplateData().pod;
     auto unitPos = GetTransform()->GetWorldPosition();
-    return unitPos + Vector3d{ math::Random::GetRandomFloat(pod.collisionSize),pod.collisionSize + math::Random::GetRandomFloat(0 , pod.collisionHeight),math::Random::GetRandomFloat(pod.collisionSize) };
+    return unitPos + Vector3d{ math::Random::GetRandomFloat(pod.collisionSize * 0.7f),pod.collisionSize + math::Random::GetRandomFloat(0 , pod.collisionHeight),math::Random::GetRandomFloat(pod.collisionSize * 0.7f) };
 }
 void Unit::EraseBuff(UnitBuffType buffType)
 {
@@ -462,6 +462,31 @@ void Unit::Heal(float healingPoint)
     SetCurrentHp(currentHitPoint += healingPoint);
     if (currentHitPoint >= unitTemplateData->pod.max_Health)
         SetCurrentHp(unitTemplateData->pod.max_Health);
+
+    coroutineHealEffect = StartCoroutine(HealEffectCoroutine());
+    coroutineHealEffect.lock()->PushDestroyCallBack([this]()
+        {
+            FBXPool::Instance().Return(healVFX);
+        });
+}
+
+yunutyEngine::coroutine::Coroutine Unit::HealEffectCoroutine()
+{
+    healVFX = FBXPool::Instance().Borrow("VFX_Buff_Healing");
+    co_await std::suspend_always{};
+    auto vfxAnimator = healVFX.lock()->AcquireVFXAnimator();
+    vfxAnimator.lock()->SetAutoActiveFalse();
+    vfxAnimator.lock()->Init();
+    vfxAnimator.lock()->Play();
+
+    healVFX.lock()->GetGameObject()->SetParent(GetWeakPtr<Unit>().lock()->GetGameObject());
+
+    while (!vfxAnimator.lock()->IsDone())
+    {
+        co_await std::suspend_always{};
+    }
+
+    co_return;
 }
 
 void Unit::SetCurrentHp(float p_newHp)

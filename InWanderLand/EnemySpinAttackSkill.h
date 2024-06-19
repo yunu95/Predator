@@ -26,6 +26,9 @@ public:
 	virtual coroutine::Coroutine operator()() override;
 	virtual void OnInterruption() override;
 
+	virtual void OnPause() override;
+	virtual void OnResume() override;
+
 	static POD_EnemySpinAttackSkill pod;
 
 private:
@@ -33,6 +36,8 @@ private:
 	std::weak_ptr<UnitAcquisitionSphereCollider> knockbackCollider;
 	std::weak_ptr<ManagedFBX> chargeEffect;
 	std::weak_ptr<ManagedFBX> previewEffect;
+	std::weak_ptr<VFXAnimator> previewEffectAnimator;
+	std::weak_ptr<VFXAnimator> chargeEffectAnimator;
 	std::weak_ptr<coroutine::Coroutine> effectColliderCoroutine;
 };
 

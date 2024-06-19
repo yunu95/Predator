@@ -1010,8 +1010,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="Action_BlockSkillCancel.h" />
     <ClInclude Include="Action_BlockSkillSelection.h" />
     <ClInclude Include="Action_Boss.h" />
-    <ClInclude Include="Action_EngageBattle.h" />
-    <ClInclude Include="Action_EngagePeace.h" />
+    <ClInclude Include="Action_RequestBattle.h" />
+    <ClInclude Include="Action_RequestPeace.h" />
     <ClInclude Include="Action_Ornament.h" />
     <ClInclude Include="Action_PauseWaves.h" />
     <ClInclude Include="Action_PlayerSelect.h" />
@@ -1087,6 +1087,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="SkillType.h" />
     <ClInclude Include="SkillUpgradeType.h" />
     <ClInclude Include="BossSummonObject.h" />
+    <ClInclude Include="Trigger_Wave.h" />
     <ClInclude Include="UIVideoPlayer.h" />
     <ClInclude Include="UnitAcquisitionBoxCollider.h" />
     <ClInclude Include="UnitAcquisitionCollider.h" />
@@ -2102,8 +2103,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="Action_BlockSkillCancel.cpp" />
     <ClCompile Include="Action_BlockSkillSelection.cpp" />
     <ClCompile Include="Action_Boss.cpp" />
-    <ClCompile Include="Action_EngageBattle.cpp" />
-    <ClCompile Include="Action_EngagePeace.cpp" />
+    <ClCompile Include="Action_RequestBattle.cpp" />
+    <ClCompile Include="Action_RequestPeace.cpp" />
     <ClCompile Include="Action_Ornament.cpp" />
     <ClCompile Include="Action_PauseWaves.cpp" />
     <ClCompile Include="Action_PlayerSelect.cpp" />
@@ -2993,6 +2994,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="Trigger_GameStart.cpp" />
     <ClCompile Include="Trigger_RepeatPeriodically.cpp" />
     <ClCompile Include="Trigger_Unit.cpp" />
+    <ClCompile Include="Trigger_Wave.cpp" />
     <ClCompile Include="TutorialManager.cpp" />
     <ClCompile Include="UIButton.cpp" />
     <ClCompile Include="UICurveType.cpp" />

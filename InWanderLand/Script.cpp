@@ -270,6 +270,16 @@ namespace application
                     trigger = AddTrigger<Trigger_InteractableTriggerExit>();
                     break;
                 }
+                case application::TriggerType::StartWave:
+                {
+                    trigger = AddTrigger<Trigger_StartWave>();
+                    break;
+                }
+                case application::TriggerType::EndWave:
+                {
+                    trigger = AddTrigger<Trigger_EndWave>();
+                    break;
+                }
                 default:
                     break;
                 }
@@ -549,14 +559,14 @@ namespace application
                         action = AddAction<Action_BossAppear>();
                         break;
                     }
-                    case application::ActionType::EngageBattle:
+                    case application::ActionType::RequestBattle:
                     {
-                        action = AddAction<Action_EngageBattle>();
+                        action = AddAction<Action_RequestBattle>();
                         break;
                     }
-                    case application::ActionType::EngagePeace:
+                    case application::ActionType::RequestPeace:
                     {
-                        action = AddAction<Action_EngagePeace>();
+                        action = AddAction<Action_RequestPeace>();
                         break;
                     }
                     default:

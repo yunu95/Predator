@@ -329,6 +329,7 @@ void UIImage::PreProcessTexture()
     ResourceBuilder::Instance.Get().device->GetDeviceContext()->RSSetViewports(1, &viewport);
     ResourceBuilder::Instance.Get().device->GetDeviceContext()->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &vertexStride, &vertexOffset);
     ResourceBuilder::Instance.Get().device->GetDeviceContext()->Draw(6, 0);
+    vertexBuffer->Release();
 }
 bool UIImage::IsLinearClippingMode()
 {

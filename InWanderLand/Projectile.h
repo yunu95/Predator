@@ -17,6 +17,7 @@ protected:
     Vector3d speed;
     std::weak_ptr<Unit> opponentUnit;
     float damage;
+    float lifetime = 0;
     bool traveling = false;
     void SetSpeed(Vector3d speed);
     virtual void OnContentsPlay()override {};

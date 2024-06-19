@@ -62,6 +62,11 @@ void BossSpinAttackSkill::OnPause()
     {
         chargeEffectAnimator.lock()->Pause();
     }
+
+    if (!previewEffectAnimator.expired())
+    {
+        previewEffectAnimator.lock()->Pause();
+    }
 }
 
 void BossSpinAttackSkill::OnResume()
@@ -69,6 +74,11 @@ void BossSpinAttackSkill::OnResume()
     if (!chargeEffectAnimator.expired())
     {
         chargeEffectAnimator.lock()->Resume();
+    }
+
+    if (!previewEffectAnimator.expired())
+    {
+        previewEffectAnimator.lock()->Resume();
     }
 }
 
@@ -88,7 +98,7 @@ coroutine::Coroutine BossSpinAttackSkill::SpawningSkillffect(std::weak_ptr<BossS
     previewEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(actualCollideRange * owner.lock()->GetTransform()->GetWorldScale().x,
         actualCollideRange * owner.lock()->GetTransform()->GetWorldScale().y,
         actualCollideRange * owner.lock()->GetTransform()->GetWorldScale().z));
-    auto previewEffectAnimator = previewEffect.lock()->AcquireVFXAnimator();
+    previewEffectAnimator = previewEffect.lock()->AcquireVFXAnimator();
     previewEffectAnimator.lock()->SetAutoActiveFalse();
     previewEffectAnimator.lock()->Init();
     previewEffectAnimator.lock()->Play();

@@ -23,6 +23,10 @@ PlaytimeWave::~PlaytimeWave()
         waveData->playtimeWave = nullptr;
     }
 }
+bool PlaytimeWave::IsRemainEnemyAndWave()
+{
+    return !isAllUnitTerminated && (currentSequenceIndex < waveData->pod.waveSizes.size());
+}
 std::weak_ptr<PlaytimeWave> PlaytimeWave::GetCurrentOperatingWave()
 {
     return currentOperativeWave;
@@ -35,8 +39,6 @@ void PlaytimeWave::ActivateWave()
     array<int, 3> comboObjectives = { waveData->pod.comboObjective1, waveData->pod.comboObjective2, waveData->pod.comboObjective3 };
     PlayerController::Instance().SetComboObjectives(comboObjectives);
     UIManager::Instance().ShowComboObjectives();
-    /// 플레이어 유닛 전투상태 돌입
-    PlayerController::Instance().OnWaveStart(GetWeakPtr<PlaytimeWave>());
     //TacticModeSystem::Instance().RegisterCurrentWave(this);
 
     // 카메라 가동범위 제한
@@ -48,8 +50,17 @@ void PlaytimeWave::ActivateWave()
 }
 void PlaytimeWave::DeActivateWave()
 {
+    /// 웨이브 끝날 때, 호출되는 콜백
+    if (waveEndCallbackMap.contains(0))
+    {
+        for (auto& each : waveEndCallbackMap[0])
+        {
+            each();
+        }
+    }
+
+    currentOperativeWave.reset();
     waveDataIndex = 0;
-    PlayerController::Instance().OnWaveEnd(GetWeakPtr<PlaytimeWave>());
     UIManager::Instance().HideComboObjectvies();
     this->SetActive(false);
     // 카메라 가동범위 제한
@@ -80,6 +91,27 @@ void PlaytimeWave::Update()
         // 유닛 소환이 임박했는가?
         while (nextSummonUnitIndex < waveSize && waveDelays[waveDataIndex] < m_elapsed)
         {
+            if (m_currentWaveUnitVector.size() == 0)
+            {
+                /// Idx 0 는 시작 콜백
+                if (currentSequenceIndex == 0)
+                {
+                    for (auto& each : waveStartCallbackMap[0])
+                    {
+                        each();
+                    }
+                }
+
+                /// Idx 맞는 Callback 호출
+                if (waveStartCallbackMap.contains(currentSequenceIndex + 1))
+                {
+                    for (auto& each : waveStartCallbackMap[currentSequenceIndex + 1])
+                    {
+                        each();
+                    }
+                }
+            }
+
             // 유닛을 소환하고 인덱스를 증가시킨다.
             // 유닛 데이터는 아래 값을 사용하면 됨.
             auto unitData = waveData->waveUnitDatasVector[waveDataIndex];
@@ -94,8 +126,8 @@ void PlaytimeWave::Update()
     // 현재 웨이브에서 소환 대상이 되는 유닛들이 다 소환된 경우
     else
     {
-        bool isAllUnitTerminated = true;
-
+        isAllUnitTerminated = true;
+        
         for (auto& e : m_currentWaveUnitVector)
         {
             // 한 유닛이라도 살아 있다면 bool값을 false로
@@ -109,6 +141,15 @@ void PlaytimeWave::Update()
         // 현재 등장한 유닛들이 다 죽었는가?
         if (isAllUnitTerminated)
         {
+            /// Idx 맞는 Callback 호출
+            if (waveEndCallbackMap.contains(currentSequenceIndex + 1))
+            {
+                for (auto& each : waveEndCallbackMap[currentSequenceIndex + 1])
+                {
+                    each();
+                }
+            }
+
             m_currentWaveUnitVector.clear();
             m_elapsed = 0.0f;
             currentSequenceIndex++;
@@ -118,7 +159,6 @@ void PlaytimeWave::Update()
             {
                 DeActivateWave();
             }
-
         }
     }
 }

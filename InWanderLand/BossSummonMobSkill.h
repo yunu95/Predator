@@ -47,6 +47,9 @@ public:
 	static void OnBossAppear();
 	static void OnBossDie();
 
+	virtual void OnPause() override;
+	virtual void OnResume() override;
+
 private:
 	coroutine::Coroutine StartSummonTimer();
 	coroutine::Coroutine SpawningFieldEffect(std::weak_ptr<BossSummonMobSkill> skill);
@@ -54,6 +57,8 @@ private:
 	static std::weak_ptr<coroutine::Coroutine> summonCoroutine;
 	std::weak_ptr<coroutine::Coroutine> effectCoroutine;
 	std::weak_ptr<ManagedFBX> stepEffect;
+	std::weak_ptr<VFXAnimator> stepEffectAnimator;
+
 	static BossSummon::LeftFrame * leftFrame;
 	static BossSummon::RightFrame* rightFrame;
 };

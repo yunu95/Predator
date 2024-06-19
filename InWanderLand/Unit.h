@@ -94,6 +94,7 @@ public:
     void Damaged(float dmg);                            // 추적받지 않는 데미지
     coroutine::Coroutine DamagedEffectCoroutine(std::weak_ptr<Unit> opponent);
     void Heal(float healingPoint);
+    coroutine::Coroutine HealEffectCoroutine();
     void SetCurrentHp(float p_newHp);
     void KnockBack(Vector3d targetPosition, float knockBackDuration);
     /// Unit 의 위치로부터 입력한 위치벡터(월드 좌표계 기준)에 KnockBack 을 수행합니다.
@@ -262,13 +263,15 @@ private:
     std::weak_ptr<yunutyEngine::coroutine::Coroutine> coroutineAttack;
     std::weak_ptr<yunutyEngine::coroutine::Coroutine> coroutineAttackEffect;
     std::weak_ptr<yunutyEngine::coroutine::Coroutine> coroutineDamagedEffect;
+    std::weak_ptr<yunutyEngine::coroutine::Coroutine> coroutineHealEffect;
     std::weak_ptr<yunutyEngine::coroutine::Coroutine> coroutineSkill;
     UnitAnimType defaultAnimationType;
     bool blendWithDefaultAnimTrigger{ false };
     int navAgentEnableFrameCount{ 0 };
     std::weak_ptr<ManagedFBX> attackVFX = std::weak_ptr<ManagedFBX>();
     std::weak_ptr<ManagedFBX> damagedVFX = std::weak_ptr<ManagedFBX>();
-    std::weak_ptr<ManagedFBX> paralysisVFX = std::weak_ptr<ManagedFBX>();
+    std::weak_ptr<ManagedFBX> healVFX = std::weak_ptr<ManagedFBX>();
+	std::weak_ptr<ManagedFBX> paralysisVFX = std::weak_ptr<ManagedFBX>();
 
     bool isPaused = false;
     float localTimeScale = 1.0f;

@@ -21,7 +21,7 @@ std::weak_ptr<Projectile> ProjectilePool::Borrow(std::weak_ptr<Unit> owner, std:
     offset = DirectX::XMVector4Transform(offset, wtm);
     projectile->GetTransform()->SetWorldPosition({ offset.m128_f32[0],offset.m128_f32[1],offset.m128_f32[2] });
     projectile->opponentUnit = opponent;
-    if (ownerTD.projectileHoming)
+    if (ownerTD.isProjectileHoming)
     {
         projectile->homingTarget = opponent;
     }
