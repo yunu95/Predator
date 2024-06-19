@@ -154,7 +154,7 @@ void GraphicsTest()
 		}
 	}
 	{
-		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_BossCorrider_Floor");
+		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("VFX_Ursula_Attack_1");
 	}
 	{
 		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_BossCorrider_Floor");

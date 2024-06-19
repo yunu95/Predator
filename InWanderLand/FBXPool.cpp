@@ -12,7 +12,7 @@ std::weak_ptr<ManagedFBX> FBXPool::Borrow(const std::string& fbxName)
         poolsByMeshName[fbxName] = pool;
     }
 
-    auto wptr = poolsByMeshName[fbxName]->Borrow();
+	auto wptr = poolsByMeshName[fbxName]->Borrow();
     borrowedList.insert(wptr);
     return wptr;
 }
