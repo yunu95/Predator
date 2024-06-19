@@ -70,7 +70,7 @@ namespace application
             // 유닛의 공격방식, 근거리 혹은 원거리
             POD_Enum<UnitAttackType::Enum> attackType;
             POD_Enum<ProjectileType::Enum> projectileType;
-            POD_Enum<ProjectileHoming::Enum> projectileHoming;
+            bool projectileHoming{ false };
             std::string projectile_staticFBXName;
             // 발사체가 생성되는 위치
             POD_Vector3<float> projectileOffset;

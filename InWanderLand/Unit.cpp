@@ -388,6 +388,12 @@ std::string Unit::GetFBXName() const
 
     return skinnedMeshGameObject->getName();
 }
+Vector3d Unit::GetRandomPositionInsideCapsuleCollider()
+{
+    const auto& pod = GetUnitTemplateData().pod;
+    auto unitPos = GetTransform()->GetWorldPosition();
+    return unitPos + Vector3d{ math::Random::GetRandomFloat(pod.collisionSize),pod.collisionSize + math::Random::GetRandomFloat(0 , pod.collisionHeight),math::Random::GetRandomFloat(pod.collisionSize) };
+}
 void Unit::EraseBuff(UnitBuffType buffType)
 {
     buffs.erase(buffType);
@@ -1569,8 +1575,8 @@ yunutyEngine::coroutine::Coroutine Unit::AttackCoroutine(std::weak_ptr<Unit> opp
     }
     case UnitAttackType::MISSILE:
     {
-        auto projectile = ProjectileSelector::SingleInstance().RequestProjectile(GetWeakPtr<Unit>(), opponent.lock(), static_cast<ProjectileType::Enum>(unitTemplateData->pod.projectileType.enumValue), static_cast<ProjectileHoming::Enum>(unitTemplateData->pod.projectileHoming.enumValue));
-        projectile.lock()->GetTransform()->SetLocalScale(Vector3d::one * unitTemplateData->pod.projectile_scale);
+        //auto projectile = ProjectileSelector::SingleInstance().RequestProjectile(GetWeakPtr<Unit>(), opponent.lock(), static_cast<ProjectileType::Enum>(unitTemplateData->pod.projectileType.enumValue));
+        auto projectile = ProjectilePool::SingleInstance().Borrow(GetWeakPtr<Unit>(), opponent.lock());
         break;
     }
     }

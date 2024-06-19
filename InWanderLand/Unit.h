@@ -139,6 +139,8 @@ public:
     bool IsPreempted() const;
     bool IsTacTicReady() const;
     std::string GetFBXName() const;
+    // 콜라이더 캡슐 내부의 무작위 위치를 반환합니다.
+    Vector3d GetRandomPositionInsideCapsuleCollider();
     // 유닛의 행동 트리 상태가 전환될 때
     std::array<DelegateCallback<void>, UnitBehaviourTree::Keywords::KeywordNum>& OnStateEngageCallback() { return onStateEngage; };
     std::array<DelegateCallback<void>, UnitBehaviourTree::Keywords::KeywordNum>& OnStateExitCallback() { return onStateExit; };
@@ -290,12 +292,12 @@ bool Unit::CanProcessOrder()
 template<typename SkillType>
 void Unit::OrderSkill(SkillType&& skill, Vector3d pos)
 {
-	static_assert(std::is_base_of<Skill, SkillType>::value, "SkillType must be derived from Skill");
-	pendingSkill = std::make_shared<SkillType>(std::move(skill));
-	static_cast<Skill*>(pendingSkill.get())->owner = GetWeakPtr<Unit>();
-	static_cast<Skill*>(pendingSkill.get())->selfWeakPtr = std::dynamic_pointer_cast<Skill>(pendingSkill);
-	static_cast<Skill*>(pendingSkill.get())->targetPos = pos;
-	pendingOrderType = UnitOrderType::Skill;
+    static_assert(std::is_base_of<Skill, SkillType>::value, "SkillType must be derived from Skill");
+    pendingSkill = std::make_shared<SkillType>(std::move(skill));
+    static_cast<Skill*>(pendingSkill.get())->owner = GetWeakPtr<Unit>();
+    static_cast<Skill*>(pendingSkill.get())->selfWeakPtr = std::dynamic_pointer_cast<Skill>(pendingSkill);
+    static_cast<Skill*>(pendingSkill.get())->targetPos = pos;
+    pendingOrderType = UnitOrderType::Skill;
 }
 
 template<typename Buff>
