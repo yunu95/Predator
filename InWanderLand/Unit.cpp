@@ -304,7 +304,10 @@ void Unit::OnPause()
 
 		for (auto& each : GetGameObject()->GetChildren())
 		{
-			each->GetComponent<graphics::ParticleRenderer>()->Pause();
+			if (auto ptr = each->GetComponent<graphics::ParticleRenderer>())
+			{
+				ptr->Pause();
+			}
 		}
 	}
 }
@@ -320,7 +323,10 @@ void Unit::OnResume()
 
 		for (auto& each : GetGameObject()->GetChildren())
 		{
-			each->GetComponent<graphics::ParticleRenderer>()->Resume();
+			if (auto ptr = each->GetComponent<graphics::ParticleRenderer>())
+			{
+				ptr->Resume();
+			}
 		}
 	}
 }
