@@ -38,13 +38,11 @@ void UnitBuffBleeding::OnEnd()
 void UnitBuffBleeding::OnPause()
 {
     isPaused = true;
-    buffEffectAnimator.lock()->Pause();
 }
 
 void UnitBuffBleeding::OnResume()
 {
     isPaused = false;
-    buffEffectAnimator.lock()->Resume();
 }
 
 void UnitBuffBleeding::OnOverlap(UnitBuff&& overlapping)

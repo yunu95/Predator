@@ -33,7 +33,7 @@ void UnitBuffUrsula::OnOverlap(UnitBuff&& overlapping)
 }
 
 coroutine::Coroutine UnitBuffUrsula::EffectCoroutine()
-{
+{ 
     buffEffect = FBXPool::Instance().Borrow("VFX_Buff_Ursula_Contract");
     buffEffect.lock()->GetGameObject()->SetParent(owner.lock()->GetGameObject());
 

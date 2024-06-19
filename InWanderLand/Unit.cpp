@@ -86,7 +86,7 @@ void Unit::Update()
 	for (auto& [buffID, buff] : buffs)
 	{
 		buff.get()->OnUpdate();
-		buff.get()->durationLeft -= Time::GetDeltaTime() * localTimeScale;
+		buff.get()->durationLeft -= Time::GetDeltaTime() * localBuffTimeScale;
 		if (buff.get()->durationLeft < 0)
 			buff.get()->OnEnd();
 	}
@@ -296,6 +296,7 @@ Unit::~Unit()
 void Unit::OnPause()
 {
 	isPaused = true;
+	localBuffTimeScale = FLT_MIN * 10000;
 	if (!IsPlayerUnit())
 	{
 		localTimeScale = FLT_MIN * 10000;
@@ -306,6 +307,7 @@ void Unit::OnPause()
 void Unit::OnResume()
 {
 	isPaused = false;
+	localBuffTimeScale = 1.0f;
 	if (!IsPlayerUnit())
 	{
 		localTimeScale = 1.0f;
@@ -958,14 +960,14 @@ void Unit::Summon(const application::editor::UnitData* unitData)
 	onStateEngage = unitData->onStateEngage;
 	onStateExit = unitData->onStateExit;
 
+	Reset();
+
 	Summon(unitData->GetUnitTemplateData());
 
 	GetTransform()->SetWorldPosition(Vector3d{ unitData->pod.position });
 	navAgentComponent.lock()->GetTransform()->SetWorldPosition(Vector3d{ unitData->pod.position });
 	navAgentComponent.lock()->AssignToNavigationField(&SingleNavigationField::Instance());
 	navObstacle.lock()->AssignToNavigationField(&SingleNavigationField::Instance());
-
-	Reset();
 
 	Quaternion quat{ unitData->pod.rotation.w,unitData->pod.rotation.x,unitData->pod.rotation.y ,unitData->pod.rotation.z };
 	auto forward = quat.Forward();
@@ -989,8 +991,8 @@ void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& po
 		each.Clear();
 	}
 
-	Summon(td);
 	Reset();
+	Summon(td);
 
 	GetTransform()->SetWorldPosition(Vector3d{ position });
 	navAgentComponent.lock()->GetTransform()->SetWorldPosition(Vector3d{ position });
@@ -1025,8 +1027,8 @@ void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& po
 		each.Clear();
 	}
 
-	Summon(td);
 	Reset();
+	Summon(td);
 
 	GetTransform()->SetWorldPosition(Vector3d{ position });
 	navAgentComponent.lock()->GetTransform()->SetWorldPosition(Vector3d{ position });

@@ -29,12 +29,10 @@ void UnitBuffHanselDebuff::OnOverlap(UnitBuff&& overlapping)
 
 void UnitBuffHanselDebuff::OnPause()
 {
-    buffEffectAnimator.lock()->Pause();
 }
 
 void UnitBuffHanselDebuff::OnResume()
 {
-    buffEffectAnimator.lock()->Resume();
 }
 
 coroutine::Coroutine UnitBuffHanselDebuff::EffectCoroutine()

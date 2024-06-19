@@ -11,5 +11,12 @@ public:
     virtual UIEnumID GetUIEnumID() { return UIEnumID::CharInfo_Buff_HanselBuff; };
     virtual UnitBuffType GetBuffType() { return UnitBuffType::HanselBuff; };
 private:
+    std::weak_ptr<VFXAnimator> buffEffectAnimator;
+
     virtual void OnStart();
+    virtual void OnEnd();
+    virtual void OnOverlap(UnitBuff&& overlapping) override;
+    virtual void OnPause() override;
+    virtual void OnResume() override;
+    virtual coroutine::Coroutine EffectCoroutine() override;
 };

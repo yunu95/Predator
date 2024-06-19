@@ -54,6 +54,7 @@ coroutine::Coroutine EnemyImpaleSkill::operator()()
     auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
     auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
     auto enableNavObstacle = owner.lock()->referenceEnableNavObstacle.Acquire();
+    auto rotRef = owner.lock()->referenceBlockRotation.Acquire();
     auto animator = owner.lock()->GetAnimator();
     auto impaleAnim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill2);
 

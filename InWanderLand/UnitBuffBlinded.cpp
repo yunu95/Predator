@@ -31,12 +31,10 @@ void UnitBuffBlinded::OnOverlap(UnitBuff&& overlapping)
 
 void UnitBuffBlinded::OnPause()
 {
-    buffEffectAnimator.lock()->Pause();
 }
 
 void UnitBuffBlinded::OnResume()
 {
-    buffEffectAnimator.lock()->Resume();
 }
 
 coroutine::Coroutine UnitBuffBlinded::EffectCoroutine()
