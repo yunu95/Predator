@@ -37,7 +37,7 @@ void PlaytimeRegion::Start()
 void PlaytimeRegion::OnTriggerEnter(physics::Collider* collider)
 {
     // 조건 더 다듬을 것
-    if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
+    if (Unit* colliderUnitComponent = UnitCollider::AcquireUnit(collider);
         colliderUnitComponent != nullptr && colliderUnitComponent->IsPlayerUnit())
     {
         enteredPlayerColliders.insert(collider);
@@ -70,7 +70,7 @@ void PlaytimeRegion::OnTriggerEnter(physics::Collider* collider)
 void PlaytimeRegion::OnTriggerExit(physics::Collider* collider)
 {
     // 조건 더 다듬을 것
-    if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
+    if (Unit* colliderUnitComponent = UnitCollider::AcquireUnit(collider);
         colliderUnitComponent != nullptr && colliderUnitComponent->IsPlayerUnit())
     {
         enteredPlayerColliders.erase(collider);

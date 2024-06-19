@@ -26,7 +26,7 @@ void DualCastComponent::ApplyStatus(Unit* ownerUnit, Unit* opponentUnit)
 void DualCastComponent::OnTriggerEnter(physics::Collider* collider)
 {
 	// Request StatusTimer To TimerPool here
-	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
+	if (Unit* colliderUnitComponent = UnitCollider::AcquireUnit(collider);
 		colliderUnitComponent != nullptr)
 	{
 		ApplyStatus(m_ownerUnit, colliderUnitComponent);

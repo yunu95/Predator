@@ -73,7 +73,7 @@ void Interactable_ChessRook::Update()
 	static auto eraseList = unitSet;
 	for (auto each : unitSet)
 	{
-		if (each->GetGameObject()->GetComponent<Unit>()->IsAlive())
+		if (each->IsAlive())
 		{
 			eraseList.erase(each);
 		}
@@ -108,7 +108,7 @@ void Interactable_ChessRook::Update()
 
 void Interactable_ChessRook::OnTriggerEnter(physics::Collider* collider)
 {
-	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
+	if (Unit* colliderUnitComponent = UnitCollider::AcquireUnit(collider);
 		PlayerController::Instance().GetState() == PlayerController::State::Battle &&
 		colliderUnitComponent != nullptr &&
 		colliderUnitComponent->IsPlayerUnit() &&
@@ -120,7 +120,7 @@ void Interactable_ChessRook::OnTriggerEnter(physics::Collider* collider)
 
 void Interactable_ChessRook::OnTriggerExit(physics::Collider* collider)
 {
-	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
+	if (Unit* colliderUnitComponent = UnitCollider::AcquireUnit(collider);
 		colliderUnitComponent != nullptr &&
 		colliderUnitComponent->IsPlayerUnit())
 	{

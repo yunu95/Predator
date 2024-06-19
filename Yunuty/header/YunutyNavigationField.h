@@ -18,6 +18,16 @@ namespace yunutyEngine
     class YUNUTY_API NavigationField : public Component
     {
     public:
+        struct PrimitiveAgentInfo
+        {
+            Vector3d position;
+            float radius;
+        };
+        struct PrimitiveObstacleInfo
+        {
+            Vector3d position;
+            float radius;
+        };
         class Impl;
         struct BuildSettings
         {

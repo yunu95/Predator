@@ -48,7 +48,7 @@ void ParalysisFieldComponent::SetFieldSkillMembers()
 
 void ParalysisFieldComponent::OnTriggerExit(physics::Collider* collider)
 {
-    if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
+    if (Unit* colliderUnitComponent = UnitCollider::AcquireUnit(collider);
         colliderUnitComponent != nullptr &&
         colliderUnitComponent->GetUnitSide() == Unit::UnitSide::Enemy)
     {

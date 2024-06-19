@@ -60,6 +60,7 @@ namespace application
             //float m_criticalDamageDecreaseMultiplier;	// 피격 시 치명타 피해 감소 배율
 
             float collisionSize = 0.5f;
+            float collisionHeight = 0.5f;
             float m_idRadius;
             float m_atkRadius;
             float m_atkCooltime = 2.1f;
@@ -69,7 +70,7 @@ namespace application
             // 유닛의 공격방식, 근거리 혹은 원거리
             POD_Enum<UnitAttackType::Enum> attackType;
             POD_Enum<ProjectileType::Enum> projectileType;
-            POD_Enum<ProjectileHoming::Enum> projectileHoming;
+            bool isProjectileHoming{ false };
             std::string projectile_staticFBXName;
             // 발사체가 생성되는 위치
             POD_Vector3<float> projectileOffset;

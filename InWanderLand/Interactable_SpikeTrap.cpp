@@ -51,7 +51,7 @@ void Interactable_SpikeTrap::Update()
     static auto eraseList = triggerStay;
     for (auto each : triggerStay)
     {
-        if (each->GetGameObject()->GetComponent<Unit>()->IsAlive())
+        if (each->IsAlive())
         {
             eraseList.erase(each);
         }
@@ -80,23 +80,23 @@ void Interactable_SpikeTrap::Update()
 
 void Interactable_SpikeTrap::OnTriggerEnter(physics::Collider* collider)
 {
-    if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
+    if (Unit* colliderUnitComponent = UnitCollider::AcquireUnit(collider);
         PlayerController::Instance().GetState() == PlayerController::State::Battle &&
         colliderUnitComponent != nullptr &&
         colliderUnitComponent->IsPlayerUnit() &&
         colliderUnitComponent->IsAlive())
     {
-        triggerStay.insert(collider);
+        triggerStay.insert(colliderUnitComponent);
     }
 }
 
 void Interactable_SpikeTrap::OnTriggerExit(physics::Collider* collider)
 {
-    if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
+    if (Unit* colliderUnitComponent = UnitCollider::AcquireUnit(collider);
         colliderUnitComponent != nullptr &&
         colliderUnitComponent->IsPlayerUnit())
     {
-        triggerStay.erase(collider);
+        triggerStay.erase(colliderUnitComponent);
     }
 }
 
@@ -123,7 +123,7 @@ yunutyEngine::coroutine::Coroutine Interactable_SpikeTrap::DoInteraction()
 
     for (auto each : units)
     {
-        interactingList.erase(each->GetGameObject()->GetComponent<physics::Collider>());
+        interactingList.erase(each);
     }
 
     co_return;

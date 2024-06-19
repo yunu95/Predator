@@ -20,6 +20,7 @@
 #include "Reference.h"
 #include "DamageType.h"
 #include "ITacticObject.h"
+#include "UnitCollider.h"
 
 class ManagedFBX;
 class PassiveSkill;
@@ -28,6 +29,7 @@ class UnitProductor;
 class SkillSystem;
 class BurnEffect;
 class Skill;
+class UnitCollider;
 class UnitBuff;
 class UnitBuffTaunted;
 class UnitBehaviourTree;
@@ -36,6 +38,7 @@ class UnitPool;
 class PlayerController;
 class UnitController;
 class BossController;
+class UnitCapsuleCollider;
 
 namespace wanderUtils
 {
@@ -98,7 +101,7 @@ public:
     void KnockBackRelativeVector(Vector3d relativeVector, float knockBackDuration);
     void Paralyze(float paralyzeDuration);
     coroutine::Coroutine ParalyzeEffectCoroutine(float paralyzeDuration);
-    yunutyEngine::coroutine::Coroutine KnockBackCoroutine(Vector3d targetPosition, float knockBackDuration, bool relative = false);
+    yunutyEngine::coroutine::Coroutine KnockbackCoroutine(std::shared_ptr<Reference::Guard> paralysisGuard, Vector3d targetPosition, float knockBackDuration, bool relative = false);
     void PlayAnimation(UnitAnimType animType, Animation::PlayFlag playFlag = Animation::PlayFlag_::Blending);
     void BlendWithDefaultAnimation();
     void SetDefaultAnimation(UnitAnimType animType);
@@ -127,8 +130,11 @@ public:
     virtual void OnDestroy() override;
     virtual ~Unit();
 
+    std::weak_ptr<UnitCapsuleCollider> GetUnitCollider() { return unitCollider; }
+
     virtual void OnPause() override;
     virtual void OnResume() override;
+
 
     bool IsPlayerUnit() const;
     bool IsInvulenerable() const;
@@ -137,6 +143,8 @@ public:
     bool IsPreempted() const;
     bool IsTacTicReady() const;
     std::string GetFBXName() const;
+    // 콜라이더 캡슐 내부의 무작위 위치를 반환합니다.
+    Vector3d GetRandomPositionInsideCapsuleCollider();
     // 유닛의 행동 트리 상태가 전환될 때
     std::array<DelegateCallback<void>, UnitBehaviourTree::Keywords::KeywordNum>& OnStateEngageCallback() { return onStateEngage; };
     std::array<DelegateCallback<void>, UnitBehaviourTree::Keywords::KeywordNum>& OnStateExitCallback() { return onStateExit; };
@@ -155,6 +163,7 @@ public:
     DelegateCallback<void> onCreated;
     // 유닛이 회전을 끝냈을 때
     DelegateCallback<void> onRotationFinish;
+
     Reference referencePause;
     Reference referenceBlockFollowingNavAgent;
     Reference referenceBlockAnimLoop;
@@ -213,8 +222,13 @@ private:
     std::array<DelegateCallback<void>, UnitBehaviourTree::Keywords::KeywordNum> onStateExit;
     std::shared_ptr<PassiveSkill> passiveSkill;
     std::shared_ptr<Reference::Guard> enableNavObstacleByState;
+    std::shared_ptr<Reference::Guard> blockFollowingNavAgentByState;
     std::shared_ptr<Reference::Guard> disableNavAgentByState;
     std::shared_ptr<Reference::Guard> invulnerabilityByState;
+
+    /// Reset 시에 획득했던 Reference::Guard 를 모두 reset 합니다.
+    void ResetSharedRef();
+
     // 공격범위와 적 포착범위
     std::weak_ptr<UnitAcquisitionSphereCollider> attackRange;
     std::weak_ptr<UnitAcquisitionSphereCollider> acquisitionRange;
@@ -222,7 +236,7 @@ private:
     std::weak_ptr<yunutyEngine::NavigationAgent> navAgentComponent;
     // 유닛들이 가만히 있을 때 장애물로 인식하게 만들기 위함.
     std::weak_ptr<yunutyEngine::NavigationObstacle> navObstacle;
-    std::weak_ptr<yunutyEngine::physics::SphereCollider> unitCollider;
+    std::weak_ptr<UnitCapsuleCollider> unitCollider;
     std::unordered_map<UnitBuffType, std::shared_ptr<UnitBuff>> buffs;
     std::shared_ptr<Skill> onGoingSkill;
     std::shared_ptr<Skill> pendingSkill;
@@ -271,6 +285,9 @@ private:
     float localTimeScale = 1.0f;
     float localBuffTimeScale = 1.0f;
 
+    void ResetCallbacks();
+
+
     friend UnitBuff;
     friend UnitPool;
     friend PlayerController;
@@ -290,12 +307,12 @@ bool Unit::CanProcessOrder()
 template<typename SkillType>
 void Unit::OrderSkill(SkillType&& skill, Vector3d pos)
 {
-	static_assert(std::is_base_of<Skill, SkillType>::value, "SkillType must be derived from Skill");
-	pendingSkill = std::make_shared<SkillType>(std::move(skill));
-	static_cast<Skill*>(pendingSkill.get())->owner = GetWeakPtr<Unit>();
-	static_cast<Skill*>(pendingSkill.get())->selfWeakPtr = std::dynamic_pointer_cast<Skill>(pendingSkill);
-	static_cast<Skill*>(pendingSkill.get())->targetPos = pos;
-	pendingOrderType = UnitOrderType::Skill;
+    static_assert(std::is_base_of<Skill, SkillType>::value, "SkillType must be derived from Skill");
+    pendingSkill = std::make_shared<SkillType>(std::move(skill));
+    static_cast<Skill*>(pendingSkill.get())->owner = GetWeakPtr<Unit>();
+    static_cast<Skill*>(pendingSkill.get())->selfWeakPtr = std::dynamic_pointer_cast<Skill>(pendingSkill);
+    static_cast<Skill*>(pendingSkill.get())->targetPos = pos;
+    pendingOrderType = UnitOrderType::Skill;
 }
 
 template<typename Buff>

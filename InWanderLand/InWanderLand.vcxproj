@@ -1088,6 +1088,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="BossSummonObject.h" />
     <ClInclude Include="Trigger_Wave.h" />
     <ClInclude Include="UIVideoPlayer.h" />
+    <ClInclude Include="UnitAcquisitionBoxCollider.h" />
+    <ClInclude Include="UnitAcquisitionCollider.h" />
     <ClInclude Include="UnitAcquisitionSphereColliderPool.h" />
     <ClInclude Include="UnitAnimationType.h" />
     <ClInclude Include="AttackSystem.h">
@@ -1984,6 +1986,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="UnitBuffTaunted.h" />
     <ClInclude Include="UnitBuffType.h" />
     <ClInclude Include="UnitBuffUrsula.h" />
+    <ClInclude Include="UnitCapsuleCollider.h" />
+    <ClInclude Include="UnitCollider.h" />
     <ClInclude Include="UnitCommand.h" />
     <ClInclude Include="UnitController.h" />
     <ClInclude Include="UnitControllerType.h" />
@@ -2999,6 +3003,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="UIPriorityLayout.cpp" />
     <ClCompile Include="UISpriteAnimation.cpp" />
     <ClCompile Include="UIVideoPlayer.cpp" />
+    <ClCompile Include="UnitAcquisitionBoxCollider.cpp" />
+    <ClCompile Include="UnitAcquisitionCollider.cpp" />
     <ClCompile Include="UnitAcquisitionSphereCollider.cpp" />
     <ClCompile Include="UnitAcquisitionSphereColliderPool.cpp" />
     <ClCompile Include="UnitAttackCommand.cpp" />
@@ -3011,6 +3017,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="UnitBuffInvulenerability.cpp" />
     <ClCompile Include="UnitBuffTaunted.cpp" />
     <ClCompile Include="UnitBuffUrsula.cpp" />
+    <ClCompile Include="UnitCapsuleCollider.cpp" />
+    <ClCompile Include="UnitCollider.cpp" />
     <ClCompile Include="UnitCommand.cpp" />
     <ClCompile Include="UnitController.cpp" />
     <ClCompile Include="UnitData.cpp" />

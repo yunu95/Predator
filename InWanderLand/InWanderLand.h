@@ -51,6 +51,8 @@
 #include "EditorPopupManager.h"
 #include "UnitData.h"
 #include "Unit.h"
+#include "UnitCollider.h"
+#include "UnitCapsuleCollider.h"
 #include "UnitPool.h"
 #include "UnitBuff.h"
 #include "UnitBuffInvulenerability.h"

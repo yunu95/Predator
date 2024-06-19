@@ -501,6 +501,18 @@ namespace yunutyEngine
     {
         if (!m_tileCache)
             return;
-        m_tileCache->removeObstacle(obstacleRef);
+        const unsigned int dtStatus = m_tileCache->removeObstacle(obstacleRef);
+        bool isDT_WRONG_MAGIC = dtStatus & DT_WRONG_MAGIC;		// Input data is not recognized.
+        bool isDT_WRONG_VERSION = dtStatus & DT_WRONG_VERSION;	// Input data is in wrong version.
+        bool isDT_OUT_OF_MEMORY = dtStatus & DT_OUT_OF_MEMORY;	// Operation ran out of memory.
+        bool isDT_INVALID_PARAM = dtStatus & DT_INVALID_PARAM;	// An input parameter was invalid.
+        bool isDT_BUFFER_TOO_SMALL = dtStatus & DT_BUFFER_TOO_SMALL;	// Result buffer for the query was too small to store all results.
+        bool isDT_OUT_OF_NODES = dtStatus & DT_OUT_OF_NODES;		// Query ran out of nodes during search.
+        bool isDT_PARTIAL_RESULT = dtStatus & DT_PARTIAL_RESULT;	// Query did not reach the end location, returning best guess. 
+        bool isDT_ALREADY_OCCUPIED = dtStatus & DT_ALREADY_OCCUPIED;	// A tile has already been assigned to the given x,y coordinate
+        if (dtStatusFailed(dtStatus))
+        {
+            assert(false);
+        }
     }
 }

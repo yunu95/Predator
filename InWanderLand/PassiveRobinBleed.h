@@ -6,6 +6,7 @@ struct POD_PassiveRobinBleed
     float duration = 10.0f;
     float durationUpgraded = 10.0f;
     float dpsPerStack = 10.0f;
+    float healAmount = 20.0f;
     int maxStack = 10;
 
     TO_JSON(POD_PassiveRobinBleed)

@@ -42,7 +42,7 @@ void Interactable_TrapSwitch::Update()
 	static auto eraseList = triggerStay;
 	for (auto each : triggerStay)
 	{
-		if (each->GetGameObject()->GetComponent<Unit>()->IsAlive())
+		if (each->IsAlive())
 		{
 			eraseList.erase(each);
 		}
@@ -82,13 +82,13 @@ void Interactable_TrapSwitch::Update()
 
 void Interactable_TrapSwitch::OnTriggerEnter(physics::Collider* collider)
 {
-	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
+	if (Unit* colliderUnitComponent = UnitCollider::AcquireUnit(collider);
 		PlayerController::Instance().GetState() == PlayerController::State::Battle &&
 		colliderUnitComponent != nullptr &&
 		colliderUnitComponent->IsPlayerUnit() &&
 		colliderUnitComponent->IsAlive())
 	{
-		triggerStay.insert(collider);
+		triggerStay.insert(colliderUnitComponent);
 		triggerOn = true;
 		if (!isPause && triggerStay.size() == 1 && !isInteracting)
 		{
@@ -101,11 +101,11 @@ void Interactable_TrapSwitch::OnTriggerEnter(physics::Collider* collider)
 
 void Interactable_TrapSwitch::OnTriggerExit(physics::Collider* collider)
 {
-	if (Unit* colliderUnitComponent = collider->GetGameObject()->GetComponent<Unit>();
+	if (Unit* colliderUnitComponent = UnitCollider::AcquireUnit(collider);
 		colliderUnitComponent != nullptr &&
 		colliderUnitComponent->IsPlayerUnit())
 	{
-		triggerStay.erase(collider);
+		triggerStay.erase(colliderUnitComponent);
 	}
 }
 

@@ -105,24 +105,25 @@ void PlayerController::Start()
 }
 void PlayerController::OnContentsPlay()
 {
-	SetActive(true);
-	cursorUnitDetector = Scene::getCurrentScene()->AddGameObject()->AddComponentAsWeakPtr<UnitAcquisitionSphereCollider>();
-	AttachDebugMesh(cursorUnitDetector.lock()->GetGameObject(), DebugMeshType::Cube, yunuGI::Color::white());
-	cursorUnitDetector.lock()->SetRadius(0.01f);
-	skillCooltimeNumberUI[SkillType::ROBIN_Q] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_Q_Cooltime_Number);
-	skillCooltimeNumberUI[SkillType::ROBIN_W] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_W_Cooltime_Number);
-	skillCooltimeNumberUI[SkillType::URSULA_Q] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Ursula)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_Q_Cooltime_Number);
-	skillCooltimeNumberUI[SkillType::URSULA_W] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Ursula)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_W_Cooltime_Number);
-	skillCooltimeNumberUI[SkillType::HANSEL_Q] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_Q_Cooltime_Number);
-	skillCooltimeNumberUI[SkillType::HANSEL_W] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_W_Cooltime_Number);
-	skillCooltimeMaskUI[SkillType::ROBIN_Q] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_Q_Overlay);
-	skillCooltimeMaskUI[SkillType::ROBIN_W] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_W_Overlay);
-	skillCooltimeMaskUI[SkillType::URSULA_Q] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Ursula)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_Q_Overlay);
-	skillCooltimeMaskUI[SkillType::URSULA_W] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Ursula)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_W_Overlay);
-	skillCooltimeMaskUI[SkillType::HANSEL_Q] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_Q_Overlay);
-	skillCooltimeMaskUI[SkillType::HANSEL_W] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_W_Overlay);
-	SetState(State::Peace);
-	InitUnitMouseInteractionEffects();
+    SetActive(true);
+    cursorUnitDetector = Scene::getCurrentScene()->AddGameObject()->AddComponentAsWeakPtr<UnitAcquisitionBoxCollider>();
+    AttachDebugMesh(cursorUnitDetector.lock()->GetGameObject(), DebugMeshType::Cube, yunuGI::Color::white());
+    skillCooltimeNumberUI[SkillType::ROBIN_Q] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_Q_Cooltime_Number);
+    skillCooltimeNumberUI[SkillType::ROBIN_W] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_W_Cooltime_Number);
+    skillCooltimeNumberUI[SkillType::URSULA_Q] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Ursula)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_Q_Cooltime_Number);
+    skillCooltimeNumberUI[SkillType::URSULA_W] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Ursula)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_W_Cooltime_Number);
+    skillCooltimeNumberUI[SkillType::HANSEL_Q] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_Q_Cooltime_Number);
+    skillCooltimeNumberUI[SkillType::HANSEL_W] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_W_Cooltime_Number);
+    skillCooltimeMaskUI[SkillType::ROBIN_Q] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_Q_Overlay);
+    skillCooltimeMaskUI[SkillType::ROBIN_W] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_W_Overlay);
+    skillCooltimeMaskUI[SkillType::URSULA_Q] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Ursula)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_Q_Overlay);
+    skillCooltimeMaskUI[SkillType::URSULA_W] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Ursula)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_W_Overlay);
+    skillCooltimeMaskUI[SkillType::HANSEL_Q] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_Q_Overlay);
+    skillCooltimeMaskUI[SkillType::HANSEL_W] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_W_Overlay);
+    SetSkillPoints(0);
+    SetManaFull();
+    SetState(State::Peace);
+    InitUnitMouseInteractionEffects();
 }
 void PlayerController::OnContentsStop()
 {
@@ -144,32 +145,33 @@ void PlayerController::Update()
 	HandleSkillCooltime();
 	HandleManaRegen();
 	HandleMouseHover();
+    HandleUnitPickingCollider();
 #ifdef EDITOR
-	static yunutyEngine::graphics::UIText* text_State{ nullptr };
-	if (text_State == nullptr)
-	{
-		text_State = Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::graphics::UIText>();
-		text_State->GetGI().SetFontSize(30);
-		text_State->GetGI().SetColor(yunuGI::Color{ 1,0,1,1 });
-		text_State->GetTransform()->SetLocalScale(Vector3d{ 1200,500,0 });
-		text_State->GetTransform()->SetLocalPosition(Vector3d{ 0,260,0 });
-	}
-	if (!selectedDebugCharacter.expired())
-	{
-		wstringstream wsstream;
-		wsstream << L"unitState : ";
-		auto& activeStates = selectedDebugCharacter.lock()->GetBehaviourTree().GetActiveNodes();
-		for (const auto& each : activeStates)
-		{
-			wsstream << wstring(L"[") + yutility::GetWString(POD_Enum<UnitBehaviourTree::Keywords>::GetEnumNameMap().at(each->GetNodeKey())) + wstring(L"]");
-		}
-		wsstream << L"\nacq : " << selectedDebugCharacter.lock()->acquisitionRange.lock()->GetEnemies().size();
-		wsstream << L"\ncurrent pos : " << selectedDebugCharacter.lock()->GetTransform()->GetWorldPosition();
-		wsstream << L"\nattack target pos : " << selectedDebugCharacter.lock()->attackMoveDestination;
-		if (!cursorUnitDetector.lock()->GetUnits().empty())
-		{
-			wsstream << L"\nhovering unit : " << yutility::GetWString((*cursorUnitDetector.lock()->GetUnits().begin())->name);
-		}
+    static yunutyEngine::graphics::UIText* text_State{ nullptr };
+    if (text_State == nullptr)
+    {
+        text_State = Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::graphics::UIText>();
+        text_State->GetGI().SetFontSize(30);
+        text_State->GetGI().SetColor(yunuGI::Color{ 1,0,1,1 });
+        text_State->GetTransform()->SetLocalScale(Vector3d{ 1200,500,0 });
+        text_State->GetTransform()->SetLocalPosition(Vector3d{ 0,260,0 });
+    }
+    if (!selectedDebugCharacter.expired())
+    {
+        wstringstream wsstream;
+        wsstream << L"unitState : ";
+        auto& activeStates = selectedDebugCharacter.lock()->GetBehaviourTree().GetActiveNodes();
+        for (const auto& each : activeStates)
+        {
+            wsstream << wstring(L"[") + yutility::GetWString(POD_Enum<UnitBehaviourTree::Keywords>::GetEnumNameMap().at(each->GetNodeKey())) + wstring(L"]");
+        }
+        wsstream << L"\nacq : " << selectedDebugCharacter.lock()->acquisitionRange.lock()->GetEnemies().size();
+        wsstream << L"\ncurrent pos : " << selectedDebugCharacter.lock()->GetTransform()->GetWorldPosition();
+        wsstream << L"\nattack target pos : " << selectedDebugCharacter.lock()->attackMoveDestination;
+        if (!cursorUnitDetector.lock()->GetUnits().empty())
+        {
+            wsstream << L"\nhovering unit : " << yutility::GetWString(GetUnitOnCursor()->name);
+        }
 
 		text_State->GetGI().SetText(wsstream.str());
 	}
@@ -442,14 +444,30 @@ void PlayerController::HandleManaRegen()
 
 void PlayerController::HandleMouseHover()
 {
-	if (!cursorUnitDetector.lock()->GetUnits().empty())
-	{
-		ApplyHoverEffect((*cursorUnitDetector.lock()->GetUnits().begin())->GetWeakPtr<Unit>());
-	}
-	else
-	{
-		DisableHoverEffect();
-	}
+    if (!cursorUnitDetector.lock()->GetUnits().empty())
+    {
+        ApplyHoverEffect(GetUnitOnCursor()->GetWeakPtr<Unit>());
+    }
+    else
+    {
+        DisableHoverEffect();
+    }
+}
+// 카메라의 near plane으로부터 far plane까지 뻗는 직선의 형태로
+// 셀렉션 박스의 트랜스폼을 변경합니다.
+// screenSpacePos는 x,y좌표가 -0.5에서 0.5 사이의 값을 가지는 정규화된 스크린좌표입니다.
+// 화면의 중심이 {0,0} 상단이 0.5, 하단이 -0.5인 좌단이 -0.5, 우단이 0.5입니다.
+void PlayerController::HandleUnitPickingCollider()
+{
+    auto cam = graphics::Camera::GetMainCamera();
+
+    Input::getMouseScreenPositionNormalizedZeroCenter();
+    auto nearPoint = cam->GetTransform()->GetWorldPosition() - cam->GetTransform()->GetWorldRotation().Forward() * cam->GetGI().GetNear();
+    auto farPoint = cam->GetProjectedPoint(Input::getMouseScreenPositionNormalizedZeroCenter(), 2000);
+    auto transform = cursorUnitDetector.lock()->GetTransform();
+    transform->SetLocalScale({ 0.1,0.1, (nearPoint - farPoint).Magnitude() });
+    transform->SetWorldPosition((nearPoint + farPoint) / 2.0);
+    transform->SetWorldRotation(Quaternion::MakeWithForwardUp(farPoint - nearPoint, cam->GetTransform()->GetWorldRotation().Up()));
 }
 
 void PlayerController::SelectPlayerUnit(PlayerCharacterType::Enum charType)
@@ -489,21 +507,21 @@ void PlayerController::SelectPlayerUnit(PlayerCharacterType::Enum charType)
 
 void PlayerController::OnLeftClick()
 {
-	if (selectedSkill == SkillType::NONE)
-	{
-		if (!cursorUnitDetector.lock()->GetUnits().empty())
-		{
-			SelectUnit((*cursorUnitDetector.lock()->GetUnits().begin())->GetWeakPtr<Unit>());
-		}
-	}
-	else
-	{
-		ActivateSkill(selectedSkill, GetWorldCursorPosition());
-		if (state != State::Tactic)
-		{
-			selectedSkill = SkillType::NONE;
-		}
-	}
+    if (selectedSkill == SkillType::NONE)
+    {
+        if (!cursorUnitDetector.lock()->GetUnits().empty())
+        {
+            SelectUnit(GetUnitOnCursor()->GetWeakPtr<Unit>());
+        }
+    }
+    else
+    {
+        ActivateSkill(selectedSkill, GetWorldCursorPosition());
+        if (state != State::Tactic)
+        {
+            selectedSkill = SkillType::NONE;
+        }
+    }
 }
 
 void PlayerController::OnPlayerChracterDead(std::weak_ptr<Unit> unit)
@@ -530,78 +548,78 @@ void PlayerController::OnPlayerChracterAllDead()
 
 void PlayerController::OnRightClick()
 {
-	if (selectedSkill == SkillType::NONE)
-	{
-		if (state != State::Tactic)
-		{
-			if (!cursorUnitDetector.lock()->GetUnits().empty() && (*cursorUnitDetector.lock()->GetUnits().begin())->teamIndex != playerTeamIndex)
-			{
-				OrderAttack((*cursorUnitDetector.lock()->GetUnits().begin())->GetWeakPtr<Unit>());
-			}
-			else
-			{
-				SFXManager::PlaySoundfile("sounds/Etc/Character move click.mp3");
-				OrderMove(GetWorldCursorPosition());
-			}
-		}
-		else
-		{
-			SkillPreviewSystem::Instance().HideTemporaryRoute();
-			if (!cursorUnitDetector.lock()->GetUnits().empty() && (*cursorUnitDetector.lock()->GetUnits().begin())->teamIndex != playerTeamIndex)
-			{
-				// Attack
-				// 걸어가서 공격을 하게 될 수 있음
-				EnqueErrorType errorType = EnqueErrorType::NONE;
-				std::vector<Vector3d> path;
-				path = TacticModeSystem::Instance().GetPathInTacticMode(selectedCharacterType, (*cursorUnitDetector.lock()->GetUnits().begin()));
-				this->ModifyPathForAttack(path);
-				if (!path.empty())
-				{
-					// 이동을 해야한다면
-					// 이동 명령
-					errorType = TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitMoveCommand>(characters[selectedCharacterType].lock().get()
-						, path.back()
-						, path
-						, true
-					));
+    if (selectedSkill == SkillType::NONE)
+    {
+        if (state != State::Tactic)
+        {
+            if (!cursorUnitDetector.lock()->GetUnits().empty() && GetUnitOnCursor()->teamIndex != playerTeamIndex)
+            {
+                OrderAttack(GetUnitOnCursor()->GetWeakPtr<Unit>());
+            }
+            else
+            {
+                SFXManager::PlaySoundfile("sounds/Etc/Character move click.mp3");
+                OrderMove(GetWorldCursorPosition());
+            }
+        }
+        else
+        {
+            SkillPreviewSystem::Instance().HideTemporaryRoute();
+            if (!cursorUnitDetector.lock()->GetUnits().empty() && GetUnitOnCursor()->teamIndex != playerTeamIndex)
+            {
+                // Attack
+                // 걸어가서 공격을 하게 될 수 있음
+                EnqueErrorType errorType = EnqueErrorType::NONE;
+                std::vector<Vector3d> path;
+                path = TacticModeSystem::Instance().GetPathInTacticMode(selectedCharacterType, GetUnitOnCursor());
+                this->ModifyPathForAttack(path);
+                if (!path.empty())
+                {
+                    // 이동을 해야한다면
+                    // 이동 명령
+                    errorType = TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitMoveCommand>(characters[selectedCharacterType].lock().get()
+                        , path.back()
+                        , path
+                        , true
+                    ));
 
-					// 공격 명령
-					if (errorType == EnqueErrorType::Success)
-					{
-						errorType = TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitAttackCommand>(
-							characters[selectedCharacterType].lock().get()
-							, path.back()
-							, (*cursorUnitDetector.lock()->GetUnits().begin())
-							, true
-							, path.back() - path[path.size() - 2]));
+                    // 공격 명령
+                    if (errorType == EnqueErrorType::Success)
+                    {
+                        errorType = TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitAttackCommand>(
+                            characters[selectedCharacterType].lock().get()
+                            , path.back()
+                            , GetUnitOnCursor()
+                            , true
+                            , path.back() - path[path.size() - 2]));
 
-						// 이동 명령은 Enque됐지만 공격명령이 Enque되지 않았을 경우 이동 명령까지 지운다
-						if (errorType != EnqueErrorType::Success)
-						{
-							TacticModeSystem::Instance().PopCommand();
-						}
-					}
-				}
-				else
-				{
-					// 이동없이 공격이 가능하다면 공격 명령
-					EnqueErrorType errorType = EnqueErrorType::NONE;
-					errorType = TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitAttackCommand>(
-						characters[selectedCharacterType].lock().get()
-						, Vector3d::zero
-						, (*cursorUnitDetector.lock()->GetUnits().begin())
-						, false
-						, (*cursorUnitDetector.lock()->GetUnits().begin())->GetGameObject()->GetTransform()->GetWorldPosition() -
-						characters[selectedCharacterType].lock().get()->GetGameObject()->GetTransform()->GetWorldPosition()));
-					// 에러 타입에 따른 UI활성화
-				}
-			}
-			else
-			{
-				// Move
-				std::vector<Vector3d> path;
-				EnqueErrorType errorType = EnqueErrorType::NONE;
-				path = TacticModeSystem::Instance().GetPathInTacticMode(selectedCharacterType);
+                        // 이동 명령은 Enque됐지만 공격명령이 Enque되지 않았을 경우 이동 명령까지 지운다
+                        if (errorType != EnqueErrorType::Success)
+                        {
+                            TacticModeSystem::Instance().PopCommand();
+                        }
+                    }
+                }
+                else
+                {
+                    // 이동없이 공격이 가능하다면 공격 명령
+                    EnqueErrorType errorType = EnqueErrorType::NONE;
+                    errorType = TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitAttackCommand>(
+                        characters[selectedCharacterType].lock().get()
+                        , Vector3d::zero
+                        , GetUnitOnCursor()
+                        , false
+                        , GetUnitOnCursor()->GetGameObject()->GetTransform()->GetWorldPosition() -
+                        characters[selectedCharacterType].lock().get()->GetGameObject()->GetTransform()->GetWorldPosition()));
+                    // 에러 타입에 따른 UI활성화
+                }
+            }
+            else
+            {
+                // Move
+                std::vector<Vector3d> path;
+                EnqueErrorType errorType = EnqueErrorType::NONE;
+                path = TacticModeSystem::Instance().GetPathInTacticMode(selectedCharacterType);
 
 				errorType = TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitMoveCommand>(characters[selectedCharacterType].lock().get()
 					, GetWorldCursorPosition(),
@@ -832,19 +850,19 @@ std::array<float, (int)PlayerCharacterType::Num> PlayerController::GetAggroPropo
 // 필요한 것들을 다 초기화한다.
 void PlayerController::Reset()
 {
-	UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Combo_Number)->DisableElement();
-	UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Combo_Text)->DisableElement();
-	for (auto& each : onSkillActivate) each.Clear();
-	for (auto& each : onSkillSelect) each.Clear();
-	for (auto& each : blockSkillSelection) each = false;
-	if (cursorUnitDetector.expired())
-		cursorUnitDetector = Scene::getCurrentScene()->AddGameObject()->AddComponentAsWeakPtr<UnitAcquisitionSphereCollider>();
-	std::for_each(skillUpgradeByUI.begin(), skillUpgradeByUI.end(), [&](auto& pair) {
-		auto& [ui, upgrade] = pair;
-		UIManager::Instance().GetUIElementByEnum(ui)->imageComponent.lock()->GetGI().SetColor({ 1,1,1,1 });
-		skillUpgraded[upgrade] = false;
-		});
-	skillPointsLeft = 0;
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Combo_Number)->DisableElement();
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Combo_Text)->DisableElement();
+    for (auto& each : onSkillActivate) each.Clear();
+    for (auto& each : onSkillSelect) each.Clear();
+    for (auto& each : blockSkillSelection) each = false;
+    if (cursorUnitDetector.expired())
+        cursorUnitDetector = Scene::getCurrentScene()->AddGameObject()->AddComponentAsWeakPtr<UnitAcquisitionBoxCollider>();
+    std::for_each(skillUpgradeByUI.begin(), skillUpgradeByUI.end(), [&](auto& pair) {
+        auto& [ui, upgrade] = pair;
+        UIManager::Instance().GetUIElementByEnum(ui)->imageComponent.lock()->GetGI().SetColor({ 1,1,1,1 });
+        skillUpgraded[upgrade] = false;
+        });
+    skillPointsLeft = 0;
 }
 
 // 현재 카메라의 위치에 따라 카메라의 플레이어 기준 오프셋 위치와 회전각을 결정합니다.
@@ -945,11 +963,28 @@ void PlayerController::ResetCombo()
 {
 }
 
+void PlayerController::SetManaFull()
+{
+    SetMana(GlobalConstant::GetSingletonInstance().pod.maxMana);
+}
 void PlayerController::SetMana(float mana)
 {
 	const auto& gc = GlobalConstant::GetSingletonInstance().pod;
 	this->mana = std::fmin(gc.maxMana, mana);
 	UIManager::Instance().GetUIElementByEnum(UIEnumID::ManaFill)->adjuster->SetTargetFloat(1 - mana / gc.maxMana);
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::Mana_Text_MaxMP)->SetNumber(gc.maxMana);
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::Mana_Text_CurrentMP)->SetNumber(mana);
+}
+
+Unit* PlayerController::GetUnitOnCursor()
+{
+    if (cursorUnitDetector.lock()->GetUnits().empty()) return nullptr;
+
+    auto mainCamPos = graphics::Camera::GetMainCamera()->GetTransform()->GetWorldPosition();
+    return *std::min_element(cursorUnitDetector.lock()->GetUnits().begin(), cursorUnitDetector.lock()->GetUnits().end(),
+        [&mainCamPos](Unit* a, Unit* b) {
+            return a->DistanceSquare(mainCamPos) < b->DistanceSquare(mainCamPos);
+        });
 }
 
 void PlayerController::OnPause()

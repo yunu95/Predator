@@ -13,8 +13,8 @@ namespace yunutyEngine
         };
         ~Impl()
         {};
-        NavigationObstacle* owner;
-        dtObstacleRef obstacleRef;
+        NavigationObstacle* owner{ nullptr };
+        dtObstacleRef obstacleRef{ 0 };
         Vector3f halfExtents;
         float radius;
         float height;

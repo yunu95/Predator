@@ -10,6 +10,10 @@ void PassiveRobinBleed::Init(std::weak_ptr<Unit> owner)
             {
                 enemyHit.lock()->ApplyBuff(UnitBuffBleeding{ owner, pod.dpsPerStack, BleedDuration() });
             }
+            else
+            {
+                owner.lock()->Heal(pod.healAmount);
+            }
         });
 }
 

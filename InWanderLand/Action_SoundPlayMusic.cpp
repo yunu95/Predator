@@ -13,6 +13,7 @@ namespace application
 {
     CoroutineObject<void> Action_SoundPlayMusic::DoAction()
     {
+        SoundSystem::StopMusic();
         SoundSystem::PlayMusic(soundPath);
         co_return;
     }

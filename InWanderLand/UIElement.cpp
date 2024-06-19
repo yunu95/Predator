@@ -82,7 +82,9 @@ void UIElement::EnableElement()
     }
     if (importedUIData.customFlags2 & (int)UIExportFlag2::MultiplyMusicVolumeOnEnableDisable)
     {
-        SoundSystem::SetMusicVolume(SoundSystem::GetMusicVolume() * importedUIData.floats[JsonUIFloatType::musicMultiplyVolumeOnEnableDisable_enableFactor]);
+        float targetVolume = SoundSystem::GetMusicVolume() * importedUIData.floats[JsonUIFloatType::musicMultiplyVolumeOnEnableDisable_enableFactor];
+        float fadeDuration = importedUIData.floats[JsonUIFloatType::musicMultiplyVolumeOnEnableDisable_enableFactor];
+        ContentsCoroutine::FadeMusicVolume(targetVolume, fadeDuration);
     }
     if (auto rot = rotator.lock())
     {
@@ -186,11 +188,12 @@ void UIElement::DisableElement()
     {
         if (importedUIData.floats[JsonUIFloatType::musicMultiplyVolumeOnEnableDisable_enableFactor] == 0)
         {
-            SoundSystem::SetMusicVolume(1);
+            ContentsCoroutine::FadeMusicVolume(1, importedUIData.floats[JsonUIFloatType::musicMultiplyVolumeOnEnableDisable_enableFactor]);
         }
         else
         {
-            SoundSystem::SetMusicVolume(SoundSystem::GetMusicVolume() * 1 / importedUIData.floats[JsonUIFloatType::musicMultiplyVolumeOnEnableDisable_enableFactor]);
+            float targetVolume = SoundSystem::GetMusicVolume() * 1 / importedUIData.floats[JsonUIFloatType::musicMultiplyVolumeOnEnableDisable_enableFactor];
+            ContentsCoroutine::FadeMusicVolume(targetVolume, importedUIData.floats[JsonUIFloatType::musicMultiplyVolumeOnEnableDisable_enableFactor]);
         }
     }
     for (auto each : disablePropagationTargets)
@@ -245,13 +248,3 @@ void UIElement::DisableElementInstant()
     GetGameObject()->SetSelfActive(false);
     enabled = false;
 }
-
-//void UIElement::PlayFunction()
-//{
-//
-//}
-//
-//void UIElement::StopFunction()
-//{
-//    yunutyEngine::Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
-//}

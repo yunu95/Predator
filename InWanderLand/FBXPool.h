@@ -10,17 +10,17 @@ class ManagedFBX : public Component, public PermanentObservee
 private:
     std::weak_ptr<VFXAnimator> vfxAnimator;
     GameObject* meshObject;
-    virtual void OnContentsStop()override; 
+    virtual void OnContentsStop()override;
     virtual Component* GetComponent() { return this; };
 public:
     std::weak_ptr<VFXAnimator> AcquireVFXAnimator();
-    friend ProjectilePool<Projectile> ;
+    friend ProjectilePool;
     friend FBXPool;
 };
 
 // FBXPool은 fbx 이름별로 여러가지 풀들을 갖고 있다.
 // FBXPool은 풀 집합체와 같다고 할 수 있다.
-class FBXPool 
+class FBXPool
     : public SingletonComponent<FBXPool>, public Component, public PermanentObservee
 {
 public:
