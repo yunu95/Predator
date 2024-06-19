@@ -376,14 +376,9 @@ namespace application
                         Action_BossAppear::ImGui_DrawDataPopup(static_cast<Action_BossAppear*>(data));
                         break;
                     }
-                    case application::ActionType::RequestBattle:
+                    case application::ActionType::RequestState:
                     {
-                        Action_RequestBattle::ImGui_DrawDataPopup(static_cast<Action_RequestBattle*>(data));
-                        break;
-                    }
-                    case application::ActionType::RequestPeace:
-                    {
-                        Action_RequestPeace::ImGui_DrawDataPopup(static_cast<Action_RequestPeace*>(data));
+                        Action_RequestState::ImGui_DrawDataPopup(static_cast<Action_RequestState*>(data));
                         break;
                     }
                     default:

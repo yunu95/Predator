@@ -559,14 +559,9 @@ namespace application
                         action = AddAction<Action_BossAppear>();
                         break;
                     }
-                    case application::ActionType::RequestBattle:
+                    case application::ActionType::RequestState:
                     {
-                        action = AddAction<Action_RequestBattle>();
-                        break;
-                    }
-                    case application::ActionType::RequestPeace:
-                    {
-                        action = AddAction<Action_RequestPeace>();
+                        action = AddAction<Action_RequestState>();
                         break;
                     }
                     default:

@@ -70,8 +70,7 @@ namespace application
         actionList.push_back({ ActionType::OrnamentHide,"OrnamentHide" });
         actionList.push_back({ ActionType::OrnamentFloating,"OrnamentFloating" });
         actionList.push_back({ ActionType::BossAppear,"BossAppear" });
-        actionList.push_back({ ActionType::RequestBattle,"RequestBattle" });
-        actionList.push_back({ ActionType::RequestPeace,"RequestPeace" });
+        actionList.push_back({ ActionType::RequestState,"RequestState" });
     }
 
     Script* ScriptSystem::CreateScript()

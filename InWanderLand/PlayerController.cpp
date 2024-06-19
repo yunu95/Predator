@@ -126,6 +126,8 @@ void PlayerController::OnContentsPlay()
 }
 void PlayerController::OnContentsStop()
 {
+	stateRequestedByAction = State::None;
+	SetState(State::Peace);
 	SetActive(false);
 	UnlockCamFromRegion();
 	Scene::getCurrentScene()->DestroyGameObject(cursorUnitDetector.lock()->GetGameObject());
@@ -299,15 +301,21 @@ void PlayerController::HandleState()
 		return;
 	}
 
-	if (stateRequestedByAction[State::Battle])
+	/// Battle 과 Peace 는 Request 요청을 우선시합니다.
+	switch (stateRequestedByAction)
 	{
-		this->SetState(State::Battle);
-		return;
-	}
-	else if (stateRequestedByAction[State::Peace])
-	{
-		this->SetState(State::Peace);
-		return;
+		case PlayerController::State::Battle:
+		{
+			this->SetState(State::Battle);
+			return;
+		}
+		case PlayerController::State::Peace:
+		{
+			this->SetState(State::Peace);
+			return;
+		}
+		default:
+			break;
 	}
 
 	if (!PlaytimeWave::GetCurrentOperatingWave().expired())
@@ -953,9 +961,9 @@ void PlayerController::OnResume()
 {
 }
 
-void PlayerController::RequestStateFromAction(State::Enum newState, bool val)
+void PlayerController::RequestStateFromAction(State::Enum newState)
 {
-	this->stateRequestedByAction[static_cast<int>(newState)] = val;
+	this->stateRequestedByAction = newState;
 }
 
 float PlayerController::GetMana()
