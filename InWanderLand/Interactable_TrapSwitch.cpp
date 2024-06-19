@@ -42,7 +42,7 @@ void Interactable_TrapSwitch::Update()
 	static auto eraseList = triggerStay;
 	for (auto each : triggerStay)
 	{
-		if (each->GetGameObject()->GetComponent<UnitCollider>()->owner.lock()->IsAlive())
+		if (each->IsAlive())
 		{
 			eraseList.erase(each);
 		}
@@ -88,7 +88,7 @@ void Interactable_TrapSwitch::OnTriggerEnter(physics::Collider* collider)
 		colliderUnitComponent->IsPlayerUnit() &&
 		colliderUnitComponent->IsAlive())
 	{
-		triggerStay.insert(collider);
+		triggerStay.insert(colliderUnitComponent);
 		triggerOn = true;
 		if (!isPause && triggerStay.size() == 1 && !isInteracting)
 		{
@@ -105,7 +105,7 @@ void Interactable_TrapSwitch::OnTriggerExit(physics::Collider* collider)
 		colliderUnitComponent != nullptr &&
 		colliderUnitComponent->IsPlayerUnit())
 	{
-		triggerStay.erase(collider);
+		triggerStay.erase(colliderUnitComponent);
 	}
 }
 

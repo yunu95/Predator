@@ -56,7 +56,7 @@ void Interactable_ChessPawn::Update()
 	static auto eraseList = unitSet;
 	for (auto each : unitSet)
 	{
-		if (each->GetGameObject()->GetComponent<UnitCollider>()->owner.lock()->IsAlive())
+		if (each->IsAlive())
 		{
 			eraseList.erase(each);
 		}

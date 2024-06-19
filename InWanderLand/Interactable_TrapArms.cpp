@@ -83,7 +83,7 @@ void Interactable_TrapArms::Update()
 	static auto eraseList = triggerStay;
 	for (auto each : triggerStay)
 	{
-		if (each->GetGameObject()->GetComponent<UnitCollider>()->owner.lock()->IsAlive())
+		if (each->IsAlive())
 		{
 			eraseList.erase(each);
 		}
@@ -117,7 +117,7 @@ void Interactable_TrapArms::OnTriggerEnter(physics::Collider* collider)
 		colliderUnitComponent->IsPlayerUnit() &&
 		colliderUnitComponent->IsAlive())
 	{
-		triggerStay.insert(collider);
+		triggerStay.insert(colliderUnitComponent);
 	}
 }
 
@@ -127,7 +127,7 @@ void Interactable_TrapArms::OnTriggerExit(physics::Collider* collider)
 		colliderUnitComponent != nullptr &&
 		colliderUnitComponent->IsPlayerUnit())
 	{
-		triggerStay.erase(collider);
+		triggerStay.erase(colliderUnitComponent);
 	}
 }
 
@@ -184,7 +184,7 @@ yunutyEngine::coroutine::Coroutine Interactable_TrapArms::DoInteraction()
 
 	for (auto each : triggerStay)
 	{
-		each->GetGameObject()->GetComponent<Unit>()->Damaged(damage);
+		each->Damaged(damage);
 	}
 
 	co_yield yunutyEngine::coroutine::WaitForSeconds(0.5, false);
