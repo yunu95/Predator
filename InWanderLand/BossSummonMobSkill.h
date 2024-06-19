@@ -31,6 +31,7 @@ struct POD_BossSummonMobSkill
 		FROM_JSON(POD_BossSummonMobSkill)
 };
 
+class Unit;
 class BossSummonMobSkill : public Skill
 {
 public:
@@ -43,6 +44,9 @@ public:
 
 	static void SetLeftFrame(BossSummon::LeftFrame* leftFrame);
 	static void SetRightFrame(BossSummon::RightFrame* rightFrame);
+
+	static std::weak_ptr<Unit> GetLeftFrameUnit();
+	static std::weak_ptr<Unit> GetRightFrameUnit();
 
 	static void OnBossAppear();
 	static void OnBossDie();

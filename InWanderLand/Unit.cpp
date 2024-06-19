@@ -330,24 +330,40 @@ Unit::~Unit()
 
 void Unit::OnPause()
 {
-    isPaused = true;
-    localBuffTimeScale = FLT_MIN * 10000;
-    if (!IsPlayerUnit())
-    {
-        localTimeScale = FLT_MIN * 10000;
-        animatorComponent.lock()->Pause();
-    }
+	isPaused = true;
+	localBuffTimeScale = FLT_MIN * 10000;
+	if (!IsPlayerUnit())
+	{
+		localTimeScale = FLT_MIN * 10000;
+		animatorComponent.lock()->Pause();
+
+		for (auto& each : GetGameObject()->GetChildren())
+		{
+			if (auto ptr = each->GetComponent<graphics::ParticleRenderer>())
+			{
+				ptr->Pause();
+			}
+		}
+	}
 }
 
 void Unit::OnResume()
 {
-    isPaused = false;
-    localBuffTimeScale = 1.0f;
-    if (!IsPlayerUnit())
-    {
-        localTimeScale = 1.0f;
-        animatorComponent.lock()->Resume();
-    }
+	isPaused = false;
+	localBuffTimeScale = 1.0f;
+	if (!IsPlayerUnit())
+	{
+		localTimeScale = 1.0f;
+		animatorComponent.lock()->Resume();
+
+		for (auto& each : GetGameObject()->GetChildren())
+		{
+			if (auto ptr = each->GetComponent<graphics::ParticleRenderer>())
+			{
+				ptr->Resume();
+			}
+		}
+	}
 }
 
 bool Unit::IsPlayerUnit() const
