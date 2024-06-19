@@ -149,11 +149,8 @@ void Unit::OnStateEngage<UnitBehaviourTree::Pause>()
 	defaultAnimationType = UnitAnimType::Idle;
 	enableNavObstacleByState = referenceEnableNavObstacle.Acquire();
 	disableNavAgentByState = referenceDisableNavAgent.Acquire();
-	onStateEngage[UnitBehaviourTree::Pause]();
 	//PlayAnimation(UnitAnimType::Idle, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
 	animatorComponent.lock()->Pause();
-	enableNavObstacleByState = referenceEnableNavObstacle.Acquire();
-	disableNavAgentByState = referenceDisableNavAgent.Acquire();
 }
 template<>
 void Unit::OnStateExit<UnitBehaviourTree::Pause>()
@@ -301,6 +298,8 @@ void Unit::OnPause()
 	{
 		localTimeScale = FLT_MIN * 10000;
 		animatorComponent.lock()->Pause();
+		enableNavObstacleByState = referenceEnableNavObstacle.Acquire();
+		disableNavAgentByState = referenceDisableNavAgent.Acquire();
 
 		for (auto& each : GetGameObject()->GetChildren())
 		{
@@ -320,6 +319,8 @@ void Unit::OnResume()
 	{
 		localTimeScale = 1.0f;
 		animatorComponent.lock()->Resume();
+		enableNavObstacleByState.reset();
+		disableNavAgentByState.reset();
 
 		for (auto& each : GetGameObject()->GetChildren())
 		{
