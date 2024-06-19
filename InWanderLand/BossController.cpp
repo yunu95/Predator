@@ -20,11 +20,11 @@ void BossController::RegisterUnit(std::weak_ptr<Unit> unit)
 		{
 			if (summonState == 0 && (boss.lock()->GetUnitCurrentHp() / boss.lock()->GetUnitMaxHp()) <= 2.0f / 3.0f)
 			{
-				summonState++;
 				summonDone = false;
 				boss.lock()->OrderSkill(BossSummonMobSkill{}, boss.lock()->GetTransform()->GetWorldPosition());
 				boss.lock()->OnStateExitCallback()[UnitBehaviourTree::SkillOnGoing].AddVolatileCallback([this]()
 					{
+						summonState++;
 						summonDone = true;
 					});
 				if (!unitRoutines.empty() && !unitRoutines.begin()->second.expired())
@@ -39,11 +39,11 @@ void BossController::RegisterUnit(std::weak_ptr<Unit> unit)
 		{
 			if (summonState == 1 && (boss.lock()->GetUnitCurrentHp() / boss.lock()->GetUnitMaxHp()) <= 1.0f / 3.0f)
 			{
-				summonState++;
 				summonDone = false;
 				boss.lock()->OrderSkill(BossSummonMobSkill{}, boss.lock()->GetTransform()->GetWorldPosition());
 				boss.lock()->OnStateExitCallback()[UnitBehaviourTree::SkillOnGoing].AddVolatileCallback([this]()
 					{
+						summonState++;
 						summonDone = true;
 					});
 				if (!unitRoutines.empty() && !unitRoutines.begin()->second.expired())
