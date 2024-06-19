@@ -874,8 +874,6 @@
     <Filter Include="Contents_Refactored\Unit\UnitAcquisitionCollider\UnitCollider\UnitCapsuleCollider">
       <UniqueIdentifier>{fcc3eb20-a332-44a5-8f35-b8503be25f27}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Editor\ScriptSystem\2_Action\List\Action_RequestBattle">
-    </Filter>
     <Filter Include="Editor\ScriptSystem\2_Action\List\Action_RequestState">
       <UniqueIdentifier>{37226b75-db20-4884-b9f7-88f698af678a}</UniqueIdentifier>
     </Filter>
