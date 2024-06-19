@@ -445,7 +445,10 @@ void UIManager::Update()
         {
             if (m_highestPriorityButton)
             {
-                m_highestPriorityButton->m_mousePushedFunction();
+                if (m_highestPriorityButton->m_mousePushedFunction)
+                {
+                    m_highestPriorityButton->m_mousePushedFunction();
+                }
             }
         }
     }
@@ -1090,7 +1093,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
             }
         }
     }
-        }
+}
 // 특별한 로직이 적용되어야 하는 경우 참, 그렇지 않으면 거짓을 반환합니다.
 bool UIManager::ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* element)
 {

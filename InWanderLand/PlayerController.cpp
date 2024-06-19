@@ -671,10 +671,13 @@ void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
     {
     case SkillType::ROBIN_Q:
     case SkillType::HANSEL_Q:
-        static constexpr float epsilon = 0.1f;
-        if ((pos - SingleNavigationField::Instance().GetClosestPointOnField(pos)).MagnitudeSqr() > epsilon)
+        static constexpr float epsilon = 0.01f;
+        Vector3d deltaDistance = (pos - SingleNavigationField::Instance().GetClosestPointOnField(pos));
+        deltaDistance.y = 0;
+        if (deltaDistance.MagnitudeSqr() > epsilon)
         {
             UIManager::Instance().GetUIElementByEnum(UIEnumID::ErrorPopup_CantLand)->EnableElement();
+            UnSelectSkill();
             return;
         }
         break;
