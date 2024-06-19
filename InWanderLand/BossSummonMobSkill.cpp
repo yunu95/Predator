@@ -5,6 +5,7 @@
 #include "GlobalConstant.h"
 #include "YunutyWaitForSeconds.h"
 #include "VFXAnimator.h"
+#include "Unit.h"
 
 POD_BossSummonMobSkill BossSummonMobSkill::pod = POD_BossSummonMobSkill();
 
@@ -20,6 +21,16 @@ void BossSummonMobSkill::SetLeftFrame(BossSummon::LeftFrame* leftFrame)
 void BossSummonMobSkill::SetRightFrame(BossSummon::RightFrame* rightFrame)
 {
 	BossSummonMobSkill::rightFrame = rightFrame;
+}
+
+std::weak_ptr<Unit> BossSummonMobSkill::GetLeftFrameUnit()
+{
+	return leftFrame->unitFrame;
+}
+
+std::weak_ptr<Unit> BossSummonMobSkill::GetRightFrameUnit()
+{
+	return rightFrame->unitFrame;
 }
 
 void BossSummonMobSkill::OnBossAppear()

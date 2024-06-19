@@ -1,6 +1,7 @@
 #include "InWanderLand.h"
 #include "UrsulaParalysisSkill.h"
 #include "VFXAnimator.h"
+#include "BossSummonMobSkill.h"
 
 #include <math.h>
 
@@ -133,8 +134,11 @@ coroutine::Coroutine UrsulaParalysisSkill::SpawningFieldEffect(std::weak_ptr<Urs
             co_await std::suspend_always{};
             for (auto& each : knockBackCollider.lock()->GetEnemies())
             {
-                each->KnockBack(targetPos, pod.knockBackDuration);
-				each->Paralyze(pod.knockBackDuration);
+                if (each != BossSummonMobSkill::GetLeftFrameUnit().lock().get() && each != BossSummonMobSkill::GetRightFrameUnit().lock().get())
+                {
+                    each->KnockBack(targetPos, pod.knockBackDuration);
+	    			each->Paralyze(pod.knockBackDuration);
+                }
             }
         }
         co_await std::suspend_always{};

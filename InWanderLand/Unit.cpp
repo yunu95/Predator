@@ -300,6 +300,11 @@ void Unit::OnPause()
 	{
 		localTimeScale = FLT_MIN * 10000;
 		animatorComponent.lock()->Pause();
+
+		for (auto& each : GetGameObject()->GetChildren())
+		{
+			each->GetComponent<graphics::ParticleRenderer>()->Pause();
+		}
 	}
 }
 
@@ -310,6 +315,11 @@ void Unit::OnResume()
 	{
 		localTimeScale = 1.0f;
 		animatorComponent.lock()->Resume();
+
+		for (auto& each : GetGameObject()->GetChildren())
+		{
+			each->GetComponent<graphics::ParticleRenderer>()->Resume();
+		}
 	}
 }
 

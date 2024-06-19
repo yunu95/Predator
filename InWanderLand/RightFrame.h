@@ -17,7 +17,7 @@ namespace application
 }
 
 class Unit;
-class BossSummonMobSkill;
+class BossSummonMobSkill; 
 namespace BossSummon
 {
 	class RightFrame
