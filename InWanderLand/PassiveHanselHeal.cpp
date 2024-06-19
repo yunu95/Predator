@@ -55,9 +55,14 @@ coroutine::Coroutine PassiveHanselHeal::CookieLingering(Vector3d pos, std::weak_
 
     SFXManager::PlaySoundfile("sounds/Hansel/Hansel passive.wav");
 
-    wanderUtils::UnitCoroutine::ForSecondsFromUnit forSeconds{ owner, pod.cookieLifetime };
+    coroutine::ForSeconds forSeconds{ pod.cookieLifetime };
     while (forSeconds.Tick())
     {
+        while (isPaused)
+        {
+            co_await std::suspend_always{};
+        }
+
         for (auto unit : collider.lock()->GetFriends())
         {
             if (unit->GetTeamIndex() == PlayerController::playerTeamIndex && unit->GetUnitCurrentHp() < unit->GetUnitTemplateData().pod.max_Health)
@@ -87,6 +92,16 @@ void PassiveHanselHeal::Init(std::weak_ptr<Unit> owner)
 float PassiveHanselHeal::GetHealAmount()
 {
     return PlayerController::Instance().IsSkillUpgraded(SkillUpgradeType::HANSEL_PASSIVE_ENHANCE) ? pod.healAmountUpgraded : pod.healAmount;
+}
+
+void PassiveHanselHeal::OnPause()
+{
+    isPaused = true;
+}
+
+void PassiveHanselHeal::OnResume()
+{
+    isPaused = false;
 }
 
 void PassiveHanselHeal::IncrementHitCounter()

@@ -5,11 +5,16 @@
 
 class Unit;
 class PassiveSkill
+    : public ITacticObject
 {
 public:
     // 패시브 스킬의 Init 함수는 유닛의 Summon 주기에서 호출됩니다.
     virtual void Init(std::weak_ptr<Unit> owner) = 0;
     virtual SkillType::Enum GetSkillType() { return SkillType::NONE; };
+
+    virtual void OnPause() {}
+    virtual void OnResume() {}
+
 protected:
     std::weak_ptr<Unit> owner;
 private:

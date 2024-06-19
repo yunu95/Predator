@@ -288,22 +288,6 @@ void Unit::OnStateEngage<UnitBehaviourTree::Tactic>()
     onStateEngage[UnitBehaviourTree::Tactic]();
     enableNavObstacleByState = referenceEnableNavObstacle.Acquire();
     disableNavAgentByState = referenceDisableNavAgent.Acquire();
-    localBuffTimeScale = FLT_MIN * 10000;
-    if (!IsPlayerUnit())
-    {
-        localTimeScale = FLT_MIN * 10000;
-        animatorComponent.lock()->Pause();
-        enableNavObstacleByState = referenceEnableNavObstacle.Acquire();
-        disableNavAgentByState = referenceDisableNavAgent.Acquire();
-
-        for (auto& each : GetGameObject()->GetChildren())
-        {
-            if (auto ptr = each->GetComponent<graphics::ParticleRenderer>())
-            {
-                ptr->Pause();
-            }
-        }
-    }
 }
 template<>
 void Unit::OnStateExit<UnitBehaviourTree::Tactic>()
@@ -311,22 +295,6 @@ void Unit::OnStateExit<UnitBehaviourTree::Tactic>()
     onStateExit[UnitBehaviourTree::Tactic]();
     enableNavObstacleByState.reset();
     disableNavAgentByState.reset();
-    localBuffTimeScale = 1.0f;
-    if (!IsPlayerUnit())
-    {
-        localTimeScale = 1.0f;
-        animatorComponent.lock()->Resume();
-        enableNavObstacleByState.reset();
-        disableNavAgentByState.reset();
-
-        for (auto& each : GetGameObject()->GetChildren())
-        {
-            if (auto ptr = each->GetComponent<graphics::ParticleRenderer>())
-            {
-                ptr->Resume();
-            }
-        }
-    }
 }
 
 template<>
@@ -360,11 +328,39 @@ Unit::~Unit()
 void Unit::OnPause()
 {
 	isPaused = true;
+    localBuffTimeScale = FLT_MIN * 10000;
+    if (!IsPlayerUnit())
+    {
+        localTimeScale = FLT_MIN * 10000;
+        animatorComponent.lock()->Pause();
+
+        for (auto& each : GetGameObject()->GetChildren())
+        {
+            if (auto ptr = each->GetComponent<graphics::ParticleRenderer>())
+            {
+                ptr->Pause();
+            }
+        }
+    }
 }
 
 void Unit::OnResume()
 {
 	isPaused = false;
+    localBuffTimeScale = 1.0f;
+    if (!IsPlayerUnit())
+    {
+        localTimeScale = 1.0f;
+        animatorComponent.lock()->Resume();
+
+        for (auto& each : GetGameObject()->GetChildren())
+        {
+            if (auto ptr = each->GetComponent<graphics::ParticleRenderer>())
+            {
+                ptr->Resume();
+            }
+        }
+    }
 }
 
 bool Unit::IsPlayerUnit() const
@@ -1485,6 +1481,12 @@ yunutyEngine::coroutine::Coroutine Unit::BirthCoroutine()
         onCreated();
         co_return;
     }
+
+    while(!IsPlayerUnit() && isPaused)
+    {
+        co_await std::suspend_always();
+    }
+
     const auto& gc = GlobalConstant::GetSingletonInstance().pod;
     auto pauseGuard = referencePause.Acquire();
     auto invulnerableGuard = referenceInvulnerable.Acquire();
@@ -1498,7 +1500,14 @@ yunutyEngine::coroutine::Coroutine Unit::BirthCoroutine()
     burnEffect.lock()->SetEdgeColor({ unitTemplateData->pod.birthBurnEdgeColor.x,unitTemplateData->pod.birthBurnEdgeColor.y,unitTemplateData->pod.birthBurnEdgeColor.z });
     burnEffect.lock()->SetEdgeThickness(unitTemplateData->pod.birthBurnEdgeThickness);
     burnEffect.lock()->Appear();
-    co_yield coroutine::WaitForSeconds(unitTemplateData->pod.birthTime);
+
+    wanderUtils::UnitCoroutine::ForSecondsFromUnit forSeconds{ GetWeakPtr<Unit>(), unitTemplateData->pod.birthTime };
+
+    while (forSeconds.Tick())
+    {
+        co_await std::suspend_always();
+    }
+
     animatorComponent.lock()->GetGI().SetPlaySpeed(1);
     onCreated();
     co_return;

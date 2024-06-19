@@ -133,7 +133,7 @@ coroutine::Coroutine BossSummonMobSkill::StartSummonTimer()
 {
 	while (true)
 	{
-		wanderUtils::UnitCoroutine::ForSecondsFromUnit forSeconds{ owner, pod.summonPeriod };
+		wanderUtils::UnitCoroutine::ForSecondsFromUnit forSeconds{ BossController::Instance().GetBoss(), pod.summonPeriod};
 
 		while (forSeconds.Tick())
 		{
@@ -180,6 +180,7 @@ coroutine::Coroutine BossSummonMobSkill::StartSummonTimer()
 
 coroutine::Coroutine BossSummonMobSkill::SpawningFieldEffect(std::weak_ptr<BossSummonMobSkill> skill)
 {
+	auto copyPtr = skill.lock();
 	Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
 	Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
 	Vector3d direction = deltaPos.Normalized();

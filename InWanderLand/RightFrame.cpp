@@ -115,6 +115,11 @@ namespace BossSummon
 		summonCorountine = StartCoroutine(SummonMoldUnit());
 		summonCorountine.lock()->PushDestroyCallBack([this]()
 			{
+				if (GetWeakPtr<RightFrame>().expired())
+				{
+					return;
+				}
+
 				if (!summonEffect.expired())
 				{
 					FBXPool::Instance().Return(summonEffect);
@@ -176,7 +181,7 @@ namespace BossSummon
 		auto& gc = GlobalConstant::GetSingletonInstance().pod;
 
 		mesh->SetSelfActive(true);
-		wanderUtils::UnitCoroutine::ForSecondsFromUnit preAppear{ unitFrame, gc.bossAppearTime };
+		coroutine::ForSeconds preAppear{ gc.bossAppearTime };
 
 		mesh->GetTransform()->SetLocalPosition(Vector3d(0, gc.bossAppearHeight, 0));
 
@@ -199,7 +204,7 @@ namespace BossSummon
 		auto anim = wanderResources::GetAnimation("SKM_Frame2", UnitAnimType::Birth);
 		animator->Play(anim);
 
-		wanderUtils::UnitCoroutine::ForSecondsFromUnit forSeconds{ unitFrame, anim->GetDuration() };
+		coroutine::ForSeconds forSeconds{ anim->GetDuration() };
 
 		while (forSeconds.Tick())
 		{

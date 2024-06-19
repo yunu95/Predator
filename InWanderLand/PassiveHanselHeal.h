@@ -27,10 +27,15 @@ public:
     virtual SkillType::Enum GetSkillType() { return SkillType::Passive_Hansel_Heal; };
     static float GetHealAmount();
     static POD_PassiveHanselHeal pod;
+
+    virtual void OnPause() override;
+    virtual void OnResume() override;
+
 private:
     int hitCounter{ 0 };
     void IncrementHitCounter();
     coroutine::Coroutine CookieLingering(Vector3d pos, std::weak_ptr<Unit> owner);
+    bool isPaused = false;
     //coroutine::Coroutine CookieDisappear(const Vector3d& pos, std::weak_ptr<Unit> owner);
 };
 

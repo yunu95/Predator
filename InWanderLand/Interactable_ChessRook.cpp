@@ -95,7 +95,13 @@ void Interactable_ChessRook::Update()
 		if (!isInteracting)
 		{
 			lastCoroutine = StartCoroutine(DoInteraction());
-			lastCoroutine.lock()->PushDestroyCallBack([this]() { GetGameObject()->SetSelfActive(false); });
+			lastCoroutine.lock()->PushDestroyCallBack([this]()
+				{
+					if (!GetWeakPtr<Interactable_ChessRook>().expired())
+					{
+						GetGameObject()->SetSelfActive(false);
+					}
+				});
 			isInteracting = true;
 		}
 		else if (lastCoroutine.expired() || lastCoroutine.lock()->Done())

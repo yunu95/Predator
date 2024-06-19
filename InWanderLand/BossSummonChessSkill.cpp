@@ -93,6 +93,7 @@ void BossSummonChessSkill::OnBossDie()
 
 coroutine::Coroutine BossSummonChessSkill::SpawningFieldEffect(std::weak_ptr<BossSummonChessSkill> skill)
 {
+	auto copyPtr = skill.lock();
 	Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
 	Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
 	Vector3d direction = deltaPos.Normalized();
