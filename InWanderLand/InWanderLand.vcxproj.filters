@@ -838,9 +838,6 @@
     <Filter Include="Contents_Refactored\UnitController\EnemyController\MeleeEliteController">
       <UniqueIdentifier>{6588c25c-1aa1-4eff-9e71-fadf805fa9c2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Editor\ScriptSystem\2_Action\List\Action_EngageBattle">
-      <UniqueIdentifier>{37226b75-db20-4884-b9f7-88f698af678a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="UI\Effect\RotatingUI">
       <UniqueIdentifier>{7cd6f424-e9c3-4e6a-bb2f-c85a7e6edbad}</UniqueIdentifier>
     </Filter>
@@ -853,9 +850,6 @@
     <Filter Include="Contents\TacticModeSystem\ITacticObject">
       <UniqueIdentifier>{b12f3552-2555-4de0-b53b-226f40f34213}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Editor\ScriptSystem\2_Action\List\Action_EngagePeace">
-      <UniqueIdentifier>{0b2355b1-29dc-49bf-a5ac-437da5f5bb5a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Contents_Refactored\Unit\UnitBuff\UnitBuffTaunted">
       <UniqueIdentifier>{a16c2fc5-ea49-4b85-9231-98235f7bd7df}</UniqueIdentifier>
     </Filter>
@@ -867,6 +861,12 @@
     </Filter>
     <Filter Include="Contents_Refactored\Unit\UnitBuff\UnitBuffHanselDebuff">
       <UniqueIdentifier>{554f8c4c-b096-4c3a-9f29-24ffdd3d860f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\ScriptSystem\2_Action\List\Action_RequestBattle">
+      <UniqueIdentifier>{37226b75-db20-4884-b9f7-88f698af678a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\ScriptSystem\2_Action\List\Action_RequestPeace">
+      <UniqueIdentifier>{0b2355b1-29dc-49bf-a5ac-437da5f5bb5a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2065,8 +2065,8 @@
     <ClInclude Include="MeleeEliteController.h">
       <Filter>Contents_Refactored\UnitController\EnemyController\MeleeEliteController</Filter>
     </ClInclude>
-    <ClInclude Include="Action_EngageBattle.h">
-      <Filter>Editor\ScriptSystem\2_Action\List\Action_EngageBattle</Filter>
+    <ClInclude Include="Action_RequestBattle.h">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_RequestBattle</Filter>
     </ClInclude>
     <ClInclude Include="ProjectileType.h">
       <Filter>Contents_Refactored\Projectile</Filter>
@@ -2083,8 +2083,8 @@
     <ClInclude Include="ITacticObject.h">
       <Filter>Contents\TacticModeSystem\ITacticObject</Filter>
     </ClInclude>
-    <ClInclude Include="Action_EngagePeace.h">
-      <Filter>Editor\ScriptSystem\2_Action\List\Action_EngagePeace</Filter>
+    <ClInclude Include="Action_RequestPeace.h">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_RequestPeace</Filter>
     </ClInclude>
     <ClInclude Include="Condition_TacticMode.h">
       <Filter>Editor\ScriptSystem\1_Condition\List</Filter>
@@ -2112,6 +2112,9 @@
     </ClInclude>
     <ClInclude Include="CurveHomingProjectile.h">
       <Filter>Contents_Refactored\Projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="Trigger_Wave.h">
+      <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -3115,8 +3118,8 @@
     <ClCompile Include="MeleeEliteController.cpp">
       <Filter>Contents_Refactored\UnitController\EnemyController\MeleeEliteController</Filter>
     </ClCompile>
-    <ClCompile Include="Action_EngageBattle.cpp">
-      <Filter>Editor\ScriptSystem\2_Action\List\Action_EngageBattle</Filter>
+    <ClCompile Include="Action_RequestBattle.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_RequestBattle</Filter>
     </ClCompile>
     <ClCompile Include="RotatingUI.cpp">
       <Filter>UI\Effect\RotatingUI</Filter>
@@ -3124,8 +3127,8 @@
     <ClCompile Include="UIVideoPlayer.cpp">
       <Filter>UI\Effect\UIVideoPlayer</Filter>
     </ClCompile>
-    <ClCompile Include="Action_EngagePeace.cpp">
-      <Filter>Editor\ScriptSystem\2_Action\List\Action_EngagePeace</Filter>
+    <ClCompile Include="Action_RequestPeace.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_RequestPeace</Filter>
     </ClCompile>
     <ClCompile Include="Condition_TacticMode.cpp">
       <Filter>Editor\ScriptSystem\1_Condition\List</Filter>
@@ -3156,6 +3159,9 @@
     </ClCompile>
     <ClCompile Include="CurveHomingProjectile.cpp">
       <Filter>Contents_Refactored\Projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="Trigger_Wave.cpp">
+      <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

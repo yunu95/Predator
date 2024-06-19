@@ -353,6 +353,76 @@ namespace application
 							epm.Return();
 						}
 					}
+
+					/// StartWave
+					else if (epm.GetReturnPopupName() == "SetStartWave")
+					{
+						ImGui::Begin("Start Wave Popup", &pop, flag);
+						auto rect = ImGui::GetContentRegionAvail();
+						auto size = ImGui::CalcTextSize("Please Setting Start Wave");
+						imgui::ShiftCursorX((rect.x - size.x) / 2);
+						imgui::ShiftCursorY((rect.y - size.y) / 2);
+						ImGui::Text("Please Setting Start Wave");
+						ImGui::BringWindowToFocusFront(ImGui::GetCurrentWindow());
+						ImGui::End();
+
+						pp.ChangeTab("Wave");
+
+						auto data = epm.GetReturnPopupData<Trigger_StartWave>();
+						if (data->isEditing == false && pm.GetCurrentPalette() == &wp)
+						{
+							data->isEditing = true;
+							wp.Reset();
+						}
+
+						if (data->isEditing == true && wp.GetSelections().size() == 1)
+						{
+							data->SetWave(static_cast<WaveData*>(*wp.GetSelections().begin()));
+							data->isEditing = false;
+							epm.Return();
+						}
+
+						if (!pop)
+						{
+							data->isEditing = false;
+							epm.Return();
+						}
+					}
+
+					/// EndWave
+					else if (epm.GetReturnPopupName() == "SetEndWave")
+					{
+						ImGui::Begin("End Wave Popup", &pop, flag);
+						auto rect = ImGui::GetContentRegionAvail();
+						auto size = ImGui::CalcTextSize("Please Setting End Wave");
+						imgui::ShiftCursorX((rect.x - size.x) / 2);
+						imgui::ShiftCursorY((rect.y - size.y) / 2);
+						ImGui::Text("Please Setting End Wave");
+						ImGui::BringWindowToFocusFront(ImGui::GetCurrentWindow());
+						ImGui::End();
+
+						pp.ChangeTab("Wave");
+
+						auto data = epm.GetReturnPopupData<Trigger_EndWave>();
+						if (data->isEditing == false && pm.GetCurrentPalette() == &wp)
+						{
+							data->isEditing = true;
+							wp.Reset();
+						}
+
+						if (data->isEditing == true && wp.GetSelections().size() == 1)
+						{
+							data->SetWave(static_cast<WaveData*>(*wp.GetSelections().begin()));
+							data->isEditing = false;
+							epm.Return();
+						}
+
+						if (!pop)
+						{
+							data->isEditing = false;
+							epm.Return();
+						}
+					}
 				}
 
 				/// Condition
@@ -1291,6 +1361,16 @@ namespace application
 									selectedScript->AddTrigger<Trigger_InteractableTriggerExit>();
 									break;
 								}
+								case application::TriggerType::StartWave:
+								{
+									selectedScript->AddTrigger<Trigger_StartWave>();
+									break;
+								}
+								case application::TriggerType::EndWave:
+								{
+									selectedScript->AddTrigger<Trigger_EndWave>();
+									break;
+								}
 								default:
 									break;
 							}
@@ -1634,14 +1714,14 @@ namespace application
 									selectedScript->AddAction<Action_BossAppear>();
 									break;
 								}
-								case application::ActionType::EngageBattle:
+								case application::ActionType::RequestBattle:
 								{
-									selectedScript->AddAction<Action_EngageBattle>();
+									selectedScript->AddAction<Action_RequestBattle>();
 									break;
 								}
-								case application::ActionType::EngagePeace:
+								case application::ActionType::RequestPeace:
 								{
-									selectedScript->AddAction<Action_EngagePeace>();
+									selectedScript->AddAction<Action_RequestPeace>();
 									break;
 								}
 								default:

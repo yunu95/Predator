@@ -34,7 +34,7 @@ private:
     std::vector<UnitProductor*> productorSelector;
 
     bool isStoppedByTacticMode{ false };
-    bool isAllUnitTerminated;
+    bool isAllUnitTerminated = false;
 
 public:
     static std::weak_ptr<PlaytimeWave> GetCurrentOperatingWave();
@@ -55,4 +55,7 @@ public:
     void StopWaveElapsedTime();
     void ResumeWaveElapsedTime();
     virtual Component* GetComponent() override { return this; }
+
+    std::unordered_map<int, std::vector<std::function<void()>>> waveStartCallbackMap = std::unordered_map<int, std::vector<std::function<void()>>>();
+    std::unordered_map<int, std::vector<std::function<void()>>> waveEndCallbackMap = std::unordered_map<int, std::vector<std::function<void()>>>();
 };
