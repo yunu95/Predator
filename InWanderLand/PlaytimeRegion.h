@@ -31,7 +31,8 @@ private:
     application::editor::RegionData* regionData{ nullptr };
     //std::wstring m_regionName;
 
-    bool isOnceActivated{ false };
+    bool isOnceActivatedEnter{ false };
+    bool isOnceActivatedLeave{ false };
     std::unordered_set<physics::Collider*> enteredPlayerColliders;
     std::vector<std::shared_ptr<application::editor::OrnamentData::DisablingReference>> disablingReferences;
 };

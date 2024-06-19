@@ -93,6 +93,7 @@ void BossSummonChessSkill::OnBossDie()
 
 coroutine::Coroutine BossSummonChessSkill::SpawningFieldEffect(std::weak_ptr<BossSummonChessSkill> skill)
 {
+	auto copyPtr = skill.lock();
 	Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
 	Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
 	Vector3d direction = deltaPos.Normalized();
@@ -111,7 +112,7 @@ coroutine::Coroutine BossSummonChessSkill::SpawningFieldEffect(std::weak_ptr<Bos
 
 	auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill3);
 
-	wanderUtils::UnitCoroutine::ForSecondsFromUnit forSeconds{ owner, anim->GetDuration() };
+	wanderUtils::UnitCoroutine::ForSecondsFromUnit forSeconds{ skill.lock()->owner, anim->GetDuration() };
 	while (forSeconds.Tick())
 	{
 		co_await std::suspend_always();
@@ -232,8 +233,8 @@ coroutine::Coroutine BossSummonChessSkill::SummonChess(std::weak_ptr<BossSummonC
 
 		for (int i = 0; i < summoned; i++)
 		{
-			velocityList[i] += Vector3d::down * gc.gravitySpeed * forSeconds.Elapsed();
-			chessList[i].lock()->GetSummonComponent()->GetTransform()->SetWorldPosition(chessList[i].lock()->GetSummonComponent()->GetTransform()->GetWorldPosition() + velocityList[i] * forSeconds.Elapsed());
+			velocityList[i] += Vector3d::down * gc.gravitySpeed * forSeconds.GetDeltaTime();
+			chessList[i].lock()->GetSummonComponent()->GetTransform()->SetWorldPosition(chessList[i].lock()->GetSummonComponent()->GetTransform()->GetWorldPosition() + velocityList[i] * forSeconds.GetDeltaTime());
 			auto tempPos = chessList[i].lock()->GetSummonComponent()->GetTransform()->GetWorldPosition();
 			if (tempPos.y <= 0)
 			{

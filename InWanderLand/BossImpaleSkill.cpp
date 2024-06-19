@@ -177,7 +177,7 @@ coroutine::Coroutine BossImpaleSkill::SpearArise(std::weak_ptr<BossImpaleSkill> 
 		}
 	}
 
-	wanderUtils::UnitCoroutine::ForSecondsFromUnit waitPerSpear { owner, pod.impaleSkillDurationPerSpear };
+	wanderUtils::UnitCoroutine::ForSecondsFromUnit waitPerSpear { skill.lock()->owner, pod.impaleSkillDurationPerSpear };
 
 	while (waitPerSpear.Tick())
 	{
@@ -195,7 +195,8 @@ coroutine::Coroutine BossImpaleSkill::SpawningSkillffect(std::weak_ptr<BossImpal
 {
 	const float colliderEffectRatio = 12.0f;
 
-	skill.lock();
+	auto persistance = skill.lock();
+
 	Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
 	Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
 	Vector3d direction = deltaPos.Normalized();

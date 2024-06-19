@@ -78,7 +78,13 @@ void Interactable_ChessPawn::Update()
 		if (!isInteracting)
 		{
 			lastCoroutine = StartCoroutine(DoInteraction());
-			lastCoroutine.lock()->PushDestroyCallBack([this]() { GetGameObject()->SetSelfActive(false); });
+			lastCoroutine.lock()->PushDestroyCallBack([this]() 
+				{ 
+					if (!GetWeakPtr<Interactable_ChessPawn>().expired())
+					{
+						GetGameObject()->SetSelfActive(false);
+					}
+				});
 			isInteracting = true;
 		}
 		else if (lastCoroutine.expired() || lastCoroutine.lock()->Done())

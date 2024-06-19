@@ -134,7 +134,7 @@ coroutine::Coroutine UrsulaParalysisSkill::SpawningFieldEffect(std::weak_ptr<Urs
             co_await std::suspend_always{};
             for (auto& each : knockBackCollider.lock()->GetEnemies())
             {
-                if (each != BossSummonMobSkill::GetLeftFrameUnit().lock().get() && each != BossSummonMobSkill::GetRightFrameUnit().lock().get())
+                if (BossSummonMobSkill::GetRightFrameUnit().expired() || (each != BossSummonMobSkill::GetLeftFrameUnit().lock().get() && each != BossSummonMobSkill::GetRightFrameUnit().lock().get()))
                 {
                     each->KnockBack(targetPos, pod.knockBackDuration);
 	    			each->Paralyze(pod.knockBackDuration);

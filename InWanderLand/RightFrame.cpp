@@ -14,11 +14,15 @@
 
 namespace BossSummon
 {
+	std::weak_ptr<ManagedFBX> RightFrame::summonEffect = std::weak_ptr<ManagedFBX>();
+	std::weak_ptr<ManagedFBX> RightFrame::summoningEffect = std::weak_ptr<ManagedFBX>();
 	application::editor::Unit_TemplateData* RightFrame::meleeUnitMold = nullptr;
 	application::editor::Unit_TemplateData* RightFrame::projectileUnitMold = nullptr;
 
 	RightFrame::~RightFrame()
 	{
+		summonEffect = std::weak_ptr<ManagedFBX>();
+		summoningEffect = std::weak_ptr<ManagedFBX>();
 		meleeUnitMold = nullptr;
 		projectileUnitMold = nullptr;
 		BossSummonMobSkill::SetRightFrame(nullptr);
@@ -103,7 +107,7 @@ namespace BossSummon
 
 	void RightFrame::SummonUnit()
 	{
-		if (!unitFrame.lock()->IsAlive())
+		if (!IsAlive())
 		{
 			return;
 		}
@@ -168,7 +172,7 @@ namespace BossSummon
 
 	bool RightFrame::IsAlive() const
 	{
-		return HasChangedUnit() && unitFrame.lock()->IsAlive();
+		return HasChangedUnit() && unitFrame.lock()->GetActive() && unitFrame.lock()->IsAlive();
 	}
 
 	coroutine::Coroutine RightFrame::OnAppear()
@@ -176,15 +180,15 @@ namespace BossSummon
 		auto& gc = GlobalConstant::GetSingletonInstance().pod;
 
 		mesh->SetSelfActive(true);
-		wanderUtils::UnitCoroutine::ForSecondsFromUnit preAppear{ unitFrame, gc.bossAppearTime };
+		coroutine::ForSeconds preAppear{ gc.bossAppearTime };
 
 		mesh->GetTransform()->SetLocalPosition(Vector3d(0, gc.bossAppearHeight, 0));
 
 		auto initVel = wanderUtils::GetInitSpeedOfFreeFall(gc.bossAppearTime, Vector3d(0, gc.bossAppearHeight, 0), Vector3d(0, 1, 0));
 		while (preAppear.Tick())
 		{
-			initVel += Vector3d::down * gc.gravitySpeed * preAppear.Elapsed();
-			mesh->GetTransform()->SetLocalPosition(Vector3d(0, (mesh->GetTransform()->GetLocalPosition() + initVel * preAppear.Elapsed()).y, 0));
+			initVel += Vector3d::down * gc.gravitySpeed * Time::GetDeltaTime();
+			mesh->GetTransform()->SetLocalPosition(Vector3d(0, (mesh->GetTransform()->GetLocalPosition() + initVel * Time::GetDeltaTime()).y, 0));
 			auto curPos = mesh->GetTransform()->GetLocalPosition();
 			if (curPos.y < 1)
 			{
@@ -199,7 +203,7 @@ namespace BossSummon
 		auto anim = wanderResources::GetAnimation("SKM_Frame2", UnitAnimType::Birth);
 		animator->Play(anim);
 
-		wanderUtils::UnitCoroutine::ForSecondsFromUnit forSeconds{ unitFrame, anim->GetDuration() };
+		coroutine::ForSeconds forSeconds{ anim->GetDuration() };
 
 		while (forSeconds.Tick())
 		{

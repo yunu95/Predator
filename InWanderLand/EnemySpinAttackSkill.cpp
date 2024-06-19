@@ -88,6 +88,8 @@ coroutine::Coroutine EnemySpinAttackSkill::SpawningSkillffect(std::weak_ptr<Enem
 {
     float actualCollideRange = pod.skillRadius * (1 / colliderEffectRatio);
 
+    auto persistance = skill.lock();
+
     Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
     Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
     Vector3d direction = deltaPos.Normalized();
@@ -121,14 +123,14 @@ coroutine::Coroutine EnemySpinAttackSkill::SpawningSkillffect(std::weak_ptr<Enem
 
     std::unordered_set<Unit*> knockBackList;
 
-    wanderUtils::UnitCoroutine::ForSecondsFromUnit waitSpinStart{ owner, eliteSpinStartTime };
+    wanderUtils::UnitCoroutine::ForSecondsFromUnit waitSpinStart{ skill.lock()->owner, eliteSpinStartTime };
 
     while (waitSpinStart.Tick())
     {
         co_await std::suspend_always();
     }
 
-    wanderUtils::UnitCoroutine::ForSecondsFromUnit forSeconds{ owner, eliteSpinAttackingTime };
+    wanderUtils::UnitCoroutine::ForSecondsFromUnit forSeconds{ skill.lock()->owner, eliteSpinAttackingTime };
     while (forSeconds.Tick())
     {
         co_await std::suspend_always{};
@@ -148,7 +150,7 @@ coroutine::Coroutine EnemySpinAttackSkill::SpawningSkillffect(std::weak_ptr<Enem
 
     co_await std::suspend_always{};
 
-    wanderUtils::UnitCoroutine::ForSecondsFromUnit afterDamagedDelay{ owner, pod.skillEndTimeAfterDamaged };
+    wanderUtils::UnitCoroutine::ForSecondsFromUnit afterDamagedDelay{ skill.lock()->owner, pod.skillEndTimeAfterDamaged };
 
     while (afterDamagedDelay.Tick())
     {

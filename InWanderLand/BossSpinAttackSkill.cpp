@@ -85,7 +85,9 @@ void BossSpinAttackSkill::OnResume()
 
 coroutine::Coroutine BossSpinAttackSkill::SpawningSkillffect(std::weak_ptr<BossSpinAttackSkill> skill)
 {
-    colliderEffectRatio = 10.0f * 0.5f;
+    auto persistance = skill.lock();
+
+    colliderEffectRatio = 10.0f * 0.7f;
 
     float actualCollideRange = pod.skillRadius * 1 / (colliderEffectRatio);
 

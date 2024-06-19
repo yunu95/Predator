@@ -25,11 +25,21 @@ void BossSummonMobSkill::SetRightFrame(BossSummon::RightFrame* rightFrame)
 
 std::weak_ptr<Unit> BossSummonMobSkill::GetLeftFrameUnit()
 {
+	if (leftFrame == nullptr)
+	{
+		return std::weak_ptr<Unit>();
+	}
+
 	return leftFrame->unitFrame;
 }
 
 std::weak_ptr<Unit> BossSummonMobSkill::GetRightFrameUnit()
 {
+	if (rightFrame == nullptr)
+	{
+		return std::weak_ptr<Unit>();
+	}
+
 	return rightFrame->unitFrame;
 }
 
@@ -133,7 +143,7 @@ coroutine::Coroutine BossSummonMobSkill::StartSummonTimer()
 {
 	while (true)
 	{
-		wanderUtils::UnitCoroutine::ForSecondsFromUnit forSeconds{ owner, pod.summonPeriod };
+		wanderUtils::UnitCoroutine::ForSecondsFromUnit forSeconds{ BossController::Instance().GetBoss(), pod.summonPeriod};
 
 		while (forSeconds.Tick())
 		{
@@ -180,6 +190,7 @@ coroutine::Coroutine BossSummonMobSkill::StartSummonTimer()
 
 coroutine::Coroutine BossSummonMobSkill::SpawningFieldEffect(std::weak_ptr<BossSummonMobSkill> skill)
 {
+	auto copyPtr = skill.lock();
 	Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
 	Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
 	Vector3d direction = deltaPos.Normalized();
@@ -198,7 +209,7 @@ coroutine::Coroutine BossSummonMobSkill::SpawningFieldEffect(std::weak_ptr<BossS
 
 	auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill3);
 
-	wanderUtils::UnitCoroutine::ForSecondsFromUnit animSeconds{ owner, anim->GetDuration() };
+	wanderUtils::UnitCoroutine::ForSecondsFromUnit animSeconds{ skill.lock()->owner, anim->GetDuration() };
 
 	while (animSeconds.Tick())
 	{

@@ -1,10 +1,24 @@
 {
     "AniEvents": [
         {
+            "animationName": "Ani_Frame1_Death",
+            "fbxName": "SKM_Frame1",
+            "frame": 27.0,
+            "rscPath": "sounds/Heart Queen/Heart Queen destroy summonGate.wav",
+            "type": 3
+        },
+        {
             "animationName": "Rig_Robin_arpbob|Ani_Robin_Skill1",
             "fbxName": "SKM_Robin",
             "frame": 10.0,
             "rscPath": "sounds/Robin/Robin skill1.wav",
+            "type": 3
+        },
+        {
+            "animationName": "Ani_Frame1_Summon",
+            "fbxName": "SKM_Frame1",
+            "frame": 0.0,
+            "rscPath": "sounds/Heart Queen/Heart Queen summonGate activate.wav",
             "type": 3
         },
         {
@@ -29,6 +43,13 @@
             "type": 3
         },
         {
+            "animationName": "Rig_Robin|Ani_Hansel_Skill1",
+            "fbxName": "SKM_Hansel",
+            "frame": 40.0,
+            "rscPath": "sounds/Hansel/Hansel skill1 Jump.wav",
+            "type": 3
+        },
+        {
             "animationName": "Rig_Robin|Ani_Hansel_Attack ",
             "fbxName": "SKM_Hansel",
             "frame": 40.0,
@@ -36,10 +57,10 @@
             "type": 3
         },
         {
-            "animationName": "Rig_Robin|Ani_Hansel_Skill1",
-            "fbxName": "SKM_Hansel",
-            "frame": 40.0,
-            "rscPath": "sounds/Hansel/Hansel skill1 Jump.wav",
+            "animationName": "Ani_Frame2_Summon",
+            "fbxName": "SKM_Frame2",
+            "frame": 0.0,
+            "rscPath": "sounds/Heart Queen/Heart Queen summonGate activate.wav",
             "type": 3
         },
         {
@@ -57,13 +78,6 @@
             "type": 3
         },
         {
-            "animationName": "Ani_Frame1_Death",
-            "fbxName": "SKM_Frame1",
-            "frame": 27.0,
-            "rscPath": "sounds/Heart Queen/Heart Queen destroym summonGate.wav",
-            "type": 3
-        },
-        {
             "animationName": "Ani_Ursula_Death",
             "fbxName": "SKM_Ursula",
             "frame": 0.0,
@@ -71,10 +85,10 @@
             "type": 3
         },
         {
-            "animationName": "Ani_Frame1_Summon",
-            "fbxName": "SKM_Frame1",
-            "frame": 0.0,
-            "rscPath": "sounds/Heart Queen/Heart Queenm summonGatem activate.wav",
+            "animationName": "Ani_Monster2_Attack",
+            "fbxName": "SKM_Monster2",
+            "frame": 27.0,
+            "rscPath": "sounds/Enemy ranged/Ranged attack.wav",
             "type": 3
         },
         {
@@ -99,10 +113,10 @@
             "type": 3
         },
         {
-            "animationName": "Ani_Monster2_Attack",
-            "fbxName": "SKM_Monster2",
-            "frame": 27.0,
-            "rscPath": "sounds/Enemy ranged/Ranged attack.wav",
+            "animationName": "Ani_HeartQueen_Appear",
+            "fbxName": "SKM_HeartQueen",
+            "frame": 0.0,
+            "rscPath": "sounds/Heart Queen/Heart Queen appear1.wav",
             "type": 3
         },
         {
@@ -148,31 +162,10 @@
             "type": 3
         },
         {
-            "animationName": "Ani_Frame2_Summon",
-            "fbxName": "SKM_Frame2",
-            "frame": 0.0,
-            "rscPath": "sounds/Heart Queen/Heart Queenm summonGatem activate.wav",
-            "type": 3
-        },
-        {
             "animationName": "Rig_Robin|Ani_Hansel_Death",
             "fbxName": "SKM_Hansel",
             "frame": 0.0,
             "rscPath": "sounds/Hansel/Hansel death.wav",
-            "type": 3
-        },
-        {
-            "animationName": "Ani_Frame2_Death",
-            "fbxName": "SKM_Frame2",
-            "frame": 26.0,
-            "rscPath": "sounds/Heart Queen/Heart Queen destroym summonGate.wav",
-            "type": 3
-        },
-        {
-            "animationName": "Ani_HeartQueen_Appear",
-            "fbxName": "SKM_HeartQueen",
-            "frame": 0.0,
-            "rscPath": "sounds/Heart Queen/Heart Queen appear1.wav",
             "type": 3
         },
         {
@@ -187,6 +180,13 @@
             "fbxName": "SKM_HeartQueen",
             "frame": 50.0,
             "rscPath": "sounds/Heart Queen/Heart Queen melee special.wav",
+            "type": 3
+        },
+        {
+            "animationName": "Ani_Frame2_Death",
+            "fbxName": "SKM_Frame2",
+            "frame": 26.0,
+            "rscPath": "sounds/Heart Queen/Heart Queen destroy summonGate.wav",
             "type": 3
         },
         {
