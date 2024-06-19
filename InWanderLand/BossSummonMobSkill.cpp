@@ -25,11 +25,21 @@ void BossSummonMobSkill::SetRightFrame(BossSummon::RightFrame* rightFrame)
 
 std::weak_ptr<Unit> BossSummonMobSkill::GetLeftFrameUnit()
 {
+	if (leftFrame == nullptr)
+	{
+		return std::weak_ptr<Unit>();
+	}
+
 	return leftFrame->unitFrame;
 }
 
 std::weak_ptr<Unit> BossSummonMobSkill::GetRightFrameUnit()
 {
+	if (rightFrame == nullptr)
+	{
+		return std::weak_ptr<Unit>();
+	}
+
 	return rightFrame->unitFrame;
 }
 
@@ -199,7 +209,7 @@ coroutine::Coroutine BossSummonMobSkill::SpawningFieldEffect(std::weak_ptr<BossS
 
 	auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill3);
 
-	wanderUtils::UnitCoroutine::ForSecondsFromUnit animSeconds{ owner, anim->GetDuration() };
+	wanderUtils::UnitCoroutine::ForSecondsFromUnit animSeconds{ skill.lock()->owner, anim->GetDuration() };
 
 	while (animSeconds.Tick())
 	{

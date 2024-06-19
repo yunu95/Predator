@@ -112,7 +112,7 @@ coroutine::Coroutine BossSummonChessSkill::SpawningFieldEffect(std::weak_ptr<Bos
 
 	auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill3);
 
-	wanderUtils::UnitCoroutine::ForSecondsFromUnit forSeconds{ owner, anim->GetDuration() };
+	wanderUtils::UnitCoroutine::ForSecondsFromUnit forSeconds{ skill.lock()->owner, anim->GetDuration() };
 	while (forSeconds.Tick())
 	{
 		co_await std::suspend_always();

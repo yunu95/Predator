@@ -14,11 +14,15 @@
 
 namespace BossSummon
 {
+	std::weak_ptr<ManagedFBX> RightFrame::summonEffect = std::weak_ptr<ManagedFBX>();
+	std::weak_ptr<ManagedFBX> RightFrame::summoningEffect = std::weak_ptr<ManagedFBX>();
 	application::editor::Unit_TemplateData* RightFrame::meleeUnitMold = nullptr;
 	application::editor::Unit_TemplateData* RightFrame::projectileUnitMold = nullptr;
 
 	RightFrame::~RightFrame()
 	{
+		summonEffect = std::weak_ptr<ManagedFBX>();
+		summoningEffect = std::weak_ptr<ManagedFBX>();
 		meleeUnitMold = nullptr;
 		projectileUnitMold = nullptr;
 		BossSummonMobSkill::SetRightFrame(nullptr);
