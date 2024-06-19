@@ -198,8 +198,7 @@ Vector3d wanderUtils::GetInitSpeedOfFreeFall(float duration, Vector3d startPos, 
     float acc = GlobalConstant::GetSingletonInstance().pod.gravitySpeed;
 
     auto deltaPos = destPos - startPos;
-    float init_Y;
-    init_Y = (deltaPos.y + acc* duration* duration / 2) / duration;
+    float init_Y = (deltaPos.y / duration) + (acc * duration / 2); 
 
     return Vector3d(deltaPos.x / duration, init_Y, deltaPos.z / duration);
 }
@@ -224,6 +223,11 @@ namespace wanderUtils
         float ForSecondsFromUnit::ElapsedNormalized()
         {
             return elapsed / duration;
+        }
+
+        float ForSecondsFromUnit::GetDeltaTime()
+        {
+            return yunutyEngine::Time::GetDeltaTime() * unit.lock()->localTimeScale;
         }
     }
 }

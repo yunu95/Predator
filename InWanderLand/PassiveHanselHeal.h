@@ -10,7 +10,10 @@ struct POD_PassiveHanselHeal
     int cookieBatchSize = 5;
     float cookieScale = 1.0f;
     float cookieRadius = 1.0f;
-
+    float dropRadius = 3.0f;
+    float maxHeight = 3.0f;
+    float cakeOnAirDuration = 1.5;
+  
     TO_JSON(POD_PassiveHanselHeal)
         FROM_JSON(POD_PassiveHanselHeal)
 };

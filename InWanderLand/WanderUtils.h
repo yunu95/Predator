@@ -108,6 +108,7 @@ namespace wanderUtils
 			bool Tick();
 			float Elapsed();
 			float ElapsedNormalized();
+			float GetDeltaTime();
 		};
 	}
 }

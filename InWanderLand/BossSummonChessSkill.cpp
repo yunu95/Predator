@@ -232,8 +232,8 @@ coroutine::Coroutine BossSummonChessSkill::SummonChess(std::weak_ptr<BossSummonC
 
 		for (int i = 0; i < summoned; i++)
 		{
-			velocityList[i] += Vector3d::down * gc.gravitySpeed * forSeconds.Elapsed();
-			chessList[i].lock()->GetSummonComponent()->GetTransform()->SetWorldPosition(chessList[i].lock()->GetSummonComponent()->GetTransform()->GetWorldPosition() + velocityList[i] * forSeconds.Elapsed());
+			velocityList[i] += Vector3d::down * gc.gravitySpeed * forSeconds.GetDeltaTime();
+			chessList[i].lock()->GetSummonComponent()->GetTransform()->SetWorldPosition(chessList[i].lock()->GetSummonComponent()->GetTransform()->GetWorldPosition() + velocityList[i] * forSeconds.GetDeltaTime());
 			auto tempPos = chessList[i].lock()->GetSummonComponent()->GetTransform()->GetWorldPosition();
 			if (tempPos.y <= 0)
 			{

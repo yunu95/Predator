@@ -131,8 +131,8 @@ coroutine::Coroutine BossController::BossAppearCoroutine()
 	auto initVel = wanderUtils::GetInitSpeedOfFreeFall(gc.bossAppearTime, Vector3d(0, gc.bossAppearHeight, 0), Vector3d(0, 0.5, 0));
 	while (preAppear.Tick())
 	{
-		initVel += Vector3d::down * gc.gravitySpeed * preAppear.Elapsed();
-		boss.lock()->GetTransform()->SetWorldPosition(boss.lock()->GetTransform()->GetWorldPosition() + initVel * preAppear.Elapsed());
+		initVel += Vector3d::down * gc.gravitySpeed * Time::GetDeltaTime();
+		boss.lock()->GetTransform()->SetWorldPosition(boss.lock()->GetTransform()->GetWorldPosition() + initVel * Time::GetDeltaTime());
 		auto curPos = boss.lock()->GetTransform()->GetWorldPosition();
 		if (curPos.y < 0.5)
 		{

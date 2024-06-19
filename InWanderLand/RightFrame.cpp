@@ -183,8 +183,8 @@ namespace BossSummon
 		auto initVel = wanderUtils::GetInitSpeedOfFreeFall(gc.bossAppearTime, Vector3d(0, gc.bossAppearHeight, 0), Vector3d(0, 1, 0));
 		while (preAppear.Tick())
 		{
-			initVel += Vector3d::down * gc.gravitySpeed * preAppear.Elapsed();
-			mesh->GetTransform()->SetLocalPosition(Vector3d(0, (mesh->GetTransform()->GetLocalPosition() + initVel * preAppear.Elapsed()).y, 0));
+			initVel += Vector3d::down * gc.gravitySpeed * Time::GetDeltaTime();
+			mesh->GetTransform()->SetLocalPosition(Vector3d(0, (mesh->GetTransform()->GetLocalPosition() + initVel * Time::GetDeltaTime()).y, 0));
 			auto curPos = mesh->GetTransform()->GetLocalPosition();
 			if (curPos.y < 1)
 			{
