@@ -87,7 +87,7 @@ void Unit::Update()
     {
         buff.get()->OnUpdate();
         buff.get()->durationLeft -= Time::GetDeltaTime() * localBuffTimeScale;
-        if (buff.get()->durationLeft < 0)
+        if (buff.get()->durationLeft < 0 || currentHitPoint <= 0.0f)
             buff.get()->OnEnd();
     }
     std::erase_if(buffs, [](std::pair<const UnitBuffType, std::shared_ptr<UnitBuff>>& pair)
@@ -413,6 +413,8 @@ Vector3d Unit::GetRandomPositionInsideCapsuleCollider()
 }
 void Unit::EraseBuff(UnitBuffType buffType)
 {
+    if (buffs.find(buffType) != buffs.end())
+        buffs.find(buffType)->second->OnEnd();
     buffs.erase(buffType);
 }
 void Unit::Damaged(std::weak_ptr<Unit> opponentUnit, float opponentDmg, DamageType damageType)
@@ -496,11 +498,14 @@ yunutyEngine::coroutine::Coroutine Unit::HealEffectCoroutine()
     vfxAnimator.lock()->Init();
     vfxAnimator.lock()->Play();
 
-    healVFX.lock()->GetGameObject()->SetParent(GetWeakPtr<Unit>().lock()->GetGameObject());
+    healVFX.lock()->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
+    healVFX.lock()->GetTransform()->SetWorldRotation(GetTransform()->GetWorldRotation());
 
     while (!vfxAnimator.lock()->IsDone())
     {
         co_await std::suspend_always{};
+        healVFX.lock()->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
+        healVFX.lock()->GetTransform()->SetWorldRotation(GetTransform()->GetWorldRotation());
     }
 
     co_return;
@@ -572,7 +577,8 @@ void Unit::Paralyze(float paralyzeDuration)
 yunutyEngine::coroutine::Coroutine Unit::ParalyzeEffectCoroutine(float paralyzeDuration)
 {
     paralysisVFX = FBXPool::Instance().Borrow("VFX_Monster_HitCC");
-    paralysisVFX.lock()->GetGameObject()->SetParent(this->GetGameObject());
+    paralysisVFX.lock()->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
+    paralysisVFX.lock()->GetTransform()->SetWorldRotation(GetTransform()->GetWorldRotation());
     paralysisVFX.lock()->GetTransform()->SetWorldScale(GetTransform()->GetWorldScale());
 
     auto paralysisEffectAnimator = paralysisVFX.lock()->AcquireVFXAnimator();
@@ -590,6 +596,8 @@ yunutyEngine::coroutine::Coroutine Unit::ParalyzeEffectCoroutine(float paralyzeD
         }
 
         co_await std::suspend_always();
+        paralysisVFX.lock()->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
+        paralysisVFX.lock()->GetTransform()->SetWorldRotation(GetTransform()->GetWorldRotation());
         localTimer += Time::GetDeltaTime();
     }
 

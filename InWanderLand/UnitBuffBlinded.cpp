@@ -22,6 +22,15 @@ void UnitBuffBlinded::OnStart()
     owner.lock()->StartCoroutine(EffectCoroutine());
 }
 
+void UnitBuffBlinded::OnUpdate()
+{
+    if (!buffEffect.expired())
+    {
+        buffEffect.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
+        buffEffect.lock()->GetTransform()->SetWorldRotation(owner.lock()->GetTransform()->GetWorldRotation());
+    }
+}
+
 void UnitBuffBlinded::OnEnd()
 {
     FBXPool::Instance().Return(buffEffect);
@@ -45,7 +54,8 @@ void UnitBuffBlinded::OnResume()
 coroutine::Coroutine UnitBuffBlinded::EffectCoroutine()
 {
     buffEffect = FBXPool::Instance().Borrow("VFX_DeBuff_Blind_Ursula");
-    buffEffect.lock()->GetGameObject()->SetParent(owner.lock()->GetGameObject());
+    buffEffect.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
+    buffEffect.lock()->GetTransform()->SetWorldRotation(owner.lock()->GetTransform()->GetWorldRotation());
 
     buffEffectAnimator = buffEffect.lock()->AcquireVFXAnimator();
     buffEffectAnimator.lock()->SetAutoActiveFalse();

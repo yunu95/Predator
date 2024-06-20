@@ -12,6 +12,17 @@ void UnitBuffHanselBuff::OnStart()
     *attackSpeedAdder = HanselProjectileSkill::pod.attackSpeedBonus;
     critChanceAdder = owner.lock()->adderCritChance.AcquireFactor();
     *critChanceAdder = HanselProjectileSkill::pod.critChanceBonus;
+
+    owner.lock()->StartCoroutine(EffectCoroutine());
+}
+
+void UnitBuffHanselBuff::OnUpdate()
+{
+    if (!buffEffect.expired())
+    {
+        buffEffect.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
+        buffEffect.lock()->GetTransform()->SetWorldRotation(owner.lock()->GetTransform()->GetWorldRotation());
+    }
 }
 
 void UnitBuffHanselBuff::OnEnd()
@@ -37,7 +48,8 @@ void UnitBuffHanselBuff::OnResume()
 coroutine::Coroutine UnitBuffHanselBuff::EffectCoroutine()
 {
     buffEffect = FBXPool::Instance().Borrow("VFX_Buff_Hansel_Pie");
-    buffEffect.lock()->GetGameObject()->SetParent(owner.lock()->GetGameObject());
+    buffEffect.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
+    buffEffect.lock()->GetTransform()->SetWorldRotation(owner.lock()->GetTransform()->GetWorldRotation());
 
     buffEffectAnimator = buffEffect.lock()->AcquireVFXAnimator();
     buffEffectAnimator.lock()->SetAutoActiveFalse();
