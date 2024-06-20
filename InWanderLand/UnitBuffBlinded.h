@@ -9,6 +9,7 @@ public:
     virtual UnitBuffType GetBuffType() override;
     virtual UIEnumID GetUIEnumID();
     virtual void OnStart() override;
+    virtual void OnUpdate() override;
     virtual void OnEnd() override;
     virtual void OnOverlap(UnitBuff&& overlapping) override;
 

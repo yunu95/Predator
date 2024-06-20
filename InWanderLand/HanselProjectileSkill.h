@@ -31,7 +31,7 @@ class HanselProjectileSkill : public Skill
 {
 private:
     coroutine::Coroutine ThrowingPie(std::weak_ptr<HanselProjectileSkill> skill);
-    coroutine::Coroutine SpawningSkillffect(std::weak_ptr<Unit> unit);
+    //coroutine::Coroutine SpawningSkillffect(std::weak_ptr<Unit> unit);
 
     std::weak_ptr<UnitAcquisitionSphereCollider> pieCollider;
     std::weak_ptr<ManagedFBX> pieObject;

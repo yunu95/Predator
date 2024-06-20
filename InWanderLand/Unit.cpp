@@ -88,7 +88,7 @@ void Unit::Update()
     {
         buff.get()->OnUpdate();
         buff.get()->durationLeft -= Time::GetDeltaTime() * localBuffTimeScale;
-        if (buff.get()->durationLeft < 0)
+        if (buff.get()->durationLeft < 0 || currentHitPoint <= 0.0f)
             buff.get()->OnEnd();
     }
     std::erase_if(buffs, [](std::pair<const UnitBuffType, std::shared_ptr<UnitBuff>>& pair)
@@ -414,23 +414,27 @@ Vector3d Unit::GetRandomPositionInsideCapsuleCollider()
 }
 void Unit::EraseBuff(UnitBuffType buffType)
 {
+    if (buffs.find(buffType) != buffs.end())
+        buffs.find(buffType)->second->OnEnd();
     buffs.erase(buffType);
+}
+void Unit::Damaged(std::weak_ptr<Unit> opponentUnit, float opponentAp, Transform* projectileTransform)
+{
+    if (!coroutineDamagedEffect.expired())
+        FBXPool::Instance().Return(damagedVFX);
+    coroutineDamagedEffect = StartCoroutine(DamagedEffectCoroutine(opponentUnit, projectileTransform));
+    coroutineDamagedEffect.lock()->PushDestroyCallBack([this]()
+        {
+            FBXPool::Instance().Return(damagedVFX);
+        });
+
+    Damaged(opponentUnit, opponentAp, DamageType::Attack);
 }
 void Unit::Damaged(std::weak_ptr<Unit> opponentUnit, float opponentDmg, DamageType damageType)
 {
     switch (damageType)
     {
     case DamageType::Attack:
-        if (opponentUnit.lock()->GetFBXName() == "SKM_Ursula" || opponentUnit.lock()->GetFBXName() == "SKM_Hansel")
-        {
-            if (!coroutineDamagedEffect.expired())
-                FBXPool::Instance().Return(damagedVFX);
-            coroutineDamagedEffect = StartCoroutine(DamagedEffectCoroutine(opponentUnit));
-            coroutineDamagedEffect.lock()->PushDestroyCallBack([this]()
-                {
-                    FBXPool::Instance().Return(damagedVFX);
-                });
-        }
         opponentUnit.lock()->onAttackHit(GetWeakPtr<Unit>());
         break;
     case DamageType::Skill:
@@ -448,7 +452,7 @@ void Unit::Damaged(float dmg)
     onDamaged();
 }
 
-yunutyEngine::coroutine::Coroutine Unit::DamagedEffectCoroutine(std::weak_ptr<Unit> opponent)
+yunutyEngine::coroutine::Coroutine Unit::DamagedEffectCoroutine(std::weak_ptr<Unit> opponent, Transform* projectileTransform)
 {
     damagedVFX = wanderResources::GetVFX(opponent.lock()->unitTemplateData->pod.skinnedFBXName, UnitAnimType::Damaged);
     co_await std::suspend_always{};
@@ -456,15 +460,16 @@ yunutyEngine::coroutine::Coroutine Unit::DamagedEffectCoroutine(std::weak_ptr<Un
     vfxAnimator.lock()->SetAutoActiveFalse();
     vfxAnimator.lock()->Init();
     vfxAnimator.lock()->Play();
-    Vector3d startPos = GetTransform()->GetWorldPosition();
-    Vector3d deltaPos = RTSCam::Instance().GetTransform()->GetWorldPosition() - GetTransform()->GetWorldPosition();
-    Vector3d direction = deltaPos.Normalized();
-    direction *= -1;
-    damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos + direction * 2 * (-1));
-    //damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
+    //direction *= -1;
+    //damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos + direction * 2);
+    damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldPosition(projectileTransform->GetWorldPosition());
+    auto temp = projectileTransform->GetLocalRotation();
+    auto euler = temp.Euler();
+    euler.y += -180;
+    damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion{euler});
     //damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(direction);
     //damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldScale(GetTransform()->GetWorldScale());
-
+        
     while (!vfxAnimator.lock()->IsDone())
     {
         co_await std::suspend_always{};
@@ -497,11 +502,14 @@ yunutyEngine::coroutine::Coroutine Unit::HealEffectCoroutine()
     vfxAnimator.lock()->Init();
     vfxAnimator.lock()->Play();
 
-    healVFX.lock()->GetGameObject()->SetParent(GetWeakPtr<Unit>().lock()->GetGameObject());
+    healVFX.lock()->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
+    healVFX.lock()->GetTransform()->SetWorldRotation(GetTransform()->GetWorldRotation());
 
     while (!vfxAnimator.lock()->IsDone())
     {
         co_await std::suspend_always{};
+        healVFX.lock()->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
+        healVFX.lock()->GetTransform()->SetWorldRotation(GetTransform()->GetWorldRotation());
     }
 
     co_return;
@@ -573,7 +581,8 @@ void Unit::Paralyze(float paralyzeDuration)
 yunutyEngine::coroutine::Coroutine Unit::ParalyzeEffectCoroutine(float paralyzeDuration)
 {
     paralysisVFX = FBXPool::Instance().Borrow("VFX_Monster_HitCC");
-    paralysisVFX.lock()->GetGameObject()->SetParent(this->GetGameObject());
+    paralysisVFX.lock()->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
+    paralysisVFX.lock()->GetTransform()->SetWorldRotation(GetTransform()->GetWorldRotation());
     paralysisVFX.lock()->GetTransform()->SetWorldScale(GetTransform()->GetWorldScale());
 
     auto paralysisEffectAnimator = paralysisVFX.lock()->AcquireVFXAnimator();
@@ -591,6 +600,8 @@ yunutyEngine::coroutine::Coroutine Unit::ParalyzeEffectCoroutine(float paralyzeD
         }
 
         co_await std::suspend_always();
+        paralysisVFX.lock()->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
+        paralysisVFX.lock()->GetTransform()->SetWorldRotation(GetTransform()->GetWorldRotation());
         localTimer += Time::GetDeltaTime();
     }
 

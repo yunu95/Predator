@@ -79,14 +79,16 @@ coroutine::Coroutine UrsulaParalysisSkill::SpawningFieldEffect(std::weak_ptr<Urs
             tentacleAnimation = each;
             tentacleAnimator->PushAnimation(tentacleAnimation);
         }
-        else if (each->GetName() == L"root|Ani_SVFX_Wave")
+        if (each->GetName() == L"root|Ani_SVFX_Wave")
         {
             waveAnimation = each;
             waveAnimator->PushAnimation(waveAnimation);
         }
     }
 
-    waveObject.lock()->GetGameObject()->GetChildren()[0]->AddComponent<VFXAnimator>()->SetAutoActiveFalse();
+    auto waveVFXAnimator = waveObject.lock()->AcquireVFXAnimator();
+    waveVFXAnimator.lock()->SetAutoActiveFalse();
+    waveVFXAnimator.lock()->Init();
 
     tentacleObject.lock()->GetGameObject()->GetTransform()->SetWorldPosition(targetPos);
     waveObject.lock()->GetGameObject()->GetTransform()->SetWorldPosition(targetPos);
@@ -95,6 +97,7 @@ coroutine::Coroutine UrsulaParalysisSkill::SpawningFieldEffect(std::weak_ptr<Urs
 
     tentacleAnimator->Play(tentacleAnimation);
     waveAnimator->Play(waveAnimation);
+    waveVFXAnimator.lock()->Play();
 
     co_await std::suspend_always{};
 
@@ -144,7 +147,7 @@ coroutine::Coroutine UrsulaParalysisSkill::SpawningFieldEffect(std::weak_ptr<Urs
         co_await std::suspend_always{};
     }
 
-    while (!waveAnimator->IsDone())
+    while (!waveVFXAnimator.lock()->IsDone())
     {
         co_await std::suspend_always{};
     }
