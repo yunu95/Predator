@@ -157,12 +157,12 @@ void Unit::OnStateExit<UnitBehaviourTree::Knockback>()
 template<>
 void Unit::OnStateEngage<UnitBehaviourTree::Pause>()
 {
-	onStateEngage[UnitBehaviourTree::Pause]();
-	defaultAnimationType = UnitAnimType::Idle;
-	enableNavObstacleByState = referenceEnableNavObstacle.Acquire();
-	disableNavAgentByState = referenceDisableNavAgent.Acquire();
-	//PlayAnimation(UnitAnimType::Idle, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
-	animatorComponent.lock()->Pause();
+    onStateEngage[UnitBehaviourTree::Pause]();
+    defaultAnimationType = UnitAnimType::Idle;
+    enableNavObstacleByState = referenceEnableNavObstacle.Acquire();
+    disableNavAgentByState = referenceDisableNavAgent.Acquire();
+    //PlayAnimation(UnitAnimType::Idle, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
+    animatorComponent.lock()->Pause();
 }
 template<>
 void Unit::OnStateExit<UnitBehaviourTree::Pause>()
@@ -172,6 +172,7 @@ void Unit::OnStateExit<UnitBehaviourTree::Pause>()
     animatorComponent.lock()->Resume();
     enableNavObstacleByState.reset();
     disableNavAgentByState.reset();
+    OrderHold();
 }
 template<>
 void Unit::OnStateEngage<UnitBehaviourTree::Reviving>()
@@ -327,7 +328,7 @@ Unit::~Unit()
 
 void Unit::OnPause()
 {
-	isPaused = true;
+    isPaused = true;
     localBuffTimeScale = FLT_MIN * 10000;
     if (!IsPlayerUnit())
     {
@@ -346,7 +347,7 @@ void Unit::OnPause()
 
 void Unit::OnResume()
 {
-	isPaused = false;
+    isPaused = false;
     localBuffTimeScale = 1.0f;
     if (!IsPlayerUnit())
     {
@@ -674,6 +675,10 @@ void Unit::SetDesiredRotation(const Vector3d& facingDirection)
         return;
     desiredRotation = std::atan2(facingDirection.z, facingDirection.x) * math::Rad2Deg;
 }
+std::weak_ptr<coroutine::Coroutine> Unit::SetRotation(const Quaternion& targetRotation, float rotatingTime)
+{
+    return SetRotation(targetRotation * Vector3d::forward, rotatingTime);
+}
 std::weak_ptr<coroutine::Coroutine> Unit::SetRotation(const Vector3d& facingDirection, float rotatingTime)
 {
     desiredRotation = std::atan2(facingDirection.z, facingDirection.x) * math::Rad2Deg;
@@ -745,7 +750,7 @@ void Unit::Start()
 void Unit::Relocate(const Vector3d& pos)
 {
     navAgentComponent.lock()->Relocate(pos);
-    //OrderHold();
+    OrderHold();
 }
 void Unit::OrderMove(Vector3d position)
 {
@@ -1211,13 +1216,33 @@ void Unit::InitBehaviorTree()
         {
             OnStateEngage<UnitBehaviourTree::Paralysis>();
         };
+    unitBehaviourTree[UnitBehaviourTree::Paralysis].onExit = [this]()
+        {
+            OnStateExit<UnitBehaviourTree::Paralysis>();
+        };
     unitBehaviourTree[UnitBehaviourTree::Paralysis][UnitBehaviourTree::Knockback].enteringCondtion = [this]()
         {
             return !coroutineKnockBack.expired();
         };
+    unitBehaviourTree[UnitBehaviourTree::Paralysis][UnitBehaviourTree::Knockback].onEnter = [this]()
+        {
+            OnStateEngage<UnitBehaviourTree::Knockback>();
+        };
+    unitBehaviourTree[UnitBehaviourTree::Paralysis][UnitBehaviourTree::Knockback].onExit = [this]()
+        {
+            OnStateExit<UnitBehaviourTree::Knockback>();
+        };
     unitBehaviourTree[UnitBehaviourTree::Paralysis][UnitBehaviourTree::Stun].enteringCondtion = [this]()
         {
             return true;
+        };
+    unitBehaviourTree[UnitBehaviourTree::Paralysis][UnitBehaviourTree::Stun].onEnter = [this]()
+        {
+            OnStateEngage<UnitBehaviourTree::Stun>();
+        };
+    unitBehaviourTree[UnitBehaviourTree::Paralysis][UnitBehaviourTree::Stun].onExit = [this]()
+        {
+            OnStateExit<UnitBehaviourTree::Stun>();
         };
     unitBehaviourTree[UnitBehaviourTree::Pause].enteringCondtion = [this]()
         {
@@ -1317,6 +1342,11 @@ void Unit::InitBehaviorTree()
     unitBehaviourTree[UnitBehaviourTree::Chasing].onEnter = [this]()
         {
             currentOrderType = pendingOrderType;
+            OnStateEngage<UnitBehaviourTree::Chasing>();
+        };
+    unitBehaviourTree[UnitBehaviourTree::Chasing].onExit = [this]()
+        {
+            OnStateExit<UnitBehaviourTree::Chasing>();
         };
     unitBehaviourTree[UnitBehaviourTree::Chasing].onUpdate = [this]()
         {
@@ -1346,6 +1376,10 @@ void Unit::InitBehaviorTree()
         {
             OnStateEngage<UnitBehaviourTree::Move>();
         };
+    unitBehaviourTree[UnitBehaviourTree::Chasing][UnitBehaviourTree::Move].onExit = [this]()
+        {
+            OnStateExit<UnitBehaviourTree::Move>();
+        };
     unitBehaviourTree[UnitBehaviourTree::Chasing][UnitBehaviourTree::Move].onUpdate = [this]()
         {
             moveDestination = GetAttackPosition(GetAttackTarget());
@@ -1358,6 +1392,11 @@ void Unit::InitBehaviorTree()
     unitBehaviourTree[UnitBehaviourTree::Hold].onEnter = [this]()
         {
             currentOrderType = UnitOrderType::Hold;
+            OnStateEngage<UnitBehaviourTree::Hold>();
+        };
+    unitBehaviourTree[UnitBehaviourTree::Hold].onExit = [this]()
+        {
+            OnStateExit<UnitBehaviourTree::Hold>();
         };
     unitBehaviourTree[UnitBehaviourTree::Hold][UnitBehaviourTree::Attack].enteringCondtion = [this]()
         {
@@ -1383,6 +1422,10 @@ void Unit::InitBehaviorTree()
     unitBehaviourTree[UnitBehaviourTree::Hold][UnitBehaviourTree::Stop].onEnter = [this]()
         {
             OnStateEngage<UnitBehaviourTree::Stop>();
+        };
+    unitBehaviourTree[UnitBehaviourTree::Hold][UnitBehaviourTree::Stop].onExit = [this]()
+        {
+            OnStateExit<UnitBehaviourTree::Stop>();
         };
     unitBehaviourTree[UnitBehaviourTree::Move].enteringCondtion = [this]()
         {
@@ -1411,6 +1454,11 @@ void Unit::InitBehaviorTree()
         {
             //currentOrderType = pendingOrderType;
             currentOrderType = UnitOrderType::AttackMove;
+            OnStateEngage<UnitBehaviourTree::AttackMove>();
+        };
+    unitBehaviourTree[UnitBehaviourTree::AttackMove].onExit = [this]()
+        {
+            OnStateExit<UnitBehaviourTree::AttackMove>();
         };
     unitBehaviourTree[UnitBehaviourTree::AttackMove][UnitBehaviourTree::Attack].enteringCondtion = [this]()
         {
@@ -1438,10 +1486,15 @@ void Unit::InitBehaviorTree()
         {
             OnStateEngage<UnitBehaviourTree::Move>();
         };
-    unitBehaviourTree[UnitBehaviourTree::AttackMove][UnitBehaviourTree::Move].onUpdate = [this]() {
-        currentTargetUnit = GetClosestEnemy();
-        moveDestination = currentTargetUnit.expired() ? attackMoveDestination : GetAttackPosition(currentTargetUnit);
-        OnStateUpdate<UnitBehaviourTree::Move>();
+    unitBehaviourTree[UnitBehaviourTree::AttackMove][UnitBehaviourTree::Move].onExit = [this]()
+        {
+            OnStateExit<UnitBehaviourTree::Move>();
+        };
+    unitBehaviourTree[UnitBehaviourTree::AttackMove][UnitBehaviourTree::Move].onUpdate = [this]()
+        {
+            currentTargetUnit = GetClosestEnemy();
+            moveDestination = currentTargetUnit.expired() ? attackMoveDestination : GetAttackPosition(currentTargetUnit);
+            OnStateUpdate<UnitBehaviourTree::Move>();
         };
     unitBehaviourTree[UnitBehaviourTree::AttackMove][UnitBehaviourTree::Stop].enteringCondtion = [this]()
         {
@@ -1482,7 +1535,7 @@ yunutyEngine::coroutine::Coroutine Unit::BirthCoroutine()
         co_return;
     }
 
-    while(!IsPlayerUnit() && isPaused)
+    while (!IsPlayerUnit() && isPaused)
     {
         co_await std::suspend_always();
     }
