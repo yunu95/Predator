@@ -39,7 +39,7 @@ void Interactable_SpikeTrap::Start()
 
 void Interactable_SpikeTrap::Update()
 {
-    if (PlayerController::Instance().GetState() == PlayerController::State::Battle)
+    if (PlayerController::Instance().GetState() == PlayerController::State::Battle || PlayerController::Instance().GetState() == PlayerController::State::Tactic)
     {
         spike->SetSelfActive(true);
     }
@@ -81,7 +81,7 @@ void Interactable_SpikeTrap::Update()
 void Interactable_SpikeTrap::OnTriggerEnter(physics::Collider* collider)
 {
     if (Unit* colliderUnitComponent = UnitCollider::AcquireUnit(collider);
-        PlayerController::Instance().GetState() == PlayerController::State::Battle &&
+        (PlayerController::Instance().GetState() == PlayerController::State::Battle || PlayerController::Instance().GetState() == PlayerController::State::Tactic) &&
         colliderUnitComponent != nullptr &&
         colliderUnitComponent->IsPlayerUnit() &&
         colliderUnitComponent->IsAlive())
