@@ -418,11 +418,11 @@ void Unit::EraseBuff(UnitBuffType buffType)
         buffs.find(buffType)->second->OnEnd();
     buffs.erase(buffType);
 }
-void Unit::Damaged(std::weak_ptr<Unit> opponentUnit, float opponentAp, Vector3d projectileHitPosition)
+void Unit::Damaged(std::weak_ptr<Unit> opponentUnit, float opponentAp, Transform* projectileTransform)
 {
     if (!coroutineDamagedEffect.expired())
         FBXPool::Instance().Return(damagedVFX);
-    coroutineDamagedEffect = StartCoroutine(DamagedEffectCoroutine(opponentUnit, projectileHitPosition));
+    coroutineDamagedEffect = StartCoroutine(DamagedEffectCoroutine(opponentUnit, projectileTransform));
     coroutineDamagedEffect.lock()->PushDestroyCallBack([this]()
         {
             FBXPool::Instance().Return(damagedVFX);
@@ -452,7 +452,7 @@ void Unit::Damaged(float dmg)
     onDamaged();
 }
 
-yunutyEngine::coroutine::Coroutine Unit::DamagedEffectCoroutine(std::weak_ptr<Unit> opponent, Vector3d projectileHitPosition)
+yunutyEngine::coroutine::Coroutine Unit::DamagedEffectCoroutine(std::weak_ptr<Unit> opponent, Transform* projectileTransform)
 {
     damagedVFX = wanderResources::GetVFX(opponent.lock()->unitTemplateData->pod.skinnedFBXName, UnitAnimType::Damaged);
     co_await std::suspend_always{};
@@ -460,16 +460,16 @@ yunutyEngine::coroutine::Coroutine Unit::DamagedEffectCoroutine(std::weak_ptr<Un
     vfxAnimator.lock()->SetAutoActiveFalse();
     vfxAnimator.lock()->Init();
     vfxAnimator.lock()->Play();
-    Vector3d startPos = GetTransform()->GetWorldPosition();
-    Vector3d deltaPos = projectileHitPosition - GetTransform()->GetWorldPosition();
-    Vector3d direction = deltaPos.Normalized();
     //direction *= -1;
     //damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos + direction * 2);
-    damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos);
-    damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
+    damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldPosition(projectileTransform->GetWorldPosition());
+    auto temp = projectileTransform->GetLocalRotation();
+    auto euler = temp.Euler();
+    euler.y += -180;
+    damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion{euler});
     //damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(direction);
-    damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldScale(GetTransform()->GetWorldScale());
-
+    //damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldScale(GetTransform()->GetWorldScale());
+        
     while (!vfxAnimator.lock()->IsDone())
     {
         co_await std::suspend_always{};
