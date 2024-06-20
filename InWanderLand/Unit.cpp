@@ -273,6 +273,7 @@ void Unit::OnStateExit<UnitBehaviourTree::SkillOnGoing>()
         DeleteCoroutine(coroutineSkill);
     }
     onGoingSkill.reset();
+    OrderAttackMove();
 }
 template<>
 void Unit::OnStateEngage<UnitBehaviourTree::SkillCasting>()
@@ -761,6 +762,10 @@ void Unit::OrderAttackMove(Vector3d position)
 {
     pendingOrderType = UnitOrderType::AttackMove;
     attackMoveDestination = position;
+}
+void Unit::OrderAttackMove()
+{
+    OrderAttackMove(GetTransform()->GetWorldPosition());
 }
 void Unit::OrderAttack(std::weak_ptr<Unit> opponent)
 {

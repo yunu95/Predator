@@ -83,6 +83,7 @@ public:
     void Relocate(const Vector3d& pos);
     void OrderMove(Vector3d position);
     void OrderAttackMove(Vector3d position);
+    void OrderAttackMove();
     void OrderAttack(std::weak_ptr<Unit> opponent);
     void OrderHold();
     template<typename SkillType>

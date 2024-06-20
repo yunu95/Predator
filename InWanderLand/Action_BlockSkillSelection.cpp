@@ -40,13 +40,13 @@ namespace application
         if (ImGui::MenuItem("SetSkillType"))
         {
             editor::EditorLayer::SetInputControl(false);
-            static POD_Enum<SkillType::Enum> skillType;
-            static bool block;
-            static bool applyExceptTarget;
+            static POD_Enum<SkillType::Enum> skillType = POD_Enum<SkillType::Enum>();
+            static bool block = false;
+            static bool applyExceptTarget = false;
             skillType = data->skillType;
             block = data->blocking;
             applyExceptTarget = data->applyExceptTarget;
-            editor::imgui::ShowMessageBox("SetSkillType", [data]()
+            editor::imgui::ShowMessageBox("SetSkillType(BlockSkillSelection)", [data]()
                 {
                     editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
 
@@ -54,7 +54,13 @@ namespace application
 
                     ImGui::SetNextItemWidth(-1);
                     ImGui::Checkbox("applyExceptTarget##applyExceptTarget", &applyExceptTarget);
-                    imgui::data::DrawData("SkillType", skillType);
+                    
+                    if (ImGui::BeginTable("##BlockSkillSelection", 2, ImGuiTableFlags_SizingStretchSame))
+                    {
+                        imgui::data::DrawData("SkillType", skillType);
+                        ImGui::EndTable();
+                    }
+
                     ImGui::Checkbox("blocking##blocking", &block);
 
                     ImGui::Separator();
@@ -65,7 +71,7 @@ namespace application
                         data->skillType = skillType;
                         data->blocking = block;
                         ImGui::CloseCurrentPopup();
-                        editor::imgui::CloseMessageBox("SetSkillType");
+                        editor::imgui::CloseMessageBox("SetSkillType(BlockSkillSelection)");
                         editor::EditorLayer::SetInputControl(true);
                     }
                     ImGui::SameLine();
@@ -73,7 +79,7 @@ namespace application
                     if (ImGui::Button("Cancel"))
                     {
                         ImGui::CloseCurrentPopup();
-                        editor::imgui::CloseMessageBox("SetSkillType");
+                        editor::imgui::CloseMessageBox("SetSkillType(BlockSkillSelection)");
                         editor::EditorLayer::SetInputControl(true);
                     }
                 }, 300);
@@ -82,7 +88,7 @@ namespace application
 
     bool Action_BlockSkillSelection::PreEncoding(json& data) const
     {
-        data["skillType"] = skillType.enumName;
+        data["skillType"] = skillType.enumValue;
         data["blocking"] = blocking;
         data["applyExceptTarget"] = applyExceptTarget;
         return true;
@@ -95,18 +101,10 @@ namespace application
 
     bool Action_BlockSkillSelection::PreDecoding(const json& data)
     {
-        if (data.contains("index"))
-        {
-            skillType.enumValue = data["index"].get<int>();
-            skillType.enumName = POD_Enum<SkillType::Enum>::GetEnumNameMap().at(skillType.enumValue);
-        }
-        else
-        {
-            skillType.enumName = data["skillType"];
-            skillType.enumValue = POD_Enum<SkillType::Enum>::GetNameEnumMap().at(skillType.enumName);
-        }
+        skillType.enumValue = data["skillType"];
+        skillType.enumName = POD_Enum<SkillType::Enum>::GetEnumNameMap().at(skillType.enumValue);
         blocking = data["blocking"];
-        applyExceptTarget = applyExceptTarget["applyExceptTarget"];
+        applyExceptTarget = data["applyExceptTarget"];
         return true;
     }
 
