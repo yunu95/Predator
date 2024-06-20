@@ -463,8 +463,8 @@ yunutyEngine::coroutine::Coroutine Unit::DamagedEffectCoroutine(std::weak_ptr<Un
     Vector3d startPos = GetTransform()->GetWorldPosition();
     Vector3d deltaPos = projectileHitPosition - GetTransform()->GetWorldPosition();
     Vector3d direction = deltaPos.Normalized();
-    direction *= -1;
-    //damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos + direction * 2 * (-1));
+    //direction *= -1;
+    //damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos + direction * 2);
     damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos);
     damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
     //damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(direction);
