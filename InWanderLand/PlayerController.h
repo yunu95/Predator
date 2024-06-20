@@ -17,6 +17,9 @@ class IInteractableComponent;
 class UnitAcquisitionSphereCollider;
 namespace application
 {
+    class Action_BlockSkillCancel;
+    class Action_BlockSkillSelection;
+    class Action_BlockPlayerSwitch;
     namespace editor
     {
         class RegionData;
@@ -40,8 +43,8 @@ public:
             Battle,
             // 평화상태, 애들이 선두 유닛을 졸졸 따라다님.
             Peace,
-			// 전술모드
-			Tactic,
+            // 전술모드
+            Tactic,
             // 시네마틱 상태, 사용자의 모든 입력이 막히고 컨트롤러가 유닛들에 일절 개입하지 않는다.
             Cinematic,
         };
@@ -49,11 +52,11 @@ public:
 
     virtual void RegisterUnit(std::weak_ptr<Unit> unit)override;
     virtual void UnRegisterUnit(std::weak_ptr<Unit> unit) override {};
-    
+
     void SelectPlayerUnit(PlayerCharacterType::Enum charType);
     void SelectSkill(SkillType::Enum skillType);
     State::Enum GetState() const { return state; }
-   
+
     const std::array<std::weak_ptr<Unit>, (int)PlayerCharacterType::Num>& GetPlayers() const { return characters; }
     std::array<float, (int)PlayerCharacterType::Num> GetAggroProportions()const;
     void Reset();
@@ -76,7 +79,6 @@ public:
     Unit* GetUnitOnCursor();
     static constexpr int playerTeamIndex = 1;
     static const std::unordered_map<UIEnumID, SkillUpgradeType::Enum> skillUpgradeByUI;
-    bool blockSkillSelection[(int)SkillType::SKILL_NUM]{ false };
     DelegateCallback<void> onSkillSelect[(int)SkillType::SKILL_NUM];
     DelegateCallback<void> onSkillActivate[(int)SkillType::SKILL_NUM];
 
@@ -97,7 +99,7 @@ private:
     virtual void OnContentsPlay() override;
     virtual void OnContentsStop() override;
     virtual void Update() override;
-   
+
     void HandleByState();
     // 사용자 입력을 받기 위해 매 프레임 불린다.
     void HandleInput();
@@ -146,6 +148,9 @@ private:
     std::array<float, SkillType::SKILL_NUM> skillCooltimeLeft;
     std::array<UIElement*, SkillType::SKILL_NUM> skillCooltimeNumberUI;
     std::array<UIElement*, SkillType::SKILL_NUM> skillCooltimeMaskUI;
+    bool blockSkillCancel{ false };
+    bool playerSwitchable{ true };
+    std::array<bool, SkillType::SKILL_NUM> blockSkillSelection{ false };
     float mana{ 0 };
     State::Enum state{ State::Battle };
     SkillType::Enum selectedSkill = SkillType::NONE;
@@ -182,4 +187,7 @@ private:
 
     State::Enum stateRequestedByAction = State::None;
     bool isStateAction = false;
+    friend application::Action_BlockSkillCancel;
+    friend application::Action_BlockSkillSelection;
+    friend application::Action_BlockPlayerSwitch;
 };

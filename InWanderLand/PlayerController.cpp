@@ -131,6 +131,7 @@ void PlayerController::OnContentsStop()
     SetState(State::Peace);
     SetActive(false);
     UnlockCamFromRegion();
+    Unit::SetPauseAll(false);
     Scene::getCurrentScene()->DestroyGameObject(cursorUnitDetector.lock()->GetGameObject());
 }
 
@@ -776,6 +777,10 @@ void PlayerController::SelectSkill(SkillType::Enum skillType)
     {
         return;
     }
+    if (blockSkillSelection[skillType] == true)
+    {
+        return;
+    }
 
     UnSelectSkill();
     SkillPreviewSystem::Instance().HideTemporaryRoute();
@@ -926,6 +931,10 @@ void PlayerController::AddCombo()
 
 void PlayerController::UnSelectSkill()
 {
+    if (blockSkillCancel == true)
+    {
+        return;
+    }
     switch (selectedSkill)
     {
     case SkillType::ROBIN_Q: SkillPreviewSystem::Instance().HideRobinQSkill(); break;

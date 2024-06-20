@@ -31,6 +31,7 @@ namespace application
         endPos.y = 0;
 
         targetUnit->inGameUnit.lock()->Relocate(endPos);
+        targetUnit->inGameUnit.lock()->OrderHold();
         co_return;
     }
 
