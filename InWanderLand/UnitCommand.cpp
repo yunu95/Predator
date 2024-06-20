@@ -7,13 +7,13 @@ UnitCommand::UnitCommand(Unit* unit, Vector3d expectedPos)
 {
 	this->playerType = static_cast<PlayerCharacterType::Enum>(unit->GetUnitTemplateData().pod.playerUnitType.enumValue);
 
-	//unit->OnStateEngageCallback()[UnitBehaviourTree::Keywords::Knockback].AddVolatileCallback([&]() {
-	//	TacticModeSystem::Instance().InterruptedCommand(unit);
-	//	});
+	this->unit->OnStateEngageCallback()[UnitBehaviourTree::Keywords::Knockback].AddVolatileCallback([=]() {
+		TacticModeSystem::Instance().InterruptedCommand(unit);
+		});
 
-	//unit->OnStateEngageCallback()[UnitBehaviourTree::Keywords::Death].AddVolatileCallback([&]() {
-	//	TacticModeSystem::Instance().InterruptedCommand(unit);
-	//	});
+	this->unit->OnStateEngageCallback()[UnitBehaviourTree::Keywords::Death].AddVolatileCallback([=]() {
+		TacticModeSystem::Instance().InterruptedCommand(unit);
+		});
 }
 
 UnitCommand::~UnitCommand()
