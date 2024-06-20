@@ -10,6 +10,7 @@ public:
 	void SetTexture(yunuGI::ITexture* texture);
 	void SetDirection(yunutyEngine::Vector2d direction);
 	void SetSpeed(float speed);
+	void SetUseDefaultValue(bool val) { this->defaultVal = val; }
 
 	virtual void Start() override;
 	virtual void Update() override;
@@ -24,5 +25,6 @@ private:
 	float speed = 1;
 	yunutyEngine::Vector2d offset;
 	yunutyEngine::Vector2d direction{-1.f,0.f};
+	bool defaultVal = true;
 };
 
