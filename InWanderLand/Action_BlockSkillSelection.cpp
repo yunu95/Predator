@@ -29,7 +29,8 @@ namespace application
                 {
                     continue;
                 }
-                PlayerController::Instance().blockSkillSelection[(int)i] = blocking;
+                if (i != (int)SkillType::NONE)
+                    PlayerController::Instance().blockSkillSelection[(int)i] = blocking;
             }
         }
         co_return;
@@ -54,7 +55,7 @@ namespace application
 
                     ImGui::SetNextItemWidth(-1);
                     ImGui::Checkbox("applyExceptTarget##applyExceptTarget", &applyExceptTarget);
-                    
+
                     if (ImGui::BeginTable("##BlockSkillSelection", 2, ImGuiTableFlags_SizingStretchSame))
                     {
                         imgui::data::DrawData("SkillType", skillType);

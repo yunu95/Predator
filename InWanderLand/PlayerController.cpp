@@ -51,13 +51,13 @@ void PlayerController::RegisterUnit(std::weak_ptr<Unit> unit)
     unit.lock()->onStateEngage[UnitBehaviourTree::Paralysis].AddCallback([this, unit]() { UnSelectSkill(unit); });
     unit.lock()->onStateEngage[UnitBehaviourTree::SkillOnGoing].AddCallback(std::bind_front(static_cast<void(PlayerController::*)(std::weak_ptr<Unit>)>(&PlayerController::SetCooltime), this, unit));
 
-	unit.lock()->OnStateEngageCallback()[UnitBehaviourTree::Keywords::Knockback].AddCallback([=]() {
-		TacticModeSystem::Instance().InterruptedCommand(unit.lock().get());
-		});
+    unit.lock()->OnStateEngageCallback()[UnitBehaviourTree::Keywords::Knockback].AddCallback([=]() {
+        TacticModeSystem::Instance().InterruptedCommand(unit.lock().get());
+        });
 
-	unit.lock()->OnStateEngageCallback()[UnitBehaviourTree::Keywords::Death].AddCallback([=]() {
-		TacticModeSystem::Instance().InterruptedCommand(unit.lock().get());
-		});
+    unit.lock()->OnStateEngageCallback()[UnitBehaviourTree::Keywords::Death].AddCallback([=]() {
+        TacticModeSystem::Instance().InterruptedCommand(unit.lock().get());
+        });
 }
 
 void PlayerController::SetSkillUpgradeTarget(UIEnumID skillUpgradeUITarget)
@@ -717,7 +717,7 @@ void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
             selectedCharacter.lock()->OrderSkill(HanselProjectileSkill{}, pos);
             break;
         }
-        UnSelectSkill();
+        UnSelectSkill(true);
         // 스킬 프리뷰를 비활성화시킨다.
     }
     else
@@ -937,9 +937,9 @@ void PlayerController::AddCombo()
     }
 }
 
-void PlayerController::UnSelectSkill()
+void PlayerController::UnSelectSkill(bool forceUnselect)
 {
-    if (blockSkillCancel == true)
+    if (blockSkillCancel == true && !forceUnselect)
     {
         return;
     }

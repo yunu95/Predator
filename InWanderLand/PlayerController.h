@@ -124,7 +124,7 @@ private:
     void OrderAttack(std::weak_ptr<Unit> unit);
     void OrderInteraction(std::weak_ptr<IInteractableComponent> interactable);
     void ActivateSkill(SkillType::Enum skillType, Vector3d pos);
-    void UnSelectSkill();
+    void UnSelectSkill(bool forceUnselect = false);
     // 현재 선택된 스킬이 특정 유닛의 스킬이라면 선택을 취소시킨다.
     void UnSelectSkill(std::weak_ptr<Unit> unit);
     Vector3d GetWorldCursorPosition();
