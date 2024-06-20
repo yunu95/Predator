@@ -106,6 +106,7 @@ public:
     void BlendWithDefaultAnimation();
     void SetDefaultAnimation(UnitAnimType animType);
     void SetDesiredRotation(const Vector3d& facingDirection);
+    std::weak_ptr<coroutine::Coroutine> SetRotation(const Quaternion& targetRotation, float rotatingTime);
     std::weak_ptr<coroutine::Coroutine> SetRotation(const Vector3d& facingDirection, float rotatingTime);
     std::weak_ptr<coroutine::Coroutine> SetRotation(float facingAngle, float rotatingTime);
     coroutine::Coroutine SettingRotation(float facingAngle, float rotatingTime);
@@ -279,7 +280,7 @@ private:
     std::weak_ptr<ManagedFBX> attackVFX = std::weak_ptr<ManagedFBX>();
     std::weak_ptr<ManagedFBX> damagedVFX = std::weak_ptr<ManagedFBX>();
     std::weak_ptr<ManagedFBX> healVFX = std::weak_ptr<ManagedFBX>();
-	std::weak_ptr<ManagedFBX> paralysisVFX = std::weak_ptr<ManagedFBX>();
+    std::weak_ptr<ManagedFBX> paralysisVFX = std::weak_ptr<ManagedFBX>();
 
     bool isPaused = false;
     float localTimeScale = 1.0f;
