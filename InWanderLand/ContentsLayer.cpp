@@ -157,7 +157,10 @@ void GraphicsTest()
 		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Spike01");
 	}
 	{
-		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("VFX_Ursula_Attack_1");
+		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SVFX_Ursula_Skill2_Wave");
+		auto anim = obj->AddComponent<VFXAnimator>();
+		anim->Init();
+		anim->Play();
 
 		//auto obj2 = Scene::getCurrentScene()->AddGameObject();
 		//auto test = obj2->AddComponent<TestComponent4>();

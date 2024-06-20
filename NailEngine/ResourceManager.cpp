@@ -1125,6 +1125,7 @@ void ResourceManager::CreateDefaultShader()
     CreateShader(L"GuideLinePS.cso");
     CreateShader(L"Stage1FloorNoBlendPS.cso");
 	CreateShader(L"VFX_PS.cso");
+	CreateShader(L"MoveAnimTexturePS.cso");
 #pragma endregion
 
 #pragma region GS

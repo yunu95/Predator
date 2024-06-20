@@ -59,7 +59,7 @@ PS_OUT main(PixelIn input)
     {
         //color = pow(color, 2.2f);
     }
-    color.w = 0.5;
+    color.w = 0.8;
     //color.w = 1;
     output.color = color;
     
