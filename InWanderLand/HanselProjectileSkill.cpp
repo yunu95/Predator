@@ -66,9 +66,11 @@ coroutine::Coroutine HanselProjectileSkill::ThrowingPie(std::weak_ptr<HanselProj
         {
             if (onceCollidedUnits.find(each) == onceCollidedUnits.end())
             {
-                /// 충돌한 아군에게는 음향버프를 부여합니다.
+                /// 충돌한 아군에게는 음향버프 및 체력회복을 부여합니다.
                 onceCollidedUnits.insert(each);
                 each->ApplyBuff(UnitBuffHanselBuff{});
+                each->Heal(pod.healPoint);
+
             }
         }
     }
