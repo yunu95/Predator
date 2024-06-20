@@ -92,20 +92,19 @@ public:
 class TestComponent4 : public yunutyEngine::Component
 {
 public:
-	yunutyEngine::graphics::ParticleRenderer* anim;
+	yunutyEngine::GameObject* obj;
+	yunutyEngine::GameObject* cam;
 	virtual void Update() override
 	{
+		obj->GetTransform()->SetLocalRotation(cam->GetTransform()->GetLocalRotation());
 		if (Input::isKeyPushed(yunutyEngine::KeyCode::V))
 		{
-			anim->Play();
 		}
 		if (Input::isKeyPushed(yunutyEngine::KeyCode::C))
 		{
-			anim->Pause();
 		}
 		if (Input::isKeyPushed(yunutyEngine::KeyCode::B))
 		{
-			anim->Resume();
 		}
 	}
 };
@@ -153,26 +152,17 @@ void GraphicsTest()
 			animation3 = i;
 		}
 	}
-	{
-		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("VFX_Ursula_Attack_1");
-	}
-	{
-		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_BossCorrider_Floor");
-		obj2->GetTransform()->GetTransform()->SetLocalPosition(Vector3d{ 20,0,0 });
-	}
 
 	{
-		auto obj = Scene::getCurrentScene()->AddGameObject();
-		auto anim = obj->AddComponent<yunutyEngine::graphics::ParticleRenderer>();
-		anim->SetTexture(_resourceManager->GetTexture(L"Texture/Particle/BombParticle.dds")); 
-		anim->SetParticleMode(yunutyEngine::graphics::ParticleMode::Bursts);
-		anim->SetPlayAwake(false);
-		anim->SetLoop(true);
-		anim->Play();
+		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Spike01");
+	}
+	{
+		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("VFX_Ursula_Attack_1");
 
-		auto obj2 = Scene::getCurrentScene()->AddGameObject();
-		auto test = obj2->AddComponent<TestComponent4>();
-		test->anim = anim;
+		//auto obj2 = Scene::getCurrentScene()->AddGameObject();
+		//auto test = obj2->AddComponent<TestComponent4>();
+		//test->obj = obj;
+		//test->cam = camObj;
 	}
 
 	yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
