@@ -1,6 +1,11 @@
 #include "UnitBuffBlinded.h"
 #include "InWanderLand.h"
 
+UnitBuffBlinded::UnitBuffBlinded()
+{
+    durationLeft = UrsulaBlindSkill::pod.skillBlindTime;
+}
+
 UnitBuffType UnitBuffBlinded::GetBuffType()
 {
     return UnitBuffType::Blinded;

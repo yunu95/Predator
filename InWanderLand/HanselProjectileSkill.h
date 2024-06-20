@@ -13,6 +13,7 @@ struct POD_HanselProjectileSkill
     float pieRotateSpeed = 1080.0f;
     float pieOffsetY = 2.0f;
     float pieOffsetX = 0.0f;
+    float healPoint = 5.0f;
     float buffDuration = 10.0f;
     float debuffDuration = 10.0f;
     float critChanceBonus = 0.1f;

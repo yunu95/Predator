@@ -31,7 +31,7 @@ namespace application
             editor::EditorLayer::SetInputControl(false);
             static bool block = true;
             block = data->block;
-            editor::imgui::ShowMessageBox("SetBlockUnblock", [data]()
+            editor::imgui::ShowMessageBox("SetBlockUnblock(SkillCancel)", [data]()
                 {
                     editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
 
@@ -46,7 +46,7 @@ namespace application
                     {
                         data->SetBlock(block);
                         ImGui::CloseCurrentPopup();
-                        editor::imgui::CloseMessageBox("SetBlockUnblock");
+                        editor::imgui::CloseMessageBox("SetBlockUnblock(SkillCancel)");
                         editor::EditorLayer::SetInputControl(true);
                     }
                     ImGui::SameLine();
@@ -54,7 +54,7 @@ namespace application
                     if (ImGui::Button("Cancel"))
                     {
                         ImGui::CloseCurrentPopup();
-                        editor::imgui::CloseMessageBox("SetBlockUnblock");
+                        editor::imgui::CloseMessageBox("SetBlockUnblock(SkillCancel)");
                         editor::EditorLayer::SetInputControl(true);
                     }
                 }, 300);

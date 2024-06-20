@@ -13,7 +13,15 @@ void UnitBuffUrsula::OnStart()
     critChanceAdder = owner.lock()->adderCritChance.AcquireFactor();
     *critChanceAdder = PassiveUrsula::GetCritChanceBonusPerStack();
     owner.lock()->StartCoroutine(EffectCoroutine());
-};
+}
+
+void UnitBuffUrsula::OnUpdate()
+{
+    if (!buffEffect.expired())
+    {
+        buffEffect.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
+    }
+}
 
 void UnitBuffUrsula::OnEnd()
 {
@@ -35,7 +43,7 @@ void UnitBuffUrsula::OnOverlap(UnitBuff&& overlapping)
 coroutine::Coroutine UnitBuffUrsula::EffectCoroutine()
 { 
     buffEffect = FBXPool::Instance().Borrow("VFX_Buff_Ursula_Contract");
-    buffEffect.lock()->GetGameObject()->SetParent(owner.lock()->GetGameObject());
+    buffEffect.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
 
     auto buffEffectAnimator = buffEffect.lock()->AcquireVFXAnimator();
     buffEffectAnimator.lock()->SetAutoActiveFalse();
