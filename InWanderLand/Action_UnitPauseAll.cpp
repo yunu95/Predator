@@ -3,6 +3,7 @@
 
 #include "EditorLayer.h"
 #include "YunutyEngine.h"
+#include "InWanderLand.h"
 
 namespace application
 {
@@ -15,14 +16,15 @@ namespace application
     {
         // 모든 유닛들의 동작을 일시정지시킨다. 다만 플레이어의 경우 스킬은 쓸 수 있어야 한다.
         // usecase : 튜토리얼에서 스킬의 사용법을 알려주기 위해 잠깐 적들과 아군의 움직임을 멈추고 싶을 때
-        if (pause)
-        {
-            //LocalTimeEntityManager::Instance().ReportTacticModeEngaged();
-        }
-        else
-        {
-            //LocalTimeEntityManager::Instance().ReportTacticModeEnded();
-        }
+        Unit::SetPauseAll(pause);
+        //if (pause)
+        //{
+        //    //LocalTimeEntityManager::Instance().ReportTacticModeEngaged();
+        //}
+        //else
+        //{
+        //    //LocalTimeEntityManager::Instance().ReportTacticModeEnded();
+        //}
         co_return;
     }
 

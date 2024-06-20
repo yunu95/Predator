@@ -269,30 +269,32 @@ namespace application
 
     CoroutineObject<void> Action_UnitRotate::DoAction()
     {
-        if (targetUnit->inGameUnit.expired())
+        auto ingameUnit = targetUnit->inGameUnit.lock();
+        if (ingameUnit == nullptr)
         {
             co_return;
         }
         // 유닛을 정지시키고
-        auto pause{ targetUnit->inGameUnit.lock()->referencePause.Acquire() };
+        //auto pause{ targetUnit->inGameUnit.lock()->referencePause.Acquire() };
+        ingameUnit->OrderHold();
         // 유닛의 자체적인 회전을 막는다.
-        //auto blockRotation{ targetUnit->inGameUnit.lock()->referenceBlockRotation.Acquire() };
-        auto ts = targetUnit->inGameUnit.lock()->GetTransform();
-        auto startRot = ts->GetWorldRotation();
+        //auto blockRotation{ ingameUnit->referenceBlockRotation.Acquire() };
+        //auto ts = ingameUnit->GetTransform();
+        //auto startRot = ts->GetWorldRotation();
 
         Quaternion endRot;
 
         if (isRelative)
         {
-            endRot = startRot * Quaternion(Vector3d(0, angle, 0));
+            //endRot = startRot * Quaternion(Vector3d(0, 90 - angle, 0));
         }
         else
         {
-            endRot = Quaternion(Vector3d(0, angle, 0));
+            //endRot = Quaternion(Vector3d(0, 90 - angle, 0));
         }
 
         double timer = 0;
-        targetUnit->inGameUnit.lock()->SetRotation(endRot, lerpTime);
+        ingameUnit->SetRotation(isRelative ? ingameUnit->GetDesiredRotation() + angle : angle, lerpTime);
         //float factor = 0;
 
         //if (lerpTime == 0)
@@ -816,7 +818,8 @@ namespace application
 
         {
             // 유닛을 정지시키고
-            auto pause{ targetUnit->inGameUnit.lock()->referencePause.Acquire() };
+            //auto pause{ targetUnit->inGameUnit.lock()->referencePause.Acquire() };
+            targetUnit->inGameUnit.lock()->OrderHold();
             // 유닛의 자체적인 회전을 막는다.
             //auto blockRotation{ targetUnit->inGameUnit.lock()->referencePause.Acquire() };
             double timer = 0;

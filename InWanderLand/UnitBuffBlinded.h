@@ -5,6 +5,7 @@
 class UnitBuffBlinded : public UnitBuff
 {
 public:
+    UnitBuffBlinded();
     virtual UnitBuffType GetBuffType() override;
     virtual UIEnumID GetUIEnumID();
     virtual void OnStart() override;

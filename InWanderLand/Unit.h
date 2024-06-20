@@ -67,6 +67,11 @@ public:
     static float DistanceSquare(Unit* a, Unit* b);
     static float Distance(Unit* a, const Vector3d& worldPos);
     static float DistanceSquare(Unit* a, const Vector3d& worldPos);
+    static float QuaternionToEastAngle(const Quaternion& rotation);
+    static Quaternion EastAngleToQuaternion(const float rotation);
+    static bool GetPauseAll();
+    static void SetPauseAll(bool pause);
+    float GetDesiredRotation();
     float Distance(const Vector3d& worldPos);
     float DistanceSquare(const Vector3d& worldPos);
     // 유닛에게 필요한 모든 필수 구성요소들을 생성해주며 유닛의 초기화를 진행한다. Init은 유닛당 한번만 호출된다.
@@ -83,6 +88,7 @@ public:
     void Relocate(const Vector3d& pos);
     void OrderMove(Vector3d position);
     void OrderAttackMove(Vector3d position);
+    void OrderAttackMove();
     void OrderAttack(std::weak_ptr<Unit> opponent);
     void OrderHold();
     template<typename SkillType>
@@ -184,6 +190,7 @@ public:
 
     std::weak_ptr<yunutyEngine::graphics::Animator> GetAnimator() { return animatorComponent; }
 private:
+    static bool pauseAll;
     void AddPassiveSkill(std::shared_ptr<PassiveSkill> skill);
     void Summon(application::editor::Unit_TemplateData* templateData);
     void SetIsAlive(bool isAlive);
@@ -254,6 +261,8 @@ private:
     float currentRotationSpeed;
     Vector3d moveDestination;
     Vector3d attackMoveDestination;
+    //Vector3d pendingMoveDestination;
+    //Vector3d pendingAttackMoveDestination;
     Vector3d lastPosition;
     float currentHitPoint;
     // 유닛의 현재 회전값을 동경각으로 나타냅니다. 유닛은 currentRotation이 0도일때 동쪽(양의 X 방향), 90도일때 북쪽(양의 z 방향)을 향합니다.

@@ -36,6 +36,7 @@ float getDeltaAngle(float difference) {
     while (difference > 180) difference -= 360;
     return difference;
 }
+bool Unit::pauseAll{ false };
 std::weak_ptr<Unit> Unit::GetClosestEnemy()
 {
     auto minIt = std::min_element(attackRange.lock()->GetEnemies().begin(), attackRange.lock()->GetEnemies().end(), [this](const Unit* const a, const Unit* const b)
@@ -153,6 +154,7 @@ void Unit::OnStateExit<UnitBehaviourTree::Knockback>()
 {
     onStateExit[UnitBehaviourTree::Knockback]();
     blockFollowingNavAgentByState.reset();
+    OrderHold();
 }
 template<>
 void Unit::OnStateEngage<UnitBehaviourTree::Pause>()
@@ -172,7 +174,6 @@ void Unit::OnStateExit<UnitBehaviourTree::Pause>()
     animatorComponent.lock()->Resume();
     enableNavObstacleByState.reset();
     disableNavAgentByState.reset();
-    OrderHold();
 }
 template<>
 void Unit::OnStateEngage<UnitBehaviourTree::Reviving>()
@@ -274,6 +275,7 @@ void Unit::OnStateExit<UnitBehaviourTree::SkillOnGoing>()
         DeleteCoroutine(coroutineSkill);
     }
     onGoingSkill.reset();
+    OrderAttackMove();
 }
 template<>
 void Unit::OnStateEngage<UnitBehaviourTree::SkillCasting>()
@@ -677,7 +679,7 @@ void Unit::SetDesiredRotation(const Vector3d& facingDirection)
 }
 std::weak_ptr<coroutine::Coroutine> Unit::SetRotation(const Quaternion& targetRotation, float rotatingTime)
 {
-    return SetRotation(targetRotation * Vector3d::forward, rotatingTime);
+    return SetRotation(targetRotation * -Vector3d::forward, rotatingTime);
 }
 std::weak_ptr<coroutine::Coroutine> Unit::SetRotation(const Vector3d& facingDirection, float rotatingTime)
 {
@@ -707,6 +709,7 @@ coroutine::Coroutine Unit::SettingRotation(float facingAngle, float rotatingTime
     {
         co_await std::suspend_always();
     }
+    co_await std::suspend_always();
 
     currentRotationSpeed = unitTemplateData->pod.rotationSpeed;
 }
@@ -750,7 +753,7 @@ void Unit::Start()
 void Unit::Relocate(const Vector3d& pos)
 {
     navAgentComponent.lock()->Relocate(pos);
-    OrderHold();
+    //OrderHold();
 }
 void Unit::OrderMove(Vector3d position)
 {
@@ -761,11 +764,16 @@ void Unit::OrderMove(Vector3d position)
     }
     pendingOrderType = UnitOrderType::Move;
     moveDestination = position;
+    //moveDestination = position;
 }
 void Unit::OrderAttackMove(Vector3d position)
 {
     pendingOrderType = UnitOrderType::AttackMove;
     attackMoveDestination = position;
+}
+void Unit::OrderAttackMove()
+{
+    OrderAttackMove(GetTransform()->GetWorldPosition());
 }
 void Unit::OrderAttack(std::weak_ptr<Unit> opponent)
 {
@@ -807,6 +815,27 @@ float Unit::Distance(Unit* a, const Vector3d& worldPos)
 float Unit::DistanceSquare(Unit* a, const Vector3d& worldPos)
 {
     return (a->GetTransform()->GetWorldPosition() - worldPos).MagnitudeSqr();
+}
+float Unit::QuaternionToEastAngle(const Quaternion& rotation)
+{
+    auto&& forward = rotation.Forward();
+    return 180 + std::atan2f(forward.z, forward.x) * math::Rad2Deg;
+}
+Quaternion Unit::EastAngleToQuaternion(const float rotation)
+{
+    return Quaternion();
+}
+bool Unit::GetPauseAll()
+{
+    return pauseAll;
+}
+void Unit::SetPauseAll(bool pause)
+{
+    pauseAll = pause;
+}
+float Unit::GetDesiredRotation()
+{
+    return desiredRotation;
 }
 float Unit::Distance(const Vector3d& worldPos)
 {
@@ -1033,7 +1062,8 @@ void Unit::Summon(const application::editor::UnitData* unitData)
 
     Quaternion quat{ unitData->pod.rotation.w,unitData->pod.rotation.x,unitData->pod.rotation.y ,unitData->pod.rotation.z };
     auto forward = quat.Forward();
-    desiredRotation = currentRotation = 180 + std::atan2f(forward.z, forward.x) * math::Rad2Deg;
+    desiredRotation = currentRotation = QuaternionToEastAngle(quat);
+    //desiredRotation = currentRotation = 180 + std::atan2f(forward.z, forward.x) * math::Rad2Deg;
     coroutineBirth = StartCoroutine(BirthCoroutine());
 }
 void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& position, float rotation, bool instant)
@@ -1063,8 +1093,7 @@ void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& po
 }
 void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& position, const Quaternion& rotation, bool instant)
 {
-    auto forward = rotation.Forward();
-    auto finalRot = 180 + std::atan2f(forward.z, forward.x) * math::Rad2Deg;
+    auto finalRot = QuaternionToEastAngle(rotation);
     Summon(td, position, finalRot, instant);
 }
 void Unit::AddPassiveSkill(std::shared_ptr<PassiveSkill> skill)
@@ -1187,6 +1216,8 @@ void Unit::Reset()
     currentOrderType = UnitOrderType::AttackMove;
     pendingOrderType = UnitOrderType::AttackMove;
     attackMoveDestination = moveDestination = GetGameObject()->GetTransform()->GetWorldPosition();
+    //pendingAttackMoveDestination = attackMoveDestination;
+    //pendingMoveDestination = moveDestination;
 
     isPaused = false;
     localTimeScale = 1.0f;
@@ -1246,7 +1277,7 @@ void Unit::InitBehaviorTree()
         };
     unitBehaviourTree[UnitBehaviourTree::Pause].enteringCondtion = [this]()
         {
-            return referencePause.BeingReferenced();
+            return referencePause.BeingReferenced() || pauseAll;
         };
     unitBehaviourTree[UnitBehaviourTree::Pause].onEnter = [this]()
         {
@@ -1311,6 +1342,7 @@ void Unit::InitBehaviorTree()
     unitBehaviourTree[UnitBehaviourTree::Skill][UnitBehaviourTree::Move].onEnter = [this]()
         {
             moveDestination = pendingSkill.get()->targetPos;
+            attackMoveDestination = moveDestination;
             OnStateEngage<UnitBehaviourTree::Move>();
         };
     unitBehaviourTree[UnitBehaviourTree::Skill][UnitBehaviourTree::Move].onUpdate = [this]()

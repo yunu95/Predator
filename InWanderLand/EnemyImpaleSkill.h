@@ -50,11 +50,13 @@ private:
     std::weak_ptr<ManagedFBX> impaleEffect;
     std::weak_ptr<VFXAnimator> previewEffectAnimator;
     std::weak_ptr<VFXAnimator> impaleEffectAnimator;
+    std::vector <std::weak_ptr<coroutine::Coroutine>> spearAriseVector;
     std::vector<std::weak_ptr<UnitAcquisitionSphereCollider>> knockbackColliderVector;
     std::vector<std::weak_ptr<ManagedFBX>> spearFbxVector;
     std::unordered_set<Unit*> damagedUnits;
 
     int managingIndex;
+    bool isInterrupted;
 };
 
 template <>
