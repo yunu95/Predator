@@ -45,8 +45,8 @@ void NailCamera::SetWorldTM(const DirectX::SimpleMath::Matrix wtm)
 #ifdef EDITOR
 
 #else
-	this->cameraNear = 10.f;
-	this->cameraFar = 80.f;
+	//this->cameraNear = 10.f;
+	//this->cameraFar = 80.f;
 #endif
 
     this->ptm = DirectX::XMMatrixPerspectiveFovLH(this->fov, this->width / this->height, this->cameraNear, this->cameraFar);

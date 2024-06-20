@@ -1480,7 +1480,8 @@ void Unit::InitBehaviorTree()
     unitBehaviourTree[UnitBehaviourTree::AttackMove][UnitBehaviourTree::Move].enteringCondtion = [this]()
         {
             constexpr float epsilon = 0.1f;
-            return !acquisitionRange.lock()->GetEnemies().empty() || (attackMoveDestination - GetTransform()->GetWorldPosition()).Magnitude() > epsilon;
+            auto distance = (attackMoveDestination - GetTransform()->GetWorldPosition()).MagnitudeSqr();
+            return !acquisitionRange.lock()->GetEnemies().empty() || distance > epsilon;
         };
     unitBehaviourTree[UnitBehaviourTree::AttackMove][UnitBehaviourTree::Move].onEnter = [this]()
         {

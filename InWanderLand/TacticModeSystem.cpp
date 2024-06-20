@@ -587,8 +587,8 @@ yunutyEngine::coroutine::Coroutine TacticModeSystem::ExecuteInternal()
             this->playersTacticRevArr[each->GetPlayerType()] = PlayerController::Instance().GetPlayers()[each->GetPlayerType()].lock()->referenceTactic.Acquire();
             each->HidePreviewMesh();
         }
-        UIManager::Instance().GetUIElementByEnum(commandIcons[iconIndex])->DisableElement();
-        iconIndex++;
+		UIManager::Instance().GetUIElementByEnum(commandIcons[iconIndex])->DisableElement();
+		iconIndex++;
     }
 
     for (auto& each : this->playersTacticRevArr)
@@ -630,7 +630,11 @@ void TacticModeSystem::SyncWithTacticCommandQueueUI()
     int idx = 0;
     for (auto& eachCmd : commandList)
     {
-        if (eachCmd->IsDone()) continue;
+        if (eachCmd->IsDone())
+        {
+            continue;
+        }
+
         eachCmd->GetCommandType();
         auto uiElement = UIManager::Instance().GetUIElementByEnum(commandIcons[idx]);
         uiElement->EnableElement();
