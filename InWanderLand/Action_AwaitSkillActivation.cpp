@@ -38,15 +38,21 @@ namespace application
         if (ImGui::MenuItem("SetSkillType"))
         {
             editor::EditorLayer::SetInputControl(false);
-            static POD_Enum<SkillType::Enum> skillType;
-            editor::imgui::ShowMessageBox("SetSkillType", [data]()
+            static POD_Enum<SkillType::Enum> skillType = POD_Enum<SkillType::Enum>();
+            skillType = data->skillType;
+            editor::imgui::ShowMessageBox("SetSkillType(AwaitSkillActivation)", [data]()
                 {
                     editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
 
                     ImGui::Separator();
 
                     ImGui::SetNextItemWidth(-1);
-                    imgui::data::DrawData("SkillType", skillType);
+
+                    if (ImGui::BeginTable("##BlockSkillSelection", 2, ImGuiTableFlags_SizingStretchSame))
+                    {
+                        imgui::data::DrawData("SkillType", skillType);
+                        ImGui::EndTable();
+                    }
 
                     ImGui::Separator();
 
@@ -54,7 +60,7 @@ namespace application
                     {
                         data->skillType = skillType;;
                         ImGui::CloseCurrentPopup();
-                        editor::imgui::CloseMessageBox("SetSkillType");
+                        editor::imgui::CloseMessageBox("SetSkillType(AwaitSkillActivation)");
                         editor::EditorLayer::SetInputControl(true);
                     }
                     ImGui::SameLine();
@@ -62,7 +68,7 @@ namespace application
                     if (ImGui::Button("Cancel"))
                     {
                         ImGui::CloseCurrentPopup();
-                        editor::imgui::CloseMessageBox("SetSkillType");
+                        editor::imgui::CloseMessageBox("SetSkillType(AwaitSkillActivation)");
                         editor::EditorLayer::SetInputControl(true);
                     }
                 }, 300);
@@ -71,7 +77,7 @@ namespace application
 
     bool Action_AwaitSkillActivation::PreEncoding(json& data) const
     {
-        data["skillType"] = skillType.enumName;
+        data["skillType"] = skillType.enumValue;
         return true;
     }
 
@@ -82,16 +88,8 @@ namespace application
 
     bool Action_AwaitSkillActivation::PreDecoding(const json& data)
     {
-        if (data.contains("index"))
-        {
-            skillType.enumValue = data["index"].get<int>();
-            skillType.enumName = POD_Enum<SkillType::Enum>::GetEnumNameMap().at(skillType.enumValue);
-        }
-        else
-        {
-            skillType.enumName = data["skillType"];
-            skillType.enumValue = POD_Enum<SkillType::Enum>::GetNameEnumMap().at(skillType.enumName);
-        }
+        skillType.enumValue = data["skillType"];
+        skillType.enumName = POD_Enum<SkillType::Enum>::GetEnumNameMap().at(skillType.enumValue);
         return true;
     }
 
