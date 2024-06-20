@@ -511,6 +511,8 @@ void TacticModeSystem::PopCommand()
 
 void TacticModeSystem::InterruptedCommand(Unit* unit)
 {
+    if (!isOperating || !isExecuting) return;
+
     auto unitType = static_cast<PlayerCharacterType::Enum>(unit->GetUnitTemplateData().pod.playerUnitType.enumValue);
 
     for (auto iter = this->commandList.begin(); iter != this->commandList.end(); ++iter)
@@ -544,6 +546,7 @@ void TacticModeSystem::InterruptedCommand(Unit* unit)
     }
     break;
     }
+    SyncWithTacticCommandQueueUI();
 }
 
 void TacticModeSystem::ClearCommand()
@@ -627,6 +630,7 @@ void TacticModeSystem::SyncWithTacticCommandQueueUI()
     int idx = 0;
     for (auto& eachCmd : commandList)
     {
+        if (eachCmd->IsDone()) continue;
         eachCmd->GetCommandType();
         auto uiElement = UIManager::Instance().GetUIElementByEnum(commandIcons[idx]);
         uiElement->EnableElement();
