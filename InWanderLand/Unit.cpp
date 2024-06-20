@@ -420,13 +420,17 @@ void Unit::EraseBuff(UnitBuffType buffType)
 }
 void Unit::Damaged(std::weak_ptr<Unit> opponentUnit, float opponentAp, Transform* projectileTransform)
 {
-    if (!coroutineDamagedEffect.expired())
-        FBXPool::Instance().Return(damagedVFX);
+//     if (!coroutineDamagedEffect.expired())
+//         FBXPool::Instance().Return(damagedVFX);
     coroutineDamagedEffect = StartCoroutine(DamagedEffectCoroutine(opponentUnit, projectileTransform));
-    coroutineDamagedEffect.lock()->PushDestroyCallBack([this]()
-        {
-            FBXPool::Instance().Return(damagedVFX);
-        });
+     coroutineDamagedEffect.lock()->PushDestroyCallBack([this]()
+         {
+             for (auto each : damagedEffectVector)
+             {
+				 FBXPool::Instance().Return(each);
+             }
+             damagedEffectVector.clear();
+         });
 
     Damaged(opponentUnit, opponentAp, DamageType::Attack);
 }
@@ -454,7 +458,7 @@ void Unit::Damaged(float dmg)
 
 yunutyEngine::coroutine::Coroutine Unit::DamagedEffectCoroutine(std::weak_ptr<Unit> opponent, Transform* projectileTransform)
 {
-    damagedVFX = wanderResources::GetVFX(opponent.lock()->unitTemplateData->pod.skinnedFBXName, UnitAnimType::Damaged);
+    auto damagedVFX = wanderResources::GetVFX(opponent.lock()->unitTemplateData->pod.skinnedFBXName, UnitAnimType::Damaged);
     co_await std::suspend_always{};
     auto vfxAnimator = damagedVFX.lock()->AcquireVFXAnimator();
     vfxAnimator.lock()->SetAutoActiveFalse();
@@ -469,11 +473,15 @@ yunutyEngine::coroutine::Coroutine Unit::DamagedEffectCoroutine(std::weak_ptr<Un
     damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion{euler});
     //damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(direction);
     //damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldScale(GetTransform()->GetWorldScale());
-        
+    
+    damagedEffectVector.push_back(damagedVFX);
+
     while (!vfxAnimator.lock()->IsDone())
     {
         co_await std::suspend_always{};
     }
+
+    FBXPool::Instance().Return(damagedVFX);
 
     co_return;
 }

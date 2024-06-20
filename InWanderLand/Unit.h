@@ -288,7 +288,8 @@ private:
     bool blendWithDefaultAnimTrigger{ false };
     int navAgentEnableFrameCount{ 0 };
     std::weak_ptr<ManagedFBX> attackVFX = std::weak_ptr<ManagedFBX>();
-    std::weak_ptr<ManagedFBX> damagedVFX = std::weak_ptr<ManagedFBX>();
+    std::vector<std::weak_ptr<ManagedFBX>> damagedEffectVector;
+//     std::weak_ptr<ManagedFBX> damagedVFX = std::weak_ptr<ManagedFBX>();
     std::weak_ptr<ManagedFBX> healVFX = std::weak_ptr<ManagedFBX>();
     std::weak_ptr<ManagedFBX> paralysisVFX = std::weak_ptr<ManagedFBX>();
 
