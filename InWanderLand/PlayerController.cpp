@@ -135,6 +135,7 @@ void PlayerController::OnContentsPlay()
 }
 void PlayerController::OnContentsStop()
 {
+    selectedCharacterType = PlayerCharacterType::None;
     stateRequestedByAction = State::None;
     SetState(State::Peace);
     SetActive(false);

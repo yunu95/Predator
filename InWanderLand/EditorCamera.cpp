@@ -13,6 +13,7 @@
 #include "PaletteManager.h"
 #include "Palette.h"
 #include "Panel_Palette.h"
+#include "RTSCam.h"
 
 #include <DirectXMath.h>
 
@@ -415,7 +416,7 @@ namespace application
 
 		void EditorCamera::OnPlayContents()
 		{
-			playCam = yunutyEngine::graphics::Camera::GetMainCamera();
+			playCam = &RTSCam::Instance();
 		}
 
 		void EditorCamera::OnPauseContents()

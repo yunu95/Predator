@@ -161,15 +161,11 @@ void Unit::OnStateEngage<UnitBehaviourTree::Pause>()
     defaultAnimationType = UnitAnimType::Idle;
     enableNavObstacleByState = referenceEnableNavObstacle.Acquire();
     disableNavAgentByState = referenceDisableNavAgent.Acquire();
-    //PlayAnimation(UnitAnimType::Idle, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
-    animatorComponent.lock()->Pause();
 }
 template<>
 void Unit::OnStateExit<UnitBehaviourTree::Pause>()
 {
     onStateExit[UnitBehaviourTree::Pause]();
-    //PlayAnimation(UnitAnimType::Idle, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
-    animatorComponent.lock()->Resume();
     enableNavObstacleByState.reset();
     disableNavAgentByState.reset();
     OrderHold();
@@ -1179,6 +1175,7 @@ void Unit::Reset()
         onGoingSkill.reset();
     }
     DeleteCoroutine(coroutineRevival);
+    DeleteCoroutine(coroutineBirth);
     DeleteCoroutine(coroutineDeath);
     ClearCoroutines();
     passiveSkill.reset();
@@ -1545,15 +1542,14 @@ yunutyEngine::coroutine::Coroutine Unit::BirthCoroutine()
         co_await std::suspend_always();
     }
 
+    co_await std::suspend_always();
+
     const auto& gc = GlobalConstant::GetSingletonInstance().pod;
     auto pauseGuard = referencePause.Acquire();
     auto invulnerableGuard = referenceInvulnerable.Acquire();
-    //animatorComponent.lock()->GetGameObject()->SetSelfActive(false);
-    //co_yield coroutine::WaitForSeconds{ math::Random::GetRandomFloat(0, gc.unitBirthTimeOffsetNoise) };
-    //animatorComponent.lock()->GetGameObject()->SetSelfActive(true);
     float animSpeed = wanderResources::GetAnimation(unitTemplateData->pod.skinnedFBXName, UnitAnimType::Birth)->GetDuration() / unitTemplateData->pod.birthTime;
+    animatorComponent.lock()->GetGI().SetPlaySpeed(animSpeed);
     PlayAnimation(UnitAnimType::Birth, Animation::PlayFlag_::None);
-    //animatorComponent.lock()->GetGI().SetPlaySpeed(animSpeed);
     burnEffect.lock()->SetDuration(unitTemplateData->pod.birthTime);
     burnEffect.lock()->SetEdgeColor({ unitTemplateData->pod.birthBurnEdgeColor.x,unitTemplateData->pod.birthBurnEdgeColor.y,unitTemplateData->pod.birthBurnEdgeColor.z });
     burnEffect.lock()->SetEdgeThickness(unitTemplateData->pod.birthBurnEdgeThickness);
@@ -1577,14 +1573,19 @@ yunutyEngine::coroutine::Coroutine Unit::DeathCoroutine()
         ReturnToPool();
         co_return;
     }
+
+    co_await std::suspend_always();
+
+    auto pauseGuard = referencePause.Acquire();
     float animSpeed = wanderResources::GetAnimation(unitTemplateData->pod.skinnedFBXName, UnitAnimType::Death)->GetDuration() / unitTemplateData->pod.deathBurnTime;
+    animatorComponent.lock()->GetGI().SetPlaySpeed(animSpeed);
     PlayAnimation(UnitAnimType::Death);
-    //animatorComponent.lock()->GetGI().SetPlaySpeed(animSpeed);
     burnEffect.lock()->SetDuration(unitTemplateData->pod.deathBurnTime);
     burnEffect.lock()->SetEdgeColor({ unitTemplateData->pod.deathBurnEdgeColor.x,unitTemplateData->pod.deathBurnEdgeColor.y,unitTemplateData->pod.deathBurnEdgeColor.z });
     burnEffect.lock()->SetEdgeThickness(unitTemplateData->pod.deathBurnEdgeThickness);
     burnEffect.lock()->Disappear();
     co_yield coroutine::WaitForSeconds(unitTemplateData->pod.deathBurnTime);
+    animatorComponent.lock()->GetGI().SetPlaySpeed(1);
     ReturnToPool();
     co_return;
 }

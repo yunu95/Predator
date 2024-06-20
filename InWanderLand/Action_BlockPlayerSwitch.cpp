@@ -15,6 +15,7 @@ namespace application
     CoroutineObject<void> Action_BlockPlayerSwitch::DoAction()
     {
         UIManager::Instance().SetPortraitsClickable(!block);
+        PlayerController::Instance();
         co_return;
     }
 
