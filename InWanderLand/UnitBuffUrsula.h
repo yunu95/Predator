@@ -13,7 +13,7 @@ public:
     virtual UIEnumID GetUIEnumID() { return UIEnumID::CharInfo_Buff_UrsulaSelf; };
 private:
     virtual void OnStart();
-    virtual void OnUpdate() {};
+    virtual void OnUpdate();
     virtual void OnEnd();
     virtual void OnOverlap(UnitBuff&& overlapping);
     virtual coroutine::Coroutine EffectCoroutine() override;

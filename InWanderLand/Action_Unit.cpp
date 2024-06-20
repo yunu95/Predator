@@ -276,7 +276,7 @@ namespace application
         // 유닛을 정지시키고
         auto pause{ targetUnit->inGameUnit.lock()->referencePause.Acquire() };
         // 유닛의 자체적인 회전을 막는다.
-        auto blockRotation{ targetUnit->inGameUnit.lock()->referenceBlockRotation.Acquire() };
+        //auto blockRotation{ targetUnit->inGameUnit.lock()->referenceBlockRotation.Acquire() };
         auto ts = targetUnit->inGameUnit.lock()->GetTransform();
         auto startRot = ts->GetWorldRotation();
 
@@ -292,18 +292,19 @@ namespace application
         }
 
         double timer = 0;
-        float factor = 0;
+        targetUnit->inGameUnit.lock()->SetRotation(endRot, lerpTime);
+        //float factor = 0;
 
-        if (lerpTime == 0)
-        {
-            ts->SetWorldRotation(endRot);
-            co_return;
-        }
+        //if (lerpTime == 0)
+        //{
+        //    ts->SetWorldRotation(endRot);
+        //    co_return;
+        //}
 
         for (double timer = 0; timer < lerpTime;)
         {
-            factor = timer / lerpTime;
-            ts->SetWorldRotation(Quaternion::Lerp(startRot, endRot, factor));
+            //factor = timer / lerpTime;
+            //ts->SetWorldRotation(Quaternion::Lerp(startRot, endRot, factor));
             timer += Time::GetDeltaTimeUnscaled();
             co_await std::suspend_always();
         }
@@ -817,16 +818,17 @@ namespace application
             // 유닛을 정지시키고
             auto pause{ targetUnit->inGameUnit.lock()->referencePause.Acquire() };
             // 유닛의 자체적인 회전을 막는다.
-            auto blockRotation{ targetUnit->inGameUnit.lock()->referencePause.Acquire() };
+            //auto blockRotation{ targetUnit->inGameUnit.lock()->referencePause.Acquire() };
             double timer = 0;
             float factor = 0;
 
-            auto startRot = ts->GetWorldRotation();
+            //auto startRot = ts->GetWorldRotation();
             auto startScale = ts->GetWorldScale();
+            targetUnit->inGameUnit.lock()->SetRotation(endRot, lerpTime);
 
             if (lerpTime == 0)
             {
-                ts->SetWorldRotation(endRot);
+                //ts->SetWorldRotation(endRot);
                 ts->SetWorldScale(endScale);
                 co_return;
             }
@@ -834,7 +836,7 @@ namespace application
             for (double timer = 0; timer < lerpTime;)
             {
                 factor = timer / lerpTime;
-                ts->SetWorldRotation(Quaternion::Lerp(startRot, endRot, factor));
+                //ts->SetWorldRotation(Quaternion::Lerp(startRot, endRot, factor));
                 ts->SetWorldScale(Vector3d::Lerp(startScale, endScale, factor));
                 timer += Time::GetDeltaTimeUnscaled();
                 co_await std::suspend_always();
