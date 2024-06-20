@@ -105,6 +105,23 @@ namespace BossSummon
 		idle->SetLoop(false);
 		unitFrame = UnitPool::SingleInstance().Borrow(frameData); 
 		unitFrame.lock()->SetDefaultAnimation(UnitAnimType::Idle);
+		unitFrame.lock()->OnStateEngageCallback()[UnitBehaviourTree::Keywords::Death].AddVolatileCallback(
+			[this]() 
+			{
+				if (!summonCorountine.expired())
+				{
+					DeleteCoroutine(summonCorountine);
+				}
+
+				if (!summonEffect.expired())
+				{
+					FBXPool::Instance().Return(summonEffect);
+				}
+				if (!summoningEffect.expired())
+				{
+					FBXPool::Instance().Return(summoningEffect);
+				}
+			});
 	}
 
 	void LeftFrame::SummonUnit()
@@ -174,7 +191,7 @@ namespace BossSummon
 
 	bool LeftFrame::IsAlive() const
 	{
-		return HasChangedUnit() && unitFrame.lock()->GetActive() && unitFrame.lock()->IsAlive();
+		return HasChangedUnit() && unitFrame.lock()->GetGameObject()->GetActive() && unitFrame.lock()->IsAlive();
 	}
 
 	coroutine::Coroutine LeftFrame::OnAppear()
