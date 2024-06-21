@@ -389,8 +389,12 @@ void UIManager::ReturnToTitleAfterFadeOut()
 coroutine::Coroutine UIManager::StartGameAfterFadeOutCoro()
 {
     FadeOutLeft(1.0f);
+    ContentsCoroutine::Instance().FadeMusicVolume(0.0f, 1.0f);
     SetIngameUIVisible(false);
     co_yield coroutine::WaitForSeconds{ 1.2f, true };
+    SoundSystem::StopMusic();
+
+    ContentsCoroutine::Instance().FadeMusicVolume(1.0f, 1.0f);
     UIManager::Instance().GetUIElementByEnum(UIEnumID::VictoryPage)->DisableElement();
     UIManager::Instance().GetUIElementByEnum(UIEnumID::DefeatPage)->DisableElement();
     auto cl = static_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
@@ -1146,18 +1150,21 @@ bool UIManager::ImportDealWithSpecialCases_Post(const JsonUIData& uiData, UIElem
         switch (element->duplicateParentEnumID)
         {
         case UIEnumID::CharInfo_Robin:
+        case UIEnumID::CharInfo_Robin_Left:
             element->button->AddExternalButtonClickFunction([=]()
                 {
                     PlayerController::Instance().SelectPlayerUnit(PlayerCharacterType::Robin);
                 });
             break;
         case UIEnumID::CharInfo_Ursula:
+        case UIEnumID::CharInfo_Ursula_Left:
             element->button->AddExternalButtonClickFunction([=]()
                 {
                     PlayerController::Instance().SelectPlayerUnit(PlayerCharacterType::Ursula);
                 });
             break;
         case UIEnumID::CharInfo_Hansel:
+        case UIEnumID::CharInfo_Hansel_Left:
             element->button->AddExternalButtonClickFunction([=]()
                 {
                     PlayerController::Instance().SelectPlayerUnit(PlayerCharacterType::Hansel);
@@ -1170,18 +1177,21 @@ bool UIManager::ImportDealWithSpecialCases_Post(const JsonUIData& uiData, UIElem
         switch (element->duplicateParentEnumID)
         {
         case UIEnumID::CharInfo_Robin:
+        case UIEnumID::CharInfo_Robin_Left:
             element->button->AddExternalButtonClickFunction([=]()
                 {
                     PlayerController::Instance().SelectSkill(SkillType::ROBIN_Q);
                 });
             break;
         case UIEnumID::CharInfo_Ursula:
+        case UIEnumID::CharInfo_Ursula_Left:
             element->button->AddExternalButtonClickFunction([=]()
                 {
                     PlayerController::Instance().SelectSkill(SkillType::URSULA_Q);
                 });
             break;
         case UIEnumID::CharInfo_Hansel:
+        case UIEnumID::CharInfo_Hansel_Left:
             element->button->AddExternalButtonClickFunction([=]()
                 {
                     PlayerController::Instance().SelectSkill(SkillType::HANSEL_Q);

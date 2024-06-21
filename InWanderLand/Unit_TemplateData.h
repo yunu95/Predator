@@ -51,13 +51,13 @@ namespace application
             float max_Health;
 
             float m_autoAttackDamage;
-            //int m_criticalHitProbability;				// 치명타 확률
-            //float m_criticalHitMultiplier;				// 공격 시 치명타 피해량
+            float m_critChance{ 0 };				// 치명타 확률
+            float m_critMultiplier{ 1.5f };				// 공격 시 치명타 피해량 배율
 
             /// Decreasing Damage Elements
-            //int m_defensePoint;
-            //float m_dodgeProbability;					// 회피율
-            //float m_criticalDamageDecreaseMultiplier;	// 피격 시 치명타 피해 감소 배율
+            int m_armor{ 5 };
+            float m_evasionChance{ 0.0f };				// 회피율
+            float m_critResistance{ 0.0f };				// 피격시 치명타 피해 감소율
 
             float collisionSize = 0.5f;
             float collisionHeight = 0.5f;

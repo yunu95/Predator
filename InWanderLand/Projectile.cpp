@@ -12,7 +12,7 @@ void Projectile::Update()
         {
             if (!owner.lock()->referenceBlindness.BeingReferenced())
             {
-                (*enemies.begin())->Damaged(owner, damage, GetTransform());
+                (*enemies.begin())->Damaged(owner, damage, GetTransform(), damageType);
             }
             ProjectilePool::SingleInstance().Return(GetWeakPtr<Projectile>());
             return;
@@ -53,6 +53,10 @@ void Projectile::SetSpeed(Vector3d speed)
 void Projectile::OnContentsStop()
 {
     ProjectilePool::SingleInstance().Return(GetWeakPtr<Projectile>());
+}
+void Projectile::SetDamageType(DamageType damageType)
+{
+    this->damageType = damageType;
 }
 void Projectile::SetSpeed(Vector3d startPosition, Vector3d endPosition, float projectileSpeed)
 {

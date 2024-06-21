@@ -184,6 +184,7 @@ void PlayerController::Update()
 
         text_State->GetGI().SetText(wsstream.str());
     }
+    text_State->SetActive(DebugGraphic::AreDebugGraphicsEnabled());
 #endif
 }
 
@@ -497,17 +498,23 @@ void PlayerController::SelectPlayerUnit(PlayerCharacterType::Enum charType)
         peaceFollowingUnits[1] = characters[PlayerCharacterType::Hansel];
         UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin)->
             GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Portrait)->button->InvokeInternalButtonClickEvent();
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin_Left)->
+            GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Portrait)->button->InvokeInternalButtonClickEvent();
         break;
     case PlayerCharacterType::Ursula:
         peaceFollowingUnits[0] = characters[PlayerCharacterType::Robin];
         peaceFollowingUnits[1] = characters[PlayerCharacterType::Hansel];
         UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Ursula)->
             GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Portrait)->button->InvokeInternalButtonClickEvent();
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Ursula_Left)->
+            GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Portrait)->button->InvokeInternalButtonClickEvent();
         break;
     case PlayerCharacterType::Hansel:
         peaceFollowingUnits[0] = characters[PlayerCharacterType::Robin];
         peaceFollowingUnits[1] = characters[PlayerCharacterType::Ursula];
         UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel)->
+            GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Portrait)->button->InvokeInternalButtonClickEvent();
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel_Left)->
             GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Portrait)->button->InvokeInternalButtonClickEvent();
     default:
         break;
