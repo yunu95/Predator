@@ -151,7 +151,6 @@ void PlayerController::Update()
     HandleManaRegen();
     HandleMouseHover();
     HandleUnitPickingCollider();
-#ifdef EDITOR
     static yunutyEngine::graphics::UIText* text_State{ nullptr };
     if (text_State == nullptr)
     {
@@ -181,7 +180,6 @@ void PlayerController::Update()
         text_State->GetGI().SetText(wsstream.str());
     }
     text_State->SetActive(DebugGraphic::AreDebugGraphicsEnabled());
-#endif
 }
 
 void PlayerController::HandleByState()

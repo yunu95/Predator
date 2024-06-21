@@ -32,6 +32,7 @@
 #include "ColorTintTimer.h"
 #include "PlayMusicTimer.h"
 #include "UISpriteAnimation.h"
+#include "PlayerPortrait.h"
 
 #include "SkillSystem.h"
 #include "GlobalConstant.h"

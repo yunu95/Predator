@@ -241,7 +241,7 @@ void Unit::OnStateEngage<UnitBehaviourTree::Move>()
 {
     onStateEngage[UnitBehaviourTree::Move]();
     navAgentComponent.lock()->SetSpeed(unitTemplateData->pod.m_unitSpeed);
-    StartCoroutine(ShowPath(SingleNavigationField::Instance().GetSmoothPath(GetTransform()->GetWorldPosition() + GetTransform()->GetWorldRotation().Forward() * unitTemplateData->pod.collisionSize, moveDestination)));
+    //StartCoroutine(ShowPath(SingleNavigationField::Instance().GetSmoothPath(GetTransform()->GetWorldPosition() + GetTransform()->GetWorldRotation().Forward() * unitTemplateData->pod.collisionSize, moveDestination)));
     PlayAnimation(UnitAnimType::Move, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
 }
 template<>
@@ -516,7 +516,7 @@ yunutyEngine::coroutine::Coroutine Unit::DamagedEffectCoroutine(std::weak_ptr<Un
 
     auto relativePos = projectileTransform->GetWorldPosition() - GetTransform()->GetWorldPosition();
     auto prevRot = QuaternionToEastAngle(GetTransform()->GetWorldRotation());
-    
+
     while (!vfxAnimator.lock()->IsDone())
     {
         damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition() + relativePos);
@@ -597,7 +597,14 @@ void Unit::SetCurrentHp(float p_newHp)
         unitStatusPortraitUI2.lock()->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_HP_Number_Current)->SetNumber(currentHitPoint);
         unitStatusPortraitUI2.lock()->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_HP_Number_Max)->SetNumber(unitTemplateData->pod.max_Health);
     }
-
+    if (currentHitPoint <= unitTemplateData->pod.max_Health * 0.5f || !GetGameObject()->GetActive())
+    {
+        PlayerPortraitUIs::SetPortraitHurt((PlayerCharacterType::Enum)unitTemplateData->pod.playerUnitType.enumValue);
+    }
+    else
+    {
+        PlayerPortraitUIs::SetPortraitIdle((PlayerCharacterType::Enum)unitTemplateData->pod.playerUnitType.enumValue);
+    }
 }
 
 float Unit::GetUnitCurrentHp() const
@@ -1264,6 +1271,13 @@ void Unit::Summon(application::editor::Unit_TemplateData* templateData)
     navAgentComponent.lock()->SetSpeed(unitTemplateData->pod.m_unitSpeed);
     navObstacle.lock()->SetRadiusAndHeight(unitTemplateData->pod.collisionSize, 100);
     SetCurrentHp(unitTemplateData->pod.max_Health);
+    if (GetTeamIndex() != PlayerController::playerTeamIndex)
+    {
+        onStateEngage.at(UnitBehaviourTree::Death).AddCallback( [this]()
+            {
+                PlayerController::Instance().AddCombo();
+            });
+    }
 }
 void Unit::Reset()
 {
