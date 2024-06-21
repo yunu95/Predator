@@ -25,6 +25,8 @@ namespace application
 		TacticModeOn,
 		TacticModeOff,
 		PlayerState,
+		OrnamentShow,
+		OrnamentHide,
 	};
 
 	struct ICondition

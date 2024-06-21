@@ -427,7 +427,73 @@ namespace application
 
 				/// Condition
 				{
+					if (epm.GetReturnPopupName() == "SetTargetOrnament(Condition Show)")
+					{
+						ImGui::Begin("Ornament Show Condition(SetTarget)", &pop, flag);
+						auto rect = ImGui::GetContentRegionAvail();
+						auto size = ImGui::CalcTextSize("Please Setting Target Ornament");
+						imgui::ShiftCursorX((rect.x - size.x) / 2);
+						imgui::ShiftCursorY((rect.y - size.y) / 2);
+						ImGui::Text("Please Setting Target Ornament");
+						ImGui::BringWindowToFocusFront(ImGui::GetCurrentWindow());
+						ImGui::End();
 
+						pp.ChangeTab("Ornament");
+
+						auto data = epm.GetReturnPopupData<Condition_OrnamentShow>();
+						if (data->isEditing == false && pm.GetCurrentPalette() == &op)
+						{
+							data->isEditing = true;
+							op.Reset();
+						}
+
+						if (data->isEditing == true && op.GetSelections().size() == 1)
+						{
+							data->SetTargetOrnament(static_cast<OrnamentData*>(*op.GetSelections().begin()));
+							data->isEditing = false;
+							epm.Return();
+						}
+
+						if (!pop)
+						{
+							data->isEditing = false;
+							epm.Return();
+						}
+					}
+
+					if (epm.GetReturnPopupName() == "SetTargetOrnament(Condition Hide)")
+					{
+						ImGui::Begin("Ornament Hide Condition(SetTarget)", &pop, flag);
+						auto rect = ImGui::GetContentRegionAvail();
+						auto size = ImGui::CalcTextSize("Please Setting Target Ornament");
+						imgui::ShiftCursorX((rect.x - size.x) / 2);
+						imgui::ShiftCursorY((rect.y - size.y) / 2);
+						ImGui::Text("Please Setting Target Ornament");
+						ImGui::BringWindowToFocusFront(ImGui::GetCurrentWindow());
+						ImGui::End();
+
+						pp.ChangeTab("Ornament");
+
+						auto data = epm.GetReturnPopupData<Condition_OrnamentHide>();
+						if (data->isEditing == false && pm.GetCurrentPalette() == &op)
+						{
+							data->isEditing = true;
+							op.Reset();
+						}
+
+						if (data->isEditing == true && op.GetSelections().size() == 1)
+						{
+							data->SetTargetOrnament(static_cast<OrnamentData*>(*op.GetSelections().begin()));
+							data->isEditing = false;
+							epm.Return();
+						}
+
+						if (!pop)
+						{
+							data->isEditing = false;
+							epm.Return();
+						}
+					}
 				}
 
 				/// Action
@@ -1468,6 +1534,16 @@ namespace application
 								case application::ConditionType::PlayerState:
 								{
 									selectedScript->AddCondition<Condition_PlayerState>();
+									break;
+								}
+								case application::ConditionType::OrnamentShow:
+								{
+									selectedScript->AddCondition<Condition_OrnamentShow>();
+									break;
+								}
+								case application::ConditionType::OrnamentHide:
+								{
+									selectedScript->AddCondition<Condition_OrnamentHide>();
 									break;
 								}
 								default:

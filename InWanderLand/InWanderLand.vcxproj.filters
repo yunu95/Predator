@@ -2143,6 +2143,9 @@
     <ClInclude Include="Condition_PlayerState.h">
       <Filter>Editor\ScriptSystem\1_Condition\List</Filter>
     </ClInclude>
+    <ClInclude Include="Condition_Ornament.h">
+      <Filter>Editor\ScriptSystem\1_Condition\List</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -3203,6 +3206,9 @@
       <Filter>UI\PlayerPortrait</Filter>
     </ClCompile>
     <ClCompile Include="Condition_PlayerState.cpp">
+      <Filter>Editor\ScriptSystem\1_Condition\List</Filter>
+    </ClCompile>
+    <ClCompile Include="Condition_Ornament.cpp">
       <Filter>Editor\ScriptSystem\1_Condition\List</Filter>
     </ClCompile>
   </ItemGroup>

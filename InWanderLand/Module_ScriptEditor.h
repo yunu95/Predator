@@ -181,6 +181,16 @@ namespace application
                         Condition_PlayerState::ImGui_DrawDataPopup(static_cast<Condition_PlayerState*>(data));
                         break;
                     }
+                    case application::ConditionType::OrnamentShow:
+                    {
+                        Condition_OrnamentShow::ImGui_DrawDataPopup(static_cast<Condition_OrnamentShow*>(data));
+                        break;
+                    }
+                    case application::ConditionType::OrnamentHide:
+                    {
+                        Condition_OrnamentHide::ImGui_DrawDataPopup(static_cast<Condition_OrnamentHide*>(data));
+                        break;
+                    }
                     default:
                         break;
                     }
