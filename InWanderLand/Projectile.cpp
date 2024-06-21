@@ -54,6 +54,10 @@ void Projectile::OnContentsStop()
 {
     ProjectilePool::SingleInstance().Return(GetWeakPtr<Projectile>());
 }
+void Projectile::SetDamageType(DamageType damageType)
+{
+    this->damageType = damageType;
+}
 void Projectile::SetSpeed(Vector3d startPosition, Vector3d endPosition, float projectileSpeed)
 {
     auto delta = endPosition - startPosition;

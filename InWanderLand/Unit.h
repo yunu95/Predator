@@ -149,6 +149,12 @@ public:
     bool IsPaused() const { return isPaused; }
     bool IsPreempted() const;
     bool IsTacTicReady() const;
+    float GetCritChance() const;
+    float GetCritMultiplier() const;
+    /// Decreasing Damage Elements
+    int GetArmor() const;
+    float GetEvasionChance() const;				// 회피율
+    float GetCritResistance() const;				// 피격시 치명타 피해 감소율
     std::string GetFBXName() const;
     // 콜라이더 캡슐 내부의 무작위 위치를 반환합니다.
     Vector3d GetRandomPositionInsideCapsuleCollider();
@@ -274,6 +280,7 @@ private:
     weak_ptr<UIElement> unitStatusUI;
     // 초상화까지 있는 플레이어측 캐릭터 UI
     std::weak_ptr<UIElement> unitStatusPortraitUI;
+    std::weak_ptr<UIElement> unitStatusPortraitUI2;
     std::weak_ptr<yunutyEngine::coroutine::Coroutine> coroutineBirth;
     std::weak_ptr<yunutyEngine::coroutine::Coroutine> coroutineDeath;
     std::weak_ptr<yunutyEngine::coroutine::Coroutine> coroutineKnockBack;

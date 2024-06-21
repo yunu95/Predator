@@ -15,6 +15,6 @@ namespace factor
             return factor;
         };
         virtual T IdentityFactor()const = 0;
-        virtual operator T() = 0;
+        virtual operator T() const = 0;
     };
 }
