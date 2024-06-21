@@ -96,9 +96,10 @@ public:
     template<typename Buff>
     void ApplyBuff(Buff&& buff);
     void EraseBuff(UnitBuffType buffType);
+    void Damaged(std::weak_ptr<Unit> opponentUnit, float opponentAp, Transform* projectileTransform, DamageType damageType);	// 데미지 입었을 경우 추적하는 로직 포함
     void Damaged(std::weak_ptr<Unit> opponentUnit, float opponentAp, DamageType damageType = DamageType::Miscellaneous);	// 데미지 입었을 경우 추적하는 로직 포함
     void Damaged(float dmg);                            // 추적받지 않는 데미지
-    coroutine::Coroutine DamagedEffectCoroutine(std::weak_ptr<Unit> opponent);
+    coroutine::Coroutine DamagedEffectCoroutine(std::weak_ptr<Unit> opponent, Transform* projectileTransform);
     void Heal(float healingPoint);
     coroutine::Coroutine HealEffectCoroutine();
     void SetCurrentHp(float p_newHp);
@@ -149,12 +150,12 @@ public:
     bool IsPaused() const { return isPaused; }
     bool IsPreempted() const;
     bool IsTacTicReady() const;
-    float GetCritChance() const;
-    float GetCritMultiplier() const;
+    float GetCritChance();
+    float GetCritMultiplier();
     /// Decreasing Damage Elements
-    int GetArmor() const;
-    float GetEvasionChance() const;				// 회피율
-    float GetCritResistance() const;				// 피격시 치명타 피해 감소율
+    int GetArmor();
+    float GetEvasionChance();				// 회피율
+    float GetCritResistance();				// 피격시 치명타 피해 감소율
     std::string GetFBXName() const;
     // 콜라이더 캡슐 내부의 무작위 위치를 반환합니다.
     Vector3d GetRandomPositionInsideCapsuleCollider();
@@ -294,7 +295,8 @@ private:
     bool blendWithDefaultAnimTrigger{ false };
     int navAgentEnableFrameCount{ 0 };
     std::weak_ptr<ManagedFBX> attackVFX = std::weak_ptr<ManagedFBX>();
-    std::weak_ptr<ManagedFBX> damagedVFX = std::weak_ptr<ManagedFBX>();
+    std::vector<std::weak_ptr<ManagedFBX>> damagedEffectVector;
+    //     std::weak_ptr<ManagedFBX> damagedVFX = std::weak_ptr<ManagedFBX>();
     std::weak_ptr<ManagedFBX> healVFX = std::weak_ptr<ManagedFBX>();
     std::weak_ptr<ManagedFBX> paralysisVFX = std::weak_ptr<ManagedFBX>();
 

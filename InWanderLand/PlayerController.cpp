@@ -184,6 +184,7 @@ void PlayerController::Update()
 
         text_State->GetGI().SetText(wsstream.str());
     }
+    text_State->SetActive(DebugGraphic::AreDebugGraphicsEnabled());
 #endif
 }
 

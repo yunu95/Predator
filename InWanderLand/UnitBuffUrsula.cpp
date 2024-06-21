@@ -20,6 +20,7 @@ void UnitBuffUrsula::OnUpdate()
     if (!buffEffect.expired())
     {
         buffEffect.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
+        buffEffect.lock()->GetTransform()->SetWorldRotation(owner.lock()->GetTransform()->GetWorldRotation());
     }
 }
 
@@ -44,6 +45,7 @@ coroutine::Coroutine UnitBuffUrsula::EffectCoroutine()
 { 
     buffEffect = FBXPool::Instance().Borrow("VFX_Buff_Ursula_Contract");
     buffEffect.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
+    buffEffect.lock()->GetTransform()->SetWorldRotation(owner.lock()->GetTransform()->GetWorldRotation());
 
     auto buffEffectAnimator = buffEffect.lock()->AcquireVFXAnimator();
     buffEffectAnimator.lock()->SetAutoActiveFalse();

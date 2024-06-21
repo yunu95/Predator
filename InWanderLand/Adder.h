@@ -8,7 +8,7 @@ namespace factor
     {
     public:
         virtual T IdentityFactor() const { return 0; };
-        virtual operator T() const
+        virtual operator T()
         {
             T identity = IdentityFactor();
             std::erase_if(*this, [](const std::weak_ptr<T>& factor) { return factor.expired(); });

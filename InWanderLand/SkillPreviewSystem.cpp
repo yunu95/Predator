@@ -18,7 +18,7 @@ void SkillPreviewSystem::ObjectInitializer(std::weak_ptr<graphics::StaticMeshRen
 {
 	const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 	yunuGI::IShader* vs = _resourceManager->GetShader(L"TextureAnimVS.cso");
-	yunuGI::IShader* ps = _resourceManager->GetShader(L"TextureAnimPS.cso");
+	yunuGI::IShader* ps = _resourceManager->GetShader(L"MoveAnimTexturePS.cso");
 
 	yunuGI::ITexture* move = _resourceManager->GetTexture(wanderResources::texture::MOVE_TEXTURE);
 	comp.lock()->GetGI().GetMaterial()->SetVertexShader(vs);
@@ -26,6 +26,7 @@ void SkillPreviewSystem::ObjectInitializer(std::weak_ptr<graphics::StaticMeshRen
 	comp.lock()->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::Temp0, move);
 
 	auto anim = comp.lock()->GetGameObject()->AddComponent<UVAnimator>();
+	anim->SetUseDefaultValue(false);
 	anim->SetStaticMeshRenderer(comp.lock().get());
 	anim->SetDirection(Vector2d{ 1,0 });
 }
@@ -39,7 +40,7 @@ void SkillPreviewSystem::Init()
 	yunuGI::IShader* vs = _resourceManager->GetShader(L"TextureVS.cso");
 	yunuGI::IShader* ps = _resourceManager->GetShader(L"GuideLinePS.cso");
 	yunuGI::IShader* vs1 = _resourceManager->GetShader(L"TextureAnimVS.cso");
-	yunuGI::IShader* ps1 = _resourceManager->GetShader(L"TextureAnimPS.cso");
+	yunuGI::IShader* ps1 = _resourceManager->GetShader(L"MoveAnimTexturePS.cso");
 	yunuGI::ITexture* arrowBodyTexture = _resourceManager->GetTexture(wanderResources::texture::ARROW_BODY_TEXTURE);
 	yunuGI::ITexture* arrowHeadTexture = _resourceManager->GetTexture(wanderResources::texture::ARROW_HEAD_TEXTURE);
 	yunuGI::ITexture* moveTexture = _resourceManager->GetTexture(wanderResources::texture::MOVE_TEXTURE);
@@ -73,6 +74,7 @@ void SkillPreviewSystem::Init()
 		auto anim = temporaryRouteMeshRendererObj->AddComponent<UVAnimator>();
 		anim->SetStaticMeshRenderer(temporaryRouteMeshRenderer);
 		anim->SetDirection(Vector2d{ 1,0 });
+		anim->SetUseDefaultValue(false);
 	}
 #pragma endregion
 

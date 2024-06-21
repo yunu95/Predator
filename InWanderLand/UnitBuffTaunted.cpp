@@ -27,6 +27,11 @@ void UnitBuffTaunted::OnUpdate()
     {
         blockPendingCommand = owner.lock()->referenceBlockPendingOrder.Acquire();
     }
+    if (!buffEffect.expired())
+    {
+        buffEffect.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
+        buffEffect.lock()->GetTransform()->SetWorldRotation(owner.lock()->GetTransform()->GetWorldRotation());
+    }
 }
 
 void UnitBuffTaunted::OnPause()
@@ -53,7 +58,8 @@ UnitBuffTaunted::UnitBuffTaunted(std::weak_ptr<Unit> inflictor)
 coroutine::Coroutine UnitBuffTaunted::EffectCoroutine()
 {
     buffEffect = FBXPool::Instance().Borrow("VFX_DeBuff_Aggro");
-    buffEffect.lock()->GetGameObject()->SetParent(owner.lock()->GetGameObject());
+    buffEffect.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
+    buffEffect.lock()->GetTransform()->SetWorldRotation(owner.lock()->GetTransform()->GetWorldRotation());
 
     buffEffectAnimator = buffEffect.lock()->AcquireVFXAnimator();
     buffEffectAnimator.lock()->SetAutoActiveFalse();

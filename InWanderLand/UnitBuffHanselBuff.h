@@ -14,6 +14,7 @@ private:
     std::weak_ptr<VFXAnimator> buffEffectAnimator;
 
     virtual void OnStart();
+    virtual void OnUpdate();
     virtual void OnEnd();
     virtual void OnOverlap(UnitBuff&& overlapping) override;
     virtual void OnPause() override;
