@@ -43,8 +43,11 @@ void EnemyController::OnPause()
 {
 	for (auto& [unit, coro] : unitRoutines)
 	{
-		enemyDeathBlockRefMap[unit] = unit->referenceBlockDeath.Acquire();
-		enemyTacticRefMap[unit] = unit->referenceTactic.Acquire();
+		if (unit->GetGameObject()->GetActive())
+		{
+			enemyDeathBlockRefMap[unit] = unit->referenceBlockDeath.Acquire();
+			enemyTacticRefMap[unit] = unit->referenceTactic.Acquire();
+		}
 	}
 }
 
