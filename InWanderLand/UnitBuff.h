@@ -19,7 +19,6 @@ private:
 protected:
     std::weak_ptr<Unit> owner;
     std::weak_ptr<ManagedFBX> buffEffect;
-    virtual coroutine::Coroutine EffectCoroutine() { co_return; }
 public:
     float durationLeft = 1;
     virtual UnitBuffType GetBuffType() = 0;

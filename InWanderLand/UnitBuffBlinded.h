@@ -18,6 +18,5 @@ public:
 
     std::shared_ptr<Reference::Guard> blindReference;
 private:
-    virtual coroutine::Coroutine EffectCoroutine() override;
     std::weak_ptr<VFXAnimator> buffEffectAnimator;
 };

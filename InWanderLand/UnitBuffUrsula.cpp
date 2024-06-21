@@ -12,7 +12,16 @@ void UnitBuffUrsula::OnStart()
     *attackSpeedAdder = PassiveUrsula::GetAttackSpeedBonusPerStack();
     critChanceAdder = owner.lock()->adderCritChance.AcquireFactor();
     *critChanceAdder = PassiveUrsula::GetCritChanceBonusPerStack();
-    owner.lock()->StartCoroutine(EffectCoroutine());
+
+    buffEffect = FBXPool::Instance().Borrow("VFX_Buff_Ursula_Contract");
+    buffEffect.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
+    buffEffect.lock()->GetTransform()->SetWorldRotation(owner.lock()->GetTransform()->GetWorldRotation());
+
+    auto buffEffectAnimator = buffEffect.lock()->AcquireVFXAnimator();
+    buffEffectAnimator.lock()->SetAutoActiveFalse();
+    buffEffectAnimator.lock()->SetLoop(true);
+    buffEffectAnimator.lock()->Init();
+    buffEffectAnimator.lock()->Play();
 }
 
 void UnitBuffUrsula::OnUpdate()
@@ -37,21 +46,5 @@ void UnitBuffUrsula::OnOverlap(UnitBuff&& overlapping)
         *attackSpeedAdder = std::fmin(PassiveUrsula::GetAttackSpeedBonusPerStack() * PassiveUrsula::pod.maxStack, *attackSpeedAdder + PassiveUrsula::GetAttackSpeedBonusPerStack());
         *critChanceAdder = std::fmin(PassiveUrsula::GetCritChanceBonusPerStack() * PassiveUrsula::pod.maxStack, *critChanceAdder + PassiveUrsula::GetCritChanceBonusPerStack());
     }
-    FBXPool::Instance().Return(buffEffect);
-    owner.lock()->StartCoroutine(EffectCoroutine());
 }
 
-coroutine::Coroutine UnitBuffUrsula::EffectCoroutine()
-{ 
-    buffEffect = FBXPool::Instance().Borrow("VFX_Buff_Ursula_Contract");
-    buffEffect.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
-    buffEffect.lock()->GetTransform()->SetWorldRotation(owner.lock()->GetTransform()->GetWorldRotation());
-
-    auto buffEffectAnimator = buffEffect.lock()->AcquireVFXAnimator();
-    buffEffectAnimator.lock()->SetAutoActiveFalse();
-    buffEffectAnimator.lock()->SetLoop(true);
-    buffEffectAnimator.lock()->Init();
-    buffEffectAnimator.lock()->Play();
-
-    co_return;
-}

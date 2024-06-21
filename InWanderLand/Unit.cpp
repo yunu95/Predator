@@ -418,23 +418,7 @@ void Unit::EraseBuff(UnitBuffType buffType)
         buffs.find(buffType)->second->OnEnd();
     buffs.erase(buffType);
 }
-void Unit::Damaged(std::weak_ptr<Unit> opponentUnit, float opponentAp, Transform* projectileTransform)
-{
-//     if (!coroutineDamagedEffect.expired())
-//         FBXPool::Instance().Return(damagedVFX);
-    coroutineDamagedEffect = StartCoroutine(DamagedEffectCoroutine(opponentUnit, projectileTransform));
-     coroutineDamagedEffect.lock()->PushDestroyCallBack([this]()
-         {
-             for (auto each : damagedEffectVector)
-             {
-				 FBXPool::Instance().Return(each);
-             }
-             damagedEffectVector.clear();
-         });
-
-    Damaged(opponentUnit, opponentAp, DamageType::Attack);
-}
-void Unit::Damaged(std::weak_ptr<Unit> opponentUnit, float opponentDmg, DamageType damageType)
+void Unit::Damaged(std::weak_ptr<Unit> opponentUnit, float opponentAp, DamageType damageType, Transform* projectileTransform)
 {
     switch (damageType)
     {
@@ -446,8 +430,22 @@ void Unit::Damaged(std::weak_ptr<Unit> opponentUnit, float opponentDmg, DamageTy
     default:
         break;
     }
+
+    coroutineDamagedEffect = StartCoroutine(DamagedEffectCoroutine(opponentUnit, projectileTransform));
+    coroutineDamagedEffect.lock()->PushDestroyCallBack([this]()
+        {
+            if (!damagedEffectQueue.empty())
+            {
+                if (!damagedEffectQueue.front().expired())
+                {
+                    FBXPool::Instance().Return(damagedEffectQueue.front());
+                    damagedEffectQueue.pop();
+                }
+            }
+        });
+
     onDamagedFromUnit(opponentUnit);
-    Damaged(opponentDmg);
+    Damaged(opponentAp);
 }
 
 void Unit::Damaged(float dmg)
@@ -458,6 +456,11 @@ void Unit::Damaged(float dmg)
 
 yunutyEngine::coroutine::Coroutine Unit::DamagedEffectCoroutine(std::weak_ptr<Unit> opponent, Transform* projectileTransform)
 {
+    if (projectileTransform == nullptr)
+    {
+        co_return;
+    }
+
     auto damagedVFX = wanderResources::GetVFX(opponent.lock()->unitTemplateData->pod.skinnedFBXName, UnitAnimType::Damaged);
     co_await std::suspend_always{};
     auto vfxAnimator = damagedVFX.lock()->AcquireVFXAnimator();
@@ -474,10 +477,16 @@ yunutyEngine::coroutine::Coroutine Unit::DamagedEffectCoroutine(std::weak_ptr<Un
     //damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(direction);
     //damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldScale(GetTransform()->GetWorldScale());
     
-    damagedEffectVector.push_back(damagedVFX);
+    damagedEffectQueue.push(damagedVFX);
 
+    auto relativePos = projectileTransform->GetWorldPosition() - GetTransform()->GetWorldPosition();
+    auto prevRot = QuaternionToEastAngle(GetTransform()->GetWorldRotation());
+    
     while (!vfxAnimator.lock()->IsDone())
     {
+        damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition() + relativePos);
+        //damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(damagedVFX.lock()->GetGameObject()->GetTransform()->GetWorldRotation() * Quaternion(Vector3d{ 0, prevRot - QuaternionToEastAngle(GetTransform()->GetWorldRotation()), 0}));
+        //prevRot = QuaternionToEastAngle(GetTransform()->GetWorldRotation());
         co_await std::suspend_always{};
     }
 

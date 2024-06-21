@@ -10,7 +10,6 @@ private:
     float damagePerSecond{ 0 };
     bool isPaused = false;
 
-    virtual coroutine::Coroutine EffectCoroutine() override;
 public:
     virtual void OnStart();
     virtual void OnUpdate();

@@ -19,7 +19,15 @@ UIEnumID UnitBuffBlinded::GetUIEnumID()
 void UnitBuffBlinded::OnStart()
 {
     blindReference = owner.lock()->referenceBlindness.Acquire();
-    owner.lock()->StartCoroutine(EffectCoroutine());
+    buffEffect = FBXPool::Instance().Borrow("VFX_DeBuff_Blind_Ursula");
+    buffEffect.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
+    buffEffect.lock()->GetTransform()->SetWorldRotation(owner.lock()->GetTransform()->GetWorldRotation());
+
+    buffEffectAnimator = buffEffect.lock()->AcquireVFXAnimator();
+    buffEffectAnimator.lock()->SetAutoActiveFalse();
+    buffEffectAnimator.lock()->SetLoop(true);
+    buffEffectAnimator.lock()->Init();
+    buffEffectAnimator.lock()->Play();
 }
 
 void UnitBuffBlinded::OnUpdate()
@@ -39,8 +47,8 @@ void UnitBuffBlinded::OnEnd()
 void UnitBuffBlinded::OnOverlap(UnitBuff&& overlapping)
 {
     UnitBuff::OnOverlap(std::move(overlapping));
-    FBXPool::Instance().Return(buffEffect);
-    owner.lock()->StartCoroutine(EffectCoroutine());
+    //FBXPool::Instance().Return(buffEffect);
+    //owner.lock()->StartCoroutine(EffectCoroutine());
 }
 
 void UnitBuffBlinded::OnPause()
@@ -51,17 +59,3 @@ void UnitBuffBlinded::OnResume()
 {
 }
 
-coroutine::Coroutine UnitBuffBlinded::EffectCoroutine()
-{
-    buffEffect = FBXPool::Instance().Borrow("VFX_DeBuff_Blind_Ursula");
-    buffEffect.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
-    buffEffect.lock()->GetTransform()->SetWorldRotation(owner.lock()->GetTransform()->GetWorldRotation());
-
-    buffEffectAnimator = buffEffect.lock()->AcquireVFXAnimator();
-    buffEffectAnimator.lock()->SetAutoActiveFalse();
-    buffEffectAnimator.lock()->SetLoop(true);
-    buffEffectAnimator.lock()->Init();
-    buffEffectAnimator.lock()->Play();
-
-    co_return;
-}
