@@ -137,7 +137,7 @@ namespace application
 
 	bool Condition_OrnamentHide::IsConditionMet()
 	{
-		return targetOrnament->GetPaletteInstance()->GetGameObject()->GetActive();
+		return !targetOrnament->GetPaletteInstance()->GetGameObject()->GetActive();
 	}
 
 	bool Condition_OrnamentHide::IsValid()
