@@ -50,6 +50,9 @@ public:
     float GetInitHeight() { return initHeight; }
     virtual Component* GetComponent() override { return this; }
 
+    virtual void OnContentsPlay() override;
+    virtual void OnContentsStop() override;
+
 private:
     void UpdateCameraView();
     const application::editor::RegionData* contrainingRegion{ nullptr };

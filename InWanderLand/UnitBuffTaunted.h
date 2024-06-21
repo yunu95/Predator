@@ -17,6 +17,5 @@ public:
     std::weak_ptr<Unit> inflictor;
     UnitBuffTaunted(std::weak_ptr<Unit> inflictor);
 private:
-    virtual coroutine::Coroutine EffectCoroutine() override;
     std::weak_ptr<VFXAnimator> buffEffectAnimator;
 };

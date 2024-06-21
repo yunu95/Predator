@@ -4,15 +4,21 @@
 
 #pragma once
 #include "YunutyEngine.h"
+#include "PlayableComponent.h"
 
 class SFXManager
-	: SingletonClass<SFXManager>
+	: public SingletonClass<SFXManager>, public application::PlayableComponent
 {
 public:
 	static void PlaySoundfile(string soundPath);
 	static void PlaySoundfile3D(string soundPath, Vector3d worldPosition);
 	static void SetSFXVolume(float volume);
 	static float GetSFXVolume();
+
+	virtual void OnGameStart() override;
+	virtual void OnGameStop() override;
+
+
 private:
 	float localSFXVolume = 1.0f;
 	float ratio = 10.f;

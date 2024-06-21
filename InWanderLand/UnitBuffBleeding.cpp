@@ -3,7 +3,7 @@
 #include "Unit.h"
 #include "InWanderLand.h"
 
-coroutine::Coroutine UnitBuffBleeding::EffectCoroutine()
+void UnitBuffBleeding::OnStart()
 {
     buffEffect = FBXPool::Instance().Borrow("VFX_DeBuff_Bleeding");
     buffEffect.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
@@ -14,13 +14,6 @@ coroutine::Coroutine UnitBuffBleeding::EffectCoroutine()
     buffEffectAnimator.lock()->SetLoop(true);
     buffEffectAnimator.lock()->Init();
     buffEffectAnimator.lock()->Play();
-
-    co_return;
-}
-
-void UnitBuffBleeding::OnStart()
-{
-    owner.lock()->StartCoroutine(EffectCoroutine());
 }
 
 void UnitBuffBleeding::OnUpdate() 
@@ -58,6 +51,4 @@ void UnitBuffBleeding::OnOverlap(UnitBuff&& overlapping)
     {
         damagePerSecond = std::fmin(PassiveRobinBleed::pod.dpsPerStack * PassiveRobinBleed::pod.maxStack, damagePerSecond + sameBleeding->damagePerSecond);
     }
-    FBXPool::Instance().Return(buffEffect);
-    owner.lock()->StartCoroutine(EffectCoroutine());
 };

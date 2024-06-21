@@ -255,7 +255,12 @@ namespace BossSummon
 		/// 1. VFX 실행을 한다(Set Auto 어쩌고로 내가 Active 관리)
 		summonEffect = FBXPool::Instance().Borrow("VFX_Frame_Summon");
 		summonEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition() + GetTransform()->GetWorldRotation().Forward() * -1.5);
-		summonEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(GetTransform()->GetWorldRotation());
+		
+		auto rot = GetTransform()->GetWorldRotation();
+		auto euler = rot.Euler();
+		euler.y += 180;
+
+		summonEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion{ euler });
 
 		summonEffectAnimator = summonEffect.lock()->AcquireVFXAnimator();
 		summonEffectAnimator.lock()->SetAutoActiveFalse();
@@ -263,7 +268,7 @@ namespace BossSummon
 
 		summoningEffect = FBXPool::Instance().Borrow("VFX_Frame_Summoning");
 		summoningEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition() + GetTransform()->GetWorldRotation().Forward() * -1.5);
-		summoningEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(GetTransform()->GetWorldRotation());
+		summoningEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion{ euler });
 		summoningEffectAnimator = summoningEffect.lock()->AcquireVFXAnimator();
 		summoningEffectAnimator.lock()->SetLoop(true);
 		summoningEffectAnimator.lock()->SetAutoActiveFalse();

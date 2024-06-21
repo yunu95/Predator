@@ -3,6 +3,11 @@
 #include "UnitData.h"
 #include "Unit.h"
 
+void UnitPool::Reset()
+{
+    poolsByTemplate.clear();
+}
+
 std::weak_ptr<Unit> UnitPool::Borrow(application::editor::UnitData* data)
 {
     auto unit = Borrow(data->GetTemplateData());
@@ -40,9 +45,6 @@ void UnitPool::Return(std::weak_ptr<Unit> unit)
     {
         return;
     }
-
-    if (unit.lock()->unitData && !unit.lock()->unitData->inGameUnit.expired())
-        unit.lock()->unitData->inGameUnit.reset();
     for (auto& each : unit.lock()->controllers)
     {
         each->UnRegisterUnit(unit);
@@ -54,7 +56,6 @@ void UnitPool::Return(std::weak_ptr<Unit> unit)
     poolsByTemplate[&unit.lock()->GetUnitTemplateData()]->Return(unit);
 }
 
-
 void UnitPool::PoolByTemplate::ObjectInitializer(std::weak_ptr<Unit> unit)
 {
     std::stringstream ss;
@@ -65,4 +66,5 @@ void UnitPool::PoolByTemplate::ObjectInitializer(std::weak_ptr<Unit> unit)
 
 void UnitPool::PoolByTemplate::OnBorrow(std::weak_ptr<Unit> unit)
 {
+    
 }
