@@ -15,6 +15,7 @@ namespace application
     CoroutineObject<void> Action_BlockSkillCancel::DoAction()
     {
         // 여기에 스킬 취소를 못하게 막는 코드를 넣어야 한다.
+        PlayerController::Instance().blockSkillCancel = block;
         co_return;
     }
 

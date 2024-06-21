@@ -9,7 +9,7 @@ const float eliteSpinEndTime = 3.15f;
 const float eliteSpinStartTime = 2.07f;
 const float eliteSpinAttackingTime = eliteSpinEndTime - eliteSpinStartTime;
 const float eliteAfterSpinDelay = eliteTotalTime - eliteSpinStartTime - eliteSpinAttackingTime;
-const float colliderEffectRatio = 10.0f * 0.5f;
+const float colliderEffectRatio = 10.0f * 0.7f;
 
 coroutine::Coroutine EnemySpinAttackSkill::operator()()
 {

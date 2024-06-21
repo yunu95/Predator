@@ -15,20 +15,24 @@ namespace application
     CoroutineObject<void> Action_PlayerSelect::DoAction()
     {
         UIEnumID uiType = UIEnumID::CharInfo_Ursula;
+        PlayerCharacterType::Enum playerType = PlayerCharacterType::Enum::Ursula;
         switch (index)
         {
         case 1:
             uiType = UIEnumID::CharInfo_Robin;
+            playerType = PlayerCharacterType::Enum::Robin;
             break;
         case 2:
             uiType = UIEnumID::CharInfo_Ursula;
+            playerType = PlayerCharacterType::Enum::Ursula;
             break;
         case 3:
             uiType = UIEnumID::CharInfo_Hansel;
+            playerType = PlayerCharacterType::Enum::Hansel;
             break;
         }
-        UIManager::Instance().GetUIElementByEnum(uiType)->
-            GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Portrait)->button->InvokeButtonClickEvent();
+        UIManager::Instance().GetUIElementByEnum(uiType)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Portrait)->button->InvokeButtonClickEvent();
+        PlayerController::Instance().SelectPlayerUnit(playerType);
         co_return;
     }
 

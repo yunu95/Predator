@@ -43,12 +43,6 @@ void Projectile::Update()
                 ProjectilePool::SingleInstance().Return(GetWeakPtr<Projectile>());
             }
         }
-
-        /// 우르슬라 기본 공격일 경우 예외적으로 회전값을 카메라와 동일하게 한다.
-        if (owner.lock()->GetUnitTemplateData().pod.playerUnitType.enumValue == PlayerCharacterType::Enum::Ursula)
-        {
-            GetTransform()->SetWorldRotation(RTSCam::Instance().GetTransform()->GetWorldRotation());
-        }
     }
 }
 void Projectile::SetSpeed(Vector3d speed)
