@@ -47,12 +47,12 @@ void PlaytimeRegion::OnTriggerEnter(physics::Collider* collider)
             {
                 each();
             }
-            switch (static_cast<SpecialEventType>(regionData->pod.specialEvent))
-            {
-            case SpecialEventType::Stage1To2Transition:
-                PlayTimeRegionManager::Instance().stage1ToStage2Function();
-                break;
-            }
+            //switch (static_cast<SpecialEventType>(regionData->pod.specialEvent))
+            //{
+            //case SpecialEventType::Stage1To2Transition:
+            //    PlayTimeRegionManager::Instance().stage1ToStage2Function();
+            //    break;
+            //}
         }
         // 가려야 하는 장식물들을 가리는 부분
         if (disablingReferences.empty())
