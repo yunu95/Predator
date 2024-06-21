@@ -96,8 +96,7 @@ public:
     template<typename Buff>
     void ApplyBuff(Buff&& buff);
     void EraseBuff(UnitBuffType buffType);
-    void Damaged(std::weak_ptr<Unit> opponentUnit, float opponentAp, Transform* projectileTransform, DamageType damageType);	// 데미지 입었을 경우 추적하는 로직 포함
-    void Damaged(std::weak_ptr<Unit> opponentUnit, float opponentAp, DamageType damageType = DamageType::Miscellaneous);	// 데미지 입었을 경우 추적하는 로직 포함
+    void Damaged(std::weak_ptr<Unit> opponentUnit, float opponentDmg, DamageType damageType = DamageType::Miscellaneous, Transform* projectileTransform = nullptr);	// 데미지 입었을 경우 추적하는 로직 포함
     void Damaged(float dmg);                            // 추적받지 않는 데미지
     coroutine::Coroutine DamagedEffectCoroutine(std::weak_ptr<Unit> opponent, Transform* projectileTransform);
     void Heal(float healingPoint);
@@ -295,8 +294,8 @@ private:
     bool blendWithDefaultAnimTrigger{ false };
     int navAgentEnableFrameCount{ 0 };
     std::weak_ptr<ManagedFBX> attackVFX = std::weak_ptr<ManagedFBX>();
-    std::vector<std::weak_ptr<ManagedFBX>> damagedEffectVector;
-    //     std::weak_ptr<ManagedFBX> damagedVFX = std::weak_ptr<ManagedFBX>();
+    std::queue<std::weak_ptr<ManagedFBX>> damagedEffectQueue;
+//     std::weak_ptr<ManagedFBX> damagedVFX = std::weak_ptr<ManagedFBX>();
     std::weak_ptr<ManagedFBX> healVFX = std::weak_ptr<ManagedFBX>();
     std::weak_ptr<ManagedFBX> paralysisVFX = std::weak_ptr<ManagedFBX>();
 

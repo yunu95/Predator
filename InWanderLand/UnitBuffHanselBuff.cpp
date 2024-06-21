@@ -13,7 +13,15 @@ void UnitBuffHanselBuff::OnStart()
     critChanceAdder = owner.lock()->adderCritChance.AcquireFactor();
     *critChanceAdder = HanselProjectileSkill::pod.critChanceBonus;
 
-    owner.lock()->StartCoroutine(EffectCoroutine());
+    buffEffect = FBXPool::Instance().Borrow("VFX_Buff_Hansel_Pie");
+    buffEffect.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
+    buffEffect.lock()->GetTransform()->SetWorldRotation(owner.lock()->GetTransform()->GetWorldRotation());
+
+    buffEffectAnimator = buffEffect.lock()->AcquireVFXAnimator();
+    buffEffectAnimator.lock()->SetAutoActiveFalse();
+    buffEffectAnimator.lock()->SetLoop(true);
+    buffEffectAnimator.lock()->Init();
+    buffEffectAnimator.lock()->Play();
 }
 
 void UnitBuffHanselBuff::OnUpdate()
@@ -33,8 +41,6 @@ void UnitBuffHanselBuff::OnEnd()
 void UnitBuffHanselBuff::OnOverlap(UnitBuff&& overlapping)
 {
     UnitBuff::OnOverlap(std::move(overlapping));
-    FBXPool::Instance().Return(buffEffect);
-    owner.lock()->StartCoroutine(EffectCoroutine());
 }
 
 void UnitBuffHanselBuff::OnPause()
@@ -45,18 +51,4 @@ void UnitBuffHanselBuff::OnResume()
 {
 }
 
-coroutine::Coroutine UnitBuffHanselBuff::EffectCoroutine()
-{
-    buffEffect = FBXPool::Instance().Borrow("VFX_Buff_Hansel_Pie");
-    buffEffect.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
-    buffEffect.lock()->GetTransform()->SetWorldRotation(owner.lock()->GetTransform()->GetWorldRotation());
-
-    buffEffectAnimator = buffEffect.lock()->AcquireVFXAnimator();
-    buffEffectAnimator.lock()->SetAutoActiveFalse();
-    buffEffectAnimator.lock()->SetLoop(true);
-    buffEffectAnimator.lock()->Init();
-    buffEffectAnimator.lock()->Play();
-
-    co_return;
-}
 

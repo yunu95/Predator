@@ -13,7 +13,15 @@ UIEnumID UnitBuffTaunted::GetUIEnumID()
 
 void UnitBuffTaunted::OnStart()
 {
-    owner.lock()->StartCoroutine(EffectCoroutine());
+    buffEffect = FBXPool::Instance().Borrow("VFX_DeBuff_Aggro");
+    buffEffect.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
+    buffEffect.lock()->GetTransform()->SetWorldRotation(owner.lock()->GetTransform()->GetWorldRotation());
+
+    buffEffectAnimator = buffEffect.lock()->AcquireVFXAnimator();
+    buffEffectAnimator.lock()->SetAutoActiveFalse();
+    buffEffectAnimator.lock()->SetLoop(true);
+    buffEffectAnimator.lock()->Init();
+    buffEffectAnimator.lock()->Play();
 }
 
 void UnitBuffTaunted::OnEnd()
@@ -45,8 +53,6 @@ void UnitBuffTaunted::OnResume()
 void UnitBuffTaunted::OnOverlap(UnitBuff&& overlapping)
 {
     UnitBuff::OnOverlap(std::move(overlapping));
-    FBXPool::Instance().Return(buffEffect);
-    owner.lock()->StartCoroutine(EffectCoroutine());
 }
 
 UnitBuffTaunted::UnitBuffTaunted(std::weak_ptr<Unit> inflictor)
@@ -55,17 +61,3 @@ UnitBuffTaunted::UnitBuffTaunted(std::weak_ptr<Unit> inflictor)
     this->inflictor = inflictor;
 }
 
-coroutine::Coroutine UnitBuffTaunted::EffectCoroutine()
-{
-    buffEffect = FBXPool::Instance().Borrow("VFX_DeBuff_Aggro");
-    buffEffect.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
-    buffEffect.lock()->GetTransform()->SetWorldRotation(owner.lock()->GetTransform()->GetWorldRotation());
-
-    buffEffectAnimator = buffEffect.lock()->AcquireVFXAnimator();
-    buffEffectAnimator.lock()->SetAutoActiveFalse();
-    buffEffectAnimator.lock()->SetLoop(true);
-    buffEffectAnimator.lock()->Init();
-    buffEffectAnimator.lock()->Play();
-
-    co_return;
-}
