@@ -92,20 +92,39 @@ public:
 class TestComponent4 : public yunutyEngine::Component
 {
 public:
-	yunutyEngine::graphics::ParticleRenderer* anim;
+	yunutyEngine::GameObject* obj;
 	virtual void Update() override
 	{
-		if (Input::isKeyPushed(yunutyEngine::KeyCode::V))
+		auto pos = obj->GetTransform()->GetLocalPosition();
+		if (Input::isKeyDown(yunutyEngine::KeyCode::LeftArrow))
 		{
-			anim->Play();
+			pos.x -= 0.01;
+			obj->GetTransform()->SetLocalPosition(pos);
 		}
-		if (Input::isKeyPushed(yunutyEngine::KeyCode::C))
+		if (Input::isKeyDown(yunutyEngine::KeyCode::RightArrow))
 		{
-			anim->Pause();
+			pos.x += 0.01;
+			obj->GetTransform()->SetLocalPosition(pos);
 		}
-		if (Input::isKeyPushed(yunutyEngine::KeyCode::B))
+		if (Input::isKeyDown(yunutyEngine::KeyCode::UpArrow))
 		{
-			anim->Resume();
+			pos.y += 0.01;
+			obj->GetTransform()->SetLocalPosition(pos);
+		}
+		if (Input::isKeyDown(yunutyEngine::KeyCode::DownArrow))
+		{
+			pos.y -= 0.01;
+			obj->GetTransform()->SetLocalPosition(pos);
+		}
+		if (Input::isKeyDown(yunutyEngine::KeyCode::O))
+		{
+			pos.z += 0.01;
+			obj->GetTransform()->SetLocalPosition(pos);
+		}
+		if (Input::isKeyDown(yunutyEngine::KeyCode::P))
+		{
+			pos.z -= 0.01;
+			obj->GetTransform()->SetLocalPosition(pos);
 		}
 	}
 };
@@ -153,31 +172,26 @@ void GraphicsTest()
 			animation3 = i;
 		}
 	}
-	{
-		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("VFX_Ursula_Attack_1");
-	}
-	{
-		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SVFX_Ursula_Skill2_Wave");
-		auto anim = obj->AddComponent<VFXAnimator>();
-		anim->Init();
-		anim->Play();
 
-		//auto obj2 = Scene::getCurrentScene()->AddGameObject();
-		//auto test = obj2->AddComponent<TestComponent4>();
-		//test->obj = obj;
+	{
+		auto obj3 = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Stage1_Floor_01");
 	}
 	{
+		auto obj3 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
+
 		auto obj = Scene::getCurrentScene()->AddGameObject();
-		auto anim = obj->AddComponent<yunutyEngine::graphics::ParticleRenderer>();
-		anim->SetTexture(_resourceManager->GetTexture(L"Texture/Particle/BombParticle.dds")); 
-		anim->SetParticleMode(yunutyEngine::graphics::ParticleMode::Bursts);
-		anim->SetPlayAwake(false);
-		anim->SetLoop(true);
-		anim->Play();
+		auto particle = obj->AddComponent < yunutyEngine::graphics::ParticleRenderer >();
+		particle->SetIsApplyRoot(true);
+		particle->SetParticleShape(yunutyEngine::graphics::ParticleShape::Cone);
+		particle->SetParticleMode(yunutyEngine::graphics::ParticleMode::Bursts);
+		particle->SetTexture(_resourceManager->GetTexture(L"Texture/Particle/BombParticle.dds"));
+		particle->SetLoop(true);
+		particle->Play();
+		obj->SetParent(obj3);
 
 		auto obj2 = Scene::getCurrentScene()->AddGameObject();
 		auto test = obj2->AddComponent<TestComponent4>();
-		test->anim = anim;
+		test->obj = obj3;
 	}
 
 	yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
@@ -194,7 +208,6 @@ bool application::contents::ContentsLayer::GetInputControl()
 {
 	return contentsInputControl;
 }
-
 class ContentsInitializer : public yunutyEngine::Component
 {
 	coroutine::Coroutine Initialize()
@@ -291,13 +304,11 @@ class ContentsInitializer : public yunutyEngine::Component
 		Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
 		co_return;
 	}
-
 	virtual void Start() override
 	{
 		StartCoroutine(Initialize());
 	}
 };
-
 void application::contents::ContentsLayer::Initialize()
 {
 	if (ContentsLayer::testInitializer)
@@ -326,7 +337,7 @@ void application::contents::ContentsLayer::GUIProgress()
 
 void application::contents::ContentsLayer::Finalize()
 {
-    
+
 }
 
 void application::contents::ContentsLayer::PlayContents(ContentsPlayFlag playFlag)

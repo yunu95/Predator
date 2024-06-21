@@ -2,6 +2,7 @@
 #include "YunutyEngine.h"
 #include "UnitAcquisitionSphereCollider.h"
 #include "ITacticObject.h"
+#include "DamageType.h"
 //#include "ProjectilePool.h"
 
 class Unit;
@@ -17,6 +18,7 @@ protected:
     Vector3d speed;
     std::weak_ptr<Unit> opponentUnit;
     float damage;
+    DamageType damageType;
     float lifetime = 0;
     bool traveling = false;
     void SetSpeed(Vector3d speed);
@@ -28,6 +30,8 @@ protected:
     virtual void OnResume() override {}
 
 public:
+    void SetDamageType(DamageType damageType);
     void SetSpeed(Vector3d startPosition, Vector3d endPosition, float projectileSpeed);
     friend ProjectilePool;
+    friend Unit;
 };

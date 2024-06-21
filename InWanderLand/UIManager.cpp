@@ -389,8 +389,12 @@ void UIManager::ReturnToTitleAfterFadeOut()
 coroutine::Coroutine UIManager::StartGameAfterFadeOutCoro()
 {
     FadeOutLeft(1.0f);
+    ContentsCoroutine::Instance().FadeMusicVolume(0.0f, 1.0f);
     SetIngameUIVisible(false);
     co_yield coroutine::WaitForSeconds{ 1.2f, true };
+    SoundSystem::StopMusic();
+
+    ContentsCoroutine::Instance().FadeMusicVolume(1.0f, 1.0f);
     UIManager::Instance().GetUIElementByEnum(UIEnumID::VictoryPage)->DisableElement();
     UIManager::Instance().GetUIElementByEnum(UIEnumID::DefeatPage)->DisableElement();
     auto cl = static_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
@@ -698,10 +702,6 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
                 yunuGI::Vector2 newStartPoint{ uiData.floats[JsonUIFloatType::adjustLinearClipStartX] - uiData.floats[JsonUIFloatType::adjustLinearClipDirectionX] * t, uiData.floats[JsonUIFloatType::adjustLinearClipStartY] - uiData.floats[JsonUIFloatType::adjustLinearClipDirectionY] * t };
                 element->imageComponent.lock()->GetGI().SetLinearClippingStartPoint(newStartPoint.x, newStartPoint.y);
             };
-    }
-    if (uiData.customFlags2 & (int)UIExportFlag2::ExclusiveEnable)
-    {
-        std::transform(uiData.exclusiveEnableGroup.begin(), uiData.exclusiveEnableGroup.end(), std::back_inserter(element->exclusiveEnableGroup), [&](int idx) {return GetUIElementWithIndex(idx); });
     }
     if (uiData.customFlags2 & (int)UIExportFlag2::DisableAfterEnable)
     {
@@ -1077,6 +1077,10 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
                 digitFonts[element][number++] = img->GetGI().GetImage();
             }
         }
+        }
+    if (uiData.customFlags2 & (int)UIExportFlag2::ExclusiveEnable)
+    {
+        std::transform(uiData.exclusiveEnableGroup.begin(), uiData.exclusiveEnableGroup.end(), std::back_inserter(element->exclusiveEnableGroup), [&](int idx) {return GetUIElementWithIndex(idx); });
     }
     if (uiData.customFlags2 & (int)UIExportFlag2::Duplicatable)
     {
@@ -1093,7 +1097,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
             }
         }
     }
-}
+    }
 // 특별한 로직이 적용되어야 하는 경우 참, 그렇지 않으면 거짓을 반환합니다.
 bool UIManager::ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* element)
 {
@@ -1146,18 +1150,21 @@ bool UIManager::ImportDealWithSpecialCases_Post(const JsonUIData& uiData, UIElem
         switch (element->duplicateParentEnumID)
         {
         case UIEnumID::CharInfo_Robin:
+        case UIEnumID::CharInfo_Robin_Left:
             element->button->AddExternalButtonClickFunction([=]()
                 {
                     PlayerController::Instance().SelectPlayerUnit(PlayerCharacterType::Robin);
                 });
             break;
         case UIEnumID::CharInfo_Ursula:
+        case UIEnumID::CharInfo_Ursula_Left:
             element->button->AddExternalButtonClickFunction([=]()
                 {
                     PlayerController::Instance().SelectPlayerUnit(PlayerCharacterType::Ursula);
                 });
             break;
         case UIEnumID::CharInfo_Hansel:
+        case UIEnumID::CharInfo_Hansel_Left:
             element->button->AddExternalButtonClickFunction([=]()
                 {
                     PlayerController::Instance().SelectPlayerUnit(PlayerCharacterType::Hansel);
@@ -1170,18 +1177,21 @@ bool UIManager::ImportDealWithSpecialCases_Post(const JsonUIData& uiData, UIElem
         switch (element->duplicateParentEnumID)
         {
         case UIEnumID::CharInfo_Robin:
+        case UIEnumID::CharInfo_Robin_Left:
             element->button->AddExternalButtonClickFunction([=]()
                 {
                     PlayerController::Instance().SelectSkill(SkillType::ROBIN_Q);
                 });
             break;
         case UIEnumID::CharInfo_Ursula:
+        case UIEnumID::CharInfo_Ursula_Left:
             element->button->AddExternalButtonClickFunction([=]()
                 {
                     PlayerController::Instance().SelectSkill(SkillType::URSULA_Q);
                 });
             break;
         case UIEnumID::CharInfo_Hansel:
+        case UIEnumID::CharInfo_Hansel_Left:
             element->button->AddExternalButtonClickFunction([=]()
                 {
                     PlayerController::Instance().SelectSkill(SkillType::HANSEL_Q);

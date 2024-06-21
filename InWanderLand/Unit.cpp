@@ -393,6 +393,31 @@ bool Unit::IsTacTicReady() const
     return false;
 }
 
+float Unit::GetCritChance()
+{
+    return unitTemplateData->pod.m_critChance + adderCritChance;
+}
+
+float Unit::GetCritMultiplier()
+{
+    return unitTemplateData->pod.m_critMultiplier;
+}
+
+int Unit::GetArmor()
+{
+    return unitTemplateData->pod.m_armor;
+}
+
+float Unit::GetEvasionChance()
+{
+    return unitTemplateData->pod.m_evasionChance;
+}
+
+float Unit::GetCritResistance()
+{
+    return unitTemplateData->pod.m_critResistance;
+}
+
 std::string Unit::GetFBXName() const
 {
     if (!skinnedMeshGameObject)
@@ -414,27 +439,41 @@ void Unit::EraseBuff(UnitBuffType buffType)
         buffs.find(buffType)->second->OnEnd();
     buffs.erase(buffType);
 }
-void Unit::Damaged(std::weak_ptr<Unit> opponentUnit, float opponentAp, Transform* projectileTransform)
+void Unit::Damaged(std::weak_ptr<Unit> opponentUnit, float opponentAp, Transform* projectileTransform, DamageType damageType)
 {
-//     if (!coroutineDamagedEffect.expired())
-//         FBXPool::Instance().Return(damagedVFX);
+    //     if (!coroutineDamagedEffect.expired())
+    //         FBXPool::Instance().Return(damagedVFX);
     coroutineDamagedEffect = StartCoroutine(DamagedEffectCoroutine(opponentUnit, projectileTransform));
-     coroutineDamagedEffect.lock()->PushDestroyCallBack([this]()
-         {
-             for (auto each : damagedEffectVector)
-             {
-				 FBXPool::Instance().Return(each);
-             }
-             damagedEffectVector.clear();
-         });
+    coroutineDamagedEffect.lock()->PushDestroyCallBack([this]()
+        {
+            for (auto each : damagedEffectVector)
+            {
+                FBXPool::Instance().Return(each);
+            }
+            damagedEffectVector.clear();
+        });
 
-    Damaged(opponentUnit, opponentAp, DamageType::Attack);
+    Damaged(opponentUnit, opponentAp, damageType);
 }
 void Unit::Damaged(std::weak_ptr<Unit> opponentUnit, float opponentDmg, DamageType damageType)
 {
     switch (damageType)
     {
     case DamageType::Attack:
+        // 치명타의 경우 치명타 배율은 이미 opponentDmg에 반영된 것으로 친다.
+    case DamageType::AttackCrit:
+        if (math::Random::ByRandomChance(GetEvasionChance()))
+        {
+            // 공격 빗나감
+            opponentDmg = 0;
+            return;
+        }
+
+        if (damageType == DamageType::AttackCrit)
+        {
+            opponentDmg *= 1 - GetCritResistance();
+        }
+        opponentDmg *= 1 - GetArmor() * 0.01f;
         opponentUnit.lock()->onAttackHit(GetWeakPtr<Unit>());
         break;
     case DamageType::Skill:
@@ -466,10 +505,10 @@ yunutyEngine::coroutine::Coroutine Unit::DamagedEffectCoroutine(std::weak_ptr<Un
     auto temp = projectileTransform->GetLocalRotation();
     auto euler = temp.Euler();
     euler.y += -180;
-    damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion{euler});
+    damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion{ euler });
     //damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(direction);
     //damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldScale(GetTransform()->GetWorldScale());
-    
+
     damagedEffectVector.push_back(damagedVFX);
 
     while (!vfxAnimator.lock()->IsDone())
@@ -542,6 +581,14 @@ void Unit::SetCurrentHp(float p_newHp)
         unitStatusPortraitUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_HP_Number_Current)->SetNumber(currentHitPoint);
         unitStatusPortraitUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_HP_Number_Max)->SetNumber(unitTemplateData->pod.max_Health);
     }
+    if (!unitStatusPortraitUI2.expired())
+    {
+        unitStatusPortraitUI2.lock()->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_HP_Fill)->adjuster->SetTargetFloat(currentHitPoint / unitTemplateData->pod.max_Health);
+        unitStatusPortraitUI2.lock()->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_PortraitBloodOverlay)->adjuster->SetTargetFloat(1 - currentHitPoint / unitTemplateData->pod.max_Health);
+        unitStatusPortraitUI2.lock()->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_HP_Number_Current)->SetNumber(currentHitPoint);
+        unitStatusPortraitUI2.lock()->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_HP_Number_Max)->SetNumber(unitTemplateData->pod.max_Health);
+    }
+
 }
 
 float Unit::GetUnitCurrentHp() const
@@ -1129,14 +1176,17 @@ void Unit::Summon(application::editor::Unit_TemplateData* templateData)
     {
     case PlayerCharacterType::Robin:
         unitStatusPortraitUI = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin)->GetWeakPtr<UIElement>();
+        unitStatusPortraitUI2 = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin_Left)->GetWeakPtr<UIElement>();
         AddPassiveSkill(std::static_pointer_cast<PassiveSkill>(std::make_shared<PassiveRobinBleed>()));
         break;
     case PlayerCharacterType::Ursula:
         unitStatusPortraitUI = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Ursula)->GetWeakPtr<UIElement>();
+        unitStatusPortraitUI2 = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Ursula_Left)->GetWeakPtr<UIElement>();
         AddPassiveSkill(std::static_pointer_cast<PassiveSkill>(std::make_shared<PassiveUrsula>()));
         break;
     case PlayerCharacterType::Hansel:
         unitStatusPortraitUI = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel)->GetWeakPtr<UIElement>();
+        unitStatusPortraitUI2 = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel_Left)->GetWeakPtr<UIElement>();
         AddPassiveSkill(std::static_pointer_cast<PassiveSkill>(std::make_shared<PassiveHanselHeal>()));
         break;
     default:
@@ -1679,13 +1729,19 @@ yunutyEngine::coroutine::Coroutine Unit::AttackCoroutine(std::weak_ptr<Unit> opp
     co_yield coroutine::WaitForSeconds(unitTemplateData->pod.m_attackPreDelay * attackDelayMultiplier);
     onAttack(opponent);
     playSpeed = animatorComponent.lock()->GetGI().GetPlaySpeed();
+    float dmg = unitTemplateData->pod.m_autoAttackDamage + adderAttackDamage;
+    DamageType damageType = DamageType::Attack;
+    if (math::Random::ByRandomChance(GetCritChance()))
+    {
+        damageType = DamageType::AttackCrit;
+    }
     switch (unitTemplateData->pod.attackType.enumValue)
     {
     case UnitAttackType::MELEE:
     {
         if (!referenceBlindness.BeingReferenced())
         {
-            opponent.lock()->Damaged(GetWeakPtr<Unit>(), unitTemplateData->pod.m_autoAttackDamage + adderAttackDamage, DamageType::Attack);
+            opponent.lock()->Damaged(GetWeakPtr<Unit>(), dmg, damageType);
         }
         if (!coroutineAttackEffect.expired())
         {
@@ -1698,6 +1754,8 @@ yunutyEngine::coroutine::Coroutine Unit::AttackCoroutine(std::weak_ptr<Unit> opp
     {
         //auto projectile = ProjectileSelector::SingleInstance().RequestProjectile(GetWeakPtr<Unit>(), opponent.lock(), static_cast<ProjectileType::Enum>(unitTemplateData->pod.projectileType.enumValue));
         auto projectile = ProjectilePool::SingleInstance().Borrow(GetWeakPtr<Unit>(), opponent.lock());
+        projectile.lock()->damage = dmg;
+        projectile.lock()->SetDamageType(damageType);
         break;
     }
     }
@@ -1748,6 +1806,7 @@ void Unit::ReturnToPool()
     navAgentComponent.lock()->SetActive(false);
     navObstacle.lock()->SetActive(false);
     unitStatusPortraitUI.reset();
+    unitStatusPortraitUI2.reset();
     Reset();
     if (unitData)
     {
