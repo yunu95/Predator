@@ -172,6 +172,8 @@ void yunutyEngine::YunutyCycle::ThreadUpdate()
 			StartComponent(updateTargetComponents[i]);
 		for (unsigned int i = 0; i < updateTargetComponentsSize; i++)
 		{
+			auto start = std::chrono::high_resolution_clock::now();
+
 			if (!updateTargetComponents[i]->GetActive() || !updateTargetComponents[i]->GetGameObject()->GetActive())
 				continue;
 			UpdateComponent(updateTargetComponents[i]);
@@ -202,6 +204,15 @@ void yunutyEngine::YunutyCycle::ThreadUpdate()
 				{
 					updateTargetComponents[i]->GetGameObject()->HandleComponentUpdateState(updateTargetComponents[i]);
 				}
+			}
+			auto stop = std::chrono::high_resolution_clock::now();
+			auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start);
+			float durationAsSeconds = duration.count() / 1000000000.0f;
+
+			if (durationAsSeconds > 0.1)
+			{
+				auto enom = updateTargetComponents[i];
+				auto ajossi = updateTargetComponents[i];
 			}
 		}
 
