@@ -12,7 +12,6 @@
 #include "UnitMoveCommand.h"
 #include "UnitAttackCommand.h"
 #include "UnitSkillCommand.h"
-#include "EnqueErrorType.h"
 
 const std::unordered_map<UIEnumID, SkillUpgradeType::Enum> PlayerController::skillUpgradeByUI
 {
@@ -39,13 +38,6 @@ void PlayerController::RegisterUnit(std::weak_ptr<Unit> unit)
         return;
 
     characters[unit.lock()->GetUnitTemplateData().pod.playerUnitType.enumValue] = unit;
-    if (!characters[PlayerCharacterType::Robin].expired() &&
-        !characters[PlayerCharacterType::Ursula].expired() &&
-        !characters[PlayerCharacterType::Hansel].expired())
-    {
-        SetCameraOffset();
-        SelectPlayerUnit(PlayerCharacterType::Robin);
-    }
     unit.lock()->onStateEngage[UnitBehaviourTree::Death].AddCallback([this, unit]() { UnSelectSkill(unit); });
     unit.lock()->onStateEngage[UnitBehaviourTree::Death].AddCallback(std::bind(&PlayerController::OnPlayerChracterDead, this, unit));
     unit.lock()->onStateEngage[UnitBehaviourTree::Paralysis].AddCallback([this, unit]() { UnSelectSkill(unit); });
@@ -132,9 +124,13 @@ void PlayerController::OnContentsPlay()
     SetManaFull();
     SetState(State::Peace);
     InitUnitMouseInteractionEffects();
+
+    SetCameraOffset();
+    SelectPlayerUnit(PlayerCharacterType::Robin);
 }
 void PlayerController::OnContentsStop()
 {
+    selectedCharacterType = PlayerCharacterType::None;
     stateRequestedByAction = State::None;
     SetState(State::Peace);
     SetActive(false);
@@ -581,11 +577,11 @@ void PlayerController::OnRightClick()
         else
         {
             SkillPreviewSystem::Instance().HideTemporaryRoute();
+            EnqueErrorType errorType = EnqueErrorType::NONE;
             if (!cursorUnitDetector.lock()->GetUnits().empty() && GetUnitOnCursor()->teamIndex != playerTeamIndex)
             {
                 // Attack
                 // 걸어가서 공격을 하게 될 수 있음
-                EnqueErrorType errorType = EnqueErrorType::NONE;
                 std::vector<Vector3d> path;
                 path = TacticModeSystem::Instance().GetPathInTacticMode(selectedCharacterType, GetUnitOnCursor());
                 this->ModifyPathForAttack(path);
@@ -619,7 +615,6 @@ void PlayerController::OnRightClick()
                 else
                 {
                     // 이동없이 공격이 가능하다면 공격 명령
-                    EnqueErrorType errorType = EnqueErrorType::NONE;
                     errorType = TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitAttackCommand>(
                         characters[selectedCharacterType].lock().get()
                         , Vector3d::zero
@@ -629,19 +624,20 @@ void PlayerController::OnRightClick()
                         characters[selectedCharacterType].lock().get()->GetGameObject()->GetTransform()->GetWorldPosition()));
                     // 에러 타입에 따른 UI활성화
                 }
+
             }
             else
             {
                 // Move
                 std::vector<Vector3d> path;
-                EnqueErrorType errorType = EnqueErrorType::NONE;
                 path = TacticModeSystem::Instance().GetPathInTacticMode(selectedCharacterType);
 
                 errorType = TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitMoveCommand>(characters[selectedCharacterType].lock().get()
                     , GetWorldCursorPosition(),
                     path, false));
-                // 에러 타입에 따른 UI활성화
             }
+            // 에러 타입에 따른 UI활성화
+            EnableErrorUI(errorType);
         }
     }
     else if (selectedSkill != SkillType::NONE)
@@ -771,7 +767,6 @@ void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
         {
             // 이동없이 스킬 사용이 가능하다면 스킬 명령
 
-            EnqueErrorType errorType = EnqueErrorType::NONE;
             errorType = TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitSkillCommand>(characters[selectedCharacterType].lock().get()
                 , GetWorldCursorPosition()
                 , skillType
@@ -781,8 +776,9 @@ void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
                 selectedSkill = SkillType::NONE;
             }
 
-            // 에러 타입에 따른 UI활성화
         }
+        // 에러 타입에 따른 UI활성화
+        EnableErrorUI(errorType);
     }
 }
 
@@ -841,6 +837,7 @@ void PlayerController::SetState(State::Enum newState)
     {
     case PlayerController::State::Tactic:
         UIManager::Instance().GetUIElementByEnum(UIEnumID::TacticModeIngameUI)->DisableElement();
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_MenuButton)->EnableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Bottom_Layout)->EnableElement();
         break;
     }
@@ -864,6 +861,7 @@ void PlayerController::SetState(State::Enum newState)
     case State::Tactic:
     {
         UIManager::Instance().GetUIElementByEnum(UIEnumID::TacticModeIngameUI)->EnableElement();
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_MenuButton)->DisableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Bottom_Layout)->DisableElement();
         UnSelectSkill();
     }
@@ -905,9 +903,10 @@ void PlayerController::SetCameraOffset()
 {
     if (characters[PlayerCharacterType::Robin].expired())
         return;
-    auto camPos = graphics::Camera::GetMainCamera()->GetTransform()->GetWorldPosition();
+
+    auto camPos = RTSCam::Instance().GetTransform()->GetWorldPosition();
     camOffset = camPos - characters[PlayerCharacterType::Robin].lock()->GetTransform()->GetWorldPosition();
-    camRotation = graphics::Camera::GetMainCamera()->GetTransform()->GetWorldRotation();
+    camRotation = RTSCam::Instance().GetTransform()->GetWorldRotation();
 }
 
 void PlayerController::SetComboObjectives(const std::array<int, 3>& targetCombos)
@@ -1010,7 +1009,8 @@ void PlayerController::SetMana(float mana)
 {
     const auto& gc = GlobalConstant::GetSingletonInstance().pod;
     this->mana = std::fmin(gc.maxMana, mana);
-    UIManager::Instance().GetUIElementByEnum(UIEnumID::ManaFill)->adjuster->SetTargetFloat(1 - mana / gc.maxMana);
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::ManaBar1)->adjuster->SetTargetFloat(1 - mana / gc.maxMana);
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::ManaBar2)->adjuster->SetTargetFloat(1 - mana / gc.maxMana);
     UIManager::Instance().GetUIElementByEnum(UIEnumID::Mana_Text_MaxMP)->SetNumber(gc.maxMana);
     UIManager::Instance().GetUIElementByEnum(UIEnumID::Mana_Text_CurrentMP)->SetNumber(mana);
 }
@@ -1193,6 +1193,19 @@ void PlayerController::InitUnitMouseInteractionEffects()
         enemyHoverEffectAnimator = enemyHoverEffect->AddComponent<VFXAnimator>();
         enemyHoverEffectAnimator->Init();
         enemyHoverEffectAnimator->SetLoop(true);
+    }
+}
+
+void PlayerController::EnableErrorUI(EnqueErrorType errorType)
+{
+    switch (errorType)
+    {
+    case EnqueErrorType::NotEnoughMana:
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::ErrorPopup_NoMana)->EnableElement();
+        break;
+    case EnqueErrorType::QueueFull:
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::ErrorPopup_TacticQueueFull)->EnableElement();
+        break;
     }
 }
 

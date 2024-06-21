@@ -12,7 +12,7 @@ void Projectile::Update()
         {
             if (!owner.lock()->referenceBlindness.BeingReferenced())
             {
-                (*enemies.begin())->Damaged(owner, damage, GetTransform(), damageType);
+                (*enemies.begin())->Damaged(owner, damage, damageType, GetTransform());
             }
             ProjectilePool::SingleInstance().Return(GetWeakPtr<Projectile>());
             return;

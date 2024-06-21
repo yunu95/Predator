@@ -703,10 +703,6 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
                 element->imageComponent.lock()->GetGI().SetLinearClippingStartPoint(newStartPoint.x, newStartPoint.y);
             };
     }
-    if (uiData.customFlags2 & (int)UIExportFlag2::ExclusiveEnable)
-    {
-        std::transform(uiData.exclusiveEnableGroup.begin(), uiData.exclusiveEnableGroup.end(), std::back_inserter(element->exclusiveEnableGroup), [&](int idx) {return GetUIElementWithIndex(idx); });
-    }
     if (uiData.customFlags2 & (int)UIExportFlag2::DisableAfterEnable)
     {
         element->disableAfterEnable = element->GetGameObject()->AddComponent<TimerComponent>();
@@ -1081,6 +1077,10 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
                 digitFonts[element][number++] = img->GetGI().GetImage();
             }
         }
+        }
+    if (uiData.customFlags2 & (int)UIExportFlag2::ExclusiveEnable)
+    {
+        std::transform(uiData.exclusiveEnableGroup.begin(), uiData.exclusiveEnableGroup.end(), std::back_inserter(element->exclusiveEnableGroup), [&](int idx) {return GetUIElementWithIndex(idx); });
     }
     if (uiData.customFlags2 & (int)UIExportFlag2::Duplicatable)
     {
@@ -1097,7 +1097,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
             }
         }
     }
-}
+    }
 // 특별한 로직이 적용되어야 하는 경우 참, 그렇지 않으면 거짓을 반환합니다.
 bool UIManager::ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* element)
 {

@@ -8,6 +8,7 @@
 #include "PlayerCharacterType.h"
 #include "SkillType.h"
 #include "UnitAcquisitionBoxCollider.h"
+#include "EnqueErrorType.h"
 
 // 사용자 입력을 받고 플레이어 유닛들의 행동을 관리하는 클래스
 // 짬통 중의 짬통이다.
@@ -140,6 +141,7 @@ private:
     void ApplySelectEffect(std::weak_ptr<Unit> unit);
     void ApplyTargetedEffect(std::weak_ptr<Unit> unit);
     void InitUnitMouseInteractionEffects();
+    void EnableErrorUI(EnqueErrorType errorType);
     std::vector<Vector3d>& ModifyPathForAttack(std::vector<Vector3d>& path);
     std::vector<Vector3d>& ModifyPathForSkill(std::vector<Vector3d>& path, SkillType::Enum skillType);
     int currentCombo{ 0 };

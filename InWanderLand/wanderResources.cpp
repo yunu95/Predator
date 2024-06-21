@@ -126,6 +126,30 @@ constexpr const std::string wanderResources::GetFBXName(WanderFBX::Enum fbxType)
     }
 }
 
+std::weak_ptr<yunuGI::IVideo> wanderResources::GetPortraitVideoIdle(PlayerCharacterType::Enum playerType)
+{
+    auto rsrc = graphics::Renderer::SingleInstance().GetResourceManager();
+    switch (playerType)
+    {
+    case PlayerCharacterType::Robin: return rsrc->GetVideoData(L"Texture/Ingame/NewFolder/Portrait_Robin_Idle.mp4");
+    case PlayerCharacterType::Ursula: return rsrc->GetVideoData(L"Texture/Ingame/NewFolder/Portrait_Ursula_Idle.mp4");
+    case PlayerCharacterType::Hansel: return rsrc->GetVideoData(L"Texture/Ingame/NewFolder/Portrait_Hansel_Idle.mp4");
+    }
+    return std::weak_ptr<yunuGI::IVideo>{};
+}
+
+std::weak_ptr<yunuGI::IVideo> wanderResources::GetPortraitVideoHurt(PlayerCharacterType::Enum playerType)
+{
+    auto rsrc = graphics::Renderer::SingleInstance().GetResourceManager();
+    switch (playerType)
+    {
+    case PlayerCharacterType::Robin: return rsrc->GetVideoData(L"Texture/Ingame/NewFolder/Portrait_Robin_Hurt.mp4");
+    case PlayerCharacterType::Ursula: return rsrc->GetVideoData(L"Texture/Ingame/NewFolder/Portrait_Ursula_Hurt.mp4");
+    case PlayerCharacterType::Hansel: return rsrc->GetVideoData(L"Texture/Ingame/NewFolder/Portrait_Hansel_Hurt.mp4");
+    }
+    return std::weak_ptr<yunuGI::IVideo>{};
+}
+
 void InitFBXMap()
 {
     fbxMap["SKM_Robin"][UnitAnimType::Attack] = "VFX_Robin_Attack";

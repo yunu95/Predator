@@ -23,6 +23,7 @@
 #include "EditorCamera.h"
 #include "PlayableComponent.h"
 #include "WanderUtils.h"
+#include "UnitPool.h"
 
 #include <d3d11.h>
 #include <dxgi1_4.h>
@@ -548,6 +549,7 @@ namespace application
         editor::EditorCamera::GetSingletonInstance().ReloadGameCamera();
         editor::palette::PaletteBrushManager::GetSingletonInstance().MakeBrush();
         PlayableComponent::PostMapLoadAll();
+        UnitPool::SingleInstance().Reset();
 #endif
     }
 

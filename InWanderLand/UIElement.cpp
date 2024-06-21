@@ -108,6 +108,13 @@ void UIElement::EnableElement()
         each->enabled = false;
         each->EnableElement();
     }
+    for (auto each : exclusiveEnableGroup)
+    {
+        if (each != this)
+        {
+            each->DisableElement();
+        }
+    }
 }
 void UIElement::DisableElement()
 {

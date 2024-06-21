@@ -163,15 +163,11 @@ void Unit::OnStateEngage<UnitBehaviourTree::Pause>()
     defaultAnimationType = UnitAnimType::Idle;
     enableNavObstacleByState = referenceEnableNavObstacle.Acquire();
     disableNavAgentByState = referenceDisableNavAgent.Acquire();
-    //PlayAnimation(UnitAnimType::Idle, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
-    animatorComponent.lock()->Pause();
 }
 template<>
 void Unit::OnStateExit<UnitBehaviourTree::Pause>()
 {
     onStateExit[UnitBehaviourTree::Pause]();
-    //PlayAnimation(UnitAnimType::Idle, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
-    animatorComponent.lock()->Resume();
     enableNavObstacleByState.reset();
     disableNavAgentByState.reset();
 }
@@ -435,7 +431,7 @@ Vector3d Unit::GetRandomPositionInsideCapsuleCollider()
 {
     const auto& pod = GetUnitTemplateData().pod;
     auto unitPos = GetTransform()->GetWorldPosition();
-    return unitPos + Vector3d{ math::Random::GetRandomFloat(pod.collisionSize * 0.7f),pod.collisionSize + math::Random::GetRandomFloat(0 , pod.collisionHeight),math::Random::GetRandomFloat(pod.collisionSize * 0.7f) };
+    return unitPos + Vector3d{ math::Random::GetRandomFloat(pod.collisionSize * 0.3f), pod.collisionSize + math::Random::GetRandomFloat(0 , pod.collisionHeight), math::Random::GetRandomFloat(pod.collisionSize * 0.3f) };
 }
 void Unit::EraseBuff(UnitBuffType buffType)
 {
@@ -443,23 +439,7 @@ void Unit::EraseBuff(UnitBuffType buffType)
         buffs.find(buffType)->second->OnEnd();
     buffs.erase(buffType);
 }
-void Unit::Damaged(std::weak_ptr<Unit> opponentUnit, float opponentAp, Transform* projectileTransform, DamageType damageType)
-{
-    //     if (!coroutineDamagedEffect.expired())
-    //         FBXPool::Instance().Return(damagedVFX);
-    coroutineDamagedEffect = StartCoroutine(DamagedEffectCoroutine(opponentUnit, projectileTransform));
-    coroutineDamagedEffect.lock()->PushDestroyCallBack([this]()
-        {
-            for (auto each : damagedEffectVector)
-            {
-                FBXPool::Instance().Return(each);
-            }
-            damagedEffectVector.clear();
-        });
-
-    Damaged(opponentUnit, opponentAp, damageType);
-}
-void Unit::Damaged(std::weak_ptr<Unit> opponentUnit, float opponentDmg, DamageType damageType)
+void Unit::Damaged(std::weak_ptr<Unit> opponentUnit, float opponentDmg, DamageType damageType, Transform* projectileTransform)
 {
     switch (damageType)
     {
@@ -478,16 +458,6 @@ void Unit::Damaged(std::weak_ptr<Unit> opponentUnit, float opponentDmg, DamageTy
             opponentDmg *= 1 - GetCritResistance();
         }
         opponentDmg *= 1 - GetArmor() * 0.01f;
-        /*if (opponentUnit.lock()->GetFBXName() == "SKM_Ursula" || opponentUnit.lock()->GetFBXName() == "SKM_Hansel")
-        {
-            if (!coroutineDamagedEffect.expired())
-                FBXPool::Instance().Return(damagedVFX);
-            coroutineDamagedEffect = StartCoroutine(DamagedEffectCoroutine(opponentUnit));
-            coroutineDamagedEffect.lock()->PushDestroyCallBack([this]()
-                {
-                    FBXPool::Instance().Return(damagedVFX);
-                });
-        }*/
         opponentUnit.lock()->onAttackHit(GetWeakPtr<Unit>());
         break;
     case DamageType::Skill:
@@ -495,6 +465,20 @@ void Unit::Damaged(std::weak_ptr<Unit> opponentUnit, float opponentDmg, DamageTy
     default:
         break;
     }
+
+    coroutineDamagedEffect = StartCoroutine(DamagedEffectCoroutine(opponentUnit, projectileTransform));
+    coroutineDamagedEffect.lock()->PushDestroyCallBack([this]()
+        {
+            if (!damagedEffectQueue.empty())
+            {
+                if (!damagedEffectQueue.front().expired())
+                {
+                    FBXPool::Instance().Return(damagedEffectQueue.front());
+                    damagedEffectQueue.pop();
+                }
+            }
+        });
+
     onDamagedFromUnit(opponentUnit);
     Damaged(opponentDmg);
 }
@@ -507,6 +491,11 @@ void Unit::Damaged(float dmg)
 
 yunutyEngine::coroutine::Coroutine Unit::DamagedEffectCoroutine(std::weak_ptr<Unit> opponent, Transform* projectileTransform)
 {
+    if (projectileTransform == nullptr)
+    {
+        co_return;
+    }
+
     auto damagedVFX = wanderResources::GetVFX(opponent.lock()->unitTemplateData->pod.skinnedFBXName, UnitAnimType::Damaged);
     co_await std::suspend_always{};
     auto vfxAnimator = damagedVFX.lock()->AcquireVFXAnimator();
@@ -523,10 +512,16 @@ yunutyEngine::coroutine::Coroutine Unit::DamagedEffectCoroutine(std::weak_ptr<Un
     //damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(direction);
     //damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldScale(GetTransform()->GetWorldScale());
 
-    damagedEffectVector.push_back(damagedVFX);
+    damagedEffectQueue.push(damagedVFX);
 
+    auto relativePos = projectileTransform->GetWorldPosition() - GetTransform()->GetWorldPosition();
+    auto prevRot = QuaternionToEastAngle(GetTransform()->GetWorldRotation());
+    
     while (!vfxAnimator.lock()->IsDone())
     {
+        damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition() + relativePos);
+        //damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(damagedVFX.lock()->GetGameObject()->GetTransform()->GetWorldRotation() * Quaternion(Vector3d{ 0, prevRot - QuaternionToEastAngle(GetTransform()->GetWorldRotation()), 0}));
+        //prevRot = QuaternionToEastAngle(GetTransform()->GetWorldRotation());
         co_await std::suspend_always{};
     }
 
@@ -646,9 +641,7 @@ void Unit::Paralyze(float paralyzeDuration)
 yunutyEngine::coroutine::Coroutine Unit::ParalyzeEffectCoroutine(float paralyzeDuration)
 {
     paralysisVFX = FBXPool::Instance().Borrow("VFX_Monster_HitCC");
-    paralysisVFX.lock()->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
-    paralysisVFX.lock()->GetTransform()->SetWorldRotation(GetTransform()->GetWorldRotation());
-    paralysisVFX.lock()->GetTransform()->SetWorldScale(GetTransform()->GetWorldScale());
+    co_await std::suspend_always{};
 
     auto paralysisEffectAnimator = paralysisVFX.lock()->AcquireVFXAnimator();
     paralysisEffectAnimator.lock()->SetAutoActiveFalse();
@@ -656,18 +649,17 @@ yunutyEngine::coroutine::Coroutine Unit::ParalyzeEffectCoroutine(float paralyzeD
     paralysisEffectAnimator.lock()->Play();
     paralysisEffectAnimator.lock()->SetLoop(true);
 
-    float localTimer = 0;
-    while (localTimer >= paralyzeDuration)
-    {
-        while (isPaused)
-        {
-            co_await std::suspend_always();
-        }
+    paralysisVFX.lock()->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
+    paralysisVFX.lock()->GetTransform()->SetWorldRotation(GetTransform()->GetWorldRotation());
+    paralysisVFX.lock()->GetTransform()->SetWorldScale(GetTransform()->GetWorldScale());
 
-        co_await std::suspend_always();
+    coroutine::ForSeconds forSeconds = paralyzeDuration;
+
+    while (forSeconds.Tick())
+    {
+        co_await std::suspend_always{};
         paralysisVFX.lock()->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
         paralysisVFX.lock()->GetTransform()->SetWorldRotation(GetTransform()->GetWorldRotation());
-        localTimer += Time::GetDeltaTime();
     }
 
     co_return;
@@ -1111,10 +1103,12 @@ void Unit::Init(const application::editor::Unit_TemplateData* unitTemplateData)
         }
     }
 }
+
 void Unit::Summon(const application::editor::UnitData* unitData)
 {
     this->unitData = unitData;
     unitData->inGameUnit = GetWeakPtr<Unit>();
+    unitTemplateData = unitData->GetUnitTemplateData();
 
     GetTransform()->SetWorldPosition(Vector3d{ unitData->pod.position });
     navAgentComponent.lock()->SetActive(true);
@@ -1142,9 +1136,11 @@ void Unit::Summon(const application::editor::UnitData* unitData)
     //desiredRotation = currentRotation = 180 + std::atan2f(forward.z, forward.x) * math::Rad2Deg;
     coroutineBirth = StartCoroutine(BirthCoroutine());
 }
+
 void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& position, float rotation, bool instant)
 {
     this->unitData = nullptr;
+    unitTemplateData = td;
 
     ResetCallbacks();
     Reset();
@@ -1282,6 +1278,7 @@ void Unit::Reset()
         onGoingSkill.reset();
     }
     DeleteCoroutine(coroutineRevival);
+    DeleteCoroutine(coroutineBirth);
     DeleteCoroutine(coroutineDeath);
     ClearCoroutines();
     passiveSkill.reset();
@@ -1652,15 +1649,14 @@ yunutyEngine::coroutine::Coroutine Unit::BirthCoroutine()
         co_await std::suspend_always();
     }
 
+    co_await std::suspend_always();
+
     const auto& gc = GlobalConstant::GetSingletonInstance().pod;
     auto pauseGuard = referencePause.Acquire();
     auto invulnerableGuard = referenceInvulnerable.Acquire();
-    //animatorComponent.lock()->GetGameObject()->SetSelfActive(false);
-    //co_yield coroutine::WaitForSeconds{ math::Random::GetRandomFloat(0, gc.unitBirthTimeOffsetNoise) };
-    //animatorComponent.lock()->GetGameObject()->SetSelfActive(true);
     float animSpeed = wanderResources::GetAnimation(unitTemplateData->pod.skinnedFBXName, UnitAnimType::Birth)->GetDuration() / unitTemplateData->pod.birthTime;
+    animatorComponent.lock()->GetGI().SetPlaySpeed(animSpeed);
     PlayAnimation(UnitAnimType::Birth, Animation::PlayFlag_::None);
-    //animatorComponent.lock()->GetGI().SetPlaySpeed(animSpeed);
     burnEffect.lock()->SetDuration(unitTemplateData->pod.birthTime);
     burnEffect.lock()->SetEdgeColor({ unitTemplateData->pod.birthBurnEdgeColor.x,unitTemplateData->pod.birthBurnEdgeColor.y,unitTemplateData->pod.birthBurnEdgeColor.z });
     burnEffect.lock()->SetEdgeThickness(unitTemplateData->pod.birthBurnEdgeThickness);
@@ -1684,14 +1680,19 @@ yunutyEngine::coroutine::Coroutine Unit::DeathCoroutine()
         ReturnToPool();
         co_return;
     }
+
+    co_await std::suspend_always();
+
+    auto pauseGuard = referencePause.Acquire();
     float animSpeed = wanderResources::GetAnimation(unitTemplateData->pod.skinnedFBXName, UnitAnimType::Death)->GetDuration() / unitTemplateData->pod.deathBurnTime;
+    animatorComponent.lock()->GetGI().SetPlaySpeed(animSpeed);
     PlayAnimation(UnitAnimType::Death);
-    //animatorComponent.lock()->GetGI().SetPlaySpeed(animSpeed);
     burnEffect.lock()->SetDuration(unitTemplateData->pod.deathBurnTime);
     burnEffect.lock()->SetEdgeColor({ unitTemplateData->pod.deathBurnEdgeColor.x,unitTemplateData->pod.deathBurnEdgeColor.y,unitTemplateData->pod.deathBurnEdgeColor.z });
     burnEffect.lock()->SetEdgeThickness(unitTemplateData->pod.deathBurnEdgeThickness);
     burnEffect.lock()->Disappear();
     co_yield coroutine::WaitForSeconds(unitTemplateData->pod.deathBurnTime);
+    animatorComponent.lock()->GetGI().SetPlaySpeed(1);
     ReturnToPool();
     co_return;
 }
@@ -1813,6 +1814,14 @@ void Unit::ReturnToPool()
     unitStatusPortraitUI.reset();
     unitStatusPortraitUI2.reset();
     Reset();
+    if (unitData)
+    {
+        if (!unitData->inGameUnit.expired())
+        {
+            unitData->inGameUnit.reset();
+        }
+        unitData = nullptr;
+    }
     UnitPool::SingleInstance().Return(GetWeakPtr<Unit>());
 }
 void Unit::ResetSharedRef()

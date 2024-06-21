@@ -143,7 +143,6 @@ coroutine::Coroutine EnemySpinAttackSkill::SpawningSkillffect(std::weak_ptr<Enem
             knockBackList.insert(each);
             Vector3d delta = pod.knockBackDistance * (each->GetTransform()->GetWorldPosition() - owner.lock()->GetTransform()->GetWorldPosition()).Normalized();
             each->Damaged(owner, pod.skillDamage);
-            each->Paralyze(pod.paralyzingDuration);
             each->KnockBack(owner.lock()->GetTransform()->GetWorldPosition() + delta, pod.knockBackDuration);
         }
     }

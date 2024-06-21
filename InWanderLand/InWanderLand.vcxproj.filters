@@ -877,6 +877,9 @@
     <Filter Include="Editor\ScriptSystem\2_Action\List\Action_RequestState">
       <UniqueIdentifier>{37226b75-db20-4884-b9f7-88f698af678a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UI\PlayerPortrait">
+      <UniqueIdentifier>{28485207-5f08-423a-9081-ac1077c64e58}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -2134,6 +2137,9 @@
     <ClInclude Include="Trigger_Wave.h">
       <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerPortrait.h">
+      <Filter>UI\PlayerPortrait</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -3189,6 +3195,9 @@
     </ClCompile>
     <ClCompile Include="Trigger_Wave.cpp">
       <Filter>Editor\ScriptSystem\0_Trigger\List</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerPortrait.cpp">
+      <Filter>UI\PlayerPortrait</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

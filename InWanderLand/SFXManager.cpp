@@ -23,3 +23,13 @@ float SFXManager::GetSFXVolume()
 {
 	return SingleInstance().localSFXVolume;
 }
+
+void SFXManager::OnGameStart()
+{
+
+}
+
+void SFXManager::OnGameStop()
+{
+	SoundSystem::StopSound(0.5);
+}

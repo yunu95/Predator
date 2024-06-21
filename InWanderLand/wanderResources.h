@@ -5,6 +5,7 @@
 #include "SkillType.h"
 #include "Command.h"
 #include "UnitCommand.h"
+#include "PlayerCharacterType.h"
 
 class ManagedFBX;
 namespace wanderResources
@@ -13,6 +14,8 @@ namespace wanderResources
     yunuGI::IAnimation* GetAnimation(const std::string& fbx, UnitAnimType animType);
     constexpr const std::string GetFBXName(WanderFBX::Enum fbxType);
 
+    std::weak_ptr<yunuGI::IVideo> GetPortraitVideoIdle(PlayerCharacterType::Enum playerType);
+    std::weak_ptr<yunuGI::IVideo> GetPortraitVideoHurt(PlayerCharacterType::Enum playerType);
     std::weak_ptr<ManagedFBX> GetVFX(const std::string& fbx, UnitAnimType animType);
 
     namespace texture

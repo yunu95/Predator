@@ -16,6 +16,10 @@ SoundChannel yunutyEngine::SoundSystem::PlaySoundfile3D(string soundPath, Vector
 {
     return SingleInstance()->mPlaySound3D(soundPath, worldPosition);
 }
+void yunutyEngine::SoundSystem::StopSound(double fadeLength)
+{
+    SoundSystem::SingleInstance()->mStopSound(fadeLength);
+}
 SoundSystem* yunutyEngine::SoundSystem::SingleInstance()
 {
     if (!soundInstance)
@@ -78,6 +82,16 @@ SoundChannel yunutyEngine::SoundSystem::mPlaySound3D(string soundPath, Vector3d 
         }
     }
     return SoundChannel(channels[lastChannelIndex]);
+}
+void yunutyEngine::SoundSystem::mStopSound(double fadeLength)
+{
+    for (int i = 0; i < 64; i++)
+    {
+        if (channels[i])
+        {
+            channels[i]->stop();
+        }
+    }
 }
 bool yunutyEngine::SoundSystem::mLoad3DSound(string soundPath)
 {

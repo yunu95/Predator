@@ -17,8 +17,25 @@ UnitMoveCommand::~UnitMoveCommand()
 
 yunuGI::ITexture* UnitMoveCommand::GetIconTexture()
 {
-    static yunuGI::ITexture* iconTexture = graphics::Renderer::SingleInstance().GetResourceManager()->GetTexture(L"Texture/Ingame/NewFolder/Skill_RobinQ2.dds");
-    return iconTexture;
+    static yunuGI::ITexture* robin = graphics::Renderer::SingleInstance().GetResourceManager()->GetTexture(L"Texture/Ingame/NewFolder/Que_Move_Robin.dds");
+    static yunuGI::ITexture* ursula = graphics::Renderer::SingleInstance().GetResourceManager()->GetTexture(L"Texture/Ingame/NewFolder/Que_Move_Ursula.dds");
+    static yunuGI::ITexture* hansel = graphics::Renderer::SingleInstance().GetResourceManager()->GetTexture(L"Texture/Ingame/NewFolder/Que_Move_Hansel.dds");
+    switch (GetPlayerType())
+    {
+    case PlayerCharacterType::Robin:
+    {
+        return robin;
+    }
+    case PlayerCharacterType::Ursula:
+    {
+        return ursula;
+    }
+    case PlayerCharacterType::Hansel:
+    {
+        return hansel;
+    }
+    }
+    return robin;
 }
 
 void UnitMoveCommand::Execute()

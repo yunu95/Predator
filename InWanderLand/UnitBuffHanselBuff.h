@@ -19,5 +19,4 @@ private:
     virtual void OnOverlap(UnitBuff&& overlapping) override;
     virtual void OnPause() override;
     virtual void OnResume() override;
-    virtual coroutine::Coroutine EffectCoroutine() override;
 };

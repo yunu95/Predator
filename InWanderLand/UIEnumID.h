@@ -36,7 +36,9 @@ enum class UIEnumID
     Toggle_TacticMode_Overlay,
     Toggle_TacticMode_Cooltime_Number,
     // 마나 게이지
-    ManaFill,
+    ManaBar1,
+    // 전술 모드 마나 게이지
+    ManaBar2,
     // 현재 마나량을 나타내는 텍스트
     Mana_Text_CurrentMP,
     // 최대 마나량을 나타내는 텍스트
@@ -126,6 +128,7 @@ enum class UIEnumID
     ErrorPopup_NoMana,
     ErrorPopup_Cooltime,
     ErrorPopup_CantLand,
+    ErrorPopup_TacticQueueFull,
     VictoryPage,
     DefeatPage,
     TacticModeIngameUI,
