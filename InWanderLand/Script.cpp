@@ -341,6 +341,11 @@ namespace application
                     condition = AddCondition<Condition_TacticModeOff>();
                     break;
                 }
+                case application::ConditionType::PlayerState:
+                {
+                    condition = AddCondition<Condition_PlayerState>();
+                    break;
+                }
                 default:
                     break;
                 }

@@ -175,6 +175,11 @@ namespace application
                     {
                         Condition_TacticModeOff::ImGui_DrawDataPopup(static_cast<Condition_TacticModeOff*>(data));
                         break;
+                    } 
+                    case application::ConditionType::PlayerState:
+                    {
+                        Condition_PlayerState::ImGui_DrawDataPopup(static_cast<Condition_PlayerState*>(data));
+                        break;
                     }
                     default:
                         break;

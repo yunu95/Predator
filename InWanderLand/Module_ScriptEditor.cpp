@@ -1465,6 +1465,11 @@ namespace application
 									selectedScript->AddCondition<Condition_TacticModeOff>();
 									break;
 								}
+								case application::ConditionType::PlayerState:
+								{
+									selectedScript->AddCondition<Condition_PlayerState>();
+									break;
+								}
 								default:
 									break;
 							}

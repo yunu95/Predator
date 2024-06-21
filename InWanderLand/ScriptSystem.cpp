@@ -31,6 +31,7 @@ namespace application
         conditionList.push_back({ ConditionType::TutorialModeOff, "TutorialModeOff" });
         conditionList.push_back({ ConditionType::TacticModeOn, "TacticModeOn" });
         conditionList.push_back({ ConditionType::TacticModeOff, "TacticModeOff" });
+        conditionList.push_back({ ConditionType::PlayerState, "PlayerState" });
 
         /// Action
         actionList.push_back({ ActionType::WaitPreviousActionEnd, "WaitPreviousActionEnd" });

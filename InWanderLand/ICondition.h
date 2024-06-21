@@ -24,6 +24,7 @@ namespace application
 		TutorialModeOff,
 		TacticModeOn,
 		TacticModeOff,
+		PlayerState,
 	};
 
 	struct ICondition

@@ -1037,6 +1037,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="ChessPawn.h" />
     <ClInclude Include="ChessRook.h" />
     <ClInclude Include="AttackPreviewPool.h" />
+    <ClInclude Include="Condition_PlayerState.h" />
     <ClInclude Include="Condition_TacticMode.h" />
     <ClInclude Include="ContentsCoroutine.h" />
     <ClInclude Include="CurveHomingProjectile.h" />
@@ -2130,6 +2131,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="ChessPawn.cpp" />
     <ClCompile Include="ChessRook.cpp" />
     <ClCompile Include="AttackPreviewPool.cpp" />
+    <ClCompile Include="Condition_PlayerState.cpp" />
     <ClCompile Include="Condition_TacticMode.cpp" />
     <ClCompile Include="ContentsCoroutine.cpp" />
     <ClCompile Include="CurveHomingProjectile.cpp" />
