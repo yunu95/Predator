@@ -25,14 +25,11 @@ struct PS_OUT
 };
 
 // AlbedoMap : T_Dirt_BaseColor
-// NormalMap : T_Dirt_Normal
 // ARMMap : T_Dirt_ARM
 
 // HeightMap : T_Grass_BaseColor
-// EmissionMap : T_Grass_Normal
 
 // Temp0Map : T_GrassBlend_BaseColor
-// Temp1Map : T_GrassBlend_Normal
 
 PS_OUT main(PixelIn input)
 {
@@ -49,17 +46,17 @@ PS_OUT main(PixelIn input)
     color = pow(color, 2.2f);
     
     float3 viewNormal = input.normalV;
-    float3 finalTangentSpaceNormal;
-    float3 tangentSpaceNormal = NormalMap.Sample(sam, uv).xyz;
-    float3 tangentSpaceNormal2 = EmissionMap.Sample(sam, uv).xyz;
-    float3 tangentSpaceNormal3 = Temp1Map.Sample(sam, uv).xyz;
-    finalTangentSpaceNormal = lerp(tangentSpaceNormal, tangentSpaceNormal2, input.color.r);
-    finalTangentSpaceNormal = lerp(finalTangentSpaceNormal, tangentSpaceNormal3, input.color.g);
+    //float3 finalTangentSpaceNormal;
+    //float3 tangentSpaceNormal = NormalMap.Sample(sam, uv).xyz;
+    //float3 tangentSpaceNormal2 = EmissionMap.Sample(sam, uv).xyz;
+    //float3 tangentSpaceNormal3 = Temp1Map.Sample(sam, uv).xyz;
+    //finalTangentSpaceNormal = lerp(tangentSpaceNormal, tangentSpaceNormal2, input.color.r);
+    //finalTangentSpaceNormal = lerp(finalTangentSpaceNormal, tangentSpaceNormal3, input.color.g);
         
-    // [0, 1] 범위에서 [-1, 1]로 변환
-    finalTangentSpaceNormal = (finalTangentSpaceNormal - 0.5f) * 2.f;
-    float3x3 matTBN = { input.tangentV, input.biNormalV, input.normalV };
-    viewNormal = normalize(mul(finalTangentSpaceNormal, matTBN));
+    //// [0, 1] 범위에서 [-1, 1]로 변환
+    //finalTangentSpaceNormal = (finalTangentSpaceNormal - 0.5f) * 2.f;
+    //float3x3 matTBN = { input.tangentV, input.biNormalV, input.normalV };
+    //viewNormal = normalize(mul(finalTangentSpaceNormal, matTBN));
     
  
     output.arm.x = 1.f;
