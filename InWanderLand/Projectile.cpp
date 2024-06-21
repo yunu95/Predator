@@ -12,7 +12,7 @@ void Projectile::Update()
         {
             if (!owner.lock()->referenceBlindness.BeingReferenced())
             {
-                (*enemies.begin())->Damaged(owner, damage, DamageType::Attack);
+                (*enemies.begin())->Damaged(owner, damage, GetTransform());
             }
             ProjectilePool::SingleInstance().Return(GetWeakPtr<Projectile>());
             return;
@@ -71,7 +71,7 @@ void Projectile::SetSpeed(Vector3d startPosition, Vector3d endPosition, float pr
     case ProjectileType::DIRECT:
     {
         SetSpeed(delta.Normalized() * projectileSpeed);
-        lifetime = delta.Magnitude() / projectileSpeed;
+        lifetime = delta.Magnitude() / projectileSpeed + 1.0f;
         break;
     }
     }

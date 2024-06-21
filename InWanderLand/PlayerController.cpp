@@ -39,13 +39,6 @@ void PlayerController::RegisterUnit(std::weak_ptr<Unit> unit)
         return;
 
     characters[unit.lock()->GetUnitTemplateData().pod.playerUnitType.enumValue] = unit;
-    if (!characters[PlayerCharacterType::Robin].expired() &&
-        !characters[PlayerCharacterType::Ursula].expired() &&
-        !characters[PlayerCharacterType::Hansel].expired())
-    {
-        SetCameraOffset();
-        SelectPlayerUnit(PlayerCharacterType::Robin);
-    }
     unit.lock()->onStateEngage[UnitBehaviourTree::Death].AddCallback([this, unit]() { UnSelectSkill(unit); });
     unit.lock()->onStateEngage[UnitBehaviourTree::Death].AddCallback(std::bind(&PlayerController::OnPlayerChracterDead, this, unit));
     unit.lock()->onStateEngage[UnitBehaviourTree::Paralysis].AddCallback([this, unit]() { UnSelectSkill(unit); });
@@ -132,6 +125,9 @@ void PlayerController::OnContentsPlay()
     SetManaFull();
     SetState(State::Peace);
     InitUnitMouseInteractionEffects();
+
+    SetCameraOffset();
+    SelectPlayerUnit(PlayerCharacterType::Robin);
 }
 void PlayerController::OnContentsStop()
 {
@@ -899,9 +895,10 @@ void PlayerController::SetCameraOffset()
 {
     if (characters[PlayerCharacterType::Robin].expired())
         return;
-    auto camPos = graphics::Camera::GetMainCamera()->GetTransform()->GetWorldPosition();
+
+    auto camPos = RTSCam::Instance().GetTransform()->GetWorldPosition();
     camOffset = camPos - characters[PlayerCharacterType::Robin].lock()->GetTransform()->GetWorldPosition();
-    camRotation = graphics::Camera::GetMainCamera()->GetTransform()->GetWorldRotation();
+    camRotation = RTSCam::Instance().GetTransform()->GetWorldRotation();
 }
 
 void PlayerController::SetComboObjectives(const std::array<int, 3>& targetCombos)

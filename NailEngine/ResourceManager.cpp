@@ -1125,6 +1125,7 @@ void ResourceManager::CreateDefaultShader()
     CreateShader(L"GuideLinePS.cso");
     CreateShader(L"Stage1FloorNoBlendPS.cso");
 	CreateShader(L"VFX_PS.cso");
+	CreateShader(L"MoveAnimTexturePS.cso");
 #pragma endregion
 
 #pragma region GS
@@ -1365,7 +1366,6 @@ void ResourceManager::CreateDefaultTexture()
     CreateTexture(L"Texture/Stage1LightMap_0.exr");
     CreateTexture(L"Texture/Stage1LightMap_1.exr");
     CreateTexture(L"Texture/Stage1LightMap_2.exr");
-    CreateTexture(L"Texture/Stage1LightMap_3.exr");
 
 
     CreateTexture(L"Texture/Stage2LightMap_0.exr");
@@ -1382,7 +1382,6 @@ void ResourceManager::CreateDefaultTexture()
     tempVec.push_back(GetTexture(L"Texture/Stage1LightMap_0.exr").get());
     tempVec.push_back(GetTexture(L"Texture/Stage1LightMap_1.exr").get());
     tempVec.push_back(GetTexture(L"Texture/Stage1LightMap_2.exr").get());
-    tempVec.push_back(GetTexture(L"Texture/Stage1LightMap_3.exr").get());
     texture->CreateLightMapArray(tempVec);
     textureMap.insert({ L"Stage1LightMap", texture });
     textureVec.push_back(texture.get());

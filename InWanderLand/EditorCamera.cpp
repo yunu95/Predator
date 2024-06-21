@@ -417,6 +417,7 @@ namespace application
 		void EditorCamera::OnPlayContents()
 		{
 			playCam = &RTSCam::Instance();
+			PlayerController::Instance().SetCameraOffset();
 		}
 
 		void EditorCamera::OnPauseContents()

@@ -157,10 +157,15 @@ void GraphicsTest()
 		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("VFX_Ursula_Attack_1");
 	}
 	{
-		auto obj2 = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_BossCorrider_Floor");
-		obj2->GetTransform()->GetTransform()->SetLocalPosition(Vector3d{ 20,0,0 });
-	}
+		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SVFX_Ursula_Skill2_Wave");
+		auto anim = obj->AddComponent<VFXAnimator>();
+		anim->Init();
+		anim->Play();
 
+		//auto obj2 = Scene::getCurrentScene()->AddGameObject();
+		//auto test = obj2->AddComponent<TestComponent4>();
+		//test->obj = obj;
+	}
 	{
 		auto obj = Scene::getCurrentScene()->AddGameObject();
 		auto anim = obj->AddComponent<yunutyEngine::graphics::ParticleRenderer>();
@@ -189,6 +194,7 @@ bool application::contents::ContentsLayer::GetInputControl()
 {
 	return contentsInputControl;
 }
+
 class ContentsInitializer : public yunutyEngine::Component
 {
 	coroutine::Coroutine Initialize()
@@ -285,11 +291,13 @@ class ContentsInitializer : public yunutyEngine::Component
 		Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
 		co_return;
 	}
+
 	virtual void Start() override
 	{
 		StartCoroutine(Initialize());
 	}
 };
+
 void application::contents::ContentsLayer::Initialize()
 {
 	if (ContentsLayer::testInitializer)

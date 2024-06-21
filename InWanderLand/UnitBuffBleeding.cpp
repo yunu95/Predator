@@ -6,7 +6,8 @@
 coroutine::Coroutine UnitBuffBleeding::EffectCoroutine()
 {
     buffEffect = FBXPool::Instance().Borrow("VFX_DeBuff_Bleeding");
-    buffEffect.lock()->GetGameObject()->SetParent(owner.lock()->GetGameObject());
+    buffEffect.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
+    buffEffect.lock()->GetTransform()->SetWorldRotation(owner.lock()->GetTransform()->GetWorldRotation());
 
     buffEffectAnimator = buffEffect.lock()->AcquireVFXAnimator();
     buffEffectAnimator.lock()->SetAutoActiveFalse();
@@ -27,6 +28,11 @@ void UnitBuffBleeding::OnUpdate()
     if (!isPaused)
     {
         owner.lock()->Damaged(Inflictor, damagePerSecond * yunutyEngine::Time::GetDeltaTime());
+    }
+    if (!buffEffect.expired())
+    {
+        buffEffect.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
+        buffEffect.lock()->GetTransform()->SetWorldRotation(owner.lock()->GetTransform()->GetWorldRotation());
     }
 }
 
