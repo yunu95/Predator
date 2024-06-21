@@ -62,8 +62,26 @@ UnitAttackCommand::~UnitAttackCommand()
 
 yunuGI::ITexture* UnitAttackCommand::GetIconTexture()
 {
-    static yunuGI::ITexture* iconTexture = graphics::Renderer::SingleInstance().GetResourceManager()->GetTexture(L"Texture/Ingame/NewFolder/Skill_RobinW2.dds");
-    return iconTexture;
+    static yunuGI::ITexture* robin = graphics::Renderer::SingleInstance().GetResourceManager()->GetTexture(L"Texture/Ingame/NewFolder/Que_Attack_Robin.dds");
+    static yunuGI::ITexture* ursula = graphics::Renderer::SingleInstance().GetResourceManager()->GetTexture(L"Texture/Ingame/NewFolder/Que_Attack_Ursula.dds");
+    static yunuGI::ITexture* hansel = graphics::Renderer::SingleInstance().GetResourceManager()->GetTexture(L"Texture/Ingame/NewFolder/Que_Attack_Hansel.dds");
+    switch (GetPlayerType())
+    {
+    case PlayerCharacterType::Robin:
+    {
+        return robin;
+    }
+    case PlayerCharacterType::Ursula:
+    {
+        return ursula;
+    }
+    case PlayerCharacterType::Hansel:
+    {
+        return hansel;
+    }
+    }
+    return robin;
+
 }
 
 void UnitAttackCommand::Execute()

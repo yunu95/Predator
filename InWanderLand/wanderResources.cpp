@@ -126,6 +126,28 @@ constexpr const std::string wanderResources::GetFBXName(WanderFBX::Enum fbxType)
     }
 }
 
+std::wstring wanderResources::GetPortraitVideoIdle(PlayerCharacterType::Enum playerType)
+{
+    switch (playerType)
+    {
+    case PlayerCharacterType::Robin: return L"Texture/Ingame/NewFolder/Portrait_Robin_Idle.mp4";
+    case PlayerCharacterType::Ursula: return L"Texture/Ingame/NewFolder/Portrait_Ursula_Idle.mp4";
+    case PlayerCharacterType::Hansel: return L"Texture/Ingame/NewFolder/Portrait_Hansel_Idle.mp4";
+    }
+    return L"";
+}
+
+std::wstring wanderResources::GetPortraitVideoHurt(PlayerCharacterType::Enum playerType)
+{
+    switch (playerType)
+    {
+    case PlayerCharacterType::Robin: return L"Texture/Ingame/NewFolder/Portrait_Robin_Hurt.mp4";
+    case PlayerCharacterType::Ursula: return L"Texture/Ingame/NewFolder/Portrait_Ursula_Hurt.mp4";
+    case PlayerCharacterType::Hansel: return L"Texture/Ingame/NewFolder/Portrait_Hansel_Hurt.mp4";
+    }
+    return L"";
+}
+
 void InitFBXMap()
 {
     fbxMap["SKM_Robin"][UnitAnimType::Attack] = "VFX_Robin_Attack";
