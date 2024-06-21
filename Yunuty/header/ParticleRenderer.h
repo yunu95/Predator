@@ -66,6 +66,7 @@ namespace yunutyEngine::graphics
 		void Resume();
 
 		void SetIsApplyRoot(bool val) { this->isApplyRoot = val; }
+		bool IsApplyRoot() { return this->isApplyRoot; }
 		void Reset();
 
 		void ParticleUpdate();
