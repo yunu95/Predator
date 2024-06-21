@@ -6,7 +6,7 @@ void PlayerPortraitUIs::SetPortraitHurt(PlayerCharacterType::Enum playerCharType
 {
     for (auto each : GetPortraits(playerCharType))
     {
-        //each->uiVideoPlayer.lock()->videoPlayer1.lock()->SetVideo(graphics::Renderer::SingleInstance().GetResourceManager()-> wanderResources::GetPortraitVideoHurt(playerCharType));
+        each->uiVideoPlayer.lock()->videoPlayer1.lock()->SetVideo( wanderResources::GetPortraitVideoHurt(playerCharType));
     };
 }
 
