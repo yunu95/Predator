@@ -478,16 +478,6 @@ void Unit::Damaged(std::weak_ptr<Unit> opponentUnit, float opponentDmg, DamageTy
             opponentDmg *= 1 - GetCritResistance();
         }
         opponentDmg *= 1 - GetArmor() * 0.01f;
-        /*if (opponentUnit.lock()->GetFBXName() == "SKM_Ursula" || opponentUnit.lock()->GetFBXName() == "SKM_Hansel")
-        {
-            if (!coroutineDamagedEffect.expired())
-                FBXPool::Instance().Return(damagedVFX);
-            coroutineDamagedEffect = StartCoroutine(DamagedEffectCoroutine(opponentUnit));
-            coroutineDamagedEffect.lock()->PushDestroyCallBack([this]()
-                {
-                    FBXPool::Instance().Return(damagedVFX);
-                });
-        }*/
         opponentUnit.lock()->onAttackHit(GetWeakPtr<Unit>());
         break;
     case DamageType::Skill:
