@@ -65,6 +65,8 @@ namespace yunutyEngine::graphics
 		void Pause();
 		void Resume();
 
+		void SetIsApplyRoot(bool val) { this->isApplyRoot = val; }
+		bool IsApplyRoot() { return this->isApplyRoot; }
 		void Reset();
 
 		void ParticleUpdate();
@@ -99,6 +101,7 @@ namespace yunutyEngine::graphics
 		yunuGI::Vector2 GetRandomPointInCircle(double centerX, double centerY, double radius);
 
 	private:
+		bool isApplyRoot = true;
 		bool isPause = false;
 		bool isPlay = false;
 		ParticleShape particleType = ParticleShape::Cone;
