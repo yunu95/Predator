@@ -71,7 +71,7 @@ void Projectile::SetSpeed(Vector3d startPosition, Vector3d endPosition, float pr
     case ProjectileType::DIRECT:
     {
         SetSpeed(delta.Normalized() * projectileSpeed);
-        lifetime = delta.Magnitude() / projectileSpeed;
+        lifetime = delta.Magnitude() / projectileSpeed + 1.0f;
         break;
     }
     }
