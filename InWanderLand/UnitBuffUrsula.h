@@ -17,4 +17,6 @@ private:
     virtual void OnEnd();
     virtual void OnOverlap(UnitBuff&& overlapping);
     virtual coroutine::Coroutine EffectCoroutine() override;
+
+    std::weak_ptr<coroutine::Coroutine> effectCoroutine;
 };

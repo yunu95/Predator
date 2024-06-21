@@ -410,7 +410,7 @@ Vector3d Unit::GetRandomPositionInsideCapsuleCollider()
 {
     const auto& pod = GetUnitTemplateData().pod;
     auto unitPos = GetTransform()->GetWorldPosition();
-    return unitPos + Vector3d{ math::Random::GetRandomFloat(pod.collisionSize * 0.7f),pod.collisionSize + math::Random::GetRandomFloat(0 , pod.collisionHeight),math::Random::GetRandomFloat(pod.collisionSize * 0.7f) };
+    return unitPos + Vector3d{ math::Random::GetRandomFloat(pod.collisionSize * 0.3f), pod.collisionSize + math::Random::GetRandomFloat(0 , pod.collisionHeight), math::Random::GetRandomFloat(pod.collisionSize * 0.3f) };
 }
 void Unit::EraseBuff(UnitBuffType buffType)
 {
@@ -589,9 +589,7 @@ void Unit::Paralyze(float paralyzeDuration)
 yunutyEngine::coroutine::Coroutine Unit::ParalyzeEffectCoroutine(float paralyzeDuration)
 {
     paralysisVFX = FBXPool::Instance().Borrow("VFX_Monster_HitCC");
-    paralysisVFX.lock()->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
-    paralysisVFX.lock()->GetTransform()->SetWorldRotation(GetTransform()->GetWorldRotation());
-    paralysisVFX.lock()->GetTransform()->SetWorldScale(GetTransform()->GetWorldScale());
+    co_await std::suspend_always{};
 
     auto paralysisEffectAnimator = paralysisVFX.lock()->AcquireVFXAnimator();
     paralysisEffectAnimator.lock()->SetAutoActiveFalse();
@@ -599,18 +597,17 @@ yunutyEngine::coroutine::Coroutine Unit::ParalyzeEffectCoroutine(float paralyzeD
     paralysisEffectAnimator.lock()->Play();
     paralysisEffectAnimator.lock()->SetLoop(true);
 
-    float localTimer = 0;
-    while (localTimer >= paralyzeDuration)
-    {
-        while (isPaused)
-        {
-            co_await std::suspend_always();
-        }
+    paralysisVFX.lock()->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
+    paralysisVFX.lock()->GetTransform()->SetWorldRotation(GetTransform()->GetWorldRotation());
+    paralysisVFX.lock()->GetTransform()->SetWorldScale(GetTransform()->GetWorldScale());
 
-        co_await std::suspend_always();
+    coroutine::ForSeconds forSeconds = paralyzeDuration;
+
+    while (forSeconds.Tick())
+    {
+        co_await std::suspend_always{};
         paralysisVFX.lock()->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
         paralysisVFX.lock()->GetTransform()->SetWorldRotation(GetTransform()->GetWorldRotation());
-        localTimer += Time::GetDeltaTime();
     }
 
     co_return;
