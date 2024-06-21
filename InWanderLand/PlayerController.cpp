@@ -12,7 +12,6 @@
 #include "UnitMoveCommand.h"
 #include "UnitAttackCommand.h"
 #include "UnitSkillCommand.h"
-#include "EnqueErrorType.h"
 
 const std::unordered_map<UIEnumID, SkillUpgradeType::Enum> PlayerController::skillUpgradeByUI
 {
@@ -184,6 +183,7 @@ void PlayerController::Update()
 
         text_State->GetGI().SetText(wsstream.str());
     }
+    text_State->SetActive(DebugGraphic::AreDebugGraphicsEnabled());
 #endif
 }
 
@@ -497,17 +497,23 @@ void PlayerController::SelectPlayerUnit(PlayerCharacterType::Enum charType)
         peaceFollowingUnits[1] = characters[PlayerCharacterType::Hansel];
         UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin)->
             GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Portrait)->button->InvokeInternalButtonClickEvent();
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin_Left)->
+            GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Portrait)->button->InvokeInternalButtonClickEvent();
         break;
     case PlayerCharacterType::Ursula:
         peaceFollowingUnits[0] = characters[PlayerCharacterType::Robin];
         peaceFollowingUnits[1] = characters[PlayerCharacterType::Hansel];
         UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Ursula)->
             GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Portrait)->button->InvokeInternalButtonClickEvent();
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Ursula_Left)->
+            GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Portrait)->button->InvokeInternalButtonClickEvent();
         break;
     case PlayerCharacterType::Hansel:
         peaceFollowingUnits[0] = characters[PlayerCharacterType::Robin];
         peaceFollowingUnits[1] = characters[PlayerCharacterType::Ursula];
         UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel)->
+            GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Portrait)->button->InvokeInternalButtonClickEvent();
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel_Left)->
             GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Portrait)->button->InvokeInternalButtonClickEvent();
     default:
         break;
@@ -574,11 +580,11 @@ void PlayerController::OnRightClick()
         else
         {
             SkillPreviewSystem::Instance().HideTemporaryRoute();
+            EnqueErrorType errorType = EnqueErrorType::NONE;
             if (!cursorUnitDetector.lock()->GetUnits().empty() && GetUnitOnCursor()->teamIndex != playerTeamIndex)
             {
                 // Attack
                 // 걸어가서 공격을 하게 될 수 있음
-                EnqueErrorType errorType = EnqueErrorType::NONE;
                 std::vector<Vector3d> path;
                 path = TacticModeSystem::Instance().GetPathInTacticMode(selectedCharacterType, GetUnitOnCursor());
                 this->ModifyPathForAttack(path);
@@ -612,7 +618,6 @@ void PlayerController::OnRightClick()
                 else
                 {
                     // 이동없이 공격이 가능하다면 공격 명령
-                    EnqueErrorType errorType = EnqueErrorType::NONE;
                     errorType = TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitAttackCommand>(
                         characters[selectedCharacterType].lock().get()
                         , Vector3d::zero
@@ -622,19 +627,20 @@ void PlayerController::OnRightClick()
                         characters[selectedCharacterType].lock().get()->GetGameObject()->GetTransform()->GetWorldPosition()));
                     // 에러 타입에 따른 UI활성화
                 }
+
             }
             else
             {
                 // Move
                 std::vector<Vector3d> path;
-                EnqueErrorType errorType = EnqueErrorType::NONE;
                 path = TacticModeSystem::Instance().GetPathInTacticMode(selectedCharacterType);
 
                 errorType = TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitMoveCommand>(characters[selectedCharacterType].lock().get()
                     , GetWorldCursorPosition(),
                     path, false));
-                // 에러 타입에 따른 UI활성화
             }
+            // 에러 타입에 따른 UI활성화
+            EnableErrorUI(errorType);
         }
     }
     else if (selectedSkill != SkillType::NONE)
@@ -764,7 +770,6 @@ void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
         {
             // 이동없이 스킬 사용이 가능하다면 스킬 명령
 
-            EnqueErrorType errorType = EnqueErrorType::NONE;
             errorType = TacticModeSystem::Instance().EnqueueCommand(std::make_shared<UnitSkillCommand>(characters[selectedCharacterType].lock().get()
                 , GetWorldCursorPosition()
                 , skillType
@@ -774,8 +779,9 @@ void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
                 selectedSkill = SkillType::NONE;
             }
 
-            // 에러 타입에 따른 UI활성화
         }
+        // 에러 타입에 따른 UI활성화
+        EnableErrorUI(errorType);
     }
 }
 
@@ -834,6 +840,7 @@ void PlayerController::SetState(State::Enum newState)
     {
     case PlayerController::State::Tactic:
         UIManager::Instance().GetUIElementByEnum(UIEnumID::TacticModeIngameUI)->DisableElement();
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_MenuButton)->EnableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Bottom_Layout)->EnableElement();
         break;
     }
@@ -857,6 +864,7 @@ void PlayerController::SetState(State::Enum newState)
     case State::Tactic:
     {
         UIManager::Instance().GetUIElementByEnum(UIEnumID::TacticModeIngameUI)->EnableElement();
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_MenuButton)->DisableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Bottom_Layout)->DisableElement();
         UnSelectSkill();
     }
@@ -1003,7 +1011,8 @@ void PlayerController::SetMana(float mana)
 {
     const auto& gc = GlobalConstant::GetSingletonInstance().pod;
     this->mana = std::fmin(gc.maxMana, mana);
-    UIManager::Instance().GetUIElementByEnum(UIEnumID::ManaFill)->adjuster->SetTargetFloat(1 - mana / gc.maxMana);
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::ManaBar1)->adjuster->SetTargetFloat(1 - mana / gc.maxMana);
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::ManaBar2)->adjuster->SetTargetFloat(1 - mana / gc.maxMana);
     UIManager::Instance().GetUIElementByEnum(UIEnumID::Mana_Text_MaxMP)->SetNumber(gc.maxMana);
     UIManager::Instance().GetUIElementByEnum(UIEnumID::Mana_Text_CurrentMP)->SetNumber(mana);
 }
@@ -1186,6 +1195,19 @@ void PlayerController::InitUnitMouseInteractionEffects()
         enemyHoverEffectAnimator = enemyHoverEffect->AddComponent<VFXAnimator>();
         enemyHoverEffectAnimator->Init();
         enemyHoverEffectAnimator->SetLoop(true);
+    }
+}
+
+void PlayerController::EnableErrorUI(EnqueErrorType errorType)
+{
+    switch (errorType)
+    {
+    case EnqueErrorType::NotEnoughMana:
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::ErrorPopup_NoMana)->EnableElement();
+        break;
+    case EnqueErrorType::QueueFull:
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::ErrorPopup_TacticQueueFull)->EnableElement();
+        break;
     }
 }
 

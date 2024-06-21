@@ -93,18 +93,38 @@ class TestComponent4 : public yunutyEngine::Component
 {
 public:
 	yunutyEngine::GameObject* obj;
-	yunutyEngine::GameObject* cam;
 	virtual void Update() override
 	{
-		obj->GetTransform()->SetLocalRotation(cam->GetTransform()->GetLocalRotation());
-		if (Input::isKeyPushed(yunutyEngine::KeyCode::V))
+		auto pos = obj->GetTransform()->GetLocalPosition();
+		if (Input::isKeyDown(yunutyEngine::KeyCode::LeftArrow))
 		{
+			pos.x -= 0.01;
+			obj->GetTransform()->SetLocalPosition(pos);
 		}
-		if (Input::isKeyPushed(yunutyEngine::KeyCode::C))
+		if (Input::isKeyDown(yunutyEngine::KeyCode::RightArrow))
 		{
+			pos.x += 0.01;
+			obj->GetTransform()->SetLocalPosition(pos);
 		}
-		if (Input::isKeyPushed(yunutyEngine::KeyCode::B))
+		if (Input::isKeyDown(yunutyEngine::KeyCode::UpArrow))
 		{
+			pos.y += 0.01;
+			obj->GetTransform()->SetLocalPosition(pos);
+		}
+		if (Input::isKeyDown(yunutyEngine::KeyCode::DownArrow))
+		{
+			pos.y -= 0.01;
+			obj->GetTransform()->SetLocalPosition(pos);
+		}
+		if (Input::isKeyDown(yunutyEngine::KeyCode::O))
+		{
+			pos.z += 0.01;
+			obj->GetTransform()->SetLocalPosition(pos);
+		}
+		if (Input::isKeyDown(yunutyEngine::KeyCode::P))
+		{
+			pos.z -= 0.01;
+			obj->GetTransform()->SetLocalPosition(pos);
 		}
 	}
 };
@@ -154,18 +174,24 @@ void GraphicsTest()
 	}
 
 	{
-		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Spike01");
+		auto obj3 = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Stage1_Floor_01");
 	}
 	{
-		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SVFX_Ursula_Skill2_Wave");
-		auto anim = obj->AddComponent<VFXAnimator>();
-		anim->Init();
-		anim->Play();
+		auto obj3 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
 
-		//auto obj2 = Scene::getCurrentScene()->AddGameObject();
-		//auto test = obj2->AddComponent<TestComponent4>();
-		//test->obj = obj;
-		//test->cam = camObj;
+		auto obj = Scene::getCurrentScene()->AddGameObject();
+		auto particle = obj->AddComponent < yunutyEngine::graphics::ParticleRenderer >();
+		particle->SetIsApplyRoot(true);
+		particle->SetParticleShape(yunutyEngine::graphics::ParticleShape::Cone);
+		particle->SetParticleMode(yunutyEngine::graphics::ParticleMode::Bursts);
+		particle->SetTexture(_resourceManager->GetTexture(L"Texture/Particle/BombParticle.dds"));
+		particle->SetLoop(true);
+		particle->Play();
+		obj->SetParent(obj3);
+
+		auto obj2 = Scene::getCurrentScene()->AddGameObject();
+		auto test = obj2->AddComponent<TestComponent4>();
+		test->obj = obj3;
 	}
 
 	yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
@@ -311,7 +337,7 @@ void application::contents::ContentsLayer::GUIProgress()
 
 void application::contents::ContentsLayer::Finalize()
 {
-    
+
 }
 
 void application::contents::ContentsLayer::PlayContents(ContentsPlayFlag playFlag)

@@ -15,6 +15,7 @@ class UnitBuff
 private:
     std::weak_ptr<UIElement> buffIcon1;
     std::weak_ptr<UIElement> buffIcon2;
+    std::weak_ptr<UIElement> buffIcon3;
     void Init(std::weak_ptr<Unit> owner);
 protected:
     std::weak_ptr<Unit> owner;

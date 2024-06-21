@@ -134,10 +134,14 @@ void ParticleRenderer::ParticleUpdate()
 			continue;
 		}
 
-		auto curWorldTM = GetTransform()->GetWorldTM();
-
+		yunuGI::Matrix4x4 curWorldTM;
 		auto particleDirection = yunuGI::Vector3{ each.offsetTM.m31, each.offsetTM.m32 ,each.offsetTM.m33 };
 		auto particlePosition = yunuGI::Vector3{ each.offsetTM.m41, each.offsetTM.m42 ,each.offsetTM.m43 };
+
+		if (this->isApplyRoot)
+		{
+			curWorldTM = GetTransform()->GetWorldTM();
+		}
 
 		particlePosition += (particleDirection * this->speed * Time::GetDeltaTime());
 
@@ -351,6 +355,14 @@ void ParticleRenderer::Update()
 					if (this->particleType == ParticleShape::Cone)
 					{
 						particle.offsetTM = this->GenerateRandomOffsetMatInCone();
+
+						if (!this->isApplyRoot)
+						{
+							auto tempPos = GetTransform()->GetWorldPosition();
+							particle.offsetTM.m41 += tempPos.x;
+							particle.offsetTM.m42 += tempPos.y;
+							particle.offsetTM.m43 += tempPos.z;
+						}
 					}
 					else if (this->particleType == ParticleShape::Circle)
 					{
@@ -358,9 +370,19 @@ void ParticleRenderer::Update()
 
 						auto particleDirection = yunuGI::Vector3{ tempPos.x,0,tempPos.y }.Normalize(yunuGI::Vector3{ tempPos.x,0,tempPos.y });
 
-						particle.offsetTM.m41 = tempPos.x;
-						particle.offsetTM.m42 = 0.f;
-						particle.offsetTM.m43 = tempPos.y;
+						if (!this->isApplyRoot)
+						{
+							auto tempPos = GetTransform()->GetWorldPosition();
+							particle.offsetTM.m41 += tempPos.x;
+							particle.offsetTM.m42 += tempPos.y;
+							particle.offsetTM.m43 += tempPos.z;
+						}
+						else
+						{
+							particle.offsetTM.m41 = tempPos.x;
+							particle.offsetTM.m42 = 0.f;
+							particle.offsetTM.m43 = tempPos.y;
+						}
 
 						particle.offsetTM.m31 = particleDirection.x;
 						particle.offsetTM.m32 = particleDirection.y;
@@ -396,6 +418,14 @@ void ParticleRenderer::Update()
 							if (this->particleType == ParticleShape::Cone)
 							{
 								particle.offsetTM = this->GenerateRandomOffsetMatInCone();
+
+								if (!this->isApplyRoot)
+								{
+									auto tempPos = GetTransform()->GetWorldPosition();
+									particle.offsetTM.m41 += tempPos.x;
+									particle.offsetTM.m42 += tempPos.y;
+									particle.offsetTM.m43 += tempPos.z;
+								}
 							}
 							else if (this->particleType == ParticleShape::Circle)
 							{
@@ -403,9 +433,19 @@ void ParticleRenderer::Update()
 
 								auto particleDirection = yunuGI::Vector3{ tempPos.x,0,tempPos.y }.Normalize(yunuGI::Vector3{ tempPos.x,0,tempPos.y });
 
-								particle.offsetTM.m41 = tempPos.x;
-								particle.offsetTM.m42 = 0.f;
-								particle.offsetTM.m43 = tempPos.y;
+								if (!this->isApplyRoot)
+								{
+									auto tempPos = GetTransform()->GetWorldPosition();
+									particle.offsetTM.m41 += tempPos.x;
+									particle.offsetTM.m42 += tempPos.y;
+									particle.offsetTM.m43 += tempPos.z;
+								}
+								else
+								{
+									particle.offsetTM.m41 = tempPos.x;
+									particle.offsetTM.m42 = 0.f;
+									particle.offsetTM.m43 = tempPos.y;
+								}
 
 								particle.offsetTM.m31 = particleDirection.x;
 								particle.offsetTM.m32 = particleDirection.y;
@@ -422,7 +462,7 @@ void ParticleRenderer::Update()
 		// 생성된 입자들은 포지션, 스케일 업데이트
 		ParticleUpdate();
 	}
-	else if(!isPause)
+	else if (!isPause)
 	{
 		isPlay = false;
 

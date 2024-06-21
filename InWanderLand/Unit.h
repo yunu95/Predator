@@ -96,7 +96,7 @@ public:
     template<typename Buff>
     void ApplyBuff(Buff&& buff);
     void EraseBuff(UnitBuffType buffType);
-    void Damaged(std::weak_ptr<Unit> opponentUnit, float opponentAp, DamageType damageType = DamageType::Miscellaneous, Transform* projectileTransform = nullptr);	// 데미지 입었을 경우 추적하는 로직 포함
+    void Damaged(std::weak_ptr<Unit> opponentUnit, float opponentDmg, DamageType damageType = DamageType::Miscellaneous, Transform* projectileTransform = nullptr);	// 데미지 입었을 경우 추적하는 로직 포함
     void Damaged(float dmg);                            // 추적받지 않는 데미지
     coroutine::Coroutine DamagedEffectCoroutine(std::weak_ptr<Unit> opponent, Transform* projectileTransform);
     void Heal(float healingPoint);
@@ -149,6 +149,12 @@ public:
     bool IsPaused() const { return isPaused; }
     bool IsPreempted() const;
     bool IsTacTicReady() const;
+    float GetCritChance();
+    float GetCritMultiplier();
+    /// Decreasing Damage Elements
+    int GetArmor();
+    float GetEvasionChance();				// 회피율
+    float GetCritResistance();				// 피격시 치명타 피해 감소율
     std::string GetFBXName() const;
     // 콜라이더 캡슐 내부의 무작위 위치를 반환합니다.
     Vector3d GetRandomPositionInsideCapsuleCollider();
@@ -274,6 +280,7 @@ private:
     weak_ptr<UIElement> unitStatusUI;
     // 초상화까지 있는 플레이어측 캐릭터 UI
     std::weak_ptr<UIElement> unitStatusPortraitUI;
+    std::weak_ptr<UIElement> unitStatusPortraitUI2;
     std::weak_ptr<yunutyEngine::coroutine::Coroutine> coroutineBirth;
     std::weak_ptr<yunutyEngine::coroutine::Coroutine> coroutineDeath;
     std::weak_ptr<yunutyEngine::coroutine::Coroutine> coroutineKnockBack;
