@@ -1861,6 +1861,7 @@ void Unit::ResetCallbacks()
         each.Clear();
     }
 }
+
 const editor::Unit_TemplateData& Unit::GetUnitTemplateData()const
 {
     return *unitTemplateData;

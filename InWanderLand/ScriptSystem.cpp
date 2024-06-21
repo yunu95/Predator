@@ -31,6 +31,9 @@ namespace application
         conditionList.push_back({ ConditionType::TutorialModeOff, "TutorialModeOff" });
         conditionList.push_back({ ConditionType::TacticModeOn, "TacticModeOn" });
         conditionList.push_back({ ConditionType::TacticModeOff, "TacticModeOff" });
+        conditionList.push_back({ ConditionType::PlayerState, "PlayerState" });
+        conditionList.push_back({ ConditionType::OrnamentShow, "OrnamentShow" });
+        conditionList.push_back({ ConditionType::OrnamentHide, "OrnamentHide" });
 
         /// Action
         actionList.push_back({ ActionType::WaitPreviousActionEnd, "WaitPreviousActionEnd" });
