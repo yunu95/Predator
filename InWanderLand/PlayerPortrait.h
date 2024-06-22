@@ -9,6 +9,6 @@ public:
     static void SetPortraitHurt(PlayerCharacterType::Enum playerCharType);
     static void SetPortraitIdle(PlayerCharacterType::Enum playerCharType);
 private:
-    static std::array<UIElement*, 2> GetPortraits(PlayerCharacterType::Enum playerCharType);
+    static std::array<UIElement*, 2> GetCharInfoUIs(PlayerCharacterType::Enum playerCharType);
     PlayerPortraitUIs() {};
 };

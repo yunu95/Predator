@@ -341,6 +341,21 @@ namespace application
                     condition = AddCondition<Condition_TacticModeOff>();
                     break;
                 }
+                case application::ConditionType::PlayerState:
+                {
+                    condition = AddCondition<Condition_PlayerState>();
+                    break;
+                }
+                case application::ConditionType::OrnamentShow:
+                {
+                    condition = AddCondition<Condition_OrnamentShow>();
+                    break;
+                }
+                case application::ConditionType::OrnamentHide:
+                {
+                    condition = AddCondition<Condition_OrnamentHide>();
+                    break;
+                }
                 default:
                     break;
                 }
