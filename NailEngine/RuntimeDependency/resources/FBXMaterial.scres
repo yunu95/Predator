@@ -210,110 +210,6 @@
     {
         "AmbientExposure": 1.0,
         "DiffuseExposure": 1.0,
-        "FBXName : ": "SM_Book01",
-        "aabb": {
-            "maxPoint": {
-                "x": -431602080.0,
-                "y": -431602080.0,
-                "z": -431602080.0
-            },
-            "minPoint": {
-                "x": -431602080.0,
-                "y": -431602080.0,
-                "z": -431602080.0
-            }
-        },
-        "boneInfo": {
-            "index": -1
-        },
-        "child": [
-            {
-                "AmbientExposure": 1.0,
-                "DiffuseExposure": 1.0,
-                "aabb": {
-                    "maxPoint": {
-                        "x": 2.6573832035064697,
-                        "y": 1.6067355871200562,
-                        "z": 0.8482630848884583
-                    },
-                    "minPoint": {
-                        "x": -2.9554765224456787,
-                        "y": -1.2801133394241333,
-                        "z": -1.198810338973999
-                    }
-                },
-                "boneInfo": {
-                    "index": -1
-                },
-                "hasAnimation": false,
-                "materialVec": [
-                    {
-                        "albedoMap": "FBX/SM_Book01/SM_Book01.fbm/T_Bookshelve_BaseColor.dds",
-                        "armMap": "FBX/SM_Book01/SM_Book01.fbm/T_Bookshelve_ARM.dds",
-                        "emissionMap": "",
-                        "heightMap": "",
-                        "materialName": "M_Bookshelf",
-                        "normalMap": "FBX/SM_Book01/SM_Book01.fbm/T_Bookshelve_Normal.dds",
-                        "opacityMap": "FBX/SM_Book01/SM_Book01.fbm/T_Bookshelve_Opacity.dds",
-                        "ps": "DefaultPS.cso",
-                        "temp0Map": "",
-                        "temp10Map": "",
-                        "temp11Map": "",
-                        "temp1Map": "",
-                        "temp2Map": "",
-                        "temp3Map": "",
-                        "temp4Map": "",
-                        "temp5Map": "",
-                        "temp6Map": "",
-                        "temp7Map": "",
-                        "temp8Map": "",
-                        "temp9Map": "",
-                        "vs": "DefaultVS.cso"
-                    }
-                ],
-                "meshName": "SM_Book01",
-                "nodeName": "SM_Book01",
-                "pos": {
-                    "x": 0.0,
-                    "y": 0.0,
-                    "z": -0.0
-                },
-                "quat": {
-                    "w": -0.7071068286895752,
-                    "x": 0.7071068286895752,
-                    "y": 0.0,
-                    "z": 0.0
-                },
-                "scale": {
-                    "x": 1.0,
-                    "y": 1.0,
-                    "z": 1.0
-                }
-            }
-        ],
-        "hasAnimation": false,
-        "meshName": "",
-        "nodeName": "RootNode",
-        "pos": {
-            "x": -431602080.0,
-            "y": -431602080.0,
-            "z": -431602080.0
-        },
-        "quat": {
-            "w": -0.5,
-            "x": -0.5,
-            "y": -0.5,
-            "z": -0.5
-        },
-        "scale": {
-            "x": -431602080.0,
-            "y": -431602080.0,
-            "z": -431602080.0
-        }
-    },
-    {
-        "AmbientExposure": 1.0,
-        "DiffuseExposure": 1.0,
         "FBXName : ": "Sphere",
         "aabb": {
             "maxPoint": {
@@ -377,6 +273,110 @@
                 ],
                 "meshName": "Sphere",
                 "nodeName": "Sphere",
+                "pos": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": -0.0
+                },
+                "quat": {
+                    "w": -0.7071068286895752,
+                    "x": 0.7071068286895752,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        ],
+        "hasAnimation": false,
+        "meshName": "",
+        "nodeName": "RootNode",
+        "pos": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        },
+        "quat": {
+            "w": -0.5,
+            "x": -0.5,
+            "y": -0.5,
+            "z": -0.5
+        },
+        "scale": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        }
+    },
+    {
+        "AmbientExposure": 1.0,
+        "DiffuseExposure": 1.0,
+        "FBXName : ": "SM_Book01",
+        "aabb": {
+            "maxPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            },
+            "minPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            }
+        },
+        "boneInfo": {
+            "index": -1
+        },
+        "child": [
+            {
+                "AmbientExposure": 1.0,
+                "DiffuseExposure": 1.0,
+                "aabb": {
+                    "maxPoint": {
+                        "x": 2.6573832035064697,
+                        "y": 1.6067355871200562,
+                        "z": 0.8482630848884583
+                    },
+                    "minPoint": {
+                        "x": -2.9554765224456787,
+                        "y": -1.2801133394241333,
+                        "z": -1.198810338973999
+                    }
+                },
+                "boneInfo": {
+                    "index": -1
+                },
+                "hasAnimation": false,
+                "materialVec": [
+                    {
+                        "albedoMap": "FBX/SM_Book01/SM_Book01.fbm/T_Bookshelve_BaseColor.dds",
+                        "armMap": "FBX/SM_Book01/SM_Book01.fbm/T_Bookshelve_ARM.dds",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "M_Bookshelf",
+                        "normalMap": "FBX/SM_Book01/SM_Book01.fbm/T_Bookshelve_Normal.dds",
+                        "opacityMap": "FBX/SM_Book01/SM_Book01.fbm/T_Bookshelve_Opacity.dds",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    }
+                ],
+                "meshName": "SM_Book01",
+                "nodeName": "SM_Book01",
                 "pos": {
                     "x": 0.0,
                     "y": 0.0,
@@ -522,110 +522,6 @@
     {
         "AmbientExposure": 1.0,
         "DiffuseExposure": 1.0,
-        "FBXName : ": "Cylinder",
-        "aabb": {
-            "maxPoint": {
-                "x": -431602080.0,
-                "y": -431602080.0,
-                "z": -431602080.0
-            },
-            "minPoint": {
-                "x": -431602080.0,
-                "y": -431602080.0,
-                "z": -431602080.0
-            }
-        },
-        "boneInfo": {
-            "index": -1
-        },
-        "child": [
-            {
-                "AmbientExposure": 1.0,
-                "DiffuseExposure": 1.0,
-                "aabb": {
-                    "maxPoint": {
-                        "x": 0.004999999888241291,
-                        "y": 0.004999998956918716,
-                        "z": 0.004999999422580004
-                    },
-                    "minPoint": {
-                        "x": -0.004999999888241291,
-                        "y": -0.004999998956918716,
-                        "z": -0.004999999422580004
-                    }
-                },
-                "boneInfo": {
-                    "index": -1
-                },
-                "hasAnimation": false,
-                "materialVec": [
-                    {
-                        "albedoMap": "",
-                        "armMap": "",
-                        "emissionMap": "",
-                        "heightMap": "",
-                        "materialName": "DefaultMaterial",
-                        "normalMap": "",
-                        "opacityMap": "",
-                        "ps": "DefaultPS.cso",
-                        "temp0Map": "",
-                        "temp10Map": "",
-                        "temp11Map": "",
-                        "temp1Map": "",
-                        "temp2Map": "",
-                        "temp3Map": "",
-                        "temp4Map": "",
-                        "temp5Map": "",
-                        "temp6Map": "",
-                        "temp7Map": "",
-                        "temp8Map": "",
-                        "temp9Map": "",
-                        "vs": "DefaultVS.cso"
-                    }
-                ],
-                "meshName": "Cylinder",
-                "nodeName": "Cylinder",
-                "pos": {
-                    "x": 0.0,
-                    "y": 0.0,
-                    "z": -0.0
-                },
-                "quat": {
-                    "w": 0.7071067094802856,
-                    "x": 0.70710688829422,
-                    "y": 0.0,
-                    "z": 0.0
-                },
-                "scale": {
-                    "x": 100.0,
-                    "y": 100.0,
-                    "z": 100.0
-                }
-            }
-        ],
-        "hasAnimation": false,
-        "meshName": "",
-        "nodeName": "RootNode",
-        "pos": {
-            "x": -431602080.0,
-            "y": -431602080.0,
-            "z": -431602080.0
-        },
-        "quat": {
-            "w": -0.5,
-            "x": -0.5,
-            "y": -0.5,
-            "z": -0.5
-        },
-        "scale": {
-            "x": -431602080.0,
-            "y": -431602080.0,
-            "z": -431602080.0
-        }
-    },
-    {
-        "AmbientExposure": 1.0,
-        "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Frame_001",
         "aabb": {
             "maxPoint": {
@@ -704,6 +600,110 @@
                     "x": 1.0,
                     "y": 1.0,
                     "z": 1.0
+                }
+            }
+        ],
+        "hasAnimation": false,
+        "meshName": "",
+        "nodeName": "RootNode",
+        "pos": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        },
+        "quat": {
+            "w": -0.5,
+            "x": -0.5,
+            "y": -0.5,
+            "z": -0.5
+        },
+        "scale": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        }
+    },
+    {
+        "AmbientExposure": 1.0,
+        "DiffuseExposure": 1.0,
+        "FBXName : ": "Cylinder",
+        "aabb": {
+            "maxPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            },
+            "minPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            }
+        },
+        "boneInfo": {
+            "index": -1
+        },
+        "child": [
+            {
+                "AmbientExposure": 1.0,
+                "DiffuseExposure": 1.0,
+                "aabb": {
+                    "maxPoint": {
+                        "x": 0.004999999888241291,
+                        "y": 0.004999998956918716,
+                        "z": 0.004999999422580004
+                    },
+                    "minPoint": {
+                        "x": -0.004999999888241291,
+                        "y": -0.004999998956918716,
+                        "z": -0.004999999422580004
+                    }
+                },
+                "boneInfo": {
+                    "index": -1
+                },
+                "hasAnimation": false,
+                "materialVec": [
+                    {
+                        "albedoMap": "",
+                        "armMap": "",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "DefaultMaterial",
+                        "normalMap": "",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    }
+                ],
+                "meshName": "Cylinder",
+                "nodeName": "Cylinder",
+                "pos": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": -0.0
+                },
+                "quat": {
+                    "w": 0.7071067094802856,
+                    "x": 0.70710688829422,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 100.0,
+                    "y": 100.0,
+                    "z": 100.0
                 }
             }
         ],
@@ -852,8 +852,8 @@
         },
         "child": [
             {
-                "AmbientExposure": 1.0,
-                "DiffuseExposure": 1.0,
+                "AmbientExposure": 0.10000000149011612,
+                "DiffuseExposure": 0.10000000149011612,
                 "aabb": {
                     "maxPoint": {
                         "x": 3.287497043609619,
@@ -4028,8 +4028,8 @@
         },
         "child": [
             {
-                "AmbientExposure": 1.0,
-                "DiffuseExposure": 1.0,
+                "AmbientExposure": 0.10000000149011612,
+                "DiffuseExposure": 0.10000000149011612,
                 "aabb": {
                     "maxPoint": {
                         "x": 3.287497043609619,
@@ -5672,14 +5672,14 @@
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
-                        "x": 2.54221248626709,
-                        "y": 2.54221248626709,
-                        "z": 0.08678250014781952
+                        "x": 2.5422122478485107,
+                        "y": 1.1754943508222875e-38,
+                        "z": 6.127094268798828
                     },
                     "minPoint": {
-                        "x": -2.54221248626709,
-                        "y": -2.54221248626709,
-                        "z": 0.007889248430728912
+                        "x": -2.5422122478485107,
+                        "y": -1.6521265506744385,
+                        "z": 1.0426687002182007
                     }
                 },
                 "boneInfo": {
@@ -11434,7 +11434,7 @@
                         "emissionMap": "",
                         "heightMap": "",
                         "materialName": "M_Stage1_Grass",
-                        "normalMap": "FBX/SM_Stage1_Floor_01/SM_Stage1_Floor_01.fbm/T_Grass_Normal.dds",
+                        "normalMap": "",
                         "opacityMap": "",
                         "ps": "Stage1FloorNoBlendPS.cso",
                         "temp0Map": "",
@@ -11457,7 +11457,7 @@
                         "emissionMap": "",
                         "heightMap": "",
                         "materialName": "M_Stage1_Dirt",
-                        "normalMap": "FBX/SM_Stage1_Floor_01/SM_Stage1_Floor_01.fbm/T_Dirt_Normal.dds",
+                        "normalMap": "",
                         "opacityMap": "",
                         "ps": "Stage1FloorNoBlendPS.cso",
                         "temp0Map": "",
@@ -13037,8 +13037,8 @@
         },
         "child": [
             {
-                "AmbientExposure": 1.0,
-                "DiffuseExposure": 1.0,
+                "AmbientExposure": 0.10000000149011612,
+                "DiffuseExposure": 0.10000000149011612,
                 "aabb": {
                     "maxPoint": {
                         "x": 1.1819484233856201,
@@ -13579,16 +13579,16 @@
                     {
                         "albedoMap": "FBX/SM_Stage1_Floor_01/SM_Stage1_Floor_01.fbm/T_Dirt_BaseColor.dds",
                         "armMap": "",
-                        "emissionMap": "Texture\\VertexColor\\T_Grass_Normal.dds",
+                        "emissionMap": "",
                         "heightMap": "Texture\\VertexColor\\T_Grass_BaseColor.dds",
                         "materialName": "M_Stage1_Floor",
-                        "normalMap": "Texture\\VertexColor\\T_Dirt_Normal.dds",
+                        "normalMap": "",
                         "opacityMap": "",
                         "ps": "Stage_1_FloorPS.cso",
                         "temp0Map": "Texture\\VertexColor\\T_GrassBlend_BaseColor.dds",
                         "temp10Map": "",
                         "temp11Map": "",
-                        "temp1Map": "Texture\\VertexColor\\T_GrassBlend_Normal.dds",
+                        "temp1Map": "",
                         "temp2Map": "",
                         "temp3Map": "",
                         "temp4Map": "",
@@ -13605,7 +13605,7 @@
                         "emissionMap": "",
                         "heightMap": "",
                         "materialName": "M_Stage1_Dirt",
-                        "normalMap": "FBX/SM_Stage1_Floor_01/SM_Stage1_Floor_01.fbm/T_Dirt_Normal.dds",
+                        "normalMap": "",
                         "opacityMap": "",
                         "ps": "Stage1FloorNoBlendPS.cso",
                         "temp0Map": "",
@@ -13628,7 +13628,7 @@
                         "emissionMap": "",
                         "heightMap": "",
                         "materialName": "M_Stage1_Grass",
-                        "normalMap": "FBX/SM_Stage1_Floor_01/SM_Stage1_Floor_01.fbm/T_Grass_Normal.dds",
+                        "normalMap": "",
                         "opacityMap": "",
                         "ps": "Stage1FloorNoBlendPS.cso",
                         "temp0Map": "",
@@ -13755,7 +13755,7 @@
                         "emissionMap": "",
                         "heightMap": "",
                         "materialName": "M_Stage1_Dirt",
-                        "normalMap": "FBX/SM_Stage1_Floor_01/SM_Stage1_Floor_01.fbm/T_Dirt_Normal.dds",
+                        "normalMap": "",
                         "opacityMap": "",
                         "ps": "Stage1FloorNoBlendPS.cso",
                         "temp0Map": "",
@@ -13778,7 +13778,7 @@
                         "emissionMap": "",
                         "heightMap": "",
                         "materialName": "M_Stage1_Grass",
-                        "normalMap": "FBX/SM_Stage1_Floor_01/SM_Stage1_Floor_01.fbm/T_Grass_Normal.dds",
+                        "normalMap": "",
                         "opacityMap": "",
                         "ps": "Stage1FloorNoBlendPS.cso",
                         "temp0Map": "",
@@ -13905,7 +13905,7 @@
                         "emissionMap": "",
                         "heightMap": "",
                         "materialName": "M_Stage1_Dirt",
-                        "normalMap": "FBX/SM_Stage1_Floor_01/SM_Stage1_Floor_01.fbm/T_Dirt_Normal.dds",
+                        "normalMap": "",
                         "opacityMap": "",
                         "ps": "Stage1FloorNoBlendPS.cso",
                         "temp0Map": "",
@@ -13928,7 +13928,7 @@
                         "emissionMap": "",
                         "heightMap": "",
                         "materialName": "M_Stage1_Grass",
-                        "normalMap": "FBX/SM_Stage1_Floor_01/SM_Stage1_Floor_01.fbm/T_Grass_Normal.dds",
+                        "normalMap": "",
                         "opacityMap": "",
                         "ps": "Stage1FloorNoBlendPS.cso",
                         "temp0Map": "",
@@ -14055,7 +14055,7 @@
                         "emissionMap": "",
                         "heightMap": "",
                         "materialName": "M_Stage1_Grass",
-                        "normalMap": "FBX/SM_Stage1_Floor_01/SM_Stage1_Floor_01.fbm/T_Grass_Normal.dds",
+                        "normalMap": "",
                         "opacityMap": "",
                         "ps": "Stage1FloorNoBlendPS.cso",
                         "temp0Map": "",
@@ -14078,7 +14078,7 @@
                         "emissionMap": "",
                         "heightMap": "",
                         "materialName": "M_Stage1_Dirt",
-                        "normalMap": "FBX/SM_Stage1_Floor_01/SM_Stage1_Floor_01.fbm/T_Dirt_Normal.dds",
+                        "normalMap": "",
                         "opacityMap": "",
                         "ps": "Stage1FloorNoBlendPS.cso",
                         "temp0Map": "",
@@ -14332,7 +14332,7 @@
                         "emissionMap": "",
                         "heightMap": "",
                         "materialName": "M_Stage1_Grass",
-                        "normalMap": "FBX/SM_Stage1_Floor_01/SM_Stage1_Floor_01.fbm/T_Grass_Normal.dds",
+                        "normalMap": "",
                         "opacityMap": "",
                         "ps": "Stage1FloorNoBlendPS.cso",
                         "temp0Map": "",
@@ -14355,7 +14355,7 @@
                         "emissionMap": "",
                         "heightMap": "",
                         "materialName": "M_Stage1_Dirt",
-                        "normalMap": "FBX/SM_Stage1_Floor_01/SM_Stage1_Floor_01.fbm/T_Dirt_Normal.dds",
+                        "normalMap": "",
                         "opacityMap": "",
                         "ps": "Stage1FloorNoBlendPS.cso",
                         "temp0Map": "",
@@ -15859,13 +15859,13 @@
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
-                        "x": 0.6181861758232117,
-                        "y": 0.25711989402770996,
-                        "z": 2.3864055265221396e-07
+                        "x": 0.6181861162185669,
+                        "y": 0.25712037086486816,
+                        "z": 2.385463631071616e-07
                     },
                     "minPoint": {
-                        "x": -0.7225832343101501,
-                        "y": -0.25626248121261597,
+                        "x": -0.7225834727287292,
+                        "y": -0.2562620937824249,
                         "z": -6.073439598083496
                     }
                 },
@@ -15875,12 +15875,12 @@
                 "hasAnimation": false,
                 "materialVec": [
                     {
-                        "albedoMap": "FBX/SKM_Monster2/SKM_Monster2.fbm/T_Spear_D.dds",
-                        "armMap": "FBX/SKM_Monster2/SKM_Monster2.fbm/T_Spear_ARM.dds",
+                        "albedoMap": "FBX/Spear/Spear.fbm/T_Spear_D.dds",
+                        "armMap": "FBX/Spear/Spear.fbm/T_Spear_ARM.dds",
                         "emissionMap": "",
                         "heightMap": "",
-                        "materialName": "T_Spear",
-                        "normalMap": "FBX/SKM_Monster2/SKM_Monster2.fbm/T_Spear_N.dds",
+                        "materialName": "M_SpearOnly",
+                        "normalMap": "FBX/Spear/Spear.fbm/T_Spear_N.dds",
                         "opacityMap": "",
                         "ps": "DefaultPS.cso",
                         "temp0Map": "",
@@ -16214,19 +16214,19 @@
                                                                                         "meshName": "",
                                                                                         "nodeName": "Bone.004",
                                                                                         "pos": {
-                                                                                            "x": 0.028776854276657104,
-                                                                                            "y": -1.2315583229064941,
-                                                                                            "z": -0.09500501304864883
+                                                                                            "x": 0.03457365185022354,
+                                                                                            "y": 1.4985328912734985,
+                                                                                            "z": 1.6862353086471558
                                                                                         },
                                                                                         "quat": {
-                                                                                            "w": 0.626762330532074,
-                                                                                            "x": -0.42120757699012756,
-                                                                                            "y": 0.2255818098783493,
-                                                                                            "z": 0.6155210137367249
+                                                                                            "w": 0.7914969325065613,
+                                                                                            "x": 0.5725246071815491,
+                                                                                            "y": 0.18142299354076385,
+                                                                                            "z": 0.11328686028718948
                                                                                         },
                                                                                         "scale": {
-                                                                                            "x": 1.0,
-                                                                                            "y": 1.0,
+                                                                                            "x": 0.9999998211860657,
+                                                                                            "y": 0.9999999403953552,
                                                                                             "z": 1.0
                                                                                         }
                                                                                     }
@@ -16235,20 +16235,20 @@
                                                                                 "meshName": "",
                                                                                 "nodeName": "Bone.006",
                                                                                 "pos": {
-                                                                                    "x": 0.19465814530849457,
-                                                                                    "y": -0.9908505082130432,
-                                                                                    "z": -0.09056391566991806
+                                                                                    "x": 0.044837601482868195,
+                                                                                    "y": 1.430658221244812,
+                                                                                    "z": 1.402044653892517
                                                                                 },
                                                                                 "quat": {
-                                                                                    "w": 0.2367449700832367,
-                                                                                    "x": -0.5974341034889221,
-                                                                                    "y": 0.179704487323761,
-                                                                                    "z": 0.7448024153709412
+                                                                                    "w": 0.7736220955848694,
+                                                                                    "x": 0.6065284609794617,
+                                                                                    "y": 0.13262003660202026,
+                                                                                    "z": 0.12666524946689606
                                                                                 },
                                                                                 "scale": {
-                                                                                    "x": 1.0,
+                                                                                    "x": 0.9999998211860657,
                                                                                     "y": 1.0,
-                                                                                    "z": 0.9999999403953552
+                                                                                    "z": 1.0000001192092896
                                                                                 }
                                                                             }
                                                                         ],
@@ -16256,20 +16256,20 @@
                                                                         "meshName": "",
                                                                         "nodeName": "Bone.002",
                                                                         "pos": {
-                                                                            "x": 0.3149489462375641,
-                                                                            "y": -0.7297001481056213,
-                                                                            "z": -0.14354799687862396
+                                                                            "x": 0.061157047748565674,
+                                                                            "y": 1.3366315364837646,
+                                                                            "z": 1.1256948709487915
                                                                         },
                                                                         "quat": {
-                                                                            "w": 0.09450413286685944,
-                                                                            "x": -0.6520880460739136,
-                                                                            "y": 0.2108328491449356,
-                                                                            "z": 0.7220801711082458
+                                                                            "w": 0.8061374425888062,
+                                                                            "x": 0.5721370577812195,
+                                                                            "y": 0.10462840646505356,
+                                                                            "z": 0.10887886583805084
                                                                         },
                                                                         "scale": {
-                                                                            "x": 1.0,
-                                                                            "y": 1.0,
-                                                                            "z": 0.9999999403953552
+                                                                            "x": 0.9999998211860657,
+                                                                            "y": 0.9999999403953552,
+                                                                            "z": 1.0000001192092896
                                                                         }
                                                                     }
                                                                 ],
@@ -16277,20 +16277,20 @@
                                                                 "meshName": "",
                                                                 "nodeName": "Bone.007",
                                                                 "pos": {
-                                                                    "x": 0.5031847953796387,
-                                                                    "y": -0.5092949271202087,
-                                                                    "z": -0.18182840943336487
+                                                                    "x": 0.07347270101308823,
+                                                                    "y": 1.182387351989746,
+                                                                    "z": 0.8776348829269409
                                                                 },
                                                                 "quat": {
-                                                                    "w": -0.1715325117111206,
-                                                                    "x": 0.7092285752296448,
-                                                                    "y": -0.3060064911842346,
-                                                                    "z": -0.6114994287490845
+                                                                    "w": 0.8692156076431274,
+                                                                    "x": 0.4802839457988739,
+                                                                    "y": 0.09084253013134003,
+                                                                    "z": 0.07442621886730194
                                                                 },
                                                                 "scale": {
-                                                                    "x": 0.9999999403953552,
-                                                                    "y": 0.9999999403953552,
-                                                                    "z": 0.9999999403953552
+                                                                    "x": 0.9999998807907104,
+                                                                    "y": 1.0,
+                                                                    "z": 1.0000001192092896
                                                                 }
                                                             }
                                                         ],
@@ -16298,20 +16298,20 @@
                                                         "meshName": "",
                                                         "nodeName": "Bone.003",
                                                         "pos": {
-                                                            "x": 0.7461547255516052,
-                                                            "y": -0.3960191309452057,
-                                                            "z": -0.06516280025243759
+                                                            "x": 0.07502913475036621,
+                                                            "y": 0.9613478183746338,
+                                                            "z": 0.686282753944397
                                                         },
                                                         "quat": {
-                                                            "w": -0.41007933020591736,
-                                                            "x": 0.7713396549224854,
-                                                            "y": -0.3716329038143158,
-                                                            "z": -0.31425949931144714
+                                                            "w": 0.9334061145782471,
+                                                            "x": 0.34764307737350464,
+                                                            "y": 0.08230792731046677,
+                                                            "z": 0.03350693732500076
                                                         },
                                                         "scale": {
-                                                            "x": 0.9999999403953552,
-                                                            "y": 0.9999999403953552,
-                                                            "z": 0.9999998807907104
+                                                            "x": 0.9999998807907104,
+                                                            "y": 1.0,
+                                                            "z": 1.0000001192092896
                                                         }
                                                     }
                                                 ],
@@ -16319,20 +16319,20 @@
                                                 "meshName": "",
                                                 "nodeName": "Bone.005",
                                                 "pos": {
-                                                    "x": 0.7888475656509399,
-                                                    "y": -0.3636786937713623,
-                                                    "z": 0.22225339710712433
+                                                    "x": 0.06407386064529419,
+                                                    "y": 0.6927806735038757,
+                                                    "z": 0.5712687373161316
                                                 },
                                                 "quat": {
-                                                    "w": -0.6106379628181458,
-                                                    "x": 0.7189659476280212,
-                                                    "y": -0.2679791748523712,
-                                                    "z": 0.19595034420490265
+                                                    "w": 0.9767720103263855,
+                                                    "x": 0.20168966054916382,
+                                                    "y": 0.07224684953689575,
+                                                    "z": -0.004263289272785187
                                                 },
                                                 "scale": {
-                                                    "x": 1.0,
-                                                    "y": 0.9999998807907104,
-                                                    "z": 0.9999998807907104
+                                                    "x": 0.9999998807907104,
+                                                    "y": 1.0,
+                                                    "z": 1.0
                                                 }
                                             }
                                         ],
@@ -16340,20 +16340,20 @@
                                         "meshName": "",
                                         "nodeName": "Bone.011",
                                         "pos": {
-                                            "x": 0.5860387086868286,
-                                            "y": -0.28069350123405457,
-                                            "z": 0.4163200557231903
+                                            "x": 0.043864160776138306,
+                                            "y": 0.40380680561065674,
+                                            "z": 0.5292502045631409
                                         },
                                         "quat": {
-                                            "w": -0.595721423625946,
-                                            "x": 0.4951605796813965,
-                                            "y": -0.05799374356865883,
-                                            "z": 0.629737138748169
+                                            "w": 0.9951375126838684,
+                                            "x": 0.07388562709093094,
+                                            "y": 0.05759606882929802,
+                                            "z": -0.030413918197155
                                         },
                                         "scale": {
-                                            "x": 1.0,
+                                            "x": 0.9999998807907104,
                                             "y": 1.0,
-                                            "z": 0.9999999403953552
+                                            "z": 1.0
                                         }
                                     }
                                 ],
@@ -16361,15 +16361,15 @@
                                 "meshName": "",
                                 "nodeName": "Bone.001",
                                 "pos": {
-                                    "x": 0.22817419469356537,
-                                    "y": -0.14256583154201508,
-                                    "z": 0.5043715238571167
+                                    "x": 0.012993505224585533,
+                                    "y": 0.011585562489926815,
+                                    "z": 0.5396852493286133
                                 },
                                 "quat": {
-                                    "w": -0.5686559677124023,
-                                    "x": 0.24354442954063416,
-                                    "y": 0.03392679989337921,
-                                    "z": 0.7849621176719666
+                                    "w": 0.9983906149864197,
+                                    "x": -0.011736873537302017,
+                                    "y": 0.038723018020391464,
+                                    "z": -0.039736952632665634
                                 },
                                 "scale": {
                                     "x": 0.9999999403953552,
@@ -16387,13 +16387,13 @@
                             "z": 0.5531646013259888
                         },
                         "quat": {
-                            "w": 0.8318653702735901,
-                            "x": -0.08461946994066238,
-                            "y": 0.047492604702711105,
-                            "z": -0.5464284420013428
+                            "w": 0.9991543292999268,
+                            "x": -0.026168106123805046,
+                            "y": 0.017948653548955917,
+                            "z": -0.02614782005548477
                         },
                         "scale": {
-                            "x": 1.0,
+                            "x": 0.9999999403953552,
                             "y": 1.0,
                             "z": 0.9999999403953552
                         }
@@ -16572,20 +16572,20 @@
                                                                                         "meshName": "",
                                                                                         "nodeName": "Bone.017",
                                                                                         "pos": {
-                                                                                            "x": 0.09071426093578339,
-                                                                                            "y": -2.1384634971618652,
-                                                                                            "z": -0.7785230875015259
+                                                                                            "x": 1.6909050941467285,
+                                                                                            "y": 1.50240159034729,
+                                                                                            "z": -0.36538445949554443
                                                                                         },
                                                                                         "quat": {
-                                                                                            "w": 0.7035725712776184,
-                                                                                            "x": -0.01798243448138237,
-                                                                                            "y": 0.05567200481891632,
-                                                                                            "z": 0.7082111239433289
+                                                                                            "w": 0.8917171359062195,
+                                                                                            "x": -0.027175815775990486,
+                                                                                            "y": 0.04943285882472992,
+                                                                                            "z": -0.4490639567375183
                                                                                         },
                                                                                         "scale": {
-                                                                                            "x": 0.9999998807907104,
-                                                                                            "y": 1.0,
-                                                                                            "z": 0.9999996423721313
+                                                                                            "x": 0.9999997615814209,
+                                                                                            "y": 0.9999997615814209,
+                                                                                            "z": 1.0
                                                                                         }
                                                                                     }
                                                                                 ],
@@ -16593,20 +16593,20 @@
                                                                                 "meshName": "",
                                                                                 "nodeName": "Bone.016",
                                                                                 "pos": {
-                                                                                    "x": 0.26409873366355896,
-                                                                                    "y": -1.9032819271087646,
-                                                                                    "z": -0.7887209057807922
+                                                                                    "x": 1.4204546213150024,
+                                                                                    "y": 1.394211769104004,
+                                                                                    "z": -0.340321809053421
                                                                                 },
                                                                                 "quat": {
-                                                                                    "w": 0.28910693526268005,
-                                                                                    "x": 0.4130074977874756,
-                                                                                    "y": -0.11920581012964249,
-                                                                                    "z": 0.8553549647331238
+                                                                                    "w": 0.8273888826370239,
+                                                                                    "x": -0.03738795220851898,
+                                                                                    "y": 0.02130023203790188,
+                                                                                    "z": -0.5599786639213562
                                                                                 },
                                                                                 "scale": {
-                                                                                    "x": 0.9999998807907104,
-                                                                                    "y": 0.9999999403953552,
-                                                                                    "z": 0.9999998807907104
+                                                                                    "x": 0.9999997615814209,
+                                                                                    "y": 0.9999998211860657,
+                                                                                    "z": 0.9999999403953552
                                                                                 }
                                                                             }
                                                                         ],
@@ -16614,20 +16614,20 @@
                                                                         "meshName": "",
                                                                         "nodeName": "Bone.015",
                                                                         "pos": {
-                                                                            "x": 0.32242751121520996,
-                                                                            "y": -1.6241579055786133,
-                                                                            "z": -0.7241905331611633
+                                                                            "x": 1.1471463441848755,
+                                                                            "y": 1.2954660654067993,
+                                                                            "z": -0.30825456976890564
                                                                         },
                                                                         "quat": {
-                                                                            "w": 0.0074211424216628075,
-                                                                            "x": 0.6259487271308899,
-                                                                            "y": -0.15029199421405792,
-                                                                            "z": 0.7652094960212708
+                                                                            "w": 0.8177576065063477,
+                                                                            "x": -0.05856574699282646,
+                                                                            "y": 0.012138850055634975,
+                                                                            "z": -0.5724467039108276
                                                                         },
                                                                         "scale": {
                                                                             "x": 0.9999997615814209,
-                                                                            "y": 0.9999999403953552,
-                                                                            "z": 1.0
+                                                                            "y": 0.9999997615814209,
+                                                                            "z": 0.9999999403953552
                                                                         }
                                                                     }
                                                                 ],
@@ -16635,20 +16635,20 @@
                                                                 "meshName": "",
                                                                 "nodeName": "Bone.014",
                                                                 "pos": {
-                                                                    "x": 0.35569101572036743,
-                                                                    "y": -1.3524435758590698,
-                                                                    "z": -0.6215189099311829
+                                                                    "x": 0.8943812251091003,
+                                                                    "y": 1.1557178497314453,
+                                                                    "z": -0.26290109753608704
                                                                 },
                                                                 "quat": {
-                                                                    "w": -0.09964355081319809,
-                                                                    "x": 0.752098560333252,
-                                                                    "y": -0.15932895243167877,
-                                                                    "z": 0.6316908001899719
+                                                                    "w": 0.8595172166824341,
+                                                                    "x": -0.08139271289110184,
+                                                                    "y": 0.015078464522957802,
+                                                                    "z": -0.5043591260910034
                                                                 },
                                                                 "scale": {
-                                                                    "x": 0.9999998211860657,
-                                                                    "y": 1.0,
-                                                                    "z": 1.0
+                                                                    "x": 0.9999997615814209,
+                                                                    "y": 0.9999998211860657,
+                                                                    "z": 0.9999998807907104
                                                                 }
                                                             }
                                                         ],
@@ -16656,20 +16656,20 @@
                                                         "meshName": "",
                                                         "nodeName": "Bone.013",
                                                         "pos": {
-                                                            "x": 0.4112511873245239,
-                                                            "y": -1.0802943706512451,
-                                                            "z": -0.530280351638794
+                                                            "x": 0.6941648721694946,
+                                                            "y": 0.9504597783088684,
+                                                            "z": -0.2058122158050537
                                                         },
                                                         "quat": {
-                                                            "w": -0.08931926637887955,
-                                                            "x": 0.851353645324707,
-                                                            "y": -0.16307379305362701,
-                                                            "z": 0.49053648114204407
+                                                            "w": 0.9222613573074341,
+                                                            "x": -0.09711859375238419,
+                                                            "y": 0.02158907614648342,
+                                                            "z": -0.3735450804233551
                                                         },
                                                         "scale": {
                                                             "x": 0.9999998807907104,
-                                                            "y": 0.9999999403953552,
-                                                            "z": 1.0
+                                                            "y": 0.9999998211860657,
+                                                            "z": 0.9999999403953552
                                                         }
                                                     }
                                                 ],
@@ -16677,20 +16677,20 @@
                                                 "meshName": "",
                                                 "nodeName": "Bone.010",
                                                 "pos": {
-                                                    "x": 0.5112067461013794,
-                                                    "y": -0.805570125579834,
-                                                    "z": -0.5267986059188843
+                                                    "x": 0.5760520696640015,
+                                                    "y": 0.6896274089813232,
+                                                    "z": -0.14671626687049866
                                                 },
                                                 "quat": {
-                                                    "w": 0.052569735795259476,
-                                                    "x": 0.9276643991470337,
-                                                    "y": -0.16554057598114014,
-                                                    "z": 0.33056244254112244
+                                                    "w": 0.9723503589630127,
+                                                    "x": -0.09859883785247803,
+                                                    "y": 0.024700552225112915,
+                                                    "z": -0.21024508774280548
                                                 },
                                                 "scale": {
-                                                    "x": 1.0,
-                                                    "y": 0.9999999403953552,
-                                                    "z": 0.9999999403953552
+                                                    "x": 0.9999998807907104,
+                                                    "y": 0.9999998807907104,
+                                                    "z": 1.0
                                                 }
                                             }
                                         ],
@@ -16698,20 +16698,20 @@
                                         "meshName": "",
                                         "nodeName": "Bone.012",
                                         "pos": {
-                                            "x": 0.5257921814918518,
-                                            "y": -0.5479198694229126,
-                                            "z": -0.3886560797691345
+                                            "x": 0.5433686971664429,
+                                            "y": 0.4010581374168396,
+                                            "z": -0.11011798679828644
                                         },
                                         "quat": {
-                                            "w": -0.23335298895835876,
-                                            "x": 0.9501038789749146,
-                                            "y": -0.0737295001745224,
-                                            "z": 0.1934243142604828
+                                            "w": 0.9962560534477234,
+                                            "x": -0.06160297244787216,
+                                            "y": 0.019969332963228226,
+                                            "z": -0.05727317929267883
                                         },
                                         "scale": {
-                                            "x": 1.0,
-                                            "y": 1.0,
-                                            "z": 0.9999999403953552
+                                            "x": 0.9999999403953552,
+                                            "y": 0.9999998807907104,
+                                            "z": 1.0
                                         }
                                     }
                                 ],
@@ -16719,20 +16719,20 @@
                                 "meshName": "",
                                 "nodeName": "Bone.009",
                                 "pos": {
-                                    "x": 0.6119958758354187,
-                                    "y": -0.1702115535736084,
-                                    "z": -0.3193400800228119
+                                    "x": 0.5811904072761536,
+                                    "y": 0.010714150033891201,
+                                    "z": -0.07694417983293533
                                 },
                                 "quat": {
-                                    "w": -0.08004413545131683,
-                                    "x": 0.986845076084137,
-                                    "y": -0.11724809557199478,
-                                    "z": 0.07734782993793488
+                                    "w": 0.9978238940238953,
+                                    "x": -0.04298250004649162,
+                                    "y": 0.015680968761444092,
+                                    "z": 0.047478556632995605
                                 },
                                 "scale": {
-                                    "x": 1.0,
-                                    "y": 1.0,
-                                    "z": 0.9999999403953552
+                                    "x": 0.9999999403953552,
+                                    "y": 0.9999999403953552,
+                                    "z": 1.0
                                 }
                             }
                         ],
@@ -16745,14 +16745,14 @@
                             "z": -0.07621020823717117
                         },
                         "quat": {
-                            "w": 0.7984086871147156,
-                            "x": -0.5988066792488098,
-                            "y": 0.04703047126531601,
-                            "z": -0.04197973012924194
+                            "w": 0.9984158277511597,
+                            "x": -0.001940336194820702,
+                            "y": 0.008786214515566826,
+                            "z": 0.05554250627756119
                         },
                         "scale": {
-                            "x": 1.0,
-                            "y": 1.0,
+                            "x": 0.9999999403953552,
+                            "y": 0.9999999403953552,
                             "z": 1.0
                         }
                     },
@@ -16930,20 +16930,20 @@
                                                                                         "meshName": "",
                                                                                         "nodeName": "Bone.026",
                                                                                         "pos": {
-                                                                                            "x": 0.28657445311546326,
-                                                                                            "y": -0.5795763731002808,
-                                                                                            "z": -0.02763213962316513
+                                                                                            "x": -1.7122247219085693,
+                                                                                            "y": 1.2557591199874878,
+                                                                                            "z": 0.08994609862565994
                                                                                         },
                                                                                         "quat": {
-                                                                                            "w": -0.6268390417098999,
-                                                                                            "x": 0.6141842603683472,
-                                                                                            "y": 0.4781043529510498,
-                                                                                            "z": -0.03559178486466408
+                                                                                            "w": 0.7677856087684631,
+                                                                                            "x": -0.21627002954483032,
+                                                                                            "y": -0.04054434970021248,
+                                                                                            "z": 0.6017380356788635
                                                                                         },
                                                                                         "scale": {
                                                                                             "x": 0.9999998807907104,
-                                                                                            "y": 0.9999999403953552,
-                                                                                            "z": 0.9999998211860657
+                                                                                            "y": 1.0,
+                                                                                            "z": 1.0000001192092896
                                                                                         }
                                                                                     }
                                                                                 ],
@@ -16951,20 +16951,20 @@
                                                                                 "meshName": "",
                                                                                 "nodeName": "Bone.025",
                                                                                 "pos": {
-                                                                                    "x": 0.26802870631217957,
-                                                                                    "y": -0.43170931935310364,
-                                                                                    "z": 0.22389908134937286
+                                                                                    "x": -1.46462082862854,
+                                                                                    "y": 1.103849172592163,
+                                                                                    "z": 0.12299663573503494
                                                                                 },
                                                                                 "quat": {
-                                                                                    "w": -0.4910283088684082,
-                                                                                    "x": 0.8647019863128662,
-                                                                                    "y": 0.07751987874507904,
-                                                                                    "z": -0.07191967964172363
+                                                                                    "w": 0.8716544508934021,
+                                                                                    "x": -0.06274618208408356,
+                                                                                    "y": -0.003764842636883259,
+                                                                                    "z": 0.4860733449459076
                                                                                 },
                                                                                 "scale": {
-                                                                                    "x": 0.9999999403953552,
-                                                                                    "y": 0.9999998807907104,
-                                                                                    "z": 0.9999998211860657
+                                                                                    "x": 0.9999998807907104,
+                                                                                    "y": 0.9999999403953552,
+                                                                                    "z": 1.0000001192092896
                                                                                 }
                                                                             }
                                                                         ],
@@ -16972,20 +16972,20 @@
                                                                         "meshName": "",
                                                                         "nodeName": "Bone.024",
                                                                         "pos": {
-                                                                            "x": 0.3057596683502197,
-                                                                            "y": -0.2744123935699463,
-                                                                            "z": 0.46743670105934143
+                                                                            "x": -1.234086275100708,
+                                                                            "y": 0.9240486025810242,
+                                                                            "z": 0.12440715730190277
                                                                         },
                                                                         "quat": {
-                                                                            "w": -0.4667193591594696,
-                                                                            "x": 0.8735885620117188,
-                                                                            "y": -0.1147347241640091,
-                                                                            "z": 0.07649876922369003
+                                                                            "w": 0.898607075214386,
+                                                                            "x": -0.002441707532852888,
+                                                                            "y": -0.0004971831222064793,
+                                                                            "z": 0.4387473165988922
                                                                         },
                                                                         "scale": {
                                                                             "x": 0.9999998807907104,
-                                                                            "y": 0.9999998807907104,
-                                                                            "z": 0.9999998807907104
+                                                                            "y": 0.9999999403953552,
+                                                                            "z": 1.0000001192092896
                                                                         }
                                                                     }
                                                                 ],
@@ -16993,20 +16993,20 @@
                                                                 "meshName": "",
                                                                 "nodeName": "Bone.023",
                                                                 "pos": {
-                                                                    "x": 0.24558866024017334,
-                                                                    "y": -0.1858987659215927,
-                                                                    "z": 0.7395057082176208
+                                                                    "x": -1.0071381330490112,
+                                                                    "y": 0.7398574948310852,
+                                                                    "z": 0.11769983917474747
                                                                 },
                                                                 "quat": {
-                                                                    "w": -0.5786773562431335,
-                                                                    "x": 0.7377110719680786,
-                                                                    "y": -0.11728963255882263,
-                                                                    "z": 0.32735002040863037
+                                                                    "w": 0.9027501344680786,
+                                                                    "x": 0.015901288017630577,
+                                                                    "y": -0.006709934212267399,
+                                                                    "z": 0.4298190772533417
                                                                 },
                                                                 "scale": {
                                                                     "x": 0.9999998807907104,
-                                                                    "y": 0.9999999403953552,
-                                                                    "z": 0.9999999403953552
+                                                                    "y": 0.9999998807907104,
+                                                                    "z": 1.0000001192092896
                                                                 }
                                                             }
                                                         ],
@@ -17014,20 +17014,20 @@
                                                         "meshName": "",
                                                         "nodeName": "Bone.022",
                                                         "pos": {
-                                                            "x": -0.00029505693237297237,
-                                                            "y": -0.18020886182785034,
-                                                            "z": 0.8975733518600464
+                                                            "x": -0.7771885395050049,
+                                                            "y": 0.5594057440757751,
+                                                            "z": 0.11161143332719803
                                                         },
                                                         "quat": {
-                                                            "w": 0.700035810470581,
-                                                            "x": -0.3986859917640686,
-                                                            "y": -0.014803259633481503,
-                                                            "z": -0.5922670960426331
+                                                            "w": 0.899124026298523,
+                                                            "x": 0.018182724714279175,
+                                                            "y": -0.013580495491623878,
+                                                            "z": 0.43710532784461975
                                                         },
                                                         "scale": {
-                                                            "x": 0.9999998211860657,
+                                                            "x": 0.9999998807907104,
                                                             "y": 0.9999999403953552,
-                                                            "z": 0.9999998211860657
+                                                            "z": 1.0000001192092896
                                                         }
                                                     }
                                                 ],
@@ -17035,20 +17035,20 @@
                                                 "meshName": "",
                                                 "nodeName": "Bone.021",
                                                 "pos": {
-                                                    "x": -0.27497047185897827,
-                                                    "y": -0.18043890595436096,
-                                                    "z": 0.7974236011505127
+                                                    "x": -0.5426937341690063,
+                                                    "y": 0.3848332464694977,
+                                                    "z": 0.10796643793582916
                                                 },
                                                 "quat": {
-                                                    "w": -0.686111569404602,
-                                                    "x": -0.07321289926767349,
-                                                    "y": 0.17217540740966797,
-                                                    "z": 0.7030265927314758
+                                                    "w": 0.8934044241905212,
+                                                    "x": 0.016790062189102173,
+                                                    "y": -0.019545989111065865,
+                                                    "z": 0.44851386547088623
                                                 },
                                                 "scale": {
-                                                    "x": 0.9999998807907104,
-                                                    "y": 0.9999998807907104,
-                                                    "z": 0.9999999403953552
+                                                    "x": 1.0,
+                                                    "y": 1.0,
+                                                    "z": 1.0000001192092896
                                                 }
                                             }
                                         ],
@@ -17056,20 +17056,20 @@
                                         "meshName": "",
                                         "nodeName": "Bone.020",
                                         "pos": {
-                                            "x": -0.42965731024742126,
-                                            "y": -0.13707464933395386,
-                                            "z": 0.5527373552322388
+                                            "x": -0.30607670545578003,
+                                            "y": 0.2125338613986969,
+                                            "z": 0.10570958256721497
                                         },
                                         "quat": {
-                                            "w": -0.6061409711837769,
-                                            "x": -0.4447389543056488,
-                                            "y": 0.24190856516361237,
-                                            "z": 0.6134172081947327
+                                            "w": 0.8908914923667908,
+                                            "x": 0.017083369195461273,
+                                            "y": -0.025075620040297508,
+                                            "z": 0.45320168137550354
                                         },
                                         "scale": {
-                                            "x": 0.9999999403953552,
-                                            "y": 0.9999998211860657,
-                                            "z": 0.9999999403953552
+                                            "x": 1.0,
+                                            "y": 1.0,
+                                            "z": 1.0
                                         }
                                     }
                                 ],
@@ -17077,20 +17077,20 @@
                                 "meshName": "",
                                 "nodeName": "Bone.019",
                                 "pos": {
-                                    "x": -0.5451458692550659,
-                                    "y": -0.10104725509881973,
-                                    "z": 0.17821936309337616
+                                    "x": -7.061424548737705e-05,
+                                    "y": -0.03494401276111603,
+                                    "z": 0.10191459953784943
                                 },
                                 "quat": {
-                                    "w": 0.6394175291061401,
-                                    "x": 0.6009661555290222,
-                                    "y": -0.21301552653312683,
-                                    "z": -0.42966195940971375
+                                    "w": 0.901955246925354,
+                                    "x": 0.0194674301892519,
+                                    "y": -0.02959645912051201,
+                                    "z": 0.4303740859031677
                                 },
                                 "scale": {
                                     "x": 1.0,
-                                    "y": 0.9999998211860657,
-                                    "z": 0.9999999403953552
+                                    "y": 1.0,
+                                    "z": 1.0
                                 }
                             }
                         ],
@@ -17098,19 +17098,19 @@
                         "meshName": "",
                         "nodeName": "Bone.018",
                         "pos": {
-                            "x": -0.6171900033950806,
+                            "x": 0.14713013172149658,
                             "y": -0.24094656109809875,
-                            "z": -0.020176123827695847
+                            "z": 0.09769153594970703
                         },
                         "quat": {
-                            "w": 0.8750226497650146,
-                            "x": 0.4227505326271057,
-                            "y": -0.10281261056661606,
-                            "z": -0.21224269270896912
+                            "w": 0.9518644213676453,
+                            "x": 0.017305830493569374,
+                            "y": -0.026681529358029366,
+                            "z": 0.3048650920391083
                         },
                         "scale": {
                             "x": 1.0,
-                            "y": 1.0,
+                            "y": 0.9999999403953552,
                             "z": 1.0
                         }
                     },
@@ -17288,20 +17288,20 @@
                                                                                         "meshName": "",
                                                                                         "nodeName": "Bone.035",
                                                                                         "pos": {
-                                                                                            "x": -0.8344024419784546,
-                                                                                            "y": -1.1595131158828735,
-                                                                                            "z": 0.09210602939128876
+                                                                                            "x": -0.26805272698402405,
+                                                                                            "y": 1.2219318151474,
+                                                                                            "z": -1.7415359020233154
                                                                                         },
                                                                                         "quat": {
-                                                                                            "w": 0.7874364852905273,
-                                                                                            "x": 0.49892115592956543,
-                                                                                            "y": -0.26103153824806213,
-                                                                                            "z": -0.2507667541503906
+                                                                                            "w": 0.7254898548126221,
+                                                                                            "x": -0.6857020258903503,
+                                                                                            "y": -0.05813997983932495,
+                                                                                            "z": -0.009849412366747856
                                                                                         },
                                                                                         "scale": {
-                                                                                            "x": 1.0,
-                                                                                            "y": 0.9999999403953552,
-                                                                                            "z": 0.9999998807907104
+                                                                                            "x": 1.0000001192092896,
+                                                                                            "y": 1.0000001192092896,
+                                                                                            "z": 0.9999998211860657
                                                                                         }
                                                                                     }
                                                                                 ],
@@ -17309,20 +17309,20 @@
                                                                                 "meshName": "",
                                                                                 "nodeName": "Bone.034",
                                                                                 "pos": {
-                                                                                    "x": -0.956123948097229,
-                                                                                    "y": -1.0243988037109375,
-                                                                                    "z": -0.13681456446647644
+                                                                                    "x": -0.2373664528131485,
+                                                                                    "y": 1.0809226036071777,
+                                                                                    "z": -1.4872699975967407
                                                                                 },
                                                                                 "quat": {
-                                                                                    "w": 0.5154049396514893,
-                                                                                    "x": 0.7946850061416626,
-                                                                                    "y": 0.05732010677456856,
-                                                                                    "z": -0.31551218032836914
+                                                                                    "w": 0.8604628443717957,
+                                                                                    "x": -0.5028970241546631,
+                                                                                    "y": -0.027524106204509735,
+                                                                                    "z": 0.0770765021443367
                                                                                 },
                                                                                 "scale": {
-                                                                                    "x": 0.9999999403953552,
-                                                                                    "y": 0.9999998807907104,
-                                                                                    "z": 0.9999999403953552
+                                                                                    "x": 1.0,
+                                                                                    "y": 1.0000001192092896,
+                                                                                    "z": 0.9999998211860657
                                                                                 }
                                                                             }
                                                                         ],
@@ -17330,20 +17330,20 @@
                                                                         "meshName": "",
                                                                         "nodeName": "Bone.033",
                                                                         "pos": {
-                                                                            "x": -1.0961477756500244,
-                                                                            "y": -0.8541253209114075,
-                                                                            "z": -0.32884833216667175
+                                                                            "x": -0.1858055293560028,
+                                                                            "y": 0.9044076800346375,
+                                                                            "z": -1.25998055934906
                                                                         },
                                                                         "quat": {
-                                                                            "w": 0.40384671092033386,
-                                                                            "x": 0.8803965449333191,
-                                                                            "y": 0.21379099786281586,
-                                                                            "z": -0.126898393034935
+                                                                            "w": 0.895204484462738,
+                                                                            "x": -0.43153098225593567,
+                                                                            "y": -0.022010870277881622,
+                                                                            "z": 0.10911216586828232
                                                                         },
                                                                         "scale": {
-                                                                            "x": 0.9999998807907104,
-                                                                            "y": 0.9999999403953552,
-                                                                            "z": 0.9999999403953552
+                                                                            "x": 0.9999999403953552,
+                                                                            "y": 1.0000001192092896,
+                                                                            "z": 0.9999998807907104
                                                                         }
                                                                     }
                                                                 ],
@@ -17351,20 +17351,20 @@
                                                                 "meshName": "",
                                                                 "nodeName": "Bone.032",
                                                                 "pos": {
-                                                                    "x": -1.1621772050857544,
-                                                                    "y": -0.7018743753433228,
-                                                                    "z": -0.5695482492446899
+                                                                    "x": -0.12894372642040253,
+                                                                    "y": 0.7221214175224304,
+                                                                    "z": -1.038586974143982
                                                                 },
                                                                 "quat": {
-                                                                    "w": 0.43796461820602417,
-                                                                    "x": 0.8554192185401917,
-                                                                    "y": 0.21865065395832062,
-                                                                    "z": 0.1692245602607727
+                                                                    "w": 0.9006702303886414,
+                                                                    "x": -0.4173240661621094,
+                                                                    "y": -0.023208508267998695,
+                                                                    "z": 0.11872311681509018
                                                                 },
                                                                 "scale": {
-                                                                    "x": 1.0,
-                                                                    "y": 0.9999998807907104,
-                                                                    "z": 1.0
+                                                                    "x": 0.9999999403953552,
+                                                                    "y": 1.0,
+                                                                    "z": 0.9999997615814209
                                                                 }
                                                             }
                                                         ],
@@ -17372,20 +17372,20 @@
                                                         "meshName": "",
                                                         "nodeName": "Bone.031",
                                                         "pos": {
-                                                            "x": -1.0597089529037476,
-                                                            "y": -0.5590285062789917,
-                                                            "z": -0.8031546473503113
+                                                            "x": -0.07209612429141998,
+                                                            "y": 0.544055700302124,
+                                                            "z": -0.8137811422348022
                                                         },
                                                         "quat": {
-                                                            "w": 0.493943989276886,
-                                                            "x": 0.6975287795066833,
-                                                            "y": 0.10828050225973129,
-                                                            "z": 0.5076892375946045
+                                                            "w": 0.8966202735900879,
+                                                            "x": -0.4255122244358063,
+                                                            "y": -0.02448461763560772,
+                                                            "z": 0.1200498566031456
                                                         },
                                                         "scale": {
-                                                            "x": 0.9999999403953552,
-                                                            "y": 0.9999999403953552,
-                                                            "z": 1.0
+                                                            "x": 1.0,
+                                                            "y": 1.0000001192092896,
+                                                            "z": 0.9999998807907104
                                                         }
                                                     }
                                                 ],
@@ -17393,20 +17393,20 @@
                                                 "meshName": "",
                                                 "nodeName": "Bone.030",
                                                 "pos": {
-                                                    "x": -0.831532895565033,
-                                                    "y": -0.4054899513721466,
-                                                    "z": -0.9023426175117493
+                                                    "x": -0.016266996040940285,
+                                                    "y": 0.3727291524410248,
+                                                    "z": -0.5835487842559814
                                                 },
                                                 "quat": {
-                                                    "w": 0.48542770743370056,
-                                                    "x": 0.4161520302295685,
-                                                    "y": -0.04217749834060669,
-                                                    "z": 0.7677229642868042
+                                                    "w": 0.8901554942131042,
+                                                    "x": -0.4389698803424835,
+                                                    "y": -0.02501278929412365,
+                                                    "z": 0.11959557235240936
                                                 },
                                                 "scale": {
-                                                    "x": 0.9999999403953552,
-                                                    "y": 0.9999999403953552,
-                                                    "z": 1.0
+                                                    "x": 1.0,
+                                                    "y": 1.0000001192092896,
+                                                    "z": 0.9999998807907104
                                                 }
                                             }
                                         ],
@@ -17414,19 +17414,19 @@
                                         "meshName": "",
                                         "nodeName": "Bone.029",
                                         "pos": {
-                                            "x": -0.5849157571792603,
-                                            "y": -0.2529642581939697,
-                                            "z": -0.8623985052108765
+                                            "x": 0.03886239603161812,
+                                            "y": 0.20442993938922882,
+                                            "z": -0.35049107670783997
                                         },
                                         "quat": {
-                                            "w": 0.4693946838378906,
-                                            "x": 0.10956299304962158,
-                                            "y": -0.13830627501010895,
-                                            "z": 0.8651797771453857
+                                            "w": 0.8870363235473633,
+                                            "x": -0.4453810155391693,
+                                            "y": -0.025495128706097603,
+                                            "z": 0.11896397918462753
                                         },
                                         "scale": {
-                                            "x": 0.9999999403953552,
-                                            "y": 0.9999999403953552,
+                                            "x": 1.0,
+                                            "y": 1.0000001192092896,
                                             "z": 0.9999998807907104
                                         }
                                     }
@@ -17435,19 +17435,19 @@
                                 "meshName": "",
                                 "nodeName": "Bone.028",
                                 "pos": {
-                                    "x": -0.24222587049007416,
-                                    "y": -0.1265297681093216,
-                                    "z": -0.715846598148346
+                                    "x": 0.11073791980743408,
+                                    "y": -0.03727845475077629,
+                                    "z": -0.048314884305000305
                                 },
                                 "quat": {
-                                    "w": 0.5657863616943359,
-                                    "x": -0.1323520690202713,
-                                    "y": -0.13878676295280457,
-                                    "z": 0.8019394874572754
+                                    "w": 0.8980022072792053,
+                                    "x": -0.4242314398288727,
+                                    "y": -0.025721164420247078,
+                                    "z": 0.11383415013551712
                                 },
                                 "scale": {
-                                    "x": 0.9999999403953552,
-                                    "y": 0.9999999403953552,
+                                    "x": 1.0,
+                                    "y": 1.0,
                                     "z": 0.9999999403953552
                                 }
                             }
@@ -17456,20 +17456,20 @@
                         "meshName": "",
                         "nodeName": "Bone.027",
                         "pos": {
-                            "x": -0.0336204469203949,
+                            "x": 0.14713016152381897,
                             "y": -0.24094653129577637,
-                            "z": -0.6291545629501343
+                            "z": 0.09769153594970703
                         },
                         "quat": {
-                            "w": 0.8507848381996155,
-                            "x": -0.17471599578857422,
-                            "y": -0.04565314203500748,
-                            "z": 0.493513286113739
+                            "w": 0.9495792984962463,
+                            "x": -0.3017662763595581,
+                            "y": -0.021151039749383926,
+                            "z": 0.08239458501338959
                         },
                         "scale": {
-                            "x": 0.9999999403953552,
+                            "x": 1.0,
                             "y": 0.9999999403953552,
-                            "z": 0.9999999403953552
+                            "z": 1.0
                         }
                     },
                     {
@@ -17494,20 +17494,20 @@
                         "meshName": "",
                         "nodeName": "root",
                         "pos": {
-                            "x": 0.0,
+                            "x": 0.005059848539531231,
                             "y": -0.24094656109809875,
-                            "z": -1.0532108518646055e-08
+                            "z": 0.003765079425647855
                         },
                         "quat": {
                             "w": 0.9999999403953552,
-                            "x": -0.00019997819617856294,
-                            "y": -0.00020011926244478673,
-                            "z": 0.00019999999494757503
+                            "x": -0.00019997825438622385,
+                            "y": -0.00020011929154861718,
+                            "z": 0.00020000005315523595
                         },
                         "scale": {
-                            "x": 1.0,
-                            "y": 1.0,
-                            "z": 1.0
+                            "x": 0.9720000624656677,
+                            "y": 0.972000002861023,
+                            "z": 0.9720000624656677
                         }
                     },
                     {
@@ -17532,18 +17532,18 @@
                         "meshName": "",
                         "nodeName": "ten.IK",
                         "pos": {
-                            "x": -0.2523566484451294,
-                            "y": -1.264587163925171,
-                            "z": -0.16826343536376953
+                            "x": 0.042884711176157,
+                            "y": 1.5916212797164917,
+                            "z": 1.9634368419647217
                         },
                         "quat": {
-                            "w": 0.6267688274383545,
-                            "x": -0.4212152063846588,
-                            "y": 0.22557838261127472,
-                            "z": 0.6155104041099548
+                            "w": 0.7914968132972717,
+                            "x": 0.5725246071815491,
+                            "y": 0.18142391741275787,
+                            "z": 0.11328599601984024
                         },
                         "scale": {
-                            "x": 0.9999999403953552,
+                            "x": 1.0,
                             "y": 1.0,
                             "z": 1.0
                         }
@@ -17570,18 +17570,18 @@
                         "meshName": "",
                         "nodeName": "ten.IK.001",
                         "pos": {
-                            "x": -0.31563758850097656,
-                            "y": -2.6286048889160156,
-                            "z": -0.9162078499794006
+                            "x": 1.9241546392440796,
+                            "y": 1.6762230396270752,
+                            "z": -0.3925016522407532
                         },
                         "quat": {
-                            "w": 0.705878734588623,
-                            "x": -0.01749451272189617,
-                            "y": 0.0572565533220768,
-                            "z": 0.7057980895042419
+                            "w": 0.8917198181152344,
+                            "x": -0.027176177129149437,
+                            "y": 0.04943646118044853,
+                            "z": -0.4490581750869751
                         },
                         "scale": {
-                            "x": 0.9999999403953552,
+                            "x": 1.0,
                             "y": 1.0,
                             "z": 0.9999999403953552
                         }
@@ -17608,20 +17608,20 @@
                         "meshName": "",
                         "nodeName": "ten.IK.002",
                         "pos": {
-                            "x": 0.44540953636169434,
-                            "y": -0.5088400840759277,
-                            "z": -0.2626824378967285
+                            "x": -2.1765546798706055,
+                            "y": 1.4664894342422485,
+                            "z": -0.02017599530518055
                         },
                         "quat": {
-                            "w": -0.6268358826637268,
-                            "x": 0.614177942276001,
-                            "y": 0.47811880707740784,
-                            "z": -0.035563867539167404
+                            "w": 0.7666065096855164,
+                            "x": -0.2175457626581192,
+                            "y": -0.04121256247162819,
+                            "z": 0.6027352809906006
                         },
                         "scale": {
                             "x": 1.0,
                             "y": 1.0,
-                            "z": 0.9999999403953552
+                            "z": 1.0
                         }
                     },
                     {
@@ -17646,19 +17646,19 @@
                         "meshName": "",
                         "nodeName": "ten.IK.003",
                         "pos": {
-                            "x": -0.795184850692749,
-                            "y": -1.0496785640716553,
-                            "z": 0.36017757654190063
+                            "x": -0.2790614366531372,
+                            "y": 1.368177890777588,
+                            "z": -2.196135997772217
                         },
                         "quat": {
-                            "w": 0.7874398827552795,
-                            "x": 0.4989199936389923,
-                            "y": -0.26104387640953064,
-                            "z": -0.25074562430381775
+                            "w": 0.7240229249000549,
+                            "x": -0.6871961951255798,
+                            "y": -0.058661483228206635,
+                            "z": -0.01054004579782486
                         },
                         "scale": {
                             "x": 1.0,
-                            "y": 1.0,
+                            "y": 0.9999999403953552,
                             "z": 1.0
                         }
                     }
@@ -18025,19 +18025,19 @@
                         "nodeName": "2",
                         "pos": {
                             "x": 0.0,
-                            "y": -0.1383708268404007,
-                            "z": -6.048380907230921e-09
+                            "y": -0.049440570175647736,
+                            "z": -2.1611159528589496e-09
                         },
                         "quat": {
-                            "w": 0.9410603046417236,
-                            "x": -0.0001999796077143401,
-                            "y": -0.33823880553245544,
-                            "z": 0.0001999927480937913
+                            "w": 0.9489297866821289,
+                            "x": -0.00019997933122795075,
+                            "y": -0.3154872953891754,
+                            "z": 0.00019999318465124816
                         },
                         "scale": {
-                            "x": 0.35137394070625305,
-                            "y": 0.9999998211860657,
-                            "z": 0.35137391090393066
+                            "x": 0.768347978591919,
+                            "y": 0.9999998807907104,
+                            "z": 0.7683479189872742
                         }
                     },
                     {
@@ -18073,9 +18073,9 @@
                             "z": -0.0
                         },
                         "scale": {
-                            "x": 1.0,
-                            "y": 1.0,
-                            "z": 1.0
+                            "x": 1.0064142942428589,
+                            "y": 0.9796141982078552,
+                            "z": 1.0064142942428589
                         }
                     },
                     {
@@ -18106,13 +18106,13 @@
                         },
                         "quat": {
                             "w": 0.9999999403953552,
-                            "x": -0.0001999782252823934,
+                            "x": -0.00019997819617856294,
                             "y": -0.00020011926244478673,
-                            "z": 0.00020000000949949026
+                            "z": 0.0001999999803956598
                         },
                         "scale": {
                             "x": 1.0,
-                            "y": 0.3314438462257385,
+                            "y": 1.155365228652954,
                             "z": 0.9999999403953552
                         }
                     }
@@ -18876,14 +18876,14 @@
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
-                        "x": 1.4290820360183716,
-                        "y": 1.1754943508222875e-38,
-                        "z": 3.855477809906006
+                        "x": 1.5955357551574707,
+                        "y": 1.094910979270935,
+                        "z": 1.3252277374267578
                     },
                     "minPoint": {
-                        "x": -1.3787596225738525,
-                        "y": -1.3995428085327148,
-                        "z": 1.0668742656707764
+                        "x": -1.2123059034347534,
+                        "y": 4.739000658560144e-08,
+                        "z": -1.4633756875991821
                     }
                 },
                 "boneInfo": {
@@ -20114,133 +20114,6 @@
         "AmbientExposure": 1.0,
         "DiffuseExposure": 1.0,
         "FBXName : ": "VFX_Monster1_Skill_Preview",
-        "aabb": {
-            "maxPoint": {
-                "x": -431602080.0,
-                "y": -431602080.0,
-                "z": -431602080.0
-            },
-            "minPoint": {
-                "x": -431602080.0,
-                "y": -431602080.0,
-                "z": -431602080.0
-            }
-        },
-        "boneInfo": {
-            "index": -1
-        },
-        "child": [
-            {
-                "AmbientExposure": 1.0,
-                "DiffuseExposure": 1.0,
-                "aabb": {
-                    "maxPoint": {
-                        "x": 6.6227312088012695,
-                        "y": 6.568614959716797,
-                        "z": 0.24394720792770386
-                    },
-                    "minPoint": {
-                        "x": -6.6227312088012695,
-                        "y": -6.56861686706543,
-                        "z": 0.2439458966255188
-                    }
-                },
-                "boneInfo": {
-                    "index": -1
-                },
-                "hasAnimation": false,
-                "materialVec": [
-                    {
-                        "albedoMap": "FBX/VFX_HeartQueen_Skill1_Preview/VFX_HeartQueen_Skill1_Preview.fbm/T_VFX_HeartQueen_SkillRange.dds",
-                        "armMap": "",
-                        "emissionMap": "",
-                        "heightMap": "",
-                        "materialName": "T_VFX_HeartQueen_Skill1_Preview_Range",
-                        "normalMap": "",
-                        "opacityMap": "",
-                        "ps": "DefaultPS.cso",
-                        "temp0Map": "",
-                        "temp10Map": "",
-                        "temp11Map": "",
-                        "temp1Map": "",
-                        "temp2Map": "",
-                        "temp3Map": "",
-                        "temp4Map": "",
-                        "temp5Map": "",
-                        "temp6Map": "",
-                        "temp7Map": "",
-                        "temp8Map": "",
-                        "temp9Map": "",
-                        "vs": "DefaultVS.cso"
-                    },
-                    {
-                        "albedoMap": "FBX/VFX_Monster1_Skill_Preview/VFX_Monster1_Skill_Preview.fbm/T_VFX_Monster_SkillTime.dds",
-                        "armMap": "",
-                        "emissionMap": "",
-                        "heightMap": "",
-                        "materialName": "T_VFX_Monster1_Skill_Previw_Time",
-                        "normalMap": "",
-                        "opacityMap": "",
-                        "ps": "DefaultPS.cso",
-                        "temp0Map": "",
-                        "temp10Map": "",
-                        "temp11Map": "",
-                        "temp1Map": "",
-                        "temp2Map": "",
-                        "temp3Map": "",
-                        "temp4Map": "",
-                        "temp5Map": "",
-                        "temp6Map": "",
-                        "temp7Map": "",
-                        "temp8Map": "",
-                        "temp9Map": "",
-                        "vs": "DefaultVS.cso"
-                    }
-                ],
-                "meshName": "VFX_Monster1_Skill_Previw",
-                "nodeName": "VFX_Monster1_Skill_Previw",
-                "pos": {
-                    "x": 0.0,
-                    "y": 0.0,
-                    "z": -0.0
-                },
-                "quat": {
-                    "w": -0.7071068286895752,
-                    "x": 0.7071068286895752,
-                    "y": 0.0,
-                    "z": 0.0
-                },
-                "scale": {
-                    "x": 1.0,
-                    "y": 1.0,
-                    "z": 1.0
-                }
-            }
-        ],
-        "hasAnimation": false,
-        "meshName": "",
-        "nodeName": "RootNode",
-        "pos": {
-            "x": -431602080.0,
-            "y": -431602080.0,
-            "z": -431602080.0
-        },
-        "quat": {
-            "w": -0.5,
-            "x": -0.5,
-            "y": -0.5,
-            "z": -0.5
-        },
-        "scale": {
-            "x": -431602080.0,
-            "y": -431602080.0,
-            "z": -431602080.0
-        }
-    },
-    {
-        "AmbientExposure": 1.0,
-        "DiffuseExposure": 1.0,
-        "FBXName : ": "VFX_Monster1_Skill_Previw",
         "aabb": {
             "maxPoint": {
                 "x": -431602080.0,

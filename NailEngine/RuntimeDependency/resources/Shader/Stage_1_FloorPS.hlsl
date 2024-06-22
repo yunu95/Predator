@@ -25,7 +25,6 @@ struct PS_OUT
 };
 
 // AlbedoMap : T_Dirt_BaseColor
-// ARMMap : T_Dirt_ARM
 
 // HeightMap : T_Grass_BaseColor
 
