@@ -5,6 +5,7 @@
 #include "UIManager.h"
 #include "ContentsObservee.h"
 #include "SingletonComponent.h"
+#include "Adder.h"
 
 using namespace yunutyEngine;
 
@@ -52,9 +53,14 @@ public:
 
     virtual void OnContentsPlay() override;
     virtual void OnContentsStop() override;
+    // 초당 frequency만큼 진동하는 카메라 흔들림을 무작위 벡터방향으로 적용합니다.
+    void ApplyShake(float shakeDistance, float frequency, float decreaseFactor);
 
 private:
+    coroutine::Coroutine ShakeCoroutine(float shakeDistance, float frequency, float decreaseFactor);
     void UpdateCameraView();
+    factor::Adder<Vector3d> camOffsetAdder;
+    std::vector<std::weak_ptr<coroutine::Coroutine>> shakeCoroutines;
     const application::editor::RegionData* contrainingRegion{ nullptr };
     Vector3d euler;
     //GameObject* target = nullptr;

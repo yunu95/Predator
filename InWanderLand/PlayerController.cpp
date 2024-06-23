@@ -42,6 +42,7 @@ void PlayerController::RegisterUnit(std::weak_ptr<Unit> unit)
     unit.lock()->onStateEngage[UnitBehaviourTree::Death].AddCallback(std::bind(&PlayerController::OnPlayerChracterDead, this, unit));
     unit.lock()->onStateEngage[UnitBehaviourTree::Paralysis].AddCallback([this, unit]() { UnSelectSkill(unit); });
     unit.lock()->onStateEngage[UnitBehaviourTree::SkillOnGoing].AddCallback(std::bind_front(static_cast<void(PlayerController::*)(std::weak_ptr<Unit>)>(&PlayerController::SetCooltime), this, unit));
+    //unit.lock()->onStateEngage[UnitBehaviourTree::SkillOnGoing].AddCallback([this]() { this->onSkillActivate(); });
 
     unit.lock()->OnStateEngageCallback()[UnitBehaviourTree::Keywords::Knockback].AddCallback([=]() {
         TacticModeSystem::Instance().InterruptedCommand(unit.lock().get());
@@ -361,7 +362,7 @@ void PlayerController::HandleCamera()
     if (!selectedCharacter.expired())
     {
         Vector3d selectedCharPos = selectedCharacter.lock()->GetTransform()->GetWorldPosition();
-        targetPos = selectedCharPos + camOffset;
+        targetPos = selectedCharPos + camOffsetNorm * camZoomFactor;
     }
     // 카메라가 지역 제한에 걸렸을 경우, targetPos를 지역 안으로 정의합니다.
     if (camLockRegion)
@@ -681,7 +682,7 @@ void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
     {
     case SkillType::ROBIN_Q:
     case SkillType::HANSEL_Q:
-        static constexpr float epsilon = 0.01f;
+        static constexpr float epsilon = 5.01f;
         Vector3d deltaDistance = (pos - SingleNavigationField::Instance().GetClosestPointOnField(pos));
         deltaDistance.y = 0;
         if (deltaDistance.MagnitudeSqr() > epsilon)
@@ -690,6 +691,7 @@ void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
             UnSelectSkill();
             return;
         }
+        pos -= deltaDistance;
         break;
     }
     if (state != State::Tactic)
@@ -883,6 +885,8 @@ void PlayerController::Reset()
 {
     UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Combo_Number)->DisableElement();
     UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Combo_Text)->DisableElement();
+    for (auto& each : onSkillTargeted) each.Clear();
+    for (auto& each : onSkillExpiration) each.Clear();
     for (auto& each : onSkillActivate) each.Clear();
     for (auto& each : onSkillSelect) each.Clear();
     for (auto& each : blockSkillSelection) each = false;
@@ -903,7 +907,9 @@ void PlayerController::SetCameraOffset()
         return;
 
     auto camPos = RTSCam::Instance().GetTransform()->GetWorldPosition();
-    camOffset = camPos - characters[PlayerCharacterType::Robin].lock()->GetTransform()->GetWorldPosition();
+    camOffsetNorm = camPos - characters[PlayerCharacterType::Robin].lock()->GetTransform()->GetWorldPosition();
+    camZoomFactor = camOffsetNorm.y;
+    camOffsetNorm /= camZoomFactor;
     camRotation = RTSCam::Instance().GetTransform()->GetWorldRotation();
 }
 
@@ -1055,6 +1061,11 @@ void PlayerController::SetCooltime(std::weak_ptr<Unit> unit)
     SetCooltime(unit.lock()->onGoingSkill->GetSkillType(), GetCooltimeForSkill(unit.lock()->onGoingSkill->GetSkillType()));
 }
 
+void PlayerController::SetZoomFactor(float zoomFactor)
+{
+    this->camZoomFactor = zoomFactor;
+}
+
 float PlayerController::GetCooltimeForSkill(SkillType::Enum skillType)
 {
     switch (skillType)
@@ -1066,6 +1077,11 @@ float PlayerController::GetCooltimeForSkill(SkillType::Enum skillType)
     case SkillType::HANSEL_Q: return HanselChargeSkill::pod.coolTime;
     case SkillType::HANSEL_W: return HanselProjectileSkill::pod.coolTime;
     }
+}
+
+float PlayerController::GetZoomFactor()
+{
+    return camZoomFactor;
 }
 
 float PlayerController::RequiredManaForSkill(SkillType::Enum skillType)

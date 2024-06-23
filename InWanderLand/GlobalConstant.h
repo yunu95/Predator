@@ -17,6 +17,10 @@ namespace application
         GC<float> manaRegen = 7.0f;
         GC<float> maxMana = 100.0f;
 
+        // 카메라에 진동효과가 주어졌을 때 진동속도와 거리가 감소하는 비율, 무조건 0~1 사이의 값이어야 한다.
+        GC<float> camShakeDecrementFactor = 0.5f;
+        // 카메라의 이상적인 위치와 각도가 정해졌을 때 카메라의 트랜스폼이 보간되는 속도
+        GC<float> cameraInterpolationSpeed = 3.0f;
         // 몇초마다 유닛들을 플레이어 캐릭터들에게 분배해주는가
         GC<float> enemyAggroUpdateInterval = 1;
         // +- 몇초씩 랜덤하게 주기에 변화를 주는가.

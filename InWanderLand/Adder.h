@@ -1,4 +1,6 @@
+#pragma once
 #include "Factor.h"
+#include "YunutyEngine.h"
 #include <algorithm>
 
 namespace factor
@@ -7,7 +9,7 @@ namespace factor
     class Adder : public Factor<T>
     {
     public:
-        virtual T IdentityFactor() const { return 0; };
+        virtual T IdentityFactor() const;
         virtual operator T()
         {
             T identity = IdentityFactor();
@@ -22,5 +24,8 @@ namespace factor
             return identity;
         };
     };
-
+    template<typename T>
+    T Adder<T>::IdentityFactor() const { return 0; };
+    template<>
+    Vector3d Adder<Vector3d>::IdentityFactor() const { return Vector3d::zero; };
 }

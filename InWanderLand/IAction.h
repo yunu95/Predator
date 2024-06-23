@@ -60,6 +60,12 @@ namespace application
         OrnamentFloating,
         BossAppear,
         RequestState,
+        AwaitSkillTargeting,
+        AwaitSkillExpiration,
+        ForceUnitPaused,
+        ForceUnitUnpaused,
+        SetZoomFactor,
+        SetCamBidirectionalPath,
     };
 
     struct IAction

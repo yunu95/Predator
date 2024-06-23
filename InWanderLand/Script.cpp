@@ -579,6 +579,36 @@ namespace application
                         action = AddAction<Action_RequestState>();
                         break;
                     }
+                    case application::ActionType::AwaitSkillTargeting:
+                    {
+                        action = AddAction<Action_AwaitSkillTargeting>();
+                        break;
+                    }
+                    case application::ActionType::AwaitSkillExpiration:
+                    {
+                        action = AddAction<Action_AwaitSkillExpiration>();
+                        break;
+                    }
+                    case application::ActionType::ForceUnitPaused:
+                    {
+                        action = AddAction<Action_ForceUnitPaused>();
+                        break;
+                    }
+                    case application::ActionType::ForceUnitUnpaused:
+                    {
+                        action = AddAction<Action_ForceUnitUnpaused>();
+                        break;
+                    }
+                    case application::ActionType::SetZoomFactor:
+                    {
+                        action = AddAction<Action_SetZoomFactor>();
+                        break;
+                    }
+                    case application::ActionType::SetCamBidirectionalPath:
+                    {
+                        action = AddAction<Action_SetCamBidirectionalPath>();
+                        break;
+                    }
                     default:
                         break;
                     }

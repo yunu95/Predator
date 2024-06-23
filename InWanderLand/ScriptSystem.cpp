@@ -74,6 +74,12 @@ namespace application
         actionList.push_back({ ActionType::OrnamentFloating,"OrnamentFloating" });
         actionList.push_back({ ActionType::BossAppear,"BossAppear" });
         actionList.push_back({ ActionType::RequestState,"RequestState" });
+        actionList.push_back({ ActionType::AwaitSkillTargeting,"AwaitSkillTargeting" });
+        actionList.push_back({ ActionType::AwaitSkillExpiration,"AwaitSkillExpiration" });
+        actionList.push_back({ ActionType::ForceUnitPaused,"ForceUnitPaused" });
+        actionList.push_back({ ActionType::ForceUnitUnpaused,"ForceUnitUnpaused" });
+        actionList.push_back({ ActionType::SetZoomFactor,"SetZoomFactor" });
+        actionList.push_back({ ActionType::SetCamBidirectionalPath,"SetCamBidirectionalPath" });
     }
 
     Script* ScriptSystem::CreateScript()

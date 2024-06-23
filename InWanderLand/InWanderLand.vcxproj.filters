@@ -880,6 +880,24 @@
     <Filter Include="UI\PlayerPortrait">
       <UniqueIdentifier>{28485207-5f08-423a-9081-ac1077c64e58}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor\ScriptSystem\2_Action\List\Action_AwaitSkillExpiration">
+      <UniqueIdentifier>{2e3bd598-a785-4032-b768-5863448321c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\ScriptSystem\2_Action\List\Action_AwaitSkillTargeting">
+      <UniqueIdentifier>{d1ced38a-465a-404a-a875-379a78162708}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\ScriptSystem\2_Action\List\Action_SetZoomFactor">
+      <UniqueIdentifier>{a2d676c3-dafe-4563-8158-4d7d0c1b9b24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\ScriptSystem\2_Action\List\Action_SetCamBidirectionalPath">
+      <UniqueIdentifier>{df9807a5-80be-46df-89fb-70ca17dca8a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\ScriptSystem\2_Action\List\Action_ForceUnitPaused">
+      <UniqueIdentifier>{56fa1fbd-4a18-4c33-b2d4-822d86b481ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\ScriptSystem\2_Action\List\Action_ForceUnitUnpaused">
+      <UniqueIdentifier>{01f33b06-acce-4e1b-994a-00c1cc82f55a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -2146,6 +2164,24 @@
     <ClInclude Include="Condition_Ornament.h">
       <Filter>Editor\ScriptSystem\1_Condition\List</Filter>
     </ClInclude>
+    <ClInclude Include="Action_AwaitSkillTargeting.h">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_AwaitSkillTargeting</Filter>
+    </ClInclude>
+    <ClInclude Include="Action_AwaitSkillExpiration.h">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_AwaitSkillExpiration</Filter>
+    </ClInclude>
+    <ClInclude Include="Action_ForceUnitPaused.h">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_ForceUnitPaused</Filter>
+    </ClInclude>
+    <ClInclude Include="Action_SetCamBidirectionalPath.h">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_SetCamBidirectionalPath</Filter>
+    </ClInclude>
+    <ClInclude Include="Action_SetZoomFactor.h">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_SetZoomFactor</Filter>
+    </ClInclude>
+    <ClInclude Include="Action_ForceUnitUnpaused.h">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_ForceUnitUnpaused</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -3210,6 +3246,24 @@
     </ClCompile>
     <ClCompile Include="Condition_Ornament.cpp">
       <Filter>Editor\ScriptSystem\1_Condition\List</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_AwaitSkillTargeting.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_AwaitSkillTargeting</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_AwaitSkillExpiration.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_AwaitSkillExpiration</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_ForceUnitPaused.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_ForceUnitPaused</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_SetCamBidirectionalPath.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_SetCamBidirectionalPath</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_SetZoomFactor.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_SetZoomFactor</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_ForceUnitUnpaused.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_ForceUnitUnpaused</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

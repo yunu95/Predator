@@ -175,7 +175,7 @@ namespace application
                     {
                         Condition_TacticModeOff::ImGui_DrawDataPopup(static_cast<Condition_TacticModeOff*>(data));
                         break;
-                    } 
+                    }
                     case application::ConditionType::PlayerState:
                     {
                         Condition_PlayerState::ImGui_DrawDataPopup(static_cast<Condition_PlayerState*>(data));
@@ -394,6 +394,36 @@ namespace application
                     case application::ActionType::RequestState:
                     {
                         Action_RequestState::ImGui_DrawDataPopup(static_cast<Action_RequestState*>(data));
+                        break;
+                    }
+                    case application::ActionType::AwaitSkillTargeting:
+                    {
+                        Action_AwaitSkillTargeting::ImGui_DrawDataPopup(static_cast<Action_AwaitSkillTargeting*>(data));
+                        break;
+                    }
+                    case application::ActionType::AwaitSkillExpiration:
+                    {
+                        Action_AwaitSkillExpiration::ImGui_DrawDataPopup(static_cast<Action_AwaitSkillExpiration*>(data));
+                        break;
+                    }
+                    case application::ActionType::ForceUnitPaused:
+                    {
+                        Action_ForceUnitPaused::ImGui_DrawDataPopup(static_cast<Action_ForceUnitPaused*>(data));
+                        break;
+                    }
+                    case application::ActionType::ForceUnitUnpaused:
+                    {
+                        Action_ForceUnitUnpaused::ImGui_DrawDataPopup(static_cast<Action_ForceUnitUnpaused*>(data));
+                        break;
+                    }
+                    case application::ActionType::SetZoomFactor:
+                    {
+                        Action_SetZoomFactor::ImGui_DrawDataPopup(static_cast<Action_SetZoomFactor*>(data));
+                        break;
+                    }
+                    case application::ActionType::SetCamBidirectionalPath:
+                    {
+                        Action_SetCamBidirectionalPath::ImGui_DrawDataPopup(static_cast<Action_SetCamBidirectionalPath*>(data));
                         break;
                     }
                     default:
