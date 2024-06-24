@@ -150,6 +150,12 @@ void Unit::OnStateEngage<UnitBehaviourTree::Knockback>()
     blockFollowingNavAgentByState = referenceBlockFollowingNavAgent.Acquire();
 }
 template<>
+void Unit::OnStateUpdate<UnitBehaviourTree::Knockback>()
+{
+    navAgentComponent.lock()->MoveTo(GetTransform()->GetWorldPosition());
+    //blockFollowingNavAgentByState = referenceBlockFollowingNavAgent.Acquire();
+}
+template<>
 void Unit::OnStateExit<UnitBehaviourTree::Knockback>()
 {
     onStateExit[UnitBehaviourTree::Knockback]();
@@ -1273,7 +1279,7 @@ void Unit::Summon(application::editor::Unit_TemplateData* templateData)
     SetCurrentHp(unitTemplateData->pod.max_Health);
     if (GetTeamIndex() != PlayerController::playerTeamIndex)
     {
-        onStateEngage.at(UnitBehaviourTree::Death).AddCallback( [this]()
+        onStateEngage.at(UnitBehaviourTree::Death).AddCallback([this]()
             {
                 PlayerController::Instance().AddCombo();
             });
@@ -1353,6 +1359,10 @@ void Unit::InitBehaviorTree()
         {
             OnStateExit<UnitBehaviourTree::Knockback>();
         };
+    unitBehaviourTree[UnitBehaviourTree::Paralysis][UnitBehaviourTree::Knockback].onUpdate = [this]()
+        {
+            OnStateUpdate<UnitBehaviourTree::Knockback>();
+        };
     unitBehaviourTree[UnitBehaviourTree::Paralysis][UnitBehaviourTree::Stun].enteringCondtion = [this]()
         {
             return true;
@@ -1367,7 +1377,7 @@ void Unit::InitBehaviorTree()
         };
     unitBehaviourTree[UnitBehaviourTree::Pause].enteringCondtion = [this]()
         {
-            return referencePause.BeingReferenced() || pauseAll;
+            return referencePause.BeingReferenced() || (pauseAll && !unpauseRequested) || pauseRequested;
         };
     unitBehaviourTree[UnitBehaviourTree::Pause].onEnter = [this]()
         {

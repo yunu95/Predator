@@ -193,6 +193,8 @@ public:
     // 전술모드에서 명령을 내릴 수 있는지에 대한 Ref
     Reference referenceTactic;
     Reference referenceBlockDeath;
+    bool pauseRequested{ false };
+    bool unpauseRequested{ false };
 
     std::weak_ptr<yunutyEngine::graphics::Animator> GetAnimator() { return animatorComponent; }
 private:
@@ -295,7 +297,7 @@ private:
     int navAgentEnableFrameCount{ 0 };
     std::weak_ptr<ManagedFBX> attackVFX = std::weak_ptr<ManagedFBX>();
     std::queue<std::weak_ptr<ManagedFBX>> damagedEffectQueue;
-//     std::weak_ptr<ManagedFBX> damagedVFX = std::weak_ptr<ManagedFBX>();
+    //     std::weak_ptr<ManagedFBX> damagedVFX = std::weak_ptr<ManagedFBX>();
     std::weak_ptr<ManagedFBX> healVFX = std::weak_ptr<ManagedFBX>();
     std::weak_ptr<ManagedFBX> paralysisVFX = std::weak_ptr<ManagedFBX>();
 

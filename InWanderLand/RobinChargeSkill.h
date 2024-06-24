@@ -20,6 +20,9 @@ struct POD_RobinChargeSkill
     float rushKnockbackRadius = 1.0f;
     float impactKnockbackRadius = 5.0f;
     float effectScale = 1.0f;
+    float impactCamShakeDistance = 0.5f;
+    float impactCamShakeFrequency = 10.0f;
+    float impactCamShakeDecreaseFactor = 0.4f;
 
     TO_JSON(POD_RobinChargeSkill)
         FROM_JSON(POD_RobinChargeSkill)

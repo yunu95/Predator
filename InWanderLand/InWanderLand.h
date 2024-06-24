@@ -8,6 +8,7 @@
 #include "DelegateCallback.h"
 #include "SkillPreviewSystem.h"
 #include "CinematicManager.h"
+#include "RTSCam.h"
 
 // UI
 #include "UIElement.h"
