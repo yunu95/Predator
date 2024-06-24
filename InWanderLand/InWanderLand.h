@@ -8,6 +8,7 @@
 #include "DelegateCallback.h"
 #include "SkillPreviewSystem.h"
 #include "CinematicManager.h"
+#include "RTSCam.h"
 
 // UI
 #include "UIElement.h"
@@ -32,6 +33,7 @@
 #include "ColorTintTimer.h"
 #include "PlayMusicTimer.h"
 #include "UISpriteAnimation.h"
+#include "PlayerPortrait.h"
 
 #include "SkillSystem.h"
 #include "GlobalConstant.h"

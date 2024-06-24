@@ -35,12 +35,12 @@ PS_OUT main(PixelIn input)
     color = pow(color, 2.2f);
     
     float3 viewNormal = input.normalV;
-    float3 tangentSpaceNormal = NormalMap.Sample(sam, uv).xyz;
+    //float3 tangentSpaceNormal = NormalMap.Sample(sam, uv).xyz;
         
-    // [0, 1] 범위에서 [-1, 1]로 변환
-    tangentSpaceNormal = (tangentSpaceNormal - 0.5f) * 2.f;
-    float3x3 matTBN = { input.tangentV, input.biNormalV, input.normalV };
-    viewNormal = normalize(mul(tangentSpaceNormal, matTBN));
+    //// [0, 1] 범위에서 [-1, 1]로 변환
+    //tangentSpaceNormal = (tangentSpaceNormal - 0.5f) * 2.f;
+    //float3x3 matTBN = { input.tangentV, input.biNormalV, input.normalV };
+    //viewNormal = normalize(mul(tangentSpaceNormal, matTBN));
     
 
     output.arm.x = 1.f;

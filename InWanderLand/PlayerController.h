@@ -69,7 +69,9 @@ public:
     bool IsSkillUpgraded(UIEnumID skillUpgradeUITarget);
     void UpgradeSkill();
     void SetSkillPoints(int points);
+    void SetZoomFactor(float zoomFactor);
     int GetSkillPoints();
+    float GetZoomFactor();
     void IncrementSkillPoint();
     void LockCamInRegion(const application::editor::RegionData* camLockRegion);
     void UnlockCamFromRegion();
@@ -82,6 +84,8 @@ public:
     static const std::unordered_map<UIEnumID, SkillUpgradeType::Enum> skillUpgradeByUI;
     DelegateCallback<void> onSkillSelect[(int)SkillType::SKILL_NUM];
     DelegateCallback<void> onSkillActivate[(int)SkillType::SKILL_NUM];
+    DelegateCallback<void> onSkillTargeted[(int)SkillType::SKILL_NUM];
+    DelegateCallback<void> onSkillExpiration[(int)SkillType::SKILL_NUM];
 
     virtual void OnPause() override;
     virtual void OnResume() override;
@@ -166,7 +170,8 @@ private:
     UIEnumID skillUpgradeUITarget;
     std::array<bool, SkillUpgradeType::END> skillUpgraded;
     int skillPointsLeft{ 5 };
-    Vector3d camOffset;
+    float camZoomFactor = 5;
+    Vector3d camOffsetNorm;
     Quaternion camRotation;
     std::array<std::weak_ptr<Unit>, 2> peaceFollowingUnits;
     std::array<Vector3d, 2> peaceFollowingDestination;

@@ -333,10 +333,13 @@ float CalcShadowFactor(SamplerComparisonState samShadow,
 void CalculateDirectionalPBR(int lightIndex, float3 normal, float3 pos, out float4 diffuse, out float4 ambient, out float4 specular, float3 albedo, float ao, float metalness, float roughness, float diffuseExposure, float ambientExposure, int useLightMap, out float shadowFactor)
 {
     shadowFactor = 1.f;
-       // 나는 별도의 렌더타겟에 View Space에 대한 정보가 담겨 있어 연산은 View Space에서 이루어진다.
+    // 나는 별도의 렌더타겟에 View Space에 대한 정보가 담겨 있어 연산은 View Space에서 이루어진다.
     diffuse = float4(0.f, 0.f, 0.f, 0.f);
     ambient = float4(0.f, 0.f, 0.f, 0.f);
     specular = float4(0.f, 0.f, 0.f, 0.f);
+    
+    // 새로운 변수: 알베도의 영향을 받지 않는 스펙큘러 계산
+    float4 specularNoAlbedo = float4(0.f, 0.f, 0.f, 0.f);
     
     // 뷰 디렉션
     float3 Lo = normalize(pos);
@@ -350,94 +353,96 @@ void CalculateDirectionalPBR(int lightIndex, float3 normal, float3 pos, out floa
     
     // 프레넬
     float3 F0 = lerp(Fdielectric, albedo, metalness);
+    float3 F0_no_albedo = float3(0.04, 0.04, 0.04); // 고정된 값으로 프레넬 반사 설정
     
-
     float3 Li = normalize(mul(float4(-lights[lightIndex].direction.xyz, 0.f), VTM).xyz);
     float3 Lradiance = float3(1, 1, 1);
         
-        // 하프 벡터
+    // 하프 벡터
     float3 Lh = normalize(Li + Lo);
         
     float cosLi = max(0.0, dot(normal, Li));
     float cosLh = max(0.0, dot(normal, Lh));
         
     float3 F = fresnelSchlick(F0, max(0.0, dot(Lh, Lo)));
+    float3 F_no_albedo = fresnelSchlick(F0_no_albedo, max(0.0, dot(Lh, Lo)));
     float D = ndfGGX(cosLh, max(0.01, roughness));
     float G = gaSchlickGGX(cosLi, cosLo, roughness);
-       
+    
+    // 기존 알베도 값을 반영한 kd 계산
     float3 kd = lerp(float3(1, 1, 1) - F, float3(0, 0, 0), metalness);
-        
+    
     float3 diffuseBRDF = kd * albedo / PI;
-        
+    
+    // 알베도 값을 반영한 스펙큘러 BRDF 계산
     float3 specularBRDF = (F * D * G) / max(Epsilon, 4.0 * cosLi * cosLo);
-        
+
+    // 알베도 값을 반영하지 않은 스펙큘러 BRDF 계산
+    float3 specularBRDFNoAlbedo = (F_no_albedo * D * G) / max(Epsilon, 4.0 * cosLi * cosLo);
+    
     float3 directionalLighting = 0;
-        
+    
     directionalLighting += (diffuseBRDF + specularBRDF) * (Lradiance * cosLi);
-        
-   
     
     float3 ambientLighting = float3(0, 0, 0);
-        // 나중에 IBL쓰면 아래 코드 사용 만일 안쓴다면 기본 라이트의 엠비언트사용하게 해야 함
-        
-       
-        ///
+    
     if (length(cosLo))
-        //if (length(cosLo) && (useLightMap == -1))
     {
         matrix shadowVP = lightVP;
-            
-            // 여기서 pos는 View Space에서의 Position
-            // VTMInv를 곱해서 월드 Space로
         float4 worldPos = mul(float4(pos.xyz, 1.f), VTMInv);
-            
-            // 현재 Position을 Light Space로
         float4 shadowClipPos = mul(worldPos, shadowVP);
-            
         shadowFactor = CalcShadowFactor(shadowSam, Temp2Map, shadowClipPos);
     }
-        ///
-        
-        //float expo = 0.5f;
-    specular = float4((specularBRDF) * (Lradiance * cosLi), 1.f);
     
+    specularNoAlbedo = float4(specularBRDFNoAlbedo * (Lradiance * cosLi), 1.f);
+    specularNoAlbedo *= diffuseExposure;
+    float3 x1 = max(0, specularNoAlbedo.xyz - 0.004);
+    specularNoAlbedo.xyz = (x1 * (6.2 * x1 + 0.5)) / (x1 * (6.2 * x1 + 1.7) + 0.06);
     
     directionalLighting *= diffuseExposure;
     float3 x = max(0, directionalLighting.xyz - 0.004);
     directionalLighting.xyz = (x * (6.2 * x + 0.5)) / (x * (6.2 * x + 1.7) + 0.06);
-        
+    
     diffuse.xyz += directionalLighting.xyz * lights[lightIndex].color.diffuse.xyz * lights[lightIndex].intensity;
     diffuse.w = 1.f;
-        
-        
+    
     if (useIBL == 1)
     {
         float3 irradiance = IrradianceMap.Sample(sam, normal).rgb;
         float3 F = fresnelSchlick(F0, cosLo);
+        float3 F_no_albedo = fresnelSchlick(F0_no_albedo, cosLo);
         float3 kd = lerp(1.0 - F, 0.0, metalness);
         float3 diffuseIBL = kd * albedo * irradiance;
-        uint specularTextureLevels = querySpecularTextureLevels(); //  텍스쳐의 최대 LOD 개수를 구한다.	
+        uint specularTextureLevels = querySpecularTextureLevels();
         float3 specularIrradiance = PrefilteredMap.SampleLevel(sam, Lr, roughness * specularTextureLevels).rgb;
         float2 specularBRDF = BrdfMap.Sample(spBRDF_Sampler, float2(cosLo, roughness)).rg;
+        
+        // IBL에서 알베도 값을 반영한 스펙큘러 계산
         float3 specularIBL = (F0 * specularBRDF.x + specularBRDF.y) * specularIrradiance;
+
+        // IBL에서 알베도 값을 반영하지 않은 스펙큘러 계산
+        float3 specularIBLNoAlbedo = (F_no_albedo * specularBRDF.x + specularBRDF.y) * specularIrradiance;
         
         ambientLighting = (diffuseIBL + specularIBL) * ao;
-            
+        
         ambientLighting *= ambientExposure;
         ambientLighting = ambientLighting / (1 + ambientLighting);
         ambientLighting = pow(ambientLighting, 1 / 2.2);
-            
+        
         ambient.xyz = ambientLighting;
         
-        float4 tempSpe = float4((specularIBL) * ao, 1.f);
-        specular += tempSpe;
+        float4 tempSpeNoAlbedo = float4(specularIBLNoAlbedo * ao, 1.f);
+        tempSpeNoAlbedo *= ambientExposure;
+        tempSpeNoAlbedo = tempSpeNoAlbedo / (1 + tempSpeNoAlbedo);
+        
+        specularNoAlbedo += tempSpeNoAlbedo;
     }
     else
     {
         ambient.xyz = lights[lightIndex].color.ambient;
     }
-    
-    
+
+    specular = specularNoAlbedo;
 }
 
 void CalculatePointPBR(int lightIndex, float3 normal, float3 pos, out float4 diffuse, out float4 ambient, out float4 specular, float3 albedo, float ao, float metalness, float roughness, float diffuseExposure, float ambientExposure, int useLightMap, out float shadowFactor)

@@ -4,21 +4,25 @@
 
 void PlayerPortraitUIs::SetPortraitHurt(PlayerCharacterType::Enum playerCharType)
 {
-    for (auto each : GetPortraits(playerCharType))
+    if (playerCharType == PlayerCharacterType::None)
+        return;
+    for (auto each : GetCharInfoUIs(playerCharType))
     {
-        each->uiVideoPlayer.lock()->videoPlayer1.lock()->SetVideo(wanderResources::GetPortraitVideoHurt(playerCharType));
+        each->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Portrait)->imageComponent.lock()->GetGI().SetVideo(wanderResources::GetPortraitVideoHurt(playerCharType).lock()->GetName());
     };
 }
 
 void PlayerPortraitUIs::SetPortraitIdle(PlayerCharacterType::Enum playerCharType)
 {
-    for (auto each : GetPortraits(playerCharType))
+    if (playerCharType == PlayerCharacterType::None)
+        return;
+    for (auto each : GetCharInfoUIs(playerCharType))
     {
-        each->uiVideoPlayer.lock()->videoPlayer1.lock()->SetVideo(wanderResources::GetPortraitVideoIdle(playerCharType));
+        each->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Portrait)->imageComponent.lock()->GetGI().SetVideo(wanderResources::GetPortraitVideoIdle(playerCharType).lock()->GetName());
     };
 }
 
-std::array<UIElement*, 2> PlayerPortraitUIs::GetPortraits(PlayerCharacterType::Enum playerCharType)
+std::array<UIElement*, 2> PlayerPortraitUIs::GetCharInfoUIs(PlayerCharacterType::Enum playerCharType)
 {
     switch (playerCharType)
     {

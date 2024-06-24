@@ -11,6 +11,12 @@ struct POD_HanselChargeSkill
     float   damage = 10.0f;
     float   damageUpgraded = 10.0f;
     float   skillRadius = 10.0f;
+    float impactCamShakeDistance1 = 0.5f;
+    float impactCamShakeFrequency1 = 10.0f;
+    float impactCamShakeDecreaseFactor1 = 0.4f;
+    float impactCamShakeDistance2 = 0.5f;
+    float impactCamShakeFrequency2 = 10.0f;
+    float impactCamShakeDecreaseFactor2 = 0.4f;
 
     TO_JSON(POD_HanselChargeSkill)
         FROM_JSON(POD_HanselChargeSkill)

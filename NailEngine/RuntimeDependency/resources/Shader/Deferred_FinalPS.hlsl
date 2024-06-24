@@ -46,8 +46,8 @@ float4 main(PixelIn input) : SV_Target
             shadowColor = 0.8;
         }
 
-        //float4 temp = (albedoColor + specular) * shadowColor;
-        float4 temp = (albedoColor) * shadowColor;
+        float4 temp = (albedoColor + specular) * shadowColor;
+        //float4 temp = (albedoColor) * shadowColor;
 
         output = temp + emissive;
     }
