@@ -62,7 +62,7 @@ namespace application::editor::palette
 
         GameObject* obj = nullptr;
 
-        if (interactableTemplateData->pod.fBXName == "Trigger_Cube")
+        if (interactableTemplateData->pod.fBXName == "Trigger_Cube" || interactableTemplateData->pod.fBXName == "Barricade_Cube")
         {
             obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Cube", &boundingMin, &boundingMax);
             for (auto each : obj->GetChildren())
@@ -76,7 +76,7 @@ namespace application::editor::palette
             }
             AttachDebugMesh(obj, DebugMeshType::Cube, yunuGI::Color::green());
         }
-        else if (interactableTemplateData->pod.fBXName == "Trigger_Sphere")
+        else if (interactableTemplateData->pod.fBXName == "Trigger_Sphere" || interactableTemplateData->pod.fBXName == "Barricade_Sphere")
         {
             obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Sphere", &boundingMin, &boundingMax);
             for (auto each : obj->GetChildren())
@@ -142,7 +142,7 @@ namespace application::editor::palette
 
         GameObject* obj = nullptr;
 
-        if (interactableTemplateData->pod.fBXName == "Trigger_Cube")
+        if (interactableTemplateData->pod.fBXName == "Trigger_Cube" || interactableTemplateData->pod.fBXName == "Barricade_Cube")
         {
             obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Cube", &boundingMin, &boundingMax);
             for (auto each : obj->GetChildren())
@@ -156,7 +156,7 @@ namespace application::editor::palette
             }
             AttachDebugMesh(obj, DebugMeshType::Cube, yunuGI::Color::green());
         }
-        else if (interactableTemplateData->pod.fBXName == "Trigger_Sphere")
+        else if (interactableTemplateData->pod.fBXName == "Trigger_Sphere" || interactableTemplateData->pod.fBXName == "Barricade_Sphere")
         {
             obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Sphere", &boundingMin, &boundingMax);
             for (auto each : obj->GetChildren())

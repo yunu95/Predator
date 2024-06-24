@@ -52,6 +52,7 @@ void ProjectilePool::PoolByMesh::ObjectInitializer(std::weak_ptr<Projectile> pro
 {
     auto gameObj = Scene::getCurrentScene()->AddGameObjectFromFBX(fbxname);
     gameObj->SetParent(projectile.lock()->GetGameObject());
+    projectile.lock()->fbxObject = gameObj;
 
     if (fbxname != "VFX_Ursula_Attack_1")
         gameObj->GetTransform()->SetLocalRotation(Vector3d(90, 0, 0));

@@ -1,10 +1,52 @@
 {
     "AniEvents": [
         {
+            "animationName": "Ani_HeartQueen_Appear",
+            "fbxName": "SKM_HeartQueen",
+            "frame": 4.0,
+            "objName": "PI_24",
+            "type": 0
+        },
+        {
+            "animationName": "Ani_HeartQueen_Appear",
+            "fbxName": "SKM_HeartQueen",
+            "frame": 0.0,
+            "rscPath": "sounds/Heart Queen/Heart Queen appear1.wav",
+            "type": 3
+        },
+        {
+            "animationName": "Ani_Ursula_Attack",
+            "fbxName": "SKM_Ursula",
+            "frame": 38.0,
+            "objName": "PI_0",
+            "type": 1
+        },
+        {
+            "animationName": "Ani_Monster1_Death",
+            "fbxName": "SKM_Monster1",
+            "frame": 0.0,
+            "objName": "PI_46",
+            "type": 0
+        },
+        {
             "animationName": "Ani_Frame1_Death",
             "fbxName": "SKM_Frame1",
             "frame": 27.0,
             "rscPath": "sounds/Heart Queen/Heart Queen destroy summonGate.wav",
+            "type": 3
+        },
+        {
+            "animationName": "Ani_Ursula_Live",
+            "fbxName": "SKM_Ursula",
+            "frame": 66.0,
+            "objName": "PI_39",
+            "type": 1
+        },
+        {
+            "animationName": "Rig_Robin|Ani_Hansel_Skill1",
+            "fbxName": "SKM_Hansel",
+            "frame": 40.0,
+            "rscPath": "sounds/Hansel/Hansel skill1 Jump.wav",
             "type": 3
         },
         {
@@ -15,6 +57,13 @@
             "type": 3
         },
         {
+            "animationName": "Ani_Monster2_Death",
+            "fbxName": "SKM_Monster2",
+            "frame": 10.0,
+            "objName": "PI_44",
+            "type": 0
+        },
+        {
             "animationName": "Ani_Frame1_Summon",
             "fbxName": "SKM_Frame1",
             "frame": 0.0,
@@ -22,38 +71,38 @@
             "type": 3
         },
         {
+            "animationName": "Ani_HeartQueen_Appear",
+            "fbxName": "SKM_HeartQueen",
+            "frame": 50.0,
+            "rscPath": "sounds/Heart Queen/Heart Queen appear2.wav",
+            "type": 3
+        },
+        {
+            "animationName": "Ani_Monster2_Skill",
+            "fbxName": "SKM_Monster2",
+            "frame": 69.0,
+            "objName": "PI_12",
+            "type": 1
+        },
+        {
+            "animationName": "Ani_Ursula_Skill1",
+            "fbxName": "SKM_Ursula",
+            "frame": 0.0,
+            "rscPath": "sounds/Ursula/Ursula skill1.wav",
+            "type": 3
+        },
+        {
+            "animationName": "Rig_Robin_arpbob|Ani_Robin_Live",
+            "fbxName": "SKM_Robin",
+            "frame": 0.0,
+            "objName": "PI_42",
+            "type": 0
+        },
+        {
             "animationName": "Rig_Robin|Ani_Hansel_Skill1",
             "fbxName": "SKM_Hansel",
             "frame": 59.0,
             "rscPath": "sounds/Hansel/Hansel skill1 Impact.wav",
-            "type": 3
-        },
-        {
-            "animationName": "Ani_Monster1_Skill",
-            "fbxName": "SKM_Monster1",
-            "frame": 40.0,
-            "rscPath": "sounds/Enemy melee/Melee special.wav",
-            "type": 3
-        },
-        {
-            "animationName": "Rig_Robin|Ani_Hansel_Skill1",
-            "fbxName": "SKM_Hansel",
-            "frame": 93.0,
-            "rscPath": "sounds/Hansel/Hansel skill1 Impact.wav",
-            "type": 3
-        },
-        {
-            "animationName": "Rig_Robin|Ani_Hansel_Skill1",
-            "fbxName": "SKM_Hansel",
-            "frame": 40.0,
-            "rscPath": "sounds/Hansel/Hansel skill1 Jump.wav",
-            "type": 3
-        },
-        {
-            "animationName": "Rig_Robin|Ani_Hansel_Attack ",
-            "fbxName": "SKM_Hansel",
-            "frame": 40.0,
-            "rscPath": "sounds/Hansel/Hansel normal attack.wav",
             "type": 3
         },
         {
@@ -64,11 +113,102 @@
             "type": 3
         },
         {
+            "animationName": "Ani_Monster1_Skill",
+            "fbxName": "SKM_Monster1",
+            "frame": 40.0,
+            "rscPath": "sounds/Enemy melee/Melee special.wav",
+            "type": 3
+        },
+        {
+            "animationName": "Ani_Ursula_Live",
+            "fbxName": "SKM_Ursula",
+            "frame": 66.0,
+            "objName": "PI_35",
+            "type": 1
+        },
+        {
             "animationName": "Ani_Ursula_Attack",
             "fbxName": "SKM_Ursula",
             "frame": 15.0,
             "rscPath": "sounds/Ursula/Ursula normal attack.wav",
             "type": 3
+        },
+        {
+            "animationName": "Rig_Robin_arpbob|Ani_Robin_BattleWalk",
+            "fbxName": "SKM_Robin",
+            "frame": 0.0,
+            "objName": "PI_41",
+            "type": 0
+        },
+        {
+            "animationName": "Ani_Ursula_Skill2",
+            "fbxName": "SKM_Ursula",
+            "frame": 59.0,
+            "objName": "PI_5",
+            "type": 0
+        },
+        {
+            "animationName": "Rig_Robin|Ani_Hansel_Skill1",
+            "fbxName": "SKM_Hansel",
+            "frame": 93.0,
+            "rscPath": "sounds/Hansel/Hansel skill1 Impact.wav",
+            "type": 3
+        },
+        {
+            "animationName": "root|Ani_SVFX_Tentacle",
+            "fbxName": "SVFX_Ursula_Skill2_Tentacle",
+            "frame": 31.0,
+            "objName": "PI_33",
+            "type": 0
+        },
+        {
+            "animationName": "Ani_HeartQueen_Skill1",
+            "fbxName": "SKM_HeartQueen",
+            "frame": 50.0,
+            "rscPath": "sounds/Heart Queen/Heart Queen melee special.wav",
+            "type": 3
+        },
+        {
+            "animationName": "Ani_HeartQueen_Death",
+            "fbxName": "SKM_HeartQueen",
+            "frame": 51.0,
+            "objName": "PI_47",
+            "type": 0
+        },
+        {
+            "animationName": "Rig_Robin|Ani_Hansel_Attack ",
+            "fbxName": "SKM_Hansel",
+            "frame": 40.0,
+            "rscPath": "sounds/Hansel/Hansel normal attack.wav",
+            "type": 3
+        },
+        {
+            "animationName": "Rig_Robin_arpbob|Ani_Robin_Walk",
+            "fbxName": "SKM_Robin",
+            "frame": 0.0,
+            "objName": "PI_17",
+            "type": 0
+        },
+        {
+            "animationName": "Rig_Robin_arpbob|Ani_Robin_Skill1-2",
+            "fbxName": "SKM_Robin",
+            "frame": 9.0,
+            "objName": "PI_15",
+            "type": 0
+        },
+        {
+            "animationName": "Rig_Robin_arpbob|Ani_Robin_Death",
+            "fbxName": "SKM_Robin",
+            "frame": 0.0,
+            "rscPath": "sounds/Robin/Robin death.wav",
+            "type": 3
+        },
+        {
+            "animationName": "Ani_Monster2_Death",
+            "fbxName": "SKM_Monster2",
+            "frame": 19.0,
+            "objName": "PI_43",
+            "type": 1
         },
         {
             "animationName": "Ani_HeartQueen_Attack",
@@ -85,11 +225,32 @@
             "type": 3
         },
         {
+            "animationName": "Ani_HeartQueen_Skill2",
+            "fbxName": "SKM_HeartQueen",
+            "frame": 85.0,
+            "rscPath": "sounds/Heart Queen/Heart Queen ranged special.wav",
+            "type": 3
+        },
+        {
+            "animationName": "Ani_Frame2_Death",
+            "fbxName": "SKM_Frame2",
+            "frame": 16.0,
+            "objName": "PI_52",
+            "type": 0
+        },
+        {
             "animationName": "Ani_Monster2_Attack",
             "fbxName": "SKM_Monster2",
             "frame": 27.0,
             "rscPath": "sounds/Enemy ranged/Ranged attack.wav",
             "type": 3
+        },
+        {
+            "animationName": "Ani_Frame2_Summon",
+            "fbxName": "SKM_Frame2",
+            "frame": 72.0,
+            "objName": "PI_57",
+            "type": 0
         },
         {
             "animationName": "Ani_HeartQueen_Death",
@@ -99,11 +260,39 @@
             "type": 3
         },
         {
+            "animationName": "Ani_Frame2_Summon",
+            "fbxName": "SKM_Frame2",
+            "frame": 99.0,
+            "objName": "PI_57",
+            "type": 1
+        },
+        {
+            "animationName": "Ani_Ursula_Skill2",
+            "fbxName": "SKM_Ursula",
+            "frame": 42.0,
+            "objName": "PI_5",
+            "type": 0
+        },
+        {
+            "animationName": "Ani_HeartQueen_Appear",
+            "fbxName": "SKM_HeartQueen",
+            "frame": 30.0,
+            "objName": "PI_24",
+            "type": 1
+        },
+        {
             "animationName": "Ani_Ursula_Skill2",
             "fbxName": "SKM_Ursula",
             "frame": 10.0,
             "rscPath": "sounds/Ursula/Ursula skill2.wav",
             "type": 3
+        },
+        {
+            "animationName": "Rig_Robin|Ani_Hansel_Skill1",
+            "fbxName": "SKM_Hansel",
+            "frame": 72.0,
+            "objName": "PI_32",
+            "type": 1
         },
         {
             "animationName": "Rig_Robin_arpbob|Ani_Robin_Skill2",
@@ -113,18 +302,32 @@
             "type": 3
         },
         {
-            "animationName": "Ani_HeartQueen_Appear",
-            "fbxName": "SKM_HeartQueen",
-            "frame": 0.0,
-            "rscPath": "sounds/Heart Queen/Heart Queen appear1.wav",
+            "animationName": "Ani_Frame1_Summon",
+            "fbxName": "SKM_Frame1",
+            "frame": 81.0,
+            "objName": "PI_29",
+            "type": 0
+        },
+        {
+            "animationName": "Ani_Frame2_Death",
+            "fbxName": "SKM_Frame2",
+            "frame": 26.0,
+            "rscPath": "sounds/Heart Queen/Heart Queen destroy summonGate.wav",
             "type": 3
         },
         {
-            "animationName": "Ani_HeartQueen_Appear",
-            "fbxName": "SKM_HeartQueen",
-            "frame": 50.0,
-            "rscPath": "sounds/Heart Queen/Heart Queen appear2.wav",
-            "type": 3
+            "animationName": "Rig_Robin_arpbob|Ani_Robin_BattleWalk",
+            "fbxName": "SKM_Robin",
+            "frame": 32.0,
+            "objName": "PI_41",
+            "type": 1
+        },
+        {
+            "animationName": "Ani_Monster1_Attack",
+            "fbxName": "SKM_Monster1",
+            "frame": 92.0,
+            "objName": "PI_9",
+            "type": 1
         },
         {
             "animationName": "Ani_Monster2_Skill",
@@ -148,18 +351,11 @@
             "type": 3
         },
         {
-            "animationName": "Rig_Robin_arpbob|Ani_Robin_Death",
-            "fbxName": "SKM_Robin",
-            "frame": 0.0,
-            "rscPath": "sounds/Robin/Robin death.wav",
-            "type": 3
-        },
-        {
-            "animationName": "Ani_Ursula_Skill1",
-            "fbxName": "SKM_Ursula",
-            "frame": 0.0,
-            "rscPath": "sounds/Ursula/Ursula skill1.wav",
-            "type": 3
+            "animationName": "Ani_Frame2_Death",
+            "fbxName": "SKM_Frame2",
+            "frame": 49.0,
+            "objName": "PI_52",
+            "type": 1
         },
         {
             "animationName": "Rig_Robin|Ani_Hansel_Death",
@@ -176,25 +372,25 @@
             "type": 3
         },
         {
-            "animationName": "Ani_HeartQueen_Skill1",
-            "fbxName": "SKM_HeartQueen",
-            "frame": 50.0,
-            "rscPath": "sounds/Heart Queen/Heart Queen melee special.wav",
-            "type": 3
+            "animationName": "Rig_Robin|Ani_Hansel_Skill1",
+            "fbxName": "SKM_Hansel",
+            "frame": 122.0,
+            "objName": "PI_32",
+            "type": 1
         },
         {
-            "animationName": "Ani_Frame2_Death",
-            "fbxName": "SKM_Frame2",
-            "frame": 26.0,
-            "rscPath": "sounds/Heart Queen/Heart Queen destroy summonGate.wav",
-            "type": 3
+            "animationName": "Rig_Robin_arpbob|Ani_Robin_Live",
+            "fbxName": "SKM_Robin",
+            "frame": 83.0,
+            "objName": "PI_42",
+            "type": 1
         },
         {
-            "animationName": "Ani_HeartQueen_Skill2",
-            "fbxName": "SKM_HeartQueen",
-            "frame": 85.0,
-            "rscPath": "sounds/Heart Queen/Heart Queen ranged special.wav",
-            "type": 3
+            "animationName": "Ani_Ursula_Walk",
+            "fbxName": "SKM_Ursula",
+            "frame": 24.0,
+            "objName": "PI_11",
+            "type": 1
         },
         {
             "animationName": "Ani_Monster1_Attack",
@@ -204,17 +400,17 @@
             "type": 0
         },
         {
-            "animationName": "Ani_Frame2_Death",
-            "fbxName": "SKM_Frame2",
-            "frame": 49.0,
-            "objName": "PI_52",
+            "animationName": "Ani_HeartQueen_Skill3",
+            "fbxName": "SKM_HeartQueen",
+            "frame": 29.0,
+            "objName": "PI_27",
             "type": 1
         },
         {
-            "animationName": "Ani_Ursula_Attack",
-            "fbxName": "SKM_Ursula",
-            "frame": 38.0,
-            "objName": "PI_0",
+            "animationName": "Rig_Robin|Ani_Hansel_Skill1",
+            "fbxName": "SKM_Hansel",
+            "frame": 145.0,
+            "objName": "PI_32",
             "type": 1
         },
         {
@@ -232,11 +428,53 @@
             "type": 0
         },
         {
+            "animationName": "Ani_Ursula_Live",
+            "fbxName": "SKM_Ursula",
+            "frame": 0.0,
+            "objName": "PI_35",
+            "type": 0
+        },
+        {
+            "animationName": "Ani_Ursula_Skill1",
+            "fbxName": "SKM_Ursula",
+            "frame": 49.0,
+            "objName": "PI_2",
+            "type": 1
+        },
+        {
             "animationName": "Ani_HeartQueen_Attack",
             "fbxName": "SKM_HeartQueen",
             "frame": 15.0,
             "objName": "PI_26",
             "type": 0
+        },
+        {
+            "animationName": "Ani_Ursula_Skill2",
+            "fbxName": "SKM_Ursula",
+            "frame": 31.0,
+            "objName": "PI_4",
+            "type": 1
+        },
+        {
+            "animationName": "Rig_Robin|Ani_Hansel_Attack ",
+            "fbxName": "SKM_Hansel",
+            "frame": 39.0,
+            "objName": "PI_34",
+            "type": 0
+        },
+        {
+            "animationName": "Ani_Monster1_Skill",
+            "fbxName": "SKM_Monster1",
+            "frame": 33.0,
+            "objName": "PI_10",
+            "type": 0
+        },
+        {
+            "animationName": "Ani_Frame1_Summon",
+            "fbxName": "SKM_Frame1",
+            "frame": 99.0,
+            "objName": "PI_55",
+            "type": 1
         },
         {
             "animationName": "Ani_Monster1_Skill",
@@ -246,10 +484,24 @@
             "type": 1
         },
         {
+            "animationName": "Ani_HeartQueen_Appear",
+            "fbxName": "SKM_HeartQueen",
+            "frame": 30.0,
+            "objName": "PI_24",
+            "type": 1
+        },
+        {
             "animationName": "Ani_HeartQueen_Skill2",
             "fbxName": "SKM_HeartQueen",
             "frame": 98.0,
             "objName": "PI_25",
+            "type": 1
+        },
+        {
+            "animationName": "Ani_Ursula_Skill2",
+            "fbxName": "SKM_Ursula",
+            "frame": 54.0,
+            "objName": "PI_5",
             "type": 1
         },
         {
@@ -274,6 +526,20 @@
             "type": 1
         },
         {
+            "animationName": "Ani_Frame2_Death",
+            "fbxName": "SKM_Frame2",
+            "frame": 16.0,
+            "objName": "PI_51",
+            "type": 1
+        },
+        {
+            "animationName": "Ani_Monster2_Skill",
+            "fbxName": "SKM_Monster2",
+            "frame": 32.0,
+            "objName": "PI_12",
+            "type": 0
+        },
+        {
             "animationName": "Ani_HeartQueen_Death",
             "fbxName": "SKM_HeartQueen",
             "frame": 99.0,
@@ -288,25 +554,11 @@
             "type": 0
         },
         {
-            "animationName": "Rig_Robin|Ani_Hansel_Skill1",
-            "fbxName": "SKM_Hansel",
-            "frame": 72.0,
-            "objName": "PI_32",
+            "animationName": "Rig_Robin_arpbob|Ani_Robin_Skill1-2",
+            "fbxName": "SKM_Robin",
+            "frame": 31.0,
+            "objName": "PI_15",
             "type": 1
-        },
-        {
-            "animationName": "Ani_Frame1_Summon",
-            "fbxName": "SKM_Frame1",
-            "frame": 81.0,
-            "objName": "PI_29",
-            "type": 0
-        },
-        {
-            "animationName": "Ani_Ursula_Skill2",
-            "fbxName": "SKM_Ursula",
-            "frame": 59.0,
-            "objName": "PI_5",
-            "type": 0
         },
         {
             "animationName": "Ani_Monster2_Skill",
@@ -316,18 +568,11 @@
             "type": 1
         },
         {
-            "animationName": "Ani_Monster2_Skill",
-            "fbxName": "SKM_Monster2",
-            "frame": 32.0,
-            "objName": "PI_12",
-            "type": 0
-        },
-        {
-            "animationName": "Ani_Ursula_Skill2",
-            "fbxName": "SKM_Ursula",
-            "frame": 42.0,
-            "objName": "PI_5",
-            "type": 0
+            "animationName": "Ani_Monster1_Death",
+            "fbxName": "SKM_Monster1",
+            "frame": 58.0,
+            "objName": "PI_45",
+            "type": 1
         },
         {
             "animationName": "Ani_Ursula_Skill2",
@@ -344,25 +589,11 @@
             "type": 1
         },
         {
-            "animationName": "Rig_Robin_arpbob|Ani_Robin_Walk",
-            "fbxName": "SKM_Robin",
-            "frame": 0.0,
-            "objName": "PI_17",
-            "type": 0
-        },
-        {
-            "animationName": "Ani_Ursula_Skill1",
-            "fbxName": "SKM_Ursula",
-            "frame": 49.0,
-            "objName": "PI_2",
+            "animationName": "Ani_HeartQueen_Death",
+            "fbxName": "SKM_HeartQueen",
+            "frame": 164.0,
+            "objName": "PI_21",
             "type": 1
-        },
-        {
-            "animationName": "root|Ani_SVFX_Tentacle",
-            "fbxName": "SVFX_Ursula_Skill2_Tentacle",
-            "frame": 31.0,
-            "objName": "PI_33",
-            "type": 0
         },
         {
             "animationName": "Ani_Ursula_Skill1",
@@ -386,13 +617,6 @@
             "type": 1
         },
         {
-            "animationName": "Ani_HeartQueen_Appear",
-            "fbxName": "SKM_HeartQueen",
-            "frame": 4.0,
-            "objName": "PI_24",
-            "type": 0
-        },
-        {
             "animationName": "Ani_Monster1_Death",
             "fbxName": "SKM_Monster1",
             "frame": 10.0,
@@ -407,13 +631,6 @@
             "type": 1
         },
         {
-            "animationName": "Ani_Ursula_Live",
-            "fbxName": "SKM_Ursula",
-            "frame": 66.0,
-            "objName": "PI_35",
-            "type": 1
-        },
-        {
             "animationName": "Ani_Ursula_Skill2",
             "fbxName": "SKM_Ursula",
             "frame": 15.0,
@@ -421,39 +638,11 @@
             "type": 0
         },
         {
-            "animationName": "Ani_Monster1_Attack",
-            "fbxName": "SKM_Monster1",
-            "frame": 92.0,
-            "objName": "PI_9",
-            "type": 1
-        },
-        {
             "animationName": "Ani_HeartQueen_Attack",
             "fbxName": "SKM_HeartQueen",
             "frame": 29.0,
             "objName": "PI_26",
             "type": 1
-        },
-        {
-            "animationName": "Rig_Robin_arpbob|Ani_Robin_Skill1-2",
-            "fbxName": "SKM_Robin",
-            "frame": 31.0,
-            "objName": "PI_15",
-            "type": 1
-        },
-        {
-            "animationName": "Rig_Robin|Ani_Hansel_Attack ",
-            "fbxName": "SKM_Hansel",
-            "frame": 39.0,
-            "objName": "PI_34",
-            "type": 0
-        },
-        {
-            "animationName": "Rig_Robin_arpbob|Ani_Robin_Skill1-2",
-            "fbxName": "SKM_Robin",
-            "frame": 9.0,
-            "objName": "PI_15",
-            "type": 0
         },
         {
             "animationName": "Ani_Frame1_Appear",
@@ -470,17 +659,10 @@
             "type": 1
         },
         {
-            "animationName": "Rig_Robin_arpbob|Ani_Robin_BattleWalk",
-            "fbxName": "SKM_Robin",
-            "frame": 32.0,
-            "objName": "PI_41",
-            "type": 1
-        },
-        {
-            "animationName": "Ani_Ursula_Skill2",
-            "fbxName": "SKM_Ursula",
-            "frame": 31.0,
-            "objName": "PI_4",
+            "animationName": "Rig_Robin|Ani_Hansel_Walk",
+            "fbxName": "SKM_Hansel",
+            "frame": 34.0,
+            "objName": "PI_31",
             "type": 1
         },
         {
@@ -491,17 +673,17 @@
             "type": 0
         },
         {
+            "animationName": "Ani_HeartQueen_Skill3",
+            "fbxName": "SKM_HeartQueen",
+            "frame": 24.0,
+            "objName": "PI_27",
+            "type": 0
+        },
+        {
             "animationName": "Ani_Monster1_Attack",
             "fbxName": "SKM_Monster1",
             "frame": 72.0,
             "objName": "PI_7",
-            "type": 1
-        },
-        {
-            "animationName": "Ani_Monster2_Skill",
-            "fbxName": "SKM_Monster2",
-            "frame": 69.0,
-            "objName": "PI_12",
             "type": 1
         },
         {
@@ -629,6 +811,13 @@
             "type": 0
         },
         {
+            "animationName": "Rig_Robin|Ani_Hansel_Live",
+            "fbxName": "SKM_Hansel",
+            "frame": 0.0,
+            "objName": "PI_38",
+            "type": 0
+        },
+        {
             "animationName": "Ani_Ursula_Skill1",
             "fbxName": "SKM_Ursula",
             "frame": 34.0,
@@ -657,13 +846,6 @@
             "type": 1
         },
         {
-            "animationName": "Ani_Ursula_Walk",
-            "fbxName": "SKM_Ursula",
-            "frame": 24.0,
-            "objName": "PI_11",
-            "type": 1
-        },
-        {
             "animationName": "Rig_Robin_arpbob|Ani_Robin_Attack",
             "fbxName": "SKM_Robin",
             "frame": 42.0,
@@ -685,18 +867,25 @@
             "type": 0
         },
         {
-            "animationName": "Ani_Ursula_Skill2",
-            "fbxName": "SKM_Ursula",
-            "frame": 54.0,
-            "objName": "PI_5",
-            "type": 1
-        },
-        {
             "animationName": "Rig_Robin_arpbob|Ani_Robin_Walk",
             "fbxName": "SKM_Robin",
             "frame": 32.0,
             "objName": "PI_17",
             "type": 1
+        },
+        {
+            "animationName": "Rig_Robin|Ani_Hansel_Live",
+            "fbxName": "SKM_Hansel",
+            "frame": 97.0,
+            "objName": "PI_38",
+            "type": 1
+        },
+        {
+            "animationName": "Rig_Robin|Ani_Hansel_Skill1",
+            "fbxName": "SKM_Hansel",
+            "frame": 58.0,
+            "objName": "PI_32",
+            "type": 0
         },
         {
             "animationName": "Ani_Frame2_Summon",
@@ -713,6 +902,13 @@
             "type": 0
         },
         {
+            "animationName": "Rig_Robin|Ani_Hansel_Live",
+            "fbxName": "SKM_Hansel",
+            "frame": 93.0,
+            "objName": "PI_49",
+            "type": 1
+        },
+        {
             "animationName": "Ani_HeartQueen_Skill3",
             "fbxName": "SKM_HeartQueen",
             "frame": 46.0,
@@ -720,17 +916,10 @@
             "type": 0
         },
         {
-            "animationName": "Ani_Ursula_Live",
-            "fbxName": "SKM_Ursula",
-            "frame": 66.0,
-            "objName": "PI_39",
-            "type": 1
-        },
-        {
-            "animationName": "Ani_HeartQueen_Appear",
+            "animationName": "Ani_HeartQueen_Death",
             "fbxName": "SKM_HeartQueen",
-            "frame": 30.0,
-            "objName": "PI_24",
+            "frame": 98.0,
+            "objName": "PI_48",
             "type": 1
         },
         {
@@ -741,24 +930,10 @@
             "type": 0
         },
         {
-            "animationName": "Rig_Robin|Ani_Hansel_Skill1",
-            "fbxName": "SKM_Hansel",
-            "frame": 122.0,
-            "objName": "PI_32",
-            "type": 1
-        },
-        {
-            "animationName": "Rig_Robin|Ani_Hansel_Skill1",
-            "fbxName": "SKM_Hansel",
-            "frame": 145.0,
-            "objName": "PI_32",
-            "type": 1
-        },
-        {
-            "animationName": "Ani_Monster1_Skill",
-            "fbxName": "SKM_Monster1",
-            "frame": 33.0,
-            "objName": "PI_10",
+            "animationName": "Ani_Frame1_Summon",
+            "fbxName": "SKM_Frame1",
+            "frame": 81.0,
+            "objName": "PI_55",
             "type": 0
         },
         {
@@ -767,13 +942,6 @@
             "frame": 0.0,
             "objName": "PI_49",
             "type": 0
-        },
-        {
-            "animationName": "Ani_HeartQueen_Death",
-            "fbxName": "SKM_HeartQueen",
-            "frame": 164.0,
-            "objName": "PI_21",
-            "type": 1
         },
         {
             "animationName": "Ani_HeartQueen_Death",
@@ -806,13 +974,6 @@
         {
             "animationName": "Ani_HeartQueen_Skill3",
             "fbxName": "SKM_HeartQueen",
-            "frame": 29.0,
-            "objName": "PI_27",
-            "type": 1
-        },
-        {
-            "animationName": "Ani_HeartQueen_Skill3",
-            "fbxName": "SKM_HeartQueen",
             "frame": 38.0,
             "objName": "PI_27",
             "type": 1
@@ -825,31 +986,10 @@
             "type": 1
         },
         {
-            "animationName": "Rig_Robin_arpbob|Ani_Robin_BattleWalk",
-            "fbxName": "SKM_Robin",
-            "frame": 0.0,
-            "objName": "PI_41",
-            "type": 0
-        },
-        {
-            "animationName": "Rig_Robin|Ani_Hansel_Walk",
-            "fbxName": "SKM_Hansel",
-            "frame": 34.0,
-            "objName": "PI_31",
-            "type": 1
-        },
-        {
             "animationName": "Ani_Frame1_Death",
             "fbxName": "SKM_Frame1",
             "frame": 13.0,
             "objName": "PI_54",
-            "type": 0
-        },
-        {
-            "animationName": "Ani_Ursula_Live",
-            "fbxName": "SKM_Ursula",
-            "frame": 0.0,
-            "objName": "PI_35",
             "type": 0
         },
         {
@@ -858,27 +998,6 @@
             "frame": 0.0,
             "objName": "PI_37",
             "type": 0
-        },
-        {
-            "animationName": "Rig_Robin|Ani_Hansel_Live",
-            "fbxName": "SKM_Hansel",
-            "frame": 0.0,
-            "objName": "PI_38",
-            "type": 0
-        },
-        {
-            "animationName": "Rig_Robin|Ani_Hansel_Live",
-            "fbxName": "SKM_Hansel",
-            "frame": 97.0,
-            "objName": "PI_38",
-            "type": 1
-        },
-        {
-            "animationName": "Ani_HeartQueen_Death",
-            "fbxName": "SKM_HeartQueen",
-            "frame": 98.0,
-            "objName": "PI_48",
-            "type": 1
         },
         {
             "animationName": "Ani_HeartQueen_Death",
@@ -888,13 +1007,6 @@
             "type": 0
         },
         {
-            "animationName": "Ani_Frame2_Death",
-            "fbxName": "SKM_Frame2",
-            "frame": 16.0,
-            "objName": "PI_51",
-            "type": 1
-        },
-        {
             "animationName": "Ani_Ursula_Live",
             "fbxName": "SKM_Ursula",
             "frame": 0.0,
@@ -902,31 +1014,17 @@
             "type": 0
         },
         {
-            "animationName": "Ani_Frame2_Death",
-            "fbxName": "SKM_Frame2",
-            "frame": 16.0,
-            "objName": "PI_52",
-            "type": 0
-        },
-        {
-            "animationName": "Rig_Robin_arpbob|Ani_Robin_Live",
-            "fbxName": "SKM_Robin",
-            "frame": 0.0,
-            "objName": "PI_42",
-            "type": 0
-        },
-        {
-            "animationName": "Rig_Robin_arpbob|Ani_Robin_Live",
-            "fbxName": "SKM_Robin",
-            "frame": 83.0,
-            "objName": "PI_37",
+            "animationName": "Ani_Frame1_Death",
+            "fbxName": "SKM_Frame1",
+            "frame": 29.0,
+            "objName": "PI_53",
             "type": 1
         },
         {
             "animationName": "Rig_Robin_arpbob|Ani_Robin_Live",
             "fbxName": "SKM_Robin",
             "frame": 83.0,
-            "objName": "PI_42",
+            "objName": "PI_37",
             "type": 1
         },
         {
@@ -953,23 +1051,9 @@
         {
             "animationName": "Ani_Monster2_Death",
             "fbxName": "SKM_Monster2",
-            "frame": 19.0,
-            "objName": "PI_43",
-            "type": 1
-        },
-        {
-            "animationName": "Ani_Monster2_Death",
-            "fbxName": "SKM_Monster2",
             "frame": 36.0,
             "objName": "PI_44",
             "type": 1
-        },
-        {
-            "animationName": "Ani_Monster2_Death",
-            "fbxName": "SKM_Monster2",
-            "frame": 10.0,
-            "objName": "PI_44",
-            "type": 0
         },
         {
             "animationName": "Ani_Frame1_Death",
@@ -979,46 +1063,11 @@
             "type": 1
         },
         {
-            "animationName": "Ani_Monster1_Death",
-            "fbxName": "SKM_Monster1",
-            "frame": 0.0,
-            "objName": "PI_46",
-            "type": 0
-        },
-        {
-            "animationName": "Ani_HeartQueen_Skill3",
-            "fbxName": "SKM_HeartQueen",
-            "frame": 24.0,
-            "objName": "PI_27",
-            "type": 0
-        },
-        {
-            "animationName": "Ani_Monster1_Death",
-            "fbxName": "SKM_Monster1",
-            "frame": 58.0,
-            "objName": "PI_45",
-            "type": 1
-        },
-        {
-            "animationName": "Ani_HeartQueen_Death",
-            "fbxName": "SKM_HeartQueen",
-            "frame": 51.0,
-            "objName": "PI_47",
-            "type": 0
-        },
-        {
             "animationName": "Ani_HeartQueen_Death",
             "fbxName": "SKM_HeartQueen",
             "frame": 51.0,
             "objName": "PI_48",
             "type": 0
-        },
-        {
-            "animationName": "Rig_Robin|Ani_Hansel_Live",
-            "fbxName": "SKM_Hansel",
-            "frame": 93.0,
-            "objName": "PI_49",
-            "type": 1
         },
         {
             "animationName": "Ani_HeartQueen_Skill3",
@@ -1049,60 +1098,11 @@
             "type": 1
         },
         {
-            "animationName": "Ani_Frame1_Death",
-            "fbxName": "SKM_Frame1",
-            "frame": 29.0,
-            "objName": "PI_53",
-            "type": 1
-        },
-        {
-            "animationName": "Ani_Frame1_Summon",
-            "fbxName": "SKM_Frame1",
-            "frame": 99.0,
-            "objName": "PI_55",
-            "type": 1
-        },
-        {
-            "animationName": "Ani_Frame2_Summon",
-            "fbxName": "SKM_Frame2",
-            "frame": 99.0,
-            "objName": "PI_57",
-            "type": 1
-        },
-        {
-            "animationName": "Ani_Frame1_Summon",
-            "fbxName": "SKM_Frame1",
-            "frame": 81.0,
-            "objName": "PI_55",
-            "type": 0
-        },
-        {
-            "animationName": "Ani_Frame2_Summon",
-            "fbxName": "SKM_Frame2",
-            "frame": 72.0,
-            "objName": "PI_57",
-            "type": 0
-        },
-        {
-            "animationName": "Rig_Robin|Ani_Hansel_Skill1",
-            "fbxName": "SKM_Hansel",
-            "frame": 58.0,
-            "objName": "PI_32",
-            "type": 0
-        },
-        {
             "animationName": "Rig_Robin|Ani_Hansel_Skill1",
             "fbxName": "SKM_Hansel",
             "frame": 89.0,
             "objName": "PI_32",
             "type": 0
-        },
-        {
-            "animationName": "Ani_HeartQueen_Appear",
-            "fbxName": "SKM_HeartQueen",
-            "frame": 30.0,
-            "objName": "PI_24",
-            "type": 1
         }
     ],
     "InstanceList": [
@@ -1119,6 +1119,7 @@
                 "duration": 5.0,
                 "endScale": 1.0,
                 "interval": 5.0,
+                "isApplyRoot": true,
                 "isLoop": false,
                 "lifeTime": 4.0,
                 "maxParticle": 55,
@@ -1158,6 +1159,7 @@
                 "duration": 0.0,
                 "endScale": 2.0,
                 "interval": 0.5,
+                "isApplyRoot": true,
                 "isLoop": false,
                 "lifeTime": 0.800000011920929,
                 "maxParticle": 30,
@@ -1185,6 +1187,46 @@
             "targetUnit": "SKM_Frame1"
         },
         {
+            "name": "PI_55",
+            "offsetPos": {
+                "x": 0.0,
+                "y": 3.904721975326538,
+                "z": -0.8288488984107971
+            },
+            "particleData": {
+                "angle": 31.0,
+                "burstsCount": 30,
+                "duration": 5.0,
+                "endScale": 1.0,
+                "interval": 5.0,
+                "isApplyRoot": true,
+                "isLoop": false,
+                "lifeTime": 2.0,
+                "maxParticle": 5,
+                "name": "LiveParticle2",
+                "particleMode": 0,
+                "playAwake": true,
+                "radius": 1.0,
+                "rateOverTime": 5.0,
+                "shape": 0,
+                "speed": 10.0,
+                "startScale": 0.20000000298023224,
+                "texturePath": "Texture/Particle/T_Particle_Light.dds"
+            },
+            "rotation": {
+                "w": 0.799734049378586,
+                "x": -0.6003544371990011,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 0.9999731779098511,
+                "z": 0.9999725222587585
+            },
+            "targetUnit": "SKM_Frame1"
+        },
+        {
             "name": "PI_53",
             "offsetPos": {
                 "x": -0.568389892578125,
@@ -1197,6 +1239,7 @@
                 "duration": 0.10000000149011612,
                 "endScale": 0.0,
                 "interval": 0.0,
+                "isApplyRoot": true,
                 "isLoop": false,
                 "lifeTime": 0.5,
                 "maxParticle": 20,
@@ -1236,6 +1279,7 @@
                 "duration": 5.0,
                 "endScale": 0.0,
                 "interval": 5.0,
+                "isApplyRoot": true,
                 "isLoop": false,
                 "lifeTime": 2.0,
                 "maxParticle": 5,
@@ -1263,45 +1307,6 @@
             "targetUnit": "SKM_Frame1"
         },
         {
-            "name": "PI_55",
-            "offsetPos": {
-                "x": 0.0,
-                "y": 3.904721975326538,
-                "z": -0.8288488984107971
-            },
-            "particleData": {
-                "angle": 31.0,
-                "burstsCount": 30,
-                "duration": 5.0,
-                "endScale": 1.0,
-                "interval": 5.0,
-                "isLoop": false,
-                "lifeTime": 2.0,
-                "maxParticle": 5,
-                "name": "LiveParticle2",
-                "particleMode": 0,
-                "playAwake": true,
-                "radius": 1.0,
-                "rateOverTime": 5.0,
-                "shape": 0,
-                "speed": 10.0,
-                "startScale": 0.20000000298023224,
-                "texturePath": "Texture/Particle/T_Particle_Light.dds"
-            },
-            "rotation": {
-                "w": 0.799734049378586,
-                "x": -0.6003544371990011,
-                "y": 0.0,
-                "z": 0.0
-            },
-            "scale": {
-                "x": 1.0,
-                "y": 0.9999731779098511,
-                "z": 0.9999725222587585
-            },
-            "targetUnit": "SKM_Frame1"
-        },
-        {
             "name": "PI_57",
             "offsetPos": {
                 "x": 0.0,
@@ -1314,6 +1319,7 @@
                 "duration": 5.0,
                 "endScale": 1.0,
                 "interval": 5.0,
+                "isApplyRoot": true,
                 "isLoop": false,
                 "lifeTime": 2.0,
                 "maxParticle": 12,
@@ -1341,6 +1347,46 @@
             "targetUnit": "SKM_Frame2"
         },
         {
+            "name": "PI_52",
+            "offsetPos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "particleData": {
+                "angle": 6.0,
+                "burstsCount": 30,
+                "duration": 5.0,
+                "endScale": 0.0,
+                "interval": 5.0,
+                "isApplyRoot": true,
+                "isLoop": false,
+                "lifeTime": 2.0,
+                "maxParticle": 16,
+                "name": "LiveParticle1",
+                "particleMode": 0,
+                "playAwake": true,
+                "radius": 1.0,
+                "rateOverTime": 5.0,
+                "shape": 0,
+                "speed": 6.0,
+                "startScale": 0.5,
+                "texturePath": "Texture/Particle/BombParticle.dds"
+            },
+            "rotation": {
+                "w": 1.0,
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "targetUnit": "SKM_Frame2"
+        },
+        {
             "name": "PI_50",
             "offsetPos": {
                 "x": 0.0,
@@ -1353,6 +1399,7 @@
                 "duration": 0.0,
                 "endScale": 2.0,
                 "interval": 0.5,
+                "isApplyRoot": true,
                 "isLoop": false,
                 "lifeTime": 0.699999988079071,
                 "maxParticle": 30,
@@ -1392,6 +1439,7 @@
                 "duration": 0.10000000149011612,
                 "endScale": 0.0,
                 "interval": 0.0,
+                "isApplyRoot": true,
                 "isLoop": false,
                 "lifeTime": 0.5,
                 "maxParticle": 30,
@@ -1419,45 +1467,6 @@
             "targetUnit": "SKM_Frame2"
         },
         {
-            "name": "PI_52",
-            "offsetPos": {
-                "x": 0.0,
-                "y": 0.0,
-                "z": 0.0
-            },
-            "particleData": {
-                "angle": 6.0,
-                "burstsCount": 30,
-                "duration": 5.0,
-                "endScale": 0.0,
-                "interval": 5.0,
-                "isLoop": false,
-                "lifeTime": 2.0,
-                "maxParticle": 16,
-                "name": "LiveParticle1",
-                "particleMode": 0,
-                "playAwake": true,
-                "radius": 1.0,
-                "rateOverTime": 5.0,
-                "shape": 0,
-                "speed": 6.0,
-                "startScale": 0.5,
-                "texturePath": "Texture/Particle/BombParticle.dds"
-            },
-            "rotation": {
-                "w": 1.0,
-                "x": 0.0,
-                "y": 0.0,
-                "z": 0.0
-            },
-            "scale": {
-                "x": 1.0,
-                "y": 1.0,
-                "z": 1.0
-            },
-            "targetUnit": "SKM_Frame2"
-        },
-        {
             "name": "PI_56",
             "offsetPos": {
                 "x": 0.0,
@@ -1470,6 +1479,7 @@
                 "duration": 5.0,
                 "endScale": 1.0,
                 "interval": 5.0,
+                "isApplyRoot": true,
                 "isLoop": false,
                 "lifeTime": 4.0,
                 "maxParticle": 33,
@@ -1509,6 +1519,7 @@
                 "duration": 0.10000000149011612,
                 "endScale": 0.0,
                 "interval": 0.0,
+                "isApplyRoot": true,
                 "isLoop": false,
                 "lifeTime": 0.5,
                 "maxParticle": 13,
@@ -1536,6 +1547,86 @@
             "targetUnit": "SKM_Hansel"
         },
         {
+            "name": "PI_32",
+            "offsetPos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "particleData": {
+                "angle": 288.0,
+                "burstsCount": 30,
+                "duration": 0.10000000149011612,
+                "endScale": 0.0,
+                "interval": 0.0,
+                "isApplyRoot": true,
+                "isLoop": false,
+                "lifeTime": 0.800000011920929,
+                "maxParticle": 20,
+                "name": "DustExplodeParticle",
+                "particleMode": 1,
+                "playAwake": true,
+                "radius": 0.6000000238418579,
+                "rateOverTime": 10.0,
+                "shape": 0,
+                "speed": 12.0,
+                "startScale": 2.0,
+                "texturePath": "Texture/Particle/T_Particle_Cream.dds"
+            },
+            "rotation": {
+                "w": 1.0,
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "targetUnit": "SKM_Hansel"
+        },
+        {
+            "name": "PI_49",
+            "offsetPos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "particleData": {
+                "angle": 6.0,
+                "burstsCount": 30,
+                "duration": 5.0,
+                "endScale": 0.0,
+                "interval": 5.0,
+                "isApplyRoot": true,
+                "isLoop": false,
+                "lifeTime": 2.0,
+                "maxParticle": 5,
+                "name": "LiveParticle2",
+                "particleMode": 0,
+                "playAwake": true,
+                "radius": 1.0,
+                "rateOverTime": 5.0,
+                "shape": 0,
+                "speed": 3.0,
+                "startScale": 0.4000000059604645,
+                "texturePath": "Texture/Particle/T_Particle_Light.dds"
+            },
+            "rotation": {
+                "w": 1.0,
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "targetUnit": "SKM_Hansel"
+        },
+        {
             "name": "PI_31",
             "offsetPos": {
                 "x": 0.0,
@@ -1548,6 +1639,7 @@
                 "duration": 2.0,
                 "endScale": 0.0,
                 "interval": 0.5,
+                "isApplyRoot": true,
                 "isLoop": false,
                 "lifeTime": 0.699999988079071,
                 "maxParticle": 3,
@@ -1587,6 +1679,7 @@
                 "duration": 5.0,
                 "endScale": 0.20000000298023224,
                 "interval": 5.0,
+                "isApplyRoot": true,
                 "isLoop": false,
                 "lifeTime": 2.0,
                 "maxParticle": 5,
@@ -1614,84 +1707,6 @@
             "targetUnit": "SKM_Hansel"
         },
         {
-            "name": "PI_49",
-            "offsetPos": {
-                "x": 0.0,
-                "y": 0.0,
-                "z": 0.0
-            },
-            "particleData": {
-                "angle": 6.0,
-                "burstsCount": 30,
-                "duration": 5.0,
-                "endScale": 0.0,
-                "interval": 5.0,
-                "isLoop": false,
-                "lifeTime": 2.0,
-                "maxParticle": 5,
-                "name": "LiveParticle2",
-                "particleMode": 0,
-                "playAwake": true,
-                "radius": 1.0,
-                "rateOverTime": 5.0,
-                "shape": 0,
-                "speed": 3.0,
-                "startScale": 0.4000000059604645,
-                "texturePath": "Texture/Particle/T_Particle_Light.dds"
-            },
-            "rotation": {
-                "w": 1.0,
-                "x": 0.0,
-                "y": 0.0,
-                "z": 0.0
-            },
-            "scale": {
-                "x": 1.0,
-                "y": 1.0,
-                "z": 1.0
-            },
-            "targetUnit": "SKM_Hansel"
-        },
-        {
-            "name": "PI_32",
-            "offsetPos": {
-                "x": 0.0,
-                "y": 0.0,
-                "z": 0.0
-            },
-            "particleData": {
-                "angle": 288.0,
-                "burstsCount": 30,
-                "duration": 0.10000000149011612,
-                "endScale": 0.0,
-                "interval": 0.0,
-                "isLoop": false,
-                "lifeTime": 0.800000011920929,
-                "maxParticle": 20,
-                "name": "DustExplodeParticle",
-                "particleMode": 1,
-                "playAwake": true,
-                "radius": 0.6000000238418579,
-                "rateOverTime": 10.0,
-                "shape": 0,
-                "speed": 12.0,
-                "startScale": 2.0,
-                "texturePath": "Texture/Particle/T_Particle_Cream.dds"
-            },
-            "rotation": {
-                "w": 1.0,
-                "x": 0.0,
-                "y": 0.0,
-                "z": 0.0
-            },
-            "scale": {
-                "x": 1.0,
-                "y": 1.0,
-                "z": 1.0
-            },
-            "targetUnit": "SKM_Hansel"
-        },
-        {
             "name": "PI_27",
             "offsetPos": {
                 "x": 0.0,
@@ -1704,6 +1719,7 @@
                 "duration": 0.10000000149011612,
                 "endScale": 0.0,
                 "interval": 0.0,
+                "isApplyRoot": true,
                 "isLoop": false,
                 "lifeTime": 0.20000000298023224,
                 "maxParticle": 20,
@@ -1743,6 +1759,7 @@
                 "duration": 0.0,
                 "endScale": 6.0,
                 "interval": 0.5,
+                "isApplyRoot": true,
                 "isLoop": false,
                 "lifeTime": 1.0,
                 "maxParticle": 30,
@@ -1770,6 +1787,46 @@
             "targetUnit": "SKM_HeartQueen"
         },
         {
+            "name": "PI_23",
+            "offsetPos": {
+                "x": 0.4998781979084015,
+                "y": 1.644961953163147,
+                "z": 0.5416949391365051
+            },
+            "particleData": {
+                "angle": 38.0,
+                "burstsCount": 45,
+                "duration": 1.0,
+                "endScale": 0.0,
+                "interval": 0.5,
+                "isApplyRoot": true,
+                "isLoop": false,
+                "lifeTime": 0.5,
+                "maxParticle": 11,
+                "name": "WalkingParticle",
+                "particleMode": 1,
+                "playAwake": true,
+                "radius": 0.10000000149011612,
+                "rateOverTime": 10.0,
+                "shape": 0,
+                "speed": 7.0,
+                "startScale": 0.5,
+                "texturePath": "Texture/Particle/T_Particle_Tear.dds"
+            },
+            "rotation": {
+                "w": 0.8322356149890188,
+                "x": 0.020975866056803814,
+                "y": -0.10034399181646825,
+                "z": -0.5448623472890679
+            },
+            "scale": {
+                "x": 0.9999977946281433,
+                "y": 0.9999969005584717,
+                "z": 0.9999985694885254
+            },
+            "targetUnit": "SKM_HeartQueen"
+        },
+        {
             "name": "PI_48",
             "offsetPos": {
                 "x": 0.3356843590736389,
@@ -1782,6 +1839,7 @@
                 "duration": 2.0,
                 "endScale": 0.0,
                 "interval": 0.5,
+                "isApplyRoot": true,
                 "isLoop": false,
                 "lifeTime": 0.5,
                 "maxParticle": 20,
@@ -1809,6 +1867,46 @@
             "targetUnit": "SKM_HeartQueen"
         },
         {
+            "name": "PI_26",
+            "offsetPos": {
+                "x": 1.9687767028808594,
+                "y": 1.927398920059204,
+                "z": 0.0
+            },
+            "particleData": {
+                "angle": 31.0,
+                "burstsCount": 30,
+                "duration": 0.10000000149011612,
+                "endScale": 0.0,
+                "interval": 0.0,
+                "isApplyRoot": true,
+                "isLoop": false,
+                "lifeTime": 0.5,
+                "maxParticle": 22,
+                "name": "DustExplodeParticle",
+                "particleMode": 1,
+                "playAwake": true,
+                "radius": 0.6000000238418579,
+                "rateOverTime": 10.0,
+                "shape": 0,
+                "speed": 22.0,
+                "startScale": 0.30000001192092896,
+                "texturePath": "Texture/Particle/T_Particle_Blood1.dds"
+            },
+            "rotation": {
+                "w": 0.6656667219633022,
+                "x": -0.5229926361918202,
+                "y": 0.4652926840079613,
+                "z": -0.2585908659802765
+            },
+            "scale": {
+                "x": 0.9999996423721313,
+                "y": 0.9999995827674866,
+                "z": 0.9999985098838806
+            },
+            "targetUnit": "SKM_HeartQueen"
+        },
+        {
             "name": "PI_47",
             "offsetPos": {
                 "x": -0.9831360578536987,
@@ -1821,6 +1919,7 @@
                 "duration": 2.0,
                 "endScale": 0.0,
                 "interval": 0.5,
+                "isApplyRoot": true,
                 "isLoop": false,
                 "lifeTime": 0.5,
                 "maxParticle": 20,
@@ -1860,6 +1959,7 @@
                 "duration": 1.0,
                 "endScale": 0.0,
                 "interval": 0.0,
+                "isApplyRoot": true,
                 "isLoop": false,
                 "lifeTime": 0.5,
                 "maxParticle": 11,
@@ -1887,84 +1987,6 @@
             "targetUnit": "SKM_HeartQueen"
         },
         {
-            "name": "PI_23",
-            "offsetPos": {
-                "x": 0.4998781979084015,
-                "y": 1.644961953163147,
-                "z": 0.5416949391365051
-            },
-            "particleData": {
-                "angle": 38.0,
-                "burstsCount": 45,
-                "duration": 1.0,
-                "endScale": 0.0,
-                "interval": 0.5,
-                "isLoop": false,
-                "lifeTime": 0.5,
-                "maxParticle": 11,
-                "name": "WalkingParticle",
-                "particleMode": 1,
-                "playAwake": true,
-                "radius": 0.10000000149011612,
-                "rateOverTime": 10.0,
-                "shape": 0,
-                "speed": 7.0,
-                "startScale": 0.5,
-                "texturePath": "Texture/Particle/T_Particle_Tear.dds"
-            },
-            "rotation": {
-                "w": 0.8322356149890188,
-                "x": 0.020975866056803814,
-                "y": -0.10034399181646825,
-                "z": -0.5448623472890679
-            },
-            "scale": {
-                "x": 0.9999977946281433,
-                "y": 0.9999969005584717,
-                "z": 0.9999985694885254
-            },
-            "targetUnit": "SKM_HeartQueen"
-        },
-        {
-            "name": "PI_26",
-            "offsetPos": {
-                "x": 1.9687767028808594,
-                "y": 1.927398920059204,
-                "z": 0.0
-            },
-            "particleData": {
-                "angle": 31.0,
-                "burstsCount": 30,
-                "duration": 0.10000000149011612,
-                "endScale": 0.0,
-                "interval": 0.0,
-                "isLoop": false,
-                "lifeTime": 0.5,
-                "maxParticle": 22,
-                "name": "DustExplodeParticle",
-                "particleMode": 1,
-                "playAwake": true,
-                "radius": 0.6000000238418579,
-                "rateOverTime": 10.0,
-                "shape": 0,
-                "speed": 22.0,
-                "startScale": 0.30000001192092896,
-                "texturePath": "Texture/Particle/T_Particle_Blood1.dds"
-            },
-            "rotation": {
-                "w": 0.6656667219633022,
-                "x": -0.5229926361918202,
-                "y": 0.4652926840079613,
-                "z": -0.2585908659802765
-            },
-            "scale": {
-                "x": 0.9999996423721313,
-                "y": 0.9999995827674866,
-                "z": 0.9999985098838806
-            },
-            "targetUnit": "SKM_HeartQueen"
-        },
-        {
             "name": "PI_25",
             "offsetPos": {
                 "x": 0.49492383003234863,
@@ -1977,6 +1999,7 @@
                 "duration": 0.10000000149011612,
                 "endScale": 0.0,
                 "interval": 0.0,
+                "isApplyRoot": true,
                 "isLoop": false,
                 "lifeTime": 1.0,
                 "maxParticle": 20,
@@ -2004,45 +2027,6 @@
             "targetUnit": "SKM_HeartQueen"
         },
         {
-            "name": "PI_9",
-            "offsetPos": {
-                "x": -0.4819999933242798,
-                "y": 0.0,
-                "z": -3.1549999713897705
-            },
-            "particleData": {
-                "angle": 90.0,
-                "burstsCount": 18,
-                "duration": 0.10000000149011612,
-                "endScale": 2.0,
-                "interval": 0.0,
-                "isLoop": false,
-                "lifeTime": 1.0,
-                "maxParticle": 30,
-                "name": "DustParticle",
-                "particleMode": 1,
-                "playAwake": true,
-                "radius": 0.10000000149011612,
-                "rateOverTime": 10.0,
-                "shape": 0,
-                "speed": 4.0,
-                "startScale": 0.20000000298023224,
-                "texturePath": "Texture/Particle/Interactable_Dust.dds"
-            },
-            "rotation": {
-                "w": 1.0,
-                "x": 0.0,
-                "y": 0.0,
-                "z": 0.0
-            },
-            "scale": {
-                "x": 0.800000011920929,
-                "y": 0.800000011920929,
-                "z": 0.800000011920929
-            },
-            "targetUnit": "SKM_Monster1"
-        },
-        {
             "name": "PI_45",
             "offsetPos": {
                 "x": -0.0075625889003276825,
@@ -2055,6 +2039,7 @@
                 "duration": 5.0,
                 "endScale": 0.0,
                 "interval": 5.0,
+                "isApplyRoot": true,
                 "isLoop": false,
                 "lifeTime": 2.0,
                 "maxParticle": 9,
@@ -2082,6 +2067,46 @@
             "targetUnit": "SKM_Monster1"
         },
         {
+            "name": "PI_9",
+            "offsetPos": {
+                "x": -0.4819999933242798,
+                "y": 0.0,
+                "z": -3.1549999713897705
+            },
+            "particleData": {
+                "angle": 90.0,
+                "burstsCount": 18,
+                "duration": 0.10000000149011612,
+                "endScale": 2.0,
+                "interval": 0.0,
+                "isApplyRoot": true,
+                "isLoop": false,
+                "lifeTime": 1.0,
+                "maxParticle": 30,
+                "name": "DustParticle",
+                "particleMode": 1,
+                "playAwake": true,
+                "radius": 0.10000000149011612,
+                "rateOverTime": 10.0,
+                "shape": 0,
+                "speed": 4.0,
+                "startScale": 0.20000000298023224,
+                "texturePath": "Texture/Particle/Interactable_Dust.dds"
+            },
+            "rotation": {
+                "w": 1.0,
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.800000011920929,
+                "y": 0.800000011920929,
+                "z": 0.800000011920929
+            },
+            "targetUnit": "SKM_Monster1"
+        },
+        {
             "name": "PI_10",
             "offsetPos": {
                 "x": 0.0,
@@ -2094,6 +2119,7 @@
                 "duration": 0.10000000149011612,
                 "endScale": 4.0,
                 "interval": 0.5,
+                "isApplyRoot": true,
                 "isLoop": false,
                 "lifeTime": 0.800000011920929,
                 "maxParticle": 30,
@@ -2121,45 +2147,6 @@
             "targetUnit": "SKM_Monster1"
         },
         {
-            "name": "PI_46",
-            "offsetPos": {
-                "x": 0.0,
-                "y": 3.6668338775634766,
-                "z": 0.0
-            },
-            "particleData": {
-                "angle": 45.0,
-                "burstsCount": 30,
-                "duration": 0.10000000149011612,
-                "endScale": 0.0,
-                "interval": 0.0,
-                "isLoop": false,
-                "lifeTime": 0.5,
-                "maxParticle": 20,
-                "name": "DustExplodeParticle",
-                "particleMode": 1,
-                "playAwake": true,
-                "radius": 0.6000000238418579,
-                "rateOverTime": 10.0,
-                "shape": 0,
-                "speed": 13.0,
-                "startScale": 0.4000000059604645,
-                "texturePath": "Texture/Particle/BombParticle.dds"
-            },
-            "rotation": {
-                "w": 0.9499545549257125,
-                "x": -0.2629055674509489,
-                "y": 0.16683012457540464,
-                "z": 0.025193564919263195
-            },
-            "scale": {
-                "x": 0.9999986290931702,
-                "y": 0.9999995231628418,
-                "z": 0.9999998211860657
-            },
-            "targetUnit": "SKM_Monster1"
-        },
-        {
             "name": "PI_7",
             "offsetPos": {
                 "x": -0.4815570116043091,
@@ -2172,6 +2159,7 @@
                 "duration": 0.10000000149011612,
                 "endScale": 0.0,
                 "interval": 0.0,
+                "isApplyRoot": true,
                 "isLoop": false,
                 "lifeTime": 0.20000000298023224,
                 "maxParticle": 39,
@@ -2199,6 +2187,86 @@
             "targetUnit": "SKM_Monster1"
         },
         {
+            "name": "PI_46",
+            "offsetPos": {
+                "x": 0.0,
+                "y": 3.6668338775634766,
+                "z": 0.0
+            },
+            "particleData": {
+                "angle": 45.0,
+                "burstsCount": 30,
+                "duration": 0.10000000149011612,
+                "endScale": 0.0,
+                "interval": 0.0,
+                "isApplyRoot": true,
+                "isLoop": false,
+                "lifeTime": 0.5,
+                "maxParticle": 20,
+                "name": "DustExplodeParticle",
+                "particleMode": 1,
+                "playAwake": true,
+                "radius": 0.6000000238418579,
+                "rateOverTime": 10.0,
+                "shape": 0,
+                "speed": 13.0,
+                "startScale": 0.4000000059604645,
+                "texturePath": "Texture/Particle/BombParticle.dds"
+            },
+            "rotation": {
+                "w": 0.9499545549257125,
+                "x": -0.2629055674509489,
+                "y": 0.16683012457540464,
+                "z": 0.025193564919263195
+            },
+            "scale": {
+                "x": 0.9999986290931702,
+                "y": 0.9999995231628418,
+                "z": 0.9999998211860657
+            },
+            "targetUnit": "SKM_Monster1"
+        },
+        {
+            "name": "PI_43",
+            "offsetPos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "particleData": {
+                "angle": 45.0,
+                "burstsCount": 30,
+                "duration": 0.10000000149011612,
+                "endScale": 0.0,
+                "interval": 0.0,
+                "isApplyRoot": true,
+                "isLoop": false,
+                "lifeTime": 0.5,
+                "maxParticle": 20,
+                "name": "DustExplodeParticle",
+                "particleMode": 1,
+                "playAwake": true,
+                "radius": 0.6000000238418579,
+                "rateOverTime": 10.0,
+                "shape": 0,
+                "speed": 13.0,
+                "startScale": 0.4000000059604645,
+                "texturePath": "Texture/Particle/BombParticle.dds"
+            },
+            "rotation": {
+                "w": 1.0,
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "targetUnit": "SKM_Monster2"
+        },
+        {
             "name": "PI_12",
             "offsetPos": {
                 "x": 0.0,
@@ -2211,6 +2279,7 @@
                 "duration": 0.10000000149011612,
                 "endScale": 0.0,
                 "interval": 0.0,
+                "isApplyRoot": true,
                 "isLoop": false,
                 "lifeTime": 1.0,
                 "maxParticle": 20,
@@ -2250,6 +2319,7 @@
                 "duration": 0.10000000149011612,
                 "endScale": 4.0,
                 "interval": 0.10000000149011612,
+                "isApplyRoot": true,
                 "isLoop": false,
                 "lifeTime": 1.0,
                 "maxParticle": 30,
@@ -2277,45 +2347,6 @@
             "targetUnit": "SKM_Monster2"
         },
         {
-            "name": "PI_43",
-            "offsetPos": {
-                "x": 0.0,
-                "y": 0.0,
-                "z": 0.0
-            },
-            "particleData": {
-                "angle": 45.0,
-                "burstsCount": 30,
-                "duration": 0.10000000149011612,
-                "endScale": 0.0,
-                "interval": 0.0,
-                "isLoop": false,
-                "lifeTime": 0.5,
-                "maxParticle": 20,
-                "name": "DustExplodeParticle",
-                "particleMode": 1,
-                "playAwake": true,
-                "radius": 0.6000000238418579,
-                "rateOverTime": 10.0,
-                "shape": 0,
-                "speed": 13.0,
-                "startScale": 0.4000000059604645,
-                "texturePath": "Texture/Particle/BombParticle.dds"
-            },
-            "rotation": {
-                "w": 1.0,
-                "x": 0.0,
-                "y": 0.0,
-                "z": 0.0
-            },
-            "scale": {
-                "x": 1.0,
-                "y": 1.0,
-                "z": 1.0
-            },
-            "targetUnit": "SKM_Monster2"
-        },
-        {
             "name": "PI_44",
             "offsetPos": {
                 "x": 1.1426180601119995,
@@ -2328,6 +2359,7 @@
                 "duration": 5.0,
                 "endScale": 0.0,
                 "interval": 5.0,
+                "isApplyRoot": true,
                 "isLoop": false,
                 "lifeTime": 2.0,
                 "maxParticle": 12,
@@ -2355,41 +2387,42 @@
             "targetUnit": "SKM_Monster2"
         },
         {
-            "name": "PI_15",
+            "name": "PI_42",
             "offsetPos": {
                 "x": 0.0,
                 "y": 0.0,
                 "z": 0.0
             },
             "particleData": {
-                "angle": 45.0,
+                "angle": 6.0,
                 "burstsCount": 30,
-                "duration": 0.10000000149011612,
-                "endScale": 0.0,
-                "interval": 0.0,
+                "duration": 5.0,
+                "endScale": 0.20000000298023224,
+                "interval": 5.0,
+                "isApplyRoot": true,
                 "isLoop": false,
-                "lifeTime": 1.0,
-                "maxParticle": 20,
-                "name": "DustExplodeParticle",
-                "particleMode": 1,
+                "lifeTime": 2.0,
+                "maxParticle": 5,
+                "name": "LiveParticle2",
+                "particleMode": 0,
                 "playAwake": true,
-                "radius": 0.6000000238418579,
-                "rateOverTime": 10.0,
+                "radius": 1.0,
+                "rateOverTime": 5.0,
                 "shape": 0,
-                "speed": 10.0,
-                "startScale": 0.20000000298023224,
-                "texturePath": "Texture/Particle/T_Particle_Dust2.dds"
+                "speed": 3.0,
+                "startScale": 0.5,
+                "texturePath": "Texture/Particle/T_Particle_Light.dds"
             },
             "rotation": {
-                "w": 0.8289961699452231,
-                "x": 0.5592542804629669,
+                "w": 1.0,
+                "x": 0.0,
                 "y": 0.0,
                 "z": 0.0
             },
             "scale": {
                 "x": 1.0,
-                "y": 0.9999996423721313,
-                "z": 0.999999463558197
+                "y": 1.0,
+                "z": 1.0
             },
             "targetUnit": "SKM_Robin"
         },
@@ -2406,6 +2439,7 @@
                 "duration": 2.0,
                 "endScale": 0.0,
                 "interval": 0.5,
+                "isApplyRoot": true,
                 "isLoop": false,
                 "lifeTime": 1.0,
                 "maxParticle": 20,
@@ -2433,123 +2467,6 @@
             "targetUnit": "SKM_Robin"
         },
         {
-            "name": "PI_17",
-            "offsetPos": {
-                "x": 0.0,
-                "y": 0.30000001192092896,
-                "z": 1.0
-            },
-            "particleData": {
-                "angle": 2.0,
-                "burstsCount": 12,
-                "duration": 5.0,
-                "endScale": 0.0,
-                "interval": 0.5,
-                "isLoop": false,
-                "lifeTime": 1.0,
-                "maxParticle": 4,
-                "name": "WalkingParticle",
-                "particleMode": 1,
-                "playAwake": true,
-                "radius": 0.10000000149011612,
-                "rateOverTime": 10.0,
-                "shape": 0,
-                "speed": 3.0,
-                "startScale": 0.5,
-                "texturePath": "Texture/Particle/T_Particle_Light.dds"
-            },
-            "rotation": {
-                "w": 0.7069542775437578,
-                "x": 0.7072592519455531,
-                "y": 0.0,
-                "z": 0.0
-            },
-            "scale": {
-                "x": 1.0,
-                "y": 0.9999983310699463,
-                "z": 0.9999983310699463
-            },
-            "targetUnit": "SKM_Robin"
-        },
-        {
-            "name": "PI_42",
-            "offsetPos": {
-                "x": 0.0,
-                "y": 0.0,
-                "z": 0.0
-            },
-            "particleData": {
-                "angle": 6.0,
-                "burstsCount": 30,
-                "duration": 5.0,
-                "endScale": 0.20000000298023224,
-                "interval": 5.0,
-                "isLoop": false,
-                "lifeTime": 2.0,
-                "maxParticle": 5,
-                "name": "LiveParticle2",
-                "particleMode": 0,
-                "playAwake": true,
-                "radius": 1.0,
-                "rateOverTime": 5.0,
-                "shape": 0,
-                "speed": 3.0,
-                "startScale": 0.5,
-                "texturePath": "Texture/Particle/T_Particle_Light.dds"
-            },
-            "rotation": {
-                "w": 1.0,
-                "x": 0.0,
-                "y": 0.0,
-                "z": 0.0
-            },
-            "scale": {
-                "x": 1.0,
-                "y": 1.0,
-                "z": 1.0
-            },
-            "targetUnit": "SKM_Robin"
-        },
-        {
-            "name": "PI_14",
-            "offsetPos": {
-                "x": -0.06528031826019287,
-                "y": 1.2382093667984009,
-                "z": -2.184309244155884
-            },
-            "particleData": {
-                "angle": 45.0,
-                "burstsCount": 61,
-                "duration": 0.10000000149011612,
-                "endScale": 0.0,
-                "interval": 0.0,
-                "isLoop": false,
-                "lifeTime": 1.0,
-                "maxParticle": 20,
-                "name": "DustExplodeParticle",
-                "particleMode": 1,
-                "playAwake": true,
-                "radius": 0.6000000238418579,
-                "rateOverTime": 10.0,
-                "shape": 0,
-                "speed": 10.0,
-                "startScale": 0.20000000298023224,
-                "texturePath": "Texture/Particle/T_Particle_Blood1.dds"
-            },
-            "rotation": {
-                "w": 0.7115739043322459,
-                "x": -0.702611257149616,
-                "y": 0.0,
-                "z": 0.0
-            },
-            "scale": {
-                "x": 1.0,
-                "y": 0.9999983310699463,
-                "z": 0.9999984502792358
-            },
-            "targetUnit": "SKM_Robin"
-        },
-        {
             "name": "PI_37",
             "offsetPos": {
                 "x": 0.0,
@@ -2562,6 +2479,7 @@
                 "duration": 5.0,
                 "endScale": 0.800000011920929,
                 "interval": 5.0,
+                "isApplyRoot": true,
                 "isLoop": false,
                 "lifeTime": 2.0,
                 "maxParticle": 9,
@@ -2589,43 +2507,124 @@
             "targetUnit": "SKM_Robin"
         },
         {
-            "name": "PI_4",
+            "name": "PI_15",
             "offsetPos": {
-                "x": 0.4000000059604645,
-                "y": 2.200000047683716,
+                "x": 0.0,
+                "y": 0.0,
                 "z": 0.0
             },
             "particleData": {
-                "angle": 30.0,
-                "burstsCount": 1,
+                "angle": 45.0,
+                "burstsCount": 30,
                 "duration": 0.10000000149011612,
-                "endScale": 0.800000011920929,
-                "interval": 0.10000000149011612,
+                "endScale": 0.0,
+                "interval": 0.0,
+                "isApplyRoot": true,
                 "isLoop": false,
-                "lifeTime": 0.699999988079071,
-                "maxParticle": 5,
-                "name": "NoteParticle1",
+                "lifeTime": 1.0,
+                "maxParticle": 20,
+                "name": "DustExplodeParticle",
                 "particleMode": 1,
                 "playAwake": true,
-                "radius": 0.009999999776482582,
+                "radius": 0.6000000238418579,
                 "rateOverTime": 10.0,
                 "shape": 0,
-                "speed": 6.0,
-                "startScale": 0.30000001192092896,
-                "texturePath": "Texture/Particle/T_Particle_Note.dds"
+                "speed": 10.0,
+                "startScale": 0.20000000298023224,
+                "texturePath": "Texture/Particle/T_Particle_Dust2.dds"
             },
             "rotation": {
-                "w": 1.0,
-                "x": 0.0,
+                "w": 0.8289961699452231,
+                "x": 0.5592542804629669,
                 "y": 0.0,
                 "z": 0.0
             },
             "scale": {
                 "x": 1.0,
-                "y": 1.0,
+                "y": 0.9999996423721313,
+                "z": 0.999999463558197
+            },
+            "targetUnit": "SKM_Robin"
+        },
+        {
+            "name": "PI_14",
+            "offsetPos": {
+                "x": -0.06528031826019287,
+                "y": 1.2382093667984009,
+                "z": -2.184309244155884
+            },
+            "particleData": {
+                "angle": 45.0,
+                "burstsCount": 61,
+                "duration": 0.10000000149011612,
+                "endScale": 0.0,
+                "interval": 0.0,
+                "isApplyRoot": true,
+                "isLoop": false,
+                "lifeTime": 1.0,
+                "maxParticle": 20,
+                "name": "DustExplodeParticle",
+                "particleMode": 1,
+                "playAwake": true,
+                "radius": 0.6000000238418579,
+                "rateOverTime": 10.0,
+                "shape": 0,
+                "speed": 10.0,
+                "startScale": 0.20000000298023224,
+                "texturePath": "Texture/Particle/T_Particle_Blood1.dds"
+            },
+            "rotation": {
+                "w": 0.7115739043322459,
+                "x": -0.702611257149616,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 0.9999983310699463,
+                "z": 0.9999984502792358
+            },
+            "targetUnit": "SKM_Robin"
+        },
+        {
+            "name": "PI_17",
+            "offsetPos": {
+                "x": 0.0,
+                "y": 0.30000001192092896,
                 "z": 1.0
             },
-            "targetUnit": "SKM_Ursula"
+            "particleData": {
+                "angle": 2.0,
+                "burstsCount": 12,
+                "duration": 5.0,
+                "endScale": 0.0,
+                "interval": 0.5,
+                "isApplyRoot": true,
+                "isLoop": false,
+                "lifeTime": 1.0,
+                "maxParticle": 4,
+                "name": "WalkingParticle",
+                "particleMode": 1,
+                "playAwake": true,
+                "radius": 0.10000000149011612,
+                "rateOverTime": 10.0,
+                "shape": 0,
+                "speed": 3.0,
+                "startScale": 0.5,
+                "texturePath": "Texture/Particle/T_Particle_Light.dds"
+            },
+            "rotation": {
+                "w": 0.7069542775437578,
+                "x": 0.7072592519455531,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 0.9999983310699463,
+                "z": 0.9999983310699463
+            },
+            "targetUnit": "SKM_Robin"
         },
         {
             "name": "PI_35",
@@ -2640,6 +2639,7 @@
                 "duration": 5.0,
                 "endScale": 0.20000000298023224,
                 "interval": 0.0,
+                "isApplyRoot": true,
                 "isLoop": false,
                 "lifeTime": 2.0,
                 "maxParticle": 9,
@@ -2667,34 +2667,115 @@
             "targetUnit": "SKM_Ursula"
         },
         {
-            "name": "PI_39",
+            "name": "PI_2",
             "offsetPos": {
-                "x": 0.0,
+                "x": 0.6000000238418579,
                 "y": 0.0,
                 "z": 0.0
             },
             "particleData": {
-                "angle": 6.0,
-                "burstsCount": 30,
-                "duration": 5.0,
-                "endScale": 0.20000000298023224,
-                "interval": 5.0,
+                "angle": 30.0,
+                "burstsCount": 1,
+                "duration": 0.10000000149011612,
+                "endScale": 0.699999988079071,
+                "interval": 0.0,
+                "isApplyRoot": true,
                 "isLoop": false,
-                "lifeTime": 2.0,
-                "maxParticle": 5,
-                "name": "LiveParticle2",
-                "particleMode": 0,
+                "lifeTime": 1.0,
+                "maxParticle": 10,
+                "name": "NoteParticle1",
+                "particleMode": 1,
                 "playAwake": true,
                 "radius": 1.0,
-                "rateOverTime": 5.0,
+                "rateOverTime": 10.0,
                 "shape": 0,
-                "speed": 3.0,
-                "startScale": 0.5,
-                "texturePath": "Texture/Particle/T_Particle_Light.dds"
+                "speed": 4.0,
+                "startScale": 0.30000001192092896,
+                "texturePath": "Texture/Particle/T_Particle_Note.dds"
             },
             "rotation": {
                 "w": 1.0,
                 "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "targetUnit": "SKM_Ursula"
+        },
+        {
+            "name": "PI_4",
+            "offsetPos": {
+                "x": 0.4000000059604645,
+                "y": 2.200000047683716,
+                "z": 0.0
+            },
+            "particleData": {
+                "angle": 30.0,
+                "burstsCount": 1,
+                "duration": 0.10000000149011612,
+                "endScale": 0.800000011920929,
+                "interval": 0.10000000149011612,
+                "isApplyRoot": true,
+                "isLoop": false,
+                "lifeTime": 0.699999988079071,
+                "maxParticle": 5,
+                "name": "NoteParticle1",
+                "particleMode": 1,
+                "playAwake": true,
+                "radius": 0.009999999776482582,
+                "rateOverTime": 10.0,
+                "shape": 0,
+                "speed": 6.0,
+                "startScale": 0.30000001192092896,
+                "texturePath": "Texture/Particle/T_Particle_Note.dds"
+            },
+            "rotation": {
+                "w": 1.0,
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "targetUnit": "SKM_Ursula"
+        },
+        {
+            "name": "PI_5",
+            "offsetPos": {
+                "x": 0.0,
+                "y": 3.0,
+                "z": -1.399999976158142
+            },
+            "particleData": {
+                "angle": 30.0,
+                "burstsCount": 1,
+                "duration": 0.10000000149011612,
+                "endScale": 0.5,
+                "interval": 0.10000000149011612,
+                "isApplyRoot": true,
+                "isLoop": false,
+                "lifeTime": 1.0,
+                "maxParticle": 2,
+                "name": "NoteParticle2",
+                "particleMode": 1,
+                "playAwake": true,
+                "radius": 0.009999999776482582,
+                "rateOverTime": 10.0,
+                "shape": 0,
+                "speed": 6.0,
+                "startScale": 0.30000001192092896,
+                "texturePath": "Texture/Particle/T_Particle_Note2.dds"
+            },
+            "rotation": {
+                "w": 0.8033374817222645,
+                "x": -0.595524046920131,
                 "y": 0.0,
                 "z": 0.0
             },
@@ -2718,6 +2799,7 @@
                 "duration": 0.10000000149011612,
                 "endScale": 0.0,
                 "interval": 0.5,
+                "isApplyRoot": true,
                 "isLoop": false,
                 "lifeTime": 1.0,
                 "maxParticle": 4,
@@ -2757,6 +2839,7 @@
                 "duration": 0.10000000149011612,
                 "endScale": 1.2000000476837158,
                 "interval": 0.0,
+                "isApplyRoot": true,
                 "isLoop": false,
                 "lifeTime": 0.699999988079071,
                 "maxParticle": 4,
@@ -2796,6 +2879,7 @@
                 "duration": 0.10000000149011612,
                 "endScale": 1.2000000476837158,
                 "interval": 0.0,
+                "isApplyRoot": true,
                 "isLoop": false,
                 "lifeTime": 0.699999988079071,
                 "maxParticle": 3,
@@ -2823,73 +2907,35 @@
             "targetUnit": "SKM_Ursula"
         },
         {
-            "name": "PI_2",
+            "name": "PI_39",
             "offsetPos": {
-                "x": 0.6000000238418579,
+                "x": 0.0,
                 "y": 0.0,
                 "z": 0.0
             },
             "particleData": {
-                "angle": 30.0,
-                "burstsCount": 1,
-                "duration": 0.10000000149011612,
-                "endScale": 0.699999988079071,
-                "interval": 0.0,
+                "angle": 6.0,
+                "burstsCount": 30,
+                "duration": 5.0,
+                "endScale": 0.20000000298023224,
+                "interval": 5.0,
+                "isApplyRoot": true,
                 "isLoop": false,
-                "lifeTime": 1.0,
-                "maxParticle": 10,
-                "name": "NoteParticle1",
-                "particleMode": 1,
+                "lifeTime": 2.0,
+                "maxParticle": 5,
+                "name": "LiveParticle2",
+                "particleMode": 0,
                 "playAwake": true,
                 "radius": 1.0,
-                "rateOverTime": 10.0,
+                "rateOverTime": 5.0,
                 "shape": 0,
-                "speed": 4.0,
-                "startScale": 0.30000001192092896,
-                "texturePath": "Texture/Particle/T_Particle_Note.dds"
+                "speed": 3.0,
+                "startScale": 0.5,
+                "texturePath": "Texture/Particle/T_Particle_Light.dds"
             },
             "rotation": {
                 "w": 1.0,
                 "x": 0.0,
-                "y": 0.0,
-                "z": 0.0
-            },
-            "scale": {
-                "x": 1.0,
-                "y": 1.0,
-                "z": 1.0
-            },
-            "targetUnit": "SKM_Ursula"
-        },
-        {
-            "name": "PI_5",
-            "offsetPos": {
-                "x": 0.0,
-                "y": 3.0,
-                "z": -1.399999976158142
-            },
-            "particleData": {
-                "angle": 30.0,
-                "burstsCount": 1,
-                "duration": 0.10000000149011612,
-                "endScale": 0.5,
-                "interval": 0.10000000149011612,
-                "isLoop": false,
-                "lifeTime": 1.0,
-                "maxParticle": 2,
-                "name": "NoteParticle2",
-                "particleMode": 1,
-                "playAwake": true,
-                "radius": 0.009999999776482582,
-                "rateOverTime": 10.0,
-                "shape": 0,
-                "speed": 6.0,
-                "startScale": 0.30000001192092896,
-                "texturePath": "Texture/Particle/T_Particle_Note2.dds"
-            },
-            "rotation": {
-                "w": 0.8033374817222645,
-                "x": -0.595524046920131,
                 "y": 0.0,
                 "z": 0.0
             },
@@ -2913,6 +2959,7 @@
                 "duration": 0.10000000149011612,
                 "endScale": 0.20000000298023224,
                 "interval": 0.0,
+                "isApplyRoot": true,
                 "isLoop": false,
                 "lifeTime": 0.5,
                 "maxParticle": 34,

@@ -4,9 +4,9 @@
 
 POD_EnemySpinAttackSkill EnemySpinAttackSkill::pod = POD_EnemySpinAttackSkill();
 
-const float eliteTotalTime = 5.2f;
-const float eliteSpinEndTime = 3.15f;
-const float eliteSpinStartTime = 2.07f;
+const float eliteTotalTime = 3.15f;
+const float eliteSpinEndTime = 2.06f;
+const float eliteSpinStartTime = 1.10f;
 const float eliteSpinAttackingTime = eliteSpinEndTime - eliteSpinStartTime;
 const float eliteAfterSpinDelay = eliteTotalTime - eliteSpinStartTime - eliteSpinAttackingTime;
 const float colliderEffectRatio = 10.0f * 0.7f;

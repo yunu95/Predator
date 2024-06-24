@@ -9,13 +9,21 @@
 
 namespace application
 {
+    namespace editor
+    {
+        class Module_ScriptEditor;
+        class UnitData;
+    }
+
     class Action_ForceUnitPaused
         : public IAction
     {
+        friend class editor::Module_ScriptEditor;
+
     public:
         DEFINE_ACTION(ForceUnitPaused)
 
-            Action_ForceUnitPaused() = default;
+        Action_ForceUnitPaused() = default;
 
         virtual CoroutineObject<void> DoAction() override;
         void SetTargetUnit(editor::UnitData* unit);
@@ -29,6 +37,7 @@ namespace application
 
     private:
         editor::UnitData* targetUnit = nullptr;
+        bool isEditing = false;
         bool withdrawRequest = false;
     };
 };
