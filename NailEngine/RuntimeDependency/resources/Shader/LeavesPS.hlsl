@@ -31,7 +31,7 @@ PS_OUT main(PixelIn input)
     
     float4 color = float4(0.5f, 0.5f, 0.5f, 1.f);
 
-    clip(OpacityMap.Sample(sam, input.uv).w - 1);
+    clip(OpacityMap.Sample(sam, input.uv).w - 1.f);
     
     color = AlbedoMap.Sample(sam, input.uv);
     color = pow(color, 2.2f);
