@@ -107,6 +107,7 @@ namespace application
     {
         return (targetUnit == nullptr) ? false : true;
     }
+
     void Action_ForceUnitPaused::ProcessObervationEvent(ObservationTarget* target, ObservationEvent event)
     {
         switch (event)

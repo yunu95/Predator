@@ -77,6 +77,7 @@ namespace application::editor::palette
 				pComp->SetEndScale(data->pod.particleData.endScale);
 				pComp->SetMaxParticle(data->pod.particleData.maxParticle);
 				pComp->SetPlayAwake(data->pod.particleData.playAwake);
+				pComp->SetIsApplyRoot(data->pod.particleData.isApplyRoot);
 				pComp->SetRadius(data->pod.particleData.radius);
 				pComp->SetAngle(data->pod.particleData.angle);
 

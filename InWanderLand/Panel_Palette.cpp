@@ -1589,6 +1589,7 @@ namespace application
                     }
 
                     imgui::Checkbox_2Col("Play Awake", particle->pod.particleData.playAwake);
+                    imgui::Checkbox_2Col("Is Apply Root", particle->pod.particleData.isApplyRoot);
 
                     switch (particle->pod.particleData.shape)
                     {

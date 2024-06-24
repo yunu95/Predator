@@ -9,9 +9,17 @@
 
 namespace application
 {
+    namespace editor
+    {
+        class Module_ScriptEditor;
+        class UnitData;
+    }
+
     class Action_ForceUnitUnpaused
         : public IAction
     {
+        friend class editor::Module_ScriptEditor;
+
     public:
         DEFINE_ACTION(ForceUnitUnpaused)
 
@@ -27,6 +35,7 @@ namespace application
 
     private:
         editor::UnitData* targetUnit = nullptr;
+        bool isEditing = false;
         bool withdrawRequest = false;
     };
 };
