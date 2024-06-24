@@ -96,7 +96,7 @@ namespace BossSummon
 	{
 		static auto eraseList = borrowedChess;
 		eraseList = borrowedChess;
-		for (auto [ptr, index] : borrowedChess)
+		for (auto [ptr, index] : eraseList)
 		{
 			switch (index)
 			{

@@ -8,3 +8,5 @@
 #include "Interactable_SpikeTrap.h"
 #include "Interactable_TrapSwitch.h"
 #include "Interactable_TrapArms.h"
+#include "Interactable_BarricadeBox.h"
+#include "Interactable_BarricadeSphere.h"
