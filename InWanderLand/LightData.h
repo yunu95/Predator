@@ -14,6 +14,14 @@
 #include "PodStructs.h"
 #include "GlobalConstant.h"
 
+namespace yunutyEngine
+{
+    namespace graphics
+    {
+        class DirectionalLight;
+    }
+}
+
 namespace application
 {
     namespace editor
@@ -64,6 +72,8 @@ namespace application
             friend class InstanceManager;
 
         public:
+            static yunutyEngine::graphics::DirectionalLight* GetPlaytimeDirectionalLight();
+
             virtual bool EnterDataFromTemplate() override;
             virtual ITemplateData* GetTemplateData() override;
             virtual bool SetTemplateData(const std::string& dataName) override;
@@ -89,6 +99,8 @@ namespace application
         private:
             static TemplateDataManager& templateDataManager;
             palette::LightEditorInstance* lightInstance{ nullptr };
+
+            static yunutyEngine::graphics::DirectionalLight* directionalLight;
 
             LightData();
             LightData(const std::string& name);

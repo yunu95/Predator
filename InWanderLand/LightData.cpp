@@ -10,6 +10,12 @@ namespace application
 	namespace editor
 	{
 		TemplateDataManager& LightData::templateDataManager = TemplateDataManager::GetSingletonInstance();
+		yunutyEngine::graphics::DirectionalLight* LightData::directionalLight = nullptr;
+
+		yunutyEngine::graphics::DirectionalLight* LightData::GetPlaytimeDirectionalLight()
+		{
+			return directionalLight;
+		}
 
 		bool LightData::EnterDataFromTemplate()
 		{
@@ -109,6 +115,7 @@ namespace application
 				case LightType::Directional:
 				{
 					auto light = comp->AddComponent<graphics::DirectionalLight>();
+					directionalLight = light;
 					//yunuGI::Color color{ 0.67 * 0.0015,0.65 * 0.0015,0.61 * 0.0015,1.f };
 					//yunuGI::Color color{ 0.0015,0.0015,0.0015,1.f };
 					//light->GetGI().SetLightDiffuseColor(color);

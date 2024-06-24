@@ -259,6 +259,7 @@ namespace application
 			pObj->SetEndScale(particleList[name]->endScale);
 			pObj->SetMaxParticle(particleList[name]->maxParticle);
 			pObj->SetPlayAwake(particleList[name]->playAwake);
+			pObj->SetIsApplyRoot(particleList[name]->isApplyRoot);
 			pObj->SetRadius(particleList[name]->radius);
 			pObj->SetAngle(particleList[name]->angle);
 
@@ -660,6 +661,7 @@ namespace application
 			pptr->SetEndScale(sptr->particleData.endScale);
 			pptr->SetMaxParticle(sptr->particleData.maxParticle);
 			pptr->SetPlayAwake(sptr->particleData.playAwake);
+			pptr->SetIsApplyRoot(sptr->particleData.isApplyRoot);
 			pptr->SetRadius(sptr->particleData.radius);
 			pptr->SetAngle(sptr->particleData.angle);
 

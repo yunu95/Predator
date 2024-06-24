@@ -47,6 +47,7 @@ namespace application
             float endScale = 1.f;
             unsigned int maxParticle = 500;
             bool playAwake = true;
+            bool isApplyRoot = true;
 
             /// Cone
             float radius = 1.f;

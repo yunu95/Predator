@@ -35,7 +35,7 @@ namespace application
 
     void Action_AwaitSkillTargeting::ImGui_DrawDataPopup(Action_AwaitSkillTargeting* data)
     {
-        if (ImGui::MenuItem("SetSkillType##ForTargetting"))
+        if (ImGui::MenuItem("SetSkillType##ForTargeting"))
         {
             editor::EditorLayer::SetInputControl(false);
             static POD_Enum<SkillType::Enum> skillType = POD_Enum<SkillType::Enum>();

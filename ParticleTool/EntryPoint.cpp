@@ -1729,6 +1729,7 @@ void ShowParticleEditor()
 			}
 
 			Checkbox_2Col("Play Awake", particleData->playAwake);
+			Checkbox_2Col("Is Apply Root", particleData->isApplyRoot);
 
 			switch (particleData->shape)
 			{
@@ -1831,6 +1832,7 @@ void ShowParticleInstanceEditor()
 			}
 
 			Checkbox_2Col("Play Awake", particleData.playAwake);
+			Checkbox_2Col("Is Apply Root", particleData.isApplyRoot);
 
 			switch (particleData.shape)
 			{
