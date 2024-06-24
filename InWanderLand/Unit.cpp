@@ -980,6 +980,7 @@ void Unit::Init(const application::editor::Unit_TemplateData* unitTemplateData)
         pr->SetEndScale(sptr->particleData.endScale);
         pr->SetMaxParticle(sptr->particleData.maxParticle);
         pr->SetPlayAwake(sptr->particleData.playAwake);
+        pr->SetIsApplyRoot(sptr->particleData.isApplyRoot);
         pr->SetRadius(sptr->particleData.radius);
         pr->SetAngle(sptr->particleData.angle);
 

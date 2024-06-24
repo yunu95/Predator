@@ -1149,6 +1149,74 @@ namespace application
                             epm.Return();
                         }
                     }
+
+                    if (epm.GetReturnPopupName() == "SetTargetUnit(ForcePause)")
+                    {
+                        ImGui::Begin("Unit Force Pause Popup(Set Unit)", &pop, flag);
+                        auto rect = ImGui::GetContentRegionAvail();
+                        auto size = ImGui::CalcTextSize("Please Setting Target Unit");
+                        imgui::ShiftCursorX((rect.x - size.x) / 2);
+                        imgui::ShiftCursorY((rect.y - size.y) / 2);
+                        ImGui::Text("Please Setting Target Unit");
+                        ImGui::BringWindowToFocusFront(ImGui::GetCurrentWindow());
+                        ImGui::End();
+
+                        pp.ChangeTab("Unit");
+
+                        auto data = epm.GetReturnPopupData<Action_ForceUnitPaused>();
+                        if (data->isEditing == false && pm.GetCurrentPalette() == &up)
+                        {
+                            data->isEditing = true;
+                            up.Reset();
+                        }
+
+                        if (data->isEditing == true && up.GetSelections().size() == 1)
+                        {
+                            data->SetTargetUnit(static_cast<UnitData*>(*up.GetSelections().begin()));
+                            data->isEditing = false;
+                            epm.Return();
+                        }
+
+                        if (!pop)
+                        {
+                            data->isEditing = false;
+                            epm.Return();
+                        }
+                    }
+
+                    if (epm.GetReturnPopupName() == "SetTargetUnit(ForceUnpause)")
+                    {
+                        ImGui::Begin("Unit Force Unpause Popup(Set Unit)", &pop, flag);
+                        auto rect = ImGui::GetContentRegionAvail();
+                        auto size = ImGui::CalcTextSize("Please Setting Target Unit");
+                        imgui::ShiftCursorX((rect.x - size.x) / 2);
+                        imgui::ShiftCursorY((rect.y - size.y) / 2);
+                        ImGui::Text("Please Setting Target Unit");
+                        ImGui::BringWindowToFocusFront(ImGui::GetCurrentWindow());
+                        ImGui::End();
+
+                        pp.ChangeTab("Unit");
+
+                        auto data = epm.GetReturnPopupData<Action_ForceUnitUnpaused>();
+                        if (data->isEditing == false && pm.GetCurrentPalette() == &up)
+                        {
+                            data->isEditing = true;
+                            up.Reset();
+                        }
+
+                        if (data->isEditing == true && up.GetSelections().size() == 1)
+                        {
+                            data->SetTargetUnit(static_cast<UnitData*>(*up.GetSelections().begin()));
+                            data->isEditing = false;
+                            epm.Return();
+                        }
+
+                        if (!pop)
+                        {
+                            data->isEditing = false;
+                            epm.Return();
+                        }
+                    }
                 }
             }
             ImGui::End();
