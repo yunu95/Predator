@@ -286,6 +286,10 @@ void RenderSystem::RenderShadow()
 
     for (auto& e : lightSet)
     {
+		if (e->IsActive() == false)
+		{
+			continue;
+		}
         if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Directional))
         {
             if (e->IsShadowCast())
@@ -295,14 +299,14 @@ void RenderSystem::RenderShadow()
                 wtm._41 = mainCamPos.x;
                 wtm._42 = mainCamPos.y;
                 wtm._43 = mainCamPos.z;
-                auto back = -static_cast<DirectionalLight*>(e)->GetDirection() * 150;
+                auto back = -static_cast<DirectionalLight*>(e)->GetDirection() * backOffset;
                 DirectX::SimpleMath::Vector3 temp;
                 temp = back + wtm.Translation();
                 wtm._41 = temp.x;
                 wtm._42 = temp.y;
                 wtm._43 = temp.z;
                 matrixBuffer.VTM = wtm.Invert();
-                matrixBuffer.PTM = DirectX::XMMatrixOrthographicLH(163.84 * 1.f, 163.84 * 1.f, 1.f, 300);
+                matrixBuffer.PTM = DirectX::XMMatrixOrthographicLH(smWidth, smHeight, 1.f, camFar);
                 NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX));
 
 
@@ -446,14 +450,14 @@ void RenderSystem::RenderLight()
             wtm._41 = mainCamPos.x;
             wtm._42 = mainCamPos.y;
             wtm._43 = mainCamPos.z;
-            auto back = -static_cast<DirectionalLight*>(e)->GetDirection() * 150;
+            auto back = -static_cast<DirectionalLight*>(e)->GetDirection() * backOffset;
             DirectX::SimpleMath::Vector3 temp;
             temp = back + wtm.Translation();
             wtm._41 = temp.x;
             wtm._42 = temp.y;
             wtm._43 = temp.z;
 
-            matrixBuffer.lightVP = wtm.Invert() * DirectX::XMMatrixOrthographicLH(163.84 * 1.f, 163.84 * 1.f, 1.f, 300);
+            matrixBuffer.lightVP = wtm.Invert() * DirectX::XMMatrixOrthographicLH(smWidth, smHeight, 1.f, camFar);
         }
         else if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Point))
         {

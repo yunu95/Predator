@@ -206,7 +206,7 @@ void wanderUtils::ChangeStageToTwo()
 {
 	graphics::Camera::GetMainCamera()->GetGI().SetClearColor(yunuGI::Color{ 0,0,0,1 });
 	yunutyEngine::graphics::Renderer::SingleInstance().SetLightMap(L"Stage2LightMap");
-	application::editor::LightData::GetPlaytimeDirectionalLight()->GetTransform()->SetWorldRotation(Vector3d::down);
+	application::editor::LightData::GetPlaytimeDirectionalLight()->GetTransform()->SetWorldRotation(Quaternion{ Vector3d{90,0,0} });
 }
 
 Vector3d wanderUtils::GetInitSpeedOfFreeFall(float duration, Vector3d startPos, Vector3d destPos)

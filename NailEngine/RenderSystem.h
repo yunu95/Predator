@@ -130,6 +130,11 @@ private:
     std::map<std::wstring, Microsoft::WRL::ComPtr<IDWriteTextFormat>> wFormatMap;
 
     DirectX::SimpleMath::Vector3 mainCamPos;
+
+    const float backOffset = 300;
+    const float smWidth = 163.38;
+    const float smHeight = 163.38;
+    const float camFar = 500;
 };
 
 

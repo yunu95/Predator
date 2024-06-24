@@ -2182,6 +2182,12 @@
     <ClInclude Include="Action_ForceUnitUnpaused.h">
       <Filter>Editor\ScriptSystem\2_Action\List\Action_ForceUnitUnpaused</Filter>
     </ClInclude>
+    <ClInclude Include="Interactable_BarricadeSphere.h">
+      <Filter>Contents_Refactored\InteractableComponent\InteractableList</Filter>
+    </ClInclude>
+    <ClInclude Include="Interactable_BarricadeBox.h">
+      <Filter>Contents_Refactored\InteractableComponent\InteractableList</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -3264,6 +3270,12 @@
     </ClCompile>
     <ClCompile Include="Action_ForceUnitUnpaused.cpp">
       <Filter>Editor\ScriptSystem\2_Action\List\Action_ForceUnitUnpaused</Filter>
+    </ClCompile>
+    <ClCompile Include="Interactable_BarricadeSphere.cpp">
+      <Filter>Contents_Refactored\InteractableComponent\InteractableList</Filter>
+    </ClCompile>
+    <ClCompile Include="Interactable_BarricadeBox.cpp">
+      <Filter>Contents_Refactored\InteractableComponent\InteractableList</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

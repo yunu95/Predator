@@ -29,7 +29,12 @@ protected:
     virtual void OnPause() override {}
     virtual void OnResume() override {}
 
+    std::weak_ptr<ManagedFBX> damagedVFX;
+    GameObject* fbxObject;
+
 public:
+    void ExplodeAtCurrentPosition();
+    coroutine::Coroutine ProjectileEffectCoroutine(std::weak_ptr<Unit> opponent);
     void SetDamageType(DamageType damageType);
     void SetSpeed(Vector3d startPosition, Vector3d endPosition, float projectileSpeed);
     friend ProjectilePool;

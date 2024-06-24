@@ -25,12 +25,12 @@ namespace application
 
                 GameObject* brushObj = nullptr;
 
-                if (name == "Trigger_Cube")
+                if (name == "Trigger_Cube" || name == "Barricade_Cube")
                 {
                     brushObj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Cube");
                     
                 }
-                else if (name == "Trigger_Sphere")
+                else if (name == "Trigger_Sphere" || name == "Barricade_Sphere")
                 {
                     brushObj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Sphere");
                 }
@@ -90,12 +90,12 @@ namespace application
 
                 GameObject* brushObj = nullptr;
 
-                if (fbxName == "Trigger_Cube")
+                if (fbxName == "Trigger_Cube" || fbxName == "Barricade_Cube")
                 {
                     brushObj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Cube");
 
                 }
-                else if (fbxName == "Trigger_Sphere")
+                else if (fbxName == "Trigger_Sphere" || fbxName == "Barricade_Sphere")
                 {
                     brushObj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX("Sphere");
                 }
