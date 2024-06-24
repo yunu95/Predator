@@ -705,8 +705,6 @@ void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
     onSkillTargeted[skillType]();
     if (state != State::Tactic)
     {
-        // 전술 모드가 아니라면 기존 로직 수행
-        SetMana(mana - RequiredManaForSkill(skillType));
         onSkillActivate[skillType]();
         switch (skillType)
         {
@@ -1234,12 +1232,19 @@ void PlayerController::EnableErrorUI(EnqueErrorType errorType)
 
 void PlayerController::OnPlayerUnitSkillActivation(std::weak_ptr<Unit> unit, std::weak_ptr<Skill> skill)
 {
-    if (dynamic_cast<RobinChargeSkill*>(skill.lock().get())) onSkillActivate[SkillType::ROBIN_Q]();
-    if (dynamic_cast<RobinTauntSkill*>(skill.lock().get())) onSkillActivate[SkillType::ROBIN_W]();
-    if (dynamic_cast<UrsulaBlindSkill*>(skill.lock().get())) onSkillActivate[SkillType::URSULA_Q]();
-    if (dynamic_cast<UrsulaParalysisSkill*>(skill.lock().get())) onSkillActivate[SkillType::URSULA_W]();
-    if (dynamic_cast<HanselChargeSkill*>(skill.lock().get())) onSkillActivate[SkillType::HANSEL_Q]();
-    if (dynamic_cast<HanselProjectileSkill*>(skill.lock().get())) onSkillActivate[SkillType::HANSEL_W]();
+    // 전술 모드가 아니라면 기존 로직 수행
+    SkillType::Enum skillType = SkillType::NONE;
+    if (dynamic_cast<RobinChargeSkill*>(skill.lock().get())) skillType = SkillType::ROBIN_Q;
+    if (dynamic_cast<RobinTauntSkill*>(skill.lock().get())) skillType = SkillType::ROBIN_W;
+    if (dynamic_cast<UrsulaBlindSkill*>(skill.lock().get())) skillType = SkillType::URSULA_Q;
+    if (dynamic_cast<UrsulaParalysisSkill*>(skill.lock().get())) skillType = SkillType::URSULA_W;
+    if (dynamic_cast<HanselChargeSkill*>(skill.lock().get())) skillType = SkillType::HANSEL_Q;
+    if (dynamic_cast<HanselProjectileSkill*>(skill.lock().get())) skillType = SkillType::HANSEL_W;
+    if (skillType != SkillType::NONE)
+    {
+        SetMana(mana - RequiredManaForSkill(skillType));
+        onSkillActivate[skillType]();
+    }
 }
 
 void PlayerController::OnPlayerUnitSkillExpiration(std::weak_ptr<Unit> unit, std::weak_ptr<Skill> skill)
