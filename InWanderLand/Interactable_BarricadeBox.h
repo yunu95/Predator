@@ -9,8 +9,6 @@ class Interactable_BarricadeBox
 	Quaternion initRotation = Quaternion();
 	Vector3d initScale = Vector3d(1, 1, 1);
 
-
-
 	virtual void SetDataFromEditorData(const application::editor::InteractableData& data) override;
 
 	virtual void Start() override;

@@ -14,6 +14,15 @@ coroutine::Coroutine UrsulaParalysisSkill::operator()()
     auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
     auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
     auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
+    auto animator = owner.lock()->GetAnimator();
+    auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill2);
+
+    owner.lock()->PlayAnimation(UnitAnimType::Skill2, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
+    while (animator.lock()->GetCurrentAnimation() != wanderResources::GetAnimation(owner.lock()->GetUnitTemplateData().pod.skinnedFBXName, UnitAnimType::Skill1))
+    {
+        co_await std::suspend_always{};
+    }
+
     effectColliderCoroutine = owner.lock()->StartCoroutine(SpawningFieldEffect(dynamic_pointer_cast<UrsulaParalysisSkill>(selfWeakPtr.lock())));
     effectColliderCoroutine.lock()->PushDestroyCallBack([this]()
         {
@@ -22,9 +31,6 @@ coroutine::Coroutine UrsulaParalysisSkill::operator()()
             UnitAcquisitionSphereColliderPool::Instance().Return(damageCollider);
             UnitAcquisitionSphereColliderPool::Instance().Return(knockBackCollider);
         });
-    owner.lock()->PlayAnimation(UnitAnimType::Skill2, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
-    auto animator = owner.lock()->GetAnimator();
-    auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill2);
     coroutine::ForSeconds forSeconds{ anim->GetDuration() };
 
     while (forSeconds.Tick())
