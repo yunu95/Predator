@@ -146,6 +146,7 @@ void PlayerController::OnContentsStop()
     UnlockCamFromRegion();
     Unit::SetPauseAll(false);
     Scene::getCurrentScene()->DestroyGameObject(cursorUnitDetector.lock()->GetGameObject());
+    currentCombo = 0;
 }
 
 void PlayerController::Update()
@@ -160,6 +161,7 @@ void PlayerController::Update()
     HandleManaRegen();
     HandleMouseHover();
     HandleUnitPickingCollider();
+    HandleComboState();
     static yunutyEngine::graphics::UIText* text_State{ nullptr };
     if (text_State == nullptr)
     {
@@ -348,18 +350,6 @@ void PlayerController::HandleState()
     {
         this->SetState(State::Peace);
     }
-
-    //if (BossController::Instance().GetBoss().lock())
-    //{
-    //	if (BossController::Instance().GetBoss().lock()->IsAlive())
-    //	{
-    //		this->SetState(State::Battle);
-    //	}
-    //	else
-    //	{
-    //		this->SetState(State::Peace);
-    //	}
-    //}
 }
 
 void PlayerController::HandleCamera()
@@ -370,13 +360,13 @@ void PlayerController::HandleCamera()
     if (!selectedCharacter.expired())
     {
         Vector3d selectedCharPos = selectedCharacter.lock()->GetTransform()->GetWorldPosition();
+        // 카메라가 지역 제한에 걸렸을 경우, targetPos를 지역 안으로 정의합니다.
+        if (camLockRegion)
+        {
+            selectedCharPos.x = std::clamp(selectedCharPos.x, camLockRegion->pod.x - camLockRegion->pod.width * 0.5, camLockRegion->pod.x + camLockRegion->pod.width * 0.5);
+            selectedCharPos.z = std::clamp(selectedCharPos.z, camLockRegion->pod.z - camLockRegion->pod.height * 0.5, camLockRegion->pod.z + camLockRegion->pod.height * 0.5);
+        }
         targetPos = selectedCharPos + camOffsetNorm * camZoomFactor;
-    }
-    // 카메라가 지역 제한에 걸렸을 경우, targetPos를 지역 안으로 정의합니다.
-    if (camLockRegion)
-    {
-        targetPos.x = std::clamp(targetPos.x, camLockRegion->pod.x - camLockRegion->pod.width * 0.5, camLockRegion->pod.x + camLockRegion->pod.width * 0.5);
-        targetPos.z = std::clamp(targetPos.z, camLockRegion->pod.z - camLockRegion->pod.height * 0.5, camLockRegion->pod.z + camLockRegion->pod.height * 0.5);
     }
     RTSCam::Instance().SetIdealPosition(targetPos);
     RTSCam::Instance().SetIdealRotation(camRotation);
@@ -481,6 +471,18 @@ void PlayerController::HandleUnitPickingCollider()
     transform->SetLocalScale({ 0.1,0.1, (nearPoint - farPoint).Magnitude() });
     transform->SetWorldPosition((nearPoint + farPoint) / 2.0);
     transform->SetWorldRotation(Quaternion::MakeWithForwardUp(farPoint - nearPoint, cam->GetTransform()->GetWorldRotation().Up()));
+}
+
+void PlayerController::HandleComboState()
+{
+    if (currentCombo > 0)
+    {
+        elapsedTimeSinceLastCombo += Time::GetDeltaTime();
+        if (elapsedTimeSinceLastCombo > GlobalConstant::GetSingletonInstance().pod.comboTimeLimit)
+        {
+            ResetCombo();
+        }
+    }
 }
 
 void PlayerController::SelectPlayerUnit(PlayerCharacterType::Enum charType)
@@ -938,6 +940,7 @@ void PlayerController::SetComboObjectives(const std::array<int, 3>& targetCombos
 void PlayerController::AddCombo()
 {
     currentCombo++;
+    elapsedTimeSinceLastCombo = 0;
     UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Combo_Number)->EnableElement();
     UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Combo_Text)->EnableElement();
     UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Combo_Number)->SetNumber(currentCombo);
@@ -1010,6 +1013,10 @@ Vector3d PlayerController::GetWorldCursorPosition()
 
 void PlayerController::ResetCombo()
 {
+    currentCombo = 0;
+    elapsedTimeSinceLastCombo = 0;
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Combo_Number)->DisableElement();
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Combo_Text)->DisableElement();
 }
 
 void PlayerController::SetManaFull()
