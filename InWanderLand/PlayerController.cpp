@@ -117,18 +117,6 @@ void PlayerController::OnContentsPlay()
     SetActive(true);
     cursorUnitDetector = Scene::getCurrentScene()->AddGameObject()->AddComponentAsWeakPtr<UnitAcquisitionBoxCollider>();
     AttachDebugMesh(cursorUnitDetector.lock()->GetGameObject(), DebugMeshType::Cube, yunuGI::Color::white());
-    skillCooltimeNumberUI[SkillType::ROBIN_Q] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_Q_Cooltime_Number);
-    skillCooltimeNumberUI[SkillType::ROBIN_W] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_W_Cooltime_Number);
-    skillCooltimeNumberUI[SkillType::URSULA_Q] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Ursula)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_Q_Cooltime_Number);
-    skillCooltimeNumberUI[SkillType::URSULA_W] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Ursula)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_W_Cooltime_Number);
-    skillCooltimeNumberUI[SkillType::HANSEL_Q] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_Q_Cooltime_Number);
-    skillCooltimeNumberUI[SkillType::HANSEL_W] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_W_Cooltime_Number);
-    skillCooltimeMaskUI[SkillType::ROBIN_Q] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_Q_Overlay);
-    skillCooltimeMaskUI[SkillType::ROBIN_W] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_W_Overlay);
-    skillCooltimeMaskUI[SkillType::URSULA_Q] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Ursula)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_Q_Overlay);
-    skillCooltimeMaskUI[SkillType::URSULA_W] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Ursula)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_W_Overlay);
-    skillCooltimeMaskUI[SkillType::HANSEL_Q] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_Q_Overlay);
-    skillCooltimeMaskUI[SkillType::HANSEL_W] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_W_Overlay);
     SetSkillPoints(0);
     SetManaFull();
     SetState(State::Peace);
@@ -171,8 +159,9 @@ void PlayerController::Update()
         text_State->GetTransform()->SetLocalScale(Vector3d{ 1200,500,0 });
         text_State->GetTransform()->SetLocalPosition(Vector3d{ 0,260,0 });
     }
-    if (!selectedDebugCharacter.expired())
+    if (GetUnitOnCursor())
     {
+        selectedDebugCharacter = GetUnitOnCursor()->GetWeakPtr<Unit>();
         wstringstream wsstream;
         wsstream << L"unitState : ";
         auto& activeStates = selectedDebugCharacter.lock()->GetBehaviourTree().GetActiveNodes();
@@ -190,7 +179,7 @@ void PlayerController::Update()
 
         text_State->GetGI().SetText(wsstream.str());
     }
-    text_State->SetActive(DebugGraphic::AreDebugGraphicsEnabled());
+    text_State->SetActive(GetUnitOnCursor() && DebugGraphic::AreDebugGraphicsEnabled());
 }
 
 void PlayerController::HandleByState()
@@ -846,6 +835,7 @@ void PlayerController::SetState(State::Enum newState)
     {
     case PlayerController::State::Tactic:
         UIManager::Instance().GetUIElementByEnum(UIEnumID::TacticModeIngameUI)->DisableElement();
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Vinetting)->EnableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_MenuButton)->EnableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Bottom_Layout)->EnableElement();
         break;
@@ -870,6 +860,7 @@ void PlayerController::SetState(State::Enum newState)
     case State::Tactic:
     {
         UIManager::Instance().GetUIElementByEnum(UIEnumID::TacticModeIngameUI)->EnableElement();
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Vinetting)->DisableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_MenuButton)->DisableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Bottom_Layout)->DisableElement();
         UnSelectSkill();
@@ -1066,8 +1057,7 @@ float PlayerController::GetMana()
 void PlayerController::SetCooltime(SkillType::Enum skillType, float cooltime)
 {
     skillCooltimeLeft[skillType] = std::fmax(0.0f, cooltime);
-    skillCooltimeNumberUI[skillType]->SetNumber(cooltime);
-    skillCooltimeMaskUI[skillType]->adjuster->SetTargetFloat(skillCooltimeLeft[skillType] / GetCooltimeForSkill(skillType));
+    PlayerPortraitUIs::ReflectCooltime(skillType, cooltime, GetCooltimeForSkill(skillType));
 }
 
 void PlayerController::SetCooltime(std::weak_ptr<Unit> unit)
@@ -1240,13 +1230,8 @@ void PlayerController::EnableErrorUI(EnqueErrorType errorType)
 void PlayerController::OnPlayerUnitSkillActivation(std::weak_ptr<Unit> unit, std::weak_ptr<Skill> skill)
 {
     // 전술 모드가 아니라면 기존 로직 수행
-    SkillType::Enum skillType = SkillType::NONE;
-    if (dynamic_cast<RobinChargeSkill*>(skill.lock().get())) skillType = SkillType::ROBIN_Q;
-    if (dynamic_cast<RobinTauntSkill*>(skill.lock().get())) skillType = SkillType::ROBIN_W;
-    if (dynamic_cast<UrsulaBlindSkill*>(skill.lock().get())) skillType = SkillType::URSULA_Q;
-    if (dynamic_cast<UrsulaParalysisSkill*>(skill.lock().get())) skillType = SkillType::URSULA_W;
-    if (dynamic_cast<HanselChargeSkill*>(skill.lock().get())) skillType = SkillType::HANSEL_Q;
-    if (dynamic_cast<HanselProjectileSkill*>(skill.lock().get())) skillType = SkillType::HANSEL_W;
+    SkillType::Enum skillType = skill.lock()->GetSkillType();
+    SetCooltime(skillType, GetCooltimeForSkill(skillType));
     if (skillType != SkillType::NONE)
     {
         SetMana(mana - RequiredManaForSkill(skillType));

@@ -771,6 +771,7 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
         {
             uiVideoPlayer->uiImage = element->imageComponent;
             uiVideoPlayer->videoPlayer1 = videoPlayers.at(wVideoPath1);
+            uiVideoPlayer->uiImage.lock()->GetGI().SetVideo(uiVideoPlayer->videoPlayer1.lock()->GetVideo().lock()->GetName());
             if (videoPlayers.contains(wVideoPath2))
             {
                 uiVideoPlayer->video1Duration = uiData.floats[JsonUIFloatType::videoDuration1];
