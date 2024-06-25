@@ -44,11 +44,19 @@ namespace application
                 virtual void ShowEditorInstance() override;
                 virtual void HideEditorInstance() override;
 
+                void ChangeGuideInstance();
+
+                void ShowParticleObject();
+                void HideParticleObject();
+
+                GameObject* GetParticleObject();
+
             protected:
                 virtual void OnHover() { PaletteInstance::OnHover(); }
                 virtual void OnHoverLeft() { PaletteInstance::OnHoverLeft(); }
 
             private:
+                bool isGuide = false;
                 GameObject* fbxObj;
                 GameObject* particleObj;
                 const application::editor::Particle_TemplateData* particleTemplateData;

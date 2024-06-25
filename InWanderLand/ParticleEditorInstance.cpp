@@ -4,6 +4,7 @@
 #include "ParticleData.h"
 #include "EditorResourceManager.h"
 #include "TemplateDataManager.h"
+#include "Application.h"
 
 namespace application::editor::palette
 {
@@ -25,6 +26,11 @@ namespace application::editor::palette
 	void ParticleEditorInstance::Init(const application::editor::ParticleData* particleData)
 	{
 		Init(particleData->pod.templateData);
+
+		if (particleData->pod.isGuide)
+		{
+			ChangeGuideInstance();
+		}
 	}
 
 	void ParticleEditorInstance::Init(const application::editor::Particle_TemplateData* particleTemplateData)
@@ -101,12 +107,67 @@ namespace application::editor::palette
 
 	void ParticleEditorInstance::ShowEditorInstance()
 	{
+		if (isGuide)
+		{
+			return;
+		}
+
 		GetGameObject()->SetSelfActive(true);
+		if (!Application::GetInstance().IsContentsPlaying())
+		{
+			if (particleObj)
+			{
+				auto ts = particleObj->GetTransform();
+				ts->SetWorldPosition(GetTransform()->GetWorldPosition());
+				ts->SetWorldRotation(GetTransform()->GetWorldRotation());
+				ts->SetWorldScale(GetTransform()->GetWorldScale());
+				particleObj->SetSelfActive(true);
+				particleObj->GetComponent<graphics::ParticleRenderer>()->Play();
+			}
+		}
 	}
 
 	void ParticleEditorInstance::HideEditorInstance()
 	{
+		if (isGuide)
+		{
+			return;
+		}
+
 		GetGameObject()->SetSelfActive(false);	
+	}
+
+	void ParticleEditorInstance::ChangeGuideInstance()
+	{
+		GetGameObject()->SetSelfActive(false);
+		if (particleObj)
+		{
+			particleObj->SetSelfActive(false);
+		}
+
+		isGuide = true;
+	}
+
+	void ParticleEditorInstance::ShowParticleObject()
+	{
+		if (particleObj)
+		{
+			particleObj->SetSelfActive(true);
+			particleObj->GetComponent<graphics::ParticleRenderer>()->Play();
+		}
+	}
+
+	void ParticleEditorInstance::HideParticleObject()
+	{
+		if (particleObj)
+		{
+			particleObj->SetSelfActive(false);
+		}
+	}
+
+	GameObject* ParticleEditorInstance::GetParticleObject()
+	{
+		return particleObj;
 	}
 }
 

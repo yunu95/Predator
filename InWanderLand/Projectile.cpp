@@ -10,11 +10,27 @@ void Projectile::Update()
     {
         if (!enemies.empty())
         {
-            if (!owner.lock()->referenceBlindness.BeingReferenced())
+            if (owner.lock()->referenceBlindness.BeingReferenced())
             {
-                (*enemies.begin())->Damaged(owner, damage, damageType, GetTransform());
+                fbxObject->SetSelfActive(true);
+                ProjectilePool::SingleInstance().Return(GetWeakPtr<Projectile>());
             }
-            ProjectilePool::SingleInstance().Return(GetWeakPtr<Projectile>());
+            else
+            {
+                (*enemies.begin())->Damaged(owner, damage, damageType);
+                fbxObject->SetSelfActive(false);
+                (*enemies.begin())->StartCoroutine(ProjectileEffectCoroutine((*enemies.begin())->GetWeakPtr<Unit>()))
+                    .lock()->PushDestroyCallBack([this]()
+                        {
+                            if (!damagedVFX.expired())
+                            {
+                                FBXPool::Instance().Return(damagedVFX);
+                            }
+                            fbxObject->SetSelfActive(true);
+                            ProjectilePool::SingleInstance().Return(GetWeakPtr<Projectile>());
+                        });
+                traveling = false;
+            }
             return;
         }
 
@@ -54,6 +70,64 @@ void Projectile::OnContentsStop()
 {
     ProjectilePool::SingleInstance().Return(GetWeakPtr<Projectile>());
 }
+
+void Projectile::ExplodeAtCurrentPosition()
+{
+    fbxObject->SetSelfActive(false);
+    StartCoroutine(ProjectileEffectCoroutine(std::weak_ptr<Unit>())).lock()->PushDestroyCallBack([this]()
+        {
+            if (!damagedVFX.expired())
+            {
+                FBXPool::Instance().Return(damagedVFX);
+            }
+            fbxObject->SetSelfActive(true);
+            ProjectilePool::SingleInstance().Return(GetWeakPtr<Projectile>());
+        });
+    traveling = false;
+}
+
+coroutine::Coroutine Projectile::ProjectileEffectCoroutine(std::weak_ptr<Unit> opponent)
+{
+    damagedVFX = wanderResources::GetVFX(owner.lock()->GetUnitTemplateData().pod.skinnedFBXName, UnitAnimType::Damaged);
+    co_await std::suspend_always{};
+    auto vfxAnimator = damagedVFX.lock()->AcquireVFXAnimator();
+    vfxAnimator.lock()->SetAutoActiveFalse();
+    vfxAnimator.lock()->Init();
+    vfxAnimator.lock()->Play();
+    //direction *= -1;
+    //damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos + direction * 2);
+    damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
+    auto temp = GetTransform()->GetLocalRotation();
+    auto euler = temp.Euler();
+    euler.y += -180;
+    damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion{ euler });
+    //damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(direction);
+    //damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldScale(GetTransform()->GetWorldScale());
+
+    if (opponent.expired())
+    {
+        while (!vfxAnimator.lock()->IsDone())
+        {
+            co_await std::suspend_always{};
+        }
+    }
+    else
+    {
+        auto relativePos = GetTransform()->GetWorldPosition() - opponent.lock()->GetTransform()->GetWorldPosition();
+        auto prevRot = opponent.lock()->QuaternionToEastAngle(opponent.lock()->GetTransform()->GetWorldRotation());
+
+        while (!vfxAnimator.lock()->IsDone())
+        {
+            damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldPosition(opponent.lock()->GetTransform()->GetWorldPosition() + relativePos);
+            //damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(damagedVFX.lock()->GetGameObject()->GetTransform()->GetWorldRotation() * Quaternion(Vector3d{ 0, prevRot - QuaternionToEastAngle(GetTransform()->GetWorldRotation()), 0}));
+            //prevRot = QuaternionToEastAngle(GetTransform()->GetWorldRotation());
+            co_await std::suspend_always{};
+        }
+    }
+
+    co_return;
+}
+
 void Projectile::SetDamageType(DamageType damageType)
 {
     this->damageType = damageType;

@@ -60,6 +60,11 @@ coroutine::Coroutine EnemyImpaleSkill::operator()()
 
     // 창이 생성되는 시간 오프셋은 유닛으로부터의 거리와 정비례한다.
     owner.lock()->PlayAnimation(UnitAnimType::Skill2);
+    while (animator.lock()->GetCurrentAnimation() != wanderResources::GetAnimation(owner.lock()->GetUnitTemplateData().pod.skinnedFBXName, UnitAnimType::Skill2))
+    {
+        co_await std::suspend_always{};
+    }
+
     effectCoroutine = owner.lock()->StartCoroutine(SpawningSkillffect(std::dynamic_pointer_cast<EnemyImpaleSkill>(selfWeakPtr.lock())));
     effectCoroutine.lock()->PushDestroyCallBack([this]()
         {
@@ -75,7 +80,6 @@ coroutine::Coroutine EnemyImpaleSkill::operator()()
     }
 
     wanderUtils::UnitCoroutine::ForSecondsFromUnit waitImpaleDuration{ owner, pod.impaleSkillDuration };
-    managingIndex = 0;
 
     for (auto& each : SpearsInfo())
     {
@@ -87,21 +91,28 @@ coroutine::Coroutine EnemyImpaleSkill::operator()()
 
         std::weak_ptr<ManagedFBX> fbx;
         std::weak_ptr<UnitAcquisitionSphereCollider> collider;
-        isInterrupted = false;
 
-        if (!isInterrupted)
-        {
-            auto spearAriseCoroutine = owner.lock()->StartCoroutine(SpearArise(std::dynamic_pointer_cast<EnemyImpaleSkill>(selfWeakPtr.lock()), fbx, collider, each.position));
-            spearAriseCoroutine.lock()->PushDestroyCallBack([this]()
+        auto spearAriseCoroutine = owner.lock()->StartCoroutine(SpearArise(std::dynamic_pointer_cast<EnemyImpaleSkill>(selfWeakPtr.lock()), fbx, collider, each.position));
+        spearAriseCoroutine.lock()->PushDestroyCallBack([this]()
+            {
+                if (!spearFbxQueue.empty())
                 {
-                    if (knockbackColliderVector.empty() && spearFbxVector.empty())
-                        return;
-                    UnitAcquisitionSphereColliderPool::Instance().Return(knockbackColliderVector[managingIndex]);
-                    FBXPool::Instance().Return(spearFbxVector[managingIndex]);
-                    managingIndex++;
-                });
-            spearAriseVector.push_back(spearAriseCoroutine);
-        }
+                    if (!spearFbxQueue.front().expired())
+                    {
+                        FBXPool::Instance().Return(spearFbxQueue.front());
+                    }
+                    spearFbxQueue.pop();
+                }
+
+                if (!knockbackColliderQueue.empty())
+                {
+                    if (!knockbackColliderQueue.front().expired())
+                    {
+                        UnitAcquisitionSphereColliderPool::Instance().Return(knockbackColliderQueue.front());
+                    }
+                    knockbackColliderQueue.pop();
+                }
+            });
     }
 
     wanderUtils::UnitCoroutine::ForSecondsFromUnit waitImpaleAfter{ owner, 2.0f };
@@ -117,19 +128,9 @@ coroutine::Coroutine EnemyImpaleSkill::operator()()
 
 void EnemyImpaleSkill::OnInterruption()
 {
-    isInterrupted = true;
-
     if (!effectCoroutine.expired())
     {
         owner.lock()->DeleteCoroutine(effectCoroutine);
-    }
-
-    for (auto e : spearAriseVector)
-    {
-        if (!e.expired())
-        {
-            owner.lock()->DeleteCoroutine(e);
-        }
     }
 }
 
@@ -164,9 +165,9 @@ coroutine::Coroutine EnemyImpaleSkill::SpearArise(std::weak_ptr<EnemyImpaleSkill
 {
     auto persistance = skill.lock();
     fbx = FBXPool::Instance().Borrow(wanderResources::GetFBXName(wanderResources::WanderFBX::IMPALING_SPIKE));
-    skill.lock()->spearFbxVector.push_back(fbx);
+    skill.lock()->spearFbxQueue.push(fbx);
     collider = UnitAcquisitionSphereColliderPool::Instance().Borrow(skill.lock()->owner);
-    skill.lock()->knockbackColliderVector.push_back(collider);
+    skill.lock()->knockbackColliderQueue.push(collider);
     auto forward = owner.lock()->GetTransform()->GetWorldRotation().Forward();
     auto right = owner.lock()->GetTransform()->GetWorldRotation().Right();
     auto worldPos = owner.lock()->GetTransform()->GetWorldPosition() + forward * pos.y + right * pos.x;

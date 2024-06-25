@@ -133,7 +133,11 @@ namespace application
             if (pod.templateData->pod.fBXName == "Trigger_Cube" || pod.templateData->pod.fBXName == "Trigger_Sphere")
             {
                 obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-            }            
+            }
+            else if (pod.templateData->pod.fBXName == "Barricade_Cube" || pod.templateData->pod.fBXName == "Barricade_Sphere")
+            {
+                obj = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
+            }
             else
             {
                 obj = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(pod.templateData->pod.fBXName);
@@ -155,6 +159,14 @@ namespace application
             else if (pod.templateData->pod.fBXName == "Trigger_Sphere")
             {
                 comp = obj->AddComponent<Interactable_TriggerSphere>();
+            }
+            else if (pod.templateData->pod.fBXName == "Barricade_Cube")
+            {
+                comp = obj->AddComponent<Interactable_BarricadeBox>();
+            }
+            else if (pod.templateData->pod.fBXName == "Barricade_Sphere")
+            {
+                comp = obj->AddComponent<Interactable_BarricadeSphere>();
             }
             else if (pod.templateData->pod.fBXName == "SM_Chess_Pawn")
             {

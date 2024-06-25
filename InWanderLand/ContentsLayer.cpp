@@ -174,25 +174,25 @@ void GraphicsTest()
 	}
 
 	{
-		auto obj3 = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Stage1_Floor_01");
+		auto obj3 = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Bush_001");
 	}
-	{
-		auto obj3 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
+	//{
+	//	auto obj3 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
 
-		auto obj = Scene::getCurrentScene()->AddGameObject();
-		auto particle = obj->AddComponent < yunutyEngine::graphics::ParticleRenderer >();
-		particle->SetIsApplyRoot(true);
-		particle->SetParticleShape(yunutyEngine::graphics::ParticleShape::Cone);
-		particle->SetParticleMode(yunutyEngine::graphics::ParticleMode::Bursts);
-		particle->SetTexture(_resourceManager->GetTexture(L"Texture/Particle/BombParticle.dds"));
-		particle->SetLoop(true);
-		particle->Play();
-		obj->SetParent(obj3);
+	//	auto obj = Scene::getCurrentScene()->AddGameObject();
+	//	auto particle = obj->AddComponent < yunutyEngine::graphics::ParticleRenderer >();
+	//	particle->SetIsApplyRoot(true);
+	//	particle->SetParticleShape(yunutyEngine::graphics::ParticleShape::Cone);
+	//	particle->SetParticleMode(yunutyEngine::graphics::ParticleMode::Bursts);
+	//	particle->SetTexture(_resourceManager->GetTexture(L"Texture/Particle/BombParticle.dds"));
+	//	particle->SetLoop(true);
+	//	particle->Play();
+	//	obj->SetParent(obj3);
 
-		auto obj2 = Scene::getCurrentScene()->AddGameObject();
-		auto test = obj2->AddComponent<TestComponent4>();
-		test->obj = obj3;
-	}
+	//	auto obj2 = Scene::getCurrentScene()->AddGameObject();
+	//	auto test = obj2->AddComponent<TestComponent4>();
+	//	test->obj = obj3;
+	//}
 
 	yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
 	//yunutyEngine::graphics::Renderer::SingleInstance().SetUseIBL(true);
@@ -364,10 +364,10 @@ void application::contents::ContentsLayer::PlayContents(ContentsPlayFlag playFla
 	SkillPreviewSystem::Instance().camObj = RTSCam::Instance().GetGameObject();
 	TacticModeSystem::Instance();
 
-	wanderUtils::ChangeStageToOne();
-
 	/// Playable 동작들을 일괄 처리할 부분입니다.
 	PlayableComponent::OnGameStartAll();
+
+	wanderUtils::ChangeStageToOne();
 }
 
 void application::contents::ContentsLayer::PauseContents()
@@ -407,6 +407,8 @@ void application::contents::ContentsLayer::StopContents(ContentsStopFlag stopFla
 
 	if (bool(stopFlag & ContentsStopFlag::ClearUI))
 		UIManager::Instance().Clear();
+
+	wanderUtils::ClearContentsCallbacks();
 }
 
 bool application::contents::ContentsLayer::IsPlayingContents() const

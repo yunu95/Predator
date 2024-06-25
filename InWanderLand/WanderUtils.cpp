@@ -189,6 +189,14 @@ coroutine::Coroutine wanderUtils::ResourceRecursiveLoader::LoadByCoroutine(strin
 	}
 }
 
+std::map<wanderUtils::Stage, std::vector<std::function<void()>>> contentsCallbackMap = std::map<wanderUtils::Stage, std::vector<std::function<void()>>>();
+wanderUtils::Stage currentStage = wanderUtils::Stage::One;
+
+wanderUtils::Stage wanderUtils::GetCurrentStage()
+{
+	return currentStage;
+}
+
 void wanderUtils::ChangeStageToOne()
 {
 	graphics::Camera::GetMainCamera()->GetGI().SetClearColor(yunuGI::Color{ 0.7686,0.8784,0.9451,1 });
@@ -200,13 +208,47 @@ void wanderUtils::ChangeStageToOne()
 	inGameRot.z = 0.11142046;
 	inGameRot.w = 0.492771924;
 	application::editor::LightData::GetPlaytimeDirectionalLight()->GetTransform()->SetWorldRotation(inGameRot);
+
+	if (contentsCallbackMap.contains(Stage::One))
+	{
+		for (auto& each : contentsCallbackMap[Stage::One])
+		{
+			each();
+		}
+	}
+
+	currentStage = wanderUtils::Stage::One;
 }
 
 void wanderUtils::ChangeStageToTwo()
 {
 	graphics::Camera::GetMainCamera()->GetGI().SetClearColor(yunuGI::Color{ 0,0,0,1 });
 	yunutyEngine::graphics::Renderer::SingleInstance().SetLightMap(L"Stage2LightMap");
-	application::editor::LightData::GetPlaytimeDirectionalLight()->GetTransform()->SetWorldRotation(Vector3d::down);
+	application::editor::LightData::GetPlaytimeDirectionalLight()->GetTransform()->SetWorldRotation(Quaternion{ Vector3d{90,0,0} });
+
+	if (contentsCallbackMap.contains(Stage::Two))
+	{
+		for (auto& each : contentsCallbackMap[Stage::Two])
+		{
+			each();
+		}
+	}
+
+	currentStage = wanderUtils::Stage::Two;
+}
+
+void wanderUtils::ClearContentsCallbacks()
+{
+	for (auto& [stage, callbacks] : contentsCallbackMap)
+	{
+		callbacks.clear();
+	}
+	contentsCallbackMap.clear();
+}
+
+void wanderUtils::PushStageCallback(Stage stage, const std::function<void()>& callback)
+{
+	contentsCallbackMap[stage].push_back(callback);
 }
 
 Vector3d wanderUtils::GetInitSpeedOfFreeFall(float duration, Vector3d startPos, Vector3d destPos)

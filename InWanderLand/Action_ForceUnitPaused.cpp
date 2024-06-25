@@ -81,26 +81,26 @@ namespace application
 
     bool Action_ForceUnitPaused::PreEncoding(json& data) const
     {
-        data["targetUnit"] = targetUnit ? UUID_To_String(targetUnit->GetUUID()) : "nullptr";
-        data["withdrawRequest"] = withdrawRequest;
         return true;
     }
 
     bool Action_ForceUnitPaused::PostEncoding(json& data) const
     {
+        data["targetUnit"] = targetUnit ? UUID_To_String(targetUnit->GetUUID()) : "nullptr";
+        data["withdrawRequest"] = withdrawRequest;
         return true;
     }
 
     bool Action_ForceUnitPaused::PreDecoding(const json& data)
     {
-        withdrawRequest = data["withdrawRequest"];
         return true;
     }
 
     bool Action_ForceUnitPaused::PostDecoding(const json& data)
     {
-        if (data.contains("targetUnit"))
-            SetTargetUnit(UUIDManager::GetSingletonInstance().GetPointerFromUUID<editor::UnitData*>(String_To_UUID(data["targetUnit"])));
+        withdrawRequest = data["withdrawRequest"];
+        //if (data.contains("targetUnit"))
+        SetTargetUnit(UUIDManager::GetSingletonInstance().GetPointerFromUUID<editor::UnitData*>(String_To_UUID(data["targetUnit"])));
         return true;
     }
     bool Action_ForceUnitPaused::IsValid()

@@ -59,9 +59,8 @@ PS_OUT main(PixelIn input)
     {
         //color = pow(color, 2.2f);
     }
-    //color.w = 0.8;
+    output.color.w = 0.7;
     //color.w = 1;
-    output.color = color;
     
     float3 viewNormal = input.normalV;
     if (UseTexture(useNormal) == 1)

@@ -1,3 +1,4 @@
+#include <ranges>
 #include "RenderSystem.h"
 
 #include "NailEngine.h"
@@ -285,6 +286,10 @@ void RenderSystem::RenderShadow()
 
     for (auto& e : lightSet)
     {
+		if (e->IsActive() == false)
+		{
+			continue;
+		}
         if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Directional))
         {
             if (e->IsShadowCast())
@@ -294,14 +299,14 @@ void RenderSystem::RenderShadow()
                 wtm._41 = mainCamPos.x;
                 wtm._42 = mainCamPos.y;
                 wtm._43 = mainCamPos.z;
-                auto back = -static_cast<DirectionalLight*>(e)->GetDirection() * 150;
+                auto back = -static_cast<DirectionalLight*>(e)->GetDirection() * backOffset;
                 DirectX::SimpleMath::Vector3 temp;
                 temp = back + wtm.Translation();
                 wtm._41 = temp.x;
                 wtm._42 = temp.y;
                 wtm._43 = temp.z;
                 matrixBuffer.VTM = wtm.Invert();
-                matrixBuffer.PTM = DirectX::XMMatrixOrthographicLH(163.84 * 1.f, 163.84 * 1.f, 1.f, 300);
+                matrixBuffer.PTM = DirectX::XMMatrixOrthographicLH(smWidth, smHeight, 1.f, camFar);
                 NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX));
 
 
@@ -445,14 +450,14 @@ void RenderSystem::RenderLight()
             wtm._41 = mainCamPos.x;
             wtm._42 = mainCamPos.y;
             wtm._43 = mainCamPos.z;
-            auto back = -static_cast<DirectionalLight*>(e)->GetDirection() * 150;
+            auto back = -static_cast<DirectionalLight*>(e)->GetDirection() * backOffset;
             DirectX::SimpleMath::Vector3 temp;
             temp = back + wtm.Translation();
             wtm._41 = temp.x;
             wtm._42 = temp.y;
             wtm._43 = temp.z;
 
-            matrixBuffer.lightVP = wtm.Invert() * DirectX::XMMatrixOrthographicLH(163.84 * 1.f, 163.84 * 1.f, 1.f, 300);
+            matrixBuffer.lightVP = wtm.Invert() * DirectX::XMMatrixOrthographicLH(smWidth, smHeight, 1.f, camFar);
         }
         else if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Point))
         {
@@ -570,25 +575,28 @@ void RenderSystem::RenderUI()
     //preProcessingUiImages.clear();
 
     this->spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, this->commonStates->NonPremultiplied());
-    for (auto& i : UIImageSet)
+    for (auto& eachVector : UIImageMap)
     {
-        auto uiImage = std::static_pointer_cast<UIImage>(i);
+        for (auto& i : eachVector.second)
+        {
+            auto uiImage = std::static_pointer_cast<UIImage>(i);
 
-        if (uiImage->IsActive() == false)
-        {
-            continue;
-        };
-        const auto& tm = uiImage->GetWorldTM();
-        auto primitiveTextureSize{ uiImage->GetPrimitiveTextureSize() };
-        float pivotX = primitiveTextureSize.x * uiImage->GetXPivot();
-        float pivotY = primitiveTextureSize.y * uiImage->GetYPivot();
-        DirectX::XMFLOAT2 scale = { uiImage->GetWidth() * uiImage->GetXScale(), uiImage->GetHeight() * uiImage->GetYScale() };
-        if (auto srv = uiImage->GetSRV())
-        {
-            scale.x /= primitiveTextureSize.x;
-            scale.y /= primitiveTextureSize.y;
-            this->spriteBatch->Draw(srv, DirectX::XMFLOAT2{ tm._41,tm._42 }, nullptr, uiImage->GetColor(), uiImage->GetRotation() * 3.14f / 180.0f, { pivotX ,pivotY }, scale, DirectX::SpriteEffects_None);
-            //this->spriteBatch->Draw(srv, DirectX::XMFLOAT2{ tm._41,tm._42 }, nullptr, uiImage->GetColor(), uiImage->GetRotation() * 3.14f / 180.0f, { pivotX ,pivotY }, scale, DirectX::SpriteEffects_None, (float)uiImage->GetLayer() / 123456789123.0f);
+            if (uiImage->IsActive() == false)
+            {
+                continue;
+            };
+            const auto& tm = uiImage->GetWorldTM();
+            auto primitiveTextureSize{ uiImage->GetPrimitiveTextureSize() };
+            float pivotX = primitiveTextureSize.x * uiImage->GetXPivot();
+            float pivotY = primitiveTextureSize.y * uiImage->GetYPivot();
+            DirectX::XMFLOAT2 scale = { uiImage->GetWidth() * uiImage->GetXScale(), uiImage->GetHeight() * uiImage->GetYScale() };
+            if (auto srv = uiImage->GetSRV())
+            {
+                scale.x /= primitiveTextureSize.x;
+                scale.y /= primitiveTextureSize.y;
+                this->spriteBatch->Draw(srv, DirectX::XMFLOAT2{ tm._41,tm._42 }, nullptr, uiImage->GetColor(), uiImage->GetRotation() * 3.14f / 180.0f, { pivotX ,pivotY }, scale, DirectX::SpriteEffects_None);
+                //this->spriteBatch->Draw(srv, DirectX::XMFLOAT2{ tm._41,tm._42 }, nullptr, uiImage->GetColor(), uiImage->GetRotation() * 3.14f / 180.0f, { pivotX ,pivotY }, scale, DirectX::SpriteEffects_None, (float)uiImage->GetLayer() / 123456789123.0f);
+            }
         }
     }
     this->spriteBatch->End();
@@ -770,18 +778,18 @@ void RenderSystem::PopSkinnedRenderableObject(nail::IRenderable* renderable)
     this->skinnedMeshRenderInfoMap.erase(renderable);
 }
 
-void RenderSystem::PushUIObject(std::shared_ptr<nail::IRenderable> renderable)
+void RenderSystem::PushUIObject(std::shared_ptr<UIImage> renderable)
 {
-    this->UIImageSet.insert(renderable);
+    UIImageMap[renderable->GetLayer()].push_back(renderable);
 }
 void RenderSystem::PushPreProcessingUIObject(UIImage* renderable)
 {
     preProcessingUiImages.insert(renderable);
 }
 
-void RenderSystem::PopUIObject(std::shared_ptr<nail::IRenderable> renderable)
+void RenderSystem::PopUIObject(std::shared_ptr<UIImage> renderable)
 {
-    this->UIImageSet.erase(renderable);
+    std::erase_if(UIImageMap[renderable->GetLayer()], [&](std::shared_ptr<UIImage>& e) { return e.get() == renderable.get(); });
 }
 
 void RenderSystem::PushTextObject(std::shared_ptr<nail::IRenderable> renderable)
@@ -794,20 +802,24 @@ void RenderSystem::PopTextObject(std::shared_ptr<nail::IRenderable> renderable)
     this->UITextSet.erase(renderable);
 }
 
-void RenderSystem::ReSortUIObject(int layer, std::shared_ptr<nail::IRenderable> ui)
-{
-    auto iter = this->UIImageSet.find(ui);
-
-    assert(iter != this->UIImageSet.end());
-
-    if (iter != this->UIImageSet.end())
-    {
-        std::static_pointer_cast<UIImage>(*iter)->layer = layer;
-        auto newUI = *iter;
-        this->UIImageSet.erase(iter);
-        this->UIImageSet.insert(newUI);
-    }
-}
+//void RenderSystem::ReSortUIObject(int layer, std::shared_ptr<UIImage> ui)
+//{
+//    PopUIObject(ui);
+//    PushUIObject(ui);
+//    int oldLayer = ui->layer;
+//
+//    auto iter = this->UIImageMap.find(ui);
+//
+//    assert(iter != this->UIImageSet.end());
+//
+//    if (iter != this->UIImageSet.end())
+//    {
+//        std::static_pointer_cast<UIImage>(*iter)->layer = layer;
+//        auto newUI = *iter;
+//        this->UIImageSet.erase(iter);
+//        this->UIImageSet.insert(newUI);
+//    }
+//}
 
 void RenderSystem::ReSortRenderInfo(nail::IRenderable* renderable, int index)
 {

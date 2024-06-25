@@ -355,6 +355,9 @@
     <Filter Include="yunutyEngine\ScopedDestroyer">
       <UniqueIdentifier>{374935f2-d0fb-4bb8-96a7-954e934f7006}</UniqueIdentifier>
     </Filter>
+    <Filter Include="yunutyEngine\NavigationSystem\NavigationFilterType">
+      <UniqueIdentifier>{1ab6833d-7a05-4a1c-b415-71c3a623f1f9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp">

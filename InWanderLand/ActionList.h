@@ -38,3 +38,4 @@
 #include "Action_ForceUnitUnpaused.h"
 #include "Action_SetZoomFactor.h"
 #include "Action_SetCamBidirectionalPath.h"
+#include "Action_Particle.h"

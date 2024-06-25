@@ -1432,6 +1432,11 @@ namespace application
                     int idx = 0;
                     for (auto& each : ParticleData::GetInstances())
                     {
+                        if (each->pod.isGuide)
+                        {
+                            continue;
+                        }
+
                         ImGui::PushID(("Particle Name" + each->pod.name).c_str() + idx);
                         if (ImGui::Selectable(each->pod.name.c_str(), palette::ParticlePalette::SingleInstance().GetSingleSelectedParticle() == each))
                         {

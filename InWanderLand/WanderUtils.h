@@ -8,12 +8,26 @@
 #include <future>
 #include <thread>
 #include <memory>
+#include <functional>
 
 using namespace application;
 namespace wanderUtils
 {
+	enum class Stage
+	{
+		One,
+		Two,
+		End
+	};
+
+	Stage GetCurrentStage();
+
 	void ChangeStageToOne();
 	void ChangeStageToTwo();
+
+	void ClearContentsCallbacks();
+	void PushStageCallback(Stage stage, const std::function<void()>& callback);
+
 	struct CompareDistance
 	{
 		Vector3d from;

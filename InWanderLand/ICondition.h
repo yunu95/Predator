@@ -27,6 +27,7 @@ namespace application
 		PlayerState,
 		OrnamentShow,
 		OrnamentHide,
+		Stage,
 	};
 
 	struct ICondition
