@@ -146,6 +146,8 @@ private:
     void ApplyTargetedEffect(std::weak_ptr<Unit> unit);
     void InitUnitMouseInteractionEffects();
     void EnableErrorUI(EnqueErrorType errorType);
+    void OnPlayerUnitSkillActivation(std::weak_ptr<Unit> unit, std::weak_ptr<Skill> skill);
+    void OnPlayerUnitSkillExpiration(std::weak_ptr<Unit> unit, std::weak_ptr<Skill> skill);
     std::vector<Vector3d>& ModifyPathForAttack(std::vector<Vector3d>& path);
     std::vector<Vector3d>& ModifyPathForSkill(std::vector<Vector3d>& path, SkillType::Enum skillType);
     int currentCombo{ 0 };

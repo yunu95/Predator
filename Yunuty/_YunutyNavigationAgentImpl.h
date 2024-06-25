@@ -25,7 +25,7 @@ namespace yunutyEngine
         }
         friend NavigationAgent;
     public:
-        int agentIdx{-1};
+        int agentIdx{ -1 };
         //const dtCrowdAgent* agent{ nullptr };
         dtCrowd* crowd{ nullptr };
         dtPolyRef targetRef;

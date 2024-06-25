@@ -175,6 +175,10 @@ public:
     DelegateCallback<void> onCreated;
     // 유닛이 회전을 끝냈을 때
     DelegateCallback<void> onRotationFinish;
+    // 유닛이 스킬 시전을 시작할 때
+    DelegateCallback<std::weak_ptr<Skill>> onSkillActivation;
+    // 유닛이 스킬 시전을 끝냈을 때
+    DelegateCallback<std::weak_ptr<Skill>> onSkillExpiration;
 
     Reference referencePause;
     Reference referenceBlockFollowingNavAgent;

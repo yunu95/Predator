@@ -99,11 +99,13 @@ void UIManager::SetIngameUIVisible(bool visible)
 {
     if (visible)
     {
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Vinetting)->EnableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Bottom_Layout)->EnableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_MenuButton)->EnableElement();
     }
     else
     {
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Vinetting)->DisableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Bottom_Layout)->DisableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_MenuButton)->DisableElement();
     }
@@ -1059,7 +1061,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
         if (uiData.disableOnStartEdtior)
         {
             element->DisableElementInstant();
-        }
+}
 #else
         if (uiData.disableOnStartExe)
         {
@@ -1077,7 +1079,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
                 digitFonts[element][number++] = img->GetGI().GetImage();
             }
         }
-        }
+    }
     if (uiData.customFlags2 & (int)UIExportFlag2::ExclusiveEnable)
     {
         std::transform(uiData.exclusiveEnableGroup.begin(), uiData.exclusiveEnableGroup.end(), std::back_inserter(element->exclusiveEnableGroup), [&](int idx) {return GetUIElementWithIndex(idx); });

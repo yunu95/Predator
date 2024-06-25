@@ -39,10 +39,18 @@ void PlayerController::RegisterUnit(std::weak_ptr<Unit> unit)
 
     characters[unit.lock()->GetUnitTemplateData().pod.playerUnitType.enumValue] = unit;
     unit.lock()->onStateEngage[UnitBehaviourTree::Death].AddCallback([this, unit]() { UnSelectSkill(unit); });
-    unit.lock()->onStateEngage[UnitBehaviourTree::Death].AddCallback(std::bind(&PlayerController::OnPlayerChracterDead, this, unit));
+    unit.lock()->onStateEngage[UnitBehaviourTree::Death].AddCallback(std::bind(&PlayerController::OnPlayerChracterDead,
+        this,
+        unit));
     unit.lock()->onStateEngage[UnitBehaviourTree::Paralysis].AddCallback([this, unit]() { UnSelectSkill(unit); });
-    unit.lock()->onStateEngage[UnitBehaviourTree::SkillOnGoing].AddCallback(std::bind_front(static_cast<void(PlayerController::*)(std::weak_ptr<Unit>)>(&PlayerController::SetCooltime), this, unit));
-    //unit.lock()->onStateEngage[UnitBehaviourTree::SkillOnGoing].AddCallback([this]() { this->onSkillActivate(); });
+    unit.lock()->onSkillActivation.AddCallback(std::bind(&PlayerController::OnPlayerUnitSkillActivation,
+        this,
+        unit,
+        std::placeholders::_1));
+    unit.lock()->onSkillExpiration.AddCallback(std::bind(&PlayerController::OnPlayerUnitSkillExpiration,
+        this,
+        unit,
+        std::placeholders::_1));
 
     unit.lock()->OnStateEngageCallback()[UnitBehaviourTree::Keywords::Knockback].AddCallback([=]() {
         TacticModeSystem::Instance().InterruptedCommand(unit.lock().get());
@@ -694,10 +702,9 @@ void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
         pos -= deltaDistance;
         break;
     }
+    onSkillTargeted[skillType]();
     if (state != State::Tactic)
     {
-        // 전술 모드가 아니라면 기존 로직 수행
-        SetMana(mana - RequiredManaForSkill(skillType));
         onSkillActivate[skillType]();
         switch (skillType)
         {
@@ -1221,6 +1228,33 @@ void PlayerController::EnableErrorUI(EnqueErrorType errorType)
         UIManager::Instance().GetUIElementByEnum(UIEnumID::ErrorPopup_TacticQueueFull)->EnableElement();
         break;
     }
+}
+
+void PlayerController::OnPlayerUnitSkillActivation(std::weak_ptr<Unit> unit, std::weak_ptr<Skill> skill)
+{
+    // 전술 모드가 아니라면 기존 로직 수행
+    SkillType::Enum skillType = SkillType::NONE;
+    if (dynamic_cast<RobinChargeSkill*>(skill.lock().get())) skillType = SkillType::ROBIN_Q;
+    if (dynamic_cast<RobinTauntSkill*>(skill.lock().get())) skillType = SkillType::ROBIN_W;
+    if (dynamic_cast<UrsulaBlindSkill*>(skill.lock().get())) skillType = SkillType::URSULA_Q;
+    if (dynamic_cast<UrsulaParalysisSkill*>(skill.lock().get())) skillType = SkillType::URSULA_W;
+    if (dynamic_cast<HanselChargeSkill*>(skill.lock().get())) skillType = SkillType::HANSEL_Q;
+    if (dynamic_cast<HanselProjectileSkill*>(skill.lock().get())) skillType = SkillType::HANSEL_W;
+    if (skillType != SkillType::NONE)
+    {
+        SetMana(mana - RequiredManaForSkill(skillType));
+        onSkillActivate[skillType]();
+    }
+}
+
+void PlayerController::OnPlayerUnitSkillExpiration(std::weak_ptr<Unit> unit, std::weak_ptr<Skill> skill)
+{
+    if (dynamic_cast<RobinChargeSkill*>(skill.lock().get())) onSkillExpiration[SkillType::ROBIN_Q]();
+    if (dynamic_cast<RobinTauntSkill*>(skill.lock().get())) onSkillExpiration[SkillType::ROBIN_W]();
+    if (dynamic_cast<UrsulaBlindSkill*>(skill.lock().get())) onSkillExpiration[SkillType::URSULA_Q]();
+    if (dynamic_cast<UrsulaParalysisSkill*>(skill.lock().get())) onSkillExpiration[SkillType::URSULA_W]();
+    if (dynamic_cast<HanselChargeSkill*>(skill.lock().get())) onSkillExpiration[SkillType::HANSEL_Q]();
+    if (dynamic_cast<HanselProjectileSkill*>(skill.lock().get())) onSkillExpiration[SkillType::HANSEL_W]();
 }
 
 std::vector<yunutyEngine::Vector3d>& PlayerController::ModifyPathForAttack(std::vector<Vector3d>& path)

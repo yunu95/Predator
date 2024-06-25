@@ -271,6 +271,7 @@ template<>
 void Unit::OnStateExit<UnitBehaviourTree::SkillOnGoing>()
 {
     onStateExit[UnitBehaviourTree::SkillOnGoing]();
+    onSkillExpiration(onGoingSkill);
     if (!coroutineSkill.expired())
     {
         onGoingSkill->OnInterruption();
@@ -286,6 +287,7 @@ void Unit::OnStateEngage<UnitBehaviourTree::SkillCasting>()
     SetDesiredRotation(pendingSkill.get()->targetPos - GetTransform()->GetWorldPosition());
     onGoingSkill = std::move(pendingSkill);
     coroutineSkill = StartCoroutine(onGoingSkill.get()->operator()());
+    onSkillActivation(onGoingSkill);
 }
 template<>
 void Unit::OnStateEngage<UnitBehaviourTree::Tactic>()
@@ -1165,6 +1167,9 @@ void Unit::Summon(application::editor::Unit_TemplateData* templateData)
     case UnitStatusBarType::ENEMY:
         unitStatusUI = UIManager::Instance().DuplicateUIElement(UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_MeleeEnemy));
         break;
+    case UnitStatusBarType::ELITE:
+        unitStatusUI = UIManager::Instance().DuplicateUIElement(UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_Elite));
+        break;
     }
 
     unitCollider.lock()->SetRadius(unitTemplateData->pod.collisionSize);
@@ -1248,6 +1253,8 @@ void Unit::Reset()
     DeleteCoroutine(coroutineDeath);
     ClearCoroutines();
     passiveSkill.reset();
+    pauseRequested = false;
+    unpauseRequested = false;
     buffs.clear();
     liveCountLeft = unitTemplateData->pod.liveCount;
     currentTargetUnit.reset();
@@ -1808,6 +1815,8 @@ void Unit::ResetCallbacks()
     onDamaged.Clear();
     onCreated.Clear();
     onRotationFinish.Clear();
+    onSkillActivation.Clear();
+    onSkillExpiration.Clear();
     for (auto& each : onStateEngage)
     {
         each.Clear();
