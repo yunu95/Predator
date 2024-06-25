@@ -1167,6 +1167,9 @@ void Unit::Summon(application::editor::Unit_TemplateData* templateData)
     case UnitStatusBarType::ENEMY:
         unitStatusUI = UIManager::Instance().DuplicateUIElement(UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_MeleeEnemy));
         break;
+    case UnitStatusBarType::ELITE:
+        unitStatusUI = UIManager::Instance().DuplicateUIElement(UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_Elite));
+        break;
     }
 
     unitCollider.lock()->SetRadius(unitTemplateData->pod.collisionSize);
