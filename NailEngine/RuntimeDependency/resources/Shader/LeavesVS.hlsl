@@ -32,38 +32,7 @@ VertexOut main(VertexIn input)
 {
     VertexOut output = (VertexOut) 0;
     
-    //float4 V_Normal = mul(float4(input.normal, 0.f), mul(input.world, VTM));
-    //float4 V_Pos = mul(float4(input.pos, 1.f), mul(input.world, VTM));
-    
-    //if (dot(normalize(V_Normal), normalize(V_Pos)) > 0.3)
-    //{
-    //    float2 lightuv = input.uv;
-    //    lightuv.x *= lightMapUV[input.instanceID].scaling.x;
-    //    lightuv.y = (1 - lightuv.y);
-    //    lightuv.y *= (lightMapUV[input.instanceID].scaling.y);
-    //    lightuv.y = (1 - lightuv.y);
-    
-    //    lightuv.x += (lightMapUV[input.instanceID].uvOffset.x);
-    //    lightuv.y += (-lightMapUV[input.instanceID].uvOffset.y);
-    
-    //    output.lightUV = lightuv;
-    
-    //    input.uv = input.uv - floor(input.uv);
-    
-    //    row_major matrix WV = mul(input.world, VTM);
-    //    row_major matrix VP = mul(VTM, PTM);
-
-    //    output.posH = mul(float4(input.pos, 1.f), input.world);
-    //    output.posH = mul(output.posH, VP);
-    //    output.posV = mul(float4(input.pos, 1.f), WV);
-    //    output.color = input.color;
-    //    output.uv = input.uv;
-    //    output.normalV = normalize(mul(float4(input.normal, 0.f), WV));
-    //    output.tangentV = normalize(mul(float4(input.tangent, 0.f), WV));
-    //    output.biNormalV = normalize(cross(output.tangentV, output.normalV));
-    //    output.id = input.instanceID;
-    //    return output;
-    //}
+ 
     
     float2 lightuv = input.lightUV;
     lightuv.x *= lightMapUV[input.instanceID].scaling.x;
@@ -76,7 +45,7 @@ VertexOut main(VertexIn input)
     
     output.lightUV = lightuv;
     
-    input.uv = input.uv - floor(input.uv);
+    //input.uv = input.uv - floor(input.uv);
    
     
     row_major matrix WV = mul(input.world, VTM);
@@ -101,12 +70,7 @@ VertexOut main(VertexIn input)
     float4 tempVec = float4(tempUV, 0, 0);
     tempVec = mul(tempVec, VTMInv);
     tempVec = normalize(tempVec);
-    tempVec *= (scale.y * 1.5);
-    //tempVec *= (1.5 * 1.5);
-    
-    //float3 tempNormal = mul(float4(input.normal, 0), input.world);
-    //tempNormal *= 0.5f;
-    //float3 tempPos = (tempVec.xyz + tempNormal) * 1.1f;
+    tempVec *= (scale.y);
     float3 tempPos = (tempVec.xyz) * 1.1f;
     output.posH.xyz += tempPos;
     

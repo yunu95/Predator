@@ -68,6 +68,8 @@ namespace yunutyEngine
             assert(faces.size() % 3 == 0);
             BuildField(reinterpret_cast<float*>(&worldVertices[0]), worldVertices.size(), &faces[0], faces.size() / 3, buildSettings);
         }
+        void SetQueryFilterIncludeFlags(unsigned int filterIndex, unsigned short flags);
+        void SetQueryFilterExcludeFlags(unsigned int filterIndex, unsigned short flags);
         //bool AddCylinderObstacle(Vector3f position, const float radius, const float height);
         //bool AddBoxObstacle(Vector3f center, Vector3f halfExtents, const float yRadians);
     private:

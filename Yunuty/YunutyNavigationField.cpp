@@ -351,6 +351,14 @@ bool yunutyEngine::NavigationField::IsInitialized()
 {
     return impl->m_navMesh != nullptr;
 }
+void yunutyEngine::NavigationField::SetQueryFilterIncludeFlags(unsigned int filterIndex, unsigned short flags)
+{
+    impl->m_crowd->getEditableFilter(filterIndex)->setIncludeFlags(flags);
+}
+void yunutyEngine::NavigationField::SetQueryFilterExcludeFlags(unsigned int filterIndex, unsigned short flags)
+{
+    impl->m_crowd->getEditableFilter(filterIndex)->setExcludeFlags(flags);
+}
 void yunutyEngine::NavigationField::CleanUpField()
 {
     //if (impl->m_polyMesh)

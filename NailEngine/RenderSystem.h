@@ -77,15 +77,15 @@ public:
     void PushSkinnedRenderableObject(nail::IRenderable* renderable);
     void PopSkinnedRenderableObject(nail::IRenderable* renderable);
 
-    void PushUIObject(std::shared_ptr<nail::IRenderable> renderable);
+    void PushUIObject(std::shared_ptr<UIImage> renderable);
     // 전처리를 한번 해줘야 하는 UI 객체를 전처리 큐에 담는다.
     void PushPreProcessingUIObject(UIImage*);
-    void PopUIObject(std::shared_ptr<nail::IRenderable> renderable);
+    void PopUIObject(std::shared_ptr<UIImage> renderable);
 
     void PushTextObject(std::shared_ptr<nail::IRenderable> renderable);
     void PopTextObject(std::shared_ptr<nail::IRenderable> renderable);
 
-    void ReSortUIObject(int layer, std::shared_ptr<nail::IRenderable> ui);
+    //void ReSortUIObject(int layer, std::shared_ptr<UIImage> ui);
 
     void ReSortRenderInfo(nail::IRenderable* renderable, int index);
 
@@ -117,7 +117,7 @@ private:
 
     // 미리 한번 전처리를 해줘야 하는 UI 이미지들
     std::unordered_set<UIImage*> preProcessingUiImages;
-    std::multiset<std::shared_ptr<nail::IRenderable>, CompareSharedPtr> UIImageSet;
+    std::map<int, std::vector<std::shared_ptr<UIImage>>> UIImageMap;
     std::set<std::shared_ptr<nail::IRenderable>> UITextSet;
 
     /// D2D 관련 멤버 변수
@@ -130,6 +130,11 @@ private:
     std::map<std::wstring, Microsoft::WRL::ComPtr<IDWriteTextFormat>> wFormatMap;
 
     DirectX::SimpleMath::Vector3 mainCamPos;
+
+    const float backOffset = 300;
+    const float smWidth = 163.38;
+    const float smHeight = 163.38;
+    const float camFar = 500;
 };
 
 

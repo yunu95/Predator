@@ -12,9 +12,12 @@ namespace application
     CoroutineObject<void> Action_ForceUnitUnpaused::DoAction()
     {
         bool proceed = false;
-        if (auto ingameUnit = targetUnit->inGameUnit.lock())
+        if (targetUnit)
         {
-            ingameUnit->pauseRequested = !withdrawRequest;
+            if (auto ingameUnit = targetUnit->inGameUnit.lock())
+            {
+                ingameUnit->unpauseRequested = !withdrawRequest;
+            }
         }
         co_return;
     };
@@ -40,6 +43,11 @@ namespace application
             editor::imgui::ShowMessageBox("SetTargetUnit(ForceUnpause)", [data]()
                 {
                     editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
+
+                    ImGui::Separator();
+
+                    ImGui::SetNextItemWidth(-1);
+                    ImGui::Checkbox("withdrawRequest##withdrawRequest", &data->withdrawRequest);
 
                     ImGui::Separator();
 
@@ -76,24 +84,25 @@ namespace application
 
     bool Action_ForceUnitUnpaused::PreEncoding(json& data) const
     {
-        data["targetUnit"] = targetUnit ? UUID_To_String(targetUnit->GetUUID()) : "nullptr";
-        data["withdrawRequest"] = withdrawRequest;
         return true;
     }
 
     bool Action_ForceUnitUnpaused::PostEncoding(json& data) const
     {
+        data["targetUnit"] = targetUnit ? UUID_To_String(targetUnit->GetUUID()) : "nullptr";
+        data["withdrawRequest"] = withdrawRequest;
         return true;
     }
 
     bool Action_ForceUnitUnpaused::PreDecoding(const json& data)
     {
-        withdrawRequest = data["withdrawRequest"];
         return true;
     }
 
     bool Action_ForceUnitUnpaused::PostDecoding(const json& data)
     {
+        withdrawRequest = data["withdrawRequest"];
+        //if (data.contains("targetUnit"))
         SetTargetUnit(UUIDManager::GetSingletonInstance().GetPointerFromUUID<editor::UnitData*>(String_To_UUID(data["targetUnit"])));
         return true;
     }
