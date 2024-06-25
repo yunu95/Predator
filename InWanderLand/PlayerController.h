@@ -118,6 +118,7 @@ private:
     void HandleManaRegen();
     void HandleMouseHover();
     void HandleUnitPickingCollider();
+    void HandleComboState();
     void OnPlayerChracterDead(std::weak_ptr<Unit> unit);
     void OnPlayerChracterAllDead();
     // character가 NONE일 경우 알아서 현재 선택된 스킬로 귀결된다.
@@ -196,6 +197,7 @@ private:
 
     State::Enum stateRequestedByAction = State::None;
     bool isStateAction = false;
+    float elapsedTimeSinceLastCombo{ 0 };
     friend application::Action_BlockSkillCancel;
     friend application::Action_BlockSkillSelection;
     friend application::Action_BlockPlayerSwitch;

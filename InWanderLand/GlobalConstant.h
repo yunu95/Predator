@@ -34,6 +34,7 @@ namespace application
 
         GC<float> peaceFollowingXOffest = 3.0f;
         GC<float> peaceFollowingZOffest = 2.0f;
+        GC<float> comboTimeLimit{ 5.0 };
 
         GC<float> tacticSkillCost = 10.0f;
         GC<float> tacticMoveCost = 10.0f;
