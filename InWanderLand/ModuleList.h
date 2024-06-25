@@ -8,3 +8,4 @@
 #include "Module_GlobalConstant.h"
 #include "Module_ScriptEditor.h"
 #include "Module_Skill.h"
+#include "Module_AnimationEditor.h"

@@ -5,6 +5,7 @@
 #include "CommandManager.h"
 #include "TransformEditCommand.h"
 #include "IEditableData.h"
+#include "EditorCommonEvents.h"
 
 #include "imgui.h"
 #include "imgui_Utility.h"
@@ -58,9 +59,26 @@ namespace application
 
 		}
 
+		void InspectorPanel::OnEvent(EditorEvents& event)
+		{
+			editor::EventDispatcher dispatcher(event);
+			dispatcher.Dispatch<editor::LoadEvent>([this](editor::LoadEvent& e)
+				{
+					saved = false;
+					savedPosition = POD_Vector3<float>();
+					savedQuaternion = POD_Quaternion<float>();
+					savedScale.x = 1;
+					savedScale.y = 1;
+					savedScale.z = 1;
+					return true;
+				});
+		}
+
 		InspectorPanel::InspectorPanel()
 		{
-
+			savedScale.x = 1;
+			savedScale.y = 1;
+			savedScale.z = 1;
 		}
 
 		void InspectorPanel::ImGui_DrawTransform(int& idx)
@@ -70,7 +88,101 @@ namespace application
 			static vector<TransformData> beforeTS(containerSize);
 			static vector<bool> isEditing(containerSize);
 			static std::vector<std::tuple<IEditableData*, TransformData, TransformData>> container(containerSize);
-			if (imgui::BeginSection_1Col(idx, "TransForm", ImGui::GetContentRegionAvail().x))
+			
+			if (idx > 0)
+				imgui::ShiftCursorY(5.5f);
+
+			imgui::SmartStyleColor textColor(ImGuiCol_Text, IM_COL32_WHITE);
+			ImGui::Text("TransForm");
+			ImGui::SameLine();
+			auto buttonSize = ImGui::CalcTextSize("+");
+			ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetContentRegionAvail().x - buttonSize.y - 10);
+			
+			{
+				imgui::SmartStyleVar textAlign(ImGuiStyleVar_ButtonTextAlign, ImVec2(0.5f, 0.5f));
+				if (ImGui::ButtonEx("+", ImVec2(buttonSize.y + 5, buttonSize.y + 5), ImGuiButtonFlags_AlignTextBaseLine))
+				{
+					ImGui::OpenPopup("TransformEdit");
+				}
+			}
+
+			if (ImGui::BeginPopup("TransformEdit"))
+			{
+				if (ImGui::MenuItem("Copy"))
+				{
+					if (selections.size() == 1)
+					{
+						auto wp = (*selections.begin())->GetPaletteInstance()->GetTransform()->GetWorldPosition();
+						auto wr = (*selections.begin())->GetPaletteInstance()->GetTransform()->GetWorldRotation();
+						auto ws = (*selections.begin())->GetPaletteInstance()->GetTransform()->GetWorldScale();
+						savedPosition.x = wp.x;
+						savedPosition.y = wp.y;
+						savedPosition.z = wp.z;
+						savedQuaternion.w = wr.w;
+						savedQuaternion.x = wr.x;
+						savedQuaternion.y = wr.y;
+						savedQuaternion.z = wr.z;
+						savedScale.x = ws.x;
+						savedScale.y = ws.y;
+						savedScale.z = ws.z;
+
+						saved = true;
+					}
+				}
+				if (ImGui::MenuItem("Paste"))
+				{
+					if (saved)
+					{
+						int containerIdx = 0;
+						container.resize(0);
+						beforeTS.resize(selections.size());
+						Vector3d fpos = Vector3d(savedPosition.x, savedPosition.y, savedPosition.z);
+						Quaternion fquat = Quaternion(savedQuaternion.w, savedQuaternion.x, savedQuaternion.y, savedQuaternion.z);
+						Vector3d fscal = Vector3d(savedScale.x, savedScale.y, savedScale.z);
+						for (auto& each : selections)
+						{
+							beforeTS[containerIdx] = each->GetPaletteInstance()->GetTransform();
+							each->OnRelocate(fpos);
+							each->OnRerotate(fquat);
+							each->OnRescale(fscal);
+							each->ApplyAsPaletteInstance();
+							container.push_back({ each, beforeTS[containerIdx], each->GetPaletteInstance()->GetTransform() });
+							containerIdx++;
+						}
+						CommandManager::GetSingletonInstance().AddQueue(std::make_shared<TransformEditCommand>(container));
+					}
+				}
+				if (ImGui::MenuItem("Reset"))
+				{
+					int containerIdx = 0;
+					container.resize(0);
+					beforeTS.resize(selections.size());
+					for (auto& each : selections)
+					{
+						beforeTS[containerIdx] = each->GetPaletteInstance()->GetTransform();
+						each->OnRelocate(Vector3d());
+						each->OnRerotate(Quaternion());
+						each->OnRescale(Vector3d(1, 1, 1));
+						each->ApplyAsPaletteInstance();
+						container.push_back({ each, beforeTS[containerIdx], each->GetPaletteInstance()->GetTransform() });
+						containerIdx++;
+					}
+					CommandManager::GetSingletonInstance().AddQueue(std::make_shared<TransformEditCommand>(container));
+				}
+				ImGui::EndPopup();
+			}
+
+			imgui::draw::Underline(IM_COL32(90, 90, 90, 200));
+			imgui::ShiftCursorY(3.5f);
+
+			bool result = ImGui::BeginTable("##section_table", 1, ImGuiTableFlags_SizingStretchSame);
+			if (result)
+			{
+				ImGui::TableSetupColumn("Labels && Widgets", ImGuiTableColumnFlags_WidthFixed, ImGui::GetContentRegionAvail().x);
+			}
+			idx++;
+			
+			if (result)
 			{
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0);

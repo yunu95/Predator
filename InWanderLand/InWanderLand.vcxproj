@@ -1073,6 +1073,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="JsonUIFloatType.h" />
     <ClInclude Include="LeftFrame.h" />
     <ClInclude Include="MeleeEliteController.h" />
+    <ClInclude Include="Module_AnimationEditor.h" />
     <ClInclude Include="Module_Skill.h" />
     <ClInclude Include="MoveEndPreviewPool.h" />
     <ClInclude Include="Multiplier.h" />
@@ -2346,6 +2347,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="LocalTimeEntityManager.cpp" />
     <ClCompile Include="LinearClippingTimer.cpp" />
     <ClCompile Include="MeleeEliteController.cpp" />
+    <ClCompile Include="Module_AnimationEditor.cpp" />
     <ClCompile Include="Module_Skill.cpp" />
     <ClCompile Include="MoveEndPreviewPool.cpp" />
     <ClCompile Include="ObservationTarget.cpp" />

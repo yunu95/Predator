@@ -2182,6 +2182,9 @@
     <ClInclude Include="Action_ForceUnitUnpaused.h">
       <Filter>Editor\ScriptSystem\2_Action\List\Action_ForceUnitUnpaused</Filter>
     </ClInclude>
+    <ClInclude Include="Module_AnimationEditor.h">
+      <Filter>Editor\Panel\List\Module\List</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -3264,6 +3267,9 @@
     </ClCompile>
     <ClCompile Include="Action_ForceUnitUnpaused.cpp">
       <Filter>Editor\ScriptSystem\2_Action\List\Action_ForceUnitUnpaused</Filter>
+    </ClCompile>
+    <ClCompile Include="Module_AnimationEditor.cpp">
+      <Filter>Editor\Panel\List\Module\List</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
