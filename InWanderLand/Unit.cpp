@@ -693,7 +693,8 @@ void Unit::PlayAnimation(UnitAnimType animType, Animation::PlayFlag playFlag)
     }
     else
     {
-        animatorComponent.lock()->ChangeAnimation(anim, GlobalConstant::GetSingletonInstance().pod.defaultAnimBlendTime, 1);
+        auto prevType = wanderResources::GetAnimationType(unitTemplateData->pod.skinnedFBXName, animatorComponent.lock()->GetGI().GetCurrentAnimation());
+        animatorComponent.lock()->ChangeAnimation(anim, unitTemplateData->pod.animationBlendMap.at(std::pair((int)prevType, (int)animType)), 1);
     }
 
     if (playFlag & Animation::PlayFlag_::Repeat)

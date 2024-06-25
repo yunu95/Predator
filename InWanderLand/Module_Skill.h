@@ -35,7 +35,7 @@ namespace application
             // 한 패널에 레이아웃을 작성하는 함수
             void DrawLayout();
             // Data 리스트를 그리는 함수
-            void DrawList(const ImVec2& region);
+            void DrawList();
 
         private:
             POD_Enum<SkillType::Enum> selectedSkill{ .enumValue = -1 };

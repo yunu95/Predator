@@ -10,3 +10,4 @@
 #include "Condition_TacticMode.h"
 #include "Condition_PlayerState.h"
 #include "Condition_Ornament.h"
+#include "Condition_Stage.h"

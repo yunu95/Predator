@@ -134,6 +134,7 @@ namespace application
                 static auto& wp = palette::WavePalette::SingleInstance();
                 static auto& cp = palette::CameraPalette::SingleInstance();
                 static auto& lp = palette::LightPalette::SingleInstance();
+                static auto& ptp = palette::ParticlePalette::SingleInstance();
                 static auto& ip = palette::InteractablePalette::SingleInstance();
 
                 bool pop = true;
@@ -1217,6 +1218,183 @@ namespace application
                             epm.Return();
                         }
                     }
+
+                    if (epm.GetReturnPopupName() == "SetTargetParticle(MoveWithRotateAndRescale)")
+                    {
+                        ImGui::Begin("Particle MoveWithRotateAndRescale Popup(Set Target)", &pop, flag);
+                        auto rect = ImGui::GetContentRegionAvail();
+                        auto size = ImGui::CalcTextSize("Please Setting Target Particle");
+                        imgui::ShiftCursorX((rect.x - size.x) / 2);
+                        imgui::ShiftCursorY((rect.y - size.y) / 2);
+                        ImGui::Text("Please Setting Target Particle");
+                        ImGui::BringWindowToFocusFront(ImGui::GetCurrentWindow());
+                        ImGui::End();
+
+                        pp.ChangeTab("Particle");
+
+                        auto data = epm.GetReturnPopupData<Action_ParticleMoveWithRotateAndRescale>();
+                        if (data->isEditing == false && pm.GetCurrentPalette() == &ptp)
+                        {
+                            data->isEditing = true;
+                            ptp.Reset();
+                        }
+
+                        if (data->isEditing == true && ptp.GetSelections().size() == 1)
+                        {
+                            data->SetTargetParticle(static_cast<ParticleData*>(*ptp.GetSelections().begin()));
+                            data->isEditing = false;
+                            epm.Return();
+                        }
+
+                        if (!pop)
+                        {
+                            data->isEditing = false;
+                            epm.Return();
+                        }
+                    }
+
+                    if (epm.GetReturnPopupName() == "EditDestinationParticle(MoveWithRotateAndRescale)")
+                    {
+                        ImGui::Begin("Particle MoveWithRotateAndRescale Popup(Edit Destination)", &pop, flag);
+                        auto rect = ImGui::GetContentRegionAvail();
+                        imgui::ShiftCursorY((rect.y - 20) / 2);
+                        bool endFlag = false;
+                        if (ImGui::Button("End Edit", ImVec2(ImGui::GetContentRegionAvail().x, 20)))
+                        {
+                            endFlag = true;
+                        }
+                        ImGui::End();
+                        ImGui::BringWindowToFocusFront(ImGui::GetCurrentWindow());
+
+                        pp.ChangeTab("Particle");
+
+                        auto data = epm.GetReturnPopupData<Action_ParticleMoveWithRotateAndRescale>();
+                        if (data->isEditing == false && pm.GetCurrentPalette() == &ptp)
+                        {
+                            data->isEditing = true;
+                            ptp.Reset();
+                            ptp.SelectParticle(data->destinationParticle);
+                        }
+
+                        if (data->isEditing == true && (endFlag || ImGui::IsKeyPressed(ImGuiKey_Escape, false)))
+                        {
+                            data->isEditing = false;
+                            data->destinationParticle->GetPaletteInstance()->GetGameObject()->SetSelfActive(false);
+                            ptp.Reset();
+                            epm.Return();
+                        }
+
+                        if (!pop)
+                        {
+                            data->isEditing = false;
+                            data->destinationParticle->GetPaletteInstance()->GetGameObject()->SetSelfActive(false);
+                            ptp.Reset();
+                            epm.Return();
+                        }
+                    }
+
+                    if (epm.GetReturnPopupName() == "SetDestinationParticle(MoveWithRotateAndRescale)")
+                    {
+                        ImGui::Begin("Particle MoveWithRotateAndRescale Popup(Set Destination)", &pop, flag);
+                        auto rect = ImGui::GetContentRegionAvail();
+                        auto size = ImGui::CalcTextSize("Please Setting Destination Particle");
+                        imgui::ShiftCursorX((rect.x - size.x) / 2);
+                        imgui::ShiftCursorY((rect.y - size.y) / 2);
+                        ImGui::Text("Please Setting Destination Particle");
+                        ImGui::BringWindowToFocusFront(ImGui::GetCurrentWindow());
+                        ImGui::End();
+
+                        pp.ChangeTab("Particle");
+
+                        auto data = epm.GetReturnPopupData<Action_ParticleMoveWithRotateAndRescale>();
+                        if (data->isEditing == false && pm.GetCurrentPalette() == &ptp)
+                        {
+                            data->isEditing = true;
+                            ptp.Reset();
+                        }
+
+                        if (data->isEditing == true && ptp.GetSelections().size() == 1)
+                        {
+                            data->SetDestinationParticle(static_cast<ParticleData*>(*ptp.GetSelections().begin()));
+                            data->isEditing = false;
+                            ptp.Reset();
+                            epm.Return();
+                        }
+
+                        if (!pop)
+                        {
+                            data->isEditing = false;
+                            epm.Return();
+                        }
+                    }
+
+                    if (epm.GetReturnPopupName() == "SetTargetParticle(Show)")
+                    {
+                        ImGui::Begin("Particle Show Popup(Set Target)", &pop, flag);
+                        auto rect = ImGui::GetContentRegionAvail();
+                        auto size = ImGui::CalcTextSize("Please Setting Target Particle");
+                        imgui::ShiftCursorX((rect.x - size.x) / 2);
+                        imgui::ShiftCursorY((rect.y - size.y) / 2);
+                        ImGui::Text("Please Setting Target Particle");
+                        ImGui::BringWindowToFocusFront(ImGui::GetCurrentWindow());
+                        ImGui::End();
+
+                        pp.ChangeTab("Particle");
+
+                        auto data = epm.GetReturnPopupData<Action_ParticleShow>();
+                        if (data->isEditing == false && pm.GetCurrentPalette() == &ptp)
+                        {
+                            data->isEditing = true;
+                            ptp.Reset();
+                        }
+
+                        if (data->isEditing == true && ptp.GetSelections().size() == 1)
+                        {
+                            data->SetTargetParticle(static_cast<ParticleData*>(*ptp.GetSelections().begin()));
+                            data->isEditing = false;
+                            epm.Return();
+                        }
+
+                        if (!pop)
+                        {
+                            data->isEditing = false;
+                            epm.Return();
+                        }
+                    }
+
+                    if (epm.GetReturnPopupName() == "SetTargetParticle(Hide)")
+                    {
+                        ImGui::Begin("Particle Hide Popup(Set Target)", &pop, flag);
+                        auto rect = ImGui::GetContentRegionAvail();
+                        auto size = ImGui::CalcTextSize("Please Setting Target Particle");
+                        imgui::ShiftCursorX((rect.x - size.x) / 2);
+                        imgui::ShiftCursorY((rect.y - size.y) / 2);
+                        ImGui::Text("Please Setting Target Particle");
+                        ImGui::BringWindowToFocusFront(ImGui::GetCurrentWindow());
+                        ImGui::End();
+
+                        pp.ChangeTab("Particle");
+
+                        auto data = epm.GetReturnPopupData<Action_ParticleHide>();
+                        if (data->isEditing == false && pm.GetCurrentPalette() == &ptp)
+                        {
+                            data->isEditing = true;
+                            ptp.Reset();
+                        }
+
+                        if (data->isEditing == true && ptp.GetSelections().size() == 1)
+                        {
+                            data->SetTargetParticle(static_cast<ParticleData*>(*ptp.GetSelections().begin()));
+                            data->isEditing = false;
+                            epm.Return();
+                        }
+
+                        if (!pop)
+                        {
+                            data->isEditing = false;
+                            epm.Return();
+                        }
+                    }
                 }
             }
             ImGui::End();
@@ -1505,6 +1683,11 @@ namespace application
                                 selectedScript->AddTrigger<Trigger_EndWave>();
                                 break;
                             }
+                            case application::TriggerType::StageStart:
+                            {
+                                selectedScript->AddTrigger<Trigger_StageStart>();
+                                break;
+                            }
                             default:
                                 break;
                             }
@@ -1612,6 +1795,11 @@ namespace application
                             case application::ConditionType::OrnamentHide:
                             {
                                 selectedScript->AddCondition<Condition_OrnamentHide>();
+                                break;
+                            }
+                            case application::ConditionType::Stage:
+                            {
+                                selectedScript->AddCondition<Condition_Stage>();
                                 break;
                             }
                             default:
@@ -1897,10 +2085,24 @@ namespace application
                                 selectedScript->AddAction<Action_SetZoomFactor>();
                                 break;
                             }
-
                             case application::ActionType::SetCamBidirectionalPath:
                             {
                                 selectedScript->AddAction<Action_SetCamBidirectionalPath>();
+                                break;
+                            }
+                            case application::ActionType::ParticleMoveWithRotateAndRescale:
+                            {
+                                selectedScript->AddAction<Action_ParticleMoveWithRotateAndRescale>();
+                                break;
+                            }
+                            case application::ActionType::ParticleShow:
+                            {
+                                selectedScript->AddAction<Action_ParticleShow>();
+                                break;
+                            }
+                            case application::ActionType::ParticleHide:
+                            {
+                                selectedScript->AddAction<Action_ParticleHide>();
                                 break;
                             }
                             default:

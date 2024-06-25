@@ -31,6 +31,7 @@ namespace application
 		InteractableTriggerExit,
 		StartWave,
 		EndWave,
+		StageStart
 	};
 
 	struct ITrigger

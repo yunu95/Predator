@@ -89,6 +89,7 @@ namespace application
             editorModuleList[(int)Module_List::TemplateDataEditor] = &Module_TemplateDataEditor::GetSingletonInstance();
             editorModuleList[(int)Module_List::ScriptEditor] = &Module_ScriptEditor::GetSingletonInstance();
             editorModuleList[(int)Module_List::Skill] = &Module_Skill::GetSingletonInstance();
+            editorModuleList[(int)Module_List::AnimationEditor] = &Module_AnimationEditor::GetSingletonInstance();
 
             for (auto& each : editorPanelList)
             {
@@ -140,6 +141,11 @@ namespace application
                 if (eim.IsKeyboardPressed(KeyCode::F5))
                 {
                     editorModuleList[(int)Module_List::Skill]->SetActivation(!editorModuleList[(int)Module_List::Skill]->GetActivation());
+                }
+
+                if (eim.IsKeyboardPressed(KeyCode::F6))
+                {
+                    editorModuleList[(int)Module_List::AnimationEditor]->SetActivation(!editorModuleList[(int)Module_List::AnimationEditor]->GetActivation());
                 }
 
                 /// Ctrl 조합
@@ -526,6 +532,19 @@ namespace application
                     else
                     {
                         editorModuleList[(int)Module_List::Skill]->SetActivation(true);
+                    }
+                }
+
+                bool ane = editorModuleList[(int)Module_List::AnimationEditor]->GetActivation();
+                if (ImGui::MenuItem("Animation Editor", "F6", ane))
+                {
+                    if (ane)
+                    {
+                        editorModuleList[(int)Module_List::AnimationEditor]->SetActivation(false);
+                    }
+                    else
+                    {
+                        editorModuleList[(int)Module_List::AnimationEditor]->SetActivation(true);
                     }
                 }
 
