@@ -38,6 +38,10 @@ void Animator::ChangeAnimation(yunuGI::IAnimation* animation, float transitionDu
     gi.ChangeAnimation(animation, transitionDuration, transitionSpeed);
     isChange = true;
 }
+yunuGI::IAnimation* yunutyEngine::graphics::Animator::GetCurrentAnimation()
+{
+    return GetGI().GetCurrentAnimation();
+}
 bool Animator::IsDone()
 {
     if (auto currentAnim = GetGI().GetCurrentAnimation(); currentAnim)
