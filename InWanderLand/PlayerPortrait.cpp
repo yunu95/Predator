@@ -60,7 +60,7 @@ void PlayerPortraitUIs::ReflectCooltime(SkillType::Enum skillType, float cooltim
             break;
         }
         if (cooltimeNumberUI) cooltimeNumberUI->SetNumber(cooltime);
-        if (cooltimeOverlay) cooltimeOverlay->adjuster->SetTargetFloat(cooltime / maxCooltime);
+        if (cooltimeOverlay) cooltimeOverlay->adjuster->SetTargetFloat(fmaxf(0, cooltime / maxCooltime));
     }
 }
 

@@ -286,10 +286,10 @@ void RenderSystem::RenderShadow()
 
     for (auto& e : lightSet)
     {
-		if (e->IsActive() == false)
-		{
-			continue;
-		}
+        if (e->IsActive() == false)
+        {
+            continue;
+        }
         if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Directional))
         {
             if (e->IsShadowCast())
