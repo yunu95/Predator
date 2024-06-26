@@ -176,7 +176,7 @@
             "type": 0
         },
         {
-            "animationName": "Rig_Robin|Ani_Hansel_Attack ",
+            "animationName": "Rig_Robin|Ani_Hansel_Attack",
             "fbxName": "SKM_Hansel",
             "frame": 40.0,
             "rscPath": "sounds/Hansel/Hansel normal attack.wav",
@@ -456,7 +456,7 @@
             "type": 1
         },
         {
-            "animationName": "Rig_Robin|Ani_Hansel_Attack ",
+            "animationName": "Rig_Robin|Ani_Hansel_Attack",
             "fbxName": "SKM_Hansel",
             "frame": 39.0,
             "objName": "PI_34",
@@ -582,7 +582,7 @@
             "type": 1
         },
         {
-            "animationName": "Rig_Robin|Ani_Hansel_Attack ",
+            "animationName": "Rig_Robin|Ani_Hansel_Attack",
             "fbxName": "SKM_Hansel",
             "frame": 60.0,
             "objName": "PI_34",

@@ -6,6 +6,8 @@
 
 #include "Application.h"
 #include "EditorLayer.h"
+#include "Panel_Palette.h"
+#include "OrnamentPalette.h"
 
 #include "EditorPopupManager.h"
 #include "InstanceManager.h"
@@ -39,6 +41,9 @@ namespace application
 			editor::EditorLayer::SetInputControl(false);
 			editor::imgui::ShowMessageBox("SetTargetOrnament(Condition Show)", [data]()
 				{
+					auto& pp = editor::PalettePanel::GetSingletonInstance();
+					auto& op = editor::palette::OrnamentPalette::SingleInstance();
+
 					editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
 
 					ImGui::Separator();
@@ -47,6 +52,9 @@ namespace application
 					if (data->targetOrnament)
 					{
 						ImGui::Text(data->targetOrnament->pod.templateData->pod.staticFBXName.c_str());
+						pp.ChangeTab("Ornament");
+						op.Reset();
+						op.SelectOrnamentInstance(data->targetOrnament);
 					}
 					else
 					{
@@ -152,6 +160,9 @@ namespace application
 			editor::EditorLayer::SetInputControl(false);
 			editor::imgui::ShowMessageBox("SetTargetOrnament(Condition Hide)", [data]()
 				{
+					auto& pp = editor::PalettePanel::GetSingletonInstance();
+					auto& op = editor::palette::OrnamentPalette::SingleInstance();
+
 					editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
 
 					ImGui::Separator();
@@ -160,6 +171,9 @@ namespace application
 					if (data->targetOrnament)
 					{
 						ImGui::Text(data->targetOrnament->pod.templateData->pod.staticFBXName.c_str());
+						pp.ChangeTab("Ornament");
+						op.Reset();
+						op.SelectOrnamentInstance(data->targetOrnament);
 					}
 					else
 					{

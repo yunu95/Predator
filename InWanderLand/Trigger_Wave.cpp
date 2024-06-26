@@ -4,6 +4,8 @@
 
 #include "Application.h"
 #include "EditorLayer.h"
+#include "Panel_Palette.h"
+#include "WavePalette.h"
 
 #include "EditorPopupManager.h"
 
@@ -71,6 +73,9 @@ namespace application
 			editor::EditorLayer::SetInputControl(false);
 			editor::imgui::ShowMessageBox("SetStartWave", [data]()
 				{
+					auto& pp = editor::PalettePanel::GetSingletonInstance();
+					auto& wp = editor::palette::WavePalette::SingleInstance();
+
 					editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
 
 					ImGui::Separator();
@@ -79,6 +84,9 @@ namespace application
 					if (data->targetWave)
 					{
 						ImGui::Text(yutility::GetString(data->targetWave->pod.name).c_str());
+						pp.ChangeTab("Wave");
+						wp.Reset();
+						wp.OnSelectSingleInstance(data->targetWave);
 					}
 					else
 					{
@@ -226,6 +234,9 @@ namespace application
 			editor::EditorLayer::SetInputControl(false);
 			editor::imgui::ShowMessageBox("SetEndWave", [data]()
 				{
+					auto& pp = editor::PalettePanel::GetSingletonInstance();
+					auto& wp = editor::palette::WavePalette::SingleInstance();
+
 					editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
 
 					ImGui::Separator();
@@ -235,6 +246,9 @@ namespace application
 					if (data->targetWave)
 					{
 						ImGui::Text(yutility::GetString(data->targetWave->pod.name).c_str());
+						pp.ChangeTab("Wave");
+						wp.Reset();
+						wp.OnSelectSingleInstance(data->targetWave);
 					}
 					else
 					{
