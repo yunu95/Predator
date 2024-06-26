@@ -117,10 +117,20 @@ void UIImage::SetYPivot(float yPivot)
 void UIImage::SetWidth(float width)
 {
     this->width = width;
+    // 너비가 바뀌면 캡슐위치를 적절히 바꿔줘야함.
+    if (isCapsuleClippingMode)
+    {
+        SetCapsuleClipping(true);
+    }
 }
 void UIImage::SetHeight(float height)
 {
     this->height = height;
+    // 높이가 바뀌면 캡슐위치를 적절히 바꿔줘야함.
+    if (isCapsuleClippingMode)
+    {
+        SetCapsuleClipping(true);
+    }
 }
 void UIImage::SetRotation(float rotation)
 {
@@ -237,7 +247,8 @@ void UIImage::PreProcessTexture()
             .clippingDirection = DirectX::SimpleMath::Vector2{0,1},
             .clippingThreshold = -2,
             .linearClippingDirection = DirectX::SimpleMath::Vector2{1,1},
-            .linearClippingStart = DirectX::SimpleMath::Vector2{1,1}
+            .linearClippingStart = DirectX::SimpleMath::Vector2{1,1},
+            .capsulePoints = DirectX::SimpleMath::Vector2{-1,-1}
         },
         {
             .pos = DirectX::SimpleMath::Vector3{-1,1,0},
@@ -245,7 +256,8 @@ void UIImage::PreProcessTexture()
             .clippingDirection = DirectX::SimpleMath::Vector2{0,1},
             .clippingThreshold = -2,
             .linearClippingDirection = DirectX::SimpleMath::Vector2{1,1},
-            .linearClippingStart = DirectX::SimpleMath::Vector2{1,1}
+            .linearClippingStart = DirectX::SimpleMath::Vector2{1,1},
+            .capsulePoints = DirectX::SimpleMath::Vector2{-1,-1}
         },
         {
             .pos = DirectX::SimpleMath::Vector3{1,1,0},
@@ -253,7 +265,8 @@ void UIImage::PreProcessTexture()
             .clippingDirection = DirectX::SimpleMath::Vector2{0,1},
             .clippingThreshold = -2,
             .linearClippingDirection = DirectX::SimpleMath::Vector2{1,1},
-            .linearClippingStart = DirectX::SimpleMath::Vector2{1,1}
+            .linearClippingStart = DirectX::SimpleMath::Vector2{1,1},
+            .capsulePoints = DirectX::SimpleMath::Vector2{-1,-1}
         },
         {
             .pos = DirectX::SimpleMath::Vector3{-1,-1,0},
@@ -261,7 +274,8 @@ void UIImage::PreProcessTexture()
             .clippingDirection = DirectX::SimpleMath::Vector2{0,1},
             .clippingThreshold = -2,
             .linearClippingDirection = DirectX::SimpleMath::Vector2{1,1},
-            .linearClippingStart = DirectX::SimpleMath::Vector2{1,1}
+            .linearClippingStart = DirectX::SimpleMath::Vector2{1,1},
+            .capsulePoints = DirectX::SimpleMath::Vector2{-1,-1}
         },
         {
             .pos = DirectX::SimpleMath::Vector3{1,1,0},
@@ -269,7 +283,8 @@ void UIImage::PreProcessTexture()
             .clippingDirection = DirectX::SimpleMath::Vector2{0,1},
             .clippingThreshold = -2,
             .linearClippingDirection = DirectX::SimpleMath::Vector2{1,1},
-            .linearClippingStart = DirectX::SimpleMath::Vector2{1,1}
+            .linearClippingStart = DirectX::SimpleMath::Vector2{1,1},
+            .capsulePoints = DirectX::SimpleMath::Vector2{-1,-1}
         },
         {
             .pos = DirectX::SimpleMath::Vector3{1,-1,0},
@@ -277,7 +292,8 @@ void UIImage::PreProcessTexture()
             .clippingDirection = DirectX::SimpleMath::Vector2{0,1},
             .clippingThreshold = -2,
             .linearClippingDirection = DirectX::SimpleMath::Vector2{1,1},
-            .linearClippingStart = DirectX::SimpleMath::Vector2{1,1}
+            .linearClippingStart = DirectX::SimpleMath::Vector2{1,1},
+            .capsulePoints = DirectX::SimpleMath::Vector2{-1,-1}
         }
     };
 
@@ -303,6 +319,13 @@ void UIImage::PreProcessTexture()
         {
             eachVertice.linearClippingDirection = linearClippingDirection;
             eachVertice.linearClippingStart = linearClippingStart;
+        }
+    }
+    if (isCapsuleClippingMode)
+    {
+        for (auto& eachVertice : vertices)
+        {
+            eachVertice.capsulePoints = capsulePoints;
         }
     }
     D3D11_BUFFER_DESC vBufferDesc =
@@ -345,10 +368,33 @@ bool UIImage::IsLinearClippingMode()
 {
     return isLinearClippingMode;
 }
+bool UIImage::IsCapsuleClipping()
+{
+    return isCapsuleClippingMode;
+}
 void UIImage::SetLinearClipping(bool clip)
 {
     isLinearClippingMode = clip;
     if (isLinearClippingMode == true)
+    {
+        RenderSystem::Instance.Get().PushPreProcessingUIObject(this);
+    }
+}
+void UIImage::SetCapsuleClipping(bool clip)
+{
+    isCapsuleClippingMode = clip;
+    if (width != -1 || height != -1)
+    {
+        if (width >= height)
+        {
+            capsulePoints = { (width - height) / (2 * width), 0 };
+        }
+        else
+        {
+            capsulePoints = { 0, (height - width) / (2 * height) };
+        }
+    }
+    if (isCapsuleClippingMode == true)
     {
         RenderSystem::Instance.Get().PushPreProcessingUIObject(this);
     }

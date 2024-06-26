@@ -542,7 +542,6 @@ void RenderSystem::RenderUI()
         each->renderToLocalTexture();
         preprocessed = true;
     }
-    //Video::renderList.clear();
 
     if (!preProcessingUiImages.empty())
     {
@@ -554,7 +553,7 @@ void RenderSystem::RenderUI()
     {
         each->PreProcessTexture();
     }
-    preProcessingUiImages.clear();
+    std::erase_if(preProcessingUiImages, [](const auto& e) {return !e->IsVideoPlayMode(); });
 
     if (preprocessed)
     {

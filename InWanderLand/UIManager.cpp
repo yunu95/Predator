@@ -786,6 +786,10 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
         element->rotator.lock()->initialRotation = uiData.floats[JsonUIFloatType::rotatingInitialRotation];
         element->rotator.lock()->rotatingSpeed = uiData.floats[JsonUIFloatType::rotatingSpeed];
     }
+    if (uiData.customFlags2 & (int)UIExportFlag2::CapsuleClip)
+    {
+        element->imageComponent.lock()->GetGI().SetCapsuleClip(true);
+    }
 
     Vector3d pivotPos{ 0,0,0 };
     // offset by anchor
@@ -1062,7 +1066,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
         if (uiData.disableOnStartEdtior)
         {
             element->DisableElementInstant();
-}
+        }
 #else
         if (uiData.disableOnStartExe)
         {
@@ -1100,7 +1104,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
             }
         }
     }
-    }
+                }
 // 특별한 로직이 적용되어야 하는 경우 참, 그렇지 않으면 거짓을 반환합니다.
 bool UIManager::ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* element)
 {
