@@ -4,6 +4,8 @@
 
 #include "Application.h"
 #include "EditorLayer.h"
+#include "Panel_Palette.h"
+#include "RegionPalette.h"
 
 #include "EditorPopupManager.h"
 
@@ -68,6 +70,9 @@ namespace application
 			editor::EditorLayer::SetInputControl(false);
 			editor::imgui::ShowMessageBox("SetEnterRegion", [data]()
 				{
+					auto& pp = editor::PalettePanel::GetSingletonInstance();
+					auto& rp = editor::palette::RegionPalette::SingleInstance();
+
 					editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
 
 					ImGui::Separator();
@@ -76,6 +81,9 @@ namespace application
 					if (data->targetRegion)
 					{
 						ImGui::Text(yutility::GetString(data->targetRegion->pod.name).c_str());
+						pp.ChangeTab("Region");
+						rp.Reset();
+						rp.SelectRegion(data->targetRegion);
 					}
 					else
 					{
@@ -184,6 +192,9 @@ namespace application
 			editor::EditorLayer::SetInputControl(false);
 			editor::imgui::ShowMessageBox("SetLeaveRegion", [data]()
 				{
+					auto& pp = editor::PalettePanel::GetSingletonInstance();
+					auto& rp = editor::palette::RegionPalette::SingleInstance();
+
 					editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
 
 					ImGui::Separator();
@@ -193,6 +204,9 @@ namespace application
 					if (data->targetRegion)
 					{
 						ImGui::Text(yutility::GetString(data->targetRegion->pod.name).c_str());
+						pp.ChangeTab("Region");
+						rp.Reset();
+						rp.SelectRegion(data->targetRegion);
 					}
 					else
 					{

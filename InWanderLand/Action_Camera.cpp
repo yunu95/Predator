@@ -6,6 +6,8 @@
 #include "Application.h"
 #include "EditorLayer.h"
 #include "RTSCam.h"
+#include "Panel_Palette.h"
+#include "CameraPalette.h"
 
 #include "EditorPopupManager.h"
 
@@ -123,6 +125,9 @@ namespace application
 			editor::EditorLayer::SetInputControl(false);
 			editor::imgui::ShowMessageBox("SetTargetCamera", [data]()
 				{
+					auto& pp = editor::PalettePanel::GetSingletonInstance();
+					auto& cp = editor::palette::CameraPalette::SingleInstance();
+
 					editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
 
 					ImGui::Separator();
@@ -131,6 +136,9 @@ namespace application
 					if (data->targetCam)
 					{
 						ImGui::Text(data->targetCam->pod.name.c_str());
+						pp.ChangeTab("Camera");
+						cp.Reset();
+						cp.SelectCamera(data->targetCam);
 					}
 					else
 					{

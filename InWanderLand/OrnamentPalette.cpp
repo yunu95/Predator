@@ -56,6 +56,7 @@ namespace application
                 instance->pod.position.x = worldPosition.x;
                 instance->pod.position.y = worldPosition.y;
                 instance->pod.position.z = worldPosition.z;
+                instance->pod.madeEditor = true;
 
                 instance->ApplyAsPaletteInstance();
                 return instance;
