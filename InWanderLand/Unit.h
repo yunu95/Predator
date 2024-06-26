@@ -202,6 +202,7 @@ public:
     std::weak_ptr<yunutyEngine::graphics::Animator> GetAnimator() { return animatorComponent; }
 private:
     static bool pauseAll;
+    static Unit* debuggingUnit;
     void AddPassiveSkill(std::shared_ptr<PassiveSkill> skill);
     void Summon(application::editor::Unit_TemplateData* templateData);
     void SetIsAlive(bool isAlive);

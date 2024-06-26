@@ -159,7 +159,7 @@ void PlayerController::Update()
         text_State->GetTransform()->SetLocalScale(Vector3d{ 1200,500,0 });
         text_State->GetTransform()->SetLocalPosition(Vector3d{ 0,260,0 });
     }
-    if (GetUnitOnCursor())
+    if (Unit::debuggingUnit = GetUnitOnCursor())
     {
         selectedDebugCharacter = GetUnitOnCursor()->GetWeakPtr<Unit>();
         wstringstream wsstream;

@@ -73,7 +73,7 @@ coroutine::Coroutine RobinChargeSkill::operator()()
             each->KnockBack(each->GetTransform()->GetWorldPosition() + delta, pod.impactKnockbackDuration);
         }
     }
-    RTSCam::Instance().ApplyShake(pod.impactCamShakeDistance, pod.impactCamShakeFrequency, pod.impactCamShakeDecreaseFactor);
+    RTSCam::Instance().ApplyShake(pod.impactCamShakeDistance, pod.impactCamShakeFrequency, pod.impactCamShakeDecreaseFactor, endPos);
 
     co_yield coroutine::WaitForSeconds(slamAnim->GetDuration());
 
