@@ -622,6 +622,17 @@ namespace application
                     }
                     op.Reset();
                 }
+                if (ImGui::Button("Clear PunrealData", ImVec2(ImGui::GetContentRegionAvail().x, 20)))
+                {
+                    for (auto& each : InstanceManager::GetSingletonInstance().GetList<OrnamentData>())
+                    {
+                        if (!each->pod.madeEditor)
+                        {
+                            op.Delete(each);
+                        }
+                    }
+                    op.Reset();
+                }
             }
             imgui::ShiftCursorY(5);
 

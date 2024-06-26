@@ -215,8 +215,7 @@ void PlayerController::HandleByState()
 void PlayerController::HandleInput()
 {
     if (state == State::Cinematic) return;
-
-    if (Input::isKeyPushed(KeyCode::Space) && ((state == State::Battle) || state == State::Tactic))
+    if (Input::isKeyPushed(KeyCode::Space) && UIManager::Instance().GetScriptUI("UiEnum:Toggle_TacticMode")->GetUIEnabled() && ((state == State::Battle) || state == State::Tactic))
     {
         if ((TacticModeSystem::Instance().IsCoolTime() == false) && (TacticModeSystem::Instance().IsExecuting() == false))
         {
