@@ -68,6 +68,11 @@ namespace application
 			}
 		}
 
+		std::unordered_map<const UUID, OrnamentData*>& InstanceManager::GetPunrealGUIDMap()
+		{
+			return punrealGUIDMap;
+		}
+
 		bool InstanceManager::PreSave()
 		{
 			for (auto& [key, ptr] : list)
