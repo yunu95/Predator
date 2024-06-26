@@ -395,7 +395,11 @@ namespace application
 
     void Application::Initialize()
     {
+#ifdef EDITOR
         layers.resize(2);
+#else
+        layers.resize(1);
+#endif
 
         layers[(int)LayerList::ContentsLayer] = new contents::ContentsLayer();
 
@@ -453,14 +457,12 @@ namespace application
 
     void Application::Finalize()
     {
-#ifdef EDITOR
         for (auto each : layers)
         {
             each->Finalize();
-
             delete each;
         }
-#endif
+
         yunutyEngine::graphics::Renderer::SingleInstance().Finalize();
         ::DestroyWindow(hWND);
         ::UnregisterClass(wc.lpszClassName, wc.hInstance);
@@ -474,35 +476,46 @@ namespace application
         editor::TemplateDataManager::GetSingletonInstance().Clear();
     }
 
-    void Application::PlayContents()
+    void Application::PlayContents(ContentsPlayFlag playFlag)
     {
         auto cl = static_cast<contents::ContentsLayer*>(layers[(int)LayerList::ContentsLayer]);
+
+#ifdef EDITOR
         auto el = static_cast<editor::EditorLayer*>(layers[(int)LayerList::EditorLayer]);
+#endif
 
         if (isContentsPlaying)
         {
             cl->ResumeContents();
+#ifdef EDITOR
             el->OnResumeContents();
+#endif
         }
         else
         {
             isContentsPlaying = true;
-            cl->PlayContents();
+            cl->PlayContents(playFlag);
+#ifdef EDITOR
             el->OnPlayContents();
+#endif
         }
     }
 
     void Application::PauseContents()
     {
         static_cast<contents::ContentsLayer*>(layers[(int)LayerList::ContentsLayer])->PauseContents();
+#ifdef EDITOR
         static_cast<editor::EditorLayer*>(layers[(int)LayerList::EditorLayer])->OnPauseContents();
+#endif
     }
 
-    void Application::StopContents()
+    void Application::StopContents(ContentsStopFlag stopFlag)
     {
         isContentsPlaying = false;
-        static_cast<contents::ContentsLayer*>(layers[(int)LayerList::ContentsLayer])->StopContents();
+        static_cast<contents::ContentsLayer*>(layers[(int)LayerList::ContentsLayer])->StopContents(stopFlag);
+#ifdef EDITOR
         static_cast<editor::EditorLayer*>(layers[(int)LayerList::EditorLayer])->OnStopContents();
+#endif
     }
 
     void Application::TurnOff()

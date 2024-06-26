@@ -12,7 +12,7 @@ namespace application
 
 	void GamePlayTimer::Update()
 	{
-		if (static_cast<contents::ContentsLayer*>(Application::GetInstance().GetContentsLayer())->IsPlayingContents())
+		if (Application::GetInstance().IsContentsPlaying())
 		{
 			if (shouldCheck)
 			{
