@@ -1003,7 +1003,7 @@ void InstancingManager::RenderSkinnedDeferred()
 
 				ExposureBuffer exposurrBuffer;
 				exposurrBuffer.diffuseExposure = (*renderInfoVec.begin())->renderInfo.mesh->GetDiffuseExposure();
-				exposurrBuffer.ambientExposure = (*renderInfoVec.begin())->renderInfo.mesh->GetAmbientExposure();;
+				exposurrBuffer.ambientExposure = (*renderInfoVec.begin())->renderInfo.mesh->GetAmbientExposure();
 				NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::EXPOSURE))->PushGraphicsData(&exposurrBuffer,
 					sizeof(ExposureBuffer),
 					static_cast<int>(CB_TYPE::EXPOSURE), false);

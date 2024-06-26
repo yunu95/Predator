@@ -18,6 +18,7 @@ namespace wanderResources
     std::weak_ptr<yunuGI::IVideo> GetPortraitVideoIdle(PlayerCharacterType::Enum playerType);
     std::weak_ptr<yunuGI::IVideo> GetPortraitVideoHurt(PlayerCharacterType::Enum playerType);
     std::weak_ptr<ManagedFBX> GetVFX(const std::string& fbx, UnitAnimType animType);
+    bool FindVFXMap(const std::string& fbx, UnitAnimType animType);
 
     namespace texture
     {

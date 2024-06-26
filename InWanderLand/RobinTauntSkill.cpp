@@ -20,11 +20,6 @@ coroutine::Coroutine RobinTauntSkill::operator()()
 
     owner.lock()->PlayAnimation(UnitAnimType::Taunt, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
 
-    while (animator.lock()->GetCurrentAnimation() != wanderResources::GetAnimation(owner.lock()->GetUnitTemplateData().pod.skinnedFBXName, UnitAnimType::Taunt))
-    {
-        co_await std::suspend_always{};
-    }
-
     effectColliderCoroutine = owner.lock()->StartCoroutine(SpawningSkillffect(std::dynamic_pointer_cast<RobinTauntSkill>(selfWeakPtr.lock())));
     effectColliderCoroutine.lock()->PushDestroyCallBack([this]()
         {

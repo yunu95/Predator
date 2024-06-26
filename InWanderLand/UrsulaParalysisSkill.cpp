@@ -18,10 +18,6 @@ coroutine::Coroutine UrsulaParalysisSkill::operator()()
     auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill2);
 
     owner.lock()->PlayAnimation(UnitAnimType::Skill2, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
-    while (animator.lock()->GetCurrentAnimation() != wanderResources::GetAnimation(owner.lock()->GetUnitTemplateData().pod.skinnedFBXName, UnitAnimType::Skill1))
-    {
-        co_await std::suspend_always{};
-    }
 
     effectColliderCoroutine = owner.lock()->StartCoroutine(SpawningFieldEffect(dynamic_pointer_cast<UrsulaParalysisSkill>(selfWeakPtr.lock())));
     effectColliderCoroutine.lock()->PushDestroyCallBack([this]()
