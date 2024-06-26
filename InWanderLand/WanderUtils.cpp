@@ -2,6 +2,7 @@
 #include "GlobalConstant.h"
 #include "LightData.h"
 #include "Application.h"
+#include "ContentsLayer.h"
 
 float wanderUtils::ResourceRecursiveLoader::coroutineDeltaTimeThreshold = 0.02f;
 bool wanderUtils::ResourceRecursiveLoader::isLoadingResources = false;
@@ -240,7 +241,7 @@ void wanderUtils::ChangeLightMap(Stage stage)
 		{
 			graphics::Camera::GetMainCamera()->GetGI().SetClearColor(yunuGI::Color{ 0,0,0,1 });
 			yunutyEngine::graphics::Renderer::SingleInstance().SetLightMap(L"Stage2LightMap");
-			if (Application::GetInstance().IsContentsPlaying())
+			if (static_cast<contents::ContentsLayer*>(Application::GetInstance().GetContentsLayer())->IsPlayingContents())
 			{
 				application::editor::LightData::GetPlaytimeDirectionalLight()->GetTransform()->SetWorldRotation(Quaternion{ Vector3d{90,0,0} });
 			}
@@ -266,7 +267,7 @@ void wanderUtils::ChangeLightMap(Stage stage)
 			inGameRot.y = 0.0646217689;
 			inGameRot.z = 0.11142046;
 			inGameRot.w = 0.492771924;
-			if (Application::GetInstance().IsContentsPlaying())
+			if (static_cast<contents::ContentsLayer*>(Application::GetInstance().GetContentsLayer())->IsPlayingContents())
 			{
 				application::editor::LightData::GetPlaytimeDirectionalLight()->GetTransform()->SetWorldRotation(inGameRot);
 			}

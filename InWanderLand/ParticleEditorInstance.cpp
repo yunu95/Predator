@@ -5,6 +5,7 @@
 #include "EditorResourceManager.h"
 #include "TemplateDataManager.h"
 #include "Application.h"
+#include "ContentsLayer.h"
 
 namespace application::editor::palette
 {
@@ -113,7 +114,7 @@ namespace application::editor::palette
 		}
 
 		GetGameObject()->SetSelfActive(true);
-		if (!Application::GetInstance().IsContentsPlaying())
+		if (!static_cast<contents::ContentsLayer*>(Application::GetInstance().GetContentsLayer())->IsPlayingContents())
 		{
 			if (particleObj)
 			{
