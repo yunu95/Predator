@@ -76,6 +76,7 @@ enum class CB_TYPE
     UTIL,
     PARTICLE,
     LIGHTMAP_UV,
+    DEPTH_BIAS,
 };
 
 struct MatrixBuffer
@@ -186,6 +187,8 @@ struct RenderInfo
     int lightMapIndex = -1;
     DirectX::SimpleMath::Vector2 uvOffset;
     DirectX::SimpleMath::Vector2 uvScaling;
+
+    float depthBias = 0.001f;
 };
 
 class NailAnimator;
@@ -247,6 +250,12 @@ struct LightMapUV
 struct LightMapUVBuffer
 {
     LightMapUV lightMapUV[MAX_STATIC_MODEL];
+};
+
+struct DepthBiasBuffer
+{
+    float depthBias;
+    DirectX::SimpleMath::Vector3 padding;
 };
 
 

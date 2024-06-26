@@ -136,8 +136,8 @@ void GraphicsTest()
 	camObj->AddComponent<tests::GraphicsTestCam>();
 	camObj->GetComponent<tests::GraphicsTestCam>()->GetGI().SetAsMain();
 
-	camObj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-10 });
-	//camObj->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{ 90,0,0 } });
+	camObj->GetTransform()->SetLocalPosition(Vector3d{ 0,10,0 });
+	camObj->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{ 90,0,0 } });
 
 	auto skillPreviewSystem = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	auto systemComponent = skillPreviewSystem->AddComponent<SkillPreviewSystem>();
@@ -153,7 +153,7 @@ void GraphicsTest()
 
 	for (auto& i : animationList)
 	{
-		if (i->GetName() == L"Ani_Monster1_Attack")
+		if (i->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleIdle")
 		{
 			i->SetLoop(true);
 			animation = i;
@@ -174,25 +174,15 @@ void GraphicsTest()
 	}
 
 	{
-		auto obj3 = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Bush_001");
+		auto obj3 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
+		auto anim = obj3->GetComponent<yunutyEngine::graphics::Animator>();
+		anim->PushAnimation(animation);
+		anim->Play(animation);
+		obj3->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{0,180,0} });
 	}
-	//{
-	//	auto obj3 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
-
-	//	auto obj = Scene::getCurrentScene()->AddGameObject();
-	//	auto particle = obj->AddComponent < yunutyEngine::graphics::ParticleRenderer >();
-	//	particle->SetIsApplyRoot(true);
-	//	particle->SetParticleShape(yunutyEngine::graphics::ParticleShape::Cone);
-	//	particle->SetParticleMode(yunutyEngine::graphics::ParticleMode::Bursts);
-	//	particle->SetTexture(_resourceManager->GetTexture(L"Texture/Particle/BombParticle.dds"));
-	//	particle->SetLoop(true);
-	//	particle->Play();
-	//	obj->SetParent(obj3);
-
-	//	auto obj2 = Scene::getCurrentScene()->AddGameObject();
-	//	auto test = obj2->AddComponent<TestComponent4>();
-	//	test->obj = obj3;
-	//}
+	{
+		auto obj3 = Scene::getCurrentScene()->AddGameObjectFromFBX("Cube");
+	}
 
 	yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
 	//yunutyEngine::graphics::Renderer::SingleInstance().SetUseIBL(true);
@@ -279,8 +269,13 @@ class ContentsInitializer : public yunutyEngine::Component
 #ifdef GRAPHICS_TEST
 		{
 			yunutyEngine::Collider2D::SetIsOnXYPlane(false);
+			Quaternion inGameRot;
+			inGameRot.x = 0.860572696;
+			inGameRot.y = 0.0646217689;
+			inGameRot.z = 0.11142046;
+			inGameRot.w = 0.492771924;
 			auto directionalLight = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
-			directionalLight->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{90,0,0} });
+			directionalLight->GetTransform()->SetLocalRotation(inGameRot);
 			directionalLight->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-20 });
 			auto light = directionalLight->AddComponent<yunutyEngine::graphics::DirectionalLight>();
 			auto color = yunuGI::Color{ 1,1,1,1.f };
