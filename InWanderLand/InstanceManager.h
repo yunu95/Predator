@@ -160,6 +160,8 @@ namespace application
                 return returnList;
             }
 
+            std::unordered_map<const UUID, OrnamentData*>& GetPunrealGUIDMap();
+
         protected:
             bool PreSave();
             virtual bool PreEncoding(json& data) const override;
@@ -179,6 +181,10 @@ namespace application
             std::unordered_map<const UUID, ITemplateData*> tdMap;
             // CreateEmptyInstance Only
             std::unordered_set<IEditableData*> listBeforeMatching;
+
+            /// Punreal 에서 사용하는 GUID 를 통해 관리되는 Map 입니다.
+            /// OrnamentData 의 pod 내부에 punrealGUID 데이터를 통해 map 에 접근합니다.
+            std::unordered_map<const UUID, OrnamentData*> punrealGUIDMap = std::unordered_map<const UUID, OrnamentData*>();
             IEditableData* mould;
         };
     }

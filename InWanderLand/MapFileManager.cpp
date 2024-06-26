@@ -5,6 +5,7 @@
 #include "EditorEvents.h"
 #include "EditorCommonEvents.h"
 #include "WavePalette.h"
+#include "OrnamentPalette.h"
 
 #include "GlobalConstant.h"
 #include "InstanceManager.h"
@@ -44,6 +45,12 @@ namespace application
 
 		bool MapFileManager::LoadStaticOrnaments(const std::string& path)
 		{
+			auto& guidMap = InstanceManager::GetSingletonInstance().GetPunrealGUIDMap();
+			for (auto& each : InstanceManager::GetSingletonInstance().GetList<OrnamentData>())
+			{
+				guidMap[String_To_UUID(each->pod.punrealGUID)] = each;
+			}
+
 			std::ifstream loadFile{ path };
 
 			if (loadFile.is_open())
@@ -60,6 +67,8 @@ namespace application
 				std::vector<float> scale(3);
 				std::vector<double> rotation(4);
 				std::vector<float> location(3);
+				UUID loadedGUID;
+				auto loadedStage = path.find("1Stage") != std::string::npos ? 1 : 2;
 
 				for (int i = 0; i < objSize; i++)
 				{
@@ -74,16 +83,47 @@ namespace application
 					location[0] = (float)(mapData[i]["Location"][0]) / 100.f;
 					location[1] = (float)(mapData[i]["Location"][1]) / 100.f;
 					location[2] = (float)(mapData[i]["Location"][2]) / 100.f;
+
+					std::string unworkedGUID = mapData[i]["GUID"];
+					unworkedGUID.insert(8, "-");
+					unworkedGUID.insert(13, "-");
+					unworkedGUID.insert(18, "-");
+					unworkedGUID.insert(23, "-");
+					loadedGUID = String_To_UUID(unworkedGUID);
 					int lightMapIndex = -1;
 					if (mapData[i].contains("LightMapIndex"))
 						lightMapIndex = (int)(mapData[i]["LightMapIndex"]);
-					float LightMapScaleOffset[4];
+					float LightMapScaleOffset[4] = { 0, 0, 0, 0 };
 					if (mapData[i].contains("LightMapScaleOffset"))
 					{
 						LightMapScaleOffset[0] = (float)(mapData[i]["LightMapScaleOffset"][0]);
 						LightMapScaleOffset[1] = (float)(mapData[i]["LightMapScaleOffset"][1]);
 						LightMapScaleOffset[2] = (float)(mapData[i]["LightMapScaleOffset"][2]);
 						LightMapScaleOffset[3] = (float)(mapData[i]["LightMapScaleOffset"][3]);
+					}
+
+					if (guidMap.contains(loadedGUID))
+					{
+						guidMap[loadedGUID]->pod.scale.x = scale[0];
+						guidMap[loadedGUID]->pod.scale.y = scale[2];
+						guidMap[loadedGUID]->pod.scale.z = scale[1];
+						guidMap[loadedGUID]->pod.rotation.x = -rotation[1];
+						guidMap[loadedGUID]->pod.rotation.y = rotation[3];
+						guidMap[loadedGUID]->pod.rotation.z = rotation[2];
+						guidMap[loadedGUID]->pod.rotation.w = rotation[0];
+						guidMap[loadedGUID]->pod.position.x = -location[0];
+						guidMap[loadedGUID]->pod.position.y = location[2];
+						guidMap[loadedGUID]->pod.position.z = location[1];
+						guidMap[loadedGUID]->pod.LightMapIndex = lightMapIndex;
+						guidMap[loadedGUID]->pod.LightMapScaleOffset[0] = LightMapScaleOffset[0];
+						guidMap[loadedGUID]->pod.LightMapScaleOffset[1] = LightMapScaleOffset[1];
+						guidMap[loadedGUID]->pod.LightMapScaleOffset[2] = LightMapScaleOffset[2];
+						guidMap[loadedGUID]->pod.LightMapScaleOffset[3] = LightMapScaleOffset[3];
+						guidMap[loadedGUID]->pod.punrealGUID = UUID_To_String(loadedGUID);
+						guidMap[loadedGUID]->pod.stage = loadedStage;
+						guidMap[loadedGUID]->ApplyAsPaletteInstance();
+						guidMap.erase(loadedGUID);
+						continue;
 					}
 
 					auto odt = instanceManager.CreateInstance<OrnamentData>(fbxName);
@@ -108,12 +148,22 @@ namespace application
 					odt->pod.LightMapScaleOffset[1] = LightMapScaleOffset[1];
 					odt->pod.LightMapScaleOffset[2] = LightMapScaleOffset[2];
 					odt->pod.LightMapScaleOffset[3] = LightMapScaleOffset[3];
+					odt->pod.punrealGUID = UUID_To_String(loadedGUID);
 
-					odt->pod.stage = path.find("1Stage") != std::string::npos ? 1 : 2;
+					odt->pod.stage = loadedStage;
 
 					auto pi = odt->ApplyAsPaletteInstance();
 				}
 
+				for (auto& [uuid, each] : guidMap)
+				{
+					if (each->pod.stage == loadedStage)
+					{
+						palette::OrnamentPalette::SingleInstance().Delete(each);
+					}
+				}
+
+				guidMap.clear();
 #ifdef EDITOR
 				Application::DispatchEvent<LoadEvent>();
 #endif
