@@ -26,10 +26,6 @@ coroutine::Coroutine HanselChargeSkill::operator()()
     auto animator = owner.lock()->GetAnimator();
 
     owner.lock()->PlayAnimation(UnitAnimType::Skill1);
-    while (animator.lock()->GetCurrentAnimation() != wanderResources::GetAnimation(owner.lock()->GetUnitTemplateData().pod.skinnedFBXName, UnitAnimType::Skill1))
-    {
-        co_await std::suspend_always{};
-    }
 
     effectColliderCoroutine = owner.lock()->StartCoroutine(SpawningFieldEffect(dynamic_pointer_cast<HanselChargeSkill>(selfWeakPtr.lock())));
     effectColliderCoroutine.lock()->PushDestroyCallBack([this]()

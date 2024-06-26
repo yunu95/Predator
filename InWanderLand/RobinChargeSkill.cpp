@@ -54,10 +54,6 @@ coroutine::Coroutine RobinChargeSkill::operator()()
     owner.lock()->PlayAnimation(UnitAnimType::Slam);
     animator.lock()->Resume();
     knockbackCollider.lock()->SetRadius(pod.impactKnockbackRadius);
-    while (animator.lock()->GetCurrentAnimation() != wanderResources::GetAnimation(owner.lock()->GetUnitTemplateData().pod.skinnedFBXName, UnitAnimType::Slam))
-    {
-        co_await std::suspend_always{};
-    }
 
     auto effectCoroutine = owner.lock()->StartCoroutine(SpawningSkillffect(dynamic_pointer_cast<RobinChargeSkill>(selfWeakPtr.lock()), startPos));
     effectCoroutine.lock()->PushDestroyCallBack([this]()

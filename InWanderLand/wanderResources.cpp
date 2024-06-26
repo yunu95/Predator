@@ -168,3 +168,17 @@ std::weak_ptr<ManagedFBX> wanderResources::GetVFX(const std::string& fbx, UnitAn
         InitFBXMap();
     return FBXPool::Instance().Borrow(fbxMap.at(fbx).at(animType));
 }
+
+bool wanderResources::FindVFXMap(const std::string& fbx, UnitAnimType animType)
+{
+    auto itr = fbxMap.find(fbx);
+
+    if (itr == fbxMap.end() || itr->second.find(animType) == itr->second.end())
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}
