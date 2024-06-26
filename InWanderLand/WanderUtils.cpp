@@ -1,6 +1,7 @@
 #include "WanderUtils.h"
 #include "GlobalConstant.h"
 #include "LightData.h"
+#include "Application.h"
 
 float wanderUtils::ResourceRecursiveLoader::coroutineDeltaTimeThreshold = 0.02f;
 bool wanderUtils::ResourceRecursiveLoader::isLoadingResources = false;
@@ -191,24 +192,21 @@ coroutine::Coroutine wanderUtils::ResourceRecursiveLoader::LoadByCoroutine(strin
 
 std::map<wanderUtils::Stage, std::vector<std::function<void()>>> contentsCallbackMap = std::map<wanderUtils::Stage, std::vector<std::function<void()>>>();
 wanderUtils::Stage currentStage = wanderUtils::Stage::One;
+wanderUtils::Stage currentLightMap = wanderUtils::Stage::One;
 
 wanderUtils::Stage wanderUtils::GetCurrentStage()
 {
 	return currentStage;
 }
 
+wanderUtils::Stage wanderUtils::GetCurrentLightMap()
+{
+	return currentLightMap;
+}
+
 void wanderUtils::ChangeStageToOne()
 {
-	graphics::Camera::GetMainCamera()->GetGI().SetClearColor(yunuGI::Color{ 0.7686,0.8784,0.9451,1 });
-	yunutyEngine::graphics::Renderer::SingleInstance().SetLightMap(L"Stage1LightMap");
-
-	Quaternion inGameRot;
-	inGameRot.x = 0.860572696;
-	inGameRot.y = 0.0646217689;
-	inGameRot.z = 0.11142046;
-	inGameRot.w = 0.492771924;
-	application::editor::LightData::GetPlaytimeDirectionalLight()->GetTransform()->SetWorldRotation(inGameRot);
-
+	ChangeLightMap(Stage::One);
 	if (contentsCallbackMap.contains(Stage::One))
 	{
 		for (auto& each : contentsCallbackMap[Stage::One])
@@ -222,10 +220,7 @@ void wanderUtils::ChangeStageToOne()
 
 void wanderUtils::ChangeStageToTwo()
 {
-	graphics::Camera::GetMainCamera()->GetGI().SetClearColor(yunuGI::Color{ 0,0,0,1 });
-	yunutyEngine::graphics::Renderer::SingleInstance().SetLightMap(L"Stage2LightMap");
-	application::editor::LightData::GetPlaytimeDirectionalLight()->GetTransform()->SetWorldRotation(Quaternion{ Vector3d{90,0,0} });
-
+	ChangeLightMap(Stage::Two);
 	if (contentsCallbackMap.contains(Stage::Two))
 	{
 		for (auto& each : contentsCallbackMap[Stage::Two])
@@ -235,6 +230,59 @@ void wanderUtils::ChangeStageToTwo()
 	}
 
 	currentStage = wanderUtils::Stage::Two;
+}
+
+void wanderUtils::ChangeLightMap(Stage stage)
+{
+	switch (stage)
+	{
+		case wanderUtils::Stage::Two:
+		{
+			graphics::Camera::GetMainCamera()->GetGI().SetClearColor(yunuGI::Color{ 0,0,0,1 });
+			yunutyEngine::graphics::Renderer::SingleInstance().SetLightMap(L"Stage2LightMap");
+			if (Application::GetInstance().IsContentsPlaying())
+			{
+				application::editor::LightData::GetPlaytimeDirectionalLight()->GetTransform()->SetWorldRotation(Quaternion{ Vector3d{90,0,0} });
+			}
+			else
+			{
+				auto editorLight = application::editor::LightData::GetEditorDirectionalLight();
+				auto inGameRot = Quaternion{ Vector3d{90,0,0} };
+				editorLight->pod.rotation.x = inGameRot.x;
+				editorLight->pod.rotation.y = inGameRot.y;
+				editorLight->pod.rotation.z = inGameRot.z;
+				editorLight->pod.rotation.w = inGameRot.w;
+				editorLight->ApplyAsPaletteInstance();
+			}
+			currentLightMap = Stage::Two;
+			break;
+		}
+		default:
+		{
+			graphics::Camera::GetMainCamera()->GetGI().SetClearColor(yunuGI::Color{ 0.7686,0.8784,0.9451,1 });
+			yunutyEngine::graphics::Renderer::SingleInstance().SetLightMap(L"Stage1LightMap");
+			Quaternion inGameRot;
+			inGameRot.x = 0.860572696;
+			inGameRot.y = 0.0646217689;
+			inGameRot.z = 0.11142046;
+			inGameRot.w = 0.492771924;
+			if (Application::GetInstance().IsContentsPlaying())
+			{
+				application::editor::LightData::GetPlaytimeDirectionalLight()->GetTransform()->SetWorldRotation(inGameRot);
+			}
+			else
+			{
+				auto editorLight = application::editor::LightData::GetEditorDirectionalLight();
+				editorLight->pod.rotation.x = inGameRot.x;
+				editorLight->pod.rotation.y = inGameRot.y;
+				editorLight->pod.rotation.z = inGameRot.z;
+				editorLight->pod.rotation.w = inGameRot.w;
+				editorLight->ApplyAsPaletteInstance();
+			}
+			currentLightMap = Stage::One;
+			break;
+		}
+	}
 }
 
 void wanderUtils::ClearContentsCallbacks()
