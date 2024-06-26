@@ -3,20 +3,6 @@
 #include "DebugMeshes.h"
 #include "InteractableData.h"
 
-void Interactable_BarricadeSphere::SetDataFromEditorData(const application::editor::InteractableData& data)
-{
-	initPos.x = data.pod.position.x;
-	initPos.y = data.pod.position.y;
-	initPos.z = data.pod.position.z;
-	initRotation.w = data.pod.rotation.w;
-	initRotation.x = data.pod.rotation.x;
-	initRotation.y = data.pod.rotation.y;
-	initRotation.z = data.pod.rotation.z;
-	initScale.x = data.pod.scale.x;
-	initScale.y = data.pod.scale.y;
-	initScale.z = data.pod.scale.z;
-}
-
 void Interactable_BarricadeSphere::Start()
 {
 	AttachDebugMesh(GetGameObject(), DebugMeshType::Sphere, yunuGI::Color::green());
@@ -35,4 +21,18 @@ void Interactable_BarricadeSphere::OnTriggerEnter(physics::Collider* collider)
 	{
 		projectile->ExplodeAtCurrentPosition();
 	}
+}
+
+void Interactable_BarricadeSphere::SetDataFromEditorData(const application::editor::InteractableData& data)
+{
+	initPos.x = data.pod.position.x;
+	initPos.y = data.pod.position.y;
+	initPos.z = data.pod.position.z;
+	initRotation.w = data.pod.rotation.w;
+	initRotation.x = data.pod.rotation.x;
+	initRotation.y = data.pod.rotation.y;
+	initRotation.z = data.pod.rotation.z;
+	initScale.x = data.pod.scale.x;
+	initScale.y = data.pod.scale.y;
+	initScale.z = data.pod.scale.z;
 }

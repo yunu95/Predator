@@ -364,10 +364,10 @@ void application::contents::ContentsLayer::PlayContents(ContentsPlayFlag playFla
 	SkillPreviewSystem::Instance().camObj = RTSCam::Instance().GetGameObject();
 	TacticModeSystem::Instance();
 
-	wanderUtils::ChangeStageToOne();
-
 	/// Playable 동작들을 일괄 처리할 부분입니다.
 	PlayableComponent::OnGameStartAll();
+
+	wanderUtils::ChangeStageToOne();
 }
 
 void application::contents::ContentsLayer::PauseContents()
@@ -407,6 +407,8 @@ void application::contents::ContentsLayer::StopContents(ContentsStopFlag stopFla
 
 	if (bool(stopFlag & ContentsStopFlag::ClearUI))
 		UIManager::Instance().Clear();
+
+	wanderUtils::ClearContentsCallbacks();
 }
 
 bool application::contents::ContentsLayer::IsPlayingContents() const

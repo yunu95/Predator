@@ -486,9 +486,9 @@ namespace application
         }
         else
         {
-			isContentsPlaying = true;
-			cl->PlayContents();
-			el->OnPlayContents();
+            isContentsPlaying = true;
+            cl->PlayContents();
+            el->OnPlayContents();
         }
     }
 
@@ -556,6 +556,10 @@ namespace application
     void Application::ImGuiUpdate()
     {
 #ifdef EDITOR
+        if (wanderUtils::ResourceRecursiveLoader::IsLoadingResources())
+        {
+            return;
+        }
         MSG msg;
         while (::PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))
         {

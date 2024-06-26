@@ -280,6 +280,11 @@ namespace application
                     trigger = AddTrigger<Trigger_EndWave>();
                     break;
                 }
+                case application::TriggerType::StageStart:
+                {
+                    trigger = AddTrigger<Trigger_StageStart>();
+                    break;
+                }
                 default:
                     break;
                 }
@@ -354,6 +359,11 @@ namespace application
                 case application::ConditionType::OrnamentHide:
                 {
                     condition = AddCondition<Condition_OrnamentHide>();
+                    break;
+                }
+                case application::ConditionType::Stage:
+                {
+                    condition = AddCondition<Condition_Stage>();
                     break;
                 }
                 default:
@@ -607,6 +617,21 @@ namespace application
                     case application::ActionType::SetCamBidirectionalPath:
                     {
                         action = AddAction<Action_SetCamBidirectionalPath>();
+                        break;
+                    }
+                    case application::ActionType::ParticleMoveWithRotateAndRescale:
+                    {
+                        action = AddAction<Action_ParticleMoveWithRotateAndRescale>();
+                        break;
+                    }
+                    case application::ActionType::ParticleShow:
+                    {
+                        action = AddAction<Action_ParticleShow>();
+                        break;
+                    }
+                    case application::ActionType::ParticleHide:
+                    {
+                        action = AddAction<Action_ParticleHide>();
                         break;
                     }
                     default:

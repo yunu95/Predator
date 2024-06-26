@@ -81,6 +81,18 @@ namespace application
 		Unit_TemplateData::Unit_TemplateData()
 			: ITemplateData(), pod()
 		{
+			for (int i = 1; i < (int)UnitAnimType::End; i++)
+			{
+				for (int j = 1; j < (int)UnitAnimType::End; j++)
+				{
+					if (i == j)
+					{
+						continue;
+					}
+
+					pod.animationBlendMap[std::pair(i, j)] = 0.32f;
+				}
+			}			
 			EnterDataFromGlobalConstant();
 		}
 

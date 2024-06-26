@@ -90,9 +90,15 @@ namespace application
 
         void ParticleData::ApplyAsPlaytimeObject()
         {
-            if (particleInstance == nullptr)
+            ApplyAsPaletteInstance();
+            if (!pod.isGuide && tookAction)
             {
-                ApplyAsPaletteInstance();
+                particleInstance->ShowParticleObject();
+                auto pt = particleInstance->GetParticleObject()->GetTransform();
+                pt->SetWorldPosition({ pod.position.x,pod.position.y,pod.position.z });
+                pt->SetWorldRotation({ pod.rotation.w, pod.rotation.x, pod.rotation.y, pod.rotation.z });
+                pt->SetLocalScale({ pod.scale.x,pod.scale.y,pod.scale.z });
+                tookAction = false;
             }
         }
 

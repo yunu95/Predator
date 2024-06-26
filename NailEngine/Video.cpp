@@ -479,6 +479,7 @@ bool Video::open(const wchar_t* filename) {
     // Just to ensure we have something as the first frame, and also ensure we have the real required size (height % 16 should be 0)
     //update(0.0f, false);
 
+    //update(0, true);
     return true;
 }
 float Video::GetWidth()

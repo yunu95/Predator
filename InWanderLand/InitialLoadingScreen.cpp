@@ -32,8 +32,10 @@ coroutine::Coroutine InitialLoadingScreen::ShowLoadingScreen()
         co_await std::suspend_always{};
     }
     co_await std::suspend_always{};
-    uiImage->GetGI().SetVideo(videoNailEngine.lock()->GetName());
     videoPlayer->SetVideo(videoNailEngine);
+
+    co_await std::suspend_always{};
+    uiImage->GetGI().SetVideo(videoNailEngine.lock()->GetName());
     float t = 0;
     while (!videoNailEngine.lock()->IsDonePlaying())
     {
@@ -49,9 +51,11 @@ coroutine::Coroutine InitialLoadingScreen::ShowLoadingScreen()
         }
         co_await std::suspend_always{};
     }
-    uiImage->GetGI().SetVideo(videoJustLoading.lock()->GetName());
     videoPlayer->SetVideo(videoJustLoading);
     videoPlayer->loop = true;
+    co_await std::suspend_always{};
+
+    uiImage->GetGI().SetVideo(videoJustLoading.lock()->GetName());
     while (wanderUtils::ResourceRecursiveLoader::IsLoadingResources())
     {
         co_await std::suspend_always{};
