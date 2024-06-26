@@ -29,6 +29,7 @@ namespace application
             class LightEditorInstance
                 : public PaletteInstance
             {
+                friend class LightData;
             public:
                 virtual ~LightEditorInstance();
                 virtual void Start() override;

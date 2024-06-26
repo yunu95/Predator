@@ -5,6 +5,8 @@
 
 #include "Application.h"
 #include "EditorLayer.h"
+#include "Panel_Palette.h"
+#include "InteractablePalette.h"
 
 #include "EditorPopupManager.h"
 
@@ -67,6 +69,9 @@ namespace application
 			editor::EditorLayer::SetInputControl(false);
 			editor::imgui::ShowMessageBox("SetTargetInteractable(TriggerEnter)", [data]()
 				{
+					auto& pp = editor::PalettePanel::GetSingletonInstance();
+					auto& ip = editor::palette::InteractablePalette::SingleInstance();
+
 					editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
 
 					ImGui::Separator();
@@ -75,6 +80,9 @@ namespace application
 					if (data->targetInteractable)
 					{
 						ImGui::Text(data->targetInteractable->pod.templateData->pod.fBXName.c_str());
+						pp.ChangeTab("Interactable");
+						ip.Reset();
+						ip.SelectInteractable(data->targetInteractable->GetUUID());
 					}
 					else
 					{
@@ -181,6 +189,9 @@ namespace application
 			editor::EditorLayer::SetInputControl(false);
 			editor::imgui::ShowMessageBox("SetTargetInteractable(TriggerExit)", [data]()
 				{
+					auto& pp = editor::PalettePanel::GetSingletonInstance();
+					auto& ip = editor::palette::InteractablePalette::SingleInstance();
+
 					editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
 
 					ImGui::Separator();
@@ -189,6 +200,9 @@ namespace application
 					if (data->targetInteractable)
 					{
 						ImGui::Text(data->targetInteractable->pod.templateData->pod.fBXName.c_str());
+						pp.ChangeTab("Interactable");
+						ip.Reset();
+						ip.SelectInteractable(data->targetInteractable->GetUUID());
 					}
 					else
 					{
