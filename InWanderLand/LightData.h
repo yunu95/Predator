@@ -72,6 +72,7 @@ namespace application
             friend class InstanceManager;
 
         public:
+            static LightData* GetEditorDirectionalLight();
             static yunutyEngine::graphics::DirectionalLight* GetPlaytimeDirectionalLight();
 
             virtual bool EnterDataFromTemplate() override;
@@ -100,7 +101,8 @@ namespace application
             static TemplateDataManager& templateDataManager;
             palette::LightEditorInstance* lightInstance{ nullptr };
 
-            static yunutyEngine::graphics::DirectionalLight* directionalLight;
+            static LightData* editorDirectionalLight;
+            static yunutyEngine::graphics::DirectionalLight* playtimeDirectionalLight;
 
             LightData();
             LightData(const std::string& name);

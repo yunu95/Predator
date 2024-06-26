@@ -21,9 +21,12 @@ namespace wanderUtils
 	};
 
 	Stage GetCurrentStage();
+	Stage GetCurrentLightMap();
 
 	void ChangeStageToOne();
 	void ChangeStageToTwo();
+
+	void ChangeLightMap(Stage stage);
 
 	void ClearContentsCallbacks();
 	void PushStageCallback(Stage stage, const std::function<void()>& callback);

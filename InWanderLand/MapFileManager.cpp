@@ -157,7 +157,7 @@ namespace application
 
 				for (auto& [uuid, each] : guidMap)
 				{
-					if (each->pod.stage == loadedStage)
+					if (!each->pod.madeEditor && each->pod.stage == loadedStage)
 					{
 						palette::OrnamentPalette::SingleInstance().Delete(each);
 					}

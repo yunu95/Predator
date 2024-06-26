@@ -557,6 +557,20 @@ namespace application
                         }
                         imgui::EndSection();
                     }
+
+                    if (imgui::BeginSection_2Col(sectionIdx, "Environment", 300.0f))
+                    {
+                        auto lmState = wanderUtils::GetCurrentLightMap();
+                        int selected = (int)lmState;
+
+                        static const char* lightMapState[] = { "Stage 1", "Stage 2" };
+                        imgui::Dropdown_2Col("Light Map", lightMapState, 2, (int32_t*)&selected);
+
+                        wanderUtils::ChangeLightMap((wanderUtils::Stage)selected);
+
+                        imgui::EndSection();
+                    }
+
                     ImGui::EndPopup();
                 }
             }

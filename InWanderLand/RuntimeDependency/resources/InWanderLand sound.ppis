@@ -50,7 +50,7 @@
             "type": 3
         },
         {
-            "animationName": "Rig_Robin|Ani_Hansel_Attack ",
+            "animationName": "Rig_Robin|Ani_Hansel_Attack",
             "fbxName": "SKM_Hansel",
             "frame": 40.0,
             "rscPath": "sounds/Hansel/Hansel normal attack.wav",

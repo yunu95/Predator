@@ -38,6 +38,7 @@ namespace application
             std::vector<float> LightMapScaleOffset{ 0,0,0,0 };
             int stage = 1;
             bool isGuide = false;
+            bool madeEditor = false;
             std::string punrealGUID = "";
 
             TO_JSON(POD_Ornament)

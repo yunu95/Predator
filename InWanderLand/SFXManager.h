@@ -21,5 +21,5 @@ public:
 
 private:
 	float localSFXVolume = 1.0f;
-	float ratio = 10.f;
+	float ratio = 1.f;
 };

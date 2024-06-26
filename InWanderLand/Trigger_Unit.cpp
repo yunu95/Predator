@@ -5,6 +5,8 @@
 
 #include "Application.h"
 #include "EditorLayer.h"
+#include "Panel_Palette.h"
+#include "UnitPalette.h"
 
 #include "EditorPopupManager.h"
 
@@ -66,6 +68,9 @@ namespace application
 			editor::EditorLayer::SetInputControl(false);
 			editor::imgui::ShowMessageBox("SetTargetUnit(UnitAppear)", [data]()
 				{
+                    auto& pp = editor::PalettePanel::GetSingletonInstance();
+                    auto& up = editor::palette::UnitPalette::SingleInstance();
+
 					editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
 
                     ImGui::Separator();
@@ -74,6 +79,9 @@ namespace application
                     if (data->targetUnit)
                     {
                         ImGui::Text(data->targetUnit->pod.templateData->pod.skinnedFBXName.c_str());
+                        pp.ChangeTab("Unit");
+                        up.Reset();
+                        up.SelectUnitInstance(data->targetUnit);
                     }
                     else
                     {
@@ -179,6 +187,9 @@ namespace application
 			editor::EditorLayer::SetInputControl(false);
 			editor::imgui::ShowMessageBox("SetTargetUnit(UnitDie)", [data]()
 				{
+                    auto& pp = editor::PalettePanel::GetSingletonInstance();
+                    auto& up = editor::palette::UnitPalette::SingleInstance();
+
 					editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
 
                     ImGui::Separator();
@@ -187,6 +198,9 @@ namespace application
                     if (data->targetUnit)
                     {
                         ImGui::Text(data->targetUnit->pod.templateData->pod.skinnedFBXName.c_str());
+                        pp.ChangeTab("Unit");
+                        up.Reset();
+                        up.SelectUnitInstance(data->targetUnit);
                     }
                     else
                     {
