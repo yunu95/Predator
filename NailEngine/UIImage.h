@@ -45,7 +45,9 @@ public:
     void PreProcessTexture();
     // 텍스처를 임의의 점으로부터 특정 방향으로 선형적으로 잘라냅니다.
     bool IsLinearClippingMode();
+    bool IsCapsuleClipping();
     void SetLinearClipping(bool clip);
+    void SetCapsuleClipping(bool clip);
     void SetLinearClippingStartPoint(float x, float y);
     void SetLinearClippingDirection(float x, float y);
 private:
@@ -57,6 +59,8 @@ private:
     bool radialFillIsClockwise{ true };
 
     bool isLinearClippingMode{ false };
+    bool isCapsuleClippingMode{ false };
+    DirectX::SimpleMath::Vector2 capsulePoints{ -1, -1 };
     DirectX::SimpleMath::Vector2 linearClippingStart{ 0, 0.5f };
     DirectX::SimpleMath::Vector2 linearClippingDirection{ 0, 1 };
 

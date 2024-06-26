@@ -286,10 +286,10 @@ void RenderSystem::RenderShadow()
 
     for (auto& e : lightSet)
     {
-		if (e->IsActive() == false)
-		{
-			continue;
-		}
+        if (e->IsActive() == false)
+        {
+            continue;
+        }
         if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Directional))
         {
             if (e->IsShadowCast())
@@ -548,7 +548,6 @@ void RenderSystem::RenderUI()
         each->renderToLocalTexture();
         preprocessed = true;
     }
-    //Video::renderList.clear();
 
     if (!preProcessingUiImages.empty())
     {
@@ -560,7 +559,7 @@ void RenderSystem::RenderUI()
     {
         each->PreProcessTexture();
     }
-    preProcessingUiImages.clear();
+    std::erase_if(preProcessingUiImages, [](const auto& e) {return !e->IsVideoPlayMode(); });
 
     if (preprocessed)
     {

@@ -36,6 +36,7 @@ namespace application
 			virtual void Update(float ts) override;
 			virtual void GUIProgress() override;
 			virtual void Finalize() override;
+			virtual void OnEvent(EditorEvents& event) override;
 
 		private:
 			InspectorPanel();
@@ -249,6 +250,11 @@ namespace application
 
 			palette::PaletteManager& pm = palette::PaletteManager::GetSingletonInstance();
 			ResourceManager& erm = ResourceManager::GetSingletonInstance();
+
+			bool saved = false;
+			POD_Vector3<float> savedPosition = POD_Vector3<float>();
+			POD_Quaternion<float> savedQuaternion = POD_Quaternion<float>();
+			POD_Vector3<float> savedScale = POD_Vector3<float>();
 		};
 	}
 }

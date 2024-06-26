@@ -1,6 +1,7 @@
 #include "wanderResources.h"
 #include "FBXPool.h"
 std::unordered_map<std::string, std::unordered_map<UnitAnimType, yunuGI::IAnimation*>> animMap;
+std::unordered_map<std::string, std::unordered_map<yunuGI::IAnimation*, UnitAnimType>> animTypeMap;
 std::unordered_map<std::string, std::unordered_map<UnitAnimType, std::string>> fbxMap;
 std::unordered_map<std::string, std::string> projectileBirthSounds;
 std::unordered_map<std::string, std::string> projectileDeathSounds;
@@ -105,13 +106,38 @@ void InitAnimMap()
             }
         }
     }
+
+    for (auto& [fbx, map] : animMap)
+    {
+        for (auto& [type, ani] : map)
+        {
+            animTypeMap[fbx][ani] = type;
+        }
+    }
 };
+
 yunuGI::IAnimation* wanderResources::GetAnimation(const std::string& fbx, UnitAnimType animType)
 {
     if (animMap.empty())
         InitAnimMap();
     return animMap.at(fbx).at(animType);
 }
+
+UnitAnimType wanderResources::GetAnimationType(const std::string& fbx, yunuGI::IAnimation* animation)
+{
+    if (animMap.empty())
+    {
+        InitAnimMap();
+    }
+
+    if (!animTypeMap.contains(fbx) || !animTypeMap[fbx].contains(animation))
+    {
+        return UnitAnimType::None;
+    }
+
+    return animTypeMap.at(fbx).at(animation);
+}
+
 constexpr const std::string wanderResources::GetFBXName(WanderFBX::Enum fbxType)
 {
     switch (fbxType)
@@ -167,4 +193,18 @@ std::weak_ptr<ManagedFBX> wanderResources::GetVFX(const std::string& fbx, UnitAn
     if (fbxMap.empty())
         InitFBXMap();
     return FBXPool::Instance().Borrow(fbxMap.at(fbx).at(animType));
+}
+
+bool wanderResources::FindVFXMap(const std::string& fbx, UnitAnimType animType)
+{
+    auto itr = fbxMap.find(fbx);
+
+    if (itr == fbxMap.end() || itr->second.find(animType) == itr->second.end())
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
 }

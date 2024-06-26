@@ -119,11 +119,10 @@ coroutine::Coroutine HanselProjectileSkill::operator()()
     Vector3d direction = deltaPos.Normalized();
     owner.lock()->SetDesiredRotation(direction);
 
-    coroutine::ForSeconds forThrowingSeconds{ pod.throwingStartDelay };
-
     owner.lock()->PlayAnimation(UnitAnimType::Throw, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
 
-    while (throwingPieTimingFrame >= animator.lock()->GetCurrentFrame())
+    while (animator.lock()->GetCurrentAnimation() != wanderResources::GetAnimation(owner.lock()->GetUnitTemplateData().pod.skinnedFBXName, UnitAnimType::Throw)
+        || throwingPieTimingFrame >= animator.lock()->GetCurrentFrame())
     {
         co_await std::suspend_always{};
     }

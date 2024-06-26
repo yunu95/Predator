@@ -42,6 +42,7 @@ namespace yunutyEngine::graphics
         void PushAnimation(yunuGI::IAnimation* animation);
         void SetAnimationFrame(yunuGI::IAnimation* animation, unsigned int frame);
         void ChangeAnimation(yunuGI::IAnimation* animation, float transitionDuration, float transitionSpeed);
+        yunuGI::IAnimation* GetCurrentAnimation();
 
         /// isPlay 값을 리턴합니다.
         bool IsPlaying() { return isPlay; }

@@ -39,6 +39,7 @@ namespace application
             POD_Vector3<float> position = POD_Vector3<float>();
             POD_Quaternion<double> rotation = POD_Quaternion<double>();
             POD_Vector3<float> scale = { 1,1,1 };
+            bool isGuide = false;
 
             TO_JSON(POD_Particle)
                 FROM_JSON(POD_Particle)
@@ -63,6 +64,8 @@ namespace application
             virtual bool EnterDataFromGlobalConstant() override;
 
             POD_Particle pod;
+
+            bool tookAction = false;
 
         protected:
             virtual bool PreEncoding(json& data) const override;

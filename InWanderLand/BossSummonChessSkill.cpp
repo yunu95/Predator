@@ -21,14 +21,15 @@ coroutine::Coroutine BossSummonChessSkill::operator()()
 	auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
 	auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
 	auto rotRef = owner.lock()->referenceBlockRotation.Acquire();
+	auto animator = owner.lock()->GetAnimator();
 
 	owner.lock()->PlayAnimation(UnitAnimType::Skill4, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
+
 	effectCoroutine = owner.lock()->StartCoroutine(SpawningFieldEffect(std::dynamic_pointer_cast<BossSummonChessSkill>(selfWeakPtr.lock())));
 	effectCoroutine.lock()->PushDestroyCallBack([this]()
 		{
 			FBXPool::Instance().Return(stepEffect);
 		});
-	auto animator = owner.lock()->GetAnimator();
 	auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill4);
 	wanderUtils::UnitCoroutine::ForSecondsFromUnit forSeconds{ owner, anim->GetDuration() };
 

@@ -275,6 +275,7 @@ struct UIPreprocessVertex
     float clippingThreshold;
     DirectX::SimpleMath::Vector2 linearClippingDirection;
     DirectX::SimpleMath::Vector2 linearClippingStart;
+    DirectX::SimpleMath::Vector2 capsulePoints;
 };
 struct VideoYUVtoRGBVertex
 {

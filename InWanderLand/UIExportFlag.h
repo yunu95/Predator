@@ -96,4 +96,5 @@ enum class UIExportFlag2
     ReturnToTitleButton = 1 << 20,
     Video = 1 << 21,
     PropagateDisable = 1 << 22,
+    CapsuleClip = 1 << 23,
 };

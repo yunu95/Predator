@@ -23,7 +23,14 @@ void UIImage::SetTexture(yunuGI::ITexture* texture)
 
 yunuGI::ITexture* UIImage::GetTexture()
 {
-    return this->texture;
+    if (IsVideoPlayMode())
+    {
+        return video.lock()->videoTexture.get();
+    }
+    else
+    {
+        return this->texture;
+    }
 }
 
 DirectX::XMFLOAT2 UIImage::GetPrimitiveTextureSize()
@@ -45,6 +52,10 @@ ID3D11Texture2D* UIImage::GetProcessedTexture()
 }
 ID3D11ShaderResourceView* UIImage::GetSRV()
 {
+    if (IsUsingProcessedTexture())
+    {
+        return processedTextureSRV.Get();
+    }
     if (IsVideoPlayMode())
     {
         if (auto videoTexture = video.lock()->videoTexture)
@@ -52,10 +63,6 @@ ID3D11ShaderResourceView* UIImage::GetSRV()
             return videoTexture->GetSRV().Get();
         }
         return nullptr;
-    }
-    if (IsUsingProcessedTexture())
-    {
-        return processedTextureSRV.Get();
     }
     return  static_cast<Texture*>(this->texture)->GetSRV().Get();
 }
@@ -110,10 +117,20 @@ void UIImage::SetYPivot(float yPivot)
 void UIImage::SetWidth(float width)
 {
     this->width = width;
+    // 너비가 바뀌면 캡슐위치를 적절히 바꿔줘야함.
+    if (isCapsuleClippingMode)
+    {
+        SetCapsuleClipping(true);
+    }
 }
 void UIImage::SetHeight(float height)
 {
     this->height = height;
+    // 높이가 바뀌면 캡슐위치를 적절히 바꿔줘야함.
+    if (isCapsuleClippingMode)
+    {
+        SetCapsuleClipping(true);
+    }
 }
 void UIImage::SetRotation(float rotation)
 {
@@ -189,12 +206,15 @@ void UIImage::SetRadialFillDirection(bool isClockwise)
 }
 void UIImage::PreProcessTexture()
 {
+    yunuGI::ITexture* originalTexture{ nullptr };
+    originalTexture = GetTexture();
+    if (originalTexture == nullptr) return;
     if (processedTexture.Get() == nullptr)
     {
         D3D11_TEXTURE2D_DESC desc
         {
-             .Width = static_cast<unsigned int>(texture->GetWidth()),
-             .Height = static_cast<unsigned int>(texture->GetHeight()),
+             .Width = static_cast<unsigned int>(originalTexture->GetWidth()),
+             .Height = static_cast<unsigned int>(originalTexture->GetHeight()),
              .MipLevels = 1,
              .ArraySize = 1,
              .Format = DXGI_FORMAT_R32G32B32A32_FLOAT,
@@ -227,7 +247,8 @@ void UIImage::PreProcessTexture()
             .clippingDirection = DirectX::SimpleMath::Vector2{0,1},
             .clippingThreshold = -2,
             .linearClippingDirection = DirectX::SimpleMath::Vector2{1,1},
-            .linearClippingStart = DirectX::SimpleMath::Vector2{1,1}
+            .linearClippingStart = DirectX::SimpleMath::Vector2{1,1},
+            .capsulePoints = DirectX::SimpleMath::Vector2{-1,-1}
         },
         {
             .pos = DirectX::SimpleMath::Vector3{-1,1,0},
@@ -235,7 +256,8 @@ void UIImage::PreProcessTexture()
             .clippingDirection = DirectX::SimpleMath::Vector2{0,1},
             .clippingThreshold = -2,
             .linearClippingDirection = DirectX::SimpleMath::Vector2{1,1},
-            .linearClippingStart = DirectX::SimpleMath::Vector2{1,1}
+            .linearClippingStart = DirectX::SimpleMath::Vector2{1,1},
+            .capsulePoints = DirectX::SimpleMath::Vector2{-1,-1}
         },
         {
             .pos = DirectX::SimpleMath::Vector3{1,1,0},
@@ -243,7 +265,8 @@ void UIImage::PreProcessTexture()
             .clippingDirection = DirectX::SimpleMath::Vector2{0,1},
             .clippingThreshold = -2,
             .linearClippingDirection = DirectX::SimpleMath::Vector2{1,1},
-            .linearClippingStart = DirectX::SimpleMath::Vector2{1,1}
+            .linearClippingStart = DirectX::SimpleMath::Vector2{1,1},
+            .capsulePoints = DirectX::SimpleMath::Vector2{-1,-1}
         },
         {
             .pos = DirectX::SimpleMath::Vector3{-1,-1,0},
@@ -251,7 +274,8 @@ void UIImage::PreProcessTexture()
             .clippingDirection = DirectX::SimpleMath::Vector2{0,1},
             .clippingThreshold = -2,
             .linearClippingDirection = DirectX::SimpleMath::Vector2{1,1},
-            .linearClippingStart = DirectX::SimpleMath::Vector2{1,1}
+            .linearClippingStart = DirectX::SimpleMath::Vector2{1,1},
+            .capsulePoints = DirectX::SimpleMath::Vector2{-1,-1}
         },
         {
             .pos = DirectX::SimpleMath::Vector3{1,1,0},
@@ -259,7 +283,8 @@ void UIImage::PreProcessTexture()
             .clippingDirection = DirectX::SimpleMath::Vector2{0,1},
             .clippingThreshold = -2,
             .linearClippingDirection = DirectX::SimpleMath::Vector2{1,1},
-            .linearClippingStart = DirectX::SimpleMath::Vector2{1,1}
+            .linearClippingStart = DirectX::SimpleMath::Vector2{1,1},
+            .capsulePoints = DirectX::SimpleMath::Vector2{-1,-1}
         },
         {
             .pos = DirectX::SimpleMath::Vector3{1,-1,0},
@@ -267,7 +292,8 @@ void UIImage::PreProcessTexture()
             .clippingDirection = DirectX::SimpleMath::Vector2{0,1},
             .clippingThreshold = -2,
             .linearClippingDirection = DirectX::SimpleMath::Vector2{1,1},
-            .linearClippingStart = DirectX::SimpleMath::Vector2{1,1}
+            .linearClippingStart = DirectX::SimpleMath::Vector2{1,1},
+            .capsulePoints = DirectX::SimpleMath::Vector2{-1,-1}
         }
     };
 
@@ -295,6 +321,13 @@ void UIImage::PreProcessTexture()
             eachVertice.linearClippingStart = linearClippingStart;
         }
     }
+    if (isCapsuleClippingMode)
+    {
+        for (auto& eachVertice : vertices)
+        {
+            eachVertice.capsulePoints = capsulePoints;
+        }
+    }
     D3D11_BUFFER_DESC vBufferDesc =
     {
         .ByteWidth = sizeof(vertices),
@@ -311,7 +344,7 @@ void UIImage::PreProcessTexture()
     auto ps = std::static_pointer_cast<PixelShader>(ResourceManager::Instance.Get().GetShader(L"UIPreProcessPS.cso"));
     ResourceBuilder::Instance.Get().device->GetDeviceContext()->OMSetRenderTargets(1, processedTextureRTV.GetAddressOf(), nullptr);
     ResourceBuilder::Instance.Get().device->GetDeviceContext()->ClearRenderTargetView(processedTextureRTV.Get(), DirectX::Colors::Transparent);
-    static_cast<Texture*>(texture)->Bind(0);
+    static_cast<Texture*>(originalTexture)->Bind(0);
 
     vs->Bind();
     ps->Bind();
@@ -321,8 +354,8 @@ void UIImage::PreProcessTexture()
     {
          .TopLeftX = 0.0f,
          .TopLeftY = 0.0f,
-         .Width = texture->GetWidth(),
-         .Height = texture->GetHeight(),
+         .Width = originalTexture->GetWidth(),
+         .Height = originalTexture->GetHeight(),
          .MinDepth = 0.0f,
          .MaxDepth = 1.0f,
     };
@@ -335,10 +368,33 @@ bool UIImage::IsLinearClippingMode()
 {
     return isLinearClippingMode;
 }
+bool UIImage::IsCapsuleClipping()
+{
+    return isCapsuleClippingMode;
+}
 void UIImage::SetLinearClipping(bool clip)
 {
     isLinearClippingMode = clip;
     if (isLinearClippingMode == true)
+    {
+        RenderSystem::Instance.Get().PushPreProcessingUIObject(this);
+    }
+}
+void UIImage::SetCapsuleClipping(bool clip)
+{
+    isCapsuleClippingMode = clip;
+    if (width != -1 || height != -1)
+    {
+        if (width >= height)
+        {
+            capsulePoints = { (width - height) / (2 * width), 0 };
+        }
+        else
+        {
+            capsulePoints = { 0, (height - width) / (2 * height) };
+        }
+    }
+    if (isCapsuleClippingMode == true)
     {
         RenderSystem::Instance.Get().PushPreProcessingUIObject(this);
     }

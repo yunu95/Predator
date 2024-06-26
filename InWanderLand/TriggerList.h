@@ -11,3 +11,4 @@
 #include "Trigger_Unit.h"
 #include "Trigger_Interactable.h"
 #include "Trigger_Wave.h"
+#include "Trigger_Stage.h"

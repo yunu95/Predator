@@ -61,6 +61,7 @@ coroutine::Coroutine BossImpaleSkill::operator()()
 	auto impaleAnim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill2);
 
 	owner.lock()->PlayAnimation(UnitAnimType::Skill2);
+
 	effectCoroutine = owner.lock()->StartCoroutine(SpawningSkillffect(dynamic_pointer_cast<BossImpaleSkill>(selfWeakPtr.lock())));
 	effectCoroutine.lock()->PushDestroyCallBack([this]()
 		{

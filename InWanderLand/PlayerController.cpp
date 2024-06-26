@@ -117,18 +117,6 @@ void PlayerController::OnContentsPlay()
     SetActive(true);
     cursorUnitDetector = Scene::getCurrentScene()->AddGameObject()->AddComponentAsWeakPtr<UnitAcquisitionBoxCollider>();
     AttachDebugMesh(cursorUnitDetector.lock()->GetGameObject(), DebugMeshType::Cube, yunuGI::Color::white());
-    skillCooltimeNumberUI[SkillType::ROBIN_Q] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_Q_Cooltime_Number);
-    skillCooltimeNumberUI[SkillType::ROBIN_W] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_W_Cooltime_Number);
-    skillCooltimeNumberUI[SkillType::URSULA_Q] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Ursula)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_Q_Cooltime_Number);
-    skillCooltimeNumberUI[SkillType::URSULA_W] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Ursula)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_W_Cooltime_Number);
-    skillCooltimeNumberUI[SkillType::HANSEL_Q] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_Q_Cooltime_Number);
-    skillCooltimeNumberUI[SkillType::HANSEL_W] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_W_Cooltime_Number);
-    skillCooltimeMaskUI[SkillType::ROBIN_Q] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_Q_Overlay);
-    skillCooltimeMaskUI[SkillType::ROBIN_W] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_W_Overlay);
-    skillCooltimeMaskUI[SkillType::URSULA_Q] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Ursula)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_Q_Overlay);
-    skillCooltimeMaskUI[SkillType::URSULA_W] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Ursula)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_W_Overlay);
-    skillCooltimeMaskUI[SkillType::HANSEL_Q] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_Q_Overlay);
-    skillCooltimeMaskUI[SkillType::HANSEL_W] = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel)->GetLocalUIsByEnumID().at(UIEnumID::CharInfo_Skill_Use_W_Overlay);
     SetSkillPoints(0);
     SetManaFull();
     SetState(State::Peace);
@@ -146,6 +134,7 @@ void PlayerController::OnContentsStop()
     UnlockCamFromRegion();
     Unit::SetPauseAll(false);
     Scene::getCurrentScene()->DestroyGameObject(cursorUnitDetector.lock()->GetGameObject());
+    currentCombo = 0;
 }
 
 void PlayerController::Update()
@@ -160,6 +149,7 @@ void PlayerController::Update()
     HandleManaRegen();
     HandleMouseHover();
     HandleUnitPickingCollider();
+    HandleComboState();
     static yunutyEngine::graphics::UIText* text_State{ nullptr };
     if (text_State == nullptr)
     {
@@ -169,8 +159,9 @@ void PlayerController::Update()
         text_State->GetTransform()->SetLocalScale(Vector3d{ 1200,500,0 });
         text_State->GetTransform()->SetLocalPosition(Vector3d{ 0,260,0 });
     }
-    if (!selectedDebugCharacter.expired())
+    if (GetUnitOnCursor())
     {
+        selectedDebugCharacter = GetUnitOnCursor()->GetWeakPtr<Unit>();
         wstringstream wsstream;
         wsstream << L"unitState : ";
         auto& activeStates = selectedDebugCharacter.lock()->GetBehaviourTree().GetActiveNodes();
@@ -188,7 +179,7 @@ void PlayerController::Update()
 
         text_State->GetGI().SetText(wsstream.str());
     }
-    text_State->SetActive(DebugGraphic::AreDebugGraphicsEnabled());
+    text_State->SetActive(GetUnitOnCursor() && DebugGraphic::AreDebugGraphicsEnabled());
 }
 
 void PlayerController::HandleByState()
@@ -348,18 +339,6 @@ void PlayerController::HandleState()
     {
         this->SetState(State::Peace);
     }
-
-    //if (BossController::Instance().GetBoss().lock())
-    //{
-    //	if (BossController::Instance().GetBoss().lock()->IsAlive())
-    //	{
-    //		this->SetState(State::Battle);
-    //	}
-    //	else
-    //	{
-    //		this->SetState(State::Peace);
-    //	}
-    //}
 }
 
 void PlayerController::HandleCamera()
@@ -370,13 +349,13 @@ void PlayerController::HandleCamera()
     if (!selectedCharacter.expired())
     {
         Vector3d selectedCharPos = selectedCharacter.lock()->GetTransform()->GetWorldPosition();
+        // 카메라가 지역 제한에 걸렸을 경우, targetPos를 지역 안으로 정의합니다.
+        if (camLockRegion)
+        {
+            selectedCharPos.x = std::clamp(selectedCharPos.x, camLockRegion->pod.x - camLockRegion->pod.width * 0.5, camLockRegion->pod.x + camLockRegion->pod.width * 0.5);
+            selectedCharPos.z = std::clamp(selectedCharPos.z, camLockRegion->pod.z - camLockRegion->pod.height * 0.5, camLockRegion->pod.z + camLockRegion->pod.height * 0.5);
+        }
         targetPos = selectedCharPos + camOffsetNorm * camZoomFactor;
-    }
-    // 카메라가 지역 제한에 걸렸을 경우, targetPos를 지역 안으로 정의합니다.
-    if (camLockRegion)
-    {
-        targetPos.x = std::clamp(targetPos.x, camLockRegion->pod.x - camLockRegion->pod.width * 0.5, camLockRegion->pod.x + camLockRegion->pod.width * 0.5);
-        targetPos.z = std::clamp(targetPos.z, camLockRegion->pod.z - camLockRegion->pod.height * 0.5, camLockRegion->pod.z + camLockRegion->pod.height * 0.5);
     }
     RTSCam::Instance().SetIdealPosition(targetPos);
     RTSCam::Instance().SetIdealRotation(camRotation);
@@ -481,6 +460,18 @@ void PlayerController::HandleUnitPickingCollider()
     transform->SetLocalScale({ 0.1,0.1, (nearPoint - farPoint).Magnitude() });
     transform->SetWorldPosition((nearPoint + farPoint) / 2.0);
     transform->SetWorldRotation(Quaternion::MakeWithForwardUp(farPoint - nearPoint, cam->GetTransform()->GetWorldRotation().Up()));
+}
+
+void PlayerController::HandleComboState()
+{
+    if (currentCombo > 0)
+    {
+        elapsedTimeSinceLastCombo += Time::GetDeltaTime();
+        if (elapsedTimeSinceLastCombo > GlobalConstant::GetSingletonInstance().pod.comboTimeLimit)
+        {
+            ResetCombo();
+        }
+    }
 }
 
 void PlayerController::SelectPlayerUnit(PlayerCharacterType::Enum charType)
@@ -844,6 +835,7 @@ void PlayerController::SetState(State::Enum newState)
     {
     case PlayerController::State::Tactic:
         UIManager::Instance().GetUIElementByEnum(UIEnumID::TacticModeIngameUI)->DisableElement();
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Vinetting)->EnableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_MenuButton)->EnableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Bottom_Layout)->EnableElement();
         break;
@@ -868,6 +860,7 @@ void PlayerController::SetState(State::Enum newState)
     case State::Tactic:
     {
         UIManager::Instance().GetUIElementByEnum(UIEnumID::TacticModeIngameUI)->EnableElement();
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Vinetting)->DisableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_MenuButton)->DisableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Bottom_Layout)->DisableElement();
         UnSelectSkill();
@@ -938,6 +931,7 @@ void PlayerController::SetComboObjectives(const std::array<int, 3>& targetCombos
 void PlayerController::AddCombo()
 {
     currentCombo++;
+    elapsedTimeSinceLastCombo = 0;
     UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Combo_Number)->EnableElement();
     UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Combo_Text)->EnableElement();
     UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Combo_Number)->SetNumber(currentCombo);
@@ -1010,6 +1004,10 @@ Vector3d PlayerController::GetWorldCursorPosition()
 
 void PlayerController::ResetCombo()
 {
+    currentCombo = 0;
+    elapsedTimeSinceLastCombo = 0;
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Combo_Number)->DisableElement();
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Combo_Text)->DisableElement();
 }
 
 void PlayerController::SetManaFull()
@@ -1059,8 +1057,7 @@ float PlayerController::GetMana()
 void PlayerController::SetCooltime(SkillType::Enum skillType, float cooltime)
 {
     skillCooltimeLeft[skillType] = std::fmax(0.0f, cooltime);
-    skillCooltimeNumberUI[skillType]->SetNumber(cooltime);
-    skillCooltimeMaskUI[skillType]->adjuster->SetTargetFloat(skillCooltimeLeft[skillType] / GetCooltimeForSkill(skillType));
+    PlayerPortraitUIs::ReflectCooltime(skillType, cooltime, GetCooltimeForSkill(skillType));
 }
 
 void PlayerController::SetCooltime(std::weak_ptr<Unit> unit)
@@ -1233,13 +1230,8 @@ void PlayerController::EnableErrorUI(EnqueErrorType errorType)
 void PlayerController::OnPlayerUnitSkillActivation(std::weak_ptr<Unit> unit, std::weak_ptr<Skill> skill)
 {
     // 전술 모드가 아니라면 기존 로직 수행
-    SkillType::Enum skillType = SkillType::NONE;
-    if (dynamic_cast<RobinChargeSkill*>(skill.lock().get())) skillType = SkillType::ROBIN_Q;
-    if (dynamic_cast<RobinTauntSkill*>(skill.lock().get())) skillType = SkillType::ROBIN_W;
-    if (dynamic_cast<UrsulaBlindSkill*>(skill.lock().get())) skillType = SkillType::URSULA_Q;
-    if (dynamic_cast<UrsulaParalysisSkill*>(skill.lock().get())) skillType = SkillType::URSULA_W;
-    if (dynamic_cast<HanselChargeSkill*>(skill.lock().get())) skillType = SkillType::HANSEL_Q;
-    if (dynamic_cast<HanselProjectileSkill*>(skill.lock().get())) skillType = SkillType::HANSEL_W;
+    SkillType::Enum skillType = skill.lock()->GetSkillType();
+    SetCooltime(skillType, GetCooltimeForSkill(skillType));
     if (skillType != SkillType::NONE)
     {
         SetMana(mana - RequiredManaForSkill(skillType));

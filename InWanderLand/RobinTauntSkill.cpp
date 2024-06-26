@@ -19,6 +19,7 @@ coroutine::Coroutine RobinTauntSkill::operator()()
     owner.lock()->SetDesiredRotation((owner.lock()->GetTransform()->GetWorldRotation().Forward()));
 
     owner.lock()->PlayAnimation(UnitAnimType::Taunt, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
+
     effectColliderCoroutine = owner.lock()->StartCoroutine(SpawningSkillffect(std::dynamic_pointer_cast<RobinTauntSkill>(selfWeakPtr.lock())));
     effectColliderCoroutine.lock()->PushDestroyCallBack([this]()
         {

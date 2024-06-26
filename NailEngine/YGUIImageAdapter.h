@@ -61,6 +61,14 @@ namespace yunuGIAdapter
             renderable->layer = layer;
             RenderSystem::Instance.Get().PushUIObject(renderable);
         };
+        virtual bool IsCapsuleClip()
+        {
+            return renderable->IsCapsuleClipping();
+        };
+        virtual void SetCapsuleClip(bool clip)
+        {
+            renderable->SetCapsuleClipping(clip);
+        }
 
         virtual float GetWidth() override
         {

@@ -160,7 +160,7 @@ void Unit::OnStateExit<UnitBehaviourTree::Knockback>()
 {
     onStateExit[UnitBehaviourTree::Knockback]();
     blockFollowingNavAgentByState.reset();
-    OrderHold();
+    OrderAttackMove();
 }
 template<>
 void Unit::OnStateEngage<UnitBehaviourTree::Pause>()
@@ -233,6 +233,7 @@ void Unit::OnStateUpdate<UnitBehaviourTree::Attack>()
         if (!currentTarget->IsAlive() || currentTarget->IsInvulenerable())
         {
             currentTargetUnit.reset();
+            currentTargetUnit = GetClosestEnemy();
             return;
         }
     }
@@ -249,14 +250,30 @@ void Unit::OnStateEngage<UnitBehaviourTree::Move>()
     navAgentComponent.lock()->SetSpeed(unitTemplateData->pod.m_unitSpeed);
     //StartCoroutine(ShowPath(SingleNavigationField::Instance().GetSmoothPath(GetTransform()->GetWorldPosition() + GetTransform()->GetWorldRotation().Forward() * unitTemplateData->pod.collisionSize, moveDestination)));
     PlayAnimation(UnitAnimType::Move, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
+    jamCount = 0;
 }
 template<>
 void Unit::OnStateUpdate<UnitBehaviourTree::Move>()
 {
     static constexpr float epsilon = 0.1f;
-    if ((moveDestination - GetTransform()->GetWorldPosition()).MagnitudeSqr() < epsilon)
+    auto currentPosition = GetTransform()->GetWorldPosition();
+    if ((moveDestination - currentPosition).MagnitudeSqr() < epsilon)
     {
         OrderAttackMove(moveDestination);
+    }
+    static constexpr float jamFactor = 0.1f;
+    float idealDeltaPosition = unitTemplateData->pod.m_unitSpeed * Time::GetDeltaTime();
+    if ((lastPosition - currentPosition).MagnitudeSqr() < idealDeltaPosition * idealDeltaPosition * jamFactor)
+    {
+        if (jamCount++ > maxJamCount)
+        {
+            OrderAttackMove();
+            jamCount = 0;
+        }
+    }
+    else
+    {
+        jamCount = 0;
     }
     navAgentComponent.lock()->MoveTo(moveDestination);
     SetDesiredRotation(GetTransform()->GetWorldPosition() - lastPosition);
@@ -278,7 +295,8 @@ void Unit::OnStateExit<UnitBehaviourTree::SkillOnGoing>()
         DeleteCoroutine(coroutineSkill);
     }
     onGoingSkill.reset();
-    OrderAttackMove();
+    if (pendingOrderType == UnitOrderType::None)
+        OrderAttackMove();
 }
 template<>
 void Unit::OnStateEngage<UnitBehaviourTree::SkillCasting>()
@@ -675,7 +693,8 @@ void Unit::PlayAnimation(UnitAnimType animType, Animation::PlayFlag playFlag)
     }
     else
     {
-        animatorComponent.lock()->ChangeAnimation(anim, GlobalConstant::GetSingletonInstance().pod.defaultAnimBlendTime, 1);
+        auto prevType = wanderResources::GetAnimationType(unitTemplateData->pod.skinnedFBXName, animatorComponent.lock()->GetGI().GetCurrentAnimation());
+        animatorComponent.lock()->ChangeAnimation(anim, unitTemplateData->pod.animationBlendMap.at(std::pair((int)prevType, (int)animType)), 1);
     }
 
     if (playFlag & Animation::PlayFlag_::Repeat)
@@ -903,7 +922,12 @@ void Unit::Init(const application::editor::Unit_TemplateData* unitTemplateData)
     const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
     std::wstring fbxNameW = yutility::GetWString(unitTemplateData->pod.skinnedFBXName);
     //fbxNameW.assign(pod.templateData->pod.skinnedFBXName.begin(), pod.templateData->pod.skinnedFBXName.end());
-    AttachDebugMesh(navAgentComponent.lock()->GetGameObject(), DebugMeshType::Sphere)->GetTransform()->SetLocalScale(Vector3d::one * unitTemplateData->pod.collisionSize);
+    //auto debugMesh = AttachDebugMesh(navAgentComponent.lock()->GetGameObject(), DebugMeshType::Capsule);
+    //debugMesh->GetTransform()->SetLocalScale(Vector3d(unitTemplateData->pod.collisionSize * 2, unitTemplateData->pod.collisionHeight, unitTemplateData->pod.collisionSize * 2));
+    //debugMesh->GetTransform()->SetLocalPosition(Vector3d::up * unitTemplateData->pod.collisionHeight * 0.5f);
+
+    auto debugMesh = AttachDebugMesh(unitCollider.lock()->GetGameObject(), DebugMeshType::Capsule);
+    debugMesh->GetTransform()->SetLocalScale(Vector3d(unitTemplateData->pod.collisionSize * 2, unitTemplateData->pod.collisionHeight, unitTemplateData->pod.collisionSize * 2));
 
     /// Particle Setting
     for (auto& eachPI : ptm.GetChildrenParticleInstanceList(unitTemplateData->pod.skinnedFBXName))
@@ -1174,7 +1198,6 @@ void Unit::Summon(application::editor::Unit_TemplateData* templateData)
 
     unitCollider.lock()->SetRadius(unitTemplateData->pod.collisionSize);
     unitCollider.lock()->SetHalfHeight(unitTemplateData->pod.collisionHeight * 0.5f);
-    unitCollider.lock()->GetTransform()->SetLocalRotation(Vector3d{ 0,0,90 });
     unitCollider.lock()->GetTransform()->SetLocalPosition(Vector3d::up * unitTemplateData->pod.collisionHeight * 0.5f);
 
     attackRange.lock()->SetRadius(unitTemplateData->pod.m_atkRadius);
@@ -1358,6 +1381,8 @@ void Unit::InitBehaviorTree()
         };
     unitBehaviourTree[UnitBehaviourTree::Skill].onEnter = [this]()
         {
+            currentOrderType = pendingOrderType;
+            pendingOrderType = UnitOrderType::None;
             OnStateEngage<UnitBehaviourTree::Skill>();
         };
     unitBehaviourTree[UnitBehaviourTree::Skill].onExit = [this]()
@@ -1427,6 +1452,7 @@ void Unit::InitBehaviorTree()
     unitBehaviourTree[UnitBehaviourTree::Chasing].onEnter = [this]()
         {
             currentOrderType = pendingOrderType;
+            pendingOrderType = UnitOrderType::None;
             OnStateEngage<UnitBehaviourTree::Chasing>();
         };
     unitBehaviourTree[UnitBehaviourTree::Chasing].onExit = [this]()
@@ -1476,7 +1502,8 @@ void Unit::InitBehaviorTree()
         };
     unitBehaviourTree[UnitBehaviourTree::Hold].onEnter = [this]()
         {
-            currentOrderType = UnitOrderType::Hold;
+            currentOrderType = pendingOrderType;
+            pendingOrderType = UnitOrderType::None;
             OnStateEngage<UnitBehaviourTree::Hold>();
         };
     unitBehaviourTree[UnitBehaviourTree::Hold].onExit = [this]()
@@ -1519,6 +1546,7 @@ void Unit::InitBehaviorTree()
     unitBehaviourTree[UnitBehaviourTree::Move].onEnter = [this]()
         {
             currentOrderType = pendingOrderType;
+            pendingOrderType = UnitOrderType::None;
             OnStateEngage<UnitBehaviourTree::Move>();
         };
     unitBehaviourTree[UnitBehaviourTree::Move].onExit = [this]()
@@ -1551,7 +1579,6 @@ void Unit::InitBehaviorTree()
         };
     unitBehaviourTree[UnitBehaviourTree::AttackMove][UnitBehaviourTree::Attack].onEnter = [this]()
         {
-            currentTargetUnit = GetClosestEnemy();
             OnStateEngage<UnitBehaviourTree::Attack>();
         };
     unitBehaviourTree[UnitBehaviourTree::AttackMove][UnitBehaviourTree::Attack].onExit = [this]()

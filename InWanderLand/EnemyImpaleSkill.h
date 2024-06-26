@@ -42,7 +42,7 @@ public:
     static POD_EnemyImpaleSkill pod;
 
 private:
-    coroutine::Coroutine SpearArise(std::weak_ptr<EnemyImpaleSkill> skill, std::weak_ptr<ManagedFBX> fbx, std::weak_ptr<UnitAcquisitionSphereCollider> collider, Vector2d pos);
+    coroutine::Coroutine SpearArise(std::weak_ptr<EnemyImpaleSkill> skill, Vector2d pos);
     coroutine::Coroutine SpawningSkillffect(std::weak_ptr<EnemyImpaleSkill> skill);
 
     std::weak_ptr<coroutine::Coroutine> effectCoroutine;
@@ -51,8 +51,8 @@ private:
     std::weak_ptr<VFXAnimator> previewEffectAnimator;
     std::weak_ptr<VFXAnimator> impaleEffectAnimator;
 
-    std::queue<std::weak_ptr<UnitAcquisitionSphereCollider>> knockbackColliderQueue;
-    std::queue<std::weak_ptr<ManagedFBX>> spearFbxQueue;
+    static std::queue<std::weak_ptr<UnitAcquisitionSphereCollider>> knockbackColliderQueue;
+    static std::queue<std::weak_ptr<ManagedFBX>> spearFbxQueue;
     std::unordered_set<Unit*> damagedUnits;
 };
 

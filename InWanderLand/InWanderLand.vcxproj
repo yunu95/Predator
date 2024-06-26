@@ -1013,6 +1013,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="Action_BlockSkillSelection.h" />
     <ClInclude Include="Action_Boss.h" />
     <ClInclude Include="Action_ForceUnitUnpaused.h" />
+    <ClInclude Include="Action_Particle.h" />
     <ClInclude Include="Action_RequestState.h" />
     <ClInclude Include="Action_Ornament.h" />
     <ClInclude Include="Action_PauseWaves.h" />
@@ -1045,6 +1046,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="AttackPreviewPool.h" />
     <ClInclude Include="Condition_Ornament.h" />
     <ClInclude Include="Condition_PlayerState.h" />
+    <ClInclude Include="Condition_Stage.h" />
     <ClInclude Include="Condition_TacticMode.h" />
     <ClInclude Include="ContentsCoroutine.h" />
     <ClInclude Include="CurveHomingProjectile.h" />
@@ -1075,6 +1077,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="JsonUIFloatType.h" />
     <ClInclude Include="LeftFrame.h" />
     <ClInclude Include="MeleeEliteController.h" />
+    <ClInclude Include="Module_AnimationEditor.h" />
     <ClInclude Include="Module_Skill.h" />
     <ClInclude Include="MoveEndPreviewPool.h" />
     <ClInclude Include="Multiplier.h" />
@@ -1097,6 +1100,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="SkillType.h" />
     <ClInclude Include="SkillUpgradeType.h" />
     <ClInclude Include="BossSummonObject.h" />
+    <ClInclude Include="Trigger_Stage.h" />
     <ClInclude Include="Trigger_Wave.h" />
     <ClInclude Include="UIVideoPlayer.h" />
     <ClInclude Include="UnitAcquisitionBoxCollider.h" />
@@ -2116,6 +2120,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="Action_BlockSkillSelection.cpp" />
     <ClCompile Include="Action_Boss.cpp" />
     <ClCompile Include="Action_ForceUnitUnpaused.cpp" />
+    <ClCompile Include="Action_Particle.cpp" />
     <ClCompile Include="Action_RequestState.cpp" />
     <ClCompile Include="Action_Ornament.cpp" />
     <ClCompile Include="Action_PauseWaves.cpp" />
@@ -2148,6 +2153,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="AttackPreviewPool.cpp" />
     <ClCompile Include="Condition_Ornament.cpp" />
     <ClCompile Include="Condition_PlayerState.cpp" />
+    <ClCompile Include="Condition_Stage.cpp" />
     <ClCompile Include="Condition_TacticMode.cpp" />
     <ClCompile Include="ContentsCoroutine.cpp" />
     <ClCompile Include="CurveHomingProjectile.cpp" />
@@ -2350,6 +2356,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="LocalTimeEntityManager.cpp" />
     <ClCompile Include="LinearClippingTimer.cpp" />
     <ClCompile Include="MeleeEliteController.cpp" />
+    <ClCompile Include="Module_AnimationEditor.cpp" />
     <ClCompile Include="Module_Skill.cpp" />
     <ClCompile Include="MoveEndPreviewPool.cpp" />
     <ClCompile Include="ObservationTarget.cpp" />
@@ -3013,6 +3020,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     </ClCompile>
     <ClCompile Include="Trigger_GameStart.cpp" />
     <ClCompile Include="Trigger_RepeatPeriodically.cpp" />
+    <ClCompile Include="Trigger_Stage.cpp" />
     <ClCompile Include="Trigger_Unit.cpp" />
     <ClCompile Include="Trigger_Wave.cpp" />
     <ClCompile Include="TutorialManager.cpp" />

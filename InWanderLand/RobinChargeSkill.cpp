@@ -54,6 +54,7 @@ coroutine::Coroutine RobinChargeSkill::operator()()
     owner.lock()->PlayAnimation(UnitAnimType::Slam);
     animator.lock()->Resume();
     knockbackCollider.lock()->SetRadius(pod.impactKnockbackRadius);
+
     auto effectCoroutine = owner.lock()->StartCoroutine(SpawningSkillffect(dynamic_pointer_cast<RobinChargeSkill>(selfWeakPtr.lock()), startPos));
     effectCoroutine.lock()->PushDestroyCallBack([this]()
         {
@@ -86,7 +87,8 @@ coroutine::Coroutine RobinChargeSkill::operator()()
 
 void RobinChargeSkill::OnInterruption()
 {
-
+    auto animator = owner.lock()->GetAnimator();
+    animator.lock()->Resume();
 }
 
 float RobinChargeSkill::GetMaxDistance()

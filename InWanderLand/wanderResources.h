@@ -12,11 +12,13 @@ namespace wanderResources
 {
     // 온갖 지저분한 애니메이션 상수들은 다 여기에 집어넣는다.
     yunuGI::IAnimation* GetAnimation(const std::string& fbx, UnitAnimType animType);
+    UnitAnimType GetAnimationType(const std::string& fbx, yunuGI::IAnimation* animation);
     constexpr const std::string GetFBXName(WanderFBX::Enum fbxType);
 
     std::weak_ptr<yunuGI::IVideo> GetPortraitVideoIdle(PlayerCharacterType::Enum playerType);
     std::weak_ptr<yunuGI::IVideo> GetPortraitVideoHurt(PlayerCharacterType::Enum playerType);
     std::weak_ptr<ManagedFBX> GetVFX(const std::string& fbx, UnitAnimType animType);
+    bool FindVFXMap(const std::string& fbx, UnitAnimType animType);
 
     namespace texture
     {
