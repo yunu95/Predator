@@ -23,6 +23,7 @@ namespace application
         triggerList.push_back({ TriggerType::InteractableTriggerExit, "InteractableTriggerExit" });
         triggerList.push_back({ TriggerType::StartWave, "StartWave" });
         triggerList.push_back({ TriggerType::EndWave, "EndWave" });
+        triggerList.push_back({ TriggerType::StageStart, "StageStart" });
 
         /// Condition
         conditionList.push_back({ ConditionType::CinematicModeOn, "CinematicModeOn" });
@@ -34,6 +35,7 @@ namespace application
         conditionList.push_back({ ConditionType::PlayerState, "PlayerState" });
         conditionList.push_back({ ConditionType::OrnamentShow, "OrnamentShow" });
         conditionList.push_back({ ConditionType::OrnamentHide, "OrnamentHide" });
+        conditionList.push_back({ ConditionType::Stage, "Stage" });
 
         /// Action
         actionList.push_back({ ActionType::WaitPreviousActionEnd, "WaitPreviousActionEnd" });
@@ -80,6 +82,9 @@ namespace application
         actionList.push_back({ ActionType::ForceUnitUnpaused,"ForceUnitUnpaused" });
         actionList.push_back({ ActionType::SetZoomFactor,"SetZoomFactor" });
         actionList.push_back({ ActionType::SetCamBidirectionalPath,"SetCamBidirectionalPath" });
+        actionList.push_back({ ActionType::ParticleMoveWithRotateAndRescale,"ParticleMoveWithRotateAndRescale" });
+        actionList.push_back({ ActionType::ParticleShow,"ParticleShow" });
+        actionList.push_back({ ActionType::ParticleHide,"ParticleHide" });
     }
 
     Script* ScriptSystem::CreateScript()

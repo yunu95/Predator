@@ -66,6 +66,9 @@ namespace application
         ForceUnitUnpaused,
         SetZoomFactor,
         SetCamBidirectionalPath,
+        ParticleMoveWithRotateAndRescale,
+        ParticleShow,
+        ParticleHide,
     };
 
     struct IAction

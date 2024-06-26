@@ -18,17 +18,24 @@ void Projectile::Update()
             else
             {
                 (*enemies.begin())->Damaged(owner, damage, damageType);
-                fbxObject->SetSelfActive(false);
-                (*enemies.begin())->StartCoroutine(ProjectileEffectCoroutine((*enemies.begin())->GetWeakPtr<Unit>()))
-                    .lock()->PushDestroyCallBack([this]()
-                        {
-                            if (!damagedVFX.expired())
+                if (wanderResources::FindVFXMap(owner.lock()->GetUnitTemplateData().pod.skinnedFBXName, UnitAnimType::Damaged))
+                {
+                    fbxObject->SetSelfActive(false);
+                    (*enemies.begin())->StartCoroutine(ProjectileEffectCoroutine((*enemies.begin())->GetWeakPtr<Unit>()))
+                        .lock()->PushDestroyCallBack([this]()
                             {
-                                FBXPool::Instance().Return(damagedVFX);
-                            }
-                            fbxObject->SetSelfActive(true);
-                            ProjectilePool::SingleInstance().Return(GetWeakPtr<Projectile>());
-                        });
+                                if (!damagedVFX.expired())
+                                {
+                                    FBXPool::Instance().Return(damagedVFX);
+                                }
+                                fbxObject->SetSelfActive(true);
+                                ProjectilePool::SingleInstance().Return(GetWeakPtr<Projectile>());
+                            });
+                }
+                else
+                {
+                    ProjectilePool::SingleInstance().Return(GetWeakPtr<Projectile>());
+                }
                 traveling = false;
             }
             return;
@@ -38,6 +45,7 @@ void Projectile::Update()
         {
             relativePositionFromTarget += speed * Time::GetDeltaTime();
             GetTransform()->SetWorldPosition(target->GetTransform()->GetWorldPosition() + relativePositionFromTarget);
+            GetTransform()->SetLocalRotation(Quaternion::MakeWithForwardUp(speed, speed.up));
         }
         else
         {
@@ -49,7 +57,15 @@ void Projectile::Update()
         }
         if (GetTransform()->GetWorldPosition().y < 0)
         {
-            ProjectilePool::SingleInstance().Return(GetWeakPtr<Projectile>());
+            if (wanderResources::FindVFXMap(owner.lock()->GetUnitTemplateData().pod.skinnedFBXName, UnitAnimType::Damaged))
+            {
+                ExplodeAtCurrentPosition();
+            }
+            else
+            {
+                ProjectilePool::SingleInstance().Return(GetWeakPtr<Projectile>());
+            }
+            traveling = false;
         }
         if (projectileType == ProjectileType::DIRECT)
         {
@@ -149,7 +165,7 @@ void Projectile::SetSpeed(Vector3d startPosition, Vector3d endPosition, float pr
     case ProjectileType::DIRECT:
     {
         SetSpeed(delta.Normalized() * projectileSpeed);
-        lifetime = delta.Magnitude() / projectileSpeed + 1.0f;
+        lifetime = delta.Magnitude() / projectileSpeed + 100.0f;
         break;
     }
     }

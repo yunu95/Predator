@@ -46,7 +46,6 @@ namespace application
         GC<float> chessBlockUnitLength = 3.4f;
         GC<float> chessBlockUnitOffset = 0.1f;
         GC<float> vibeMaxOffset = 0.12f;
-        GC<float> defaultAnimBlendTime = 0.32f;
 
         GC<float> bossAppearHeight = 60.f;
         GC<float> bossAppearTime = 2.f;

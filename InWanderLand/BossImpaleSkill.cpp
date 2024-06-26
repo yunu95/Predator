@@ -61,10 +61,6 @@ coroutine::Coroutine BossImpaleSkill::operator()()
 	auto impaleAnim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill2);
 
 	owner.lock()->PlayAnimation(UnitAnimType::Skill2);
-	while (animator.lock()->GetCurrentAnimation() != wanderResources::GetAnimation(owner.lock()->GetUnitTemplateData().pod.skinnedFBXName, UnitAnimType::Skill2))
-	{
-		co_await std::suspend_always{};
-	}
 
 	effectCoroutine = owner.lock()->StartCoroutine(SpawningSkillffect(dynamic_pointer_cast<BossImpaleSkill>(selfWeakPtr.lock())));
 	effectCoroutine.lock()->PushDestroyCallBack([this]()

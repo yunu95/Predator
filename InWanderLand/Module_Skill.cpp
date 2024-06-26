@@ -59,16 +59,15 @@ namespace application
 			static int idx = 0;
 			imgui::BeginSection_2Col(idx, "Skill Module", ImGui::GetContentRegionAvail().x, 0.2f);
 			imgui::DropdownEnum_2Col("Selected Skill", selectedSkill);
-			auto region = ImGui::GetContentRegionAvail();
 			imgui::ShiftCursorY(10);
 			if (selectedSkill.enumValue != (int)SkillType::NONE)
 			{
-				DrawList(region);
+				DrawList();
 			}
 			imgui::EndSection();
 		}
 
-		void Module_Skill::DrawList(const ImVec2& region)
+		void Module_Skill::DrawList()
 		{
 			Skill::DrawSkillPod((SkillType::Enum)selectedSkill.enumValue);
 		}

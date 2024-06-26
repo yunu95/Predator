@@ -131,6 +131,11 @@ namespace application
                         Trigger_EndWave::ImGui_DrawDataPopup(static_cast<Trigger_EndWave*>(data));
                         break;
                     }
+                    case application::TriggerType::StageStart:
+                    {
+                        Trigger_StageStart::ImGui_DrawDataPopup(static_cast<Trigger_StageStart*>(data));
+                        break;
+                    }
                     default:
                         break;
                     }
@@ -189,6 +194,11 @@ namespace application
                     case application::ConditionType::OrnamentHide:
                     {
                         Condition_OrnamentHide::ImGui_DrawDataPopup(static_cast<Condition_OrnamentHide*>(data));
+                        break;
+                    }
+                    case application::ConditionType::Stage:
+                    {
+                        Condition_Stage::ImGui_DrawDataPopup(static_cast<Condition_Stage*>(data));
                         break;
                     }
                     default:
@@ -424,6 +434,21 @@ namespace application
                     case application::ActionType::SetCamBidirectionalPath:
                     {
                         Action_SetCamBidirectionalPath::ImGui_DrawDataPopup(static_cast<Action_SetCamBidirectionalPath*>(data));
+                        break;
+                    }
+                    case application::ActionType::ParticleMoveWithRotateAndRescale:
+                    {
+                        Action_ParticleMoveWithRotateAndRescale::ImGui_DrawDataPopup(static_cast<Action_ParticleMoveWithRotateAndRescale*>(data));
+                        break;
+                    }
+                    case application::ActionType::ParticleShow:
+                    {
+                        Action_ParticleShow::ImGui_DrawDataPopup(static_cast<Action_ParticleShow*>(data));
+                        break;
+                    }
+                    case application::ActionType::ParticleHide:
+                    {
+                        Action_ParticleHide::ImGui_DrawDataPopup(static_cast<Action_ParticleHide*>(data));
                         break;
                     }
                     default:

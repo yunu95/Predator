@@ -91,10 +91,6 @@ coroutine::Coroutine BossSummonMobSkill::operator()()
 	auto animator = owner.lock()->GetAnimator();
 
 	owner.lock()->PlayAnimation(UnitAnimType::Skill3, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
-	while (animator.lock()->GetCurrentAnimation() != wanderResources::GetAnimation(owner.lock()->GetUnitTemplateData().pod.skinnedFBXName, UnitAnimType::Skill3))
-	{
-		co_await std::suspend_always{};
-	}
 
 	effectCoroutine = owner.lock()->StartCoroutine(SpawningFieldEffect(std::dynamic_pointer_cast<BossSummonMobSkill>(selfWeakPtr.lock())));
 	effectCoroutine.lock()->PushDestroyCallBack([this]()

@@ -81,6 +81,8 @@ namespace application
 
             float unit_scale{ 1.0f };
 
+            std::map<std::pair<int, int>, float> animationBlendMap = std::map<std::pair<int, int>, float>();
+
             TO_JSON(POD_Unit_TemplateData)
                 FROM_JSON(POD_Unit_TemplateData)
         };

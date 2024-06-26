@@ -20,10 +20,6 @@ coroutine::Coroutine EnemySpinAttackSkill::operator()()
     auto animator = owner.lock()->GetAnimator();
 
     owner.lock()->PlayAnimation(UnitAnimType::Spin, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
-    while (animator.lock()->GetCurrentAnimation() != wanderResources::GetAnimation(owner.lock()->GetUnitTemplateData().pod.skinnedFBXName, UnitAnimType::Spin))
-    {
-        co_await std::suspend_always{};
-    }
 
     effectColliderCoroutine = owner.lock()->StartCoroutine(SpawningSkillffect(dynamic_pointer_cast<EnemySpinAttackSkill>(selfWeakPtr.lock())));
     effectColliderCoroutine.lock()->PushDestroyCallBack([this]()

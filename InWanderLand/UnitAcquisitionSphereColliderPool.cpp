@@ -13,7 +13,7 @@ void UnitAcquisitionSphereColliderPool::Return(std::weak_ptr<UnitAcquisitionSphe
     borrowedList.erase(collider);
     if (collider.expired())
     {
-        collider.lock()->SetActive(false);
+        return;
     }
     GameObjectPool<UnitAcquisitionSphereCollider>::Return(collider);
 }
