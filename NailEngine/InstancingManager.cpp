@@ -522,9 +522,11 @@ void InstancingManager::RenderStaticShadow()
 						NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATERIAL))->PushGraphicsData(&materialBuffer, sizeof(MaterialBuffer), static_cast<int>(CB_TYPE::MATERIAL));
 					}
 
-					DepthBiasBuffer depthBiasBuffer;
-					depthBiasBuffer.depthBias = (*renderInfoVec.begin())->depthBias;
-					NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::DEPTH_BIAS))->PushGraphicsData(&depthBiasBuffer, sizeof(DepthBiasBuffer), static_cast<int>(CB_TYPE::DEPTH_BIAS));
+					ExposureBuffer useBias;
+					useBias.depthBias = (*renderInfoVec.begin())->depthBias;
+					NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::EXPOSURE))->PushGraphicsData(&useBias,
+						sizeof(ExposureBuffer),
+						static_cast<int>(CB_TYPE::EXPOSURE), false);
 
 					buffer->PushData();
 					(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, true, buffer->GetCount(), buffer);
@@ -662,14 +664,22 @@ void InstancingManager::RenderSkinnedShadow()
 						NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATERIAL))->PushGraphicsData(&materialBuffer, sizeof(MaterialBuffer), static_cast<int>(CB_TYPE::MATERIAL));
 					}
 
-					DepthBiasBuffer depthBiasBuffer;
-					//if ((*renderInfoVec.begin())->renderInfo.material->GetMaterial()->)
-					//{
-					//	(*renderInfoVec.begin())->renderInfo.depthBias;
-					//}
-					depthBiasBuffer.depthBias = (*renderInfoVec.begin())->renderInfo.depthBias;
+					
+					ExposureBuffer useBias;
+					
 
-					NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::DEPTH_BIAS))->PushGraphicsData(&depthBiasBuffer, sizeof(DepthBiasBuffer), static_cast<int>(CB_TYPE::DEPTH_BIAS));
+					if ((*renderInfoVec.begin())->renderInfo.material->GetMaterial()->GetName() == L"T_Robin_Cloak")
+					{
+						useBias.depthBias = 0.1;
+					}
+					else
+					{
+						useBias.depthBias = (*renderInfoVec.begin())->renderInfo.depthBias;
+					}
+					NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::EXPOSURE))->PushGraphicsData(&useBias,
+						sizeof(ExposureBuffer),
+						static_cast<int>(CB_TYPE::EXPOSURE), false);
+
 					buffer->PushData();
 					(*renderInfoVec.begin())->renderInfo.mesh->Render((*renderInfoVec.begin())->renderInfo.materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, true, buffer->GetCount(), buffer);
 				}
