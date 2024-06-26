@@ -69,6 +69,7 @@ row_major matrix GetAnimationMatrix(VertexIn input)
         n3 = TransformMap.Load(int4(indices[i] * 4 + 3, nextFrame[0], animIndex[0], 0));
         next = matrix(n0, n1, n2, n3);
 
+        // 현재 애니메이션 보간
         matrix result = lerp(curr, next, ratio[0]);
 
 		// 다음 애니메이션
@@ -85,9 +86,12 @@ row_major matrix GetAnimationMatrix(VertexIn input)
             n2 = TransformMap.Load(int4(indices[i] * 4 + 2, nextFrame[1], animIndex[1], 0));
             n3 = TransformMap.Load(int4(indices[i] * 4 + 3, nextFrame[1], animIndex[1], 0));
             next = matrix(n0, n1, n2, n3);
-
+            // 다음 애니메이션 보간
             matrix nextResult = lerp(curr, next, ratio[1]);
-            result = lerp(result, nextResult, transitionDesc[input.instanceID].transitionRatio);
+            
+            // 현재, 다음 보간
+            //result = lerp(result, nextResult, transitionDesc[input.instanceID].transitionRatio);
+            result = lerp(nextResult, result, transitionDesc[input.instanceID].transitionRatio);
         }
 
         transform += mul(weights[i], result);

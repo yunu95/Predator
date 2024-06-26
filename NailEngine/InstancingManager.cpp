@@ -667,15 +667,23 @@ void InstancingManager::RenderSkinnedShadow()
 					
 					ExposureBuffer useBias;
 					
-
-					if ((*renderInfoVec.begin())->renderInfo.material->GetMaterial()->GetName() == L"T_Robin_Cloak")
+					auto name = (*renderInfoVec.begin())->renderInfo.material->GetMaterial()->GetName();
+					size_t pos = name.find(L"_instance");
+					if (pos != std::wstring::npos)
 					{
-						useBias.depthBias = 0.1;
+						name = name.substr(0, pos);
+					}
+					if (name == L"T_Robin_Cloak")
+					{
+						//useBias.depthBias = 0.005;
+						useBias.depthBias = (*renderInfoVec.begin())->renderInfo.depthBias;
 					}
 					else
 					{
-						useBias.depthBias = (*renderInfoVec.begin())->renderInfo.depthBias;
+						useBias.depthBias = 0.002;
+						//useBias.depthBias = (*renderInfoVec.begin())->renderInfo.depthBias;
 					}
+
 					NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::EXPOSURE))->PushGraphicsData(&useBias,
 						sizeof(ExposureBuffer),
 						static_cast<int>(CB_TYPE::EXPOSURE), false);

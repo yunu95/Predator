@@ -228,15 +228,15 @@ void PlayerController::HandleInput()
     }
 
     // 전술모드의 마지막 명령을 지우는 키
-    if (Input::isKeyDown(KeyCode::Control) && Input::isKeyPushed(KeyCode::Z) && TacticModeSystem::Instance().IsOperation() && !TacticModeSystem::Instance().IsExecuting())
+    if (Input::isKeyPushed(KeyCode::R) && TacticModeSystem::Instance().IsOperation() && !TacticModeSystem::Instance().IsExecuting())
     {
         TacticModeSystem::Instance().PopCommand();
     }
 
-    if (Input::isKeyPushed(KeyCode::ESC) && TacticModeSystem::Instance().IsOperation() && !TacticModeSystem::Instance().IsExecuting())
-    {
-        TacticModeSystem::Instance().ClearCommand();
-    }
+    //if (Input::isKeyPushed(KeyCode::ESC) && TacticModeSystem::Instance().IsOperation() && !TacticModeSystem::Instance().IsExecuting())
+    //{
+    //    TacticModeSystem::Instance().ClearCommand();
+    //}
 
     if ((TacticModeSystem::Instance().IsExecuting() == false))
     {
