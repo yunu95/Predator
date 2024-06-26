@@ -923,8 +923,8 @@ void PlayerController::SetComboObjectives(const std::array<int, 3>& targetCombos
         UIManager::Instance().GetUIElementByEnum(UIManager::comboNumbers[i])->SetNumber(comboObjective[i]);
         UIManager::Instance().GetUIElementByEnum(UIManager::comboNumbers[i + 3])->SetNumber(comboObjective[i]);
         UIManager::Instance().GetUIElementByEnum(UIManager::comboFinishedImgs[i])->DisableElement();
-        UIManager::Instance().GetUIElementByEnum(UIManager::comboUnFinishedImgs[i])->EnableElement();
         UIManager::Instance().GetUIElementByEnum(UIManager::comboCheckImgs[i])->DisableElement();
+        UIManager::Instance().GetUIElementByEnum(UIManager::comboUnFinishedImgs[i])->EnableElement();
     }
 }
 

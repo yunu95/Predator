@@ -230,7 +230,7 @@ void Unit::OnStateUpdate<UnitBehaviourTree::Attack>()
     }
     else
     {
-        if (!currentTarget->IsAlive() || currentTarget->IsInvulenerable())
+        if (!currentTarget->GetActive() || !currentTarget->IsAlive() || currentTarget->IsInvulenerable())
         {
             currentTargetUnit.reset();
             currentTargetUnit = GetClosestEnemy();
