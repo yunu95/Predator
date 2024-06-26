@@ -842,9 +842,13 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
                 }
             });
     }
-    if (uiData.customFlags & (int)UIExportFlag2::PropagateDisable)
+    if (uiData.customFlags2 & (int)UIExportFlag2::PropagateEnable)
     {
-        std::transform(uiData.disablePropagationTargets.begin(), uiData.disablePropagationTargets.end(), std::back_inserter(element->disablePropagationTargets), [=](int id) {return GetUIElementWithIndex(id); });
+        std::transform(uiData.enablePropagationTargets.begin(), uiData.enablePropagationTargets.end(), std::back_inserter(element->enablePropagationTargets), [=](int id) { return GetUIElementWithIndex(id); });
+    }
+    if (uiData.customFlags2 & (int)UIExportFlag2::PropagateDisable)
+    {
+        std::transform(uiData.disablePropagationTargets.begin(), uiData.disablePropagationTargets.end(), std::back_inserter(element->disablePropagationTargets), [=](int id) { return GetUIElementWithIndex(id); });
     }
     // 만약 열기 버튼이라면...
     if (uiData.customFlags & (int)UIExportFlag::OpeningButton)
@@ -1104,7 +1108,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
             }
         }
     }
-                }
+}
 // 특별한 로직이 적용되어야 하는 경우 참, 그렇지 않으면 거짓을 반환합니다.
 bool UIManager::ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* element)
 {

@@ -791,6 +791,10 @@ void RenderSystem::PushPreProcessingUIObject(UIImage* renderable)
 {
     preProcessingUiImages.insert(renderable);
 }
+void RenderSystem::PopPreProcessingUIObject(UIImage* renderable)
+{
+    preProcessingUiImages.erase(renderable);
+}
 
 void RenderSystem::PopUIObject(std::shared_ptr<UIImage> renderable)
 {

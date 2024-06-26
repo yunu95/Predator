@@ -9,6 +9,11 @@
 #include "SwapChain.h"
 #include "NailEngine.h"
 
+UIImage::~UIImage()
+{
+    RenderSystem::Instance.Get().PopPreProcessingUIObject(this);
+}
+
 void UIImage::SetTexture(yunuGI::ITexture* texture)
 {
     this->texture = texture;

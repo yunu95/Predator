@@ -6,12 +6,16 @@
 void UnitBuff::Init(std::weak_ptr<Unit> owner)
 {
     this->owner = owner;
-    if (auto id = GetUIEnumID(); id != UIEnumID::None && !owner.lock()->unitStatusUI.expired())
-        this->buffIcon1 = owner.lock()->unitStatusUI.lock()->GetLocalUIsByEnumID().at(id)->GetWeakPtr<UIElement>();
-    if (auto id = GetUIEnumID(); id != UIEnumID::None && !owner.lock()->unitStatusPortraitUI.expired())
-        this->buffIcon2 = owner.lock()->unitStatusPortraitUI.lock()->GetLocalUIsByEnumID().at(id)->GetWeakPtr<UIElement>();
-    if (auto id = GetUIEnumID(); id != UIEnumID::None && !owner.lock()->unitStatusPortraitUI2.expired())
-        this->buffIcon3 = owner.lock()->unitStatusPortraitUI2.lock()->GetLocalUIsByEnumID().at(id)->GetWeakPtr<UIElement>();
+    auto id = GetUIEnumID();
+    if (id != UIEnumID::None)
+    {
+        if (auto ui = owner.lock()->unitStatusUI; !ui.expired() && ui.lock()->GetLocalUIsByEnumID().at(id))
+            this->buffIcon1 = ui.lock()->GetLocalUIsByEnumID().at(id)->GetWeakPtr<UIElement>();
+        if (auto ui = owner.lock()->unitStatusPortraitUI; !ui.expired() && ui.lock()->GetLocalUIsByEnumID().at(id))
+            this->buffIcon2 = ui.lock()->GetLocalUIsByEnumID().at(id)->GetWeakPtr<UIElement>();
+        if (auto ui = owner.lock()->unitStatusPortraitUI2; !ui.expired() && ui.lock()->GetLocalUIsByEnumID().at(id))
+            this->buffIcon3 = ui.lock()->GetLocalUIsByEnumID().at(id)->GetWeakPtr<UIElement>();
+    }
     if (!buffIcon1.expired())
         buffIcon1.lock()->EnableElement();
     if (!buffIcon2.expired())

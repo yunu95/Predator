@@ -7,6 +7,7 @@
 class UIImage : public nail::IRenderable
 {
 public:
+    virtual ~UIImage();
     void SetTexture(yunuGI::ITexture* texture);
     yunuGI::ITexture* GetTexture();
     DirectX::XMFLOAT2 GetPrimitiveTextureSize();
