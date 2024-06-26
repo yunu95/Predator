@@ -399,9 +399,8 @@ coroutine::Coroutine UIManager::StartGameAfterFadeOutCoro()
     ContentsCoroutine::Instance().FadeMusicVolume(1.0f, 1.0f);
     UIManager::Instance().GetUIElementByEnum(UIEnumID::VictoryPage)->DisableElement();
     UIManager::Instance().GetUIElementByEnum(UIEnumID::DefeatPage)->DisableElement();
-    auto cl = static_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
-    cl->StopContents(ContentsStopFlag::None);
-    cl->PlayContents(ContentsPlayFlag::None);
+    application::Application::GetInstance().StopContents(ContentsStopFlag::None);
+    application::Application::GetInstance().PlayContents(ContentsPlayFlag::None);
     FadeIn(1.0f);
 
     GetUIElementByEnum(UIEnumID::TitleRoot)->DisableElement();
@@ -415,12 +414,11 @@ coroutine::Coroutine UIManager::ReturnToTitleAfterFadeOutCoro()
     co_yield coroutine::WaitForSeconds{ 1.2f, true };
     UIManager::Instance().GetUIElementByEnum(UIEnumID::VictoryPage)->DisableElement();
     UIManager::Instance().GetUIElementByEnum(UIEnumID::DefeatPage)->DisableElement();
-    auto cl = static_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
     FadeIn(1.0f);
 
     auto cam = Scene::getCurrentScene()->AddGameObject()->AddComponentAsWeakPtr<graphics::Camera>();
     cam.lock()->SetCameraMain();
-    cl->StopContents(ContentsStopFlag::None);
+    application::Application::GetInstance().StopContents(ContentsStopFlag::None);
     GetUIElementByEnum(UIEnumID::TitleRoot)->EnableElement();
     co_return;
 }
