@@ -36,6 +36,7 @@ public:
     bool GetUIEnabled() { return enabled; }
     virtual void Start() override;
     vector<UIElement*> disablePropagationTargets;
+    vector<UIElement*> enablePropagationTargets;
     int duplicatePriorityOffset = 0;
     PopupOnEnable* scalePopUpTransition{ nullptr };
     PopDownOnDisable* scalePopDownTransition{ nullptr };

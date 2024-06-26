@@ -80,6 +80,7 @@ public:
     void PushUIObject(std::shared_ptr<UIImage> renderable);
     // 전처리를 한번 해줘야 하는 UI 객체를 전처리 큐에 담는다.
     void PushPreProcessingUIObject(UIImage*);
+    void PopPreProcessingUIObject(UIImage*);
     void PopUIObject(std::shared_ptr<UIImage> renderable);
 
     void PushTextObject(std::shared_ptr<nail::IRenderable> renderable);

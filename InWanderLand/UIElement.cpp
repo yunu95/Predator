@@ -103,9 +103,9 @@ void UIElement::EnableElement()
             each->EnableElement();
         }
     }
-    for (auto each : disablePropagationTargets)
+    for (auto each : enablePropagationTargets)
     {
-        each->enabled = false;
+        //each->enabled = false;
         each->EnableElement();
     }
     for (auto each : exclusiveEnableGroup)
