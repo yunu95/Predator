@@ -21,6 +21,6 @@ float4 main(PixelIn input) :SV_Target0
 // ShaderType : Deferred
 // RasterType : Shadow
 // CullType : CullNone
-// DepthType : LessEqual
+// DepthType : Less
 // BlendType : Default
 // Sampler : Default

@@ -299,14 +299,18 @@ void RenderSystem::RenderShadow()
                 wtm._41 = mainCamPos.x;
                 wtm._42 = mainCamPos.y;
                 wtm._43 = mainCamPos.z;
-                auto back = -static_cast<DirectionalLight*>(e)->GetDirection() * backOffset;
+				auto backDirection = -static_cast<DirectionalLight*>(e)->GetDirection();
+				backDirection.Normalize(backDirection);
+				auto back = backDirection * backOffset;
                 DirectX::SimpleMath::Vector3 temp;
                 temp = back + wtm.Translation();
                 wtm._41 = temp.x;
                 wtm._42 = temp.y;
                 wtm._43 = temp.z;
                 matrixBuffer.VTM = wtm.Invert();
-                matrixBuffer.PTM = DirectX::XMMatrixOrthographicLH(smWidth, smHeight, 1.f, camFar);
+                matrixBuffer.PTM = DirectX::XMMatrixOrthographicLH(smWidth, smHeight, camNear, camFar);
+
+                //matrixBuffer.lightVP = wtm.Invert() * DirectX::XMMatrixOrthographicLH(smWidth, smHeight, camNear, camFar);
                 NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX));
 
 
@@ -450,14 +454,16 @@ void RenderSystem::RenderLight()
             wtm._41 = mainCamPos.x;
             wtm._42 = mainCamPos.y;
             wtm._43 = mainCamPos.z;
-            auto back = -static_cast<DirectionalLight*>(e)->GetDirection() * backOffset;
+            auto backDirection = -static_cast<DirectionalLight*>(e)->GetDirection();
+            backDirection.Normalize(backDirection);
+            auto back = backDirection * backOffset;
             DirectX::SimpleMath::Vector3 temp;
             temp = back + wtm.Translation();
             wtm._41 = temp.x;
             wtm._42 = temp.y;
             wtm._43 = temp.z;
 
-            matrixBuffer.lightVP = wtm.Invert() * DirectX::XMMatrixOrthographicLH(smWidth, smHeight, 1.f, camFar);
+            matrixBuffer.lightVP = wtm.Invert() * DirectX::XMMatrixOrthographicLH(smWidth, smHeight, camNear, camFar);
         }
         else if (e->GetLightInfo().lightType == static_cast<unsigned int>(LightType::Point))
         {

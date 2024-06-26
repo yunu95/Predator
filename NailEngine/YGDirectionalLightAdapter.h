@@ -43,8 +43,8 @@ namespace yunuGIAdapter
 			front = DirectX::XMVector3Rotate(front, quat);
 			light->SetLightDirection(front);
 
-			DirectX::SimpleMath::Vector4 temp{ tm.m31,tm.m32,tm.m33,1 };
-			light->SetLightDirection(temp);
+			//DirectX::SimpleMath::Vector4 temp{ tm.m31,tm.m32,tm.m33,1 };
+			//light->SetLightDirection(temp);
 		}
 		
 		virtual void SetLightDiffuseColor(yunuGI::Color& color) override
