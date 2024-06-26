@@ -177,14 +177,14 @@ void RTSCam::OnContentsStop()
     SetActive(false);
 }
 
-void RTSCam::ApplyShake(float shakeDistance, float frequency, float decreaseFactor)
+void RTSCam::ApplyShake(float shakeDistance, float frequency, float decreaseFactor, const Vector3d& origin)
 {
-    shakeCoroutines.push_back(StartCoroutine(ShakeCoroutine(shakeDistance, frequency, decreaseFactor)));
+    shakeCoroutines.push_back(StartCoroutine(ShakeCoroutine(shakeDistance, frequency, decreaseFactor, origin)));
 }
 
-coroutine::Coroutine RTSCam::ShakeCoroutine(float shakeDistance, float frequency, float decreaseFactor)
+coroutine::Coroutine RTSCam::ShakeCoroutine(float shakeDistance, float frequency, float decreaseFactor, Vector3d origin)
 {
-    Vector3d direction = { Random::GetRandomFloat(1),Random::GetRandomFloat(0.2),Random::GetRandomFloat(1) };
+    Vector3d direction = (GetTransform()->GetWorldPosition() - origin).Normalized();
     direction = direction.Normalized();
     static constexpr float epsilon = 0.01f;
     auto offset = camOffsetAdder.AcquireFactor();

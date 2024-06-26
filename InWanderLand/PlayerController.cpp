@@ -159,7 +159,7 @@ void PlayerController::Update()
         text_State->GetTransform()->SetLocalScale(Vector3d{ 1200,500,0 });
         text_State->GetTransform()->SetLocalPosition(Vector3d{ 0,260,0 });
     }
-    if (GetUnitOnCursor())
+    if (Unit::debuggingUnit = GetUnitOnCursor())
     {
         selectedDebugCharacter = GetUnitOnCursor()->GetWeakPtr<Unit>();
         wstringstream wsstream;
@@ -922,8 +922,8 @@ void PlayerController::SetComboObjectives(const std::array<int, 3>& targetCombos
         UIManager::Instance().GetUIElementByEnum(UIManager::comboNumbers[i])->SetNumber(comboObjective[i]);
         UIManager::Instance().GetUIElementByEnum(UIManager::comboNumbers[i + 3])->SetNumber(comboObjective[i]);
         UIManager::Instance().GetUIElementByEnum(UIManager::comboFinishedImgs[i])->DisableElement();
-        UIManager::Instance().GetUIElementByEnum(UIManager::comboUnFinishedImgs[i])->EnableElement();
         UIManager::Instance().GetUIElementByEnum(UIManager::comboCheckImgs[i])->DisableElement();
+        UIManager::Instance().GetUIElementByEnum(UIManager::comboUnFinishedImgs[i])->EnableElement();
     }
 }
 

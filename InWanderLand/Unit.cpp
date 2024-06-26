@@ -37,6 +37,8 @@ float getDeltaAngle(float difference) {
     return difference;
 }
 bool Unit::pauseAll{ false };
+Unit* Unit::debuggingUnit{ nullptr };
+
 std::weak_ptr<Unit> Unit::GetClosestEnemy()
 {
     auto minIt = std::min_element(attackRange.lock()->GetEnemies().begin(), attackRange.lock()->GetEnemies().end(), [this](const Unit* const a, const Unit* const b)
@@ -230,7 +232,7 @@ void Unit::OnStateUpdate<UnitBehaviourTree::Attack>()
     }
     else
     {
-        if (!currentTarget->IsAlive() || currentTarget->IsInvulenerable())
+        if (!currentTarget->GetActive() || !currentTarget->IsAlive() || currentTarget->IsInvulenerable())
         {
             currentTargetUnit.reset();
             currentTargetUnit = GetClosestEnemy();

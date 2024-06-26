@@ -141,7 +141,7 @@ coroutine::Coroutine HanselChargeSkill::SpawningFieldEffect(std::weak_ptr<Hansel
     {
         each->Damaged(owner, GetDamage());
     }
-    RTSCam::Instance().ApplyShake(pod.impactCamShakeDistance1, pod.impactCamShakeFrequency1, pod.impactCamShakeDecreaseFactor1);
+    RTSCam::Instance().ApplyShake(pod.impactCamShakeDistance1, pod.impactCamShakeFrequency1, pod.impactCamShakeDecreaseFactor1, endPos);
 
     /*while (stompTimingFrame >= animator.lock()->GetCurrentFrame())
     {
@@ -154,7 +154,7 @@ coroutine::Coroutine HanselChargeSkill::SpawningFieldEffect(std::weak_ptr<Hansel
     {
         each->Damaged(owner, GetDamage());
     }
-    RTSCam::Instance().ApplyShake(pod.impactCamShakeDistance2, pod.impactCamShakeFrequency2, pod.impactCamShakeDecreaseFactor2);
+    RTSCam::Instance().ApplyShake(pod.impactCamShakeDistance2, pod.impactCamShakeFrequency2, pod.impactCamShakeDecreaseFactor2, endPos);
 
     co_yield coroutine::WaitForSeconds(anim->GetDuration() - jumpTiming - duration - damageDelay);
 
