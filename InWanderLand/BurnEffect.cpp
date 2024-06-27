@@ -30,7 +30,6 @@ void BurnEffect::Appear()
 	isAppear = true;
 	isDone = false;
 	isFirst = true;
-	Update();
 }
 
 bool BurnEffect::IsDone()
@@ -76,6 +75,16 @@ void BurnEffect::Update()
 {
 	if (isAppear && !isDone)
 	{
+		if (duration == 0)
+		{
+			for (int i = 0; i < originMaterialVec.size(); ++i)
+			{
+				renderer->GetGI().SetMaterial(i, originMaterialVec[i], true);
+			}
+			isDone = true;
+			return;
+		}
+
 		if (isFirst)
 		{
 			this->amount = 1.f;
@@ -89,15 +98,7 @@ void BurnEffect::Update()
 			}
 		}
 
-		if (duration == 0)
-		{
-			for (int i = 0; i < originMaterialVec.size(); ++i)
-			{
-				renderer->GetGI().GetMaterial(i)->SetFloat(0, 0);
-			}
-			isDone = true;
-			return;
-		}
+		
 
 		// 1 ~ 0 -> 나타남
 		amount -= (1 / duration * Time::GetDeltaTime());
@@ -106,6 +107,10 @@ void BurnEffect::Update()
 		{
 			amount = 0;
 			isDone = true;
+			for (int i = 0; i < originMaterialVec.size(); ++i)
+			{
+				renderer->GetGI().SetMaterial(i, originMaterialVec[i], true);
+			}
 		}
 
 		for (int i = 0; i < originMaterialVec.size(); ++i)
@@ -115,6 +120,16 @@ void BurnEffect::Update()
 	}
 	else if(isDisAppear && !isDone)
 	{
+		if (duration == 0)
+		{
+			for (int i = 0; i < originMaterialVec.size(); ++i)
+			{
+				renderer->GetGI().SetMaterial(i, originMaterialVec[i], true);
+			}
+			isDone = true;
+			return;
+		}
+
 		if (isFirst)
 		{
 			this->amount = 0.f;
@@ -128,15 +143,7 @@ void BurnEffect::Update()
 			}
 		}
 
-		if (duration == 0)
-		{
-			for (int i = 0; i < originMaterialVec.size(); ++i)
-			{
-				renderer->GetGI().GetMaterial(i)->SetFloat(0, 1);
-			}
-			isDone = true;
-			return;
-		}
+		
 
 		// 0 ~ 1 -> 사라짐
 		amount += (1 / duration * Time::GetDeltaTime());
@@ -145,6 +152,10 @@ void BurnEffect::Update()
 		{
 			amount = 1;
 			isDone = true;
+			for (int i = 0; i < originMaterialVec.size(); ++i)
+			{
+				renderer->GetGI().SetMaterial(i, originMaterialVec[i], true);
+			}
 		}
 
 		for (int i = 0; i < originMaterialVec.size(); ++i)

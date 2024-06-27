@@ -92,39 +92,22 @@ public:
 class TestComponent4 : public yunutyEngine::Component
 {
 public:
-	yunutyEngine::GameObject* obj;
+	yunutyEngine::graphics::Animator* anim;
+	yunuGI::IAnimation* idle;
+	yunuGI::IAnimation* walk;
 	virtual void Update() override
 	{
-		auto pos = obj->GetTransform()->GetLocalPosition();
 		if (Input::isKeyDown(yunutyEngine::KeyCode::LeftArrow))
 		{
-			pos.x -= 0.01;
-			obj->GetTransform()->SetLocalPosition(pos);
+			anim->ChangeAnimation(idle, 0.3, 1);
+			auto temp = anim->GetGI().GetCurrentAnimation();
+			int a = 1;
 		}
 		if (Input::isKeyDown(yunutyEngine::KeyCode::RightArrow))
 		{
-			pos.x += 0.01;
-			obj->GetTransform()->SetLocalPosition(pos);
-		}
-		if (Input::isKeyDown(yunutyEngine::KeyCode::UpArrow))
-		{
-			pos.y += 0.01;
-			obj->GetTransform()->SetLocalPosition(pos);
-		}
-		if (Input::isKeyDown(yunutyEngine::KeyCode::DownArrow))
-		{
-			pos.y -= 0.01;
-			obj->GetTransform()->SetLocalPosition(pos);
-		}
-		if (Input::isKeyDown(yunutyEngine::KeyCode::O))
-		{
-			pos.z += 0.01;
-			obj->GetTransform()->SetLocalPosition(pos);
-		}
-		if (Input::isKeyDown(yunutyEngine::KeyCode::P))
-		{
-			pos.z -= 0.01;
-			obj->GetTransform()->SetLocalPosition(pos);
+			anim->ChangeAnimation(walk, 0.3, 1);
+			auto temp = anim->GetGI().GetCurrentAnimation();
+			int a = 1;
 		}
 	}
 };
@@ -159,29 +142,33 @@ void GraphicsTest()
 			animation = i;
 		}
 
-		if (i->GetName() == L"Ani_Ursula_Idle")
+		if (i->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleWalk")
 		{
 			i->SetLoop(true);
 			animation2 = i;
 		}
-
-
-		if (i->GetName() == L"Rig_Robin|Ani_Hansel_Attack")
-		{
-			i->SetLoop(true);
-			animation3 = i;
-		}
 	}
 
 	{
+		auto obj4 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
+		obj4->GetTransform()->SetLocalPosition(Vector3d{ 5,0,0 });
+		obj4->SetSelfActive(false);
+
+		auto obj = Scene::getCurrentScene()->AddGameObject();
+		auto test = obj->AddComponent<TestComponent4>();
+
 		auto obj3 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
 		auto anim = obj3->GetComponent<yunutyEngine::graphics::Animator>();
+		anim->PushAnimationWithFunc(animation, 0, [=]() {obj4->SetSelfActive(true); });
+		anim->PushAnimationWithFunc(animation, 10, [=]() {obj4->SetSelfActive(false); });
 		anim->PushAnimation(animation);
+		anim->PushAnimation(animation2);
 		anim->Play(animation);
-		obj3->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{0,180,0} });
-	}
-	{
-		auto obj3 = Scene::getCurrentScene()->AddGameObjectFromFBX("Cube");
+
+
+		test->anim = anim;
+		test->idle = animation;
+		test->walk = animation2;
 	}
 
 	yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();

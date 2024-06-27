@@ -149,7 +149,8 @@ cbuffer ExposureBuffer : register(b9)
 {
     float DiffuseExposure;
     float AmbientExposure;
-    float2 padding4;
+    float depthBias;
+    float pad4;
 }
 
 cbuffer UtilBuffer : register(b10)

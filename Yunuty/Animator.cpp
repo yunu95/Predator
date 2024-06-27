@@ -200,16 +200,13 @@ void Animator::Update()
 
             desc.transitionTotalTime += (Time::GetDeltaTime() * desc.transitionSpeed);
             desc.transitionRatio = desc.transitionTotalTime / desc.transitionDuration;
-            // 애니메이션 교체가 완료된다면
+            // 애니메이션 블렌딩이 끝난다면
             if (desc.transitionRatio >= 1.f)
             {
-                // 애니메이션 교체과 완료된다면 현재 애니메이션을 바꾸기 전에 현재 애니메이션에 등록된 이벤트를 클리어 해준다.
-                ClearAnimationEvent(gi.GetCurrentAnimation());
+                // 애니메이션 블렌딩이 끝난다면 블렌딩에 쓰인 애니메이션을 클리어해준다.
+                ClearAnimationEvent(gi.GetNextAnimation());
 
-                desc.curr = desc.next;
-                desc.curr.sumTime = desc.next.sumTime;
                 desc.ClearNextAnimation();
-                gi.SetCurrentAnimation(nextAnimation);
                 gi.SetNextAnimation(nullptr);
             }
             else
@@ -225,7 +222,7 @@ void Animator::Update()
                 desc.next.nextFrame = min(static_cast<int>(desc.next.currFrame + 1), totalFrame - 1);
                 desc.next.ratio = static_cast<float>(desc.next.sumTime - static_cast<float>(desc.next.currFrame) / ratio);
 
-                // 다음 애니메이션에 대한 이벤트까지 처리
+                // 블렌딩 중인 애니메이션에 대한 이벤트까지 처리
                 for (auto& each : this->animationEventMap)
                 {
                     auto nextAnimation = gi.GetNextAnimation();

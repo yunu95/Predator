@@ -291,12 +291,6 @@ void NailEngine::CreateConstantBuffer()
         _constantBuffer->CraeteConstantBuffer(sizeof(LightMapUVBuffer));
         this->constantBuffers.emplace_back(_constantBuffer);
     }
-
-	{
-		std::shared_ptr<ConstantBuffer> _constantBuffer = std::make_shared<ConstantBuffer>();
-		_constantBuffer->CraeteConstantBuffer(sizeof(DepthBiasBuffer));
-		this->constantBuffers.emplace_back(_constantBuffer);
-	}
 }
 
 void NailEngine::CreateRenderTargetGroup()

@@ -81,7 +81,7 @@ row_major matrix GetAnimationMatrix(VertexIn input)
             next = matrix(n0, n1, n2, n3);
 
             matrix nextResult = lerp(curr, next, ratio[1]);
-            result = lerp(result, nextResult, transitionDesc[input.instanceID].transitionRatio);
+            result = lerp(nextResult, result, transitionDesc[input.instanceID].transitionRatio);
         }
 
         transform += mul(weights[i], result);
@@ -99,6 +99,7 @@ VertexOut main(VertexIn input)
     if (transitionDesc[input.instanceID].curr.animIndex == -1)
     {
         output.pos = mul(float4(input.pos, 1.f), _WVP);
+        output.pos.z += depthBias;
         output.clipPos = output.pos;
     }
     else
@@ -107,6 +108,7 @@ VertexOut main(VertexIn input)
         
         output.pos = mul(float4(input.pos, 1.f), boneMat);
         output.pos = mul(output.pos, _WVP);
+        output.pos.z += depthBias;
         output.clipPos = output.pos;
     }
     

@@ -76,7 +76,6 @@ enum class CB_TYPE
     UTIL,
     PARTICLE,
     LIGHTMAP_UV,
-    DEPTH_BIAS,
 };
 
 struct MatrixBuffer
@@ -214,7 +213,8 @@ struct ExposureBuffer
 {
     float diffuseExposure;
     float ambientExposure;
-    DirectX::SimpleMath::Vector2 padding;
+    float depthBias;
+    float padding;
 };
 
 struct UtilBuffer
@@ -250,12 +250,6 @@ struct LightMapUV
 struct LightMapUVBuffer
 {
     LightMapUV lightMapUV[MAX_STATIC_MODEL];
-};
-
-struct DepthBiasBuffer
-{
-    float depthBias;
-    DirectX::SimpleMath::Vector3 padding;
 };
 
 

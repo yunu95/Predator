@@ -81,7 +81,7 @@ row_major matrix GetAnimationMatrix(VertexIn input)
             next = matrix(n0, n1, n2, n3);
 
             matrix nextResult = lerp(curr, next, ratio[1]);
-            result = lerp(result, nextResult, transitionDesc[input.instanceID].transitionRatio);
+            result = lerp(nextResult, result, transitionDesc[input.instanceID].transitionRatio);
         }
 
         transform += mul(weights[i], result);

@@ -98,11 +98,29 @@ public:
     {
         if (currentAnimation == animation) return;
 
-        nextAnimation = animation;
-        transitionDesc.next.animIndex = ((Animation*)(animation))->GetAnimationIndex();
-        //transitionDesc.next.speed = transitionSpeed;
+        // 변경 요청이 들어오면 현재 재생중인 애니메이션은 다음 애니메이션이 되고 요청으로 들어온 애니메이션을 현재 애니메이션으로 설정한다.
+        // 다음 애니메이션을 현재 애니메이션으로
+        nextAnimation = currentAnimation;
+        // 현재 애니메이션을 요청 들어온 애니메이션으로 설정
+        currentAnimation = animation;
+
+        // 다음 애니메이션에 대한 Desc를 현재 Desc로 설정
+        transitionDesc.next.animIndex = ((Animation*)(nextAnimation))->GetAnimationIndex();
+        transitionDesc.next.currFrame = transitionDesc.curr.currFrame;
+        transitionDesc.next.nextFrame = transitionDesc.curr.currFrame;
+        transitionDesc.next.ratio = transitionDesc.curr.ratio;
+        transitionDesc.next.sumTime = transitionDesc.curr.sumTime;
+        transitionDesc.next.speed = transitionDesc.curr.speed;
         transitionDesc.transitionDuration = transitionDuration;
         transitionDesc.transitionSpeed = transitionSpeed;
+
+        // 현재 애니메이션에 대한 Desc를 요청 들어온 애니메이션의 Desc로 설정
+        transitionDesc.curr.animIndex = ((Animation*)(currentAnimation))->GetAnimationIndex();
+        transitionDesc.curr.currFrame = 0;
+        transitionDesc.curr.nextFrame = 1;
+        transitionDesc.curr.ratio = 0.f;
+        transitionDesc.curr.sumTime = 0.f;
+        transitionDesc.curr.speed = currentAnimation->GetPlaySpeed();
     };
 
     void SetCurrentAnimation(yunuGI::IAnimation* animation)
