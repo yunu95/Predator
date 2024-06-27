@@ -41,8 +41,6 @@ namespace application
 		Quaternion endRot = { destinationOrnament->pod.rotation.w, destinationOrnament->pod.rotation.x, destinationOrnament->pod.rotation.y, destinationOrnament->pod.rotation.z };
 		Vector3d endScale = { destinationOrnament->pod.scale.x, destinationOrnament->pod.scale.y, destinationOrnament->pod.scale.z };
 
-		endPos.y = 0;
-
 		double timer = 0;
 		float factor = 0;
 
