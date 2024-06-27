@@ -221,6 +221,8 @@ private:
         onStateExit[state]();
     };
     std::weak_ptr<Unit> GetClosestEnemy();
+    std::weak_ptr<Unit> GetClosestEnemyWithinAttackRange();
+    std::weak_ptr<Unit> GetClosestEnemyWithinAcquisitionRange();
     template<UnitOrderType orderType>
     bool CanProcessOrder();
     // 상대 유닛에 대해 다가가서 때리기 좋은 위치를 반환합니다.
@@ -233,6 +235,7 @@ private:
     yunutyEngine::coroutine::Coroutine DeathCoroutine();
     yunutyEngine::coroutine::Coroutine AttackCoroutine(std::weak_ptr<Unit> opponent);
     yunutyEngine::coroutine::Coroutine MeleeAttackEffectCoroutine(std::weak_ptr<Unit> opponent);
+    void UpdateAttackTargetWithinRange();
     float DistanceTo(const Vector3d& target);
     void ReturnToPool();
     int liveCountLeft{ 0 };

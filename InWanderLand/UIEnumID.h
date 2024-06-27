@@ -37,14 +37,16 @@ enum class UIEnumID
     // 전술모드 토글버튼 흑백 오버레이
     Toggle_TacticMode_Overlay,
     Toggle_TacticMode_Cooltime_Number,
-    // 마나 게이지
+    // 화면 하단 마나 게이지
     ManaBar1,
     // 전술 모드 마나 게이지
     ManaBar2,
     // 현재 마나량을 나타내는 텍스트
     Mana_Text_CurrentMP,
+    Mana_Text_CurrentMP_Tactic,
     // 최대 마나량을 나타내는 텍스트
     Mana_Text_MaxMP,
+    Mana_Text_MaxMP_Tactic,
     // 사운드가 켜진 상태에서 표시할 UI버튼
     Sound_On,
     // 사운드가 꺼진 상태에서 표시할 UI버튼
@@ -118,7 +120,9 @@ enum class UIEnumID
     PopUpMessage_WarningForRestart_ProceedButton,
     StatusBar_Elite,
     StatusBar_MeleeEnemy,
-    StatusBar_Heroes,
+    StatusBar_Hero_Robin,
+    StatusBar_Hero_Ursula,
+    StatusBar_Hero_Hansel,
     StatusBar_HP_Number_Current,
     StatusBar_HP_Number_Max,
     StatusBar_HP_Cells,
@@ -195,8 +199,10 @@ const std::unordered_map<int, std::string>& application::POD_Enum<UIEnumID>::Get
         {static_cast<int>((int)UIEnumID::ManaBar2), "ManaBar2"},
         // 현재 마나량을 나타내는 텍스트
         {static_cast<int>((int)UIEnumID::Mana_Text_CurrentMP), "Mana_Text_CurrentMP"},
+        {static_cast<int>((int)UIEnumID::Mana_Text_CurrentMP_Tactic), "Mana_Text_Tactic"},
         // 최대 마나량을 나타내는 텍스트
         {static_cast<int>((int)UIEnumID::Mana_Text_MaxMP), "Mana_Text_MaxMP"},
+        {static_cast<int>((int)UIEnumID::Mana_Text_MaxMP_Tactic), "Mana_Text_MaxMP_Tactic"},
         // 사운드가 켜진 상태에서 표시할 UI버튼
         {static_cast<int>((int)UIEnumID::Sound_On), "Sound_On"},
         // 사운드가 꺼진 상태에서 표시할 UI버튼
@@ -270,7 +276,9 @@ const std::unordered_map<int, std::string>& application::POD_Enum<UIEnumID>::Get
         {static_cast<int>((int)UIEnumID::PopUpMessage_WarningForRestart_ProceedButton), "PopUpMessage_WarningForRestart_ProceedButton"},
         {static_cast<int>((int)UIEnumID::StatusBar_Elite), "StatusBar_Elite"},
         {static_cast<int>((int)UIEnumID::StatusBar_MeleeEnemy), "StatusBar_MeleeEnemy"},
-        {static_cast<int>((int)UIEnumID::StatusBar_Heroes), "StatusBar_Heroes"},
+        {static_cast<int>((int)UIEnumID::StatusBar_Hero_Robin), "StatusBar_Hero_Robin"},
+        {static_cast<int>((int)UIEnumID::StatusBar_Hero_Ursula), "StatusBar_Hero_Ursula"},
+        {static_cast<int>((int)UIEnumID::StatusBar_Hero_Hansel), "StatusBar_Hero_Hansel"},
         {static_cast<int>((int)UIEnumID::StatusBar_HP_Number_Current), "StatusBar_HP_Number_Current"},
         {static_cast<int>((int)UIEnumID::StatusBar_HP_Number_Max), "StatusBar_HP_Number_Max"},
         {static_cast<int>((int)UIEnumID::StatusBar_HP_Cells), "StatusBar_HP_Cells"},
