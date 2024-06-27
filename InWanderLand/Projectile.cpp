@@ -6,6 +6,9 @@
 void Projectile::Update()
 {
     UnitAcquisitionSphereCollider::Update();
+
+    previousTransform = GetTransform();
+
     if (traveling)
     {
         if (!enemies.empty())
@@ -59,6 +62,7 @@ void Projectile::Update()
         {
             if (wanderResources::FindVFXMap(owner.lock()->GetUnitTemplateData().pod.skinnedFBXName, UnitAnimType::Damaged))
             {
+                /// 투사체가 터지는 이펙트가 존재할 경우.
                 ExplodeAtCurrentPosition();
             }
             else
@@ -112,11 +116,25 @@ coroutine::Coroutine Projectile::ProjectileEffectCoroutine(std::weak_ptr<Unit> o
     vfxAnimator.lock()->Play();
     //direction *= -1;
     //damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos + direction * 2);
-    damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
-    auto temp = GetTransform()->GetLocalRotation();
-    auto euler = temp.Euler();
-    euler.y += -180;
-    damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion{ euler });
+    
+    if (GetTransform()->GetWorldPosition().y < 0)
+    {
+        damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldPosition(Vector3d(GetTransform()->GetWorldPosition().x, 0.0f, GetTransform()->GetWorldPosition().z));
+        auto temp = GetTransform()->GetLocalRotation();
+        auto euler = temp.Euler();
+        euler.y += -180;
+        euler.x = 90;
+        damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion{ euler });
+    }
+    else
+    {
+        damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
+        auto temp = GetTransform()->GetLocalRotation();
+        auto euler = temp.Euler();
+        euler.y += -180;
+        damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion{ euler });
+    }
+
     //damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(direction);
     //damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldScale(GetTransform()->GetWorldScale());
 

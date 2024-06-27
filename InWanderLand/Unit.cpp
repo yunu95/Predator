@@ -459,7 +459,7 @@ Vector3d Unit::GetRandomPositionInsideCapsuleCollider()
 {
     const auto& pod = GetUnitTemplateData().pod;
     auto unitPos = GetTransform()->GetWorldPosition();
-    return unitPos + Vector3d{ math::Random::GetRandomFloat(pod.collisionSize * 0.3f), pod.collisionSize + math::Random::GetRandomFloat(0 , pod.collisionHeight), math::Random::GetRandomFloat(pod.collisionSize * 0.3f) };
+    return unitPos + Vector3d{ math::Random::GetRandomFloat(pod.collisionSize * 0.5f), pod.collisionSize + math::Random::GetRandomFloat(0 , pod.collisionHeight * 0.7f), math::Random::GetRandomFloat(pod.collisionSize * 0.f) };
 }
 void Unit::EraseBuff(UnitBuffType buffType)
 {

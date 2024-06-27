@@ -12,6 +12,7 @@ public:
     virtual UnitBuffType GetBuffType() { return UnitBuffType::HanselDebuff; };
 private:
     std::weak_ptr<VFXAnimator> buffEffectAnimator;
+    std::shared_ptr<Reference::Guard> blindReference;
 
     virtual void OnStart();
     virtual void OnUpdate() override;

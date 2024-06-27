@@ -20,6 +20,8 @@ struct POD_BossImpaleSkill
 	float impaleSkillKnockbackDistance = 2.0f;
 	float impaleSkillKnockbackDuration = 2.0f;
 
+	float impaleStartDelay = 1.5f;
+
 	TO_JSON(POD_BossImpaleSkill)
 	FROM_JSON(POD_BossImpaleSkill)
 };
@@ -39,7 +41,7 @@ public:
 	static POD_BossImpaleSkill pod;
 
 private:
-	coroutine::Coroutine SpearArise(std::weak_ptr<BossImpaleSkill> skill, std::weak_ptr<ManagedFBX> fbx, std::weak_ptr<UnitAcquisitionSphereCollider> collider, Vector2d pos);
+	coroutine::Coroutine SpearArise(std::weak_ptr<BossImpaleSkill> skill, Vector2d pos);
 	coroutine::Coroutine SpawningSkillffect(std::weak_ptr<BossImpaleSkill> skill);
 
 	std::weak_ptr<coroutine::Coroutine> effectCoroutine;

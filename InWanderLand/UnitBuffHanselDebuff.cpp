@@ -13,6 +13,9 @@ void UnitBuffHanselDebuff::OnStart()
     attackDamageMultiplier = owner.lock()->multiplierDamage.AcquireFactor();
     *attackDamageMultiplier = HanselProjectileSkill::pod.debuffAttackDamageMultiplier;
     
+    //    blindReference = owner.lock()->referenceBlindness.Acquire();
+
+
     buffEffect = FBXPool::Instance().Borrow("VFX_DeBuff_Blind_Hansel");
     buffEffect.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
     buffEffect.lock()->GetTransform()->SetWorldRotation(owner.lock()->GetTransform()->GetWorldRotation());

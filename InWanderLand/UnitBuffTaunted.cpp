@@ -15,7 +15,7 @@ void UnitBuffTaunted::OnStart()
 {
     buffEffect = FBXPool::Instance().Borrow("VFX_DeBuff_Aggro");
     buffEffect.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
-    buffEffect.lock()->GetTransform()->SetWorldRotation(owner.lock()->GetTransform()->GetWorldRotation());
+    buffEffect.lock()->GetTransform()->SetWorldRotation(RTSCam::Instance().GetTransform()->GetWorldRotation());
 
     buffEffectAnimator = buffEffect.lock()->AcquireVFXAnimator();
     buffEffectAnimator.lock()->SetAutoActiveFalse();
@@ -38,7 +38,7 @@ void UnitBuffTaunted::OnUpdate()
     if (!buffEffect.expired())
     {
         buffEffect.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
-        buffEffect.lock()->GetTransform()->SetWorldRotation(owner.lock()->GetTransform()->GetWorldRotation());
+        buffEffect.lock()->GetTransform()->SetWorldRotation(RTSCam::Instance().GetTransform()->GetWorldRotation());
     }
 }
 

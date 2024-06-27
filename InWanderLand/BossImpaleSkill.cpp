@@ -52,35 +52,36 @@ const std::vector<BossSpear> BossSpearsInfo()
 
 coroutine::Coroutine BossImpaleSkill::operator()()
 {
+	//auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
 	auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
 	auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
 	auto enableNavObstacle = owner.lock()->referenceEnableNavObstacle.Acquire();
 	auto rotRef = owner.lock()->referenceBlockRotation.Acquire();
-
 	auto animator = owner.lock()->GetAnimator();
 	auto impaleAnim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill2);
 
+	// 창이 생성되는 시간 오프셋은 유닛으로부터의 거리와 정비례한다.
 	owner.lock()->PlayAnimation(UnitAnimType::Skill2);
 
-	effectCoroutine = owner.lock()->StartCoroutine(SpawningSkillffect(dynamic_pointer_cast<BossImpaleSkill>(selfWeakPtr.lock())));
+	effectCoroutine = owner.lock()->StartCoroutine(SpawningSkillffect(std::dynamic_pointer_cast<BossImpaleSkill>(selfWeakPtr.lock())));
 	effectCoroutine.lock()->PushDestroyCallBack([this]()
 		{
 			FBXPool::Instance().Return(impaleEffect);
 			FBXPool::Instance().Return(previewEffect);
 		});
 
-
-	wanderUtils::UnitCoroutine::ForSecondsFromUnit waitImpaleStart{ owner, impaleStartTime };
+	wanderUtils::UnitCoroutine::ForSecondsFromUnit waitImpaleStart{ owner, pod.impaleStartDelay };
 
 	while (waitImpaleStart.Tick())
 	{
 		co_await std::suspend_always();
 	}
 
-	wanderUtils::UnitCoroutine::ForSecondsFromUnit waitImpaleDuration { owner, pod.impaleSkillDuration };
-	managingIndex = 0;
+	wanderUtils::UnitCoroutine::ForSecondsFromUnit waitImpaleDuration{ owner, pod.impaleSkillDuration };
 
-	for (auto& each : BossSpearsInfo())
+	auto spearVec = BossSpearsInfo();
+
+	for (auto& each : spearVec)
 	{
 		while (each.timeOffset > waitImpaleDuration.Elapsed())
 		{
@@ -88,10 +89,7 @@ coroutine::Coroutine BossImpaleSkill::operator()()
 			co_await std::suspend_always{};
 		}
 
-		std::weak_ptr<ManagedFBX> fbx;
-		std::weak_ptr<UnitAcquisitionSphereCollider> collider;
-
-		auto spearAriseCoroutine = owner.lock()->StartCoroutine(SpearArise(std::dynamic_pointer_cast<BossImpaleSkill>(selfWeakPtr.lock()), fbx, collider, each.position));
+		auto spearAriseCoroutine = ContentsCoroutine::StartRoutine(SpearArise(std::dynamic_pointer_cast<BossImpaleSkill>(selfWeakPtr.lock()), each.position));
 		spearAriseCoroutine.lock()->PushDestroyCallBack([this]()
 			{
 				if (!spearFbxQueue.empty())
@@ -99,8 +97,8 @@ coroutine::Coroutine BossImpaleSkill::operator()()
 					if (!spearFbxQueue.front().expired())
 					{
 						FBXPool::Instance().Return(spearFbxQueue.front());
+						spearFbxQueue.pop();
 					}
-					spearFbxQueue.pop();
 				}
 
 				if (!knockbackColliderQueue.empty())
@@ -108,13 +106,13 @@ coroutine::Coroutine BossImpaleSkill::operator()()
 					if (!knockbackColliderQueue.front().expired())
 					{
 						UnitAcquisitionSphereColliderPool::Instance().Return(knockbackColliderQueue.front());
+						knockbackColliderQueue.pop();
 					}
-					knockbackColliderQueue.pop();
 				}
 			});
 	}
-	
-	wanderUtils::UnitCoroutine::ForSecondsFromUnit waitImpaleAfter { owner, 2.0f };
+
+	wanderUtils::UnitCoroutine::ForSecondsFromUnit waitImpaleAfter{ owner, 2.0f };
 
 	while (waitImpaleAfter.Tick())
 	{
@@ -160,13 +158,13 @@ void BossImpaleSkill::OnResume()
 }
 
 // 창이 한번 불쑥 튀어나왔다가 다시 꺼지는 사이클
-coroutine::Coroutine BossImpaleSkill::SpearArise(std::weak_ptr<BossImpaleSkill> skill, std::weak_ptr<ManagedFBX> fbx, std::weak_ptr<UnitAcquisitionSphereCollider> collider, Vector2d pos)
+coroutine::Coroutine BossImpaleSkill::SpearArise(std::weak_ptr<BossImpaleSkill> skill, Vector2d pos)
 {
-	auto temp = skill.lock();
-	fbx = FBXPool::Instance().Borrow(wanderResources::GetFBXName(wanderResources::WanderFBX::BOSS_SPIKE));
-	skill.lock()->spearFbxQueue.push(fbx);
-	collider = UnitAcquisitionSphereColliderPool::Instance().Borrow(skill.lock()->owner);
-	skill.lock()->knockbackColliderQueue.push(collider);
+	auto persistance = skill.lock();
+	auto fbx = FBXPool::Instance().Borrow(wanderResources::GetFBXName(wanderResources::WanderFBX::IMPALING_SPIKE));
+	spearFbxQueue.push(fbx);
+	auto collider = UnitAcquisitionSphereColliderPool::Instance().Borrow(persistance->owner);
+	knockbackColliderQueue.push(collider);
 	auto forward = owner.lock()->GetTransform()->GetWorldRotation().Forward();
 	auto right = owner.lock()->GetTransform()->GetWorldRotation().Right();
 	auto worldPos = owner.lock()->GetTransform()->GetWorldPosition() + forward * pos.y + right * pos.x;
@@ -174,35 +172,27 @@ coroutine::Coroutine BossImpaleSkill::SpearArise(std::weak_ptr<BossImpaleSkill> 
 	collider.lock()->SetRadius(0.01);
 	collider.lock()->GetTransform()->SetWorldPosition(worldPos);
 	co_await std::suspend_always{};
-	if (!skill.expired())
+	for (auto& each : collider.lock()->GetEnemies())
 	{
-		skill.lock();
-		for (auto& each : collider.lock()->GetEnemies())
+		if (persistance->damagedUnits.contains(each))
 		{
-			if (skill.lock()->damagedUnits.contains(each))
-			{
-				continue;
-			}
-			skill.lock()->damagedUnits.insert(each);
-			each->Damaged(skill.lock()->owner, pod.impaleSkillDamage);
-			Vector3d knockBackDest = each->GetTransform()->GetWorldPosition() + (each->GetTransform()->GetWorldPosition() - worldPos).Normalized() * pod.impaleSkillKnockbackDistance;
-			each->KnockBack(knockBackDest, pod.impaleSkillKnockbackDuration);
+			continue;
 		}
+		persistance->damagedUnits.insert(each);
+		each->Damaged(persistance->owner, pod.impaleSkillDamage);
+		Vector3d knockBackDest = each->GetTransform()->GetWorldPosition() + (each->GetTransform()->GetWorldPosition() - worldPos).Normalized() * pod.impaleSkillKnockbackDistance;
+		each->KnockBack(knockBackDest, pod.impaleSkillKnockbackDuration);
 	}
 
-	wanderUtils::UnitCoroutine::ForSecondsFromUnit waitPerSpear { skill.lock()->owner, pod.impaleSkillDurationPerSpear };
+	wanderUtils::UnitCoroutine::ForSecondsFromUnit waitPerSpear{ persistance->owner, pod.impaleSkillDurationPerSpear };
 
 	while (waitPerSpear.Tick())
 	{
-		skill.lock();
 		float heightAlpha = std::sinf(waitPerSpear.ElapsedNormalized() * math::PI);
 		float yDelta = math::LerpF(pod.impaleSkillMinHeightPerSpear, pod.impaleSkillMaxHeightPerSpear, heightAlpha);
 		fbx.lock()->GetTransform()->SetWorldPosition(worldPos + Vector3d::up * yDelta);
 		co_await std::suspend_always{};
 	}
-
-	FBXPool::Instance().Return(fbx);
-	UnitAcquisitionSphereColliderPool::Instance().Return(collider);
 
 	co_return;
 }
