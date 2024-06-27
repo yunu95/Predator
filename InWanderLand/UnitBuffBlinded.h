@@ -17,6 +17,4 @@ public:
     virtual void OnResume() override;
 
     std::shared_ptr<Reference::Guard> blindReference;
-private:
-    std::weak_ptr<VFXAnimator> buffEffectAnimator;
 };

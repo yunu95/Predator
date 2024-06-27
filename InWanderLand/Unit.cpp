@@ -139,6 +139,10 @@ void Unit::OnStateEngage<UnitBehaviourTree::Death>()
     disableNavAgentByState = referenceDisableNavAgent.Acquire();
     defaultAnimationType = UnitAnimType::None;
     coroutineDeath = StartCoroutine(DeathCoroutine());
+    for (auto& [buffID, buff] : buffs)
+    {
+        buff.get()->OnEnd();
+    }
 }
 template<>
 void Unit::OnStateExit<UnitBehaviourTree::Death>()
@@ -245,7 +249,7 @@ void Unit::OnStateUpdate<UnitBehaviourTree::Attack>()
     }
     else
     {
-        if (!currentTarget->GetActive() || !currentTarget->IsAlive() || currentTarget->IsInvulenerable())
+        if (!currentTarget->GetGameObject()->GetActive() || !currentTarget->IsAlive() || currentTarget->IsInvulenerable())
         {
             currentTargetUnit.reset();
             return;

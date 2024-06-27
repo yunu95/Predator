@@ -21,9 +21,9 @@ void UnitBuffBlinded::OnStart()
     blindReference = owner.lock()->referenceBlindness.Acquire();
     buffEffect = FBXPool::Instance().Borrow("VFX_DeBuff_Blind_Ursula");
     buffEffect.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
-    buffEffect.lock()->GetTransform()->SetWorldRotation(owner.lock()->GetTransform()->GetWorldRotation());
+    buffEffect.lock()->GetTransform()->SetWorldRotation(RTSCam::Instance().GetTransform()->GetWorldRotation());
 
-    buffEffectAnimator = buffEffect.lock()->AcquireVFXAnimator();
+    auto buffEffectAnimator = buffEffect.lock()->AcquireVFXAnimator();
     buffEffectAnimator.lock()->SetAutoActiveFalse();
     buffEffectAnimator.lock()->SetLoop(true);
     buffEffectAnimator.lock()->Init();
@@ -35,7 +35,7 @@ void UnitBuffBlinded::OnUpdate()
     if (!buffEffect.expired())
     {
         buffEffect.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
-        buffEffect.lock()->GetTransform()->SetWorldRotation(owner.lock()->GetTransform()->GetWorldRotation());
+        buffEffect.lock()->GetTransform()->SetWorldRotation(RTSCam::Instance().GetTransform()->GetWorldRotation());
     }
 }
 
