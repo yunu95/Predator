@@ -32,7 +32,10 @@ namespace yunutyEngine
                 std::suspend_always yield_value(std::suspend_always) { return {}; }
                 std::suspend_always yield_value(YieldInstruction& yield) { this->yield = &yield; return {}; }
                 std::suspend_always yield_value(YieldInstruction&& yield) { this->yield = &yield; return {}; }
-                void unhandled_exception() {  }
+                void unhandled_exception() 
+                {
+                    std::rethrow_exception(std::current_exception());
+                }
             };
             explicit Coroutine(std::coroutine_handle<promise_type> h) : handle(h) {}
             ~Coroutine()
