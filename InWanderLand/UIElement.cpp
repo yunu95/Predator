@@ -29,7 +29,11 @@ void UIElement::EnableElement()
     if (disableTransition)
         disableTransition->StopTimer();
     if (linearClippingTimerOnDisable)
+    {
+        imageComponent.lock()->GetGI().SetLinearClippingStartPoint(0, 0);
+        imageComponent.lock()->GetGI().SetLinearClippingDirection(0, -1);
         linearClippingTimerOnDisable->StopTimer();
+    }
 
     if (disableAfterEnable)
     {

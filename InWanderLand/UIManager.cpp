@@ -412,8 +412,10 @@ coroutine::Coroutine UIManager::ReturnToTitleAfterFadeOutCoro()
     FadeOutRight(1.0f);
     SetIngameUIVisible(false);
     co_yield coroutine::WaitForSeconds{ 1.2f, true };
-    UIManager::Instance().GetUIElementByEnum(UIEnumID::VictoryPage)->DisableElement();
-    UIManager::Instance().GetUIElementByEnum(UIEnumID::DefeatPage)->DisableElement();
+    HideComboObjectvies();
+    GetUIElementByEnum(UIEnumID::VictoryPage)->DisableElement();
+    GetUIElementByEnum(UIEnumID::DefeatPage)->DisableElement();
+    GetUIElementByEnum(UIEnumID::DefeatPage)->DisableElement();
     FadeIn(1.0f);
 
     auto cam = Scene::getCurrentScene()->AddGameObject()->AddComponentAsWeakPtr<graphics::Camera>();

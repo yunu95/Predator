@@ -9,11 +9,11 @@ void UnitBuff::Init(std::weak_ptr<Unit> owner)
     auto id = GetUIEnumID();
     if (id != UIEnumID::None)
     {
-        if (auto ui = owner.lock()->unitStatusUI; !ui.expired() && ui.lock()->GetLocalUIsByEnumID().at(id))
+        if (auto ui = owner.lock()->unitStatusUI; !ui.expired() && ui.lock()->GetLocalUIsByEnumID().contains(id))
             this->buffIcon1 = ui.lock()->GetLocalUIsByEnumID().at(id)->GetWeakPtr<UIElement>();
-        if (auto ui = owner.lock()->unitStatusPortraitUI; !ui.expired() && ui.lock()->GetLocalUIsByEnumID().at(id))
+        if (auto ui = owner.lock()->unitStatusPortraitUI; !ui.expired() && ui.lock()->GetLocalUIsByEnumID().contains(id))
             this->buffIcon2 = ui.lock()->GetLocalUIsByEnumID().at(id)->GetWeakPtr<UIElement>();
-        if (auto ui = owner.lock()->unitStatusPortraitUI2; !ui.expired() && ui.lock()->GetLocalUIsByEnumID().at(id))
+        if (auto ui = owner.lock()->unitStatusPortraitUI2; !ui.expired() && ui.lock()->GetLocalUIsByEnumID().contains(id))
             this->buffIcon3 = ui.lock()->GetLocalUIsByEnumID().at(id)->GetWeakPtr<UIElement>();
     }
     if (!buffIcon1.expired())
