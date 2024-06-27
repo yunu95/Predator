@@ -4,6 +4,9 @@
 
 POD_BossImpaleSkill BossImpaleSkill::pod = POD_BossImpaleSkill();
 
+std::queue<std::weak_ptr<UnitAcquisitionSphereCollider>> BossImpaleSkill::knockbackColliderQueue = std::queue<std::weak_ptr<UnitAcquisitionSphereCollider>>();
+std::queue<std::weak_ptr<ManagedFBX>> BossImpaleSkill::spearFbxQueue = std::queue<std::weak_ptr<ManagedFBX>>();
+
 const float impaleStartTime = 3.02f;
 
 struct BossSpear

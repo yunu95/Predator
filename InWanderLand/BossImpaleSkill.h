@@ -49,8 +49,8 @@ private:
 	std::weak_ptr<ManagedFBX> impaleEffect;
 	std::weak_ptr<VFXAnimator> previewEffectAnimator;
 	std::weak_ptr<VFXAnimator> impaleEffectAnimator;
-	std::queue<std::weak_ptr<UnitAcquisitionSphereCollider>> knockbackColliderQueue;
-	std::queue<std::weak_ptr<ManagedFBX>> spearFbxQueue;
+	static std::queue<std::weak_ptr<UnitAcquisitionSphereCollider>> knockbackColliderQueue;
+	static std::queue<std::weak_ptr<ManagedFBX>> spearFbxQueue;
 	std::unordered_set<Unit*> damagedUnits;
 
 	int managingIndex;
