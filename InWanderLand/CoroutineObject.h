@@ -50,7 +50,7 @@ namespace application
 
 			CoroutineObject get_return_object()
 			{
-				return CoroutineObject(std::shared_ptr<Coroutine_Handler>(coro_Handle::from_promise(*this)));
+				return CoroutineObject(std::make_shared<Coroutine_Handler>(coro_Handle::from_promise(*this)));
 			}
 
 			auto yield_value(const T& value)
