@@ -5,7 +5,9 @@ struct UnitStatusBarType
 {
     enum Enum {
         NONE,
-        PLAYER,
+        PLAYER_ROBIN,
+        PLAYER_URSULA,
+        PLAYER_HANSEL,
         ENEMY,
         ELITE,
         BOSS,
@@ -18,7 +20,9 @@ const std::unordered_map<int, std::string>& application::POD_Enum<UnitStatusBarT
     static std::unordered_map<int, std::string> enumNameMap
     {
         {static_cast<int>(UnitStatusBarType::NONE), "NONE"},
-        {static_cast<int>(UnitStatusBarType::PLAYER), "PLAYER"},
+        {static_cast<int>(UnitStatusBarType::PLAYER_ROBIN), "PLAYER_ROBIN"},
+        {static_cast<int>(UnitStatusBarType::PLAYER_URSULA), "PLAYER_URSULA"},
+        {static_cast<int>(UnitStatusBarType::PLAYER_HANSEL), "PLAYER_HANSEL"},
         {static_cast<int>(UnitStatusBarType::ENEMY), "ENEMY"},
         {static_cast<int>(UnitStatusBarType::ELITE), "ELITE"},
         {static_cast<int>(UnitStatusBarType::BOSS), "BOSS"},

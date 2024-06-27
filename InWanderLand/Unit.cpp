@@ -41,6 +41,16 @@ Unit* Unit::debuggingUnit{ nullptr };
 
 std::weak_ptr<Unit> Unit::GetClosestEnemy()
 {
+    if (auto unit = GetClosestEnemyWithinAttackRange().lock())
+        return unit;
+
+    if (auto unit = GetClosestEnemyWithinAcquisitionRange().lock())
+        return unit;
+
+    return std::weak_ptr<Unit>();
+}
+std::weak_ptr<Unit> Unit::GetClosestEnemyWithinAttackRange()
+{
     auto minIt = std::min_element(attackRange.lock()->GetEnemies().begin(), attackRange.lock()->GetEnemies().end(), [this](const Unit* const a, const Unit* const b)
         {
             return (GetTransform()->GetWorldPosition() - a->GetTransform()->GetWorldPosition()).MagnitudeSqr() <
@@ -48,8 +58,11 @@ std::weak_ptr<Unit> Unit::GetClosestEnemy()
         });
     if (minIt != attackRange.lock()->GetEnemies().end())
         return (*minIt)->GetWeakPtr<Unit>();
-
-    minIt = std::min_element(acquisitionRange.lock()->GetEnemies().begin(), acquisitionRange.lock()->GetEnemies().end(), [this](const Unit* const a, const Unit* const b)
+    return std::weak_ptr<Unit>();
+}
+std::weak_ptr<Unit> Unit::GetClosestEnemyWithinAcquisitionRange()
+{
+    auto minIt = std::min_element(acquisitionRange.lock()->GetEnemies().begin(), acquisitionRange.lock()->GetEnemies().end(), [this](const Unit* const a, const Unit* const b)
         {
             return (GetTransform()->GetWorldPosition() - a->GetTransform()->GetWorldPosition()).MagnitudeSqr() <
                 (GetTransform()->GetWorldPosition() - b->GetTransform()->GetWorldPosition()).MagnitudeSqr();
@@ -235,7 +248,6 @@ void Unit::OnStateUpdate<UnitBehaviourTree::Attack>()
         if (!currentTarget->GetActive() || !currentTarget->IsAlive() || currentTarget->IsInvulenerable())
         {
             currentTargetUnit.reset();
-            currentTargetUnit = GetClosestEnemy();
             return;
         }
     }
@@ -916,6 +928,7 @@ void Unit::Init(const application::editor::Unit_TemplateData* unitTemplateData)
     //wanderResources::PushAnimations(animatorComponent.lock().get(), unitTemplateData->pod.skinnedFBXName);
     unitCollider = GetGameObject()->AddGameObject()->AddComponentAsWeakPtr<UnitCapsuleCollider>();
     unitCollider.lock()->owner = GetWeakPtr<Unit>();
+    unitCollider.lock()->GetTransform()->SetLocalRotation(Vector3d{ {0,0,90} });
     auto rigidBody = unitCollider.lock()->GetGameObject()->AddComponentAsWeakPtr<physics::RigidBody>();
     rigidBody.lock()->SetAsKinematic(true);
     InitBehaviorTree();
@@ -928,8 +941,9 @@ void Unit::Init(const application::editor::Unit_TemplateData* unitTemplateData)
     //debugMesh->GetTransform()->SetLocalScale(Vector3d(unitTemplateData->pod.collisionSize * 2, unitTemplateData->pod.collisionHeight, unitTemplateData->pod.collisionSize * 2));
     //debugMesh->GetTransform()->SetLocalPosition(Vector3d::up * unitTemplateData->pod.collisionHeight * 0.5f);
 
-    auto debugMesh = AttachDebugMesh(unitCollider.lock()->GetGameObject(), DebugMeshType::Capsule);
+    auto debugMesh = AttachDebugMesh(unitCollider.lock()->GetGameObject()->AddGameObject(), DebugMeshType::Capsule);
     debugMesh->GetTransform()->SetLocalScale(Vector3d(unitTemplateData->pod.collisionSize * 2, unitTemplateData->pod.collisionHeight, unitTemplateData->pod.collisionSize * 2));
+    debugMesh->GetTransform()->SetLocalRotation(Vector3d{ {0,0,90} });
 
     /// Particle Setting
     for (auto& eachPI : ptm.GetChildrenParticleInstanceList(unitTemplateData->pod.skinnedFBXName))
@@ -1187,8 +1201,14 @@ void Unit::Summon(application::editor::Unit_TemplateData* templateData)
     }
     switch (unitTemplateData->pod.unitStatusBar.enumValue)
     {
-    case UnitStatusBarType::PLAYER:
-        unitStatusUI = UIManager::Instance().DuplicateUIElement(UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_Heroes));
+    case UnitStatusBarType::PLAYER_ROBIN:
+        unitStatusUI = UIManager::Instance().DuplicateUIElement(UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_Hero_Robin));
+        break;
+    case UnitStatusBarType::PLAYER_URSULA:
+        unitStatusUI = UIManager::Instance().DuplicateUIElement(UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_Hero_Ursula));
+        break;
+    case UnitStatusBarType::PLAYER_HANSEL:
+        unitStatusUI = UIManager::Instance().DuplicateUIElement(UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_Hero_Hansel));
         break;
     case UnitStatusBarType::ENEMY:
         unitStatusUI = UIManager::Instance().DuplicateUIElement(UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_MeleeEnemy));
@@ -1589,6 +1609,7 @@ void Unit::InitBehaviorTree()
         };
     unitBehaviourTree[UnitBehaviourTree::AttackMove][UnitBehaviourTree::Attack].onUpdate = [this]()
         {
+            UpdateAttackTargetWithinRange();
             OnStateUpdate<UnitBehaviourTree::Attack>();
         };
     unitBehaviourTree[UnitBehaviourTree::AttackMove][UnitBehaviourTree::Move].enteringCondtion = [this]()
@@ -1803,6 +1824,21 @@ yunutyEngine::coroutine::Coroutine Unit::MeleeAttackEffectCoroutine(std::weak_pt
     }
 
     co_return;
+}
+void Unit::UpdateAttackTargetWithinRange()
+{
+    auto currentTarget = currentTargetUnit.lock();
+    // 현재 타깃이 유효하면 그냥 리턴
+    if (currentTarget && currentTarget->IsAlive() && !currentTarget->IsInvulenerable() && currentTarget->GetActive())
+    {
+        return;
+    }
+    else
+    {
+        currentTargetUnit.reset();
+        currentTargetUnit = GetClosestEnemyWithinAttackRange();
+        return;
+    }
 }
 float Unit::DistanceTo(const Vector3d& target)
 {
