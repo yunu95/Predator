@@ -309,7 +309,7 @@ UIElement* UIManager::GetUIElementByEnum(UIEnumID uiEnumID)
         if (auto itr = uisByEnumID.find(uiEnumID); itr != uisByEnumID.end())
             return itr->second;
     }
-    assert("찾으려는 ui 요소가 존재하지 않습니다! .iwui 파일이 최신 파일이 아닌지 확인해보십시오." && false);
+    ASSERT_WITH_MESSAGE(false, "찾으려는 ui 요소가 존재하지 않습니다! .iwui 파일이 최신 파일이 아닌지 확인해보십시오. UI ID : " + POD_Enum<UIEnumID>::GetEnumNameMap().at((int)uiEnumID));
     return nullptr;
 }
 const std::vector<std::string>& UIManager::GetDialogueTimed_KeyStrings()

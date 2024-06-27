@@ -122,6 +122,29 @@ namespace application
 						guidMap[loadedGUID]->pod.punrealGUID = UUID_To_String(loadedGUID);
 						guidMap[loadedGUID]->pod.stage = loadedStage;
 						guidMap[loadedGUID]->ApplyAsPaletteInstance();
+
+
+
+						for (auto child : guidMap[loadedGUID]->GetPaletteInstance()->GetGameObject()->GetChildren())
+						{
+							if (child->getName() == guidMap[loadedGUID]->pod.templateData->pod.staticFBXName)
+							{
+								for (auto each : child->GetChildrenRecursively())
+								{
+									auto staticMeshRenderer = each->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+									if (staticMeshRenderer == nullptr)
+										continue;
+
+									if (guidMap[loadedGUID]->pod.LightMapIndex != -1)
+									{
+										staticMeshRenderer->GetGI().SetLightMapUVIndex(guidMap[loadedGUID]->pod.LightMapIndex);
+										staticMeshRenderer->GetGI().SetLightMapUVOffset(guidMap[loadedGUID]->pod.LightMapScaleOffset[2], guidMap[loadedGUID]->pod.LightMapScaleOffset[3]);
+										staticMeshRenderer->GetGI().SetLightMapUVScaling(guidMap[loadedGUID]->pod.LightMapScaleOffset[0], guidMap[loadedGUID]->pod.LightMapScaleOffset[1]);
+									}
+								}
+							}
+						}
+
 						guidMap.erase(loadedGUID);
 						continue;
 					}

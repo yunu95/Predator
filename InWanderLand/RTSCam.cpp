@@ -182,21 +182,20 @@ void RTSCam::ApplyShake(float shakeDistance, float frequency, float decreaseFact
     shakeCoroutines.push_back(StartCoroutine(ShakeCoroutine(shakeDistance, frequency, decreaseFactor, origin)));
 }
 
-coroutine::Coroutine RTSCam::ShakeCoroutine(float shakeDistance, float frequency, float decreaseFactor, Vector3d origin)
+coroutine::Coroutine RTSCam::ShakeCoroutine(float strength, float frequency, float decreaseFactor, Vector3d origin)
 {
-    Vector3d direction = (GetTransform()->GetWorldPosition() - origin).Normalized();
+    Vector3d direction = GetTransform()->GetWorldPosition() - origin;
+    strength /= direction.MagnitudeSqr();
     direction = direction.Normalized();
     static constexpr float epsilon = 0.01f;
     auto offset = camOffsetAdder.AcquireFactor();
-    while (std::fabsf(shakeDistance) > epsilon)
+    float elapsed = 0.0f;
+    while (std::fabsf(strength) > epsilon)
     {
-        coroutine::ForSeconds forSeconds{ 1.0f / frequency };
-        while (forSeconds.Tick())
-        {
-            *offset = forSeconds.ElapsedNormalized() * shakeDistance * direction;
-            co_await std::suspend_always{};
-        }
-        shakeDistance *= -decreaseFactor;
+        strength *= powf(decreaseFactor, Time::GetDeltaTime());
+        *offset = sinf(elapsed * 2 * math::PI * frequency) * strength * direction;
+        elapsed += Time::GetDeltaTime();
+        co_await std::suspend_always{};
     }
     co_return;
 }
