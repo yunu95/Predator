@@ -179,7 +179,7 @@ void yunutyEngine::YunutyCycle::ThreadUpdate()
 			UpdateComponent(updateTargetComponents[i]);
 			for (auto coroutine : updateTargetComponents[i]->coroutines)
 			{
-				if (coroutine->deathWish)
+				if (coroutine->Done() || coroutine->deathWish)
 				{
 					continue;
 				}
@@ -188,7 +188,7 @@ void yunutyEngine::YunutyCycle::ThreadUpdate()
 					yield->Update();
 					if (yield->ShouldResume())
 					{
-						coroutine->handle.promise().yield = nullptr;
+						coroutine->handle->promise().yield = nullptr;
 						coroutine->resume();
 					}
 				}
@@ -199,7 +199,8 @@ void yunutyEngine::YunutyCycle::ThreadUpdate()
 			}
 			if (!updateTargetComponents[i]->coroutines.empty())
 			{
-				std::erase_if(updateTargetComponents[i]->coroutines, [](std::shared_ptr<yunutyEngine::coroutine::Coroutine> coroutine) {return coroutine->handle.done() || coroutine->deathWish; });
+				std::erase_if(updateTargetComponents[i]->coroutines, [](std::shared_ptr<yunutyEngine::coroutine::Coroutine> coroutine) {return coroutine->Done() || coroutine->deathWish; });
+				
 				if (!updateTargetComponents[i]->coroutines.empty())
 				{
 					updateTargetComponents[i]->GetGameObject()->HandleComponentUpdateState(updateTargetComponents[i]);

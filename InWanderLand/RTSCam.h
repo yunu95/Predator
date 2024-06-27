@@ -58,7 +58,8 @@ public:
     void ApplyShake(float shakeDistance, float frequency, float decreaseFactor, const Vector3d& origin);
 
 private:
-    coroutine::Coroutine ShakeCoroutine(float shakeDistance, float frequency, float decreaseFactor, Vector3d origin);
+    // decreaseFactor는 초당 감쇠율
+    coroutine::Coroutine ShakeCoroutine(float strength, float frequency, float decreaseFactor, Vector3d origin);
     void UpdateCameraView();
     factor::Adder<Vector3d> camOffsetAdder;
     std::vector<std::weak_ptr<coroutine::Coroutine>> shakeCoroutines;
