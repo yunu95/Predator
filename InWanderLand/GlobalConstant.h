@@ -41,6 +41,8 @@ namespace application
         GC<float> tacticAttackCost = 10.0f;
 
         GC<float>	tacticGaugeRecoveryPerSecond = 2.0f;
+        GC<float> battleZoomMultiplier = 0.95f;
+        GC<float> tacticZoomMultiplier = 1.05f;
 
         GC<int>	maxResurrectCount;
         GC<float> chessBlockUnitLength = 3.4f;

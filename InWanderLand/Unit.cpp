@@ -167,7 +167,7 @@ void Unit::OnStateEngage<UnitBehaviourTree::Knockback>()
 template<>
 void Unit::OnStateUpdate<UnitBehaviourTree::Knockback>()
 {
-    navAgentComponent.lock()->MoveTo(GetTransform()->GetWorldPosition());
+    //navAgentComponent.lock()->MoveTo(GetTransform()->GetWorldPosition());
     //blockFollowingNavAgentByState = referenceBlockFollowingNavAgent.Acquire();
 }
 template<>
@@ -678,7 +678,7 @@ yunutyEngine::coroutine::Coroutine Unit::KnockbackCoroutine(std::shared_ptr<Refe
     while (forSeconds.Tick())
     {
         bool isNavAgentActive = navAgentComponent.lock()->GetActive();
-        navAgentComponent.lock()->MoveTo(targetPosition + Vector3d::one * 0.0001);
+        navAgentComponent.lock()->MoveTo(targetPosition + Vector3d::one);
         y = vy0 * forSeconds.Elapsed() - 0.5 * constant.gravitySpeed * forSeconds.Elapsed() * forSeconds.Elapsed();
         Vector3d pos = Vector3d::Lerp(startPos, navAgentComponent.lock()->GetTransform()->GetWorldPosition(), forSeconds.ElapsedNormalized());
         pos.y = y;
@@ -1538,7 +1538,6 @@ void Unit::InitBehaviorTree()
         };
     unitBehaviourTree[UnitBehaviourTree::Hold][UnitBehaviourTree::Attack].onEnter = [this]()
         {
-            currentTargetUnit = GetClosestEnemy();
             OnStateEngage<UnitBehaviourTree::Attack>();
         };
     unitBehaviourTree[UnitBehaviourTree::Hold][UnitBehaviourTree::Attack].onExit = [this]()
@@ -1547,6 +1546,7 @@ void Unit::InitBehaviorTree()
         };
     unitBehaviourTree[UnitBehaviourTree::Hold][UnitBehaviourTree::Attack].onUpdate = [this]()
         {
+            UpdateAttackTargetWithinRange();
             OnStateUpdate<UnitBehaviourTree::Attack>();
         };
     unitBehaviourTree[UnitBehaviourTree::Hold][UnitBehaviourTree::Stop].enteringCondtion = [this]()

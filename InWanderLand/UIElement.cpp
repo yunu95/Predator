@@ -4,13 +4,15 @@ void UIElement::Start()
 {
     application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
     // 만약 숫자 UI라면 먼저 숫자들을 모두 비활성화
-    if (!numberSetBefore)
+    //if (!numberSetBefore)
+    //{
+    if (!numberSetBefore && importedUIData.customFlags & (int)UIExportFlag::IsNumber)
+        SetNumber(0);
+    /*for (auto each : digits)
     {
-        for (auto each : digits)
-        {
-            each->DisableElementInstant();
-        }
-    }
+        each->DisableElementInstant();
+    }*/
+    //}
 };
 void UIElement::EnableElement()
 {
@@ -242,6 +244,10 @@ void UIElement::SetNumber(float number)
     }
     else
     {
+        for (auto each : digits)
+        {
+            each->DisableElement();
+        }
         if (importedUIData.numberShowZero)
         {
             digits[0]->EnableElement();
