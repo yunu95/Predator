@@ -488,6 +488,8 @@ void InstancingManager::RenderStaticShadow()
 
 				if (i->isActive == false) continue;
 
+				if (i->mesh == nullptr) continue;
+
 				//auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
 				//auto aabb = i->mesh->GetBoundingBox(i->wtm * CameraManager::Instance.Get().GetMainCamera()->GetVTM(), i->materialIndex);
 
@@ -885,6 +887,18 @@ void InstancingManager::RegisterSkinnedForwardData(std::shared_ptr<SkinnedRender
 	}
 }
 
+void InstancingManager::RegisterDecalData(std::shared_ptr<RenderInfo>& renderInfo)
+{
+	InstanceID instanceID = std::make_pair(renderInfo->mesh, renderInfo->material);
+
+	this->decalRenderInfoCache[instanceID].insert(renderInfo);
+
+	if (_buffers.find(instanceID) == _buffers.end())
+	{
+		_buffers[instanceID] = std::make_shared<InstanceBuffer>();
+	}
+}
+
 void InstancingManager::PopStaticDeferredData(std::shared_ptr<RenderInfo>& renderInfo)
 {
 	//InstanceID instanceID = std::make_pair((unsigned __int64)renderInfo->mesh, (unsigned __int64)renderInfo->material);
@@ -970,6 +984,21 @@ void InstancingManager::PopSkinnedForwardData(std::shared_ptr<SkinnedRenderInfo>
 		if (this->skinnedMeshForwardCache[instanceID].empty())
 		{
 			this->skinnedMeshForwardCache.erase(instanceID);
+		}
+	}
+}
+
+void InstancingManager::PopDecalData(std::shared_ptr<RenderInfo>& renderInfo)
+{
+	InstanceID instanceID = std::make_pair(renderInfo->mesh, renderInfo->material);
+
+	auto iter = this->decalRenderInfoCache.find(instanceID);
+	if (iter != this->decalRenderInfoCache.end())
+	{
+		this->decalRenderInfoCache[instanceID].erase(renderInfo);
+		if (this->decalRenderInfoCache[instanceID].empty())
+		{
+			this->decalRenderInfoCache.erase(instanceID);
 		}
 	}
 }

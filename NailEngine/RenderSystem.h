@@ -71,11 +71,11 @@ public:
 
     void DrawDeferredInfo();
 
-    void PushStaticRenderableObject(nail::IRenderable* renderable);
-    void PopStaticRenderableObject(nail::IRenderable* renderable);
-
-    void PushSkinnedRenderableObject(nail::IRenderable* renderable);
-    void PopSkinnedRenderableObject(nail::IRenderable* renderable);
+    //void PushStaticRenderableObject(nail::IRenderable* renderable);
+    //void PopStaticRenderableObject(nail::IRenderable* renderable);
+    //
+    //void PushSkinnedRenderableObject(nail::IRenderable* renderable);
+    //void PopSkinnedRenderableObject(nail::IRenderable* renderable);
 
     void PushUIObject(std::shared_ptr<UIImage> renderable);
     // 전처리를 한번 해줘야 하는 UI 객체를 전처리 큐에 담는다.
@@ -88,19 +88,19 @@ public:
 
     //void ReSortUIObject(int layer, std::shared_ptr<UIImage> ui);
 
-    void ReSortRenderInfo(nail::IRenderable* renderable, int index);
-
-    void RegisterRenderInfo(nail::IRenderable* renderable, std::shared_ptr<RenderInfo> renderInfo);
-    void RegisterSkinnedRenderInfo(nail::IRenderable* renderable, std::shared_ptr<SkinnedRenderInfo> renderInfo);
+    //void ReSortRenderInfo(nail::IRenderable* renderable, int index);
+    //
+    //void RegisterRenderInfo(nail::IRenderable* renderable, std::shared_ptr<RenderInfo> renderInfo);
+    //void RegisterSkinnedRenderInfo(nail::IRenderable* renderable, std::shared_ptr<SkinnedRenderInfo> renderInfo);
 
 private:
     Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> QueryBrush(std::shared_ptr<UIText> uiText);
     Microsoft::WRL::ComPtr<IDWriteTextFormat> QueryTextFormat(std::shared_ptr<UIText> uiText);
 
 private:
-    std::set<std::shared_ptr<RenderInfo>> deferredSet;
-    std::set<std::shared_ptr<RenderInfo>> forwardSet;
-    std::set<std::shared_ptr<SkinnedRenderInfo>> skinnedSet;
+    //std::set<std::shared_ptr<RenderInfo>> deferredSet;
+    //std::set<std::shared_ptr<RenderInfo>> forwardSet;
+    //std::set<std::shared_ptr<SkinnedRenderInfo>> skinnedSet;
 
     BoneMatrix finalTM;
 
@@ -111,8 +111,8 @@ private:
     yunuGI::IShader* vs = nullptr;
 
 private:
-    std::map<nail::IRenderable*, std::vector<std::shared_ptr<RenderInfo>>> staticMeshRenderInfoMap;
-    std::map<nail::IRenderable*, std::vector<std::shared_ptr<SkinnedRenderInfo>>> skinnedMeshRenderInfoMap;
+    //std::map<nail::IRenderable*, std::vector<std::shared_ptr<RenderInfo>>> staticMeshRenderInfoMap;
+    //std::map<nail::IRenderable*, std::vector<std::shared_ptr<SkinnedRenderInfo>>> skinnedMeshRenderInfoMap;
 
     // 미리 한번 전처리를 해줘야 하는 UI 이미지들
     std::unordered_set<UIImage*> preProcessingUiImages;

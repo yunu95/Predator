@@ -43,11 +43,13 @@ public:
 	void RegisterStaticForwardData(std::shared_ptr<RenderInfo>& renderInfo);
 	void RegisterSkinnedDeferredData(std::shared_ptr<SkinnedRenderInfo>& renderInfo);
 	void RegisterSkinnedForwardData(std::shared_ptr<SkinnedRenderInfo>& renderInfo);
+	void RegisterDecalData(std::shared_ptr<RenderInfo>& renderInfo);
 
 	void PopStaticDeferredData(std::shared_ptr<RenderInfo>& renderInfo);
 	void PopStaticForwardData(std::shared_ptr<RenderInfo>& renderInfo);
 	void PopSkinnedDeferredData(std::shared_ptr<SkinnedRenderInfo>& renderInfo);
 	void PopSkinnedForwardData(std::shared_ptr<SkinnedRenderInfo>& renderInfo);
+	void PopDecalData(std::shared_ptr<RenderInfo>& renderInfo);
 
 	void RegisterParticleRenderInfo(ParticleSystem* particleSystem, std::list<yunuGI::ParticleRenderInfo>* particleInfoList);
 
@@ -79,6 +81,7 @@ private:
 	std::map<InstanceID, std::set<std::shared_ptr<SkinnedRenderInfo>>> skinnedMeshForwardCache;
 
 	std::map<ParticleSystem*, std::list<yunuGI::ParticleRenderInfo>*> particleRenderInfoMap;
+	std::map<InstanceID, std::set<std::shared_ptr<RenderInfo>>> decalRenderInfoCache;
 
 private:
 	std::map<InstanceID, std::shared_ptr<InstanceBuffer>> _buffers;

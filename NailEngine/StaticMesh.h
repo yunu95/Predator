@@ -80,36 +80,49 @@ public:
 	virtual void SetMesh(Mesh* mesh) override
 	{
 		this->mesh = mesh;
+
 		for (auto& i : renderInfoVec)
 		{
-			i->mesh = mesh;
-			if (this->materialVec.size() == 0)
+			
+			//if (this->materialVec.size() == 0)
+			//{
+			//	InstancingManager::Instance.Get().RegisterStaticDeferredData(i);
+			//}
+			//else
+			//{
+			for (auto& each : this->materialVec)
 			{
-				InstancingManager::Instance.Get().RegisterStaticDeferredData(i);
-			}
-			else
-			{
-				/*for (auto& each : this->materialVec)
+				// 메쉬를 갱신하기 전에 이전 메쉬에 대한 정보를 뺀다.
+				if (each->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
 				{
-					if (each->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
-					{
-						InstancingManager::Instance.Get().PopStaticDeferredData(i);
-					}
-					else
-					{
-						InstancingManager::Instance.Get().PopStaticForwardData(i);
-					}
+					InstancingManager::Instance.Get().PopStaticDeferredData(i);
+				}
+				else if(each->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Forward)
+				{
+					InstancingManager::Instance.Get().PopStaticForwardData(i);
+				}
+				else if (each->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Decal)
+				{
+					InstancingManager::Instance.Get().PopDecalData(i);
+				}
 
-					if (each->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
-					{
-						InstancingManager::Instance.Get().RegisterStaticDeferredData(i);
-					}
-					else
-					{
-						InstancingManager::Instance.Get().RegisterStaticForwardData(i);
-					}
-				}*/
+				i->mesh = mesh;
+
+				// 메쉬가 갱신되었으니 새로 등록해준다.
+				if (each->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
+				{
+					InstancingManager::Instance.Get().RegisterStaticDeferredData(i);
+				}
+				else if (each->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Forward)
+				{
+					InstancingManager::Instance.Get().RegisterStaticForwardData(i);
+				}
+				else if (each->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Decal)
+				{
+					InstancingManager::Instance.Get().RegisterDecalData(i);
+				}
 			}
+			//}
 		}
 	}
 	yunuGI::IMesh* GetMesh()
@@ -130,9 +143,21 @@ public:
 
 			this->materialVec.emplace_back(reinterpret_cast<Material*>(material));
 
-
-			RenderSystem::Instance.Get().RegisterRenderInfo(this, this->renderInfoVec.back());
-			RenderSystem::Instance.Get().ReSortRenderInfo(this, index);
+			/// here ok
+			if (material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
+			{
+				InstancingManager::Instance.Get().RegisterStaticDeferredData(this->renderInfoVec.back());
+			}
+			else if (material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Forward)
+			{
+				InstancingManager::Instance.Get().RegisterStaticForwardData(this->renderInfoVec.back());
+			}
+			else if (material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Decal)
+			{
+				InstancingManager::Instance.Get().RegisterDecalData(this->renderInfoVec.back());
+			}
+			//RenderSystem::Instance.Get().RegisterRenderInfo(this, this->renderInfoVec.back());
+			//RenderSystem::Instance.Get().ReSortRenderInfo(this, index);
 		}
 		else
 		{
@@ -142,9 +167,13 @@ public:
 				{
 					InstancingManager::Instance.Get().PopStaticDeferredData(renderInfoVec[index]);
 				}
-				else
+				else if (this->materialVec[index]->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Forward)
 				{
 					InstancingManager::Instance.Get().PopStaticForwardData(renderInfoVec[index]);
+				}
+				else if (this->materialVec[index]->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Decal)
+				{
+					InstancingManager::Instance.Get().PopDecalData(renderInfoVec[index]);
 				}
 
 				renderInfoVec[index]->mesh = this->mesh;
@@ -157,14 +186,19 @@ public:
 				{
 					InstancingManager::Instance.Get().RegisterStaticDeferredData(renderInfoVec[index]);
 				}
-				else
+				else if (reinterpret_cast<Material*>(material)->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Forward)
 				{
 					InstancingManager::Instance.Get().RegisterStaticForwardData(renderInfoVec[index]);
 				}
+				else if (reinterpret_cast<Material*>(material)->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Decal)
+				{
+					InstancingManager::Instance.Get().RegisterDecalData(renderInfoVec[index]);
+				}
 			}
 
-			RenderSystem::Instance.Get().RegisterRenderInfo(this, this->renderInfoVec.back());
-			RenderSystem::Instance.Get().ReSortRenderInfo(this, index);
+			/// here ok
+			//RenderSystem::Instance.Get().RegisterRenderInfo(this, this->renderInfoVec.back());
+			//RenderSystem::Instance.Get().ReSortRenderInfo(this, index);
 		}
 	}
 

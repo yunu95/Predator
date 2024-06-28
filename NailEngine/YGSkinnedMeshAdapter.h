@@ -17,12 +17,15 @@ namespace yunuGIAdapter
 		SkinnedMeshAdapter() :RenderableAdapter()
 		{
 			renderable = std::make_shared<SkinnedMesh>();
-			RenderSystem::Instance.Get().PushSkinnedRenderableObject(renderable.get());
 
 			std::shared_ptr<MaterialWrapper> material = std::make_shared<MaterialWrapper>(false, 0);
 			material->SetRenderable(this->renderable);
 			//renderable->SetMaterial(0, material->GetMaterial());
 			this->materialVec.emplace_back(material);
+
+			/// here ok
+			//RenderSystem::Instance.Get().PushSkinnedRenderableObject(renderable.get());
+			InstancingManager::Instance.Get().RegisterSkinnedDeferredData(static_cast<SkinnedMesh*>(renderable.get())->renderInfoVec[0]);
 		}
 
 		~SkinnedMeshAdapter()
