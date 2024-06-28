@@ -54,6 +54,7 @@ void Projectile::Update()
         {
             GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition() + speed * Time::GetDeltaTime());
         }
+
         if (projectileType == ProjectileType::CURVE)
         {
             SetSpeed(speed + Vector3d::down * GlobalConstant::GetSingletonInstance().pod.gravitySpeed * Time::GetDeltaTime());
@@ -120,11 +121,7 @@ coroutine::Coroutine Projectile::ProjectileEffectCoroutine(std::weak_ptr<Unit> o
     if (GetTransform()->GetWorldPosition().y < 0)
     {
         damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldPosition(Vector3d(GetTransform()->GetWorldPosition().x, 0.0f, GetTransform()->GetWorldPosition().z));
-        auto temp = GetTransform()->GetLocalRotation();
-        auto euler = temp.Euler();
-        //euler.y += -180;
-        euler.y = 90;
-        damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Vector3d(90, 0, 0));
+        damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion{Vector3d(90, 0, 0)});
     }
     else
     {

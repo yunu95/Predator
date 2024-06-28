@@ -329,6 +329,7 @@ template<>
 void Unit::OnStateEngage<UnitBehaviourTree::Tactic>()
 {
     onStateEngage[UnitBehaviourTree::Tactic]();
+    PlayAnimation(UnitAnimType::Idle, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
     enableNavObstacleByState = referenceEnableNavObstacle.Acquire();
     disableNavAgentByState = referenceDisableNavAgent.Acquire();
 }
