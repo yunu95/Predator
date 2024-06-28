@@ -9,7 +9,7 @@ void UnitBuffBleeding::OnStart()
     buffEffect.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
     buffEffect.lock()->GetTransform()->SetWorldRotation(owner.lock()->GetTransform()->GetWorldRotation());
 
-    buffEffectAnimator = buffEffect.lock()->AcquireVFXAnimator();
+    auto buffEffectAnimator = buffEffect.lock()->AcquireVFXAnimator();
     buffEffectAnimator.lock()->SetAutoActiveFalse();
     buffEffectAnimator.lock()->SetLoop(true);
     buffEffectAnimator.lock()->Init();

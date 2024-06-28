@@ -2,7 +2,7 @@
 #include "HanselProjectileSkill.h"
 #include "VFXAnimator.h"
 
-const float throwingPieTimingFrame = 70.0f;
+const float throwingPieTimingFrame = 43.0f;
 
 POD_HanselProjectileSkill HanselProjectileSkill::pod = POD_HanselProjectileSkill();
 
@@ -119,7 +119,7 @@ coroutine::Coroutine HanselProjectileSkill::operator()()
     Vector3d direction = deltaPos.Normalized();
     owner.lock()->SetDesiredRotation(direction);
 
-    owner.lock()->PlayAnimation(UnitAnimType::Throw, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
+    owner.lock()->PlayAnimation(UnitAnimType::Throw);
 
     while (animator.lock()->GetCurrentAnimation() != wanderResources::GetAnimation(owner.lock()->GetUnitTemplateData().pod.skinnedFBXName, UnitAnimType::Throw)
         || throwingPieTimingFrame >= animator.lock()->GetCurrentFrame())

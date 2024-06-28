@@ -29,6 +29,8 @@ protected:
     virtual void OnPause() override {}
     virtual void OnResume() override {}
 
+    yunutyEngine::Transform* previousTransform;
+
     std::weak_ptr<ManagedFBX> damagedVFX;
     GameObject* fbxObject;
 

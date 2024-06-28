@@ -111,8 +111,6 @@ private:
     yunuGI::IShader* vs = nullptr;
 
 private:
-    //std::unordered_set<std::shared_ptr<IRenderable>> staticRenderableSet;
-
     std::map<nail::IRenderable*, std::vector<std::shared_ptr<RenderInfo>>> staticMeshRenderInfoMap;
     std::map<nail::IRenderable*, std::vector<std::shared_ptr<SkinnedRenderInfo>>> skinnedMeshRenderInfoMap;
 
