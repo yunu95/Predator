@@ -150,25 +150,23 @@ void GraphicsTest()
 	}
 
 	{
-		auto obj4 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
-		obj4->GetTransform()->SetLocalPosition(Vector3d{ 5,0,0 });
-		obj4->SetSelfActive(false);
-
 		auto obj = Scene::getCurrentScene()->AddGameObject();
-		auto test = obj->AddComponent<TestComponent4>();
-
-		auto obj3 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
-		auto anim = obj3->GetComponent<yunutyEngine::graphics::Animator>();
-		anim->PushAnimationWithFunc(animation, 0, [=]() {obj4->SetSelfActive(true); });
-		anim->PushAnimationWithFunc(animation, 10, [=]() {obj4->SetSelfActive(false); });
-		anim->PushAnimation(animation);
-		anim->PushAnimation(animation2);
-		anim->Play(animation);
-
-
-		test->anim = anim;
-		test->idle = animation;
-		test->walk = animation2;
+		obj->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{90,0,0} });
+		obj->GetTransform()->SetLocalScale( Vector3d{5,5,0} );
+		obj->GetTransform()->SetLocalPosition( Vector3d{0,10,0} );
+		auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+		renderer->GetGI().SetMesh(_resourceManager->GetMesh(L"Rectangle"));
+		renderer->GetGI().GetMaterial()->SetVertexShader(_resourceManager->GetShader(L"TextureVS.cso"));
+		renderer->GetGI().GetMaterial()->SetPixelShader(_resourceManager->GetShader(L"TestDecalPS.cso"));
+		renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::Temp0, _resourceManager->GetTexture(L"Texture/T_VFX_SkillRange_Clock.dds"));
+	}
+	{
+		auto obj = Scene::getCurrentScene()->AddGameObject();
+		obj->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{90,0,0} });
+		obj->GetTransform()->SetLocalScale(Vector3d{ 10,10,0 });
+		obj->GetTransform()->SetLocalPosition(Vector3d{ 0,-1,0 });
+		auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+		renderer->GetGI().SetMesh(_resourceManager->GetMesh(L"Rectangle"));
 	}
 
 	yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
