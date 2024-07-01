@@ -7,6 +7,7 @@ POD_RobinChargeSkill RobinChargeSkill::pod = POD_RobinChargeSkill();
 
 coroutine::Coroutine RobinChargeSkill::operator()()
 {
+    auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
     auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
     auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
     Vector3d startPos = owner.lock()->GetTransform()->GetWorldPosition();
@@ -23,7 +24,7 @@ coroutine::Coroutine RobinChargeSkill::operator()()
     auto rushAnim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Rush);
     auto slamAnim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Slam);
 
-    owner.lock()->PlayAnimation(UnitAnimType::Rush, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
+    owner.lock()->PlayAnimation(UnitAnimType::Rush, Animation::PlayFlag_::Blending);
 
     co_yield coroutine::WaitForSeconds(rushAnim->GetDuration());
 
@@ -34,6 +35,7 @@ coroutine::Coroutine RobinChargeSkill::operator()()
     coroutine::ForSeconds forSeconds{ static_cast<float>(deltaPos.Magnitude()) / pod.rushSpeed };
     knockbackCollider = UnitAcquisitionSphereColliderPool::Instance().Borrow(owner.lock());
     knockbackCollider.lock()->SetRadius(pod.rushKnockbackRadius);
+
     while (forSeconds.Tick())
     {
         currentPos += direction * pod.rushSpeed * Time::GetDeltaTime();
@@ -50,7 +52,7 @@ coroutine::Coroutine RobinChargeSkill::operator()()
             }
         }
     }
-
+    //animator.lock()->ChangeAnimation(slamAnim, 0.4f, 1.0f);
     owner.lock()->PlayAnimation(UnitAnimType::Slam);
     animator.lock()->Resume();
     knockbackCollider.lock()->SetRadius(pod.impactKnockbackRadius);
@@ -75,13 +77,14 @@ coroutine::Coroutine RobinChargeSkill::operator()()
     }
     RTSCam::Instance().ApplyShake(pod.impactCamShakeDistance, pod.impactCamShakeFrequency, pod.impactCamShakeDecreaseFactor, endPos);
 
-    co_yield coroutine::WaitForSeconds(slamAnim->GetDuration());
+    co_yield coroutine::WaitForSeconds(slamAnim->GetDuration() - 0.1f);
 
     disableNavAgent.reset();
     blockFollowingNavigation.reset();
     owner.lock()->Relocate(currentPos);
-    owner.lock()->PlayAnimation(UnitAnimType::Idle, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
-    co_yield coroutine::WaitForSeconds(0.2);
+    //owner.lock()->PlayAnimation(UnitAnimType::Idle, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
+    //animator.lock()->GetGI().SetNextAnimation(wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Idle));
+    //animator.lock()->GetGI().SetNextAnimation(nullptr);
     co_return;
 }
 
