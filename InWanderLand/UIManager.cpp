@@ -412,6 +412,19 @@ coroutine::Coroutine UIManager::ReturnToTitleAfterFadeOutCoro()
     FadeOutRight(1.0f);
     SetIngameUIVisible(false);
     co_yield coroutine::WaitForSeconds{ 1.2f, true };
+    for (auto& each : uisByIndex)
+    {
+        if (each.second->importedUIData.disableOnStartExe)
+        {
+            each.second->DisableElementInstant();
+        }
+        else
+        {
+            each.second->EnableElement();
+            each.second->Start();
+        }
+    }
+    //GetUIElementByEnum(UIEnumID::Toggle_TacticMode)->DisableElement();
     HideComboObjectvies();
     GetUIElementByEnum(UIEnumID::VictoryPage)->DisableElement();
     GetUIElementByEnum(UIEnumID::DefeatPage)->DisableElement();
@@ -431,19 +444,20 @@ void UIManager::Update()
     {
         auto resolution = graphics::Renderer::SingleInstance().GetResolution();
         cursorUI->second->GetTransform()->SetWorldPosition({ yunutyEngine::Input::getMouseScreenPositionNormalized().x * resolution.x, yunutyEngine::Input::getMouseScreenPositionNormalized().y * resolution.y, 0 });
-        UIElement* properCursor = uisByEnumID.at(UIEnumID::MouseCursor_Free);
-        if (IsMouseOnButton())
-        {
-            if (m_highestPriorityButton->m_mouseLiftedEventFunctions.empty() == false)
-                properCursor = uisByEnumID.at(UIEnumID::MouseCursor_OnButton);
-        }
-        else
-        {
-            properCursor = uisByEnumID.at(UIEnumID::MouseCursor_Free);
-        }
-        uisByEnumID.at(UIEnumID::MouseCursor_OnButton)->DisableElement();
-        uisByEnumID.at(UIEnumID::MouseCursor_Free)->DisableElement();
-        properCursor->EnableElement();
+        //UIElement* properCursor = uisByEnumID.at(UIEnumID::MouseCursor_Free);
+        //if (IsMouseOnButton())
+        //{
+            //uisByEnumID.at(UIEnumID::MouseCursor_OnButton)->EnableElement();
+            //if (m_highestPriorityButton->m_mouseLiftedEventFunctions.empty() == false)
+                //properCursor = uisByEnumID.at(UIEnumID::MouseCursor_OnButton);
+        //}
+        //else
+        //{
+            //properCursor = uisByEnumID.at(UIEnumID::MouseCursor_Free);
+        //}
+        //uisByEnumID.at(UIEnumID::MouseCursor_OnButton)->DisableElement();
+        //uisByEnumID.at(UIEnumID::MouseCursor_Free)->DisableElement();
+        //properCursor->EnableElement();
     }
     if (yunutyEngine::Input::isKeyPushed(yunutyEngine::KeyCode::MouseLeftClick))
     {
@@ -905,6 +919,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
         std::transform(uiData.hoverEnableTargets.begin(), uiData.hoverEnableTargets.end(), std::back_inserter(tooltipTargets), [&](int idx) {return GetUIElementWithIndex(idx); });
         for (auto each : tooltipTargets)
         {
+            each->importedUIData.disableOnStartExe = true;
             each->DisableElementInstant();
         }
         button->AddButtonOnMouseFunction([=]()

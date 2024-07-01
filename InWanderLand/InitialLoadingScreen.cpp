@@ -63,6 +63,7 @@ coroutine::Coroutine InitialLoadingScreen::ShowLoadingScreen()
     co_await std::suspend_always{};
 #ifndef EDITOR
 #ifndef GRAPHICS_TEST
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::TitleRoot)->EnableElement();
     UIManager::Instance().FadeOutRight(0);
     UIManager::Instance().FadeIn(2);
 #endif

@@ -128,6 +128,7 @@ namespace application
             camComp->GetGI().SetResolution(pod.res_Width, pod.res_Height);
 
             /// Main 으로 등록해야 추후 Editor Camera 로직에서 처리 가능합니다.
+            camComp->SetUpdateability(true);
             camComp->SetCameraMain();
 
             auto rsrcMgr = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();

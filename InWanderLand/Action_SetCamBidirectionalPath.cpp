@@ -10,6 +10,26 @@ namespace application
 {
     CoroutineObject<void> Action_SetCamBidirectionalPath::DoAction()
     {
+        auto startCamPivotPoint = PlayerController::Instance().GetCamPivotPoint();
+        auto startZoomFactor = PlayerController::Instance().GetZoomFactor();
+        auto updateDirection = Vector3d{ pathX,0,pathZ }.Normalized();
+        auto pathDistance = Vector3d{ pathX,0,pathZ }.Magnitude();
+        auto currentCamPivotPoint = PlayerController::Instance().GetCamPivotPoint();
+        float traveledDistance = 0;
+        while ((traveledDistance = Vector3d::Dot((currentCamPivotPoint - startCamPivotPoint), updateDirection)) < pathDistance)
+        {
+            currentCamPivotPoint = PlayerController::Instance().GetCamPivotPoint();
+            if (applyZoomFactor)
+            {
+                PlayerController::Instance().SetZoomFactor(startZoomFactor + (traveledDistance / pathDistance) * zoomFactor);
+            }
+            if (constrainCamUpdate)
+            {
+                PlayerController::Instance().ConstrainCamUpdateDirection(updateDirection);
+            }
+            co_await std::suspend_always{};
+        }
+        PlayerController::Instance().UnconstrainCamUpdateDirection();
         co_return;
     }
 
@@ -21,10 +41,12 @@ namespace application
             static float pathX = 1;
             static float pathZ = 1;
             static bool applyZoomFactor = false;
+            static bool constrainCamUpdate = false;
             static float zoomFactor = 10;
             pathX = data->pathX;
             pathZ = data->pathZ;
             applyZoomFactor = data->applyZoomFactor;
+            constrainCamUpdate = data->constrainCamUpdate;
             zoomFactor = data->zoomFactor;
             editor::imgui::ShowMessageBox("Set Cam Path", [data]()
                 {
@@ -35,6 +57,7 @@ namespace application
                     ImGui::DragFloat("path X", &pathX);
                     ImGui::DragFloat("path Z", &pathZ);
                     ImGui::Checkbox("apply Zoom Factor", &applyZoomFactor);
+                    ImGui::Checkbox("constrain Cam Update", &constrainCamUpdate);
                     ImGui::DragFloat("Zoom Factor", &zoomFactor);
 
                     ImGui::Separator();
@@ -44,6 +67,7 @@ namespace application
                         data->pathX = pathX;
                         data->pathZ = pathZ;
                         data->applyZoomFactor = applyZoomFactor;
+                        data->constrainCamUpdate = constrainCamUpdate;
                         data->zoomFactor = zoomFactor;
                         ImGui::CloseCurrentPopup();
                         editor::imgui::CloseMessageBox("Set Cam Path");
@@ -65,6 +89,7 @@ namespace application
     {
         data["pathX"] = pathX;
         data["pathZ"] = pathZ;
+        data["constrainCamUpdate"] = constrainCamUpdate;
         data["applyZoomFactor"] = applyZoomFactor;
         data["zoomFactor"] = zoomFactor;
         return true;
@@ -79,6 +104,7 @@ namespace application
     {
         pathX = data["pathX"];
         pathZ = data["pathZ"];
+        constrainCamUpdate = data["constrainCamUpdate"];
         applyZoomFactor = data["applyZoomFactor"];
         zoomFactor = data["zoomFactor"];
         return true;
