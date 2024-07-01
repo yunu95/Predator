@@ -6,6 +6,10 @@
 void LinearClippingTimer::Init()
 {
     isRealtime = true;
+    onActivation = [=]()
+        {
+            onUpdate(0);
+        };
     onUpdate = [=](float t)
         {
             t = UICurveFunctions[uiCurveType](t);

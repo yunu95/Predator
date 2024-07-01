@@ -139,6 +139,10 @@ void Unit::OnStateEngage<UnitBehaviourTree::Death>()
     disableNavAgentByState = referenceDisableNavAgent.Acquire();
     defaultAnimationType = UnitAnimType::None;
     coroutineDeath = StartCoroutine(DeathCoroutine());
+    for (auto& [buffID, buff] : buffs)
+    {
+        buff.get()->OnEnd();
+    }
 }
 template<>
 void Unit::OnStateExit<UnitBehaviourTree::Death>()
@@ -167,7 +171,7 @@ void Unit::OnStateEngage<UnitBehaviourTree::Knockback>()
 template<>
 void Unit::OnStateUpdate<UnitBehaviourTree::Knockback>()
 {
-    navAgentComponent.lock()->MoveTo(GetTransform()->GetWorldPosition());
+    //navAgentComponent.lock()->MoveTo(GetTransform()->GetWorldPosition());
     //blockFollowingNavAgentByState = referenceBlockFollowingNavAgent.Acquire();
 }
 template<>
@@ -245,7 +249,7 @@ void Unit::OnStateUpdate<UnitBehaviourTree::Attack>()
     }
     else
     {
-        if (!currentTarget->GetActive() || !currentTarget->IsAlive() || currentTarget->IsInvulenerable())
+        if (!currentTarget->GetGameObject()->GetActive() || !currentTarget->IsAlive() || currentTarget->IsInvulenerable())
         {
             currentTargetUnit.reset();
             return;
@@ -471,7 +475,7 @@ Vector3d Unit::GetRandomPositionInsideCapsuleCollider()
 {
     const auto& pod = GetUnitTemplateData().pod;
     auto unitPos = GetTransform()->GetWorldPosition();
-    return unitPos + Vector3d{ math::Random::GetRandomFloat(pod.collisionSize * 0.3f), pod.collisionSize + math::Random::GetRandomFloat(0 , pod.collisionHeight), math::Random::GetRandomFloat(pod.collisionSize * 0.3f) };
+    return unitPos + Vector3d{ math::Random::GetRandomFloat(pod.collisionSize * 0.5f), pod.collisionSize + math::Random::GetRandomFloat(0 , pod.collisionHeight * 0.7f), math::Random::GetRandomFloat(pod.collisionSize * 0.f) };
 }
 void Unit::EraseBuff(UnitBuffType buffType)
 {
@@ -678,7 +682,7 @@ yunutyEngine::coroutine::Coroutine Unit::KnockbackCoroutine(std::shared_ptr<Refe
     while (forSeconds.Tick())
     {
         bool isNavAgentActive = navAgentComponent.lock()->GetActive();
-        navAgentComponent.lock()->MoveTo(targetPosition + Vector3d::one * 0.0001);
+        navAgentComponent.lock()->MoveTo(targetPosition + Vector3d::one);
         y = vy0 * forSeconds.Elapsed() - 0.5 * constant.gravitySpeed * forSeconds.Elapsed() * forSeconds.Elapsed();
         Vector3d pos = Vector3d::Lerp(startPos, navAgentComponent.lock()->GetTransform()->GetWorldPosition(), forSeconds.ElapsedNormalized());
         pos.y = y;
@@ -1109,7 +1113,6 @@ void Unit::Summon(const application::editor::UnitData* unitData)
 {
     this->unitData = unitData;
     unitData->inGameUnit = GetWeakPtr<Unit>();
-    unitTemplateData = unitData->GetUnitTemplateData();
 
     GetTransform()->SetWorldPosition(Vector3d{ unitData->pod.position });
     navAgentComponent.lock()->SetActive(true);
@@ -1141,7 +1144,6 @@ void Unit::Summon(const application::editor::UnitData* unitData)
 void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& position, float rotation, bool instant)
 {
     this->unitData = nullptr;
-    unitTemplateData = td;
 
     ResetCallbacks();
     Reset();
@@ -1538,7 +1540,6 @@ void Unit::InitBehaviorTree()
         };
     unitBehaviourTree[UnitBehaviourTree::Hold][UnitBehaviourTree::Attack].onEnter = [this]()
         {
-            currentTargetUnit = GetClosestEnemy();
             OnStateEngage<UnitBehaviourTree::Attack>();
         };
     unitBehaviourTree[UnitBehaviourTree::Hold][UnitBehaviourTree::Attack].onExit = [this]()
@@ -1547,6 +1548,7 @@ void Unit::InitBehaviorTree()
         };
     unitBehaviourTree[UnitBehaviourTree::Hold][UnitBehaviourTree::Attack].onUpdate = [this]()
         {
+            UpdateAttackTargetWithinRange();
             OnStateUpdate<UnitBehaviourTree::Attack>();
         };
     unitBehaviourTree[UnitBehaviourTree::Hold][UnitBehaviourTree::Stop].enteringCondtion = [this]()

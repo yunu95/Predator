@@ -32,6 +32,7 @@ public:
         if (durationLeft < overlapping.durationLeft)
             durationLeft = overlapping.durationLeft;
     };
+
     virtual ~UnitBuff();
 
     virtual void OnPause() {}

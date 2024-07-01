@@ -35,9 +35,11 @@ namespace wanderResources
     }
     namespace unitColor
     {
-        const yunuGI::Color ROBIN_COLOR{ 1,0,0,1 };
+        //const yunuGI::Color ROBIN_COLOR{ 1,0,0,1 };
+        const yunuGI::Color ROBIN_COLOR{ 0.62,0.31,0.31,1 }; // 갈색
         const yunuGI::Color URSULA_COLOR{ 0.545,0,1,1 };
         const yunuGI::Color HANSEL_COLOR{ 1,0.5,0,1 };
-        const yunuGI::Color ENEMY_COLOR{ 0,1,1,1 };
+        //const yunuGI::Color ENEMY_COLOR{ 0,1,1,1 };
+        const yunuGI::Color ENEMY_COLOR{ 1,0,0,1 }; // 적색
     }
 }

@@ -11,6 +11,7 @@ void UnitPool::Reset()
 std::weak_ptr<Unit> UnitPool::Borrow(application::editor::UnitData* data)
 {
     auto unit = Borrow(data->GetTemplateData());
+    unit.lock()->unitTemplateData = data->GetTemplateData();
     unit.lock()->Summon(data);
     return unit;
 }
@@ -18,6 +19,7 @@ std::weak_ptr<Unit> UnitPool::Borrow(application::editor::UnitData* data)
 std::weak_ptr<Unit> UnitPool::Borrow(application::editor::Unit_TemplateData* td, const Vector3d& position, float rotation)
 {
     auto unit = Borrow(td);
+    unit.lock()->unitTemplateData = td;
     unit.lock()->Summon(td, position, rotation);
     return unit;
 }
@@ -25,6 +27,7 @@ std::weak_ptr<Unit> UnitPool::Borrow(application::editor::Unit_TemplateData* td,
 std::weak_ptr<Unit> UnitPool::Borrow(application::editor::Unit_TemplateData* td, const Vector3d& position, const Quaternion& rotation)
 {
     auto unit = Borrow(td);
+    unit.lock()->unitTemplateData = td;
     unit.lock()->Summon(td, position, rotation);
     return unit;
 }

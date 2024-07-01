@@ -17,7 +17,7 @@ coroutine::Coroutine UrsulaParalysisSkill::operator()()
     auto animator = owner.lock()->GetAnimator();
     auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill2);
 
-    owner.lock()->PlayAnimation(UnitAnimType::Skill2, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
+    owner.lock()->PlayAnimation(UnitAnimType::Skill2);
 
     effectColliderCoroutine = owner.lock()->StartCoroutine(SpawningFieldEffect(dynamic_pointer_cast<UrsulaParalysisSkill>(selfWeakPtr.lock())));
     effectColliderCoroutine.lock()->PushDestroyCallBack([this]()

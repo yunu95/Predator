@@ -35,6 +35,7 @@ namespace application
         float pathX = 1;
         float pathZ = 1;
         bool applyZoomFactor = false;
+        bool constrainCamUpdate = false;
         float zoomFactor = 10;
     };
 }
