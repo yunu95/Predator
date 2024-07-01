@@ -13,7 +13,7 @@ struct PixelIn
 // Temp3Map : Emissive Map
 // Temp4Map : Util
 // Temp5Map : Ambient Light
-// Temp5Map : Specular Light
+// Temp6Map : Specular Light
 
 float4 main(PixelIn input) : SV_Target
 {

@@ -33,6 +33,7 @@ public:
 
 	void RenderStaticDeferred();
 	void RenderStaticForward();
+	void RenderDecal();
 
 	void RenderStaticShadow();
 	void RenderSkinnedShadow();

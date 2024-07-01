@@ -63,6 +63,7 @@ public:
     void RenderPointLightShadow();
     void RenderLight();
     void RenderFinal();
+    void RenderDecal();
     void RenderBackBuffer();
     void RenderUI();
 

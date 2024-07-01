@@ -95,6 +95,7 @@ public:
 	yunutyEngine::graphics::Animator* anim;
 	yunuGI::IAnimation* idle;
 	yunuGI::IAnimation* walk;
+	yunuGI::IAnimation* temp;
 	virtual void Update() override
 	{
 		if (Input::isKeyDown(yunutyEngine::KeyCode::LeftArrow))
@@ -108,6 +109,10 @@ public:
 			anim->ChangeAnimation(walk, 0.3, 1);
 			auto temp = anim->GetGI().GetCurrentAnimation();
 			int a = 1;
+		}
+		if (Input::isKeyDown(yunutyEngine::KeyCode::UpArrow))
+		{
+			anim->ChangeAnimation(temp, 0.3, 1);
 		}
 	}
 };
@@ -136,37 +141,36 @@ void GraphicsTest()
 
 	for (auto& i : animationList)
 	{
-		if (i->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleIdle")
+		if (i->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Skill1-2")
 		{
-			i->SetLoop(true);
 			animation = i;
 		}
 
-		if (i->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleWalk")
+		if (i->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleIdle")
 		{
 			i->SetLoop(true);
 			animation2 = i;
 		}
+		if (i->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Skill1")
+		{
+			animation3 = i;
+		}
 	}
 
 	{
-		auto obj = Scene::getCurrentScene()->AddGameObject();
-		obj->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{90,0,0} });
-		obj->GetTransform()->SetLocalScale( Vector3d{5,5,0} );
-		obj->GetTransform()->SetLocalPosition( Vector3d{0,10,0} );
-		auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-		renderer->GetGI().SetMesh(_resourceManager->GetMesh(L"Rectangle"));
-		renderer->GetGI().GetMaterial()->SetVertexShader(_resourceManager->GetShader(L"TextureVS.cso"));
-		renderer->GetGI().GetMaterial()->SetPixelShader(_resourceManager->GetShader(L"TestDecalPS.cso"));
-		renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::Temp0, _resourceManager->GetTexture(L"Texture/T_VFX_SkillRange_Clock.dds"));
-	}
-	{
-		auto obj = Scene::getCurrentScene()->AddGameObject();
-		obj->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{90,0,0} });
-		obj->GetTransform()->SetLocalScale(Vector3d{ 10,10,0 });
-		obj->GetTransform()->SetLocalPosition(Vector3d{ 0,-1,0 });
-		auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-		renderer->GetGI().SetMesh(_resourceManager->GetMesh(L"Rectangle"));
+		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
+		auto anim = obj->GetComponent<yunutyEngine::graphics::Animator>();
+		anim->PushAnimation(animation);
+		anim->PushAnimation(animation2);
+		anim->PushAnimation(animation3);
+		anim->Play(animation2);
+
+		auto obj2 = Scene::getCurrentScene()->AddGameObject();
+		auto test = obj2->AddComponent<TestComponent4>();
+		test->anim = anim;
+		test->idle = animation;
+		test->walk = animation2;
+		test->temp = animation3;
 	}
 
 	yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();

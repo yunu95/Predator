@@ -471,6 +471,64 @@ void InstancingManager::RenderStaticForward()
 	}
 }
 
+void InstancingManager::RenderDecal()
+{
+	ClearData();
+
+	for (auto& pair : this->decalRenderInfoCache)
+	{
+		std::set<std::shared_ptr<RenderInfo>>& renderInfoVec = pair.second;
+
+		const InstanceID& instanceID = pair.first;
+
+		{
+			for (auto& i : renderInfoVec)
+			{
+				if (i->mesh == nullptr) continue;
+				if (i->isActive == false) continue;
+
+				const std::shared_ptr<RenderInfo>& renderInfo = i;
+				InstancingData data;
+				data.wtm = renderInfo->wtm;
+				AddData(instanceID, data);
+			}
+
+			if (renderInfoVec.size() != 0)
+			{
+				if ((*renderInfoVec.begin())->mesh == nullptr) continue;
+
+				auto& buffer = _buffers[instanceID];
+				if (buffer->GetCount() > 0)
+				{
+					// 임시 매트릭스
+					Matrix WTM = Matrix::Identity;
+
+					//// Y축으로 10만큼의 변위
+					//Matrix translationMatrix = Matrix::CreateTranslation(0.0f, 10.0f, 0.0f);
+
+					//// X축 기준으로 90도 회전 (라디안 단위로 변환)
+					//float angleInRadians = DirectX::XMConvertToRadians(90.0f);
+					////Matrix rotationMatrix = Matrix::CreateRotationX(angleInRadians);
+
+					//// 변위 행렬과 회전 행렬을 결합하여 최종 변환 행렬을 생성
+					//WTM = translationMatrix;
+
+					MatrixBuffer matrixBuffer;
+					matrixBuffer.VTM = WTM.Invert();
+					matrixBuffer.PTM = DirectX::XMMatrixOrthographicLH(200, 200, 0.1, 200);
+					NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX), true);
+
+
+					(*renderInfoVec.begin())->material->PushGraphicsData();
+					auto test = (*renderInfoVec.begin())->mesh->GetMaterialCount();
+					buffer->PushData();
+					(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, true, buffer->GetCount(), buffer);
+				}
+			}
+		}
+	}
+}
+
 void InstancingManager::RenderStaticShadow()
 {
 	ClearData();
@@ -666,9 +724,9 @@ void InstancingManager::RenderSkinnedShadow()
 						NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATERIAL))->PushGraphicsData(&materialBuffer, sizeof(MaterialBuffer), static_cast<int>(CB_TYPE::MATERIAL));
 					}
 
-					
+
 					ExposureBuffer useBias;
-					
+
 					auto name = (*renderInfoVec.begin())->renderInfo.material->GetMaterial()->GetName();
 					size_t pos = name.find(L"_instance");
 					if (pos != std::wstring::npos)

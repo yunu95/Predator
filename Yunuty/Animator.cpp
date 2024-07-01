@@ -215,7 +215,10 @@ void Animator::Update()
                 desc.next.sumTime += (gi.GetPlaySpeed() * desc.next.speed * Time::GetDeltaTime());
                 if (desc.next.sumTime >= nextAnimation->GetDuration())
                 {
-                    desc.next.sumTime = 0;
+                    if (nextAnimation->GetLoop())
+                    {
+                        desc.next.sumTime = 0;
+                    }
                 }
                 desc.next.currFrame = static_cast<__int32>(desc.next.sumTime * ratio);
                 desc.next.currFrame = min(static_cast<int>(desc.next.currFrame), totalFrame - 1);

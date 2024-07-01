@@ -211,6 +211,9 @@ void RenderSystem::Render()
 
     BloomPass::Instance.Get().Bloom();
 
+    // 빛연산을 받는 오브젝트에만 데칼 바르게끔 이 위치에서 렌더링을 한다.
+    RenderDecal();
+
     // Final 출력
     RenderFinal();
     RenderForward();
@@ -508,6 +511,25 @@ void RenderSystem::RenderFinal()
     deferredFinal->PushGraphicsData();
     static auto rectangleMesh = ResourceManager::Instance.Get().GetMesh(L"Rectangle");
     rectangleMesh->Render();
+}
+
+void RenderSystem::RenderDecal()
+{
+	auto& renderTargetGroup = NailEngine::Instance.Get().GetRenderTargetGroup();
+	renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::DECAL)]->OMSetRenderTarget(true);
+
+	D3D11_VIEWPORT viewport
+	{
+		 .TopLeftX = 0.0f,
+		 .TopLeftY = 0.0f,
+		 .Width = 4096,
+		 .Height = 4096,
+		 .MinDepth = 0.0f,
+		 .MaxDepth = 1.0f,
+	};
+	ResourceBuilder::Instance.Get().device->GetDeviceContext()->RSSetViewports(1, &viewport);
+
+    InstancingManager::Instance.Get().RenderDecal();
 }
 
 void RenderSystem::RenderBackBuffer()
