@@ -77,7 +77,7 @@ coroutine::Coroutine RobinChargeSkill::operator()()
     }
     RTSCam::Instance().ApplyShake(pod.impactCamShakeDistance, pod.impactCamShakeFrequency, pod.impactCamShakeDecreaseFactor, endPos);
 
-    co_yield coroutine::WaitForSeconds(slamAnim->GetDuration() - 0.1f);
+    co_yield coroutine::WaitForSeconds(slamAnim->GetDuration());
 
     disableNavAgent.reset();
     blockFollowingNavigation.reset();
