@@ -156,21 +156,26 @@ void GraphicsTest()
 			animation3 = i;
 		}
 	}
-
 	{
-		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
-		auto anim = obj->GetComponent<yunutyEngine::graphics::Animator>();
-		anim->PushAnimation(animation);
-		anim->PushAnimation(animation2);
-		anim->PushAnimation(animation3);
-		anim->Play(animation2);
+		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Bush_001");
+	}
+	{
+		//auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
+		//auto anim = obj->GetComponent<yunutyEngine::graphics::Animator>();
+		//anim->PushAnimation(animation);
+		//anim->PushAnimation(animation2);
+		//anim->PushAnimation(animation3);
+		//anim->Play(animation2);
 
-		auto obj2 = Scene::getCurrentScene()->AddGameObject();
-		auto test = obj2->AddComponent<TestComponent4>();
-		test->anim = anim;
-		test->idle = animation;
-		test->walk = animation2;
-		test->temp = animation3;
+		//auto obj2 = Scene::getCurrentScene()->AddGameObject();
+		//auto test = obj2->AddComponent<TestComponent4>();
+		//test->anim = anim;
+		//test->idle = animation;
+		//test->walk = animation2;
+		//test->temp = animation3;
+	}
+	{
+
 	}
 
 	yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
