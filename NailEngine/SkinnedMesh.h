@@ -67,8 +67,30 @@ public:
 		this->mesh = mesh;
 		for (auto& i : renderInfoVec)
 		{
-			i->renderInfo.mesh = mesh;
-			InstancingManager::Instance.Get().RegisterSkinnedDeferredData(i);
+			for (auto each : this->materialVec)
+			{
+				// 메쉬를 갱신하기 전에 이전 메쉬에 대한 정보를 뺀다.
+				if (each->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
+				{
+					InstancingManager::Instance.Get().PopSkinnedDeferredData(i);
+				}
+				else if (each->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Forward)
+				{
+					InstancingManager::Instance.Get().PopSkinnedForwardData(i);
+				}
+
+				i->renderInfo.mesh = mesh;
+
+				// 메쉬가 갱신되었으니 새로 등록해준다.
+				if (each->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
+				{
+					InstancingManager::Instance.Get().RegisterSkinnedDeferredData(i);
+				}
+				else if (each->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Forward)
+				{
+					InstancingManager::Instance.Get().RegisterSkinnedForwardData(i);
+				}
+			}
 		}
 	}
 
@@ -88,8 +110,18 @@ public:
 
 			this->materialVec.emplace_back(reinterpret_cast<Material*>(material));
 
-			RenderSystem::Instance.Get().RegisterSkinnedRenderInfo(this, this->renderInfoVec.back());
-			InstancingManager::Instance.Get().RegisterSkinnedDeferredData(this->renderInfoVec.back());
+			/// here ok
+			if (material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
+			{
+				InstancingManager::Instance.Get().RegisterSkinnedDeferredData(this->renderInfoVec.back());
+			}
+			else if (material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Forward)
+			{
+				InstancingManager::Instance.Get().RegisterSkinnedForwardData(this->renderInfoVec.back());
+			}
+			
+			//RenderSystem::Instance.Get().RegisterSkinnedRenderInfo(this, this->renderInfoVec.back());
+			//InstancingManager::Instance.Get().RegisterSkinnedDeferredData(this->renderInfoVec.back());
 		}
 		else
 		{

@@ -103,6 +103,10 @@ void PixelShader::CreateShaderType(const std::string& fileContent)
 			{
 				this->shaderInfo.shaderType = yunuGI::ShaderType::Particle;
 			}
+			else if (shaderType == "Decal")
+			{
+				this->shaderInfo.shaderType = yunuGI::ShaderType::Decal;
+			}
 			else
 			{
 				// 뒤에 입력이 없었으니 assert

@@ -17,16 +17,35 @@ namespace yunuGIAdapter
 		StaticMeshAdapter() :RenderableAdapter()
 		{
 			renderable = std::make_shared<StaticMesh>();
-			RenderSystem::Instance.Get().PushStaticRenderableObject(renderable.get());
 
 			std::shared_ptr<MaterialWrapper> material = std::make_shared<MaterialWrapper>(true, 0);
 			material->SetRenderable(this->renderable);
 			this->materialVec.emplace_back(material);
+
+			/// here ok
+			InstancingManager::Instance.Get().RegisterStaticDeferredData(static_cast<StaticMesh*>(renderable.get())->renderInfoVec[0]);
+			//RenderSystem::Instance.Get().PushStaticRenderableObject(renderable.get());
 		}
 
 		~StaticMeshAdapter()
 		{
-			RenderSystem::Instance.Get().PopStaticRenderableObject(renderable.get());
+			/// here ok
+			for (int i = 0; i < static_cast<StaticMesh*>(renderable.get())->renderInfoVec.size(); ++i)
+			{
+				if (static_cast<StaticMesh*>(renderable.get())->renderInfoVec[i]->material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
+				{
+					InstancingManager::Instance.Get().PopStaticDeferredData(static_cast<StaticMesh*>(renderable.get())->renderInfoVec[i]);
+				}
+				else if(static_cast<StaticMesh*>(renderable.get())->renderInfoVec[i]->material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Forward)
+				{
+					InstancingManager::Instance.Get().PopStaticForwardData(static_cast<StaticMesh*>(renderable.get())->renderInfoVec[i]);
+				}
+				else if (static_cast<StaticMesh*>(renderable.get())->renderInfoVec[i]->material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Decal)
+				{
+					InstancingManager::Instance.Get().PopDecalData(static_cast<StaticMesh*>(renderable.get())->renderInfoVec[i]);
+				}
+			}
+			//RenderSystem::Instance.Get().PopStaticRenderableObject(renderable.get());
 		}
 
 		virtual void SetWorldTM(const yunuGI::Matrix4x4& worldTM)

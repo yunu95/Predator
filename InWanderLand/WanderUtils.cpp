@@ -266,7 +266,7 @@ void wanderUtils::ChangeLightMap(Stage stage)
 			inGameRot.x = 0.860572696;
 			inGameRot.y = 0.0646217689;
 			inGameRot.z = 0.11142046;
-			inGameRot.w = 0.492771924;
+			inGameRot.w = -0.492771924;
 			if (Application::GetInstance().IsContentsPlaying())
 			{
 				application::editor::LightData::GetPlaytimeDirectionalLight()->GetTransform()->SetWorldRotation(inGameRot);

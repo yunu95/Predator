@@ -1114,7 +1114,6 @@ void Unit::Summon(const application::editor::UnitData* unitData)
 {
     this->unitData = unitData;
     unitData->inGameUnit = GetWeakPtr<Unit>();
-    unitTemplateData = unitData->GetUnitTemplateData();
 
     GetTransform()->SetWorldPosition(Vector3d{ unitData->pod.position });
     navAgentComponent.lock()->SetActive(true);
@@ -1146,7 +1145,6 @@ void Unit::Summon(const application::editor::UnitData* unitData)
 void Unit::Summon(application::editor::Unit_TemplateData* td, const Vector3d& position, float rotation, bool instant)
 {
     this->unitData = nullptr;
-    unitTemplateData = td;
 
     ResetCallbacks();
     Reset();

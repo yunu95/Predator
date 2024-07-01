@@ -211,6 +211,9 @@ void RenderSystem::Render()
 
     BloomPass::Instance.Get().Bloom();
 
+    // 빛연산을 받는 오브젝트에만 데칼 바르게끔 이 위치에서 렌더링을 한다.
+    RenderDecal();
+
     // Final 출력
     RenderFinal();
     RenderForward();
@@ -510,6 +513,25 @@ void RenderSystem::RenderFinal()
     rectangleMesh->Render();
 }
 
+void RenderSystem::RenderDecal()
+{
+	auto& renderTargetGroup = NailEngine::Instance.Get().GetRenderTargetGroup();
+	renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::DECAL)]->OMSetRenderTarget(true);
+
+	D3D11_VIEWPORT viewport
+	{
+		 .TopLeftX = 0.0f,
+		 .TopLeftY = 0.0f,
+		 .Width = 4096,
+		 .Height = 4096,
+		 .MinDepth = 0.0f,
+		 .MaxDepth = 1.0f,
+	};
+	ResourceBuilder::Instance.Get().device->GetDeviceContext()->RSSetViewports(1, &viewport);
+
+    InstancingManager::Instance.Get().RenderDecal();
+}
+
 void RenderSystem::RenderBackBuffer()
 {
     //ResourceBuilder::Instance.Get().device->GetDeviceContext()->OMSetBlendState(nullptr, nullptr, 0xFFFFFFFF);
@@ -735,53 +757,53 @@ void RenderSystem::DrawDeferredInfo()
     }
 }
 
-void RenderSystem::PushStaticRenderableObject(nail::IRenderable* renderable)
-{
-    staticMeshRenderInfoMap.insert({ renderable, {} });
-    staticMeshRenderInfoMap[renderable].emplace_back(static_cast<StaticMesh*>(renderable)->renderInfoVec[0]);
-
-    deferredSet.insert(static_cast<StaticMesh*>(renderable)->renderInfoVec[0]);
-}
-
-void RenderSystem::PopStaticRenderableObject(nail::IRenderable* renderable)
-{
-    for (int i = 0; i < static_cast<StaticMesh*>(renderable)->renderInfoVec.size(); ++i)
-    {
-        if (static_cast<StaticMesh*>(renderable)->renderInfoVec[i]->material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
-        {
-            InstancingManager::Instance.Get().PopStaticDeferredData(static_cast<StaticMesh*>(renderable)->renderInfoVec[i]);
-        }
-        else
-        {
-            InstancingManager::Instance.Get().PopStaticForwardData(static_cast<StaticMesh*>(renderable)->renderInfoVec[i]);
-        }
-
-
-        // 나중에 메모리가 너무 커지면 채우자
-        ///ResourceManager::Instance.Get().DeleteMaterial(static_cast<StaticMesh*>(renderable)->renderInfoVec[i]->material);
-    }
-
-    this->staticMeshRenderInfoMap.erase(renderable);
-}
-
-void RenderSystem::PushSkinnedRenderableObject(nail::IRenderable* renderable)
-{
-    skinnedMeshRenderInfoMap.insert({ renderable, {} });
-    skinnedMeshRenderInfoMap[renderable].emplace_back(static_cast<SkinnedMesh*>(renderable)->renderInfoVec[0]);
-
-    skinnedSet.insert(static_cast<SkinnedMesh*>(renderable)->renderInfoVec[0]);
-}
-
-void RenderSystem::PopSkinnedRenderableObject(nail::IRenderable* renderable)
-{
-    for (int i = 0; i < static_cast<SkinnedMesh*>(renderable)->renderInfoVec.size(); ++i)
-    {
-        InstancingManager::Instance.Get().PopSkinnedDeferredData(static_cast<SkinnedMesh*>(renderable)->renderInfoVec[i]);
-        this->skinnedSet.erase(static_cast<SkinnedMesh*>(renderable)->renderInfoVec[i]);
-    }
-
-    this->skinnedMeshRenderInfoMap.erase(renderable);
-}
+//void RenderSystem::PushStaticRenderableObject(nail::IRenderable* renderable)
+//{
+//    staticMeshRenderInfoMap.insert({ renderable, {} });
+//    staticMeshRenderInfoMap[renderable].emplace_back(static_cast<StaticMesh*>(renderable)->renderInfoVec[0]);
+//
+//    deferredSet.insert(static_cast<StaticMesh*>(renderable)->renderInfoVec[0]);
+//}
+//
+//void RenderSystem::PopStaticRenderableObject(nail::IRenderable* renderable)
+//{
+//    for (int i = 0; i < static_cast<StaticMesh*>(renderable)->renderInfoVec.size(); ++i)
+//    {
+//        if (static_cast<StaticMesh*>(renderable)->renderInfoVec[i]->material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
+//        {
+//            InstancingManager::Instance.Get().PopStaticDeferredData(static_cast<StaticMesh*>(renderable)->renderInfoVec[i]);
+//        }
+//        else
+//        {
+//            InstancingManager::Instance.Get().PopStaticForwardData(static_cast<StaticMesh*>(renderable)->renderInfoVec[i]);
+//        }
+//
+//
+//        // 나중에 메모리가 너무 커지면 채우자
+//        ///ResourceManager::Instance.Get().DeleteMaterial(static_cast<StaticMesh*>(renderable)->renderInfoVec[i]->material);
+//    }
+//
+//    this->staticMeshRenderInfoMap.erase(renderable);
+//}
+//
+//void RenderSystem::PushSkinnedRenderableObject(nail::IRenderable* renderable)
+//{
+//    skinnedMeshRenderInfoMap.insert({ renderable, {} });
+//    skinnedMeshRenderInfoMap[renderable].emplace_back(static_cast<SkinnedMesh*>(renderable)->renderInfoVec[0]);
+//
+//    skinnedSet.insert(static_cast<SkinnedMesh*>(renderable)->renderInfoVec[0]);
+//}
+//
+//void RenderSystem::PopSkinnedRenderableObject(nail::IRenderable* renderable)
+//{
+//    for (int i = 0; i < static_cast<SkinnedMesh*>(renderable)->renderInfoVec.size(); ++i)
+//    {
+//        InstancingManager::Instance.Get().PopSkinnedDeferredData(static_cast<SkinnedMesh*>(renderable)->renderInfoVec[i]);
+//        this->skinnedSet.erase(static_cast<SkinnedMesh*>(renderable)->renderInfoVec[i]);
+//    }
+//
+//    this->skinnedMeshRenderInfoMap.erase(renderable);
+//}
 
 void RenderSystem::PushUIObject(std::shared_ptr<UIImage> renderable)
 {
@@ -830,78 +852,78 @@ void RenderSystem::PopTextObject(std::shared_ptr<nail::IRenderable> renderable)
 //    }
 //}
 
-void RenderSystem::ReSortRenderInfo(nail::IRenderable* renderable, int index)
-{
-    if (staticMeshRenderInfoMap[renderable][index]->material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
-    {
-        auto iter = forwardSet.find(staticMeshRenderInfoMap[renderable][index]);
-        if (iter == forwardSet.end())
-        {
-            return;
-        }
-        else
-        {
-            // 포워드에서 디퍼드로
-            InstancingManager::Instance.Get().PopStaticForwardData(staticMeshRenderInfoMap[renderable][index]);
-            forwardSet.erase(iter);
-            deferredSet.insert(staticMeshRenderInfoMap[renderable][index]);
-            InstancingManager::Instance.Get().RegisterStaticDeferredData(staticMeshRenderInfoMap[renderable][index]);
-        }
-    }
-    else
-    {
-        auto iter = deferredSet.find(staticMeshRenderInfoMap[renderable][index]);
-        if (iter == deferredSet.end())
-        {
-            return;
-        }
-        else
-        {
-            // 디퍼드에서 포워드로
-            InstancingManager::Instance.Get().PopStaticDeferredData(staticMeshRenderInfoMap[renderable][index]);
-            deferredSet.erase(iter);
-            forwardSet.insert(staticMeshRenderInfoMap[renderable][index]);
-            InstancingManager::Instance.Get().RegisterStaticForwardData(staticMeshRenderInfoMap[renderable][index]);
-        }
-    }
-}
-
-void RenderSystem::RegisterRenderInfo(nail::IRenderable* renderable, std::shared_ptr<RenderInfo> renderInfo)
-{
-    auto iter = staticMeshRenderInfoMap.find(renderable);
-    if (iter != staticMeshRenderInfoMap.end())
-    {
-        if (staticMeshRenderInfoMap[renderable].size() <= renderInfo->materialIndex)
-        {
-            staticMeshRenderInfoMap[renderable].emplace_back(renderInfo);
-        }
-
-        if (renderInfo->material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
-        {
-            deferredSet.insert(renderInfo);
-
-            InstancingManager::Instance.Get().RegisterStaticDeferredData(renderInfo);
-        }
-        else if (renderInfo->material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Forward)
-        {
-            forwardSet.insert(renderInfo);
-
-            InstancingManager::Instance.Get().RegisterStaticForwardData(renderInfo);
-        }
-    }
-}
-
-void RenderSystem::RegisterSkinnedRenderInfo(nail::IRenderable* renderable, std::shared_ptr<SkinnedRenderInfo> renderInfo)
-{
-    auto iter = skinnedMeshRenderInfoMap.find(renderable);
-    if (iter != skinnedMeshRenderInfoMap.end())
-    {
-        skinnedMeshRenderInfoMap[renderable].emplace_back(renderInfo);
-        skinnedSet.insert(renderInfo);
-
-        InstancingManager::Instance.Get().RegisterSkinnedDeferredData(renderInfo);
-    }
-}
+//void RenderSystem::ReSortRenderInfo(nail::IRenderable* renderable, int index)
+//{
+//    if (staticMeshRenderInfoMap[renderable][index]->material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
+//    {
+//        auto iter = forwardSet.find(staticMeshRenderInfoMap[renderable][index]);
+//        if (iter == forwardSet.end())
+//        {
+//            return;
+//        }
+//        else
+//        {
+//            // 포워드에서 디퍼드로
+//            InstancingManager::Instance.Get().PopStaticForwardData(staticMeshRenderInfoMap[renderable][index]);
+//            forwardSet.erase(iter);
+//            deferredSet.insert(staticMeshRenderInfoMap[renderable][index]);
+//            InstancingManager::Instance.Get().RegisterStaticDeferredData(staticMeshRenderInfoMap[renderable][index]);
+//        }
+//    }
+//    else
+//    {
+//        auto iter = deferredSet.find(staticMeshRenderInfoMap[renderable][index]);
+//        if (iter == deferredSet.end())
+//        {
+//            return;
+//        }
+//        else
+//        {
+//            // 디퍼드에서 포워드로
+//            InstancingManager::Instance.Get().PopStaticDeferredData(staticMeshRenderInfoMap[renderable][index]);
+//            deferredSet.erase(iter);
+//            forwardSet.insert(staticMeshRenderInfoMap[renderable][index]);
+//            InstancingManager::Instance.Get().RegisterStaticForwardData(staticMeshRenderInfoMap[renderable][index]);
+//        }
+//    }
+//}
+//
+//void RenderSystem::RegisterRenderInfo(nail::IRenderable* renderable, std::shared_ptr<RenderInfo> renderInfo)
+//{
+//    auto iter = staticMeshRenderInfoMap.find(renderable);
+//    if (iter != staticMeshRenderInfoMap.end())
+//    {
+//        if (staticMeshRenderInfoMap[renderable].size() <= renderInfo->materialIndex)
+//        {
+//            staticMeshRenderInfoMap[renderable].emplace_back(renderInfo);
+//        }
+//
+//        if (renderInfo->material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
+//        {
+//            deferredSet.insert(renderInfo);
+//
+//            InstancingManager::Instance.Get().RegisterStaticDeferredData(renderInfo);
+//        }
+//        else if (renderInfo->material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Forward)
+//        {
+//            forwardSet.insert(renderInfo);
+//
+//            InstancingManager::Instance.Get().RegisterStaticForwardData(renderInfo);
+//        }
+//    }
+//}
+//
+//void RenderSystem::RegisterSkinnedRenderInfo(nail::IRenderable* renderable, std::shared_ptr<SkinnedRenderInfo> renderInfo)
+//{
+//    auto iter = skinnedMeshRenderInfoMap.find(renderable);
+//    if (iter != skinnedMeshRenderInfoMap.end())
+//    {
+//        skinnedMeshRenderInfoMap[renderable].emplace_back(renderInfo);
+//        skinnedSet.insert(renderInfo);
+//
+//        InstancingManager::Instance.Get().RegisterSkinnedDeferredData(renderInfo);
+//    }
+//}
 
 Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> RenderSystem::QueryBrush(std::shared_ptr<UIText> uiText)
 {

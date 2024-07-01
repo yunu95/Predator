@@ -22,7 +22,14 @@ namespace application
 
     void Trigger_UnitAppear::LinkCallback()
     {
-        targetUnit->onCreated.AddVolatileCallback([=]() { PullTrigger(); });
+        if (targetUnit->inGameUnit.expired())
+        {
+            targetUnit->onCreated.AddVolatileCallback([=]() { PullTrigger(); });
+        }
+        else
+        {
+            targetUnit->inGameUnit.lock()->onCreated.AddVolatileCallback([=]() { PullTrigger(); });
+        }
     }
 
     void Trigger_UnitAppear::SetUnit(editor::UnitData* unit)
@@ -141,7 +148,14 @@ namespace application
 
     void Trigger_UnitDie::LinkCallback()
     {
-        targetUnit->onStateEngage[UnitBehaviourTree::Death].AddVolatileCallback([=]() { PullTrigger(); });
+        if (targetUnit->inGameUnit.expired())
+        {
+            targetUnit->onStateEngage[UnitBehaviourTree::Death].AddVolatileCallback([=]() { PullTrigger(); });
+        }
+        else
+        {
+            targetUnit->inGameUnit.lock()->OnStateEngageCallback()[UnitBehaviourTree::Death].AddVolatileCallback([=]() { PullTrigger(); });
+        }
     }
 
     void Trigger_UnitDie::SetUnit(editor::UnitData* unit)

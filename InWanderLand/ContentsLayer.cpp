@@ -95,6 +95,7 @@ public:
 	yunutyEngine::graphics::Animator* anim;
 	yunuGI::IAnimation* idle;
 	yunuGI::IAnimation* walk;
+	yunuGI::IAnimation* temp;
 	virtual void Update() override
 	{
 		if (Input::isKeyDown(yunutyEngine::KeyCode::LeftArrow))
@@ -108,6 +109,10 @@ public:
 			anim->ChangeAnimation(walk, 0.3, 1);
 			auto temp = anim->GetGI().GetCurrentAnimation();
 			int a = 1;
+		}
+		if (Input::isKeyDown(yunutyEngine::KeyCode::UpArrow))
+		{
+			anim->ChangeAnimation(temp, 0.3, 1);
 		}
 	}
 };
@@ -136,39 +141,36 @@ void GraphicsTest()
 
 	for (auto& i : animationList)
 	{
-		if (i->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleIdle")
+		if (i->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Skill1-2")
 		{
-			i->SetLoop(true);
 			animation = i;
 		}
 
-		if (i->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleWalk")
+		if (i->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleIdle")
 		{
 			i->SetLoop(true);
 			animation2 = i;
 		}
+		if (i->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Skill1")
+		{
+			animation3 = i;
+		}
 	}
 
 	{
-		auto obj4 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
-		obj4->GetTransform()->SetLocalPosition(Vector3d{ 5,0,0 });
-		obj4->SetSelfActive(false);
-
-		auto obj = Scene::getCurrentScene()->AddGameObject();
-		auto test = obj->AddComponent<TestComponent4>();
-
-		auto obj3 = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
-		auto anim = obj3->GetComponent<yunutyEngine::graphics::Animator>();
-		anim->PushAnimationWithFunc(animation, 0, [=]() {obj4->SetSelfActive(true); });
-		anim->PushAnimationWithFunc(animation, 10, [=]() {obj4->SetSelfActive(false); });
+		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
+		auto anim = obj->GetComponent<yunutyEngine::graphics::Animator>();
 		anim->PushAnimation(animation);
 		anim->PushAnimation(animation2);
-		anim->Play(animation);
+		anim->PushAnimation(animation3);
+		anim->Play(animation2);
 
-
+		auto obj2 = Scene::getCurrentScene()->AddGameObject();
+		auto test = obj2->AddComponent<TestComponent4>();
 		test->anim = anim;
 		test->idle = animation;
 		test->walk = animation2;
+		test->temp = animation3;
 	}
 
 	yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
