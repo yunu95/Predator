@@ -56,6 +56,12 @@ std::weak_ptr<Unit> Unit::GetClosestEnemyWithinAttackRange()
             return (GetTransform()->GetWorldPosition() - a->GetTransform()->GetWorldPosition()).MagnitudeSqr() <
                 (GetTransform()->GetWorldPosition() - b->GetTransform()->GetWorldPosition()).MagnitudeSqr();
         });
+
+    if (minIt != attackRange.lock()->GetEnemies().end())
+    {
+        auto tempPrimitivePtr = *minIt;
+        int a = 3;
+    }
     if (minIt != attackRange.lock()->GetEnemies().end())
         return (*minIt)->GetWeakPtr<Unit>();
     return std::weak_ptr<Unit>();
@@ -67,6 +73,12 @@ std::weak_ptr<Unit> Unit::GetClosestEnemyWithinAcquisitionRange()
             return (GetTransform()->GetWorldPosition() - a->GetTransform()->GetWorldPosition()).MagnitudeSqr() <
                 (GetTransform()->GetWorldPosition() - b->GetTransform()->GetWorldPosition()).MagnitudeSqr();
         });
+
+    if (minIt != acquisitionRange.lock()->GetEnemies().end())
+    {
+        auto tempPrimitivePtr = *minIt;
+        int a = 3;
+    }
     if (minIt != acquisitionRange.lock()->GetEnemies().end())
         return (*minIt)->GetWeakPtr<Unit>();
 
@@ -217,6 +229,10 @@ void Unit::OnStateUpdate<UnitBehaviourTree::Chasing>()
     if (!referenceBlockPendingOrder.BeingReferenced() && !pendingTargetUnit.expired())
     {
         currentTargetUnit = pendingTargetUnit;
+        if (currentTargetUnit.lock().get() == this)
+        {
+            int a = 1;
+        }
         pendingTargetUnit.reset();
     }
 }
