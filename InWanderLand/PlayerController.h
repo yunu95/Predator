@@ -73,22 +73,26 @@ public:
     int GetSkillPoints();
     float GetZoomFactor();
     void IncrementSkillPoint();
+    void UnconstrainCamUpdateDirection();
+    void ConstrainCamUpdateDirection(const Vector3d& direction);
     void LockCamInRegion(const application::editor::RegionData* camLockRegion);
     void UnlockCamFromRegion();
     bool CanUnitSelectSkill(std::weak_ptr<Unit> unit);
     float GetMana();
+    Vector3d GetCamPivotPoint();
     void SetManaFull();
     void SetMana(float mana);
     Unit* GetUnitOnCursor();
+    virtual void OnPause() override;
+    virtual void OnResume() override;
+
     static constexpr int playerTeamIndex = 1;
     static const std::unordered_map<UIEnumID, SkillUpgradeType::Enum> skillUpgradeByUI;
     DelegateCallback<void> onSkillSelect[(int)SkillType::SKILL_NUM];
     DelegateCallback<void> onSkillActivate[(int)SkillType::SKILL_NUM];
     DelegateCallback<void> onSkillTargeted[(int)SkillType::SKILL_NUM];
     DelegateCallback<void> onSkillExpiration[(int)SkillType::SKILL_NUM];
-
-    virtual void OnPause() override;
-    virtual void OnResume() override;
+    factor::Multiplier<float> camZoomMultiplier;
 
     // 시네마틱 모드가 되면 아래의 레퍼런스를 사용한다.
     Reference referenceCinematic;
@@ -124,6 +128,7 @@ private:
     // character가 NONE일 경우 알아서 현재 선택된 스킬로 귀결된다.
     void OnLeftClick();
     void OnRightClick();
+    void UnselectUnit();
     void SelectUnit(std::weak_ptr<Unit> unit);
     void OrderMove(Vector3d position);
     void OrderAttackMove(Vector3d position);
@@ -134,6 +139,8 @@ private:
     // 현재 선택된 스킬이 특정 유닛의 스킬이라면 선택을 취소시킨다.
     void UnSelectSkill(std::weak_ptr<Unit> unit);
     Vector3d GetWorldCursorPosition();
+    // 플레이어 유닛의 위치들의 중점을 반환한다.
+    Vector3d GetMiddlePoint();
     // 연속으로 쌓은 콤보를 초기화한다.
     void ResetCombo();
 
@@ -157,6 +164,10 @@ private:
     std::array<float, SkillType::SKILL_NUM> skillCooltimeLeft;
     std::array<UIElement*, SkillType::SKILL_NUM> skillCooltimeNumberUI;
     std::array<UIElement*, SkillType::SKILL_NUM> skillCooltimeMaskUI;
+    Vector3d camPivotPoint;
+    Vector3d camPreviousPivotPoint;
+    Vector3d camContrainingDirection;
+    bool isConstraingCamUpdateDirection{ false };
     bool blockSkillCancel{ false };
     bool playerSwitchable{ true };
     std::array<bool, SkillType::SKILL_NUM> blockSkillSelection{ false };
@@ -174,6 +185,8 @@ private:
     std::array<bool, SkillUpgradeType::END> skillUpgraded;
     int skillPointsLeft{ 5 };
     float camZoomFactor = 5;
+    shared_ptr<float> zoomMultiplierByState;
+    shared_ptr<float> zoomMultiplierByNonSelection;
     Vector3d camOffsetNorm;
     Quaternion camRotation;
     std::array<std::weak_ptr<Unit>, 2> peaceFollowingUnits;

@@ -94,6 +94,17 @@ void PlayerController::IncrementSkillPoint()
     SetSkillPoints(skillPointsLeft + 1);
 }
 
+void PlayerController::UnconstrainCamUpdateDirection()
+{
+    isConstraingCamUpdateDirection = false;
+}
+
+void PlayerController::ConstrainCamUpdateDirection(const Vector3d& direction)
+{
+    camContrainingDirection = direction.Normalized();
+    isConstraingCamUpdateDirection = true;
+}
+
 void PlayerController::LockCamInRegion(const application::editor::RegionData* camLockRegion)
 {
     this->camLockRegion = camLockRegion;
@@ -135,6 +146,7 @@ void PlayerController::OnContentsStop()
     Unit::SetPauseAll(false);
     Scene::getCurrentScene()->DestroyGameObject(cursorUnitDetector.lock()->GetGameObject());
     currentCombo = 0;
+    isConstraingCamUpdateDirection = false;
 }
 
 void PlayerController::Update()
@@ -347,15 +359,30 @@ void PlayerController::HandleCamera()
     Vector3d targetPos;
     if (!selectedCharacter.expired())
     {
-        Vector3d selectedCharPos = selectedCharacter.lock()->GetTransform()->GetWorldPosition();
-        // 카메라가 지역 제한에 걸렸을 경우, targetPos를 지역 안으로 정의합니다.
-        if (camLockRegion)
-        {
-            selectedCharPos.x = std::clamp(selectedCharPos.x, camLockRegion->pod.x - camLockRegion->pod.width * 0.5, camLockRegion->pod.x + camLockRegion->pod.width * 0.5);
-            selectedCharPos.z = std::clamp(selectedCharPos.z, camLockRegion->pod.z - camLockRegion->pod.height * 0.5, camLockRegion->pod.z + camLockRegion->pod.height * 0.5);
-        }
-        targetPos = selectedCharPos + camOffsetNorm * camZoomFactor;
+        camPivotPoint = selectedCharacter.lock()->GetTransform()->GetWorldPosition();
+        zoomMultiplierByNonSelection.reset();
     }
+    else
+    {
+        if (!zoomMultiplierByNonSelection)
+        {
+            zoomMultiplierByNonSelection = camZoomMultiplier.AcquireFactor();
+            *zoomMultiplierByNonSelection = GlobalConstant::GetSingletonInstance().pod.tacticZoomMultiplier;
+        }
+        camPivotPoint = GetMiddlePoint();
+    }
+    // 카메라가 지역 제한에 걸렸을 경우, targetPos를 지역 안으로 정의합니다.
+    if (camLockRegion)
+    {
+        camPivotPoint.x = std::clamp(camPivotPoint.x, camLockRegion->pod.x - camLockRegion->pod.width * 0.5, camLockRegion->pod.x + camLockRegion->pod.width * 0.5);
+        camPivotPoint.z = std::clamp(camPivotPoint.z, camLockRegion->pod.z - camLockRegion->pod.height * 0.5, camLockRegion->pod.z + camLockRegion->pod.height * 0.5);
+    }
+    if (isConstraingCamUpdateDirection)
+    {
+        camPivotPoint = camPreviousPivotPoint + std::fmaxf(0, Vector3d::Dot(camPivotPoint - camPreviousPivotPoint, camContrainingDirection)) * camContrainingDirection;
+    }
+    targetPos = camPivotPoint + camOffsetNorm * camZoomFactor * camZoomMultiplier;
+    camPreviousPivotPoint = camPivotPoint;
     RTSCam::Instance().SetIdealPosition(targetPos);
     RTSCam::Instance().SetIdealRotation(camRotation);
 }
@@ -396,7 +423,7 @@ void PlayerController::HandleSkillPreview()
     }
     else
     {
-        if (selectedCharacter.lock()->IsTacTicReady())
+        if (auto unit = selectedCharacter.lock(); unit && unit->IsTacTicReady())
         {
             TacticModeSystem::Instance().ShowSkillPreviewInTacticMode(selectedSkill);
         }
@@ -405,7 +432,7 @@ void PlayerController::HandleSkillPreview()
     // 임시 이동 경로 보여주는 부분
     if ((state == State::Tactic) && (selectedSkill == SkillType::NONE))
     {
-        if (selectedCharacter.lock()->IsTacTicReady())
+        if (auto unit = selectedCharacter.lock(); unit && unit->IsTacTicReady())
         {
             TacticModeSystem::Instance().ShowTemporaryRouteInTacticMode(this->selectedCharacterType);
         }
@@ -435,13 +462,33 @@ void PlayerController::HandleManaRegen()
 
 void PlayerController::HandleMouseHover()
 {
-    if (!cursorUnitDetector.lock()->GetUnits().empty())
+    if (auto unit = GetUnitOnCursor())
     {
-        ApplyHoverEffect(GetUnitOnCursor()->GetWeakPtr<Unit>());
+        ApplyHoverEffect(unit->GetWeakPtr<Unit>());
+        if (UIManager::Instance().IsMouseOnButton())
+        {
+            UIManager::Instance().GetUIElementByEnum(UIEnumID::MouseCursor_OnButton)->EnableElement();
+        }
+        else if (unit->GetTeamIndex() == playerTeamIndex)
+        {
+            UIManager::Instance().GetUIElementByEnum(UIEnumID::MouseCursor_OnAlly)->EnableElement();
+        }
+        else
+        {
+            UIManager::Instance().GetUIElementByEnum(UIEnumID::MouseCursor_OnEnemy)->EnableElement();
+        }
     }
     else
     {
         DisableHoverEffect();
+        if (UIManager::Instance().IsMouseOnButton())
+        {
+            UIManager::Instance().GetUIElementByEnum(UIEnumID::MouseCursor_OnButton)->EnableElement();
+        }
+        else
+        {
+            UIManager::Instance().GetUIElementByEnum(UIEnumID::MouseCursor_Free)->EnableElement();
+        }
     }
 }
 // 카메라의 near plane으로부터 far plane까지 뻗는 직선의 형태로
@@ -476,14 +523,27 @@ void PlayerController::HandleComboState()
 void PlayerController::SelectPlayerUnit(PlayerCharacterType::Enum charType)
 {
     UnSelectSkill();
-    if (charType == selectedCharacterType || charType == PlayerCharacterType::None)
+    if (charType == selectedCharacterType)
     {
         return;
     }
+
     selectedCharacterType = charType;
-    selectedCharacter = characters[charType];
-    selectedDebugCharacter = characters[charType];
-    ApplySelectEffect(characters[charType]);
+    // 체력바의 선택 UI 활성화시키기
+    if (auto previous = selectedCharacter.lock())
+        previous->unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::StatusBar_SelectionName)->DisableElement();
+    if (charType == PlayerCharacterType::None)
+    {
+        selectedCharacter.reset();
+    }
+    else
+    {
+        selectedCharacter = characters[charType];
+        ApplySelectEffect(characters[charType]);
+        // 체력바의 선택 UI 활성화시키기
+        characters[charType].lock()->unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::StatusBar_SelectionName)->EnableElement();
+    }
+
     switch (selectedCharacterType)
     {
     case PlayerCharacterType::Robin:
@@ -559,6 +619,7 @@ void PlayerController::OnRightClick()
 {
     if (selectedSkill == SkillType::NONE)
     {
+        if (selectedCharacter.expired()) return;
         if (state != State::Tactic)
         {
             if (!cursorUnitDetector.lock()->GetUnits().empty() && GetUnitOnCursor()->teamIndex != playerTeamIndex)
@@ -643,33 +704,52 @@ void PlayerController::OnRightClick()
     }
 }
 
+void PlayerController::UnselectUnit()
+{
+    SelectPlayerUnit(PlayerCharacterType::None);
+}
 void PlayerController::SelectUnit(std::weak_ptr<Unit> unit)
 {
-    SelectPlayerUnit(static_cast<PlayerCharacterType::Enum>(unit.lock()->GetUnitTemplateData().pod.playerUnitType.enumValue));
-    selectedDebugCharacter = unit;
+    if (auto playerType = static_cast<PlayerCharacterType::Enum>(unit.lock()->GetUnitTemplateData().pod.playerUnitType.enumValue);
+        playerType != PlayerCharacterType::None)
+    {
+        SelectPlayerUnit(playerType);
+    }
 }
 
 void PlayerController::OrderMove(Vector3d position)
 {
-    selectedCharacter.lock()->OrderMove(position);
-    UIManager::Instance().SummonMoveToFeedback(GetWorldCursorPosition());
+    if (auto unit = selectedCharacter.lock())
+    {
+        unit->OrderMove(position);
+        UIManager::Instance().SummonMoveToFeedback(GetWorldCursorPosition());
+    }
 }
 
 void PlayerController::OrderAttackMove(Vector3d position)
 {
-    selectedCharacter.lock()->OrderAttackMove(position);
-    UIManager::Instance().SummonMoveToFeedback(GetWorldCursorPosition());
+    if (auto unit = selectedCharacter.lock())
+    {
+        unit->OrderAttackMove(position);
+        UIManager::Instance().SummonMoveToFeedback(GetWorldCursorPosition());
+    }
 }
 
 void PlayerController::OrderAttack(std::weak_ptr<Unit> unit)
 {
-    ApplyTargetedEffect(unit);
-    selectedCharacter.lock()->OrderAttack(unit);
+    if (auto unit = selectedCharacter.lock())
+    {
+        ApplyTargetedEffect(unit);
+        unit->OrderAttack(unit);
+    }
 }
 
 void PlayerController::OrderInteraction(std::weak_ptr<IInteractableComponent> interactable)
 {
-    selectedCharacter.lock()->OrderMove(interactable.lock()->GetTransform()->GetWorldPosition());
+    if (auto unit = selectedCharacter.lock())
+    {
+        unit->OrderMove(interactable.lock()->GetTransform()->GetWorldPosition());
+    }
 }
 
 void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
@@ -837,13 +917,29 @@ void PlayerController::SetState(State::Enum newState)
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Vinetting)->EnableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_MenuButton)->EnableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Bottom_Layout)->EnableElement();
+        skillCooltimeLeft.fill(0);
+        skillCooltimeLeft.fill(0);
+        break;
+    case PlayerController::State::Battle:
+        zoomMultiplierByState.reset();
         break;
     }
     state = newState;
     switch (state)
     {
     case State::Peace:
+        if (selectedCharacter.expired())
+        {
+            SelectPlayerUnit(PlayerCharacterType::Robin);
+        }
+        UnSelectSkill();
+        for (auto& each : characters)
+        {
+            each.lock()->playingBattleAnim = false;
+        }
+        break;
     case State::Cinematic:
+        UnselectUnit();
         UnSelectSkill();
         for (auto& each : characters)
         {
@@ -851,6 +947,8 @@ void PlayerController::SetState(State::Enum newState)
         }
         break;
     case State::Battle:
+        zoomMultiplierByState = camZoomMultiplier.AcquireFactor();
+        *zoomMultiplierByState = GlobalConstant::GetSingletonInstance().pod.battleZoomMultiplier;
         for (auto& each : characters)
         {
             each.lock()->playingBattleAnim = true;
@@ -862,6 +960,7 @@ void PlayerController::SetState(State::Enum newState)
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Vinetting)->DisableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_MenuButton)->DisableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Bottom_Layout)->DisableElement();
+        UnselectUnit();
         UnSelectSkill();
     }
     break;
@@ -1001,6 +1100,13 @@ Vector3d PlayerController::GetWorldCursorPosition()
     return projectedPoint;
 }
 
+Vector3d PlayerController::GetMiddlePoint()
+{
+    auto ret = std::accumulate(characters.begin(), characters.end(), Vector3d(), [](Vector3d acc, auto& each)
+        { return acc + each.lock()->GetTransform()->GetWorldPosition(); }) / characters.size();
+    return ret;
+}
+
 void PlayerController::ResetCombo()
 {
     currentCombo = 0;
@@ -1051,6 +1157,11 @@ void PlayerController::RequestStateFromAction(State::Enum newState)
 float PlayerController::GetMana()
 {
     return this->mana;
+}
+
+Vector3d PlayerController::GetCamPivotPoint()
+{
+    return camPivotPoint;
 }
 
 void PlayerController::SetCooltime(SkillType::Enum skillType, float cooltime)
@@ -1233,7 +1344,10 @@ void PlayerController::OnPlayerUnitSkillActivation(std::weak_ptr<Unit> unit, std
     SetCooltime(skillType, GetCooltimeForSkill(skillType));
     if (skillType != SkillType::NONE)
     {
-        SetMana(mana - RequiredManaForSkill(skillType));
+        if (state != State::Tactic)
+        {
+            SetMana(mana - RequiredManaForSkill(skillType));
+        }
         onSkillActivate[skillType]();
     }
 }
