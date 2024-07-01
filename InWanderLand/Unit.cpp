@@ -566,6 +566,10 @@ void Unit::SetCurrentHp(float p_newHp)
     }
     if (!unitStatusUI.expired())
     {
+        if (isAlive && !unitStatusUI.lock()->GetUIEnabled() && currentHitPoint != unitTemplateData->pod.max_Health)
+        {
+            unitStatusUI.lock()->EnableElement();
+        }
         unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::StatusBar_HP_Fill)->adjuster->SetTargetFloat(1 - currentHitPoint / unitTemplateData->pod.max_Health);
         if (unitStatusUI.lock()->GetLocalUIsByEnumID().contains(UIEnumID::StatusBar_HP_Number_Current))
         {
@@ -1214,9 +1218,14 @@ void Unit::Summon(application::editor::Unit_TemplateData* templateData)
         break;
     case UnitStatusBarType::ENEMY:
         unitStatusUI = UIManager::Instance().DuplicateUIElement(UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_MeleeEnemy));
+        unitStatusUI.lock()->DisableElement();
         break;
     case UnitStatusBarType::ELITE:
         unitStatusUI = UIManager::Instance().DuplicateUIElement(UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_Elite));
+        unitStatusUI.lock()->DisableElement();
+        break;
+    case UnitStatusBarType::BOSS:
+        /// 현재 Boss 관련 UI 가 없음
         break;
     }
 

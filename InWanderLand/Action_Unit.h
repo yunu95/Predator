@@ -9,6 +9,8 @@
 
 #include "YunuGraphicsInterface.h"
 
+#include "UnitAnimationType.h"
+
 namespace yunutyEngine
 {
 	class GameObject;
@@ -154,5 +156,39 @@ namespace application
 		editor::UnitData* destinationUnit = nullptr;
 		float lerpTime = 0;
 		bool isEditing = false;
+	};
+
+	/// Unit 의 특정한 Animation 을 재생하는 Action 입니다.
+	/// Unit 을 강제로 Pause 상태로 바꾸고 Animation 을 재생하므로 주의가 필요합니다.
+	class Action_UnitPlayAnimation
+		: public IAction
+	{
+		friend class editor::Module_ScriptEditor;
+
+	public:
+		DEFINE_ACTION(UnitPlayAnimation)
+
+		virtual ~Action_UnitPlayAnimation();
+
+		virtual CoroutineObject<void> DoAction() override;
+
+		virtual bool IsValid() override;
+
+		void SetTargetUnit(editor::UnitData* unit);
+		void SetAnimType(UnitAnimType animType);
+		void SetDuration(float duration);
+
+		virtual void ProcessObervationEvent(ObservationTarget* target, ObservationEvent event) override;
+
+		virtual bool PreEncoding(json& data) const override;
+		virtual bool PostEncoding(json& data) const override;
+		virtual bool PreDecoding(const json& data) override;
+		virtual bool PostDecoding(const json& data) override;
+
+	private:
+		editor::UnitData* targetUnit = nullptr;
+		bool isEditing = false;
+		UnitAnimType animType = UnitAnimType::None;
+		float duration = -1;
 	};
 }

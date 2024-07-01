@@ -107,19 +107,25 @@ namespace application::editor::palette
             return;
         }
 
-        GetGameObject()->SetSelfActive(true);
-        if (ornamentData)
+        if (ornamentData->tookAction && !GetGameObject()->GetActive())
         {
-            GetGameObject()->GetTransform()->SetWorldPosition({ ornamentData->pod.position.x,ornamentData->pod.position.y,ornamentData->pod.position.z });
-            GetGameObject()->GetTransform()->SetWorldRotation({ ornamentData->pod.rotation.w, ornamentData->pod.rotation.x, ornamentData->pod.rotation.y, ornamentData->pod.rotation.z });
-            GetGameObject()->GetTransform()->SetLocalScale({ ornamentData->pod.scale.x, ornamentData->pod.scale.y, ornamentData->pod.scale.z });
+            actionActiveFlag = false;
         }
+
+        GetGameObject()->SetSelfActive(true);
     }
 
     void OrnamentEditorInstance::HideEditorInstance()
     {
         if (isGuide)
         {
+            return;
+        }
+
+        if (ornamentData->tookAction && !actionActiveFlag)
+        {
+            actionActiveFlag = true;
+            GetGameObject()->SetSelfActive(false);
             return;
         }
 

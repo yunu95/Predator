@@ -634,6 +634,11 @@ namespace application
                         action = AddAction<Action_ParticleHide>();
                         break;
                     }
+                    case application::ActionType::UnitPlayAnimation:
+                    {
+                        action = AddAction<Action_UnitPlayAnimation>();
+                        break;
+                    }
                     default:
                         break;
                     }
