@@ -101,6 +101,7 @@ namespace application
             virtual std::string GetDataResourceName() const override;
             virtual bool EnterDataFromGlobalConstant() override;
 
+            static constexpr float defaultBlendDuration = 0.32f;
             POD_Unit_TemplateData pod;
 
         protected:
@@ -113,6 +114,7 @@ namespace application
             Unit_TemplateData();
             Unit_TemplateData(const Unit_TemplateData& prototype);
             Unit_TemplateData& operator=(const Unit_TemplateData& prototype);
+            void FillAnimationBlendMapDefault();
         };
     }
 }

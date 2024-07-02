@@ -166,25 +166,29 @@ template<>
 void Unit::OnStateEngage<UnitBehaviourTree::Paralysis>()
 {
     onStateEngage[UnitBehaviourTree::Paralysis]();
-    PlayAnimation(UnitAnimType::Paralysis, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
 }
 template<>
 void Unit::OnStateExit<UnitBehaviourTree::Paralysis>()
 {
     onStateExit[UnitBehaviourTree::Paralysis]();
-    PlayAnimation(UnitAnimType::Paralysis, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
 }
 template<>
 void Unit::OnStateEngage<UnitBehaviourTree::Knockback>()
 {
     onStateEngage[UnitBehaviourTree::Knockback]();
     blockFollowingNavAgentByState = referenceBlockFollowingNavAgent.Acquire();
+    PlayAnimation(UnitAnimType::Airborne, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
+}
+template<>
+void Unit::OnStateEngage<UnitBehaviourTree::Stun>()
+{
+    onStateEngage[UnitBehaviourTree::Knockback]();
+    blockFollowingNavAgentByState = referenceBlockFollowingNavAgent.Acquire();
+    PlayAnimation(UnitAnimType::Paralysis, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
 }
 template<>
 void Unit::OnStateUpdate<UnitBehaviourTree::Knockback>()
 {
-    //navAgentComponent.lock()->MoveTo(GetTransform()->GetWorldPosition());
-    //blockFollowingNavAgentByState = referenceBlockFollowingNavAgent.Acquire();
 }
 template<>
 void Unit::OnStateExit<UnitBehaviourTree::Knockback>()
@@ -287,14 +291,24 @@ void Unit::OnStateEngage<UnitBehaviourTree::Move>()
     jamCount = 0;
 }
 template<>
+void Unit::OnStateExit<UnitBehaviourTree::Move>()
+{
+    onStateExit[UnitBehaviourTree::Move]();
+    if (currentOrderType == UnitOrderType::Move)
+    {
+        OrderHold();
+        unitBehaviourTree.reAssessFlag = true;
+    }
+}
+template<>
 void Unit::OnStateUpdate<UnitBehaviourTree::Move>()
 {
     static constexpr float epsilon = 0.1f;
     auto currentPosition = GetTransform()->GetWorldPosition();
-    if ((moveDestination - currentPosition).MagnitudeSqr() < epsilon)
+    /*if ((moveDestination - currentPosition).MagnitudeSqr() < epsilon)
     {
         OrderAttackMove(moveDestination);
-    }
+    }*/
     static constexpr float jamFactor = 0.1f;
     float idealDeltaPosition = unitTemplateData->pod.m_unitSpeed * Time::GetDeltaTime();
     if ((lastPosition - currentPosition).MagnitudeSqr() < idealDeltaPosition * idealDeltaPosition * jamFactor)
@@ -864,6 +878,10 @@ void Unit::OrderAttack(std::weak_ptr<Unit> opponent)
 {
     pendingOrderType = UnitOrderType::AttackUnit;
     pendingTargetUnit = opponent;
+    if (pendingTargetUnit.lock().get() == this)
+    {
+        int a = 1;
+    }
 }
 void Unit::OrderHold()
 {
