@@ -100,19 +100,15 @@ public:
 	{
 		if (Input::isKeyDown(yunutyEngine::KeyCode::LeftArrow))
 		{
-			anim->ChangeAnimation(idle, 0.3, 1);
-			auto temp = anim->GetGI().GetCurrentAnimation();
-			int a = 1;
+			idle->SetPlaySpeed(2.f);
 		}
 		if (Input::isKeyDown(yunutyEngine::KeyCode::RightArrow))
 		{
-			anim->ChangeAnimation(walk, 0.3, 1);
-			auto temp = anim->GetGI().GetCurrentAnimation();
-			int a = 1;
+			idle->SetPlaySpeed(4.f);
 		}
 		if (Input::isKeyDown(yunutyEngine::KeyCode::UpArrow))
 		{
-			anim->ChangeAnimation(temp, 0.3, 1);
+			idle->SetPlaySpeed(1.f);
 		}
 	}
 };
@@ -148,7 +144,7 @@ void GraphicsTest()
 
 		if (i->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleIdle")
 		{
-			i->SetLoop(true);
+			i->SetPlaySpeed(0.01);
 			animation2 = i;
 		}
 		if (i->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Skill1")
@@ -157,10 +153,14 @@ void GraphicsTest()
 		}
 	}
 	{
-		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Hansel");
+		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
 		auto anim = obj->GetComponent<yunutyEngine::graphics::Animator>();
-		anim->PushAnimation(animation);
-		anim->Play(animation);
+		anim->PushAnimation(animation2);
+		anim->Play(animation2);
+
+		auto obj2 = Scene::getCurrentScene()->AddGameObject();
+		auto test = obj2->AddComponent<TestComponent4>();
+		test->idle = animation2;
 	}
 	{
 		//auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");

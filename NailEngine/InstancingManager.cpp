@@ -397,15 +397,15 @@ void InstancingManager::RenderStaticDeferred()
 						}
 
 						ExposureBuffer exposurrBuffer;
-						exposurrBuffer.diffuseExposure = (*renderInfoVec.begin())->mesh->GetDiffuseExposure();
-						exposurrBuffer.ambientExposure = (*renderInfoVec.begin())->mesh->GetAmbientExposure();
+						exposurrBuffer.diffuseExposure = renderInfo->mesh->GetDiffuseExposure();
+						exposurrBuffer.ambientExposure = renderInfo->mesh->GetAmbientExposure();
 						NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::EXPOSURE))->PushGraphicsData(&exposurrBuffer,
 							sizeof(ExposureBuffer),
 							static_cast<int>(CB_TYPE::EXPOSURE), false);
 
-						(*renderInfoVec.begin())->material->PushGraphicsData();
+						renderInfo->material->PushGraphicsData();
 						buffer->PushData();
-						(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, true, buffer->GetCount(), buffer);
+						renderInfo->mesh->Render(renderInfo->materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, true, buffer->GetCount(), buffer);
 					}
 				}
 			}
