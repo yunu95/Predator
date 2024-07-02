@@ -336,6 +336,8 @@ namespace application
 
 	CoroutineObject<void> Action_OrnamentShow::DoAction()
 	{
+		targetOrnament->tookAction = true;
+
 		targetOrnament->GetPaletteInstance()->GetGameObject()->SetSelfActive(true);
 
 		if (lerpTime == 0)
@@ -359,8 +361,6 @@ namespace application
 
 		if (renderer)
 		{
-			targetOrnament->tookAction = true;
-
 			float localTimer = 0;
 			float ratio = 0;
 			while (ratio < 1)
@@ -542,6 +542,8 @@ namespace application
 
 	CoroutineObject<void> Action_OrnamentHide::DoAction()
 	{
+		targetOrnament->tookAction = true;
+
 		if (lerpTime == 0 || !targetOrnament->GetPaletteInstance()->GetGameObject()->GetSelfActive())
 		{
 			targetOrnament->GetPaletteInstance()->GetGameObject()->SetSelfActive(false);
@@ -564,8 +566,6 @@ namespace application
 
 		if (renderer)
 		{
-			targetOrnament->tookAction = true;
-
 			float localTimer = 0;
 			float ratio = 0;
 			while (ratio < 1)

@@ -451,6 +451,11 @@ namespace application
                         Action_ParticleHide::ImGui_DrawDataPopup(static_cast<Action_ParticleHide*>(data));
                         break;
                     }
+                    case application::ActionType::UnitPlayAnimation:
+                    {
+                        Action_UnitPlayAnimation::ImGui_DrawDataPopup(static_cast<Action_UnitPlayAnimation*>(data));
+                        break;
+                    }
                     default:
                         break;
                     }

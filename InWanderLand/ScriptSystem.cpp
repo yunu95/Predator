@@ -85,6 +85,7 @@ namespace application
         actionList.push_back({ ActionType::ParticleMoveWithRotateAndRescale,"ParticleMoveWithRotateAndRescale" });
         actionList.push_back({ ActionType::ParticleShow,"ParticleShow" });
         actionList.push_back({ ActionType::ParticleHide,"ParticleHide" });
+        actionList.push_back({ ActionType::UnitPlayAnimation,"UnitPlayAnimation" });
     }
 
     Script* ScriptSystem::CreateScript()

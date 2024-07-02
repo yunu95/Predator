@@ -1125,4 +1125,269 @@ namespace application
         SetDestinationUnit(UUIDManager::GetSingletonInstance().GetPointerFromUUID<editor::UnitData*>(String_To_UUID(data["destinationUnit"])));
         return true;
     }
+
+    Action_UnitPlayAnimation::~Action_UnitPlayAnimation()
+    {
+        if (targetUnit)
+        {
+            targetUnit->RemoveObserver(this);
+        }
+    }
+
+    CoroutineObject<void> Action_UnitPlayAnimation::DoAction()
+    {
+        co_return;
+    }
+
+    bool Action_UnitPlayAnimation::IsValid()
+    {
+        return (targetUnit == nullptr) ? false : true;
+    }
+
+    void Action_UnitPlayAnimation::SetTargetUnit(editor::UnitData* unit)
+    {
+        if (targetUnit)
+        {
+            targetUnit->RemoveObserver(this);
+        }
+
+        targetUnit = unit;
+        if (unit)
+        {
+            unit->RegisterObserver(this);
+        }
+    }
+
+    void Action_UnitPlayAnimation::SetAnimType(UnitAnimType animType)
+    {
+        this->animType = animType;
+    }
+
+    void Action_UnitPlayAnimation::SetDuration(float duration)
+    {
+        this->duration = duration;
+    }
+
+    void Action_UnitPlayAnimation::ProcessObervationEvent(ObservationTarget* target, ObservationEvent event)
+    {
+        switch (event)
+        {
+            case application::ObservationEvent::Destroy:
+            {
+                if (targetUnit == static_cast<editor::UnitData*>(target))
+                {
+                    targetUnit = nullptr;
+                }
+                break;
+            }
+            default:
+                break;
+        }
+    }
+
+    void Action_UnitPlayAnimation::ImGui_DrawDataPopup(Action_UnitPlayAnimation* data)
+    {
+        if (ImGui::MenuItem("SetTargetUnit(PlayAnimation)"))
+        {
+            editor::EditorLayer::SetInputControl(false);
+            editor::imgui::ShowMessageBox("SetTargetUnit(PlayAnimation)", [data]()
+                {
+                    auto& pp = editor::PalettePanel::GetSingletonInstance();
+                    auto& up = editor::palette::UnitPalette::SingleInstance();
+
+                    editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
+
+                    ImGui::Separator();
+
+                    ImGui::SetNextItemWidth(-1);
+                    if (data->targetUnit)
+                    {
+                        ImGui::Text(data->targetUnit->pod.templateData->pod.skinnedFBXName.c_str());
+                        pp.ChangeTab("Unit");
+                        up.Reset();
+                        up.SelectUnitInstance(data->targetUnit);
+                    }
+                    else
+                    {
+                        ImGui::Text("------");
+                    }
+
+                    ImGui::Separator();
+
+                    if (ImGui::Button("Edit"))
+                    {
+                        ImGui::CloseCurrentPopup();
+                        editor::imgui::CloseMessageBox("SetTargetUnit(PlayAnimation)");
+                        editor::EditorLayer::SetInputControl(true);
+                        editor::EditorPopupManager::GetSingletonInstance().PushReturnPopup<Action_UnitPlayAnimation>("SetTargetUnit(PlayAnimation)", data);
+                    }
+                    ImGui::SameLine();
+
+                    if (ImGui::Button("Cancel"))
+                    {
+                        ImGui::CloseCurrentPopup();
+                        editor::imgui::CloseMessageBox("SetTargetUnit(PlayAnimation)");
+                        editor::EditorLayer::SetInputControl(true);
+                    }
+                }, 300);
+        }
+
+        if (ImGui::MenuItem("SetAnimation(PlayAnimation)"))
+        {
+            editor::EditorLayer::SetInputControl(false);
+            static int animType = (int)UnitAnimType::None;
+            animType = (int)data->animType;
+            editor::imgui::ShowMessageBox("SetAnimation(PlayAnimation)", [data]()
+                {
+                    editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
+
+                    ImGui::Separator();
+
+                    ImGui::SetNextItemWidth(-1);
+
+                    static std::map<int, std::string> nameMap = std::map<int, std::string>();
+                    static std::vector<const char*> nameList = std::vector<const char*>();
+
+                    if (nameMap.empty())
+                    {
+                        nameMap[(int)UnitAnimType::None] = "None";
+                        nameList.push_back("None");
+                        nameMap[(int)UnitAnimType::Idle] = "Idle";
+                        nameList.push_back("Idle");
+                        nameMap[(int)UnitAnimType::BattleIdle] = "BattleIdle";
+                        nameList.push_back("BattleIdle");
+                        nameMap[(int)UnitAnimType::Move] = "Move";
+                        nameList.push_back("Move");
+                        nameMap[(int)UnitAnimType::BattleMove] = "BattleMove";
+                        nameList.push_back("BattleMove");
+                        nameMap[(int)UnitAnimType::Attack] = "Attack";
+                        nameList.push_back("Attack");
+                        nameMap[(int)UnitAnimType::Death] = "Death";
+                        nameList.push_back("Death");
+                        nameMap[(int)UnitAnimType::Paralysis] = "Paralysis";
+                        nameList.push_back("Paralysis");
+                        nameMap[(int)UnitAnimType::Slam] = "Slam";
+                        nameList.push_back("Slam");
+                        nameMap[(int)UnitAnimType::Taunt] = "Taunt";
+                        nameList.push_back("Taunt");
+                        nameMap[(int)UnitAnimType::Skill1] = "Skill1";
+                        nameList.push_back("Skill1");
+                        nameMap[(int)UnitAnimType::Skill2] = "Skill2";
+                        nameList.push_back("Skill2");
+                        nameMap[(int)UnitAnimType::Skill3] = "Skill3";
+                        nameList.push_back("Skill3");
+                        nameMap[(int)UnitAnimType::Skill4] = "Skill4";
+                        nameList.push_back("Skill4");
+                        nameMap[(int)UnitAnimType::Birth] = "Birth";
+                        nameList.push_back("Birth");
+                        nameMap[(int)UnitAnimType::Rush] = "Rush";
+                        nameList.push_back("Rush");
+                        nameMap[(int)UnitAnimType::Throw] = "Throw";
+                        nameList.push_back("Throw");
+                        nameMap[(int)UnitAnimType::Spin] = "Spin";
+                        nameList.push_back("Spin");
+                        nameMap[(int)UnitAnimType::BattleStart] = "BattleStart";
+                        nameList.push_back("BattleStart");
+                        nameMap[(int)UnitAnimType::BattleEnd] = "BattleEnd";
+                        nameList.push_back("BattleEnd");
+                        nameMap[(int)UnitAnimType::Damaged] = "Damaged";
+                        nameList.push_back("Damaged");
+                    }
+
+                    if (ImGui::BeginCombo("##Anim Type Combo", nameList[animType]))
+                    {
+                        for (int i = 0; i < (int)UnitAnimType::End; i++)
+                        {
+                            const bool is_selected = (nameList[animType] == nameList[i]);
+                            if (ImGui::Selectable(nameList[i], is_selected))
+                            {
+                                animType = i;
+                            }
+
+                            if (is_selected)
+                                ImGui::SetItemDefaultFocus();
+                        }
+                        ImGui::EndCombo();
+                    }
+
+                    ImGui::Separator();
+
+                    if (ImGui::Button("OK"))
+                    {
+                        data->SetAnimType((UnitAnimType)animType);
+                        ImGui::CloseCurrentPopup();
+                        editor::imgui::CloseMessageBox("SetAnimation(PlayAnimation)");
+                        editor::EditorLayer::SetInputControl(true);
+                    }
+                    ImGui::SameLine();
+
+                    if (ImGui::Button("Cancel"))
+                    {
+                        ImGui::CloseCurrentPopup();
+                        editor::imgui::CloseMessageBox("SetAnimation(PlayAnimation)");
+                        editor::EditorLayer::SetInputControl(true);
+                    }
+                }, 300);
+        }
+
+        if (ImGui::MenuItem("SetDuration(PlayAnimation)"))
+        {
+            editor::EditorLayer::SetInputControl(false);
+            static float duration = -1;
+            duration = data->duration;
+            editor::imgui::ShowMessageBox("SetDuration(PlayAnimation)", [data]()
+                {
+                    editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
+
+                    ImGui::Separator();
+
+                    ImGui::SetNextItemWidth(-1);
+                    ImGui::DragFloat("##Duration_PlayAnim", &duration);
+
+                    ImGui::Separator();
+
+                    if (ImGui::Button("OK"))
+                    {
+                        data->SetDuration(duration);
+                        ImGui::CloseCurrentPopup();
+                        editor::imgui::CloseMessageBox("SetDuration(PlayAnimation)");
+                        editor::EditorLayer::SetInputControl(true);
+                    }
+                    ImGui::SameLine();
+
+                    if (ImGui::Button("Cancel"))
+                    {
+                        ImGui::CloseCurrentPopup();
+                        editor::imgui::CloseMessageBox("SetDuration(PlayAnimation)");
+                        editor::EditorLayer::SetInputControl(true);
+                    }
+                }, 300);
+        }
+    }
+
+    bool Action_UnitPlayAnimation::PreEncoding(json& data) const
+    {
+        data["duration"] = duration;
+        data["animType"] = (int)animType;
+        return true;
+    }
+
+    bool Action_UnitPlayAnimation::PostEncoding(json& data) const
+    {
+        data["targetUnit"] = targetUnit ? UUID_To_String(targetUnit->GetUUID()) : "nullptr";
+        return true;
+    }
+
+    bool Action_UnitPlayAnimation::PreDecoding(const json& data)
+    {
+        duration = data["duration"];
+        animType = (UnitAnimType)(int)data["animType"];
+        return true;
+    }
+
+    bool Action_UnitPlayAnimation::PostDecoding(const json& data)
+    {
+        SetTargetUnit(UUIDManager::GetSingletonInstance().GetPointerFromUUID<editor::UnitData*>(String_To_UUID(data["targetUnit"])));
+        return true;
+    }
 }

@@ -69,6 +69,7 @@ namespace application
         ParticleMoveWithRotateAndRescale,
         ParticleShow,
         ParticleHide,
+        UnitPlayAnimation,
     };
 
     struct IAction
