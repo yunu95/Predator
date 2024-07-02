@@ -1125,12 +1125,12 @@ void PlayerController::SetManaFull()
 }
 void PlayerController::SetMana(float mana)
 {
-	const auto& gc = GlobalConstant::GetSingletonInstance().pod;
-	this->mana = std::fmin(gc.maxMana, mana);
-	UIManager::Instance().GetUIElementByEnum(UIEnumID::ManaBar1)->adjuster->SetTargetFloat(1 - mana / gc.maxMana);
-	UIManager::Instance().GetUIElementByEnum(UIEnumID::ManaBar2)->adjuster->SetTargetFloat(1 - mana / gc.maxMana);
-	UIManager::Instance().GetUIElementByEnum(UIEnumID::Mana_Text_MaxMP)->SetNumber(gc.maxMana);
-	UIManager::Instance().GetUIElementByEnum(UIEnumID::Mana_Text_CurrentMP)->SetNumber(mana);
+    const auto& gc = GlobalConstant::GetSingletonInstance().pod;
+    this->mana = std::fmin(gc.maxMana, mana);
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::ManaBar1)->adjuster->SetTargetFloat(1 - this->mana / gc.maxMana);
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::ManaBar2)->adjuster->SetTargetFloat(1 - this->mana / gc.maxMana);
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::Mana_Text_MaxMP)->SetNumber(gc.maxMana);
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::Mana_Text_CurrentMP)->SetNumber(this->mana);
 }
 
 Unit* PlayerController::GetUnitOnCursor()

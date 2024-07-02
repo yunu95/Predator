@@ -898,6 +898,15 @@
     <Filter Include="Editor\ScriptSystem\2_Action\List\Action_ForceUnitUnpaused">
       <UniqueIdentifier>{01f33b06-acce-4e1b-994a-00c1cc82f55a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents_Refactored\UnitController\EnemyController\RangedKitingController">
+      <UniqueIdentifier>{c2f03fb1-d324-4dba-85ce-46414fea0626}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\UnitController\EnemyController\RangedApproachingController">
+      <UniqueIdentifier>{16f16640-e4f2-496d-8a97-4d0fbf535236}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\UnitController\EnemyController\HolderController">
+      <UniqueIdentifier>{f4e41c96-8336-43ce-bb06-2a3e060296d6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -2200,6 +2209,15 @@
     <ClInclude Include="Action_Particle.h">
       <Filter>Editor\ScriptSystem\2_Action\List</Filter>
     </ClInclude>
+    <ClInclude Include="HolderController.h">
+      <Filter>Contents_Refactored\UnitController\EnemyController\HolderController</Filter>
+    </ClInclude>
+    <ClInclude Include="RangedApproachingController.h">
+      <Filter>Contents_Refactored\UnitController\EnemyController\RangedApproachingController</Filter>
+    </ClInclude>
+    <ClInclude Include="RangedKitingController.h">
+      <Filter>Contents_Refactored\UnitController\EnemyController\RangedKitingController</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -3300,6 +3318,15 @@
     </ClCompile>
     <ClCompile Include="Action_Particle.cpp">
       <Filter>Editor\ScriptSystem\2_Action\List</Filter>
+    </ClCompile>
+    <ClCompile Include="HolderController.cpp">
+      <Filter>Contents_Refactored\UnitController\EnemyController\HolderController</Filter>
+    </ClCompile>
+    <ClCompile Include="RangedApproachingController.cpp">
+      <Filter>Contents_Refactored\UnitController\EnemyController\RangedApproachingController</Filter>
+    </ClCompile>
+    <ClCompile Include="RangedKitingController.cpp">
+      <Filter>Contents_Refactored\UnitController\EnemyController\RangedKitingController</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

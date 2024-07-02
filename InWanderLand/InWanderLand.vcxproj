@@ -1071,6 +1071,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="HanselChargeSkill.h" />
     <ClInclude Include="HanselProjectileSkill.h" />
     <ClInclude Include="FBXPool.h" />
+    <ClInclude Include="HolderController.h" />
     <ClInclude Include="Interactable_BarricadeBox.h" />
     <ClInclude Include="Interactable_BarricadeSphere.h" />
     <ClInclude Include="ITacticObject.h" />
@@ -1090,7 +1091,9 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="ProjectilePool.h" />
     <ClInclude Include="ProjectileSelector.h" />
     <ClInclude Include="ProjectileType.h" />
+    <ClInclude Include="RangedApproachingController.h" />
     <ClInclude Include="RangedEliteController.h" />
+    <ClInclude Include="RangedKitingController.h" />
     <ClInclude Include="Reference.h" />
     <ClInclude Include="RightFrame.h" />
     <ClInclude Include="RobinTauntSkill.h" />
@@ -2335,6 +2338,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugEditorExe|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="FloatFollower.cpp" />
+    <ClCompile Include="HolderController.cpp" />
     <ClCompile Include="InitialLoadingScreen.cpp" />
     <ClCompile Include="InteractableBrush.cpp" />
     <ClCompile Include="InteractableData.cpp" />
@@ -2421,7 +2425,9 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="ProjectilePool.cpp" />
     <ClCompile Include="ProjectileSelector.cpp" />
     <ClCompile Include="PulsingUI.cpp" />
+    <ClCompile Include="RangedApproachingController.cpp" />
     <ClCompile Include="RangedEliteController.cpp" />
+    <ClCompile Include="RangedKitingController.cpp" />
     <ClCompile Include="ResurrectionSystem.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugGraphicsExe|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugUnitTests|x64'">true</ExcludedFromBuild>

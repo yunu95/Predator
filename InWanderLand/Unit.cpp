@@ -56,6 +56,12 @@ std::weak_ptr<Unit> Unit::GetClosestEnemyWithinAttackRange()
             return (GetTransform()->GetWorldPosition() - a->GetTransform()->GetWorldPosition()).MagnitudeSqr() <
                 (GetTransform()->GetWorldPosition() - b->GetTransform()->GetWorldPosition()).MagnitudeSqr();
         });
+
+    if (minIt != attackRange.lock()->GetEnemies().end())
+    {
+        auto tempPrimitivePtr = *minIt;
+        int a = 3;
+    }
     if (minIt != attackRange.lock()->GetEnemies().end())
         return (*minIt)->GetWeakPtr<Unit>();
     return std::weak_ptr<Unit>();
@@ -67,6 +73,12 @@ std::weak_ptr<Unit> Unit::GetClosestEnemyWithinAcquisitionRange()
             return (GetTransform()->GetWorldPosition() - a->GetTransform()->GetWorldPosition()).MagnitudeSqr() <
                 (GetTransform()->GetWorldPosition() - b->GetTransform()->GetWorldPosition()).MagnitudeSqr();
         });
+
+    if (minIt != acquisitionRange.lock()->GetEnemies().end())
+    {
+        auto tempPrimitivePtr = *minIt;
+        int a = 3;
+    }
     if (minIt != acquisitionRange.lock()->GetEnemies().end())
         return (*minIt)->GetWeakPtr<Unit>();
 
@@ -154,25 +166,29 @@ template<>
 void Unit::OnStateEngage<UnitBehaviourTree::Paralysis>()
 {
     onStateEngage[UnitBehaviourTree::Paralysis]();
-    PlayAnimation(UnitAnimType::Paralysis, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
 }
 template<>
 void Unit::OnStateExit<UnitBehaviourTree::Paralysis>()
 {
     onStateExit[UnitBehaviourTree::Paralysis]();
-    PlayAnimation(UnitAnimType::Paralysis, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
 }
 template<>
 void Unit::OnStateEngage<UnitBehaviourTree::Knockback>()
 {
     onStateEngage[UnitBehaviourTree::Knockback]();
     blockFollowingNavAgentByState = referenceBlockFollowingNavAgent.Acquire();
+    PlayAnimation(UnitAnimType::Airborne, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
+}
+template<>
+void Unit::OnStateEngage<UnitBehaviourTree::Stun>()
+{
+    onStateEngage[UnitBehaviourTree::Knockback]();
+    blockFollowingNavAgentByState = referenceBlockFollowingNavAgent.Acquire();
+    PlayAnimation(UnitAnimType::Paralysis, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
 }
 template<>
 void Unit::OnStateUpdate<UnitBehaviourTree::Knockback>()
 {
-    //navAgentComponent.lock()->MoveTo(GetTransform()->GetWorldPosition());
-    //blockFollowingNavAgentByState = referenceBlockFollowingNavAgent.Acquire();
 }
 template<>
 void Unit::OnStateExit<UnitBehaviourTree::Knockback>()
@@ -217,6 +233,10 @@ void Unit::OnStateUpdate<UnitBehaviourTree::Chasing>()
     if (!referenceBlockPendingOrder.BeingReferenced() && !pendingTargetUnit.expired())
     {
         currentTargetUnit = pendingTargetUnit;
+        if (currentTargetUnit.lock().get() == this)
+        {
+            int a = 1;
+        }
         pendingTargetUnit.reset();
     }
 }
@@ -278,14 +298,24 @@ void Unit::OnStateEngage<UnitBehaviourTree::Move>()
     jamCount = 0;
 }
 template<>
+void Unit::OnStateExit<UnitBehaviourTree::Move>()
+{
+    onStateExit[UnitBehaviourTree::Move]();
+    if (currentOrderType == UnitOrderType::Move)
+    {
+        OrderHold();
+        unitBehaviourTree.reAssessFlag = true;
+    }
+}
+template<>
 void Unit::OnStateUpdate<UnitBehaviourTree::Move>()
 {
     static constexpr float epsilon = 0.1f;
     auto currentPosition = GetTransform()->GetWorldPosition();
-    if ((moveDestination - currentPosition).MagnitudeSqr() < epsilon)
+    /*if ((moveDestination - currentPosition).MagnitudeSqr() < epsilon)
     {
         OrderAttackMove(moveDestination);
-    }
+    }*/
     static constexpr float jamFactor = 0.1f;
     float idealDeltaPosition = unitTemplateData->pod.m_unitSpeed * Time::GetDeltaTime();
     if ((lastPosition - currentPosition).MagnitudeSqr() < idealDeltaPosition * idealDeltaPosition * jamFactor)
@@ -574,6 +604,10 @@ void Unit::SetCurrentHp(float p_newHp)
     }
     if (!unitStatusUI.expired())
     {
+        if (isAlive && !unitStatusUI.lock()->GetUIEnabled() && currentHitPoint != unitTemplateData->pod.max_Health)
+        {
+            unitStatusUI.lock()->EnableElement();
+        }
         unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::StatusBar_HP_Fill)->adjuster->SetTargetFloat(1 - currentHitPoint / unitTemplateData->pod.max_Health);
         if (unitStatusUI.lock()->GetLocalUIsByEnumID().contains(UIEnumID::StatusBar_HP_Number_Current))
         {
@@ -857,6 +891,10 @@ void Unit::OrderAttack(std::weak_ptr<Unit> opponent)
 {
     pendingOrderType = UnitOrderType::AttackUnit;
     pendingTargetUnit = opponent;
+    if (pendingTargetUnit.lock().get() == this)
+    {
+        int a = 1;
+    }
 }
 void Unit::OrderHold()
 {
@@ -1227,9 +1265,14 @@ void Unit::Summon(application::editor::Unit_TemplateData* templateData)
         break;
     case UnitStatusBarType::ENEMY:
         unitStatusUI = UIManager::Instance().DuplicateUIElement(UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_MeleeEnemy));
+        unitStatusUI.lock()->DisableElement();
         break;
     case UnitStatusBarType::ELITE:
         unitStatusUI = UIManager::Instance().DuplicateUIElement(UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_Elite));
+        unitStatusUI.lock()->DisableElement();
+        break;
+    case UnitStatusBarType::BOSS:
+        /// 현재 Boss 관련 UI 가 없음
         break;
     }
 

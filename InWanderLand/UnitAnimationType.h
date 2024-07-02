@@ -23,6 +23,7 @@ enum class UnitAnimType
     BattleStart,  // 전투 시작
     BattleEnd,   // 전투 끝
     Damaged,
+    Airborne, // 공중에 떠있는 동작
     End
 };
 

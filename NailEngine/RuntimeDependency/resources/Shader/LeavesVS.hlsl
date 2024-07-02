@@ -22,6 +22,7 @@ struct VertexOut
     float4 color : COLOR;
     float2 uv : TEXCOORD0;
     float3 normalV : NORMAL;
+    float3 normalW : NORMAL1;
     float3 tangentV : TANGENT;
     float3 biNormalV : BINORMAL;
     float2 lightUV : TEXCOORD1;
@@ -31,8 +32,6 @@ struct VertexOut
 VertexOut main(VertexIn input)
 {
     VertexOut output = (VertexOut) 0;
-    
- 
     
     float2 lightuv = input.lightUV;
     lightuv.x *= lightMapUV[input.instanceID].scaling.x;
@@ -70,7 +69,8 @@ VertexOut main(VertexIn input)
     float4 tempVec = float4(tempUV, 0, 0);
     tempVec = mul(tempVec, VTMInv);
     tempVec = normalize(tempVec);
-    tempVec *= (scale.y);
+    float tempScale = max(scale.x, max(scale.y, scale.z));
+    tempVec *= (tempScale);
     float3 tempPos = (tempVec.xyz) * 1.1f;
     output.posH.xyz += tempPos;
     
@@ -79,6 +79,7 @@ VertexOut main(VertexIn input)
     output.posV = mul(float4(input.pos, 1.f), WV);
     output.color = input.color;
     output.uv = input.uv;
+    output.normalW = normalize(mul(float4(input.normal, 0.f), input.world));
     output.normalV = normalize(mul(float4(input.normal, 0.f), WV));
     output.tangentV = normalize(mul(float4(input.tangent, 0.f), WV));
     output.biNormalV = normalize(cross(output.tangentV, output.normalV));

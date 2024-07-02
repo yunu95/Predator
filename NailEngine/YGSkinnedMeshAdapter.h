@@ -99,12 +99,16 @@ namespace yunuGIAdapter
 				{
 					if (this->materialVec.back()->IsOrigin())
 					{
+						renderable->SetMaterial(index, material);
 						this->materialVec.back()->original = reinterpret_cast<Material*>(material);
 					}
 					else
 					{
+						renderable->SetMaterial(index, material);
 						this->materialVec.back()->variation = reinterpret_cast<Material*>(material);
 					}
+
+					
 				}
 			}
 			else
@@ -118,13 +122,17 @@ namespace yunuGIAdapter
 				{
 					if (this->materialVec[index]->IsOrigin())
 					{
+						renderable->SetMaterial(index, material);
 						this->materialVec[index]->original = reinterpret_cast<Material*>(material);
 					}
 					else
 					{
+						renderable->SetMaterial(index, material);
 						this->materialVec[index]->variation = reinterpret_cast<Material*>(material);
 					}
 				}
+
+				
 			}
 
 			renderable->SetMaterial(index, material);

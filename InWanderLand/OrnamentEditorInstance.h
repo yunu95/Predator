@@ -42,6 +42,7 @@ namespace application
                 virtual void OnHoverLeft() { PaletteInstance::OnHoverLeft(); }
 
             private:
+                bool actionActiveFlag = true;
                 bool isGuide = false;
                 std::string currentFBX = "";
                 const application::editor::OrnamentData* ornamentData{};

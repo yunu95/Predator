@@ -565,7 +565,7 @@
                         "emissionMap": "",
                         "heightMap": "",
                         "materialName": "M_Frame_001",
-                        "normalMap": "",
+                        "normalMap": "FBX/SM_Frame_001/SM_Frame_001.fbm/T_Frame_001_Normal.dds",
                         "opacityMap": "",
                         "ps": "DefaultPS.cso",
                         "temp0Map": "",
@@ -1316,7 +1316,7 @@
                         "emissionMap": "",
                         "heightMap": "",
                         "materialName": "M_Frame_002",
-                        "normalMap": "",
+                        "normalMap": "FBX/SM_Frame_002/SM_Frame_002.fbm/T_Frame_002_Normal.dds",
                         "opacityMap": "",
                         "ps": "DefaultPS.cso",
                         "temp0Map": "",
@@ -1524,7 +1524,7 @@
                         "emissionMap": "",
                         "heightMap": "",
                         "materialName": "M_Chess_Bishop",
-                        "normalMap": "",
+                        "normalMap": "FBX/SM_Chess_Bishop/SM_Chess_Bishop.fbm/T_Chess_Bishop_Normal.dds",
                         "opacityMap": "",
                         "ps": "DefaultPS.cso",
                         "temp0Map": "",
@@ -3314,7 +3314,7 @@
                         "emissionMap": "",
                         "heightMap": "",
                         "materialName": "M_2Stage_Pillar",
-                        "normalMap": "",
+                        "normalMap": "FBX/SM_2Stage_Pillar/SM_2Stage_Pillar.fbm/T_2Stage_Pillar_Normal.dds",
                         "opacityMap": "",
                         "ps": "DefaultPS.cso",
                         "temp0Map": "",
@@ -3695,7 +3695,7 @@
                         "emissionMap": "",
                         "heightMap": "",
                         "materialName": "M_Banner",
-                        "normalMap": "",
+                        "normalMap": "FBX/SM_Banner/SM_Banner.fbm/T_Banner_Normal.dds",
                         "opacityMap": "",
                         "ps": "DefaultPS.cso",
                         "temp0Map": "",
@@ -4896,7 +4896,7 @@
                         "emissionMap": "",
                         "heightMap": "",
                         "materialName": "M_Chess_Pawn",
-                        "normalMap": "",
+                        "normalMap": "FBX/SM_Chess_Pawn/SM_Chess_Pawn.fbm/T_Chess_Pawn_Normal.dds",
                         "opacityMap": "",
                         "ps": "DefaultPS.cso",
                         "temp0Map": "",
@@ -5000,7 +5000,7 @@
                         "emissionMap": "",
                         "heightMap": "",
                         "materialName": "M_Candle",
-                        "normalMap": "",
+                        "normalMap": "FBX/SM_Candle/SM_Candle.fbm/T_Candle_Normal.dds",
                         "opacityMap": "",
                         "ps": "DefaultPS.cso",
                         "temp0Map": "",
@@ -6340,7 +6340,7 @@
                         "emissionMap": "",
                         "heightMap": "",
                         "materialName": "M_Chess_Rook",
-                        "normalMap": "",
+                        "normalMap": "FBX/SM_Chess_Rook/SM_Chess_Rook.fbm/T_Chess_Rook_Normal.dds",
                         "opacityMap": "",
                         "ps": "DefaultPS.cso",
                         "temp0Map": "",
@@ -7114,7 +7114,7 @@
                         "emissionMap": "FBX/SM_FlyingCandle/SM_FlyingCandle.fbm/T_FlyingCandle_Emissive.dds",
                         "heightMap": "",
                         "materialName": "M_FlyingCandle",
-                        "normalMap": "",
+                        "normalMap": "FBX/SM_FlyingCandle/SM_FlyingCandle.fbm/T_FlyingCandle_Normal.dds",
                         "opacityMap": "",
                         "ps": "DefaultPS.cso",
                         "temp0Map": "",
@@ -9682,12 +9682,12 @@
                     "maxPoint": {
                         "x": 1.0892060995101929,
                         "y": 0.2747817635536194,
-                        "z": 4.0375213623046875
+                        "z": 3.9270224571228027
                     },
                     "minPoint": {
                         "x": -1.0892056226730347,
                         "y": -0.4957800507545471,
-                        "z": 0.11049896478652954
+                        "z": -1.3952193178567995e-08
                     }
                 },
                 "boneInfo": {
@@ -9701,7 +9701,7 @@
                         "emissionMap": "",
                         "heightMap": "",
                         "materialName": "M_HeartKey",
-                        "normalMap": "",
+                        "normalMap": "FBX/SM_HeartKey/SM_HeartKey.fbm/T_HeartKey_Normal.dds",
                         "opacityMap": "",
                         "ps": "DefaultPS.cso",
                         "temp0Map": "",
@@ -11160,6 +11160,110 @@
     {
         "AmbientExposure": 1.0,
         "DiffuseExposure": 1.0,
+        "FBXName : ": "SM_MiniCarpet",
+        "aabb": {
+            "maxPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            },
+            "minPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            }
+        },
+        "boneInfo": {
+            "index": -1
+        },
+        "child": [
+            {
+                "AmbientExposure": 1.0,
+                "DiffuseExposure": 1.0,
+                "aabb": {
+                    "maxPoint": {
+                        "x": 20.86353874206543,
+                        "y": 12.634757041931152,
+                        "z": 0.2386067807674408
+                    },
+                    "minPoint": {
+                        "x": -20.86353874206543,
+                        "y": -12.634757041931152,
+                        "z": -0.05977129936218262
+                    }
+                },
+                "boneInfo": {
+                    "index": -1
+                },
+                "hasAnimation": false,
+                "materialVec": [
+                    {
+                        "albedoMap": "FBX/SM_MiniCarpet/SM_MiniCarpet.fbm/T_MiniCarpet_BaseColor.dds",
+                        "armMap": "FBX/SM_MiniCarpet/SM_MiniCarpet.fbm/T_MiniCarpet_ARM.dds",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "M_MiniCarpet",
+                        "normalMap": "FBX/SM_MiniCarpet/SM_MiniCarpet.fbm/T_MiniCarpet_Normal.dds",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    }
+                ],
+                "meshName": "SM_MiniCarpet",
+                "nodeName": "SM_MiniCarpet",
+                "pos": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": -0.0
+                },
+                "quat": {
+                    "w": -0.7071068286895752,
+                    "x": 0.7071068286895752,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        ],
+        "hasAnimation": false,
+        "meshName": "",
+        "nodeName": "RootNode",
+        "pos": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        },
+        "quat": {
+            "w": -0.5,
+            "x": -0.5,
+            "y": -0.5,
+            "z": -0.5
+        },
+        "scale": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        }
+    },
+    {
+        "AmbientExposure": 1.0,
+        "DiffuseExposure": 1.0,
         "FBXName : ": "SM_MiniStair",
         "aabb": {
             "maxPoint": {
@@ -12427,7 +12531,7 @@
                         "emissionMap": "",
                         "heightMap": "",
                         "materialName": "M_RedCarpet",
-                        "normalMap": "",
+                        "normalMap": "FBX/SM_RedCarpet/SM_RedCarpet.fbm/T_RedCarpet_Normal.dds",
                         "opacityMap": "",
                         "ps": "DefaultPS.cso",
                         "temp0Map": "",
