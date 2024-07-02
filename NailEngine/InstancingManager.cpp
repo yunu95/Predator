@@ -256,7 +256,6 @@ void InstancingManager::RenderStaticDeferred()
 	for (auto& each : queryVec)
 	{
 		each->isInArea = true;
-
 		auto aabb = each->mesh->GetBoundingBox(each->wtm, each->materialIndex);
 
 		if (frustum.Contains(aabb) == DirectX::ContainmentType::DISJOINT)
@@ -318,6 +317,7 @@ void InstancingManager::RenderStaticDeferred()
 		}
 	}
 
+
 	{
 		for (auto& pair : this->staticMeshDeferredRenderVec)
 		{
@@ -330,6 +330,7 @@ void InstancingManager::RenderStaticDeferred()
 				for (auto& i : renderInfoVec)
 				{
 					if (i == nullptr) continue;
+					
 
 					if (i.get() == nullptr)
 					{
@@ -342,6 +343,7 @@ void InstancingManager::RenderStaticDeferred()
 					}
 
 					if (i->mesh == nullptr) continue;
+
 
 					if (i->isInArea == false)
 					{
@@ -391,19 +393,19 @@ void InstancingManager::RenderStaticDeferred()
 
 						if (renderInfo == nullptr)
 						{
-							return;
+							continue;
 						}
 
 						ExposureBuffer exposurrBuffer;
-						exposurrBuffer.diffuseExposure = renderInfo->mesh->GetDiffuseExposure();
-						exposurrBuffer.ambientExposure = renderInfo->mesh->GetAmbientExposure();
+						exposurrBuffer.diffuseExposure = (*renderInfoVec.begin())->mesh->GetDiffuseExposure();
+						exposurrBuffer.ambientExposure = (*renderInfoVec.begin())->mesh->GetAmbientExposure();
 						NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::EXPOSURE))->PushGraphicsData(&exposurrBuffer,
 							sizeof(ExposureBuffer),
 							static_cast<int>(CB_TYPE::EXPOSURE), false);
 
-						renderInfo->material->PushGraphicsData();
+						(*renderInfoVec.begin())->material->PushGraphicsData();
 						buffer->PushData();
-						renderInfo->mesh->Render(renderInfo->materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, true, buffer->GetCount(), buffer);
+						(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, true, buffer->GetCount(), buffer);
 					}
 				}
 			}
@@ -618,12 +620,24 @@ void InstancingManager::RenderStaticShadow()
 
 			if (renderInfoVec.size() != 0)
 			{
-				if (renderInfoVec[0] == nullptr) continue;
+				std::shared_ptr<RenderInfo> renderInfo = nullptr;
+				for (auto& each : renderInfoVec)
+				{
+					if (each.get())
+					{
+						renderInfo = each;
+					}
+				}
+
+				if (renderInfo == nullptr)
+				{
+					continue;
+				}
 
 				auto& buffer = _buffers[instanceID];
 				if (buffer->GetCount() > 0)
 				{
-					auto opacityMap = (*renderInfoVec.begin())->material->GetTexture(yunuGI::Texture_Type::OPACITY);
+					auto opacityMap = renderInfo->material->GetTexture(yunuGI::Texture_Type::OPACITY);
 					if (opacityMap)
 					{
 						static_cast<Texture*>(opacityMap)->Bind(static_cast<unsigned int>(yunuGI::Texture_Type::OPACITY));
@@ -639,7 +653,7 @@ void InstancingManager::RenderStaticShadow()
 					}
 
 					buffer->PushData();
-					(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, true, buffer->GetCount(), buffer);
+					renderInfo->mesh->Render(renderInfo->materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, true, buffer->GetCount(), buffer);
 				}
 			}
 		}
@@ -861,6 +875,7 @@ void InstancingManager::RegisterStaticDeferredData(std::shared_ptr<RenderInfo>& 
 	//InstanceID instanceID = std::make_pair((unsigned __int64)renderInfo->mesh, (unsigned __int64)renderInfo->material);
 	InstanceID instanceID = std::make_pair(renderInfo->mesh, renderInfo->material);
 
+
 	auto renderInfoIter = this->staticMeshRenderInfoIndexMap.find(renderInfo);
 	if (renderInfoIter != this->staticMeshRenderInfoIndexMap.end())
 	{
@@ -961,7 +976,7 @@ void InstancingManager::PopStaticDeferredData(std::shared_ptr<RenderInfo>& rende
 {
 	//InstanceID instanceID = std::make_pair((unsigned __int64)renderInfo->mesh, (unsigned __int64)renderInfo->material);
 	InstanceID instanceID = std::make_pair(renderInfo->mesh, renderInfo->material);
-
+	
 	// 인스턴스 인덱스 맵에 있는지 검사
 	auto instanceIter = this->staticMeshInstanceIDIndexMap.find(instanceID);
 	if (instanceIter != this->staticMeshInstanceIDIndexMap.end())
@@ -995,6 +1010,24 @@ void InstancingManager::PopStaticDeferredData(std::shared_ptr<RenderInfo>& rende
 		if (this->staticMeshDeferredMap[instanceID].empty())
 		{
 			this->staticMeshDeferredMap.erase(instanceID);
+		}
+	}
+
+	for (auto& each : staticMeshDeferredRenderVec)
+	{
+		auto& vec = each.second;
+		for (auto& each2 : vec)
+		{
+			if (each2 != nullptr)
+			{
+				if (each2->mesh != nullptr)
+				{
+					if (each2->mesh->GetName() == L"SM_Temple_Floor")
+					{
+						int a = 1;
+					}
+				}
+			}
 		}
 	}
 }

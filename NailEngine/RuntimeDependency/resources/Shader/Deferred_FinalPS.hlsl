@@ -51,7 +51,7 @@ float4 main(PixelIn input) : SV_Target
 
         output = temp + emissive;
     }
-    
+    output.w = 1.f;
     
     //output = Temp0Map.Sample(sam, input.uv);
     

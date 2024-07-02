@@ -36,8 +36,14 @@ PS_OUT main(PixelIn input)
     
     color = AlbedoMap.Sample(sam, input.uv);
     float dotValue = dot(input.normalW, float3(0, 1, 0));
-    //color = lerp(color, (0.15, 0.26, 0.06), dot(input.normalW, (0, 1, 0)) * 0.8);
-    color = lerp(color, (1, 0, 0), 1);
+    //color.x = lerp(color.x, (0.15), dotValue * 0.8);
+    //color.y = lerp(color.y, (0.26), dotValue * 0.8);
+    //color.z = lerp(color.z, (0.06), dotValue * 0.8);
+    color.x = lerp(color.x, (0.8), dotValue * 0.3);
+    color.y = lerp(color.y, (0.8), dotValue * 0.3);
+    color.z = lerp(color.z, (0), dotValue * 0.3);
+    
+
     //color = lerp(color, (1, 0, 0), dot(input.normalW, (0, 1, 0)) * 1);
     color = pow(color, 2.2f);
     

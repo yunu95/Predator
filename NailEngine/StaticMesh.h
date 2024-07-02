@@ -45,25 +45,12 @@ public:
 		{
 			i->wtm.Decompose(scale, quat, pos);
 
-			//auto mutex = FrustumCullingManager::Instance.Get().GetRenderInfoMutex(i);
-			//if (mutex)
-			//{
-			//	//std::scoped_lock<std::mutex> lock(*mutex.get());
-			//	i->wtm = wtm;
-			//	//mutex->unlock();
-			//}
-			//else
-			//{
-			//	i->wtm = wtm;
-			//}
-
 			i->wtm = wtm;
 
-			if ((i->mesh));
+			if ((i->mesh))
 			{
 				if ((quadTree.GetDataSize() > 0))
 				{
-
 					if ((InstancingManager::Instance.Get().IsInTree(i)))
 					{
 						auto radius = i->mesh->GetBoundingRadius();
@@ -83,13 +70,6 @@ public:
 
 		for (auto& i : renderInfoVec)
 		{
-			
-			//if (this->materialVec.size() == 0)
-			//{
-			//	InstancingManager::Instance.Get().RegisterStaticDeferredData(i);
-			//}
-			//else
-			//{
 			for (auto& each : this->materialVec)
 			{
 				// 메쉬를 갱신하기 전에 이전 메쉬에 대한 정보를 뺀다.
