@@ -787,9 +787,6 @@
     <Filter Include="Contents_Refactored\UnitController\EnemyController\EnemyAggroController">
       <UniqueIdentifier>{04e79efc-5c10-46da-9c0c-07cfad73a2eb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Contents_Refactored\UnitController\EnemyController\RangedEliteController">
-      <UniqueIdentifier>{2559020f-20b5-4a3a-bed0-6b2c31bee46b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Contents_Refactored\Unit\UnitBuff\UnitBuffType">
       <UniqueIdentifier>{d9edcc6f-5959-4393-b429-659e8ebccaf5}</UniqueIdentifier>
     </Filter>
@@ -906,6 +903,9 @@
     </Filter>
     <Filter Include="Contents_Refactored\UnitController\EnemyController\HolderController">
       <UniqueIdentifier>{f4e41c96-8336-43ce-bb06-2a3e060296d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents_Refactored\UnitController\EnemyController\RangedEliteController">
+      <UniqueIdentifier>{2559020f-20b5-4a3a-bed0-6b2c31bee46b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

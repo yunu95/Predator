@@ -74,6 +74,9 @@ namespace application
             std::string projectile_staticFBXName;
             // 발사체가 생성되는 위치
             POD_Vector3<float> projectileOffset;
+            // noise가 클수록 착탄지점이 불규칙해진다.
+            // 최종적으로 적용되는 착탄지점 노이즈는 공격 대상으로부터의 거리의 제곱에 비례한다.
+            float projectileTargetNoise{ 0 };
             float projectileSpeed{ 5 };
             float projectile_scale{ 1.0f };
             float m_attackPreDelay = 0.5f;

@@ -11,6 +11,10 @@ namespace yunutyEngine
             unscaledRadius = radius;
             ApplyScale(GetTransform()->GetWorldScale());
         }
+        float SphereCollider::GetRadius()
+        {
+            return unscaledRadius;
+        }
         void SphereCollider::ApplyScale(const Vector3d& scale)
         {
             impl->radius = unscaledRadius * static_cast<float>(scale.x);

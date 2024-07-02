@@ -38,6 +38,7 @@ class UnitPool;
 class PlayerController;
 class UnitController;
 class BossController;
+class RangedApproachingController;
 class UnitCapsuleCollider;
 
 namespace wanderUtils
@@ -126,6 +127,7 @@ public:
     factor::Adder<float> adderAttackSpeed;
     factor::Multiplier<float> multiplierAttackSpeed;
     factor::Adder<float> adderCritChance;
+    factor::Multiplier<float> multiplierProjectileSpeed;
     virtual void OnContentsPlay() override { }
     virtual void OnContentsStop() override;
     virtual Component* GetComponent() override { return this; }
@@ -152,11 +154,15 @@ public:
     float GetCritMultiplier();
     /// Decreasing Damage Elements
     int GetArmor();
+    float GetProjectileSpeed();
     float GetEvasionChance();				// 회피율
     float GetCritResistance();				// 피격시 치명타 피해 감소율
     std::string GetFBXName() const;
     // 콜라이더 캡슐 내부의 무작위 위치를 반환합니다.
     Vector3d GetRandomPositionInsideCapsuleCollider();
+    std::weak_ptr<Unit> GetClosestEnemy();
+    std::weak_ptr<Unit> GetClosestEnemyWithinAttackRange();
+    std::weak_ptr<Unit> GetClosestEnemyWithinAcquisitionRange();
     // 유닛의 행동 트리 상태가 전환될 때
     std::array<DelegateCallback<void>, UnitBehaviourTree::Keywords::KeywordNum>& OnStateEngageCallback() { return onStateEngage; };
     std::array<DelegateCallback<void>, UnitBehaviourTree::Keywords::KeywordNum>& OnStateExitCallback() { return onStateExit; };
@@ -220,9 +226,6 @@ private:
     {
         onStateExit[state]();
     };
-    std::weak_ptr<Unit> GetClosestEnemy();
-    std::weak_ptr<Unit> GetClosestEnemyWithinAttackRange();
-    std::weak_ptr<Unit> GetClosestEnemyWithinAcquisitionRange();
     template<UnitOrderType orderType>
     bool CanProcessOrder();
     // 상대 유닛에 대해 다가가서 때리기 좋은 위치를 반환합니다.
@@ -319,6 +322,8 @@ private:
     friend UnitPool;
     friend PlayerController;
     friend BossController;
+    friend RangedApproachingController;
+    friend PlayerController;
     friend UnitBuffTaunted;
     friend wanderUtils::UnitCoroutine::ForSecondsFromUnit;
 };

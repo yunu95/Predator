@@ -25,6 +25,7 @@ namespace yunutyEngine
             Impl* impl;
             SphereCollider();
             void SetRadius(float radius);
+            float GetRadius();
             virtual void ApplyScale(const Vector3d& scale) override;
         private:
             float unscaledRadius;

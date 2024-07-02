@@ -276,7 +276,7 @@ void Unit::OnStateUpdate<UnitBehaviourTree::Attack>()
         }
     }
     SetDesiredRotation(currentTargetUnit.lock()->GetTransform()->GetWorldPosition() - GetTransform()->GetWorldPosition());
-    if (!referenceBlockAttack.BeingReferenced())
+    if (!referenceBlockAttack.BeingReferenced() && coroutineAttack.expired())
     {
         coroutineAttack = StartCoroutine(AttackCoroutine(currentTargetUnit));
     }
@@ -480,6 +480,11 @@ float Unit::GetCritMultiplier()
 int Unit::GetArmor()
 {
     return unitTemplateData->pod.m_armor;
+}
+
+float Unit::GetProjectileSpeed()
+{
+    return unitTemplateData->pod.projectileSpeed * multiplierProjectileSpeed;
 }
 
 float Unit::GetEvasionChance()
@@ -1290,6 +1295,12 @@ void Unit::Summon(application::editor::Unit_TemplateData* templateData)
         controllers.push_back(&EnemyAggroController::Instance());
         break;
     }
+    case UnitControllerType::HOLDER:
+    {
+        HolderController::Instance().RegisterUnit(GetWeakPtr<Unit>());
+        controllers.push_back(&HolderController::Instance());
+        break;
+    }
     case UnitControllerType::MELEE_ELITE:
     {
         EnemyAggroController::Instance().RegisterUnit(GetWeakPtr<Unit>());
@@ -1303,7 +1314,23 @@ void Unit::Summon(application::editor::Unit_TemplateData* templateData)
         EnemyAggroController::Instance().RegisterUnit(GetWeakPtr<Unit>());
         controllers.push_back(&EnemyAggroController::Instance());
         RangedEliteController::Instance().RegisterUnit(GetWeakPtr<Unit>());
+        controllers.push_back(&RangedEliteController::Instance());
+        break;
+    }
+    case UnitControllerType::RANGED_KITING:
+    {
+        EnemyAggroController::Instance().RegisterUnit(GetWeakPtr<Unit>());
         controllers.push_back(&EnemyAggroController::Instance());
+        RangedKitingController::Instance().RegisterUnit(GetWeakPtr<Unit>());
+        controllers.push_back(&RangedKitingController::Instance());
+        break;
+    }
+    case UnitControllerType::RANGED_APPROACHING:
+    {
+        EnemyAggroController::Instance().RegisterUnit(GetWeakPtr<Unit>());
+        controllers.push_back(&EnemyAggroController::Instance());
+        RangedApproachingController::Instance().RegisterUnit(GetWeakPtr<Unit>());
+        controllers.push_back(&RangedApproachingController::Instance());
         break;
     }
     case UnitControllerType::HEART_QUEEN:
@@ -1771,7 +1798,7 @@ yunutyEngine::coroutine::Coroutine Unit::DeathCoroutine()
 
 yunutyEngine::coroutine::Coroutine Unit::AttackCoroutine(std::weak_ptr<Unit> opponent)
 {
-    auto blockAttack = referenceBlockAttack.Acquire();
+    //auto blockAttack = referenceBlockAttack.Acquire();
     defaultAnimationType = UnitAnimType::Idle;
     // 공격 애니메이션이 자연스럽게 맞물리기까지 필요한 최소시간
     float animMinimumTime = unitTemplateData->pod.m_attackPreDelay + unitTemplateData->pod.m_attackPostDelay;

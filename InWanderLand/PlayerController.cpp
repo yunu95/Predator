@@ -760,7 +760,7 @@ void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
     {
     case SkillType::ROBIN_Q:
     case SkillType::HANSEL_Q:
-        static constexpr float epsilon = 5.01f;
+        static constexpr float epsilon = 16.01f;
         Vector3d deltaDistance = (pos - SingleNavigationField::Instance().GetClosestPointOnField(pos));
         deltaDistance.y = 0;
         if (deltaDistance.MagnitudeSqr() > epsilon)
