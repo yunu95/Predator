@@ -141,7 +141,7 @@ void GraphicsTest()
 
 	for (auto& i : animationList)
 	{
-		if (i->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Skill1-2")
+		if (i->GetName() == L"Rig_Robin|Ani_Hansel_Airborne")
 		{
 			animation = i;
 		}
@@ -157,7 +157,10 @@ void GraphicsTest()
 		}
 	}
 	{
-		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Bush_001");
+		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Hansel");
+		auto anim = obj->GetComponent<yunutyEngine::graphics::Animator>();
+		anim->PushAnimation(animation);
+		anim->Play(animation);
 	}
 	{
 		//auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
