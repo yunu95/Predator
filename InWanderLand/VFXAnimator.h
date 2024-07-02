@@ -20,6 +20,9 @@ public:
 	void Play();
 	void Pause();
 	void Resume();
+	void SetSpeed(float speed) { this->speed = speed; }
+	float GetSpeed() { return this->speed;}
+	float GetDuration();
 private:
 	
 	void Reset();
@@ -41,7 +44,7 @@ private:
 	yunuGI::IMeshRenderer* renderer;
 	float frameRate;
 	bool isPlayDone = false;
-
+	float speed = 1.f;
 	// 키프레임의 UV좌표 값
 	std::vector<std::vector<yunuGI::VFXInfo>> frameInfoVec;
 

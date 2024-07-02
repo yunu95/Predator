@@ -16,15 +16,25 @@ coroutine::Coroutine UrsulaBlindSkill::operator()()
     auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
     auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
     auto enableNavObstacle = owner.lock()->referenceEnableNavObstacle.Acquire();
+    animator = owner.lock()->GetAnimator();
+    skill1Anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill1);
+
+    if (pod.skillDuration > 0)
+    {
+        skillSpeed = skill1Anim->GetDuration() / pod.skillDuration;
+    }
+
+    owner.lock()->SetDefaultAnimation(UnitAnimType::None);
+    animator.lock()->GetGI().SetPlaySpeed(skillSpeed);
     owner.lock()->PlayAnimation(UnitAnimType::Skill1);
-    auto animator = owner.lock()->GetAnimator();
-    auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill1);
 
     UpdatePosition(owner.lock()->GetGameObject()->GetTransform()->GetWorldPosition(), targetPos);
 
     effectColliderCoroutine = owner.lock()->StartCoroutine(SpawningFieldEffect(dynamic_pointer_cast<UrsulaBlindSkill>(selfWeakPtr.lock())));
     effectColliderCoroutine.lock()->PushDestroyCallBack([this]()
         {
+            animator.lock()->GetGI().SetPlaySpeed(1);
+
             circle_Top.lock()->SetRadius(0.5);
             circle_Left.lock()->SetRadius(0.5);
             circle_Right.lock()->SetRadius(0.5);
@@ -37,11 +47,25 @@ coroutine::Coroutine UrsulaBlindSkill::operator()()
             FBXPool::Instance().Return(onTargetPosEffect3);
         });
 
-    co_yield coroutine::WaitForSeconds(anim->GetDuration());
+    float localSkillDuration = 0;
+
+    if (pod.skillDuration > 0)
+    {
+        localSkillDuration = pod.skillDuration;
+    }
+    else
+    {
+        localSkillDuration = skill1Anim->GetDuration();
+    }
+
+    co_yield coroutine::WaitForSeconds(localSkillDuration);
 
     disableNavAgent.reset();
     blockFollowingNavigation.reset();
     owner.lock()->Relocate(owner.lock()->GetTransform()->GetWorldPosition());
+    if (owner.lock()->GetPendingOrderType() == UnitOrderType::None)
+        owner.lock()->OrderAttackMove();
+
     co_return;
 }
 
@@ -51,6 +75,7 @@ void UrsulaBlindSkill::OnInterruption()
     {
         owner.lock()->DeleteCoroutine(effectColliderCoroutine);
     }
+    animator.lock()->GetGI().SetPlaySpeed(1);
 }
 
 coroutine::Coroutine UrsulaBlindSkill::SpawningFieldEffect(std::weak_ptr<UrsulaBlindSkill> skill)
@@ -90,24 +115,26 @@ coroutine::Coroutine UrsulaBlindSkill::SpawningFieldEffect(std::weak_ptr<UrsulaB
     auto onUrsulaPosAnimator = onUrsulaPosEffect.lock()->AcquireVFXAnimator();
     onUrsulaPosAnimator.lock()->SetAutoActiveFalse();
     onUrsulaPosAnimator.lock()->Init();
+    onUrsulaPosAnimator.lock()->SetSpeed(skillSpeed);
     onUrsulaPosAnimator.lock()->Play();
 
     auto onTargetPosAnimator1 = onTargetPosEffect1.lock()->AcquireVFXAnimator();
     onTargetPosAnimator1.lock()->SetAutoActiveFalse();
     onTargetPosAnimator1.lock()->Init();
+    onTargetPosAnimator1.lock()->SetSpeed(skillSpeed);
     onTargetPosAnimator1.lock()->Play();
 
     auto onTargetPosAnimator2 = onTargetPosEffect2.lock()->AcquireVFXAnimator();
     onTargetPosAnimator2.lock()->SetAutoActiveFalse();
     onTargetPosAnimator2.lock()->Init();
+    onTargetPosAnimator2.lock()->SetSpeed(skillSpeed);
     onTargetPosAnimator2.lock()->Play();
 
     auto onTargetPosAnimator3 = onTargetPosEffect3.lock()->AcquireVFXAnimator();
     onTargetPosAnimator3.lock()->SetAutoActiveFalse();
     onTargetPosAnimator3.lock()->Init();
+    onTargetPosAnimator3.lock()->SetSpeed(skillSpeed);
     onTargetPosAnimator3.lock()->Play();
-
-    auto animator = owner.lock()->GetAnimator();
 
     circle_Top = UnitAcquisitionSphereColliderPool::Instance().Borrow(owner.lock());
     circle_Left = UnitAcquisitionSphereColliderPool::Instance().Borrow(owner.lock());

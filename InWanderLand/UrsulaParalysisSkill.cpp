@@ -5,6 +5,7 @@
 
 #include <math.h>
 
+const float paralysisForeswingTime = 1.0f;
 
 POD_UrsulaParalysisSkill UrsulaParalysisSkill::pod = POD_UrsulaParalysisSkill();
 
@@ -15,9 +16,18 @@ coroutine::Coroutine UrsulaParalysisSkill::operator()()
     auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
     auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
     auto animator = owner.lock()->GetAnimator();
-    auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill2);
+    paralysisAnim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill2);
 
+    //if (pod.foreswingDuration > 0)
+    //{
+    //    foreswingSpeed = paralysisForeswingTime / pod.foreswingDuration;
+    //}
+
+    owner.lock()->SetDefaultAnimation(UnitAnimType::None);
+    animator.lock()->GetGI().SetPlaySpeed(skillSpeed);
     owner.lock()->PlayAnimation(UnitAnimType::Skill2);
+
+    //coroutine::ForSeconds foreforSeconds{ tauntForeswingTime / foreswingSpeed };
 
     effectColliderCoroutine = owner.lock()->StartCoroutine(SpawningFieldEffect(dynamic_pointer_cast<UrsulaParalysisSkill>(selfWeakPtr.lock())));
     effectColliderCoroutine.lock()->PushDestroyCallBack([this]()
@@ -27,7 +37,18 @@ coroutine::Coroutine UrsulaParalysisSkill::operator()()
             UnitAcquisitionSphereColliderPool::Instance().Return(damageCollider);
             UnitAcquisitionSphereColliderPool::Instance().Return(knockBackCollider);
         });
-    coroutine::ForSeconds forSeconds{ anim->GetDuration() };
+
+    float localSkillDuration;
+    if (pod.skillDuration > 0)
+    {
+        localSkillDuration = pod.skillDuration;
+    }
+    else
+    {
+        localSkillDuration = paralysisAnim->GetDuration();
+    }
+
+    coroutine::ForSeconds forSeconds{ localSkillDuration };
 
     while (forSeconds.Tick())
     {
@@ -37,6 +58,8 @@ coroutine::Coroutine UrsulaParalysisSkill::operator()()
     disableNavAgent.reset();
     blockFollowingNavigation.reset();
     owner.lock()->Relocate(owner.lock()->GetTransform()->GetWorldPosition());
+    if (owner.lock()->GetPendingOrderType() == UnitOrderType::None)
+        owner.lock()->OrderAttackMove();
     co_return;
 }
 
@@ -67,7 +90,7 @@ coroutine::Coroutine UrsulaParalysisSkill::SpawningFieldEffect(std::weak_ptr<Urs
 
     auto tentacleAnimator = tentacleObject.lock()->GetGameObject()->GetChildren()[0]->GetComponent<yunutyEngine::graphics::Animator>();
     auto waveAnimator = waveObject.lock()->GetGameObject()->GetChildren()[0]->GetComponent<yunutyEngine::graphics::Animator>();
-
+    
     auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
     auto& animList = rsrcManager->GetAnimationList();
 
@@ -91,7 +114,6 @@ coroutine::Coroutine UrsulaParalysisSkill::SpawningFieldEffect(std::weak_ptr<Urs
     auto waveVFXAnimator = waveObject.lock()->AcquireVFXAnimator();
     waveVFXAnimator.lock()->SetAutoActiveFalse();
     waveVFXAnimator.lock()->Init();
-
     tentacleObject.lock()->GetGameObject()->GetTransform()->SetWorldPosition(targetPos);
     waveObject.lock()->GetGameObject()->GetTransform()->SetWorldPosition(targetPos);
     tentacleObject.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));

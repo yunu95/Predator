@@ -259,6 +259,13 @@ void Unit::OnStateUpdate<UnitBehaviourTree::Attack>()
     if (!referenceBlockAttack.BeingReferenced())
     {
         coroutineAttack = StartCoroutine(AttackCoroutine(currentTargetUnit));
+        coroutineAttack.lock()->PushDestroyCallBack([this]()
+            {
+                if (!animatorComponent.expired())
+                {
+                    animatorComponent.lock()->GetGI().SetPlaySpeed(1);
+                }
+            });
     }
 }
 template<>
@@ -313,8 +320,8 @@ void Unit::OnStateExit<UnitBehaviourTree::SkillOnGoing>()
         DeleteCoroutine(coroutineSkill);
     }
     onGoingSkill.reset();
-    if (pendingOrderType == UnitOrderType::None)
-        OrderAttackMove();
+    //if (pendingOrderType == UnitOrderType::None)
+    //    OrderAttackMove();
 }
 template<>
 void Unit::OnStateEngage<UnitBehaviourTree::SkillCasting>()
@@ -595,6 +602,11 @@ void Unit::SetCurrentHp(float p_newHp)
     {
         PlayerPortraitUIs::SetPortraitIdle((PlayerCharacterType::Enum)unitTemplateData->pod.playerUnitType.enumValue);
     }
+}
+
+UnitOrderType Unit::GetPendingOrderType() const
+{
+    return pendingOrderType;
 }
 
 float Unit::GetUnitCurrentHp() const
@@ -1445,7 +1457,7 @@ void Unit::InitBehaviorTree()
     unitBehaviourTree[UnitBehaviourTree::Skill][UnitBehaviourTree::Move].onEnter = [this]()
         {
             moveDestination = pendingSkill.get()->targetPos;
-            attackMoveDestination = moveDestination;
+            //attackMoveDestination = moveDestination;
             OnStateEngage<UnitBehaviourTree::Move>();
         };
     unitBehaviourTree[UnitBehaviourTree::Skill][UnitBehaviourTree::Move].onUpdate = [this]()
@@ -1619,6 +1631,10 @@ void Unit::InitBehaviorTree()
         {
             constexpr float epsilon = 0.1f;
             auto distance = (attackMoveDestination - GetTransform()->GetWorldPosition()).MagnitudeSqr();
+            if (!acquisitionRange.lock()->GetEnemies().empty() || distance > epsilon)
+            {
+                int a = 3;
+            }
             return !acquisitionRange.lock()->GetEnemies().empty() || distance > epsilon;
         };
     unitBehaviourTree[UnitBehaviourTree::AttackMove][UnitBehaviourTree::Move].onEnter = [this]()
@@ -1800,7 +1816,6 @@ yunutyEngine::coroutine::Coroutine Unit::AttackCoroutine(std::weak_ptr<Unit> opp
     co_yield coroutine::WaitForSeconds(unitTemplateData->pod.m_attackPostDelay * attackDelayMultiplier);
     playSpeed = animatorComponent.lock()->GetGI().GetPlaySpeed();
     blockCommand.reset();
-    animatorComponent.lock()->GetGI().SetPlaySpeed(1);
     co_return;
 }
 yunutyEngine::coroutine::Coroutine Unit::MeleeAttackEffectCoroutine(std::weak_ptr<Unit> opponent)

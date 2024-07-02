@@ -3,6 +3,9 @@
 
 struct POD_UrsulaParalysisSkill
 {
+    float foreswingDuration = -1.0f;
+    float skillDuration = -1.0f;
+
     float skillCoolTime = 2.0f;
     float skillCost = 10.0f;
     float skillRange = 6.f;
@@ -30,8 +33,6 @@ public:
     static POD_UrsulaParalysisSkill pod;
 
 private:
-    float colliderEffectRatio;
-
     coroutine::Coroutine SpawningFieldEffect(std::weak_ptr<UrsulaParalysisSkill> skill);
 
     std::weak_ptr<coroutine::Coroutine> effectColliderCoroutine;
@@ -39,6 +40,12 @@ private:
     std::weak_ptr<UnitAcquisitionSphereCollider> knockBackCollider;
     std::weak_ptr<ManagedFBX> tentacleObject;
     std::weak_ptr<ManagedFBX> waveObject;
+
+    yunuGI::IAnimation* paralysisAnim = nullptr;
+
+    float colliderEffectRatio;
+    float foreswingSpeed = 1.f;
+    float skillSpeed = 1.f;
 };
 
 
