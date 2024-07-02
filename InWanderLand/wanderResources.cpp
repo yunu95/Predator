@@ -18,6 +18,8 @@ void InitAnimMap()
     animMap["SKM_Robin"][UnitAnimType::Birth] = localAnimMap[L"Rig_Robin_arpbob|Ani_Robin_Live"];
     animMap["SKM_Robin"][UnitAnimType::BattleIdle] = localAnimMap[L"Rig_Robin_arpbob|Ani_Robin_BattleIdle"];
     animMap["SKM_Robin"][UnitAnimType::BattleMove] = localAnimMap[L"Rig_Robin_arpbob|Ani_Robin_BattleWalk"];
+    animMap["SKM_Robin"][UnitAnimType::Paralysis] = localAnimMap[L"Rig_Robin_arpbob|Ani_Robin_Idle"];
+    animMap["SKM_Robin"][UnitAnimType::Airborne] = localAnimMap[L"Rig_Robin_arpbob|Ani_Robin_Airborne"];
     animMap["SKM_Robin"][UnitAnimType::Death] = localAnimMap[L"Rig_Robin_arpbob|Ani_Robin_Death"];
     animMap["SKM_Robin"][UnitAnimType::BattleStart] = localAnimMap[L"Rig_Robin_arpbob|Ani_Robin_BattleStart"];
     animMap["SKM_Robin"][UnitAnimType::Rush] = localAnimMap[L"Rig_Robin_arpbob|Ani_Robin_Skill1"];
@@ -28,6 +30,8 @@ void InitAnimMap()
     animMap["SKM_Ursula"][UnitAnimType::Attack] = localAnimMap[L"Ani_Ursula_Attack"];
     animMap["SKM_Ursula"][UnitAnimType::Death] = localAnimMap[L"Ani_Ursula_Death"];
     animMap["SKM_Ursula"][UnitAnimType::Idle] = localAnimMap[L"Ani_Ursula_Idle"];
+    animMap["SKM_Ursula"][UnitAnimType::Paralysis] = localAnimMap[L"Ani_Ursula_Idle"];
+    animMap["SKM_Ursula"][UnitAnimType::Airborne] = localAnimMap[L"Ani_Ursula_Airborne"];
     animMap["SKM_Ursula"][UnitAnimType::BattleIdle] = localAnimMap[L"Ani_Ursula_Idle"];
     animMap["SKM_Ursula"][UnitAnimType::Birth] = localAnimMap[L"Ani_Ursula_Live"];
     animMap["SKM_Ursula"][UnitAnimType::Skill1] = localAnimMap[L"Ani_Ursula_Skill1"];
@@ -36,6 +40,8 @@ void InitAnimMap()
     animMap["SKM_Ursula"][UnitAnimType::BattleMove] = localAnimMap[L"Ani_Ursula_Walk"];
 
     animMap["SKM_Hansel"][UnitAnimType::Idle] = localAnimMap[L"Rig_Robin|Ani_Hansel_Idle"];
+    animMap["SKM_Hansel"][UnitAnimType::Paralysis] = localAnimMap[L"Rig_Robin|Ani_Hansel_Idle"];
+    animMap["SKM_Hansel"][UnitAnimType::Airborne] = localAnimMap[L"Rig_Robin|Ani_Hansel_Airborne"];
     animMap["SKM_Hansel"][UnitAnimType::Move] = localAnimMap[L"Rig_Robin|Ani_Hansel_Walk"];
     animMap["SKM_Hansel"][UnitAnimType::Birth] = localAnimMap[L"Rig_Robin|Ani_Hansel_Live"];
     animMap["SKM_Hansel"][UnitAnimType::BattleIdle] = localAnimMap[L"Rig_Robin|Ani_Hansel_Idle"];
@@ -55,6 +61,7 @@ void InitAnimMap()
     animMap["SKM_Monster1"][UnitAnimType::Skill2] = localAnimMap[L"Ani_Monster1_Skill"];
     animMap["SKM_Monster1"][UnitAnimType::Idle] = localAnimMap[L"Ani_Monster1_Idle"];
     animMap["SKM_Monster1"][UnitAnimType::BattleIdle] = localAnimMap[L"Ani_Monster1_Idle"];
+    animMap["SKM_Monster1"][UnitAnimType::Airborne] = localAnimMap[L"Ani_Monster1_Stun"];
     animMap["SKM_Monster1"][UnitAnimType::Paralysis] = localAnimMap[L"Ani_Monster1_Stun"];
     animMap["SKM_Monster1"][UnitAnimType::Move] = localAnimMap[L"Ani_Monster1_Walk"];
     animMap["SKM_Monster1"][UnitAnimType::BattleMove] = localAnimMap[L"Ani_Monster1_Walk"];
@@ -63,6 +70,7 @@ void InitAnimMap()
 
     animMap["SKM_Monster2"][UnitAnimType::Attack] = localAnimMap[L"Ani_Monster2_Attack"];
     animMap["SKM_Monster2"][UnitAnimType::Paralysis] = localAnimMap[L"Ani_Monster2_HitCC"];
+    animMap["SKM_Monster2"][UnitAnimType::Airborne] = localAnimMap[L"Ani_Monster2_HitCC"];
     animMap["SKM_Monster2"][UnitAnimType::Idle] = localAnimMap[L"Ani_Monster2_Idle"];
     animMap["SKM_Monster2"][UnitAnimType::BattleIdle] = localAnimMap[L"Ani_Monster2_Idle"];
     animMap["SKM_Monster2"][UnitAnimType::Slam] = localAnimMap[L"Ani_Monster2_Skill"];
@@ -75,6 +83,8 @@ void InitAnimMap()
     animMap["SKM_HeartQueen"][UnitAnimType::Attack] = localAnimMap[L"Ani_HeartQueen_Attack"];
     animMap["SKM_HeartQueen"][UnitAnimType::Death] = localAnimMap[L"Ani_HeartQueen_Death"];
     animMap["SKM_HeartQueen"][UnitAnimType::Idle] = localAnimMap[L"Ani_HeartQueen_Idle"];
+    animMap["SKM_HeartQueen"][UnitAnimType::Airborne] = localAnimMap[L"Ani_HeartQueen_Idle"];
+    animMap["SKM_HeartQueen"][UnitAnimType::Paralysis] = localAnimMap[L"Ani_HeartQueen_Idle"];
     animMap["SKM_HeartQueen"][UnitAnimType::BattleIdle] = localAnimMap[L"Ani_HeartQueen_Idle"];
     animMap["SKM_HeartQueen"][UnitAnimType::Skill1] = localAnimMap[L"Ani_HeartQueen_Skill1"];
     animMap["SKM_HeartQueen"][UnitAnimType::Skill2] = localAnimMap[L"Ani_HeartQueen_Skill2"];
