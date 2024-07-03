@@ -1,5 +1,7 @@
 #include "VFXAnimator.h"
 
+#include <algorithm>
+
 void VFXAnimator::Start()
 {
 	if (isInit == false)
@@ -18,7 +20,7 @@ void VFXAnimator::Update()
 			float duration = totalframe / this->frameRate;
 			__int32 ratio = static_cast<__int32>(totalframe / duration);
 
-			this->curFrameVec[i].sumTime += Time::GetDeltaTime();
+			this->curFrameVec[i].sumTime += Time::GetDeltaTime() * this->speed;
 
 			for (int j = 0; j < this->frameInfoVec[i].size(); ++j)
 			{
@@ -162,6 +164,21 @@ void VFXAnimator::Pause()
 void VFXAnimator::Resume()
 {
 	this->isPlay = true;
+}
+
+float VFXAnimator::GetDuration()
+{
+	float duration = 0.f;
+	for (int i = 0; i < this->frameInfoVec.size(); ++i)
+	{
+		int totalframe = this->frameInfoVec[i].size();
+
+		float durationgh = totalframe / this->frameRate;
+
+		duration = std::max(duration, durationgh);
+	}
+
+	return duration;
 }
 
 void VFXAnimator::Reset()

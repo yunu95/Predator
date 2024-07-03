@@ -3,6 +3,7 @@
 
 struct POD_UrsulaBlindSkill
 {
+    float skillDuration = -1.0f;
     float skillCoolTime = 2.0f;
     float skillCost = 10.0f;
     float skillRange = 6.f;
@@ -46,9 +47,11 @@ private:
     coroutine::Coroutine SpawningFieldEffect(std::weak_ptr<UrsulaBlindSkill> skill);
 
     std::weak_ptr<coroutine::Coroutine> effectColliderCoroutine;
+    yunuGI::IAnimation* skill1Anim = nullptr;
 
     static Vector3d skillStart;
     static Vector3d skillDestination;
+    std::weak_ptr<yunutyEngine::graphics::Animator> animator;
     std::weak_ptr<UnitAcquisitionSphereCollider> circle_Top;
     std::weak_ptr<UnitAcquisitionSphereCollider> circle_Left;
     std::weak_ptr<UnitAcquisitionSphereCollider> circle_Right;
@@ -57,6 +60,8 @@ private:
     std::weak_ptr<ManagedFBX> onTargetPosEffect1;
     std::weak_ptr<ManagedFBX> onTargetPosEffect2;
     std::weak_ptr<ManagedFBX> onTargetPosEffect3;
+
+    float skillSpeed = 1.f;
 };
 
 
