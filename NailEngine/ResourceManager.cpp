@@ -890,6 +890,7 @@ void ResourceManager::SaveFBXChildData(const yunuGI::FBXData* data, nlohmann::js
 
     jsonData["DiffuseExposure"] = data->diffuseExposure;
     jsonData["AmbientExposure"] = data->ambientExposure;
+    jsonData["CastDecal"] = data->castDecal;
 
     for (const auto& child : data->child)
     {
@@ -1034,6 +1035,7 @@ void ResourceManager::LoadFBXData(const nlohmann::json& jsonData, yunuGI::FBXDat
 
     data->diffuseExposure = jsonData["DiffuseExposure"];
     data->ambientExposure = jsonData["AmbientExposure"];
+    data->castDecal = jsonData["CastDecal"];
 
     if (jsonData.contains("child"))
     {
@@ -1096,6 +1098,7 @@ void ResourceManager::CreateDefaultShader()
     CreateShader(L"ParticleVS.cso");
     CreateShader(L"TextureAnimVS.cso");
     CreateShader(L"SkinnedVFX_VS.cso");
+    CreateShader(L"TestDecalVS.cso");
 #pragma endregion
 
 #pragma region PS

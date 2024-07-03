@@ -268,7 +268,6 @@ void PixelShader::CreateDepthStencilState(const std::string& fileContent)
 			else if (shaderType == "NoDepthTestNoWrite")
 			{
 				depthStencilDesc.DepthEnable = false;
-				//depthStencilDesc.DepthFunc = D3D11_COMPARISON_ALWAYS;
 				depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
 			}
 			else if (shaderType == "LessNoWrite")

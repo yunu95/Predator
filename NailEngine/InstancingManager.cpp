@@ -490,42 +490,33 @@ void InstancingManager::RenderDecal()
 				if (i->isActive == false) continue;
 
 				const std::shared_ptr<RenderInfo>& renderInfo = i;
-				InstancingData data;
-				data.wtm = renderInfo->wtm;
-				AddData(instanceID, data);
-			}
 
-			if (renderInfoVec.size() != 0)
-			{
-				if ((*renderInfoVec.begin())->mesh == nullptr) continue;
+				MatrixBuffer matrixBuffer;
+				// 큐브의 WTM
+				matrixBuffer.WTM = i->wtm;
+				// 메인 카메라의 VTM
+				matrixBuffer.VTM = CameraManager::Instance.Get().GetMainCamera()->GetVTM();
+				// 메인 카메라의 PTM
+				matrixBuffer.PTM = CameraManager::Instance.Get().GetMainCamera()->GetPTM();
+				matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
+				matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
+				matrixBuffer.VTMInv = matrixBuffer.VTM.Invert();
+				DirectX::SimpleMath::Vector4 tempProj{1,1,1,1};
+				tempProj = DirectX::SimpleMath::Vector4::Transform(tempProj, matrixBuffer.PTM.Invert());
+				tempProj.y = -tempProj.y;
+				matrixBuffer.projInvVec = tempProj;
+				NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX));
 
-				auto& buffer = _buffers[instanceID];
-				if (buffer->GetCount() > 0)
-				{
-					// 임시 매트릭스
-					Matrix WTM = Matrix::Identity;
+				// 아래를 통해 머터리얼 정보를 바인딩한다.
+				i->material->PushGraphicsData();
+				// 버텍스 쉐이더만 예외적으로 따로 바인딩한다.
+				static_cast<VertexShader*>(ResourceManager::Instance.Get().GetShader(L"TestDecalVS.cso").get())->Bind();
 
-					//// Y축으로 10만큼의 변위
-					//Matrix translationMatrix = Matrix::CreateTranslation(0.0f, 10.0f, 0.0f);
+				// Temp1Map에 ViewSpace상에서의 포지션값을 넘긴다.
+				ResourceManager::Instance.Get().GetTexture(L"PositionTarget")->Bind(7);
 
-					//// X축 기준으로 90도 회전 (라디안 단위로 변환)
-					//float angleInRadians = DirectX::XMConvertToRadians(90.0f);
-					////Matrix rotationMatrix = Matrix::CreateRotationX(angleInRadians);
-
-					//// 변위 행렬과 회전 행렬을 결합하여 최종 변환 행렬을 생성
-					//WTM = translationMatrix;
-
-					MatrixBuffer matrixBuffer;
-					matrixBuffer.VTM = WTM.Invert();
-					matrixBuffer.PTM = DirectX::XMMatrixOrthographicLH(200, 200, 0.1, 200);
-					NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX), true);
-
-
-					(*renderInfoVec.begin())->material->PushGraphicsData();
-					auto test = (*renderInfoVec.begin())->mesh->GetMaterialCount();
-					buffer->PushData();
-					(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, true, buffer->GetCount(), buffer);
-				}
+				// 메쉬는 Cube로 통일한다.
+				ResourceManager::Instance.Get().GetMesh(L"Cube")->Render(0, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 			}
 		}
 	}
@@ -1010,24 +1001,6 @@ void InstancingManager::PopStaticDeferredData(std::shared_ptr<RenderInfo>& rende
 		if (this->staticMeshDeferredMap[instanceID].empty())
 		{
 			this->staticMeshDeferredMap.erase(instanceID);
-		}
-	}
-
-	for (auto& each : staticMeshDeferredRenderVec)
-	{
-		auto& vec = each.second;
-		for (auto& each2 : vec)
-		{
-			if (each2 != nullptr)
-			{
-				if (each2->mesh != nullptr)
-				{
-					if (each2->mesh->GetName() == L"SM_Temple_Floor")
-					{
-						int a = 1;
-					}
-				}
-			}
 		}
 	}
 }

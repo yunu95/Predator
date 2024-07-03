@@ -92,24 +92,39 @@ public:
 class TestComponent4 : public yunutyEngine::Component
 {
 public:
-	yunutyEngine::graphics::Animator* anim;
-	yunuGI::IAnimation* idle;
-	yunuGI::IAnimation* walk;
-	yunuGI::IAnimation* temp;
+	yunutyEngine::GameObject* obj;
 	virtual void Update() override
 	{
+		auto pos = obj->GetTransform()->GetLocalPosition();
+		auto euler = obj->GetTransform()->GetLocalRotation().Euler();
+
 		if (Input::isKeyDown(yunutyEngine::KeyCode::LeftArrow))
 		{
-			idle->SetPlaySpeed(2.f);
+			pos.x -= 0.01;
 		}
 		if (Input::isKeyDown(yunutyEngine::KeyCode::RightArrow))
 		{
-			idle->SetPlaySpeed(4.f);
+			pos.x += 0.01;
 		}
 		if (Input::isKeyDown(yunutyEngine::KeyCode::UpArrow))
 		{
-			idle->SetPlaySpeed(1.f);
+			pos.z += 0.01;
 		}
+		if (Input::isKeyDown(yunutyEngine::KeyCode::DownArrow))
+		{
+			pos.z -= 0.01;
+		}
+		if (Input::isKeyDown(yunutyEngine::KeyCode::O))
+		{
+			euler.y += 0.1;
+		}
+		if (Input::isKeyDown(yunutyEngine::KeyCode::P))
+		{
+			euler.y -= 0.1;
+		}
+
+		obj->GetTransform()->SetLocalPosition(pos);
+		obj->GetTransform()->SetLocalRotation(Quaternion{euler});
 	}
 };
 
@@ -152,33 +167,44 @@ void GraphicsTest()
 			animation3 = i;
 		}
 	}
+
 	{
-		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
-		auto anim = obj->GetComponent<yunutyEngine::graphics::Animator>();
-		anim->PushAnimation(animation2);
-		anim->Play(animation2);
+		auto obj = Scene::getCurrentScene()->AddGameObject();
+		obj->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{90,0,0} });
+		obj->GetTransform()->SetLocalScale(Vector3d{ 5,5,1 });
+		auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+		renderer->GetGI().SetMesh(_resourceManager->GetMesh(L"Rectangle"));
+	}
+
+	{
+		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Grass_001");
+	}
+	{
+		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Grass_002");
+		obj->GetTransform()->SetLocalPosition(Vector3d{ 1,0,0 });
+	}
+	{
+		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Flowers_001");
+		obj->GetTransform()->SetLocalPosition(Vector3d{ 2,0,0 });
+	}
+	{
+		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Flowers_002");
+		obj->GetTransform()->SetLocalPosition(Vector3d{ 3,0,0 });
+	}
+
+	{
+		auto obj = Scene::getCurrentScene()->AddGameObject();
+		obj->GetTransform()->SetLocalScale(Vector3d{ 2,2,2 });
+		obj->GetTransform()->SetLocalPosition(Vector3d{ 0.5,0,0 });
+		auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+		renderer->GetGI().SetMesh(_resourceManager->GetMesh(L"Cube"));
+		renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::Temp0, _resourceManager->GetTexture(L"Texture/T_VFX_SkillRange_Clock.dds"));
+		renderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1,0,0,1 });
+		renderer->GetGI().GetMaterial()->SetPixelShader(_resourceManager->GetShader(L"TestDecalPS.cso"));
 
 		auto obj2 = Scene::getCurrentScene()->AddGameObject();
-		auto test = obj2->AddComponent<TestComponent4>();
-		test->idle = animation2;
-	}
-	{
-		//auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
-		//auto anim = obj->GetComponent<yunutyEngine::graphics::Animator>();
-		//anim->PushAnimation(animation);
-		//anim->PushAnimation(animation2);
-		//anim->PushAnimation(animation3);
-		//anim->Play(animation2);
-
-		//auto obj2 = Scene::getCurrentScene()->AddGameObject();
-		//auto test = obj2->AddComponent<TestComponent4>();
-		//test->anim = anim;
-		//test->idle = animation;
-		//test->walk = animation2;
-		//test->temp = animation3;
-	}
-	{
-
+		auto tset = obj2->AddComponent<TestComponent4>();
+		tset->obj = obj;
 	}
 
 	yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();

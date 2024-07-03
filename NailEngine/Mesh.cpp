@@ -89,6 +89,11 @@ void Mesh::SetAmbientExposure(float exposure)
 	this->ambientExposure = exposure;
 }
 
+void Mesh::SetCastDecal(bool val)
+{
+	this->castDecal = val;
+}
+
 void Mesh::Render(unsigned int materialIndex, D3D_PRIMITIVE_TOPOLOGY topology, bool isInstancing, int instanceCount, std::shared_ptr<InstanceBuffer> buffer)
 {
 	if (buffer != nullptr && isInstancing)
@@ -228,6 +233,11 @@ float Mesh::GetDiffuseExposure()
 float Mesh::GetAmbientExposure()
 {
 	return this->ambientExposure;
+}
+
+bool Mesh::GetCastDecal()
+{
+	return this->castDecal;
 }
 
 float Mesh::GetBoundingRadius()

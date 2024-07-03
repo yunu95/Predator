@@ -35,7 +35,7 @@ PS_OUT main(PixelIn input)
     {
         float tempOpa = OpacityMap.Sample(sam, input.uv).w;
         if (tempOpa== 0.f)
-        {
+        { 
             clip(-1);
         }
     }

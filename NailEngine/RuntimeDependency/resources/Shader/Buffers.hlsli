@@ -16,6 +16,7 @@ cbuffer MatrixBuffer : register(b0)
     row_major matrix WorldInvTrans;
     row_major matrix VTMInv;
     row_major matrix lightVP;
+    float4 projInvVec;
 }
 
 cbuffer MaterialBuffer : register(b1)
