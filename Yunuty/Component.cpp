@@ -11,113 +11,113 @@ Component::AddComponentDesc Component::addComponentDesc =
 Component::AddComponentDesc
 {
 #if _DEBUG
-	.addAvailable = false,
+    .addAvailable = false,
 #endif
-	.gameObject = nullptr,
-	.guid = 0,
+    .gameObject = nullptr,
+    .guid = 0,
 };
 std::unordered_map<GUID, Component*, yutility::GenericHash<GUID>, yutility::GenericEqual<GUID>> Component::guidPtrMap;
 
 Component::Component()
 {
 #if _DEBUG
-	if (addComponentDesc.addAvailable != true)
-	{
-		_wassert(_CRT_WIDE("derived class of component class can only be created through the \"AddComponent\" function, which is the member function of gameobject class instance."), _CRT_WIDE(__FILE__), (unsigned)(__LINE__));
-	}
-	addComponentDesc.addAvailable = false;
+    if (addComponentDesc.addAvailable != true)
+    {
+        _wassert(_CRT_WIDE("derived class of component class can only be created through the \"AddComponent\" function, which is the member function of gameobject class instance."), _CRT_WIDE(__FILE__), (unsigned)(__LINE__));
+    }
+    addComponentDesc.addAvailable = false;
 #endif
-	gameObject = addComponentDesc.gameObject;
-	if (addComponentDesc.guid == GUID_NULL)
-		UuidCreate(&addComponentDesc.guid);
-	guid = addComponentDesc.guid;
-	guidPtrMap[guid] = this;
+    gameObject = addComponentDesc.gameObject;
+    if (addComponentDesc.guid == GUID_NULL)
+        UuidCreate(&addComponentDesc.guid);
+    guid = addComponentDesc.guid;
+    guidPtrMap[guid] = this;
 
 }
 std::weak_ptr<Component> yunutyEngine::Component::GetWeakPtrFromGameObject()const
 {
-	return gameObject->components.at(const_cast<yunutyEngine::Component*>(this));
+    return gameObject->components.at(const_cast<yunutyEngine::Component*>(this));
 }
 Component::~Component()
 {
-	guidPtrMap.erase(guid);
+    guidPtrMap.erase(guid);
 
-	gameObject->HandleComponentUpdateState(this);
+    gameObject->HandleComponentUpdateState(this);
 }
 yunutyEngine::GameObject* yunutyEngine::Component::GetGameObject()
 {
-	return gameObject;
+    return gameObject;
 }
 const yunutyEngine::GameObject* yunutyEngine::Component::GetGameObject()const
 {
-	return gameObject;
+    return gameObject;
 }
 Transform* yunutyEngine::Component::GetTransform()
 {
-	return gameObject->GetTransform();
+    return gameObject->GetTransform();
 }
 const Transform* yunutyEngine::Component::GetTransform()const
 {
-	return gameObject->GetTransform();
+    return gameObject->GetTransform();
 }
-bool yunutyEngine::Component::GetActive()
+bool yunutyEngine::Component::GetActive()const
 {
-	return isActive;
+    return isActive;
 }
 GUID yunutyEngine::Component::GetGUID()
 {
-	return guid;
+    return guid;
 }
 std::wstring yunutyEngine::Component::GetGUIDWStr()
 {
-	wchar_t guidStr[40];
-	StringFromGUID2(guid, guidStr, sizeof(guidStr) / sizeof(wchar_t));
-	return std::wstring(guidStr);
+    wchar_t guidStr[40];
+    StringFromGUID2(guid, guidStr, sizeof(guidStr) / sizeof(wchar_t));
+    return std::wstring(guidStr);
 }
 void yunutyEngine::Component::SetActive(bool active)
 {
-	if (isActive != active && GetGameObject()->GetActive())
-	{
-		isActive = active;
-		gameObject->HandleComponentUpdateState(this);
-		if (isActive)
-			OnEnable();
-		else
-			OnDisable();
-	}
-	else
-		isActive = active;
+    if (isActive != active && GetGameObject()->GetActive())
+    {
+        isActive = active;
+        gameObject->HandleComponentUpdateState(this);
+        if (isActive)
+            OnEnable();
+        else
+            OnDisable();
+    }
+    else
+        isActive = active;
 }
 void yunutyEngine::Component::SetIsUpdating(bool isUpdating)
 {
-	if ((this->isUpdating != isUpdating) && GetGameObject()->GetActive())
-	{
-		this->isUpdating = isUpdating;
-		gameObject->HandleComponentUpdateState(this);
-	}
+    if ((this->isUpdating != isUpdating) && GetGameObject()->GetActive())
+    {
+        this->isUpdating = isUpdating;
+        gameObject->HandleComponentUpdateState(this);
+    }
 };
 std::weak_ptr<yunutyEngine::coroutine::Coroutine> yunutyEngine::Component::StartCoroutine(coroutine::Coroutine&& coroutine)
 {
-	auto coroutinePtr = std::make_shared<coroutine::Coroutine>(std::move(coroutine));
-	coroutines.insert(coroutinePtr);
-	gameObject->HandleComponentUpdateState(this);
-	return coroutinePtr;
+    auto coroutinePtr = std::make_shared<coroutine::Coroutine>(std::move(coroutine));
+    coroutines.insert(coroutinePtr);
+    gameObject->HandleComponentUpdateState(this);
+    return coroutinePtr;
 }
 void yunutyEngine::Component::DeleteCoroutine(const std::weak_ptr<coroutine::Coroutine>& coroutine)
 {
-	if (auto shared = coroutine.lock(); coroutines.contains(shared))
-	{
-		shared->deathWish = true;
-		gameObject->HandleComponentUpdateState(this);
-		YunutyCycle::SingleInstance().deleteCoroutineTargets.insert(this);
-	}
+    if (auto shared = coroutine.lock(); coroutines.contains(shared))
+    {
+        shared->deathWish = true;
+        gameObject->HandleComponentUpdateState(this);
+        YunutyCycle::SingleInstance().deleteCoroutineTargets.insert(this);
+    }
 }
 void yunutyEngine::Component::ClearCoroutines()
 {
-	for (auto& each : coroutines)
-	{
-		each->deathWish = true;
-	}
-	YunutyCycle::SingleInstance().deleteCoroutineTargets.insert(this);
-	gameObject->HandleComponentUpdateState(this);
+    for (auto& each : coroutines)
+    {
+        each->deathWish = true;
+    }
+    YunutyCycle::SingleInstance().deleteCoroutineTargets.insert(this);
+    gameObject->HandleComponentUpdateState(this);
 }

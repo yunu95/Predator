@@ -167,6 +167,7 @@ public:
     // 유닛의 행동 트리 상태가 전환될 때
     std::array<DelegateCallback<void>, UnitBehaviourTree::Keywords::KeywordNum>& OnStateEngageCallback() { return onStateEngage; };
     std::array<DelegateCallback<void>, UnitBehaviourTree::Keywords::KeywordNum>& OnStateExitCallback() { return onStateExit; };
+    void Revive();
     string name;
     bool playingBattleAnim{ true };
     // 내가 공격할 때, 매개변수는 내가 공격하는 상대
@@ -232,7 +233,7 @@ private:
     // 상대 유닛에 대해 다가가서 때리기 좋은 위치를 반환합니다.
     Vector3d GetAttackPosition(std::weak_ptr<Unit> opponent);
     // 유닛 부활 코루틴
-    yunutyEngine::coroutine::Coroutine RevivalCoroutine();
+    yunutyEngine::coroutine::Coroutine RevivalCoroutine(float revivalDelay);
     // 유닛이 새로 생성될때 애니메이션, 번 이펙트와 함께 나오는 코루틴
     yunutyEngine::coroutine::Coroutine BirthCoroutine();
     // 유닛이 죽을 때 애니메이션, 번 이펙트와 함께 사라지고 유닛 풀에 반환되는 코루틴

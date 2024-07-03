@@ -1483,7 +1483,9 @@ namespace application
             auto selectedData = GetSelectedScript();
 
             int idx = 0;
-            for (auto each : ScriptSystem::Instance().GetScriptList())
+            std::vector<Script*> sortedScriptList{ ScriptSystem::Instance().GetScriptList().begin(), ScriptSystem::Instance().GetScriptList().end() };
+            std::sort(sortedScriptList.begin(), sortedScriptList.end(), [](Script* a, Script* b) { return a->name < b->name; });
+            for (auto each : sortedScriptList)
             {
                 ImGui::PushID(("Script_Name" + each->name).c_str() + idx);
 

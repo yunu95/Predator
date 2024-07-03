@@ -158,6 +158,8 @@ private:
     void OnPlayerUnitSkillExpiration(std::weak_ptr<Unit> unit, std::weak_ptr<Skill> skill);
     std::vector<Vector3d>& ModifyPathForAttack(std::vector<Vector3d>& path);
     std::vector<Vector3d>& ModifyPathForSkill(std::vector<Vector3d>& path, SkillType::Enum skillType);
+    int skillButtonIDHovering;
+    int parentEnumIDHovering;
     int currentCombo{ 0 };
     std::array<int, 3> comboObjective{ 10, 20, 30 };
     std::array<bool, 3> comboAchieved{ false };

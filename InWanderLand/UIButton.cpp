@@ -10,6 +10,11 @@ void UIButton::SetIdleImage(yunuGI::ITexture* p_IdleImage)
     //m_ImageComponent->GetGI().SetImage(m_IdleImage);
 }
 
+std::weak_ptr<UIElement> UIButton::GetUIElement()
+{
+    return uiElement;
+}
+
 void UIButton::SetClickedImage(yunuGI::ITexture* p_ClickedImage)
 {
     m_ClickedImage = p_ClickedImage;
