@@ -529,7 +529,7 @@ void PlayerController::SelectPlayerUnit(PlayerCharacterType::Enum charType)
     }
 
     selectedCharacterType = charType;
-    // 체력바의 선택 UI 활성화시키기
+    // 이전 유닛의 체력바 선택 UI 비활성화시키기
     if (auto previous = selectedCharacter.lock())
         previous->unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::StatusBar_SelectionName)->DisableElement();
     if (charType == PlayerCharacterType::None)
