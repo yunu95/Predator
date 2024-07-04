@@ -70,6 +70,7 @@ namespace application
         ParticleShow,
         ParticleHide,
         UnitPlayAnimation,
+        PullScriptTrigger,
     };
 
     struct IAction

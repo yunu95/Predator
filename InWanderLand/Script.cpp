@@ -28,16 +28,7 @@ namespace application
             each->Clear();
             each->AddFunction([=]()
                 {
-                    bool isConditionMet = true;
-                    for (auto& each : conditionList)
-                    {
-                        isConditionMet &= each->IsConditionMet();
-                    }
-
-                    if (isConditionMet)
-                    {
-                        PushCoroutine();
-                    }
+                    Script::PullScriptTrigger(); 
                 });
             each->LinkCallback();
         }
@@ -112,6 +103,20 @@ namespace application
         }
 
         return false;
+    }
+
+    void Script::PullScriptTrigger()
+    {
+        bool isConditionMet = true;
+        for (auto& each : conditionList)
+        {
+            isConditionMet &= each->IsConditionMet();
+        }
+
+        if (isConditionMet)
+        {
+            PushCoroutine();
+        }
     }
 
     bool Script::PreEncoding(json& data) const
@@ -637,6 +642,11 @@ namespace application
                     case application::ActionType::UnitPlayAnimation:
                     {
                         action = AddAction<Action_UnitPlayAnimation>();
+                        break;
+                    }
+                    case application::ActionType::PullScriptTrigger:
+                    {
+                        action = AddAction<Action_PullScriptTrigger>();
                         break;
                     }
                     default:
