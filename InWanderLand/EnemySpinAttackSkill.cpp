@@ -17,21 +17,53 @@ coroutine::Coroutine EnemySpinAttackSkill::operator()()
     auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
     auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
     auto rotRef = owner.lock()->referenceBlockRotation.Acquire();
-    auto animator = owner.lock()->GetAnimator();
+    animator = owner.lock()->GetAnimator();
 
+    owner.lock()->SetDefaultAnimation(UnitAnimType::None);
     owner.lock()->PlayAnimation(UnitAnimType::Spin, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
 
     effectColliderCoroutine = owner.lock()->StartCoroutine(SpawningSkillffect(dynamic_pointer_cast<EnemySpinAttackSkill>(selfWeakPtr.lock())));
     effectColliderCoroutine.lock()->PushDestroyCallBack([this]()
         {
+            animator.lock()->GetGI().SetPlaySpeed(1);
+            previewEffectAnimator.lock()->SetSpeed(1);
+            chargeEffectAnimator.lock()->SetSpeed(1);
             FBXPool::Instance().Return(chargeEffect);
             FBXPool::Instance().Return(previewEffect);
             UnitAcquisitionSphereColliderPool::Instance().Return(knockbackCollider);
         });
 
-    wanderUtils::UnitCoroutine::ForSecondsFromUnit waitSpinStart{ owner, eliteSpinStartTime };
 
-    while (waitSpinStart.Tick())
+    float localForeswingDuration;
+    if (pod.foreswingDuration > 0)
+    {
+        localForeswingDuration = pod.foreswingDuration;
+    }
+    else
+    {
+        localForeswingDuration = eliteSpinStartTime;
+    }
+    float localSkillDuration;
+    if (pod.skillDuration > 0)
+    {
+        localSkillDuration = pod.skillDuration;
+    }
+    else
+    {
+        localSkillDuration = eliteSpinAttackingTime;
+    }
+    float localBackswingDuration;
+    if (pod.backswingDuration > 0)
+    {
+        localBackswingDuration = pod.backswingDuration;
+    }
+    else
+    {
+        localBackswingDuration = wanderResources::GetAnimation(owner.lock()->GetUnitTemplateData().pod.skinnedFBXName, UnitAnimType::Spin)->GetDuration() - eliteSpinStartTime - eliteSpinAttackingTime;
+    }
+    wanderUtils::UnitCoroutine::ForSecondsFromUnit spinTimer{ owner, localForeswingDuration + localSkillDuration + localBackswingDuration };
+
+    while (spinTimer.Tick())
     {
         co_await std::suspend_always();
     }
@@ -39,21 +71,15 @@ coroutine::Coroutine EnemySpinAttackSkill::operator()()
     disableNavAgent.reset();
     blockFollowingNavigation.reset();
     owner.lock()->Relocate(owner.lock()->GetTransform()->GetWorldPosition());
-
-    wanderUtils::UnitCoroutine::ForSecondsFromUnit afterSpinDelayTimer{ owner, eliteAfterSpinDelay };
-
-    while (afterSpinDelayTimer.Tick())
-    {
-        co_await std::suspend_always();
-    }
-
-    owner.lock()->PlayAnimation(UnitAnimType::Idle, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
-    co_yield coroutine::WaitForSeconds(0.2);
+    if (owner.lock()->GetPendingOrderType() == UnitOrderType::None)
+        owner.lock()->OrderAttackMove();
+    animator.lock()->GetGI().SetPlaySpeed(1);
     co_return;
 }
 
 void EnemySpinAttackSkill::OnInterruption()
 {
+    animator.lock()->GetGI().SetPlaySpeed(1);
     if (!effectColliderCoroutine.expired())
     {
         owner.lock()->DeleteCoroutine(effectColliderCoroutine);
@@ -125,14 +151,41 @@ coroutine::Coroutine EnemySpinAttackSkill::SpawningSkillffect(std::weak_ptr<Enem
 
     std::unordered_set<Unit*> knockBackList;
 
-    wanderUtils::UnitCoroutine::ForSecondsFromUnit waitSpinStart{ skill.lock()->owner, eliteSpinStartTime };
+    float localForeswingDuration;
+    if (pod.foreswingDuration > 0)
+    {
+        foreswingSpeed = eliteSpinStartTime / pod.foreswingDuration;
+        localForeswingDuration = pod.foreswingDuration;
+    }
+    else
+    {
+        localForeswingDuration = eliteSpinStartTime;
+    }
+    animator.lock()->GetGI().SetPlaySpeed(foreswingSpeed);
+    previewEffectAnimator.lock()->SetSpeed(foreswingSpeed);
+    chargeEffectAnimator.lock()->SetSpeed(foreswingSpeed);
+
+    wanderUtils::UnitCoroutine::ForSecondsFromUnit waitSpinStart{ skill.lock()->owner, localForeswingDuration };
 
     while (waitSpinStart.Tick())
     {
         co_await std::suspend_always();
     }
 
-    wanderUtils::UnitCoroutine::ForSecondsFromUnit forSeconds{ skill.lock()->owner, eliteSpinAttackingTime };
+    float localSkillDuration;
+    if (pod.skillDuration > 0)
+    {
+        skillSpeed = eliteSpinAttackingTime / pod.skillDuration;
+        localSkillDuration = pod.skillDuration;
+    }
+    else
+    {
+        localSkillDuration = eliteSpinAttackingTime;
+    }
+    animator.lock()->GetGI().SetPlaySpeed(skillSpeed);
+    chargeEffectAnimator.lock()->SetSpeed(skillSpeed);
+
+    wanderUtils::UnitCoroutine::ForSecondsFromUnit forSeconds{ skill.lock()->owner, localForeswingDuration };
     while (forSeconds.Tick())
     {
         co_await std::suspend_always{};
@@ -151,7 +204,19 @@ coroutine::Coroutine EnemySpinAttackSkill::SpawningSkillffect(std::weak_ptr<Enem
 
     co_await std::suspend_always{};
 
-    wanderUtils::UnitCoroutine::ForSecondsFromUnit afterDamagedDelay{ skill.lock()->owner, pod.skillEndTimeAfterDamaged };
+    float localBackswingDuration;
+    if (pod.backswingDuration > 0)
+    {
+        backswingSpeed = (wanderResources::GetAnimation(owner.lock()->GetUnitTemplateData().pod.skinnedFBXName, UnitAnimType::Spin)->GetDuration() - eliteSpinStartTime - eliteSpinAttackingTime) / pod.backswingDuration;
+        localBackswingDuration = pod.backswingDuration;
+    }
+    else
+    {
+        localBackswingDuration = wanderResources::GetAnimation(owner.lock()->GetUnitTemplateData().pod.skinnedFBXName, UnitAnimType::Spin)->GetDuration() - localForeswingDuration - localSkillDuration;
+    }
+    animator.lock()->GetGI().SetPlaySpeed(backswingSpeed);
+
+    wanderUtils::UnitCoroutine::ForSecondsFromUnit afterDamagedDelay{ skill.lock()->owner, localBackswingDuration };
 
     while (afterDamagedDelay.Tick())
     {

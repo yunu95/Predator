@@ -7,7 +7,7 @@ POD_BossImpaleSkill BossImpaleSkill::pod = POD_BossImpaleSkill();
 std::queue<std::weak_ptr<UnitAcquisitionSphereCollider>> BossImpaleSkill::knockbackColliderQueue = std::queue<std::weak_ptr<UnitAcquisitionSphereCollider>>();
 std::queue<std::weak_ptr<ManagedFBX>> BossImpaleSkill::spearFbxQueue = std::queue<std::weak_ptr<ManagedFBX>>();
 
-const float impaleStartTime = 3.02f;
+const float impaleStartTime = 3.10f;
 
 struct BossSpear
 {
@@ -60,20 +60,35 @@ coroutine::Coroutine BossImpaleSkill::operator()()
 	auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
 	auto enableNavObstacle = owner.lock()->referenceEnableNavObstacle.Acquire();
 	auto rotRef = owner.lock()->referenceBlockRotation.Acquire();
-	auto animator = owner.lock()->GetAnimator();
+	animator = owner.lock()->GetAnimator();
 	auto impaleAnim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill2);
 
 	// 창이 생성되는 시간 오프셋은 유닛으로부터의 거리와 정비례한다.
+	owner.lock()->SetDefaultAnimation(UnitAnimType::None);
 	owner.lock()->PlayAnimation(UnitAnimType::Skill2);
 
 	effectCoroutine = owner.lock()->StartCoroutine(SpawningSkillffect(std::dynamic_pointer_cast<BossImpaleSkill>(selfWeakPtr.lock())));
 	effectCoroutine.lock()->PushDestroyCallBack([this]()
 		{
+			animator.lock()->GetGI().SetPlaySpeed(1);
+			previewEffectAnimator.lock()->SetSpeed(1);
+			impaleEffectAnimator.lock()->SetSpeed(1);
 			FBXPool::Instance().Return(impaleEffect);
 			FBXPool::Instance().Return(previewEffect);
 		});
 
-	wanderUtils::UnitCoroutine::ForSecondsFromUnit waitImpaleStart{ owner, pod.impaleStartDelay };
+	float localForeswingDuration;
+	if (pod.foreswingDuration > 0)
+	{
+		foreswingSpeed = impaleStartTime / pod.foreswingDuration;
+		localForeswingDuration = pod.foreswingDuration;
+	}
+	else
+	{
+		localForeswingDuration = impaleStartTime;
+	}
+
+	wanderUtils::UnitCoroutine::ForSecondsFromUnit waitImpaleStart{ owner, localForeswingDuration };
 
 	while (waitImpaleStart.Tick())
 	{
@@ -81,7 +96,6 @@ coroutine::Coroutine BossImpaleSkill::operator()()
 	}
 
 	wanderUtils::UnitCoroutine::ForSecondsFromUnit waitImpaleDuration{ owner, pod.impaleSkillDuration };
-
 	auto spearVec = BossSpearsInfo();
 
 	for (auto& each : spearVec)
@@ -115,14 +129,29 @@ coroutine::Coroutine BossImpaleSkill::operator()()
 			});
 	}
 
-	wanderUtils::UnitCoroutine::ForSecondsFromUnit waitImpaleAfter{ owner, 2.0f };
+	float localBackswingDuration;
+	if (pod.backswingDuration > 0)
+	{
+		backswingSpeed = (wanderResources::GetAnimation(owner.lock()->GetUnitTemplateData().pod.skinnedFBXName, UnitAnimType::Skill2)->GetDuration() - impaleStartTime) / pod.backswingDuration;
+		localBackswingDuration = pod.backswingDuration;
+	}
+	else
+	{
+		localBackswingDuration = wanderResources::GetAnimation(owner.lock()->GetUnitTemplateData().pod.skinnedFBXName, UnitAnimType::Skill2)->GetDuration() - localForeswingDuration;
+	}
+
+	wanderUtils::UnitCoroutine::ForSecondsFromUnit waitImpaleAfter{ owner, localBackswingDuration - waitImpaleDuration.Elapsed() };
 
 	while (waitImpaleAfter.Tick())
 	{
 		co_await std::suspend_always();
 	}
 
-	owner.lock()->PlayAnimation(UnitAnimType::Idle, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
+
+	if (owner.lock()->GetPendingOrderType() == UnitOrderType::None)
+		owner.lock()->OrderAttackMove();
+	animator.lock()->GetGI().SetPlaySpeed(1);
+
 	co_return;
 }
 
@@ -234,11 +263,45 @@ coroutine::Coroutine BossImpaleSkill::SpawningSkillffect(std::weak_ptr<BossImpal
 	impaleEffectAnimator.lock()->Init();
 	impaleEffectAnimator.lock()->Play();
 
-	co_await std::suspend_always{};
-
-	while (!impaleEffectAnimator.lock()->IsDone())
+	float localForeswingDuration;
+	if (pod.foreswingDuration > 0)
 	{
-		co_await std::suspend_always{};
+		foreswingSpeed = impaleStartTime / pod.foreswingDuration;
+		localForeswingDuration = pod.foreswingDuration;
+	}
+	else
+	{
+		localForeswingDuration = impaleStartTime;
+	}
+	animator.lock()->GetGI().SetPlaySpeed(foreswingSpeed);
+	previewEffectAnimator.lock()->SetSpeed(foreswingSpeed);
+	impaleEffectAnimator.lock()->SetSpeed(foreswingSpeed);
+
+	wanderUtils::UnitCoroutine::ForSecondsFromUnit waitImpaleStart{ owner, localForeswingDuration };
+
+	while (waitImpaleStart.Tick())
+	{
+		co_await std::suspend_always();
+	}
+
+	float localBackswingDuration;
+	if (pod.backswingDuration > 0)
+	{
+		backswingSpeed = (wanderResources::GetAnimation(owner.lock()->GetUnitTemplateData().pod.skinnedFBXName, UnitAnimType::Skill2)->GetDuration() - impaleStartTime) / pod.backswingDuration;
+		localBackswingDuration = pod.backswingDuration;
+	}
+	else
+	{
+		localBackswingDuration = wanderResources::GetAnimation(owner.lock()->GetUnitTemplateData().pod.skinnedFBXName, UnitAnimType::Skill2)->GetDuration() - localForeswingDuration;
+	}
+	animator.lock()->GetGI().SetPlaySpeed(backswingSpeed);
+	impaleEffectAnimator.lock()->SetSpeed(backswingSpeed);
+
+	wanderUtils::UnitCoroutine::ForSecondsFromUnit waitImpaleEnd{ owner, localBackswingDuration };
+
+	while (waitImpaleEnd.Tick())
+	{
+		co_await std::suspend_always();
 	}
 
 	co_return;

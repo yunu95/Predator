@@ -88,19 +88,26 @@ coroutine::Coroutine BossSummonMobSkill::operator()()
 	auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
 	auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
 	auto rotRef = owner.lock()->referenceBlockRotation.Acquire();
-	auto animator = owner.lock()->GetAnimator();
+	animator = owner.lock()->GetAnimator();
+	skillAnim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill3);
 
-	owner.lock()->PlayAnimation(UnitAnimType::Skill3, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
+	if (pod.skillDuration > 0)
+	{
+		skillSpeed = skillAnim->GetDuration() / pod.skillDuration;
+	}
+
+	owner.lock()->SetDefaultAnimation(UnitAnimType::None);
+	animator.lock()->GetGI().SetPlaySpeed(skillSpeed);
+	owner.lock()->PlayAnimation(UnitAnimType::Skill3);
 
 	effectCoroutine = owner.lock()->StartCoroutine(SpawningFieldEffect(std::dynamic_pointer_cast<BossSummonMobSkill>(selfWeakPtr.lock())));
 	effectCoroutine.lock()->PushDestroyCallBack([this]()
 		{
+			animator.lock()->GetGI().SetPlaySpeed(1);
+			stepEffectAnimator.lock()->SetSpeed(1);
 			FBXPool::Instance().Return(stepEffect);
 		});
-	auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill3);
-	
-	wanderUtils::UnitCoroutine::ForSecondsFromUnit forSeconds{ owner, anim->GetDuration() };
-	
+		
 	if (rightFrame->HasChangedUnit())
 	{
 		leftFrame->ChangeUnit();
@@ -120,6 +127,19 @@ coroutine::Coroutine BossSummonMobSkill::operator()()
 		summonCoroutine = owner.lock()->StartCoroutine(StartSummonTimer());
 	}
 
+	float localSkillDuration = 0;
+
+	if (pod.skillDuration > 0)
+	{
+		localSkillDuration = pod.skillDuration;
+	}
+	else
+	{
+		localSkillDuration = skillAnim->GetDuration();
+	}
+
+	wanderUtils::UnitCoroutine::ForSecondsFromUnit forSeconds{ owner, localSkillDuration };
+
 	while (forSeconds.Tick())
 	{
 		co_await std::suspend_always{};
@@ -128,6 +148,9 @@ coroutine::Coroutine BossSummonMobSkill::operator()()
 	disableNavAgent.reset();
 	blockFollowingNavigation.reset();
 	owner.lock()->Relocate(owner.lock()->GetTransform()->GetWorldPosition());
+	if (owner.lock()->GetPendingOrderType() == UnitOrderType::None)
+		owner.lock()->OrderAttackMove();
+	animator.lock()->GetGI().SetPlaySpeed(1);
 
 	co_return;
 }
@@ -208,11 +231,9 @@ coroutine::Coroutine BossSummonMobSkill::SpawningFieldEffect(std::weak_ptr<BossS
 	stepEffectAnimator.lock()->Init();
 	stepEffectAnimator.lock()->Play();
 
-	auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill3);
+	stepEffectAnimator.lock()->SetSpeed(skillSpeed);
 
-	wanderUtils::UnitCoroutine::ForSecondsFromUnit animSeconds{ skill.lock()->owner, anim->GetDuration() };
-
-	while (animSeconds.Tick())
+	while (!stepEffectAnimator.lock()->IsDone())
 	{
 		co_await std::suspend_always();
 	}
