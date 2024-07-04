@@ -39,3 +39,4 @@
 #include "Action_SetZoomFactor.h"
 #include "Action_SetCamBidirectionalPath.h"
 #include "Action_Particle.h"
+#include "Action_Script.h"

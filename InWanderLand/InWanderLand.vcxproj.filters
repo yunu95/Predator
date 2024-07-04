@@ -2218,6 +2218,9 @@
     <ClInclude Include="RangedKitingController.h">
       <Filter>Contents_Refactored\UnitController\EnemyController\RangedKitingController</Filter>
     </ClInclude>
+    <ClInclude Include="Action_Script.h">
+      <Filter>Editor\ScriptSystem\2_Action\List</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -3327,6 +3330,9 @@
     </ClCompile>
     <ClCompile Include="RangedKitingController.cpp">
       <Filter>Contents_Refactored\UnitController\EnemyController\RangedKitingController</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_Script.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -19,6 +19,7 @@ namespace application
 	class ObservationTarget
 	{
 	public:
+		virtual ~ObservationTarget();
 		bool RegisterObserver(IObserver* observer);
 		bool RemoveObserver(IObserver* observer);
 		void DispatchObervationEvent(ObservationEvent event);

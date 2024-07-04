@@ -4,6 +4,11 @@
 
 namespace application
 {
+	ObservationTarget::~ObservationTarget()
+	{
+		DispatchObervationEvent(ObservationEvent::Destroy);
+	}
+
 	bool ObservationTarget::RegisterObserver(IObserver* observer)
 	{
 		if (observer == nullptr)

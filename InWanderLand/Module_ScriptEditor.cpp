@@ -2146,6 +2146,11 @@ namespace application
                                 selectedScript->AddAction<Action_UnitPlayAnimation>();
                                 break;
                             }
+                            case application::ActionType::PullScriptTrigger:
+                            {
+                                selectedScript->AddAction<Action_PullScriptTrigger>();
+                                break;
+                            }
                             default:
                                 break;
                             }

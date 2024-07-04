@@ -9,6 +9,7 @@
 #include "TriggerList.h"
 #include "ConditionList.h"
 #include "ActionList.h"
+#include "ObservationTarget.h"
 
 #include "YunutyEngine.h"
 
@@ -29,12 +30,15 @@ namespace application
 namespace application
 {
 	class Script
-		: public Identifiable, public Storable, public Component
+		: public Identifiable, public Storable, public Component, public ObservationTarget
 	{
 		friend class ScriptSystem;
 		friend class editor::Module_ScriptEditor;
 
+		friend CoroutineObject<void> Action_PullScriptTrigger::DoAction();
+
 	public:
+		virtual ~Script() = default;
 		virtual void Update() override;
 
 		std::string name = "NewScript";
@@ -84,11 +88,32 @@ namespace application
 		CoroutineObject<void> MakeActionCoroutine();
 
 	private:
+		/// Trigger 와 무관하게 PullTrigger 효과를 Script 단위에서 수행하는 함수입니다.
+		void PullScriptTrigger();
+
 		std::unordered_set<std::shared_ptr<ITrigger>> triggerList;
 		std::unordered_set<std::shared_ptr<ICondition>> conditionList;
 		std::vector<std::shared_ptr<IAction>> actionList;
 		std::queue<CoroutineObject<void>> coroutineQueue = std::queue<CoroutineObject<void>>();
 		std::vector<CoroutineObject<void>> coroutineInProgress = std::vector<CoroutineObject<void>>();
+	};
+
+	struct ScriptPredicate
+	{
+		bool operator()(const Script* const ls, const Script* const rs) const
+		{
+			if (ls && rs)
+			{
+				return ls->name < rs->name;
+			}
+
+			if (!ls)
+			{
+				return true;
+			}
+
+			return false;
+		}
 	};
 }
 
