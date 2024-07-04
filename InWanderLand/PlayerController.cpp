@@ -1023,8 +1023,8 @@ void PlayerController::SetState(State::Enum newState)
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Vinetting)->EnableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_MenuButton)->EnableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Bottom_Layout)->EnableElement();
-        skillCooltimeLeft.fill(0);
-        skillCooltimeLeft.fill(0);
+        //skillCooltimeLeft.fill(0);
+        //skillCooltimeLeft.fill(0);
         break;
     case PlayerController::State::Battle:
         zoomMultiplierByState.reset();
@@ -1069,6 +1069,12 @@ void PlayerController::SetState(State::Enum newState)
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Bottom_Layout)->DisableElement();
         UnselectUnit();
         UnSelectSkill();
+        previousSkillCooltimeLeft = skillCooltimeLeft;
+        skillCooltimeLeft.fill(0);
+        for (int skillType = SkillType::ROBIN_Q; skillType <= SkillType::HANSEL_W; skillType++)
+        {
+            SetCooltime((SkillType::Enum)skillType, 0);
+        }
     }
     break;
     }
@@ -1261,6 +1267,11 @@ void PlayerController::RequestStateFromAction(State::Enum newState)
     this->stateRequestedByAction = newState;
 }
 
+void PlayerController::ApplyBeforeEngageSkillCoolTime()
+{
+    skillCooltimeLeft = previousSkillCooltimeLeft;
+}
+
 float PlayerController::GetMana()
 {
     return this->mana;
@@ -1451,10 +1462,10 @@ void PlayerController::OnPlayerUnitSkillActivation(std::weak_ptr<Unit> unit, std
     SetCooltime(skillType, GetCooltimeForSkill(skillType));
     if (skillType != SkillType::NONE)
     {
-        if (state != State::Tactic)
-        {
-            SetMana(mana - RequiredManaForSkill(skillType));
-        }
+        //if (state != State::Tactic)
+        //{
+        //    //SetMana(mana - RequiredManaForSkill(skillType));
+        //}
         onSkillActivate[skillType]();
     }
 }

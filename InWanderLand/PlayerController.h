@@ -98,7 +98,7 @@ public:
     Reference referenceCinematic;
 
     void RequestStateFromAction(State::Enum newState);
-
+    void ApplyBeforeEngageSkillCoolTime();
     // 스킬 업그레이드와 관련된 부분
     // 어떤 스킬을 업그레이드 할 것인지 미리 정한다. 미리 지정만 하는 것이지 바로 업그레이드까지 직행하는 것은 아니다.
 private:
@@ -163,6 +163,7 @@ private:
     int currentCombo{ 0 };
     std::array<int, 3> comboObjective{ 10, 20, 30 };
     std::array<bool, 3> comboAchieved{ false };
+    std::array<float, SkillType::SKILL_NUM> previousSkillCooltimeLeft;
     std::array<float, SkillType::SKILL_NUM> skillCooltimeLeft;
     std::array<UIElement*, SkillType::SKILL_NUM> skillCooltimeNumberUI;
     std::array<UIElement*, SkillType::SKILL_NUM> skillCooltimeMaskUI;
