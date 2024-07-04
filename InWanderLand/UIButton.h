@@ -28,6 +28,7 @@ private:
     std::vector<std::function<void()>> m_OnMouseEventFunctions;
 
     yunutyEngine::graphics::UIImage* m_ImageComponent;
+    std::weak_ptr<UIElement> uiElement;
 
     double m_Width;
     double m_Height;
@@ -41,6 +42,7 @@ private:
     LONG initialRectBottom;
 
 public:
+    std::weak_ptr<UIElement> GetUIElement();
     void SetIdleImage(yunuGI::ITexture* p_IdleImage);
     void SetClickedImage(yunuGI::ITexture* p_ClickedImage);
 
@@ -64,6 +66,7 @@ public:
     virtual void InvokeButtonClickEvent();
     // UI가 다른 UI를 닫거나 여는 등 유니티에서 내부적으로 링킹된 이벤트들만 동작시킨다.
     virtual void InvokeInternalButtonClickEvent();
+    bool IsFunctioningButton() const { return !m_mouseLiftedEventFunctions.empty(); };
 
     //virtual void PlayFunction() override;
     //virtual void StopFunction() override;

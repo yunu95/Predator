@@ -29,6 +29,16 @@ namespace application
         GC<float> enemyAggroUpdateQuota = 2;
         // +- 몇명씩 랜덤하게 분배해주는가
         GC<float> enemyAggroUpdateQuotaNoise = 2;
+        // 카이팅 하는 적은 플레이어가 얼마나 가까워질 때 도주를 시도하는가.
+        GC<float> enemyKitingDistanceThreshold = 4;
+        // 카이팅 하는 적은 얼마나 잦은 간격으로 판단을 내리는가.
+        GC<float> enemyKitingCooltime = 2;
+        // 포위망을 좁혀오는 적들은 몇 초 간격으로 사거리를 줄이는가
+        GC<float> enemyApproachingDecayCooltime = 4;
+        // 포위망을 좁혀오는 적들은 한번에 몇%씩 사거리를 줄이는가
+        GC<float> enemyApproachingDecayRate = 0.9f;
+        // 포위망을 좁혀오는 적들은 최종적으로 몇%만큼 사거리를 줄이는가
+        GC<float> enemyApproachingDecayEndRate = 0.4f;
         // 유닛들이 등장할 때 등장 시간 오프셋에 대한 노이즈
         GC<float> unitBirthTimeOffsetNoise = 0.2;
 
@@ -40,7 +50,7 @@ namespace application
         GC<float> tacticMoveCost = 10.0f;
         GC<float> tacticAttackCost = 10.0f;
 
-        GC<float>	tacticGaugeRecoveryPerSecond = 2.0f;
+        GC<float> tacticGaugeRecoveryPerSecond = 2.0f;
         GC<float> battleZoomMultiplier = 0.95f;
         GC<float> tacticZoomMultiplier = 1.05f;
 

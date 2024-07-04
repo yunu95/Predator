@@ -53,6 +53,7 @@ public:
 #pragma region RobinQSkill
     // objectPos는 사거리 표시의 시작위치 즉, 유닛의 월드포지션입니다.
     void ShowRobinQSkill(const Vector3d& objectPos);
+    void ShowRobinQSkill(const Vector3d& objectPos, const Vector3d& destination);
     void HideRobinQSkill();
 #pragma endregion
 
@@ -83,6 +84,7 @@ public:
 #pragma region HanselWSkill
     // objectPos는 사거리 표시의 시작위치 즉, 유닛의 월드포지션입니다.
     void ShowHanselWSkill(const Vector3d& objectPos);
+    void ShowHanselWSkill(const Vector3d& objectPos, const Vector3d& destination);
     void HideHanselWSkill();
 #pragma endregion
 

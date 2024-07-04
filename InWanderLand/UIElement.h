@@ -73,6 +73,7 @@ public:
     const std::unordered_map<int, JsonUIData>& GetLocalUIdatasByIndex() { return localUIdatasByIndex; };
     // UI 요소에 영향을 줄 수 있는 실수 값을 조정합니다.
     FloatFollower* adjuster{ nullptr };
+    UIEnumID GetDuplicateParentEnumID() { return duplicateParentEnumID; }
 
     //virtual void PlayFunction() override;
     //virtual void StopFunction() override;

@@ -388,6 +388,10 @@ void UIManager::ReturnToTitleAfterFadeOut()
         coro = StartCoroutine(ReturnToTitleAfterFadeOutCoro());
     }
 }
+UIButton* UIManager::GetHighlightedButton()
+{
+    return m_highestPriorityButton;
+}
 coroutine::Coroutine UIManager::StartGameAfterFadeOutCoro()
 {
     FadeOutLeft(1.0f);
@@ -596,9 +600,8 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
         if (!(uiData.customFlags & (int)UIExportFlag::NoOverlaying))
         {
             uiButtonComponent = element->button = uiObject->AddComponent<UIButton>();
+            uiButtonComponent->uiElement = element->GetWeakPtr<UIElement>();
             uiButtonComponent->SetImageComponent(uiImageComponent);
-            //uiButtonComponent->SetIdleImage(idleTexture);
-            //uiButtonComponent->SetOnMouseImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
         }
     }
     if (uiData.customFlags & (int)UIExportFlag::CanAdjustHeight)
@@ -1230,18 +1233,21 @@ bool UIManager::ImportDealWithSpecialCases_Post(const JsonUIData& uiData, UIElem
         switch (element->duplicateParentEnumID)
         {
         case UIEnumID::CharInfo_Robin:
+        case UIEnumID::CharInfo_Robin_Left:
             element->button->AddExternalButtonClickFunction([=]()
                 {
                     PlayerController::Instance().SelectSkill(SkillType::ROBIN_W);
                 });
             break;
         case UIEnumID::CharInfo_Ursula:
+        case UIEnumID::CharInfo_Ursula_Left:
             element->button->AddExternalButtonClickFunction([=]()
                 {
                     PlayerController::Instance().SelectSkill(SkillType::URSULA_W);
                 });
             break;
         case UIEnumID::CharInfo_Hansel:
+        case UIEnumID::CharInfo_Hansel_Left:
             element->button->AddExternalButtonClickFunction([=]()
                 {
                     PlayerController::Instance().SelectSkill(SkillType::HANSEL_W);

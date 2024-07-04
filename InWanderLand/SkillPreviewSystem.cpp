@@ -229,6 +229,14 @@ void SkillPreviewSystem::Init()
 
 void SkillPreviewSystem::ShowRobinQSkill(const Vector3d& objectPos)
 {
+    auto distToXZPlane = abs(camObj->GetTransform()->GetWorldPosition().y);
+    auto centeredPosition = Input::getMouseScreenPositionNormalizedZeroCenter();
+    Vector3d mouseWorldPos = camObj->GetComponent<yunutyEngine::graphics::Camera>()->GetProjectedPoint(centeredPosition, distToXZPlane, Vector3d(0, 1, 0));
+    mouseWorldPos.y = objectPos.y;
+    ShowRobinQSkill(objectPos, mouseWorldPos);
+}
+void SkillPreviewSystem::ShowRobinQSkill(const Vector3d& objectPos, const Vector3d& destination)
+{
     if (this->robinQSkillPreviewObj->GetActive() == false)
     {
         this->robinQSkillPreviewObj->SetSelfActive(true);
@@ -242,12 +250,7 @@ void SkillPreviewSystem::ShowRobinQSkill(const Vector3d& objectPos)
     offsetPos.y += Y_OFFSET;
     this->robinQSkillPreviewObj->GetTransform()->SetLocalPosition(offsetPos);
 
-    auto distToXZPlane = abs(camObj->GetTransform()->GetWorldPosition().y);
-    auto centeredPosition = Input::getMouseScreenPositionNormalizedZeroCenter();
-
-    Vector3d mouseWorldPos = camObj->GetComponent<yunutyEngine::graphics::Camera>()->GetProjectedPoint(centeredPosition, distToXZPlane, Vector3d(0, 1, 0));
-    mouseWorldPos.y = objectPos.y;
-    Vector3d mouseVector = mouseWorldPos - objectPos;
+    Vector3d mouseVector = destination - objectPos;
     //mouseWorldPos.y = 0.f;
     auto normalizedPos = mouseVector.Normalize(mouseVector);
 
@@ -259,7 +262,7 @@ void SkillPreviewSystem::ShowRobinQSkill(const Vector3d& objectPos)
     float angle = acos(dotValue);
     angle = angle * (180 / yunutyEngine::math::PI);
 
-    if (mouseWorldPos.z - objectPos.z < 0)
+    if (destination.z - objectPos.z < 0)
     {
         angle = 360.0f - angle;
     }
@@ -268,7 +271,7 @@ void SkillPreviewSystem::ShowRobinQSkill(const Vector3d& objectPos)
     this->robinQSkillPreviewObj->GetChildren()[static_cast<int>(RobinQSkillInfo::ArrowBody)]->GetTransform()->SetLocalRotation(Quaternion{ Vector3f{0.f,angle,0.f} });
 
     //float distance = (pow(objectPos.x - mouseWorldPos.x, 2) + pow(objectPos.y - mouseWorldPos.y, 2) + pow(objectPos.z - mouseWorldPos.z, 2));
-    float distance = abs((objectPos - mouseWorldPos).Magnitude());
+    float distance = abs((objectPos - destination).Magnitude());
     if (distance > OFFSET)
     {
         this->robinQSkillPreviewObj->GetChildren()[static_cast<int>(RobinQSkillInfo::ArrowBody)]->GetTransform()->SetLocalScale(Vector3d{ (distance - OFFSET) / 2 ,1.0,1.0 });
@@ -388,6 +391,14 @@ void SkillPreviewSystem::HideHanselQSkill()
 
 void SkillPreviewSystem::ShowHanselWSkill(const Vector3d& objectPos)
 {
+    auto distToXZPlane = abs(camObj->GetTransform()->GetWorldPosition().y);
+    auto centeredPosition = Input::getMouseScreenPositionNormalizedZeroCenter();
+    Vector3d mouseWorldPos = camObj->GetComponent<yunutyEngine::graphics::Camera>()->GetProjectedPoint(centeredPosition, distToXZPlane, Vector3d(0, 1, 0));
+    mouseWorldPos.y = objectPos.y;
+    ShowHanselWSkill(objectPos, mouseWorldPos);
+}
+void SkillPreviewSystem::ShowHanselWSkill(const Vector3d& objectPos, const Vector3d& destination)
+{
     if (this->hanselWSkillPreviewObj->GetActive() == false)
     {
         this->hanselWSkillPreviewObj->SetSelfActive(true);
@@ -401,12 +412,7 @@ void SkillPreviewSystem::ShowHanselWSkill(const Vector3d& objectPos)
     offsetPos.y += Y_OFFSET;
     this->hanselWSkillPreviewObj->GetTransform()->SetLocalPosition(offsetPos);
 
-    auto distToXZPlane = abs(camObj->GetTransform()->GetWorldPosition().y);
-    auto centeredPosition = Input::getMouseScreenPositionNormalizedZeroCenter();
-
-    Vector3d mouseWorldPos = camObj->GetComponent<yunutyEngine::graphics::Camera>()->GetProjectedPoint(centeredPosition, distToXZPlane, Vector3d(0, 1, 0));
-    mouseWorldPos.y = objectPos.y;
-    Vector3d mouseVector = mouseWorldPos - objectPos;
+    Vector3d mouseVector = destination - objectPos;
     //mouseWorldPos.y = 0.f;
     auto normalizedPos = mouseVector.Normalize(mouseVector);
 
@@ -418,7 +424,7 @@ void SkillPreviewSystem::ShowHanselWSkill(const Vector3d& objectPos)
     float angle = acos(dotValue);
     angle = angle * (180 / yunutyEngine::math::PI);
 
-    if (mouseWorldPos.z - objectPos.z < 0)
+    if (destination.z - objectPos.z < 0)
     {
         angle = 360.0f - angle;
     }
@@ -426,7 +432,7 @@ void SkillPreviewSystem::ShowHanselWSkill(const Vector3d& objectPos)
     this->hanselWSkillPreviewObj->GetChildren()[static_cast<int>(HanselWSkillInfo::ArrowHead)]->GetTransform()->SetLocalRotation(Quaternion{ Vector3f{0.f,angle,0.f} });
     this->hanselWSkillPreviewObj->GetChildren()[static_cast<int>(HanselWSkillInfo::ArrowBody)]->GetTransform()->SetLocalRotation(Quaternion{ Vector3f{0.f,angle,0.f} });
 
-    float distance = sqrt(pow(objectPos.x - mouseWorldPos.x, 2) + pow(objectPos.y - mouseWorldPos.y, 2) + pow(objectPos.z - mouseWorldPos.z, 2));
+    float distance = sqrt(pow(objectPos.x - destination.x, 2) + pow(objectPos.y - destination.y, 2) + pow(objectPos.z - destination.z, 2));
 
     if (distance > OFFSET)
     {

@@ -37,6 +37,12 @@ namespace application
         {
             co_return;
         }
+        auto ingameUnit = targetUnit->inGameUnit.lock();
+        if (withdrawPauseRequestBefore)
+            ingameUnit->pauseRequested = false;
+        if (addUnpauseRequestBefore)
+            ingameUnit->unpauseRequested = true;
+
         auto ts = targetUnit->inGameUnit.lock()->GetTransform();
         auto startPos = ts->GetWorldPosition();
 
@@ -48,6 +54,10 @@ namespace application
         targetUnit->inGameUnit.lock()->OrderMove(endPos);
         targetUnit->inGameUnit.lock()->OnStateExitCallback()[UnitBehaviourTree::Move].AddVolatileCallback([&]() {moving = false; });
         while (moving) { co_await std::suspend_always(); }
+        if (addPauseRequestAfter)
+            ingameUnit->pauseRequested = true;
+        if (withdrawUnpauseRequestAfter)
+            ingameUnit->unpauseRequested = false;
         co_return;
     }
 
@@ -241,10 +251,59 @@ namespace application
                     }, 300);
             }
         }
+        if (ImGui::MenuItem("SetPauseSettings"))
+        {
+            editor::EditorLayer::SetInputControl(false);
+            static bool addUnpauseRequestBefore{ false };
+            static bool withdrawPauseRequestBefore{ false };
+            static bool withdrawUnpauseRequestAfter{ false };
+            static bool addPauseRequestAfter{ false };
+            addUnpauseRequestBefore = data->addUnpauseRequestBefore;
+            withdrawPauseRequestBefore = data->withdrawPauseRequestBefore;
+            withdrawUnpauseRequestAfter = data->withdrawUnpauseRequestAfter;
+            addPauseRequestAfter = data->addPauseRequestAfter;
+            editor::imgui::ShowMessageBox("SetPauseSettings(UnitMoveWithRotateAndRescale)", [data]()
+                {
+                    editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
+
+                    ImGui::Separator();
+
+                    ImGui::SetNextItemWidth(-1);
+                    ImGui::Checkbox("addUnpauseRequestBefore##addUnpauseRequestBefore_UnitMoveWithRotateAndRescale", &addUnpauseRequestBefore);
+                    ImGui::Checkbox("withdrawPauseRequestBefore##withdrawPauseRequestBefore_UnitMoveWithRotateAndRescale", &withdrawPauseRequestBefore);
+                    ImGui::Checkbox("withdrawUnpauseRequestAfter##withdrawUnpauseRequestAfter_UnitMoveWithRotateAndRescale", &withdrawUnpauseRequestAfter);
+                    ImGui::Checkbox("addPauseRequestAfter##addPauseRequestAfter_UnitMoveWithRotateAndRescale", &addPauseRequestAfter);
+
+                    ImGui::Separator();
+
+                    if (ImGui::Button("OK"))
+                    {
+                        data->addUnpauseRequestBefore = addUnpauseRequestBefore;
+                        data->withdrawPauseRequestBefore = withdrawPauseRequestBefore;
+                        data->withdrawUnpauseRequestAfter = withdrawUnpauseRequestAfter;
+                        data->addPauseRequestAfter = addPauseRequestAfter;
+                        ImGui::CloseCurrentPopup();
+                        editor::imgui::CloseMessageBox("SetPauseSettings(UnitMoveWithRotateAndRescale)");
+                        editor::EditorLayer::SetInputControl(true);
+                    }
+                    ImGui::SameLine();
+
+                    if (ImGui::Button("Cancel"))
+                    {
+                        ImGui::CloseCurrentPopup();
+                        editor::imgui::CloseMessageBox("SetPauseSettings(UnitMoveWithRotateAndRescale)");
+                        editor::EditorLayer::SetInputControl(true);
+                    }
+                }, 300);
+        }
     }
 
     bool Action_UnitMove::PreEncoding(json& data) const
     {
+        data["addUnpauseRequestBefore"] = addUnpauseRequestBefore;
+        data["withdrawPauseRequestBefore"] = withdrawPauseRequestBefore;
+        data["withdrawUnpauseRequestAfter"] = withdrawUnpauseRequestAfter;
+        data["addPauseRequestAfter"] = addPauseRequestAfter;
         return true;
     }
 
@@ -258,6 +317,14 @@ namespace application
     bool Action_UnitMove::PreDecoding(const json& data)
     {
         return true;
+        if (data.contains("addUnpauseRequestBefore"))
+            addUnpauseRequestBefore = data["addUnpauseRequestBefore"];
+        if (data.contains("withdrawPauseRequestBefore"))
+            withdrawPauseRequestBefore = data["withdrawPauseRequestBefore"];
+        if (data.contains("withdrawUnpauseRequestAfter"))
+            withdrawUnpauseRequestAfter = data["withdrawUnpauseRequestAfter"];
+        if (data.contains("addPauseRequestAfter"))
+            addPauseRequestAfter = data["addPauseRequestAfter"];
     }
 
     bool Action_UnitMove::PostDecoding(const json& data)
@@ -282,6 +349,10 @@ namespace application
         {
             co_return;
         }
+        if (withdrawPauseRequestBefore)
+            ingameUnit->pauseRequested = false;
+        if (addUnpauseRequestBefore)
+            ingameUnit->unpauseRequested = true;
         // 유닛을 정지시키고
         //auto pause{ targetUnit->inGameUnit.lock()->referencePause.Acquire() };
         ingameUnit->OrderHold();
@@ -318,6 +389,10 @@ namespace application
             timer += Time::GetDeltaTimeUnscaled();
             co_await std::suspend_always();
         }
+        if (addPauseRequestAfter)
+            ingameUnit->pauseRequested = true;
+        if (withdrawUnpauseRequestAfter)
+            ingameUnit->unpauseRequested = false;
     }
 
     bool Action_UnitRotate::IsValid()
@@ -519,6 +594,51 @@ namespace application
                     }
                 }, 300);
         }
+        if (ImGui::MenuItem("SetPauseSettings"))
+        {
+            editor::EditorLayer::SetInputControl(false);
+            static bool addUnpauseRequestBefore{ false };
+            static bool withdrawPauseRequestBefore{ false };
+            static bool withdrawUnpauseRequestAfter{ false };
+            static bool addPauseRequestAfter{ false };
+            addUnpauseRequestBefore = data->addUnpauseRequestBefore;
+            withdrawPauseRequestBefore = data->withdrawPauseRequestBefore;
+            withdrawUnpauseRequestAfter = data->withdrawUnpauseRequestAfter;
+            addPauseRequestAfter = data->addPauseRequestAfter;
+            editor::imgui::ShowMessageBox("SetPauseSettings(UnitMoveWithRotateAndRescale)", [data]()
+                {
+                    editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
+
+                    ImGui::Separator();
+
+                    ImGui::SetNextItemWidth(-1);
+                    ImGui::Checkbox("addUnpauseRequestBefore##addUnpauseRequestBefore_UnitMoveWithRotateAndRescale", &addUnpauseRequestBefore);
+                    ImGui::Checkbox("withdrawPauseRequestBefore##withdrawPauseRequestBefore_UnitMoveWithRotateAndRescale", &withdrawPauseRequestBefore);
+                    ImGui::Checkbox("withdrawUnpauseRequestAfter##withdrawUnpauseRequestAfter_UnitMoveWithRotateAndRescale", &withdrawUnpauseRequestAfter);
+                    ImGui::Checkbox("addPauseRequestAfter##addPauseRequestAfter_UnitMoveWithRotateAndRescale", &addPauseRequestAfter);
+
+                    ImGui::Separator();
+
+                    if (ImGui::Button("OK"))
+                    {
+                        data->addUnpauseRequestBefore = addUnpauseRequestBefore;
+                        data->withdrawPauseRequestBefore = withdrawPauseRequestBefore;
+                        data->withdrawUnpauseRequestAfter = withdrawUnpauseRequestAfter;
+                        data->addPauseRequestAfter = addPauseRequestAfter;
+                        ImGui::CloseCurrentPopup();
+                        editor::imgui::CloseMessageBox("SetPauseSettings(UnitMoveWithRotateAndRescale)");
+                        editor::EditorLayer::SetInputControl(true);
+                    }
+                    ImGui::SameLine();
+
+                    if (ImGui::Button("Cancel"))
+                    {
+                        ImGui::CloseCurrentPopup();
+                        editor::imgui::CloseMessageBox("SetPauseSettings(UnitMoveWithRotateAndRescale)");
+                        editor::EditorLayer::SetInputControl(true);
+                    }
+                }, 300);
+        }
     }
 
     bool Action_UnitRotate::PreEncoding(json& data) const
@@ -526,6 +646,10 @@ namespace application
         data["relative"] = isRelative;
         data["angle"] = angle;
         data["lerpTime"] = lerpTime;
+        data["addUnpauseRequestBefore"] = addUnpauseRequestBefore;
+        data["withdrawPauseRequestBefore"] = withdrawPauseRequestBefore;
+        data["withdrawUnpauseRequestAfter"] = withdrawUnpauseRequestAfter;
+        data["addPauseRequestAfter"] = addPauseRequestAfter;
         return true;
     }
 
@@ -540,6 +664,14 @@ namespace application
         isRelative = data["relative"];
         angle = data["angle"];
         lerpTime = data["lerpTime"];
+        if (data.contains("addUnpauseRequestBefore"))
+            addUnpauseRequestBefore = data["addUnpauseRequestBefore"];
+        if (data.contains("withdrawPauseRequestBefore"))
+            withdrawPauseRequestBefore = data["withdrawPauseRequestBefore"];
+        if (data.contains("withdrawUnpauseRequestAfter"))
+            withdrawUnpauseRequestAfter = data["withdrawUnpauseRequestAfter"];
+        if (data.contains("addPauseRequestAfter"))
+            addPauseRequestAfter = data["addPauseRequestAfter"];
         return true;
     }
 
@@ -821,8 +953,14 @@ namespace application
 
     CoroutineObject<void> Action_UnitMoveWithRotateAndRescale::DoAction()
     {
-        if (targetUnit->inGameUnit.expired()) co_return;
-        auto ts = targetUnit->inGameUnit.lock()->GetTransform();
+        auto inGameUnit = targetUnit->inGameUnit.lock();
+        if (!inGameUnit) co_return;
+
+        if (withdrawPauseRequestBefore)
+            inGameUnit->pauseRequested = false;
+        if (addUnpauseRequestBefore)
+            inGameUnit->unpauseRequested = true;
+        auto ts = inGameUnit->GetTransform();
         auto startPos = ts->GetWorldPosition();
 
         Vector3d endPos = { destinationUnit->pod.position.x, destinationUnit->pod.position.y, destinationUnit->pod.position.z };
@@ -832,27 +970,31 @@ namespace application
         endPos.y = 0;
 
         bool moving = true;
-        targetUnit->inGameUnit.lock()->OrderMove(endPos);
-        targetUnit->inGameUnit.lock()->OnStateExitCallback()[UnitBehaviourTree::Move].AddVolatileCallback([&]() {moving = false; });
+        inGameUnit->OrderMove(endPos);
+        inGameUnit->OnStateExitCallback()[UnitBehaviourTree::Move].AddVolatileCallback([&]() {moving = false; });
         while (moving) { co_await std::suspend_always(); }
 
         {
             // 유닛을 정지시키고
-            //auto pause{ targetUnit->inGameUnit.lock()->referencePause.Acquire() };
-            targetUnit->inGameUnit.lock()->OrderHold();
+            //auto pause{ inGameUnit->referencePause.Acquire() };
+            inGameUnit->OrderHold();
             // 유닛의 자체적인 회전을 막는다.
-            //auto blockRotation{ targetUnit->inGameUnit.lock()->referencePause.Acquire() };
+            //auto blockRotation{ inGameUnit->referencePause.Acquire() };
             double timer = 0;
             float factor = 0;
 
             //auto startRot = ts->GetWorldRotation();
             auto startScale = ts->GetWorldScale();
-            targetUnit->inGameUnit.lock()->SetRotation(endRot, lerpTime);
+            inGameUnit->SetRotation(endRot, lerpTime);
 
             if (lerpTime == 0)
             {
                 //ts->SetWorldRotation(endRot);
                 ts->SetWorldScale(endScale);
+                if (addPauseRequestAfter)
+                    inGameUnit->pauseRequested = true;
+                if (withdrawUnpauseRequestAfter)
+                    inGameUnit->unpauseRequested = false;
                 co_return;
             }
 
@@ -865,6 +1007,10 @@ namespace application
                 co_await std::suspend_always();
             }
 
+            if (addPauseRequestAfter)
+                inGameUnit->pauseRequested = true;
+            if (withdrawUnpauseRequestAfter)
+                inGameUnit->unpauseRequested = false;
             co_return;
         }
     }
@@ -1098,6 +1244,51 @@ namespace application
                     }
                 }, 300);
         }
+        if (ImGui::MenuItem("SetPauseSettings"))
+        {
+            editor::EditorLayer::SetInputControl(false);
+            static bool addUnpauseRequestBefore{ false };
+            static bool withdrawPauseRequestBefore{ false };
+            static bool withdrawUnpauseRequestAfter{ false };
+            static bool addPauseRequestAfter{ false };
+            addUnpauseRequestBefore = data->addUnpauseRequestBefore;
+            withdrawPauseRequestBefore = data->withdrawPauseRequestBefore;
+            withdrawUnpauseRequestAfter = data->withdrawUnpauseRequestAfter;
+            addPauseRequestAfter = data->addPauseRequestAfter;
+            editor::imgui::ShowMessageBox("SetPauseSettings(UnitMoveWithRotateAndRescale)", [data]()
+                {
+                    editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
+
+                    ImGui::Separator();
+
+                    ImGui::SetNextItemWidth(-1);
+                    ImGui::Checkbox("addUnpauseRequestBefore##addUnpauseRequestBefore_UnitMoveWithRotateAndRescale", &addUnpauseRequestBefore);
+                    ImGui::Checkbox("withdrawPauseRequestBefore##withdrawPauseRequestBefore_UnitMoveWithRotateAndRescale", &withdrawPauseRequestBefore);
+                    ImGui::Checkbox("withdrawUnpauseRequestAfter##withdrawUnpauseRequestAfter_UnitMoveWithRotateAndRescale", &withdrawUnpauseRequestAfter);
+                    ImGui::Checkbox("addPauseRequestAfter##addPauseRequestAfter_UnitMoveWithRotateAndRescale", &addPauseRequestAfter);
+
+                    ImGui::Separator();
+
+                    if (ImGui::Button("OK"))
+                    {
+                        data->addUnpauseRequestBefore = addUnpauseRequestBefore;
+                        data->withdrawPauseRequestBefore = withdrawPauseRequestBefore;
+                        data->withdrawUnpauseRequestAfter = withdrawUnpauseRequestAfter;
+                        data->addPauseRequestAfter = addPauseRequestAfter;
+                        ImGui::CloseCurrentPopup();
+                        editor::imgui::CloseMessageBox("SetPauseSettings(UnitMoveWithRotateAndRescale)");
+                        editor::EditorLayer::SetInputControl(true);
+                    }
+                    ImGui::SameLine();
+
+                    if (ImGui::Button("Cancel"))
+                    {
+                        ImGui::CloseCurrentPopup();
+                        editor::imgui::CloseMessageBox("SetPauseSettings(UnitMoveWithRotateAndRescale)");
+                        editor::EditorLayer::SetInputControl(true);
+                    }
+                }, 300);
+        }
     }
 
     bool Action_UnitMoveWithRotateAndRescale::PreEncoding(json& data) const
@@ -1172,16 +1363,16 @@ namespace application
     {
         switch (event)
         {
-            case application::ObservationEvent::Destroy:
+        case application::ObservationEvent::Destroy:
+        {
+            if (targetUnit == static_cast<editor::UnitData*>(target))
             {
-                if (targetUnit == static_cast<editor::UnitData*>(target))
-                {
-                    targetUnit = nullptr;
-                }
-                break;
+                targetUnit = nullptr;
             }
-            default:
-                break;
+            break;
+        }
+        default:
+            break;
         }
     }
 

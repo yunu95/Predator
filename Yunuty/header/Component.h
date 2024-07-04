@@ -111,7 +111,7 @@ namespace yunutyEngine
         const Transform* GetTransform()const;
         const GameObject* GetGameObject()const;
         // 컴포넌트의 활성화 여부를 가져옵니다.
-        bool GetActive();
+        bool GetActive()const;
         // 컴포넌트를 비활성화합니다. OnEnable, OnDisable 콜백 함수가 호출됩니다.
         void SetActive(bool active);
         // 컴포넌트의 WeakPtr를 가져옵니다.
