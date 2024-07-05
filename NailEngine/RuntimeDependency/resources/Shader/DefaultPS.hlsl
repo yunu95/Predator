@@ -22,6 +22,7 @@ struct PS_OUT
     float4 util : SV_Target3;
     float4 arm : SV_Target4;
     float4 emissive : SV_Target5;
+    float4 viewPosDecal : SV_Target6;
 };
 
 PS_OUT main(PixelIn input)
@@ -35,7 +36,7 @@ PS_OUT main(PixelIn input)
     {
         float tempOpa = OpacityMap.Sample(sam, input.uv).w;
         if (tempOpa== 0.f)
-        {
+        { 
             clip(-1);
         }
     }
@@ -93,6 +94,10 @@ PS_OUT main(PixelIn input)
     }
     
     output.position = input.posV;
+    if(castDecal == 1)
+    {
+        output.viewPosDecal = input.posV;
+    }
     output.normal = float4(viewNormal.xyz, 1.f);
     
     /////output.color = color * materialColor;

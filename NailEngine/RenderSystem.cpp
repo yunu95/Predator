@@ -197,6 +197,8 @@ void RenderSystem::Render()
     // 스태틱 오브젝트 렌더
     RenderObject();
 
+
+
     // 스킨드 오브젝트 렌더
     RenderSkinnedDeferred();
 
@@ -211,11 +213,11 @@ void RenderSystem::Render()
 
     BloomPass::Instance.Get().Bloom();
 
-    // 빛연산을 받는 오브젝트에만 데칼 바르게끔 이 위치에서 렌더링을 한다.
-    RenderDecal();
-
     // Final 출력
     RenderFinal();
+
+    RenderDecal();
+
     RenderForward();
     RenderSkinnedForward();
     RenderParticle();
@@ -515,19 +517,8 @@ void RenderSystem::RenderFinal()
 
 void RenderSystem::RenderDecal()
 {
-	auto& renderTargetGroup = NailEngine::Instance.Get().GetRenderTargetGroup();
-	renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::DECAL)]->OMSetRenderTarget(true);
-
-	D3D11_VIEWPORT viewport
-	{
-		 .TopLeftX = 0.0f,
-		 .TopLeftY = 0.0f,
-		 .Width = 4096,
-		 .Height = 4096,
-		 .MinDepth = 0.0f,
-		 .MaxDepth = 1.0f,
-	};
-	ResourceBuilder::Instance.Get().device->GetDeviceContext()->RSSetViewports(1, &viewport);
+	/*auto& renderTargetGroup = NailEngine::Instance.Get().GetRenderTargetGroup();
+	renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::DECAL)]->OMSetRenderTarget(true);*/
 
     InstancingManager::Instance.Get().RenderDecal();
 }

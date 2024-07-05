@@ -22,6 +22,7 @@ struct PS_OUT
     float4 util : SV_Target3;
     float4 arm : SV_Target4;
     float4 emissive : SV_Target5;
+    float4 viewPosDecal : SV_Target6;
 };
 
 // Temp0Map : Blend Albedo
@@ -82,6 +83,10 @@ PS_OUT main(PixelIn input)
     }
     
     output.position = input.posV;
+    if(castDecal == 1)
+    {
+        output.viewPosDecal = input.posV;
+    }
     output.normal = float4(viewNormal.xyz, 1.f);
     
     if ((lightMapUV[input.id].lightMapIndex != -1) && useLightMap)

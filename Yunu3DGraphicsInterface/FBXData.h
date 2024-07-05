@@ -63,6 +63,9 @@ namespace yunuGI
 
 		float diffuseExposure = 1.f;
 		float ambientExposure = 1.f;
+
+		bool castDecal = false;
+		bool calculateShadow = true;
 	};
 
 

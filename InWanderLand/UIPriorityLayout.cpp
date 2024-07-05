@@ -44,7 +44,7 @@ void UIPriorityLayout::StartTransition(GameObject* newlyEnabledElement)
     // 가운데 정렬일 경우...
     else
     {
-        float x = horizontalPivot + enabledUIs.size() * 0.5f * (enabledUIs.size() - 1.0f);
+        float x = horizontalPivot + 0.5f * (enabledUIs.size() - 1.0f);
         for (auto each : enabledUIs)
         {
             each->GetTransform()->SetLocalPosition(Vector3d::right * x);

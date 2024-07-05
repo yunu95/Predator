@@ -629,6 +629,14 @@ yunutyEngine::coroutine::Coroutine TacticModeSystem::ExecuteInternal()
 void TacticModeSystem::SyncWithTacticCommandQueueUI()
 {
     int idx = 0;
+    if (commandList.empty())
+    {
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::TacticModeRevertButton_InActive)->EnableElement();
+    }
+    else
+    {
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::TacticModeRevertButton_Active)->EnableElement();
+    }
     for (auto& eachCmd : commandList)
     {
         if (eachCmd->IsDone())

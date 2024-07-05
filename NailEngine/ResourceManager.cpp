@@ -879,10 +879,6 @@ void ResourceManager::SaveFBXChildData(const yunuGI::FBXData* data, nlohmann::js
         materialJson["temp11Map"] = std::string{ material.temp11Map.begin(), material.temp11Map.end() };
         materialJson["vs"] = std::string{ material.vs.begin(),material.vs.end() };
         auto ps = std::string{ material.ps.begin(), material.ps.end() };
-        if (material.materialName == L"M_Chess_Pattern" && ps != "Stage2FloorPS.cso")
-        {
-            int a = -1;
-        }
         materialJson["ps"] = ps;
 
         jsonData["materialVec"].push_back(materialJson);
@@ -890,6 +886,8 @@ void ResourceManager::SaveFBXChildData(const yunuGI::FBXData* data, nlohmann::js
 
     jsonData["DiffuseExposure"] = data->diffuseExposure;
     jsonData["AmbientExposure"] = data->ambientExposure;
+    jsonData["CastDecal"] = data->castDecal;
+    jsonData["CalculateShadow"] = data->calculateShadow;
 
     for (const auto& child : data->child)
     {
@@ -1034,6 +1032,8 @@ void ResourceManager::LoadFBXData(const nlohmann::json& jsonData, yunuGI::FBXDat
 
     data->diffuseExposure = jsonData["DiffuseExposure"];
     data->ambientExposure = jsonData["AmbientExposure"];
+    data->castDecal = jsonData["CastDecal"];
+    data->calculateShadow = jsonData["CalculateShadow"];
 
     if (jsonData.contains("child"))
     {
@@ -1096,6 +1096,7 @@ void ResourceManager::CreateDefaultShader()
     CreateShader(L"ParticleVS.cso");
     CreateShader(L"TextureAnimVS.cso");
     CreateShader(L"SkinnedVFX_VS.cso");
+    CreateShader(L"TestDecalVS.cso");
 #pragma endregion
 
 #pragma region PS
@@ -1127,6 +1128,7 @@ void ResourceManager::CreateDefaultShader()
 	CreateShader(L"VFX_PS.cso");
 	CreateShader(L"MoveAnimTexturePS.cso");
 	CreateShader(L"TestDecalPS.cso");
+	CreateShader(L"TestDecalMaskPS.cso");
 #pragma endregion
 
 #pragma region GS
@@ -1519,6 +1521,8 @@ void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode* node, yu
 
                 mesh->SetDiffuseExposure(fbxData->diffuseExposure);
                 mesh->SetAmbientExposure(fbxData->ambientExposure);
+                mesh->SetCastDecal(fbxData->castDecal);
+                mesh->SetCalculateShadow(fbxData->calculateShadow);
 
                 this->meshMap.insert({ node->meshVec[i].meshName, mesh });
             }

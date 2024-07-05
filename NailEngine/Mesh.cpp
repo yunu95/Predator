@@ -56,10 +56,6 @@ void Mesh::SetData(std::vector<Vertex>& vertexVec, std::vector<unsigned int>& in
 	aabb.Extents = DirectX::SimpleMath::Vector3((maxPoint.x - minPoint.x) * 0.5f, (maxPoint.y - minPoint.y) * 0.5f, (maxPoint.z - minPoint.z) * 0.5f);
 	this->aabbVec.emplace_back(aabb);
 
-
-
-
-
 	std::vector<DirectX::SimpleMath::Vector3> tempVertexList;
 	tempVertexList.push_back(DirectX::SimpleMath::Vector3{ minPoint.x, minPoint.y, minPoint.z }); // [0]
 	tempVertexList.push_back(DirectX::SimpleMath::Vector3{ maxPoint.x, minPoint.y, minPoint.z });
@@ -87,6 +83,16 @@ void Mesh::SetDiffuseExposure(float exposure)
 void Mesh::SetAmbientExposure(float exposure)
 {
 	this->ambientExposure = exposure;
+}
+
+void Mesh::SetCastDecal(bool val)
+{
+	this->castDecal = val;
+}
+
+void Mesh::SetCalculateShadow(bool val)
+{
+	this->calculateShadow = val;
 }
 
 void Mesh::Render(unsigned int materialIndex, D3D_PRIMITIVE_TOPOLOGY topology, bool isInstancing, int instanceCount, std::shared_ptr<InstanceBuffer> buffer)
@@ -228,6 +234,16 @@ float Mesh::GetDiffuseExposure()
 float Mesh::GetAmbientExposure()
 {
 	return this->ambientExposure;
+}
+
+bool Mesh::GetCastDecal()
+{
+	return this->castDecal;
+}
+
+bool Mesh::IsCalculateShadow()
+{
+	return this->calculateShadow;
 }
 
 float Mesh::GetBoundingRadius()

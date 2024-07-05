@@ -520,7 +520,7 @@ void PlayerController::HandleSkillPreview()
                 auto pos{ characters[PlayerCharacterType::Ursula].lock()->GetTransform()->GetWorldPosition() };
                 //auto forward{ characters[PlayerCharacterType::Ursula].lock()->GetTransform()->GetWorldRotation().Forward() };
                 static constexpr float epsilon = 0.0001f;
-                UrsulaBlindSkill::UpdatePosition(pos, pos + epsilon * Vector3d::one);
+                UrsulaBlindSkill::UpdatePosition(pos + epsilon * Vector3d::one, pos);
                 auto pos1 = UrsulaBlindSkill::GetSkillObjectPos_Left(pos);
                 auto pos2 = UrsulaBlindSkill::GetSkillObjectPos_Right(pos);
                 auto pos3 = UrsulaBlindSkill::GetSkillObjectPos_Top(pos);
@@ -588,7 +588,14 @@ void PlayerController::HandleManaRegen()
 {
     if (state != State::Tactic)
     {
-        SetMana(mana + GlobalConstant::GetSingletonInstance().pod.manaRegen * Time::GetDeltaTime());
+        if (state == State::Peace)
+        {
+            SetMana(mana + GlobalConstant::GetSingletonInstance().pod.manaRegen_Peace * Time::GetDeltaTime());
+        }
+        else
+        {
+            SetMana(mana + GlobalConstant::GetSingletonInstance().pod.manaRegen * Time::GetDeltaTime());
+        }
     }
 }
 
@@ -1261,7 +1268,7 @@ void PlayerController::SetManaFull()
 void PlayerController::SetMana(float mana)
 {
     const auto& gc = GlobalConstant::GetSingletonInstance().pod;
-    this->mana = std::fmin(gc.maxMana, mana);
+    this->mana = std::clamp<float>(mana, 0, gc.maxMana);
     UIManager::Instance().GetUIElementByEnum(UIEnumID::ManaBar1)->adjuster->SetTargetFloat(1 - this->mana / gc.maxMana);
     UIManager::Instance().GetUIElementByEnum(UIEnumID::ManaBar2)->adjuster->SetTargetFloat(1 - this->mana / gc.maxMana);
     UIManager::Instance().GetUIElementByEnum(UIEnumID::Mana_Text_MaxMP)->SetNumber(gc.maxMana);

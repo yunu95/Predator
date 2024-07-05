@@ -16,6 +16,7 @@ cbuffer MatrixBuffer : register(b0)
     row_major matrix WorldInvTrans;
     row_major matrix VTMInv;
     row_major matrix lightVP;
+    float4 projInvVec;
 }
 
 cbuffer MaterialBuffer : register(b1)
@@ -186,6 +187,8 @@ struct LightMapUV
 cbuffer LightMapUVBuffer : register(b12)
 {
     LightMapUV lightMapUV[MAX_STATIC_MODEL];
+    int castDecal;
+    float3 pad7;
 };
 
 Texture2D AlbedoMap : register(t0);

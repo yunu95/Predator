@@ -507,6 +507,14 @@ void ShowSeleteFBXInfo()
 		ImGui::Text("AmbientExposure :");
 		ImGui::DragFloat("##AmbientExposure", &g_selectFBX->ambientExposure, 0.1f, 0.0, 10.0);
 
+		ImGui::Text("CastDecal ");
+		ImGui::SameLine();
+		ImGui::Checkbox("##CastDecal ", &g_selectFBX->castDecal);
+
+		ImGui::Text("CalculateShadow ");
+		ImGui::SameLine();
+		ImGui::Checkbox("##CalculateShadow ", &g_selectFBX->calculateShadow);
+
 		int materialIndex = 0;
 		for (auto& each : g_selectFBX->materialVec)
 		{
@@ -626,6 +634,8 @@ void ShowSeleteFBXInfo()
 
 		resourceManager->GetMesh(g_selectFBX->meshName)->SetDiffuseExposure(g_selectFBX->diffuseExposure);
 		resourceManager->GetMesh(g_selectFBX->meshName)->SetAmbientExposure(g_selectFBX->ambientExposure);
+		resourceManager->GetMesh(g_selectFBX->meshName)->SetCastDecal(g_selectFBX->castDecal);
+		resourceManager->GetMesh(g_selectFBX->meshName)->SetCalculateShadow(g_selectFBX->calculateShadow);
 
 		g_prevFBX = g_selectFBX;
 	}
@@ -1555,7 +1565,7 @@ void LoadResourcesRecursively()
 		const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
 		/// SCRES 우선 로드
-		///resourceManager->LoadFile("FBXMaterial.scres");
+		resourceManager->LoadFile("FBXMaterial.scres");
 
 		// 나머지 기타등등 파일들 로드하기
 		{
