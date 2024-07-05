@@ -235,7 +235,7 @@ void SkillPreviewSystem::Init()
 #pragma endregion 
 }
 
-void SkillPreviewSystem::ShowRobinQSkill(const Vector3d& objectPos)
+void SkillPreviewSystem::ShowRobinQSkill(const yunutyEngine::Vector3d& objectPos)
 {
 	// 매개변수로 들어온 objectPos로부터 사거리가 표시됩니다.
 
@@ -287,6 +287,11 @@ void SkillPreviewSystem::ShowRobinQSkill(const Vector3d& objectPos)
 	{
 		this->robinQSkillPreviewObj->SetSelfActive(true);
 	}
+}
+
+void SkillPreviewSystem::ShowRobinQSkill(const Vector3d& objectPos, const Vector3d& destination)
+{
+
 }
 
 void SkillPreviewSystem::HideRobinQSkill()
@@ -448,6 +453,11 @@ void SkillPreviewSystem::ShowHanselWSkill(const Vector3d& objectPos)
 	{
 		this->hanselWSkillPreviewObj->SetSelfActive(true);
 	}
+}
+
+void SkillPreviewSystem::ShowHanselWSkill(const Vector3d& objectPos, const Vector3d& destination)
+{
+
 }
 
 void SkillPreviewSystem::HideHanselWSkill()
