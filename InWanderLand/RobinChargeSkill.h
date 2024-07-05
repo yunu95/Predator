@@ -3,6 +3,8 @@
 
 struct POD_RobinChargeSkill
 {
+    float foreswingDuration = -1;
+    float backswingDuration = -1;
     float coolTime = 2.0f;
     float cost = 10.0f;
     float maxDistance = 8.0f;
@@ -48,6 +50,12 @@ private:
     coroutine::Coroutine SpawningSkillffect(std::weak_ptr<RobinChargeSkill> skill, Vector3d skillStartPos);
     std::weak_ptr<UnitAcquisitionSphereCollider> knockbackCollider;
     std::weak_ptr<ManagedFBX> chargeEffect;
+    yunuGI::IAnimation* rushAnim = nullptr;
+    yunuGI::IAnimation* slamAnim = nullptr;
+    std::weak_ptr<VFXAnimator> chargeEffectAnimator = std::weak_ptr<VFXAnimator>();
+    float foreswingSpeed = 1.f;
+    float backswingSpeed = 1.f;
+    float effectSpeed = 1.f;
 };
 
 

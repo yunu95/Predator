@@ -283,6 +283,7 @@ UIElement* UIManager::GetUIElementWithIndex(int index)
         if (auto itr = uisByIndex.find(index); itr != uisByIndex.end())
             return itr->second;
     }
+    return nullptr;
 }
 JsonUIData UIManager::GetUIDataWithIndex(int index)
 {
@@ -387,6 +388,10 @@ void UIManager::ReturnToTitleAfterFadeOut()
     {
         coro = StartCoroutine(ReturnToTitleAfterFadeOutCoro());
     }
+}
+UIButton* UIManager::GetHighlightedButton()
+{
+    return m_highestPriorityButton;
 }
 coroutine::Coroutine UIManager::StartGameAfterFadeOutCoro()
 {
@@ -596,9 +601,8 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
         if (!(uiData.customFlags & (int)UIExportFlag::NoOverlaying))
         {
             uiButtonComponent = element->button = uiObject->AddComponent<UIButton>();
+            uiButtonComponent->uiElement = element->GetWeakPtr<UIElement>();
             uiButtonComponent->SetImageComponent(uiImageComponent);
-            //uiButtonComponent->SetIdleImage(idleTexture);
-            //uiButtonComponent->SetOnMouseImage(rsrcMgr->GetTexture(L"Texture/zoro.jpg"));
         }
     }
     if (uiData.customFlags & (int)UIExportFlag::CanAdjustHeight)
@@ -838,11 +842,27 @@ void UIManager::ImportDefaultAction(const JsonUIData& uiData, UIElement* element
     //topLeftPos.x -= uiData.pivot[0] * uiData.width;
     //topLeftPos.y -= (1 - uiData.pivot[1]) * uiData.height;
     uiObject->GetTransform()->SetLocalPosition({ pivotPos.x, pivotPos.y, 0 });
+    uiObject->GetTransform()->SetLocalRotation(Vector3d{ 0,0,uiData.floats[JsonUIFloatType::rotation] });
 }
 void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* element)
 {
     UIButton* button{ element->button };
     transform(element->GetGameObject()->GetChildren().begin(), element->GetGameObject()->GetChildren().end(), back_inserter(element->children), [](auto each) {return each->GetComponent<UIElement>(); });
+    if (uiData.customFlags2 & (int)UIExportFlag2::Duplicatable)
+    {
+        //element->localUIdatasByIndex[uiData.uiIndex] = uiData;
+        element->uiPriority = uiImportingPriority;
+        for (auto child : element->GetGameObject()->GetChildrenRecursively())
+        {
+            if (auto childElement = child->GetComponent<UIElement>())
+            {
+                element->localUIsByEnumID[(UIEnumID)childElement->importedUIData.enumID] = childElement;
+                element->localUIsByIndex[childElement->importedUIData.uiIndex] = childElement;
+                element->localUIdatasByIndex[childElement->importedUIData.uiIndex] = childElement->importedUIData;
+                childElement->duplicateParentEnumID = (UIEnumID)uiData.enumID;
+            }
+        }
+    }
     // 만약 닫기 버튼이라면...
     if (uiData.customFlags & (int)UIExportFlag::CloseButton)
     {
@@ -1052,31 +1072,25 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
         {
             dependentUpgrade = static_cast<UIEnumID>(GetUIDataWithIndex(uiData.dependentUpgrade).enumID);
         }
-        element->button->AddButtonClickFunction([=]()
+        element->GetLocalUIsByEnumID().at(UIEnumID::SkillUpgradeButton_Upgradable)->button->AddButtonClickFunction([=]()
             {
-                if (PlayerController::Instance().IsSkillUpgraded(static_cast<UIEnumID>(uiData.enumID)))
-                {
-                    return;
-                }
-
+                // 스킬 포인트가 있으면 업글시켜준다.
                 if (PlayerController::Instance().GetSkillPoints() <= 0)
                 {
                     GetUIElementByEnum(UIEnumID::PopUpMessage_NotEnoughSP)->EnableElement();
                 }
                 else
                 {
-                    // 선행 업그레이드까지 완료된 경우 허락창을 띄운다.
-                    if (dependentUpgrade == UIEnumID::None || PlayerController::Instance().IsSkillUpgraded(dependentUpgrade))
-                    {
-                        PlayerController::Instance().SetSkillUpgradeTarget(upgradeID);
-                        GetUIElementByEnum(UIEnumID::PopUpMessage_PermissionForUpgrade)->EnableElement();
-                    }
-                    else
-                    {
-                        GetUIElementByEnum(UIEnumID::PopUpMessage_RequirementNotMet)->EnableElement();
-                    }
+                    PlayerController::Instance().SetSkillUpgradeTarget(upgradeID);
+                    GetUIElementByEnum(UIEnumID::PopUpMessage_PermissionForUpgrade)->EnableElement();
                 }
             });
+        element->GetLocalUIsByEnumID().at(UIEnumID::SkillUpgradeButton_InUpgradableImage)->button->AddButtonClickFunction([=]()
+            {
+                // 선행 스킬이 업그레이드되어 있지 않은 상태라면 경고문 출력
+                GetUIElementByEnum(UIEnumID::PopUpMessage_RequirementNotMet)->EnableElement();
+            }
+        );
     }
     // 초기 상태가 비활성화 상태라면...
     if (uiData.customFlags & (int)UIExportFlag::DisableOnStart)
@@ -1108,21 +1122,6 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
     {
         std::transform(uiData.exclusiveEnableGroup.begin(), uiData.exclusiveEnableGroup.end(), std::back_inserter(element->exclusiveEnableGroup), [&](int idx) {return GetUIElementWithIndex(idx); });
     }
-    if (uiData.customFlags2 & (int)UIExportFlag2::Duplicatable)
-    {
-        //element->localUIdatasByIndex[uiData.uiIndex] = uiData;
-        element->uiPriority = uiImportingPriority;
-        for (auto child : element->GetGameObject()->GetChildrenRecursively())
-        {
-            if (auto childElement = child->GetComponent<UIElement>())
-            {
-                element->localUIsByEnumID[(UIEnumID)childElement->importedUIData.enumID] = childElement;
-                element->localUIsByIndex[childElement->importedUIData.uiIndex] = childElement;
-                element->localUIdatasByIndex[childElement->importedUIData.uiIndex] = childElement->importedUIData;
-                childElement->duplicateParentEnumID = (UIEnumID)uiData.enumID;
-            }
-        }
-    }
 }
 // 특별한 로직이 적용되어야 하는 경우 참, 그렇지 않으면 거짓을 반환합니다.
 bool UIManager::ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* element)
@@ -1138,8 +1137,11 @@ bool UIManager::ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* 
         ImportDefaultAction(uiData, GetUIElementWithIndex(uiData.uiIndex));
         element->button->AddButtonClickFunction([=]()
             {
-                //InputManager::Instance().ToggleTacticMode();
+                PlayerController::Instance().TryTogglingTacticMode();
             });
+        break;
+    case UIEnumID::TacticModeRevertButton:
+        TacticModeSystem::Instance().PopCommand();
         break;
     case UIEnumID::PopUpMessage_PermissionForUpgradeProceedButton:
         ImportDefaultAction(uiData, GetUIElementWithIndex(uiData.uiIndex));
@@ -1230,18 +1232,21 @@ bool UIManager::ImportDealWithSpecialCases_Post(const JsonUIData& uiData, UIElem
         switch (element->duplicateParentEnumID)
         {
         case UIEnumID::CharInfo_Robin:
+        case UIEnumID::CharInfo_Robin_Left:
             element->button->AddExternalButtonClickFunction([=]()
                 {
                     PlayerController::Instance().SelectSkill(SkillType::ROBIN_W);
                 });
             break;
         case UIEnumID::CharInfo_Ursula:
+        case UIEnumID::CharInfo_Ursula_Left:
             element->button->AddExternalButtonClickFunction([=]()
                 {
                     PlayerController::Instance().SelectSkill(SkillType::URSULA_W);
                 });
             break;
         case UIEnumID::CharInfo_Hansel:
+        case UIEnumID::CharInfo_Hansel_Left:
             element->button->AddExternalButtonClickFunction([=]()
                 {
                     PlayerController::Instance().SelectSkill(SkillType::HANSEL_W);

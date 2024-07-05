@@ -38,6 +38,7 @@ class UnitPool;
 class PlayerController;
 class UnitController;
 class BossController;
+class RangedApproachingController;
 class UnitCapsuleCollider;
 
 namespace wanderUtils
@@ -116,6 +117,7 @@ public:
     std::weak_ptr<coroutine::Coroutine> SetRotation(float facingAngle, float rotatingTime);
     coroutine::Coroutine SettingRotation(float facingAngle, float rotatingTime);
     const UnitBehaviourTree& GetBehaviourTree() const { return unitBehaviourTree; };
+    UnitOrderType GetPendingOrderType() const;
     float GetUnitCurrentHp() const;
     float GetUnitMaxHp() const;
     // AcquireFactor는 수치에 곱연산이 적용될 부분이며, AcquireDelta는 수치에 덧셈 연산이 적용될 부분이다.
@@ -126,6 +128,7 @@ public:
     factor::Adder<float> adderAttackSpeed;
     factor::Multiplier<float> multiplierAttackSpeed;
     factor::Adder<float> adderCritChance;
+    factor::Multiplier<float> multiplierProjectileSpeed;
     virtual void OnContentsPlay() override { }
     virtual void OnContentsStop() override;
     virtual Component* GetComponent() override { return this; }
@@ -152,14 +155,19 @@ public:
     float GetCritMultiplier();
     /// Decreasing Damage Elements
     int GetArmor();
+    float GetProjectileSpeed();
     float GetEvasionChance();				// 회피율
     float GetCritResistance();				// 피격시 치명타 피해 감소율
     std::string GetFBXName() const;
     // 콜라이더 캡슐 내부의 무작위 위치를 반환합니다.
     Vector3d GetRandomPositionInsideCapsuleCollider();
+    std::weak_ptr<Unit> GetClosestEnemy();
+    std::weak_ptr<Unit> GetClosestEnemyWithinAttackRange();
+    std::weak_ptr<Unit> GetClosestEnemyWithinAcquisitionRange();
     // 유닛의 행동 트리 상태가 전환될 때
     std::array<DelegateCallback<void>, UnitBehaviourTree::Keywords::KeywordNum>& OnStateEngageCallback() { return onStateEngage; };
     std::array<DelegateCallback<void>, UnitBehaviourTree::Keywords::KeywordNum>& OnStateExitCallback() { return onStateExit; };
+    void Revive();
     string name;
     bool playingBattleAnim{ true };
     // 내가 공격할 때, 매개변수는 내가 공격하는 상대
@@ -220,15 +228,12 @@ private:
     {
         onStateExit[state]();
     };
-    std::weak_ptr<Unit> GetClosestEnemy();
-    std::weak_ptr<Unit> GetClosestEnemyWithinAttackRange();
-    std::weak_ptr<Unit> GetClosestEnemyWithinAcquisitionRange();
     template<UnitOrderType orderType>
     bool CanProcessOrder();
     // 상대 유닛에 대해 다가가서 때리기 좋은 위치를 반환합니다.
     Vector3d GetAttackPosition(std::weak_ptr<Unit> opponent);
     // 유닛 부활 코루틴
-    yunutyEngine::coroutine::Coroutine RevivalCoroutine();
+    yunutyEngine::coroutine::Coroutine RevivalCoroutine(float revivalDelay);
     // 유닛이 새로 생성될때 애니메이션, 번 이펙트와 함께 나오는 코루틴
     yunutyEngine::coroutine::Coroutine BirthCoroutine();
     // 유닛이 죽을 때 애니메이션, 번 이펙트와 함께 사라지고 유닛 풀에 반환되는 코루틴
@@ -240,8 +245,8 @@ private:
     void ReturnToPool();
     int liveCountLeft{ 0 };
     // 유닛이 이동중, 정체 상태에 연속으로 jamCount번 이상 빠졌다면 이동 명령을 취소하고 공격모드 이동명령을 실행하게 된다.
-    int jamCount = 0;
-    static constexpr int maxJamCount = 4;
+    float jammedDuration = 0;
+    static constexpr float jamDurationThreshold = 0.5f;
     std::vector<UnitController*> controllers;
     UnitBehaviourTree unitBehaviourTree;
     std::array<DelegateCallback<void>, UnitBehaviourTree::Keywords::KeywordNum> onStateEngage;
@@ -319,6 +324,8 @@ private:
     friend UnitPool;
     friend PlayerController;
     friend BossController;
+    friend RangedApproachingController;
+    friend PlayerController;
     friend UnitBuffTaunted;
     friend wanderUtils::UnitCoroutine::ForSecondsFromUnit;
 };

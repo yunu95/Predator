@@ -77,13 +77,46 @@ void PlayerController::UpgradeSkill()
 {
     SetSkillPoints(skillPointsLeft - 1);
     static constexpr float gray = 0.3f;
-    UIManager::Instance().GetUIElementByEnum(skillUpgradeUITarget)->imageComponent.lock()->GetGI().SetColor({ gray,gray,gray,1 });
+    // AdjustUpgradeButtonsByState
     skillUpgraded[skillUpgradeByUI.at(skillUpgradeUITarget)] = true;
+    for (auto each : skillUpgradeByUI)
+    {
+        UIElement* uiElement = UIManager::Instance().GetUIElementByEnum(each.first);
+        SkillUpgradeType::Enum dependentSkillUpgrade = SkillUpgradeType::NONE;
+        if (UIElement* dependent = UIManager::Instance().GetUIElementWithIndex(uiElement->importedUIData.dependentUpgrade))
+        {
+            dependentSkillUpgrade = skillUpgradeByUI.at((UIEnumID)dependent->importedUIData.enumID);
+        }
+        if (skillUpgraded[each.second])
+        {
+            // 스킬이 이미 업그레이드된 경우
+            uiElement->GetLocalUIsByEnumID().at(UIEnumID::SkillUpgradeButton_UpgradedImage)->EnableElement();
+        }
+        else if (dependentSkillUpgrade == SkillUpgradeType::NONE || skillUpgraded[dependentSkillUpgrade])
+        {
+            // 의존하는 스킬이 업그레이드된 경우
+            uiElement->GetLocalUIsByEnumID().at(UIEnumID::SkillUpgradeButton_Upgradable)->EnableElement();
+        }
+        else
+        {
+            // 아예 업그레이드를 할 수 없는 경우
+            uiElement->GetLocalUIsByEnumID().at(UIEnumID::SkillUpgradeButton_InUpgradableImage)->EnableElement();
+        }
+    }
 }
 void PlayerController::SetSkillPoints(int points)
 {
     skillPointsLeft = points;
     UIManager::Instance().GetUIElementByEnum(UIEnumID::SkillPoint_Number)->SetNumber(skillPointsLeft);
+    if (skillPointsLeft > 0)
+    {
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::InGame_SkiltreeMenu_Active)->EnableElement();
+    }
+    else
+    {
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::InGame_SkiltreeMenu_InActive)->EnableElement();
+    }
+
 }
 int PlayerController::GetSkillPoints()
 {
@@ -167,14 +200,19 @@ void PlayerController::Update()
     {
         text_State = Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::graphics::UIText>();
         text_State->GetGI().SetFontSize(30);
-        text_State->GetGI().SetColor(yunuGI::Color{ 1,0,1,1 });
+        text_State->GetGI().SetColor(yunuGI::Color{ 1,1,1,1 });
         text_State->GetTransform()->SetLocalScale(Vector3d{ 1200,500,0 });
         text_State->GetTransform()->SetLocalPosition(Vector3d{ 0,260,0 });
     }
-    if (Unit::debuggingUnit = GetUnitOnCursor())
+    if (auto cursorOnUnit = GetUnitOnCursor())
     {
-        selectedDebugCharacter = GetUnitOnCursor()->GetWeakPtr<Unit>();
+        Unit::debuggingUnit = cursorOnUnit;
+    }
+    if (Unit::debuggingUnit)
+    {
+        selectedDebugCharacter = Unit::debuggingUnit->GetWeakPtr<Unit>();
         wstringstream wsstream;
+        wsstream << L"\ndebug unit name: " << yutility::GetWString(Unit::debuggingUnit->name);
         wsstream << L"unitState : ";
         auto& activeStates = selectedDebugCharacter.lock()->GetBehaviourTree().GetActiveNodes();
         for (const auto& each : activeStates)
@@ -184,14 +222,18 @@ void PlayerController::Update()
         wsstream << L"\nacq : " << selectedDebugCharacter.lock()->acquisitionRange.lock()->GetEnemies().size();
         wsstream << L"\ncurrent pos : " << selectedDebugCharacter.lock()->GetTransform()->GetWorldPosition();
         wsstream << L"\nattack target pos : " << selectedDebugCharacter.lock()->attackMoveDestination;
-        if (!cursorUnitDetector.lock()->GetUnits().empty())
+        wsstream << L"\nnavObstacle : " << selectedDebugCharacter.lock()->referenceEnableNavObstacle.BeingReferenced();
+        wsstream << L"\nnavAgent : " << selectedDebugCharacter.lock()->navAgentComponent.lock()->GetTransform()->GetWorldPosition();
+        wsstream << L"\nnavAgent pos : " << !selectedDebugCharacter.lock()->referenceDisableNavAgent.BeingReferenced();
+        wsstream << L"\nblockFollowingNavAgent : " << selectedDebugCharacter.lock()->referenceBlockFollowingNavAgent.BeingReferenced();
+        if (auto target = Unit::debuggingUnit->currentTargetUnit.lock())
         {
-            wsstream << L"\nhovering unit : " << yutility::GetWString(GetUnitOnCursor()->name);
+            wsstream << L"\nattack target unit : " << yutility::GetWString(target->name);
         }
 
         text_State->GetGI().SetText(wsstream.str());
     }
-    text_State->SetActive(GetUnitOnCursor() && DebugGraphic::AreDebugGraphicsEnabled());
+    text_State->SetActive(Unit::debuggingUnit && DebugGraphic::AreDebugGraphicsEnabled());
 }
 
 void PlayerController::HandleByState()
@@ -227,20 +269,13 @@ void PlayerController::HandleByState()
 void PlayerController::HandleInput()
 {
     if (state == State::Cinematic) return;
-    if (Input::isKeyPushed(KeyCode::Space) && UIManager::Instance().GetScriptUI("UiEnum:Toggle_TacticMode")->GetUIEnabled() && ((state == State::Battle) || state == State::Tactic))
+    if (Input::isKeyPushed(KeyCode::Space))
     {
-        if ((TacticModeSystem::Instance().IsCoolTime() == false) && (TacticModeSystem::Instance().IsExecuting() == false))
-        {
-            TacticModeSystem::Instance().EngageTacticSystem();
-        }
-        else if ((TacticModeSystem::Instance().IsOperation() == true) && (TacticModeSystem::Instance().IsExecuting() == false))
-        {
-            TacticModeSystem::Instance().ExecuteCommands();
-        }
+        TryTogglingTacticMode();
     }
 
     // 전술모드의 마지막 명령을 지우는 키
-    if (Input::isKeyPushed(KeyCode::R) && TacticModeSystem::Instance().IsOperation() && !TacticModeSystem::Instance().IsExecuting())
+    if (Input::isKeyPushed(KeyCode::R))
     {
         TacticModeSystem::Instance().PopCommand();
     }
@@ -337,14 +372,14 @@ void PlayerController::HandleState()
 
     if (!PlaytimeWave::GetCurrentOperatingWave().expired())
     {
-        if (PlaytimeWave::GetCurrentOperatingWave().lock()->IsRemainEnemyAndWave())
-        {
-            this->SetState(State::Battle);
-        }
-        else
-        {
-            this->SetState(State::Peace);
-        }
+        //if (PlaytimeWave::GetCurrentOperatingWave().lock()->IsRemainEnemyAndWave())
+        //{
+        this->SetState(State::Battle);
+        //}
+        //else
+        //{
+        //this->SetState(State::Peace);
+        //}
     }
     else
     {
@@ -427,14 +462,111 @@ void PlayerController::HandleSkillPreview()
         {
             TacticModeSystem::Instance().ShowSkillPreviewInTacticMode(selectedSkill);
         }
-    }
-
-    // 임시 이동 경로 보여주는 부분
-    if ((state == State::Tactic) && (selectedSkill == SkillType::NONE))
-    {
-        if (auto unit = selectedCharacter.lock(); unit && unit->IsTacTicReady())
+        // 임시 이동 경로 보여주는 부분
+        if (selectedSkill == SkillType::NONE)
         {
-            TacticModeSystem::Instance().ShowTemporaryRouteInTacticMode(this->selectedCharacterType);
+            if (auto unit = selectedCharacter.lock(); unit && unit->IsTacTicReady())
+            {
+                TacticModeSystem::Instance().ShowTemporaryRouteInTacticMode(this->selectedCharacterType);
+            }
+        }
+    }
+    // 스킬 버튼 위에 마우스 커서가 올라갔을 때 표시할 스킬 프리뷰
+    if (selectedSkill == SkillType::NONE)
+    {
+        int skillButtonIDHoveringPending;
+        int parentEnumIDHoveringPending;
+        if (auto btn = UIManager::Instance().GetHighlightedButton())
+        {
+            auto uiElement = btn->GetUIElement().lock();
+            skillButtonIDHoveringPending = uiElement->importedUIData.enumID;
+            parentEnumIDHoveringPending = (int)uiElement->GetDuplicateParentEnumID();
+        }
+        else
+        {
+            parentEnumIDHoveringPending = (int)UIEnumID::None;
+            skillButtonIDHoveringPending = (int)UIEnumID::None;
+        }
+        if (skillButtonIDHovering != skillButtonIDHoveringPending || parentEnumIDHovering != parentEnumIDHoveringPending)
+        {
+            skillButtonIDHovering = skillButtonIDHoveringPending;
+            parentEnumIDHovering = parentEnumIDHoveringPending;
+
+            SkillPreviewSystem::Instance().HideRobinQSkill();
+            SkillPreviewSystem::Instance().HideUrsulaQSkill();
+            SkillPreviewSystem::Instance().HideUrsulaWSkill();
+            SkillPreviewSystem::Instance().HideHanselQSkill();
+            SkillPreviewSystem::Instance().HideHanselWSkill();
+            SkillPreviewSystem::Instance().HideSkillMaxRange();
+        }
+
+        switch (skillButtonIDHovering)
+        {
+        case (int)UIEnumID::CharInfo_Skill_Use_Q:
+            switch (parentEnumIDHovering)
+            {
+            case (int)UIEnumID::CharInfo_Robin:
+            case (int)UIEnumID::CharInfo_Robin_Left:
+            {
+                auto pos{ characters[PlayerCharacterType::Robin].lock()->GetTransform()->GetWorldPosition() };
+                auto forward{ characters[PlayerCharacterType::Robin].lock()->GetTransform()->GetWorldRotation().Forward() };
+                SkillPreviewSystem::Instance().ShowRobinQSkill(pos, pos + forward * RobinChargeSkill::GetMaxDistance());
+                SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Robin, characters[PlayerCharacterType::Robin].lock()->GetTransform()->GetWorldPosition(), RobinChargeSkill::GetMaxDistance());
+                break;
+            }
+            case (int)UIEnumID::CharInfo_Ursula:
+            case (int)UIEnumID::CharInfo_Ursula_Left:
+            {
+                auto pos{ characters[PlayerCharacterType::Ursula].lock()->GetTransform()->GetWorldPosition() };
+                //auto forward{ characters[PlayerCharacterType::Ursula].lock()->GetTransform()->GetWorldRotation().Forward() };
+                static constexpr float epsilon = 0.0001f;
+                UrsulaBlindSkill::UpdatePosition(pos, pos + epsilon * Vector3d::one);
+                auto pos1 = UrsulaBlindSkill::GetSkillObjectPos_Left(pos);
+                auto pos2 = UrsulaBlindSkill::GetSkillObjectPos_Right(pos);
+                auto pos3 = UrsulaBlindSkill::GetSkillObjectPos_Top(pos);
+                SkillPreviewSystem::Instance().ShowUrsulaQSkill(pos1, pos2, pos3, Vector3d::one * UrsulaBlindSkill::pod.skillRadius);
+                SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Ursula, characters[PlayerCharacterType::Ursula].lock()->GetTransform()->GetWorldPosition(), UrsulaBlindSkill::GetSkillRange());
+                break;
+            }
+            case (int)UIEnumID::CharInfo_Hansel:
+            case (int)UIEnumID::CharInfo_Hansel_Left:
+            {
+                auto pos{ characters[PlayerCharacterType::Hansel].lock()->GetTransform()->GetWorldPosition() };
+                SkillPreviewSystem::Instance().ShowHanselQSkill(pos, HanselChargeSkill::pod.skillRadius);
+                SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Hansel, characters[PlayerCharacterType::Hansel].lock()->GetTransform()->GetWorldPosition(), HanselChargeSkill::GetMaxRange());
+                break;
+            }
+            }
+            break;
+        case (int)UIEnumID::CharInfo_Skill_Use_W:
+            switch (parentEnumIDHovering)
+            {
+            case (int)UIEnumID::CharInfo_Robin:
+            case (int)UIEnumID::CharInfo_Robin_Left:
+                SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Robin, characters[PlayerCharacterType::Robin].lock()->GetTransform()->GetWorldPosition(), RobinTauntSkill::GetSkillRadius());
+                break;
+            case (int)UIEnumID::CharInfo_Ursula:
+            case (int)UIEnumID::CharInfo_Ursula_Left:
+            {
+                auto pos{ characters[PlayerCharacterType::Ursula].lock()->GetTransform()->GetWorldPosition() };
+                SkillPreviewSystem::Instance().ShowUrsulaWSkill(pos, UrsulaParalysisSkill::GetSkillRadius());
+                SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Ursula, characters[PlayerCharacterType::Ursula].lock()->GetTransform()->GetWorldPosition(), UrsulaParalysisSkill::pod.skillRange);
+                break;
+            }
+            case (int)UIEnumID::CharInfo_Hansel:
+            case (int)UIEnumID::CharInfo_Hansel_Left:
+            {
+                auto pos{ characters[PlayerCharacterType::Hansel].lock()->GetTransform()->GetWorldPosition() };
+                auto forward{ characters[PlayerCharacterType::Hansel].lock()->GetTransform()->GetWorldRotation().Forward() };
+                SkillPreviewSystem::Instance().ShowHanselWSkill(pos, pos + forward * HanselProjectileSkill::GetMaxRange());
+                SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Hansel, characters[PlayerCharacterType::Hansel].lock()->GetTransform()->GetWorldPosition(), HanselProjectileSkill::GetMaxRange());
+                break;
+            }
+            }
+
+            break;
+        default:
+            break;
         }
     }
 }
@@ -465,23 +597,26 @@ void PlayerController::HandleMouseHover()
     if (auto unit = GetUnitOnCursor())
     {
         ApplyHoverEffect(unit->GetWeakPtr<Unit>());
-        if (UIManager::Instance().IsMouseOnButton())
+        if (auto btn = UIManager::Instance().GetHighlightedButton(); btn && btn->IsFunctioningButton())
         {
             UIManager::Instance().GetUIElementByEnum(UIEnumID::MouseCursor_OnButton)->EnableElement();
         }
-        else if (unit->GetTeamIndex() == playerTeamIndex)
+        else if (!UIManager::Instance().IsMouseOnButton())
         {
-            UIManager::Instance().GetUIElementByEnum(UIEnumID::MouseCursor_OnAlly)->EnableElement();
-        }
-        else
-        {
-            UIManager::Instance().GetUIElementByEnum(UIEnumID::MouseCursor_OnEnemy)->EnableElement();
+            if (unit->GetTeamIndex() == playerTeamIndex)
+            {
+                UIManager::Instance().GetUIElementByEnum(UIEnumID::MouseCursor_OnAlly)->EnableElement();
+            }
+            else
+            {
+                UIManager::Instance().GetUIElementByEnum(UIEnumID::MouseCursor_OnEnemy)->EnableElement();
+            }
         }
     }
     else
     {
         DisableHoverEffect();
-        if (UIManager::Instance().IsMouseOnButton())
+        if (auto btn = UIManager::Instance().GetHighlightedButton(); btn && btn->IsFunctioningButton())
         {
             UIManager::Instance().GetUIElementByEnum(UIEnumID::MouseCursor_OnButton)->EnableElement();
         }
@@ -529,9 +664,13 @@ void PlayerController::SelectPlayerUnit(PlayerCharacterType::Enum charType)
     }
 
     selectedCharacterType = charType;
-    // 체력바의 선택 UI 활성화시키기
+    if (allySelectedEffectRenderer)
+        allySelectedEffectRenderer->SetActive(selectedCharacterType != PlayerCharacterType::None);
+    // 이전 유닛의 선택 UI 비활성화시키기
     if (auto previous = selectedCharacter.lock())
+    {
         previous->unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::StatusBar_SelectionName)->DisableElement();
+    }
     if (charType == PlayerCharacterType::None)
     {
         selectedCharacter.reset();
@@ -622,9 +761,9 @@ void PlayerController::OnRightClick()
         if (selectedCharacter.expired()) return;
         if (state != State::Tactic)
         {
-            if (!cursorUnitDetector.lock()->GetUnits().empty() && GetUnitOnCursor()->teamIndex != playerTeamIndex)
+            if (auto target = GetUnitOnCursor(); target && target->teamIndex != playerTeamIndex)
             {
-                OrderAttack(GetUnitOnCursor()->GetWeakPtr<Unit>());
+                OrderAttack(target->GetWeakPtr<Unit>());
             }
             else
             {
@@ -636,7 +775,7 @@ void PlayerController::OnRightClick()
         {
             SkillPreviewSystem::Instance().HideTemporaryRoute();
             EnqueErrorType errorType = EnqueErrorType::NONE;
-            if (!cursorUnitDetector.lock()->GetUnits().empty() && GetUnitOnCursor()->teamIndex != playerTeamIndex)
+            if (auto target = GetUnitOnCursor(); target && target->teamIndex != playerTeamIndex)
             {
                 // Attack
                 // 걸어가서 공격을 하게 될 수 있음
@@ -735,12 +874,12 @@ void PlayerController::OrderAttackMove(Vector3d position)
     }
 }
 
-void PlayerController::OrderAttack(std::weak_ptr<Unit> unit)
+void PlayerController::OrderAttack(std::weak_ptr<Unit> target)
 {
     if (auto unit = selectedCharacter.lock())
     {
-        ApplyTargetedEffect(unit);
-        unit->OrderAttack(unit);
+        ApplyTargetedEffect(target);
+        unit->OrderAttack(target);
     }
 }
 
@@ -760,7 +899,7 @@ void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
     {
     case SkillType::ROBIN_Q:
     case SkillType::HANSEL_Q:
-        static constexpr float epsilon = 5.01f;
+        static constexpr float epsilon = 16.01f;
         Vector3d deltaDistance = (pos - SingleNavigationField::Instance().GetClosestPointOnField(pos));
         deltaDistance.y = 0;
         if (deltaDistance.MagnitudeSqr() > epsilon)
@@ -936,6 +1075,7 @@ void PlayerController::SetState(State::Enum newState)
         for (auto& each : characters)
         {
             each.lock()->playingBattleAnim = false;
+            each.lock()->Revive();
         }
         break;
     case State::Cinematic:
@@ -992,7 +1132,6 @@ void PlayerController::Reset()
         cursorUnitDetector = Scene::getCurrentScene()->AddGameObject()->AddComponentAsWeakPtr<UnitAcquisitionBoxCollider>();
     std::for_each(skillUpgradeByUI.begin(), skillUpgradeByUI.end(), [&](auto& pair) {
         auto& [ui, upgrade] = pair;
-        UIManager::Instance().GetUIElementByEnum(ui)->imageComponent.lock()->GetGI().SetColor({ 1,1,1,1 });
         skillUpgraded[upgrade] = false;
         });
     skillPointsLeft = 0;
@@ -1129,6 +1268,22 @@ void PlayerController::SetMana(float mana)
     UIManager::Instance().GetUIElementByEnum(UIEnumID::Mana_Text_CurrentMP)->SetNumber(this->mana);
 }
 
+void PlayerController::TryTogglingTacticMode()
+{
+    if (UIManager::Instance().GetScriptUI("UiEnum:Toggle_TacticMode")->GetUIEnabled() && ((state == State::Battle) || state == State::Tactic))
+    {
+        if ((TacticModeSystem::Instance().IsCoolTime() == false) && (TacticModeSystem::Instance().IsExecuting() == false))
+        {
+            TacticModeSystem::Instance().EngageTacticSystem();
+        }
+        else if ((TacticModeSystem::Instance().IsOperation() == true) && (TacticModeSystem::Instance().IsExecuting() == false))
+        {
+            TacticModeSystem::Instance().ExecuteCommands();
+        }
+    }
+
+}
+
 Unit* PlayerController::GetUnitOnCursor()
 {
     if (cursorUnitDetector.lock()->GetUnits().empty()) return nullptr;
@@ -1152,6 +1307,11 @@ void PlayerController::OnResume()
 void PlayerController::RequestStateFromAction(State::Enum newState)
 {
     this->stateRequestedByAction = newState;
+}
+
+void PlayerController::SetTacticCamera(GameObject* cam)
+{
+    tacticCameraRef = cam;
 }
 
 float PlayerController::GetMana()
@@ -1443,4 +1603,9 @@ std::vector<yunutyEngine::Vector3d>& PlayerController::ModifyPathForSkill(std::v
         path.clear();
     }
     return path;
+}
+
+void PlayerController::SetAttackMoveMode(bool attackMoveMode)
+{
+    this->attackMoveMode = attackMoveMode;
 }

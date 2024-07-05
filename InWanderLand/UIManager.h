@@ -76,6 +76,7 @@ public:
     UIElement* GetScriptUI(const std::string& keyString);
     void StartGameAfterFadeOut();
     void ReturnToTitleAfterFadeOut();
+    UIButton* GetHighlightedButton();
     static constexpr UIEnumID comboNumbers[6]
     {
         UIEnumID::Ingame_Combo_TargetNumFinished1,

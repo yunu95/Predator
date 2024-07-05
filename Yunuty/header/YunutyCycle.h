@@ -10,6 +10,7 @@
 #include "Object.h"
 #include <functional>
 #include <mutex>
+#include <DbgHelp.h>
 
 #ifdef YUNUTY_EXPORTS
 #define YUNUTY_API __declspec(dllexport)

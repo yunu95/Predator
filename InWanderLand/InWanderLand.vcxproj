@@ -1018,6 +1018,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="Action_Ornament.h" />
     <ClInclude Include="Action_PauseWaves.h" />
     <ClInclude Include="Action_PlayerSelect.h" />
+    <ClInclude Include="Action_Script.h" />
     <ClInclude Include="Action_SetCamBidirectionalPath.h" />
     <ClInclude Include="Action_SetZoomFactor.h" />
     <ClInclude Include="Action_SoundPlay.h" />
@@ -2129,6 +2130,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="Action_PauseWaves.cpp" />
     <ClCompile Include="Action_PlayerSelect.cpp" />
     <ClCompile Include="Action_EngageStage.cpp" />
+    <ClCompile Include="Action_Script.cpp" />
     <ClCompile Include="Action_SetCamBidirectionalPath.cpp" />
     <ClCompile Include="Action_SetZoomFactor.cpp" />
     <ClCompile Include="Action_SoundPlay.cpp" />

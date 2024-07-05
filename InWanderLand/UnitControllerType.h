@@ -18,6 +18,12 @@ struct UnitControllerType
         RANGED_ELITE,
         // 하트퀸
         HEART_QUEEN,
+        // 제자리만 고수하는 유닛들
+        HOLDER,
+        // 거리를 유지하며 공격하려는 원거리 공격수
+        RANGED_KITING,
+        // 거리를 좁히며 다가오는 원거리 공격수
+        RANGED_APPROACHING,
         NUM
     };
 };
@@ -33,7 +39,10 @@ const std::unordered_map<int, std::string>& application::POD_Enum<UnitController
         {(int)UnitControllerType::MELEE_ELITE, "Elite Melee"},
         {(int)UnitControllerType::RANGED_ELITE, "Elite Ranged"},
         {(int)UnitControllerType::HEART_QUEEN, "Heart Queen"},
-        {(int)UnitControllerType::NUM, "Controller Type Num"}
+        {(int)UnitControllerType::HOLDER, "Holder"},
+        {(int)UnitControllerType::RANGED_KITING, "Ranged Kiting"},
+        {(int)UnitControllerType::RANGED_APPROACHING, "Ranged Approaching"},
+        {(int)UnitControllerType::NUM, "Controller Type Num"},
     };
     return enumNameMap;
 }

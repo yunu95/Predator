@@ -3,7 +3,8 @@
 
 std::weak_ptr<Projectile> ProjectilePool::Borrow(std::weak_ptr<Unit> owner, std::weak_ptr<Unit> opponent)
 {
-    const std::string& fbxname = owner.lock()->GetUnitTemplateData().pod.projectile_staticFBXName;
+    auto ownerPtr = owner.lock();
+    const std::string& fbxname = ownerPtr->GetUnitTemplateData().pod.projectile_staticFBXName;
     if (!poolsByFBX.contains(fbxname))
     {
         std::shared_ptr<PoolByMesh> pool = std::make_shared<PoolByMesh>();
@@ -13,10 +14,10 @@ std::weak_ptr<Projectile> ProjectilePool::Borrow(std::weak_ptr<Unit> owner, std:
     std::weak_ptr<Projectile> ret = poolsByFBX[fbxname]->Borrow();
     auto projectile = ret.lock();
     projectile->owner = owner;
-    const auto& ownerTD = owner.lock()->GetUnitTemplateData().pod;
+    const auto& ownerTD = ownerPtr->GetUnitTemplateData().pod;
     const auto& v = ownerTD.projectileOffset;
     DirectX::XMVECTOR offset = DirectX::XMVectorSet(v.x, v.y, v.z, 1);
-    auto yunuWtm = owner.lock()->GetTransform()->GetWorldTM();
+    auto yunuWtm = ownerPtr->GetTransform()->GetWorldTM();
     DirectX::XMMATRIX wtm = DirectX::XMLoadFloat4x4(reinterpret_cast<const DirectX::XMFLOAT4X4*>(&yunuWtm));
     offset = DirectX::XMVector4Transform(offset, wtm);
     projectile->GetTransform()->SetWorldPosition({ offset.m128_f32[0],offset.m128_f32[1],offset.m128_f32[2] });
@@ -30,9 +31,17 @@ std::weak_ptr<Projectile> ProjectilePool::Borrow(std::weak_ptr<Unit> owner, std:
         projectile->homingTarget.reset();
     }
     projectile->projectileType = (ProjectileType::Enum)ownerTD.projectileType.enumValue;
-    projectile->damage = owner.lock()->GetUnitTemplateData().pod.m_autoAttackDamage + owner.lock()->adderAttackDamage;
+    projectile->damage = ownerPtr->GetUnitTemplateData().pod.m_autoAttackDamage + ownerPtr->adderAttackDamage;
     projectile->traveling = true;
-    projectile->SetSpeed({ offset.m128_f32[0],offset.m128_f32[1],offset.m128_f32[2] }, opponent.lock()->GetRandomPositionInsideCapsuleCollider(), ownerTD.projectileSpeed);
+    auto opponentPtr = opponent.lock();
+    auto destination = opponentPtr->GetRandomPositionInsideCapsuleCollider();
+    float distanceToOpponent = (-projectile->GetTransform()->GetWorldPosition() + destination).Magnitude();
+    float noise = math::Random::GetRandomFloat(0.0f, ownerTD.projectileTargetNoise * distanceToOpponent) - opponentPtr->GetUnitTemplateData().pod.collisionSize;
+    if (noise > 0)
+    {
+        destination += Quaternion{ Vector3d{0, math::Random::GetRandomFloat(180), 0} }.Forward() * noise;
+    }
+    projectile->SetSpeed({ offset.m128_f32[0],offset.m128_f32[1],offset.m128_f32[2] }, destination, ownerPtr->GetProjectileSpeed());
     projectile->GetTransform()->SetLocalScale(Vector3d::one * ownerTD.projectile_scale);
 
     return ret;

@@ -1429,6 +1429,40 @@ namespace application
                             epm.Return();
                         }
                     }
+
+                    if (epm.GetReturnPopupName() == "SetTargetCamera(Tactic)")
+                    {
+                        ImGui::Begin("Tactic Camera Setting Popup", &pop, flag);
+                        auto rect = ImGui::GetContentRegionAvail();
+                        auto size = ImGui::CalcTextSize("Please Setting Camera");
+                        imgui::ShiftCursorX((rect.x - size.x) / 2);
+                        imgui::ShiftCursorY((rect.y - size.y) / 2);
+                        ImGui::Text("Please Setting Camera");
+                        ImGui::BringWindowToFocusFront(ImGui::GetCurrentWindow());
+                        ImGui::End();
+
+                        pp.ChangeTab("Cam");
+
+                        auto data = epm.GetReturnPopupData<Action_SetTacticCamera>();
+                        if (data->isEditing == false && pm.GetCurrentPalette() == &cp)
+                        {
+                            data->isEditing = true;
+                            cp.Reset();
+                        }
+
+                        if (data->isEditing == true && cp.GetSelections().size() == 1)
+                        {
+                            data->SetCamera(static_cast<CameraData*>(*cp.GetSelections().begin()));
+                            data->isEditing = false;
+                            epm.Return();
+                        }
+
+                        if (!pop)
+                        {
+                            data->isEditing = false;
+                            epm.Return();
+                        }
+                    }
                 }
             }
             ImGui::End();
@@ -1483,7 +1517,9 @@ namespace application
             auto selectedData = GetSelectedScript();
 
             int idx = 0;
-            for (auto each : ScriptSystem::Instance().GetScriptList())
+            std::vector<Script*> sortedScriptList{ ScriptSystem::Instance().GetScriptList().begin(), ScriptSystem::Instance().GetScriptList().end() };
+            std::sort(sortedScriptList.begin(), sortedScriptList.end(), [](Script* a, Script* b) { return a->name < b->name; });
+            for (auto each : sortedScriptList)
             {
                 ImGui::PushID(("Script_Name" + each->name).c_str() + idx);
 
@@ -2142,6 +2178,16 @@ namespace application
                             case application::ActionType::UnitPlayAnimation:
                             {
                                 selectedScript->AddAction<Action_UnitPlayAnimation>();
+                                break;
+                            }
+                            case application::ActionType::PullScriptTrigger:
+                            {
+                                selectedScript->AddAction<Action_PullScriptTrigger>();
+                                break;
+                            }
+                            case application::ActionType::SetTacticCamera:
+                            {
+                                selectedScript->AddAction<Action_SetTacticCamera>();
                                 break;
                             }
                             default:

@@ -3,6 +3,11 @@
 
 struct POD_HanselChargeSkill
 {
+    float   foreswingDuration = -1.0f;
+    float	skillDuration = -1.0f;
+    float   backswingDuration = -1.0f;
+    float   jumpSpeed = 1.0f;
+
     float	coolTime = 2.0f;
     float	skillCost = 10.0f;
     float	maxRange = 10.0f;
@@ -42,8 +47,16 @@ private:
     std::weak_ptr<ManagedFBX> stompEffect1;
     std::weak_ptr<ManagedFBX> stompEffect2;
     std::weak_ptr<coroutine::Coroutine> effectColliderCoroutine;
+    std::weak_ptr<yunutyEngine::graphics::Animator> animator;
+    std::weak_ptr<VFXAnimator> stompEffect1Animator;
+    std::weak_ptr<VFXAnimator> stompEffect2Animator;
+
 
     float colliderEffectRatio;
+    float foreswingSpeed = 1.f;
+    float skillSpeed = 1.f;
+    float jumpSpeed = 1.f;
+    float backswingSpeed = 1.f;
 };
 
 

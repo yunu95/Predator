@@ -41,7 +41,9 @@ namespace application
             POD_Vector2<float> statusBarOffset;
             // 생성될때 걸리는 시간, 생성시 번아웃 효과 연출 시간과 같다.
             float birthTime{ 0.5 };
+            bool lingeringCorpse{ false };
             // 사망할 때 번아웃 효과가 연출되는 시간
+            float deathBurnOffset{ 0.0 };
             float deathBurnTime{ 0.5 };
             POD_Vector3<float> birthBurnEdgeColor{ 1,1,1 };
             float birthBurnEdgeThickness = 0.01f;
@@ -64,6 +66,8 @@ namespace application
             float m_idRadius;
             float m_atkRadius;
             float m_atkCooltime = 2.1f;
+            float m_atkRandomDelayMax = 0.125f;
+            float m_atkRandomDelayMin = -0.0625f;
             float m_unitSpeed;
             float rotationSpeed = 180.0f;
 
@@ -74,6 +78,9 @@ namespace application
             std::string projectile_staticFBXName;
             // 발사체가 생성되는 위치
             POD_Vector3<float> projectileOffset;
+            // noise가 클수록 착탄지점이 불규칙해진다.
+            // 최종적으로 적용되는 착탄지점 노이즈는 공격 대상으로부터의 거리의 제곱에 비례한다.
+            float projectileTargetNoise{ 0 };
             float projectileSpeed{ 5 };
             float projectile_scale{ 1.0f };
             float m_attackPreDelay = 0.5f;

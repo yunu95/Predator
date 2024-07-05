@@ -11,6 +11,8 @@
 
 #include "EditorPopupManager.h"
 
+#include "PlayerController.h"
+
 namespace application
 {
 	Action_CameraChangeView::~Action_CameraChangeView()
@@ -543,6 +545,126 @@ namespace application
 
 	bool Action_CameraRevert::PostDecoding(const json& data)
 	{
+		return true;
+	}
+
+	Action_SetTacticCamera::~Action_SetTacticCamera()
+	{
+		if (targetCam)
+		{
+			targetCam->RemoveObserver(this);
+		}
+	}
+
+	CoroutineObject<void> Action_SetTacticCamera::DoAction()
+	{
+		PlayerController::Instance().SetTacticCamera(targetCam->GetCameraComponent()->GetGameObject());
+		co_return;
+	}
+
+	bool Action_SetTacticCamera::IsValid()
+	{
+		return (targetCam != nullptr) ? true : false;
+	}
+
+	void Action_SetTacticCamera::SetCamera(editor::CameraData* cam)
+	{
+		if (targetCam)
+		{
+			targetCam->RemoveObserver(this);
+		}
+
+		targetCam = cam;
+		if (cam)
+		{
+			cam->RegisterObserver(this);
+		}
+	}
+
+	void Action_SetTacticCamera::ProcessObervationEvent(ObservationTarget* target, ObservationEvent event)
+	{
+		switch (event)
+		{
+			case application::ObservationEvent::Destroy:
+			{
+				if (targetCam == static_cast<editor::CameraData*>(target))
+				{
+					targetCam = nullptr;
+				}
+				break;
+			}
+			default:
+				break;
+		}
+	}
+
+	void Action_SetTacticCamera::ImGui_DrawDataPopup(Action_SetTacticCamera* data)
+	{
+		if (ImGui::MenuItem("SetTargetCamera"))
+		{
+			editor::EditorLayer::SetInputControl(false);
+			editor::imgui::ShowMessageBox("SetTargetCamera(Tactic)", [data]()
+				{
+					auto& pp = editor::PalettePanel::GetSingletonInstance();
+					auto& cp = editor::palette::CameraPalette::SingleInstance();
+
+					editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
+
+					ImGui::Separator();
+
+					ImGui::SetNextItemWidth(-1);
+					if (data->targetCam)
+					{
+						ImGui::Text(data->targetCam->pod.name.c_str());
+						pp.ChangeTab("Camera");
+						cp.Reset();
+						cp.SelectCamera(data->targetCam);
+					}
+					else
+					{
+						ImGui::Text("------");
+					}
+
+					ImGui::Separator();
+
+					if (ImGui::Button("Edit"))
+					{
+						ImGui::CloseCurrentPopup();
+						editor::imgui::CloseMessageBox("SetTargetCamera(Tactic)");
+						editor::EditorLayer::SetInputControl(true);
+						editor::EditorPopupManager::GetSingletonInstance().PushReturnPopup<Action_SetTacticCamera>("SetTargetCamera(Tactic)", data);
+					}
+					ImGui::SameLine();
+
+					if (ImGui::Button("Cancel"))
+					{
+						ImGui::CloseCurrentPopup();
+						editor::imgui::CloseMessageBox("SetTargetCamera(Tactic)");
+						editor::EditorLayer::SetInputControl(true);
+					}
+				}, 300);
+		}
+	}
+
+	bool Action_SetTacticCamera::PreEncoding(json& data) const
+	{
+		return true;
+	}
+
+	bool Action_SetTacticCamera::PostEncoding(json& data) const
+	{
+		data["targetCam"] = targetCam ? UUID_To_String(targetCam->GetUUID()) : "nullptr";
+		return true;
+	}
+
+	bool Action_SetTacticCamera::PreDecoding(const json& data)
+	{
+		return true;
+	}
+
+	bool Action_SetTacticCamera::PostDecoding(const json& data)
+	{
+		SetCamera(UUIDManager::GetSingletonInstance().GetPointerFromUUID<editor::CameraData*>(String_To_UUID(data["targetCam"])));
 		return true;
 	}
 }

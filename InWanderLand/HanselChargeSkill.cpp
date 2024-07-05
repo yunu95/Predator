@@ -7,11 +7,9 @@ POD_HanselChargeSkill HanselChargeSkill::pod = POD_HanselChargeSkill();
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-const float stompTimingFrame = 91.0f;
-const float endFrame = 145.0f;
-const float	duration = 0.7f;
-const float damageDelay = 1.5f;
-const float jumpTiming = 1.05f;
+const float	JumpAndLandDuration = 0.88f;
+const float damageDelay = 0.92f;
+const float jumpForeswingTime = 0.2f;
 
 coroutine::Coroutine HanselChargeSkill::operator()()
 {
@@ -23,19 +21,53 @@ coroutine::Coroutine HanselChargeSkill::operator()()
     Vector3d direction = deltaPos.Normalized();
     Vector3d endPos = startPos + deltaPos;
     Vector3d currentPos = startPos;
-    auto animator = owner.lock()->GetAnimator();
+    animator = owner.lock()->GetAnimator();
 
+    owner.lock()->SetDefaultAnimation(UnitAnimType::None);
     owner.lock()->PlayAnimation(UnitAnimType::Skill1);
 
     effectColliderCoroutine = owner.lock()->StartCoroutine(SpawningFieldEffect(dynamic_pointer_cast<HanselChargeSkill>(selfWeakPtr.lock())));
     effectColliderCoroutine.lock()->PushDestroyCallBack([this]()
         {
+            animator.lock()->GetGI().SetPlaySpeed(1);
+            stompEffect1Animator.lock()->SetSpeed(1);
+            stompEffect2Animator.lock()->SetSpeed(1);
             UnitAcquisitionSphereColliderPool::Instance().Return(stompCollider);
             FBXPool::Instance().Return(stompEffect1);
             FBXPool::Instance().Return(stompEffect2);
         });
+    float localForeswingDuration;
+    if (pod.foreswingDuration > 0)
+    {
+        localForeswingDuration = pod.foreswingDuration;
+    }
+    else
+    {
+        localForeswingDuration = jumpForeswingTime;
+    }
+    float localSkillDuration;
+    if (pod.skillDuration > 0)
+    {
+        localSkillDuration = pod.skillDuration;
+    }
+    else
+    {
+        localSkillDuration = JumpAndLandDuration + damageDelay;
+    }
+    float localBackswingDuration;
+    if (pod.backswingDuration > 0)
+    {
+        localBackswingDuration = pod.backswingDuration;
+    }
+    else
+    {
+        localBackswingDuration = anim->GetDuration() - jumpForeswingTime - JumpAndLandDuration - damageDelay;
+    }
 
-    co_yield coroutine::WaitForSeconds(anim->GetDuration());
+    co_yield coroutine::WaitForSeconds(localForeswingDuration + localSkillDuration + localBackswingDuration);
+
+    if (owner.lock()->GetPendingOrderType() == UnitOrderType::None)
+        owner.lock()->OrderAttackMove();
 
     co_return;
 }
@@ -91,21 +123,52 @@ coroutine::Coroutine HanselChargeSkill::SpawningFieldEffect(std::weak_ptr<Hansel
     stompEffect2.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(actualCollideRange, actualCollideRange, actualCollideRange));
     stompEffect2.lock()->GetGameObject()->SetSelfActive(false);
 
-    auto stompEffect1Animator = stompEffect1.lock()->AcquireVFXAnimator();
+    stompEffect1Animator = stompEffect1.lock()->AcquireVFXAnimator();
     stompEffect1Animator.lock()->SetAutoActiveFalse();
     stompEffect1Animator.lock()->Init();
 
-    auto stompEffect2Animator = stompEffect2.lock()->AcquireVFXAnimator();
+    stompEffect2Animator = stompEffect2.lock()->AcquireVFXAnimator();
     stompEffect2Animator.lock()->SetAutoActiveFalse();
     stompEffect2Animator.lock()->Init();
 
-    auto animator = owner.lock()->GetAnimator();
     auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill1);
 
-    co_yield coroutine::WaitForSeconds(jumpTiming);
+    float localForeswingDuration;
+    if (pod.foreswingDuration > 0)
+    {
+        foreswingSpeed = jumpForeswingTime / pod.foreswingDuration;
+        localForeswingDuration = pod.foreswingDuration;
+    }
+    else
+    {
+        localForeswingDuration = jumpForeswingTime;
+    }
+    animator.lock()->GetGI().SetPlaySpeed(foreswingSpeed);
 
-    float rushSpeed = static_cast<float>(deltaPos.Magnitude()) / duration;
-    coroutine::ForSeconds forSeconds{ duration };
+    co_yield coroutine::WaitForSeconds(localForeswingDuration);
+
+    float localSkillDuration;
+    float localJumpDuration;
+    float localDamageDuration;
+    if (pod.skillDuration > 0)
+    {
+        jumpSpeed = JumpAndLandDuration / (JumpAndLandDuration * pod.skillDuration / (JumpAndLandDuration + damageDelay));
+        skillSpeed = damageDelay / (damageDelay * pod.skillDuration / (JumpAndLandDuration + damageDelay));
+        localSkillDuration = pod.skillDuration;
+        localJumpDuration = (JumpAndLandDuration * pod.skillDuration / (JumpAndLandDuration + damageDelay));
+        localDamageDuration = (damageDelay * pod.skillDuration / (JumpAndLandDuration + damageDelay));
+    }
+    else
+    {
+        localSkillDuration = JumpAndLandDuration + damageDelay;
+        localJumpDuration = JumpAndLandDuration;
+        localDamageDuration = damageDelay;
+    }
+
+    animator.lock()->GetGI().SetPlaySpeed(jumpSpeed);
+
+    float rushSpeed = static_cast<float>(deltaPos.Magnitude()) / localJumpDuration;
+    coroutine::ForSeconds forSeconds{ localJumpDuration };
 
     // y = vy0 * t - 0.5 * a * t^2
     // y가 0일 때, t는 Duration이고, t = Duration / 2 일 때, y는 jumpDistance.
@@ -113,8 +176,8 @@ coroutine::Coroutine HanselChargeSkill::SpawningFieldEffect(std::weak_ptr<Hansel
     // a = (8 * jumpDistance) / Duration^2
     // vy0 = 4 * jumpDistance / Duration
 
-    float vy0 = 4 * pod.maxJumpHeight / duration;
-    float acc = (8 * pod.maxJumpHeight) / (duration * duration);
+    float vy0 = 4 * pod.maxJumpHeight / localJumpDuration;
+    float acc = (8 * pod.maxJumpHeight) / (localJumpDuration * localJumpDuration);
     float yPos = 0.0f;
 
     while (forSeconds.Tick())
@@ -127,6 +190,9 @@ coroutine::Coroutine HanselChargeSkill::SpawningFieldEffect(std::weak_ptr<Hansel
         owner.lock()->GetTransform()->SetWorldPosition(currentPos);
         co_await std::suspend_always{};
     }
+    animator.lock()->GetGI().SetPlaySpeed(skillSpeed);
+    stompEffect1Animator.lock()->SetSpeed(skillSpeed);
+    stompEffect2Animator.lock()->SetSpeed(skillSpeed);
 
     stompCollider.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
     co_await std::suspend_always{};
@@ -143,12 +209,10 @@ coroutine::Coroutine HanselChargeSkill::SpawningFieldEffect(std::weak_ptr<Hansel
     }
     RTSCam::Instance().ApplyShake(pod.impactCamShakeDistance1, pod.impactCamShakeFrequency1, pod.impactCamShakeDecreaseFactor1, endPos);
 
-    /*while (stompTimingFrame >= animator.lock()->GetCurrentFrame())
+    while (animator.lock()->GetCurrentFrame() < 60)
     {
         co_await std::suspend_always{};
-    }*/
-
-    co_yield coroutine::WaitForSeconds(damageDelay);
+    }
 
     for (auto each : stompCollider.lock()->GetEnemies())
     {
@@ -156,7 +220,27 @@ coroutine::Coroutine HanselChargeSkill::SpawningFieldEffect(std::weak_ptr<Hansel
     }
     RTSCam::Instance().ApplyShake(pod.impactCamShakeDistance2, pod.impactCamShakeFrequency2, pod.impactCamShakeDecreaseFactor2, endPos);
 
-    co_yield coroutine::WaitForSeconds(anim->GetDuration() - jumpTiming - duration - damageDelay);
+    float localBackswingDuration;
+    if (pod.backswingDuration > 0)
+    {
+        backswingSpeed = (anim->GetDuration() - jumpForeswingTime - JumpAndLandDuration - damageDelay) / pod.backswingDuration;
+        localBackswingDuration = pod.backswingDuration;
+    }
+    else
+    {
+        localBackswingDuration = anim->GetDuration() - jumpForeswingTime - JumpAndLandDuration - damageDelay;
+    }
+
+    animator.lock()->GetGI().SetPlaySpeed(backswingSpeed);
+    stompEffect1Animator.lock()->SetSpeed(backswingSpeed);
+    stompEffect2Animator.lock()->SetSpeed(backswingSpeed);
+
+    wanderUtils::UnitCoroutine::ForSecondsFromUnit backForSeconds{ owner, localBackswingDuration };
+
+    while (backForSeconds.Tick())
+    {
+        co_await std::suspend_always{};
+    }
 
     disableNavAgent.reset();
     blockFollowingNavigation.reset();

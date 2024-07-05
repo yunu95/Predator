@@ -3,13 +3,15 @@
 
 struct POD_RobinTauntSkill
 {
+    float   foreswingDuration = -1.0f;
+    float	skillDuration = -1.0f;
+
     float	coolTime = 2.0f;
     float	skillCost = 10.0f;
     float   skillRadius = 1.0f;
     float   skillRadiusUpgraded = 1.0f;
     float	skillDamage = 5.0f;
     float	skillDamageUpgraded = 5.0f;
-    float	skillPlayTime = 2.0f;
     float	skillTauntTime = 3.0f;
 
     TO_JSON(POD_RobinTauntSkill)
@@ -31,11 +33,20 @@ public:
     static POD_RobinTauntSkill pod;
 
 private:
-    float colliderEffectRatio;
     coroutine::Coroutine SpawningSkillffect(std::weak_ptr<RobinTauntSkill> skill);
     std::weak_ptr<coroutine::Coroutine> effectColliderCoroutine;
     std::weak_ptr<UnitAcquisitionSphereCollider> tauntCollider;
     std::weak_ptr<ManagedFBX> tauntEffect;
+    std::weak_ptr<VFXAnimator> chargeEffectAnimator;
+    std::weak_ptr<yunutyEngine::graphics::Animator> animator;
+    yunuGI::IAnimation* tauntAnim = nullptr;
+
+    float colliderEffectRatio;
+    float foreswingSpeed = 1.f;
+    float skillSpeed = 1.f;
+
+    float localForeswingDuration = 0;
+    float localBackswingDuration = 0;
 };
 
 
