@@ -649,6 +649,11 @@ namespace application
                         action = AddAction<Action_PullScriptTrigger>();
                         break;
                     }
+                    case application::ActionType::SetTacticCamera:
+                    {
+                        action = AddAction<Action_SetTacticCamera>();
+                        break;
+                    }
                     default:
                         break;
                     }

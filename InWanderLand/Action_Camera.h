@@ -124,4 +124,33 @@ namespace application
 	private:
 		float lerpTime = 0;
 	};
+
+	/// 전술모드에서 사용할 카메라를 세팅합니다.
+	class Action_SetTacticCamera
+		: public IAction
+	{
+		friend class editor::Module_ScriptEditor;
+
+	public:
+		DEFINE_ACTION(SetTacticCamera)
+
+		virtual ~Action_SetTacticCamera();
+
+		virtual CoroutineObject<void> DoAction() override;
+
+		virtual bool IsValid() override;
+
+		void SetCamera(editor::CameraData* cam);
+
+		virtual void ProcessObervationEvent(ObservationTarget* target, ObservationEvent event) override;
+
+		virtual bool PreEncoding(json& data) const override;
+		virtual bool PostEncoding(json& data) const override;
+		virtual bool PreDecoding(const json& data) override;
+		virtual bool PostDecoding(const json& data) override;
+
+	private:
+		editor::CameraData* targetCam = nullptr;
+		bool isEditing = false;
+	};
 }

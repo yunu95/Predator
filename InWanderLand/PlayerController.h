@@ -99,6 +99,8 @@ public:
 
     void RequestStateFromAction(State::Enum newState);
 
+    void SetTacticCamera(GameObject* cam);
+
     // 스킬 업그레이드와 관련된 부분
     // 어떤 스킬을 업그레이드 할 것인지 미리 정한다. 미리 지정만 하는 것이지 바로 업그레이드까지 직행하는 것은 아니다.
 private:
@@ -209,6 +211,8 @@ private:
     GameObject* enemyHoverEffect{ nullptr };
     VFXAnimator* enemyHoverEffectAnimator{ nullptr };
     yunutyEngine::graphics::StaticMeshRenderer* enemyHoverEffectRenderer{ nullptr };
+
+    GameObject* tacticCameraRef{ nullptr };
 
     State::Enum stateRequestedByAction = State::None;
     bool isStateAction = false;
