@@ -520,7 +520,7 @@ void PlayerController::HandleSkillPreview()
                 auto pos{ characters[PlayerCharacterType::Ursula].lock()->GetTransform()->GetWorldPosition() };
                 //auto forward{ characters[PlayerCharacterType::Ursula].lock()->GetTransform()->GetWorldRotation().Forward() };
                 static constexpr float epsilon = 0.0001f;
-                UrsulaBlindSkill::UpdatePosition(pos, pos + epsilon * Vector3d::one);
+                UrsulaBlindSkill::UpdatePosition(pos + epsilon * Vector3d::one, pos);
                 auto pos1 = UrsulaBlindSkill::GetSkillObjectPos_Left(pos);
                 auto pos2 = UrsulaBlindSkill::GetSkillObjectPos_Right(pos);
                 auto pos3 = UrsulaBlindSkill::GetSkillObjectPos_Top(pos);
