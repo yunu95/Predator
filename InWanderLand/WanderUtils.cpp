@@ -52,6 +52,7 @@ void wanderUtils::ResourceRecursiveLoader::Load(string rootFolder, std::set<std:
 						auto relativePath = fs::relative(entry.path(), realRootPath).string();
 						std::replace(relativePath.begin(), relativePath.end(), '\\', '/');
 						yunutyEngine::SoundSystem::LoadSound(relativePath);
+						yunutyEngine::SoundSystem::Load3DSound(relativePath);
 					}
 #ifdef EDITOR
 					timeTookToLoadResources[entry.path().extension().string()] += std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - startTime).count() / 1000.0f;
@@ -105,6 +106,7 @@ coroutine::Coroutine wanderUtils::ResourceRecursiveLoader::LoadByCoroutine(strin
 							auto relativePath = fs::relative(entry.path(), basePath).string();
 							std::replace(relativePath.begin(), relativePath.end(), '\\', '/');
 							yunutyEngine::SoundSystem::LoadSound(relativePath);
+							yunutyEngine::SoundSystem::Load3DSound(relativePath);
 						}
 						else if (fs::is_regular_file(entry) && textureExtensions.contains(entry.path().extension().string()))
 						{
