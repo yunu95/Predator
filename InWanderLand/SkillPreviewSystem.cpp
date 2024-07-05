@@ -7,6 +7,7 @@
 #include "DirectXMath.h"
 #include "UVAnimator.h"
 #include "wanderResources.h"
+#include "RobinChargeSkill.h"
 
 
 void SkillPreviewSystem::Start()
@@ -102,6 +103,16 @@ void SkillPreviewSystem::Init()
         bodyRenderer->GetGI().GetMaterial()->SetPixelShader(ps);
         bodyRenderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::Temp0, arrowBodyTexture);
         bodyRenderer->GetGI().GetMaterial()->SetColor(wanderResources::unitColor::ROBIN_COLOR);
+
+
+		auto circleOne = Scene::getCurrentScene()->AddGameObject();
+		circleOne->SetParent(this->robinQSkillPreviewObj);
+		auto circleOneRenderer = circleOne->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+		circleOneRenderer->GetGI().SetMesh(cubeMesh);
+		circleOneRenderer->GetGI().GetMaterial()->SetVertexShader(vs);
+		circleOneRenderer->GetGI().GetMaterial()->SetPixelShader(ps);
+		circleOneRenderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::Temp0, robinWSkillTexture);
+		circleOneRenderer->GetGI().GetMaterial()->SetColor(wanderResources::unitColor::ROBIN_COLOR);
 
         this->robinQSkillPreviewObj->SetSelfActive(false);
     }
@@ -284,7 +295,8 @@ void SkillPreviewSystem::ShowRobinQSkill(const yunutyEngine::Vector3d& objectPos
         this->robinQSkillPreviewObj->GetChildren()[static_cast<int>(RobinQSkillInfo::ArrowBody)]->GetTransform()->SetLocalScale(Vector3d{ 0,0,0 });
         this->robinQSkillPreviewObj->GetChildren()[static_cast<int>(RobinQSkillInfo::ArrowHead)]->GetTransform()->SetLocalPosition(normalizedVec * 0.5);
     }
-
+    this->robinQSkillPreviewObj->GetChildren()[static_cast<int>(RobinQSkillInfo::Circle)]->GetTransform()->SetWorldPosition(destination);
+    this->robinQSkillPreviewObj->GetChildren()[static_cast<int>(RobinQSkillInfo::Circle)]->GetTransform()->SetLocalScale(Vector3d{RobinChargeSkill::pod.impactKnockbackRadius,1,RobinChargeSkill::pod.impactKnockbackRadius });
 
     if (this->robinQSkillPreviewObj->GetActive() == false)
     {
