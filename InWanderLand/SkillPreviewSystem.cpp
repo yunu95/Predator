@@ -296,7 +296,7 @@ void SkillPreviewSystem::ShowRobinQSkill(const yunutyEngine::Vector3d& objectPos
         this->robinQSkillPreviewObj->GetChildren()[static_cast<int>(RobinQSkillInfo::ArrowHead)]->GetTransform()->SetLocalPosition(normalizedVec * 0.5);
     }
     this->robinQSkillPreviewObj->GetChildren()[static_cast<int>(RobinQSkillInfo::Circle)]->GetTransform()->SetWorldPosition(destination);
-    this->robinQSkillPreviewObj->GetChildren()[static_cast<int>(RobinQSkillInfo::Circle)]->GetTransform()->SetLocalScale(Vector3d{RobinChargeSkill::pod.impactKnockbackRadius,1,RobinChargeSkill::pod.impactKnockbackRadius });
+    this->robinQSkillPreviewObj->GetChildren()[static_cast<int>(RobinQSkillInfo::Circle)]->GetTransform()->SetLocalScale(Vector3d{RobinChargeSkill::pod.impactKnockbackRadius*2,1,RobinChargeSkill::pod.impactKnockbackRadius*2 });
 
     if (this->robinQSkillPreviewObj->GetActive() == false)
     {
