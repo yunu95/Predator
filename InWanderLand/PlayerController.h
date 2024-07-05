@@ -82,6 +82,7 @@ public:
     Vector3d GetCamPivotPoint();
     void SetManaFull();
     void SetMana(float mana);
+    void TryTogglingTacticMode();
     Unit* GetUnitOnCursor();
     virtual void OnPause() override;
     virtual void OnResume() override;
@@ -99,6 +100,8 @@ public:
 
     void RequestStateFromAction(State::Enum newState);
     void ApplyBeforeEngageSkillCoolTime();
+    void SetTacticCamera(GameObject* cam);
+
     // 스킬 업그레이드와 관련된 부분
     // 어떤 스킬을 업그레이드 할 것인지 미리 정한다. 미리 지정만 하는 것이지 바로 업그레이드까지 직행하는 것은 아니다.
 private:
@@ -143,6 +146,7 @@ private:
     Vector3d GetMiddlePoint();
     // 연속으로 쌓은 콤보를 초기화한다.
     void ResetCombo();
+    void SetTacticCameraActive(bool boolen);
 
     void SetCooltime(SkillType::Enum skillType, float cooltime);
     void SetCooltime(std::weak_ptr<Unit> unit);
@@ -158,6 +162,7 @@ private:
     void OnPlayerUnitSkillExpiration(std::weak_ptr<Unit> unit, std::weak_ptr<Skill> skill);
     std::vector<Vector3d>& ModifyPathForAttack(std::vector<Vector3d>& path);
     std::vector<Vector3d>& ModifyPathForSkill(std::vector<Vector3d>& path, SkillType::Enum skillType);
+    void SetAttackMoveMode(bool attackMoveMode);
     int skillButtonIDHovering;
     int parentEnumIDHovering;
     int currentCombo{ 0 };
@@ -177,6 +182,7 @@ private:
     float mana{ 0 };
     State::Enum state{ State::Battle };
     SkillType::Enum selectedSkill = SkillType::NONE;
+    bool attackMoveMode{ false };
     PlayerCharacterType::Enum selectedCharacterType = PlayerCharacterType::None;
     std::weak_ptr<UnitAcquisitionBoxCollider> cursorUnitDetector;
     std::array<std::weak_ptr<Unit>, (int)PlayerCharacterType::Num> characters;
@@ -210,6 +216,8 @@ private:
     GameObject* enemyHoverEffect{ nullptr };
     VFXAnimator* enemyHoverEffectAnimator{ nullptr };
     yunutyEngine::graphics::StaticMeshRenderer* enemyHoverEffectRenderer{ nullptr };
+
+    GameObject* tacticCameraRef{ nullptr };
 
     State::Enum stateRequestedByAction = State::None;
     bool isStateAction = false;

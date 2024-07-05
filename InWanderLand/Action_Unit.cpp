@@ -1364,6 +1364,8 @@ namespace application
 			}
 		}
 
+		animator->GetGI().SetPlaySpeed(1);
+
 		co_return;
 	}
 

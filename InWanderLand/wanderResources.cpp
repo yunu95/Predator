@@ -38,6 +38,7 @@ void InitAnimMap()
     animMap["SKM_Ursula"][UnitAnimType::Skill2] = localAnimMap[L"Ani_Ursula_Skill2"];
     animMap["SKM_Ursula"][UnitAnimType::Move] = localAnimMap[L"Ani_Ursula_Walk"];
     animMap["SKM_Ursula"][UnitAnimType::BattleMove] = localAnimMap[L"Ani_Ursula_Walk"];
+    animMap["SKM_Ursula"][UnitAnimType::BattleStart] = localAnimMap[L"Ani_Ursula_Attack"];
 
     animMap["SKM_Hansel"][UnitAnimType::Idle] = localAnimMap[L"Rig_Robin|Ani_Hansel_Idle"];
     animMap["SKM_Hansel"][UnitAnimType::Paralysis] = localAnimMap[L"Rig_Robin|Ani_Hansel_Idle"];
@@ -47,7 +48,7 @@ void InitAnimMap()
     animMap["SKM_Hansel"][UnitAnimType::BattleIdle] = localAnimMap[L"Rig_Robin|Ani_Hansel_Idle"];
     animMap["SKM_Hansel"][UnitAnimType::BattleMove] = localAnimMap[L"Rig_Robin|Ani_Hansel_Walk"];
     animMap["SKM_Hansel"][UnitAnimType::Death] = localAnimMap[L"Rig_Robin|Ani_Hansel_Death"];
-    animMap["SKM_Hansel"][UnitAnimType::BattleStart] = localAnimMap[L"Rig_Robin|Ani_Hansel_Live"];
+    animMap["SKM_Hansel"][UnitAnimType::BattleStart] = localAnimMap[L"Rig_Robin|Ani_Hansel_Attack"];
     animMap["SKM_Hansel"][UnitAnimType::Rush] = localAnimMap[L"Rig_Robin|Ani_Hansel_Walk"];
     animMap["SKM_Hansel"][UnitAnimType::Attack] = localAnimMap[L"Rig_Robin|Ani_Hansel_Attack"];
     animMap["SKM_Hansel"][UnitAnimType::Taunt] = localAnimMap[L"Rig_Robin|Ani_Hansel_Skill2"];

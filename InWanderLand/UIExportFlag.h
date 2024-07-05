@@ -98,4 +98,5 @@ enum class UIExportFlag2
     PropagateEnable = 1 << 22,
     PropagateDisable = 1 << 23,
     CapsuleClip = 1 << 24,
+    DisableOnlyOnImport = 1 << 25,
 };

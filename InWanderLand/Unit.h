@@ -245,8 +245,8 @@ private:
     void ReturnToPool();
     int liveCountLeft{ 0 };
     // 유닛이 이동중, 정체 상태에 연속으로 jamCount번 이상 빠졌다면 이동 명령을 취소하고 공격모드 이동명령을 실행하게 된다.
-    int jamCount = 0;
-    static constexpr int maxJamCount = 4;
+    float jammedDuration = 0;
+    static constexpr float jamDurationThreshold = 0.5f;
     std::vector<UnitController*> controllers;
     UnitBehaviourTree unitBehaviourTree;
     std::array<DelegateCallback<void>, UnitBehaviourTree::Keywords::KeywordNum> onStateEngage;
