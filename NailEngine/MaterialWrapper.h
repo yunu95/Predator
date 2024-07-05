@@ -76,72 +76,7 @@ public:
 		}
 
 		// 픽셀 쉐이더를 세팅해주기전에 렌더링 방식이 바뀌었는지 검사한다.
-		if (GetVariation()->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
-		{
-			if (shader->GetShaderInfo().shaderType == yunuGI::ShaderType::Forward)
-			{
-				if (!renderable->IsStatic())
-				{
-					if (static_cast<SkinnedMesh*>(renderable.get())->renderInfoVec[this->index]->renderInfo.material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
-					{
-						InstancingManager::Instance.Get().PopSkinnedDeferredData(static_cast<SkinnedMesh*>(renderable.get())->renderInfoVec[this->index]);
-					}
-					else
-					{
-						InstancingManager::Instance.Get().PopSkinnedForwardData(static_cast<SkinnedMesh*>(renderable.get())->renderInfoVec[this->index]);
-					}
-				}
-				else
-				{
-					// 스태틱메쉬라면
-					if (static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]->material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
-					{
-						InstancingManager::Instance.Get().PopStaticDeferredData(static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]);
-					}
-					else if (static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]->material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Forward)
-					{
-						InstancingManager::Instance.Get().PopStaticForwardData(static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]);
-					}
-					else if (static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]->material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Decal)
-					{
-						InstancingManager::Instance.Get().PopDecalData(static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]);
-					}
-				}
-			}
-		}
-		else
-		{
-			if (shader->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
-			{
-				if (!renderable->IsStatic())
-				{
-					if (static_cast<SkinnedMesh*>(renderable.get())->renderInfoVec[this->index]->renderInfo.material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
-					{
-						InstancingManager::Instance.Get().PopSkinnedDeferredData(static_cast<SkinnedMesh*>(renderable.get())->renderInfoVec[this->index]);
-					}
-					else
-					{
-						InstancingManager::Instance.Get().PopSkinnedForwardData(static_cast<SkinnedMesh*>(renderable.get())->renderInfoVec[this->index]);
-					}
-				}
-				else
-				{
-					// 스태틱메쉬라면
-					if (static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]->material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
-					{
-						InstancingManager::Instance.Get().PopStaticDeferredData(static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]);
-					}
-					else if (static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]->material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Forward)
-					{
-						InstancingManager::Instance.Get().PopStaticForwardData(static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]);
-					}
-					else if (static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]->material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Decal)
-					{
-						InstancingManager::Instance.Get().PopDecalData(static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]);
-					}
-				}
-			}
-		}
+		ChangeRenderType(shader);
 
 		GetVariation()->SetPixelShader(shader);
 
@@ -276,6 +211,198 @@ public:
 		}
 	};
 private:
+	void ChangeRenderType(const yunuGI::IShader* shader)
+	{
+		if (GetVariation()->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
+		{
+			if (shader->GetShaderInfo().shaderType == yunuGI::ShaderType::Forward)
+			{
+				if (!renderable->IsStatic())
+				{
+					if (static_cast<SkinnedMesh*>(renderable.get())->renderInfoVec[this->index]->renderInfo.material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
+					{
+						InstancingManager::Instance.Get().PopSkinnedDeferredData(static_cast<SkinnedMesh*>(renderable.get())->renderInfoVec[this->index]);
+					}
+					else
+					{
+						InstancingManager::Instance.Get().PopSkinnedForwardData(static_cast<SkinnedMesh*>(renderable.get())->renderInfoVec[this->index]);
+					}
+				}
+				else
+				{
+					// 스태틱메쉬라면
+					if (static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]->material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
+					{
+						InstancingManager::Instance.Get().PopStaticDeferredData(static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]);
+					}
+					else if (static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]->material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Forward)
+					{
+						InstancingManager::Instance.Get().PopStaticForwardData(static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]);
+					}
+					else if (static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]->material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Decal)
+					{
+						InstancingManager::Instance.Get().PopDecalData(static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]);
+					}
+				}
+			}
+			else if (shader->GetShaderInfo().shaderType == yunuGI::ShaderType::Decal)
+			{
+				if (!renderable->IsStatic())
+				{
+					if (static_cast<SkinnedMesh*>(renderable.get())->renderInfoVec[this->index]->renderInfo.material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
+					{
+						InstancingManager::Instance.Get().PopSkinnedDeferredData(static_cast<SkinnedMesh*>(renderable.get())->renderInfoVec[this->index]);
+					}
+					else
+					{
+						InstancingManager::Instance.Get().PopSkinnedForwardData(static_cast<SkinnedMesh*>(renderable.get())->renderInfoVec[this->index]);
+					}
+				}
+				else
+				{
+					// 스태틱메쉬라면
+					if (static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]->material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
+					{
+						InstancingManager::Instance.Get().PopStaticDeferredData(static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]);
+					}
+					else if (static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]->material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Forward)
+					{
+						InstancingManager::Instance.Get().PopStaticForwardData(static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]);
+					}
+					else if (static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]->material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Decal)
+					{
+						InstancingManager::Instance.Get().PopDecalData(static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]);
+					}
+				}
+			}
+		}
+		else if(GetVariation()->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Forward)
+		{
+			if (shader->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
+			{
+				if (!renderable->IsStatic())
+				{
+					if (static_cast<SkinnedMesh*>(renderable.get())->renderInfoVec[this->index]->renderInfo.material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
+					{
+						InstancingManager::Instance.Get().PopSkinnedDeferredData(static_cast<SkinnedMesh*>(renderable.get())->renderInfoVec[this->index]);
+					}
+					else
+					{
+						InstancingManager::Instance.Get().PopSkinnedForwardData(static_cast<SkinnedMesh*>(renderable.get())->renderInfoVec[this->index]);
+					}
+				}
+				else
+				{
+					// 스태틱메쉬라면
+					if (static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]->material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
+					{
+						InstancingManager::Instance.Get().PopStaticDeferredData(static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]);
+					}
+					else if (static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]->material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Forward)
+					{
+						InstancingManager::Instance.Get().PopStaticForwardData(static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]);
+					}
+					else if (static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]->material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Decal)
+					{
+						InstancingManager::Instance.Get().PopDecalData(static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]);
+					}
+				}
+			}
+			else if (shader->GetShaderInfo().shaderType == yunuGI::ShaderType::Decal)
+			{
+				if (!renderable->IsStatic())
+				{
+					if (static_cast<SkinnedMesh*>(renderable.get())->renderInfoVec[this->index]->renderInfo.material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
+					{
+						InstancingManager::Instance.Get().PopSkinnedDeferredData(static_cast<SkinnedMesh*>(renderable.get())->renderInfoVec[this->index]);
+					}
+					else
+					{
+						InstancingManager::Instance.Get().PopSkinnedForwardData(static_cast<SkinnedMesh*>(renderable.get())->renderInfoVec[this->index]);
+					}
+				}
+				else
+				{
+					// 스태틱메쉬라면
+					if (static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]->material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
+					{
+						InstancingManager::Instance.Get().PopStaticDeferredData(static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]);
+					}
+					else if (static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]->material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Forward)
+					{
+						InstancingManager::Instance.Get().PopStaticForwardData(static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]);
+					}
+					else if (static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]->material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Decal)
+					{
+						InstancingManager::Instance.Get().PopDecalData(static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]);
+					}
+				}
+			}
+		}
+		else if (GetVariation()->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Decal)
+		{
+			if (shader->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
+			{
+				if (!renderable->IsStatic())
+				{
+					if (static_cast<SkinnedMesh*>(renderable.get())->renderInfoVec[this->index]->renderInfo.material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
+					{
+						InstancingManager::Instance.Get().PopSkinnedDeferredData(static_cast<SkinnedMesh*>(renderable.get())->renderInfoVec[this->index]);
+					}
+					else
+					{
+						InstancingManager::Instance.Get().PopSkinnedForwardData(static_cast<SkinnedMesh*>(renderable.get())->renderInfoVec[this->index]);
+					}
+				}
+				else
+				{
+					// 스태틱메쉬라면
+					if (static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]->material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
+					{
+						InstancingManager::Instance.Get().PopStaticDeferredData(static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]);
+					}
+					else if (static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]->material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Forward)
+					{
+						InstancingManager::Instance.Get().PopStaticForwardData(static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]);
+					}
+					else if (static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]->material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Decal)
+					{
+						InstancingManager::Instance.Get().PopDecalData(static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]);
+					}
+				}
+			}
+			else if (shader->GetShaderInfo().shaderType == yunuGI::ShaderType::Forward)
+			{
+				if (!renderable->IsStatic())
+				{
+					if (static_cast<SkinnedMesh*>(renderable.get())->renderInfoVec[this->index]->renderInfo.material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
+					{
+						InstancingManager::Instance.Get().PopSkinnedDeferredData(static_cast<SkinnedMesh*>(renderable.get())->renderInfoVec[this->index]);
+					}
+					else
+					{
+						InstancingManager::Instance.Get().PopSkinnedForwardData(static_cast<SkinnedMesh*>(renderable.get())->renderInfoVec[this->index]);
+					}
+				}
+				else
+				{
+					// 스태틱메쉬라면
+					if (static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]->material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
+					{
+						InstancingManager::Instance.Get().PopStaticDeferredData(static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]);
+					}
+					else if (static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]->material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Forward)
+					{
+						InstancingManager::Instance.Get().PopStaticForwardData(static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]);
+					}
+					else if (static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]->material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Decal)
+					{
+						InstancingManager::Instance.Get().PopDecalData(static_cast<StaticMesh*>(renderable.get())->renderInfoVec[this->index]);
+					}
+				}
+			}
+		}
+	}
 	bool usingOriginal{ true };
 
 

@@ -1,6 +1,8 @@
 [
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "Camera",
         "aabb": {
@@ -21,6 +23,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -105,6 +109,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "Cube",
         "aabb": {
@@ -125,6 +131,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -209,6 +217,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "Sphere",
         "aabb": {
@@ -229,6 +239,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -313,6 +325,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Book01",
         "aabb": {
@@ -333,6 +347,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -417,6 +433,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "Capsule",
         "aabb": {
@@ -437,6 +455,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -521,6 +541,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Frame_001",
         "aabb": {
@@ -541,6 +563,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -625,6 +649,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "Cylinder",
         "aabb": {
@@ -645,6 +671,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -729,6 +757,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "Cone",
         "aabb": {
@@ -749,6 +779,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -833,6 +865,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Bush_002",
         "aabb": {
@@ -853,6 +887,8 @@
         "child": [
             {
                 "AmbientExposure": 0.10000000149011612,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 0.10000000149011612,
                 "aabb": {
                     "maxPoint": {
@@ -937,6 +973,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "Directional",
         "aabb": {
@@ -957,6 +995,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -1041,6 +1081,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_CupTower",
         "aabb": {
@@ -1061,6 +1103,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -1168,6 +1212,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "Guideline",
         "aabb": {
@@ -1188,6 +1234,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -1272,6 +1320,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Frame_002",
         "aabb": {
@@ -1292,6 +1342,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -1376,6 +1428,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "Particle_Circle",
         "aabb": {
@@ -1396,6 +1450,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -1480,6 +1536,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Chess_Bishop",
         "aabb": {
@@ -1500,6 +1558,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -1584,6 +1644,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "Room",
         "aabb": {
@@ -1604,6 +1666,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -1711,6 +1775,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Temple_Book_etc",
         "aabb": {
@@ -1731,6 +1797,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -1815,6 +1883,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Bookshelf03",
         "aabb": {
@@ -1835,6 +1905,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -1942,6 +2014,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "VFX_Ursula_Skill1_1",
         "aabb": {
@@ -1962,6 +2036,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -2046,6 +2122,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "VFX_Frame_Summoning",
         "aabb": {
@@ -2066,6 +2144,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -2150,6 +2230,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": false,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_CastleWall_Door",
         "aabb": {
@@ -2170,6 +2252,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": false,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -2254,6 +2338,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Corrider_Floor07",
         "aabb": {
@@ -2274,6 +2360,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": true,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -2381,6 +2469,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Card02",
         "aabb": {
@@ -2401,6 +2491,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -2485,6 +2577,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Hall_Floor",
         "aabb": {
@@ -2505,6 +2599,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": true,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -2635,6 +2731,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Arch_Window_7m",
         "aabb": {
@@ -2655,6 +2753,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -2725,7 +2825,7 @@
                         "emissionMap": "",
                         "heightMap": "",
                         "materialName": "M_Wood",
-                        "normalMap": "",
+                        "normalMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Wood_Normal.dds",
                         "opacityMap": "",
                         "ps": "DefaultPS.cso",
                         "temp0Map": "",
@@ -2808,6 +2908,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Card01",
         "aabb": {
@@ -2828,6 +2930,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -2912,6 +3016,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Entrance_Floor",
         "aabb": {
@@ -2932,6 +3038,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": true,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -3039,6 +3147,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Book06",
         "aabb": {
@@ -3059,6 +3169,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -3143,6 +3255,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Wall_7m",
         "aabb": {
@@ -3163,6 +3277,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -3270,6 +3386,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_2Stage_Pillar",
         "aabb": {
@@ -3290,6 +3408,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -3374,6 +3494,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Book05",
         "aabb": {
@@ -3394,6 +3516,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -3478,6 +3602,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Arch_Window_14m",
         "aabb": {
@@ -3498,6 +3624,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -3651,6 +3779,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Banner",
         "aabb": {
@@ -3671,6 +3801,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -3755,6 +3887,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_BigTree_001",
         "aabb": {
@@ -3775,6 +3909,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -3859,6 +3995,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_CastleWall",
         "aabb": {
@@ -3879,6 +4017,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -4009,6 +4149,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Bush_001",
         "aabb": {
@@ -4029,6 +4171,8 @@
         "child": [
             {
                 "AmbientExposure": 0.10000000149011612,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 0.10000000149011612,
                 "aabb": {
                     "maxPoint": {
@@ -4113,6 +4257,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Book03",
         "aabb": {
@@ -4133,6 +4279,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -4217,6 +4365,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Bookshelf01",
         "aabb": {
@@ -4237,6 +4387,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -4344,6 +4496,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Purple_Arch_Window_7m",
         "aabb": {
@@ -4364,6 +4518,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -4434,7 +4590,7 @@
                         "emissionMap": "",
                         "heightMap": "",
                         "materialName": "M_Wood",
-                        "normalMap": "",
+                        "normalMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Wood_Normal.dds",
                         "opacityMap": "",
                         "ps": "DefaultPS.cso",
                         "temp0Map": "",
@@ -4517,6 +4673,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_CastleWall_Pillar",
         "aabb": {
@@ -4537,6 +4695,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -4621,6 +4781,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "VFX_AttackSelected",
         "aabb": {
@@ -4641,6 +4803,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -4725,6 +4889,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Bookshelf02",
         "aabb": {
@@ -4745,6 +4911,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -4852,6 +5020,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Chess_Pawn",
         "aabb": {
@@ -4872,6 +5042,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -4956,6 +5128,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Candle",
         "aabb": {
@@ -4976,6 +5150,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -5060,6 +5236,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Bookshelf04",
         "aabb": {
@@ -5080,6 +5258,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -5187,6 +5367,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_BossCorrider_Floor",
         "aabb": {
@@ -5207,6 +5389,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": true,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -5314,6 +5498,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Corrider_Floor06",
         "aabb": {
@@ -5334,6 +5520,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": true,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -5441,6 +5629,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Card03",
         "aabb": {
@@ -5461,6 +5651,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -5545,6 +5737,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_CastleVine",
         "aabb": {
@@ -5565,6 +5759,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -5649,6 +5845,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "VFX_Ursula_Attack_2",
         "aabb": {
@@ -5669,6 +5867,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -5753,6 +5953,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Card04",
         "aabb": {
@@ -5773,6 +5975,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -5857,6 +6061,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Chair",
         "aabb": {
@@ -5877,6 +6083,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -5961,6 +6169,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Card05",
         "aabb": {
@@ -5981,6 +6191,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -6065,6 +6277,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Card06",
         "aabb": {
@@ -6085,6 +6299,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -6169,6 +6385,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Chandelier",
         "aabb": {
@@ -6189,6 +6407,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -6296,6 +6516,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Chess_Rook",
         "aabb": {
@@ -6316,6 +6538,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -6400,6 +6624,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "VFX_Robin_Attack",
         "aabb": {
@@ -6420,6 +6646,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -6504,6 +6732,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Corrider_Floor",
         "aabb": {
@@ -6524,6 +6754,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": true,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -6631,6 +6863,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Green_Wall_21m",
         "aabb": {
@@ -6651,6 +6885,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -6758,6 +6994,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Fence",
         "aabb": {
@@ -6778,6 +7016,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -6862,6 +7102,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Flowers_001",
         "aabb": {
@@ -6882,6 +7124,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -6966,6 +7210,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Flowers_002",
         "aabb": {
@@ -6986,6 +7232,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -7070,6 +7318,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_FlyingCandle",
         "aabb": {
@@ -7090,6 +7340,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -7174,6 +7426,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Fork",
         "aabb": {
@@ -7194,6 +7448,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -7278,6 +7534,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Stone_002",
         "aabb": {
@@ -7298,6 +7556,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -7382,6 +7642,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Gimmick01",
         "aabb": {
@@ -7402,6 +7664,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -7486,6 +7750,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Stone_001",
         "aabb": {
@@ -7506,6 +7772,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -7590,6 +7858,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Gimmick02",
         "aabb": {
@@ -7610,6 +7880,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -7694,6 +7966,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Under_Arch_Window",
         "aabb": {
@@ -7714,6 +7988,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -7798,6 +8074,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Gimmick02_Button",
         "aabb": {
@@ -7818,6 +8096,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -7902,6 +8182,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Grass_001",
         "aabb": {
@@ -7922,6 +8204,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -8006,6 +8290,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Grass_002",
         "aabb": {
@@ -8026,6 +8312,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -8110,6 +8398,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Green_Arch_Window_14m",
         "aabb": {
@@ -8130,6 +8420,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -8283,6 +8575,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Green_Arch_Window_7m",
         "aabb": {
@@ -8303,6 +8597,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -8373,7 +8669,7 @@
                         "emissionMap": "",
                         "heightMap": "",
                         "materialName": "M_Wood",
-                        "normalMap": "",
+                        "normalMap": "FBX/SM_Arch_Window_14m/SM_Arch_Window_14m.fbm/T_Wood_Normal.dds",
                         "opacityMap": "",
                         "ps": "DefaultPS.cso",
                         "temp0Map": "",
@@ -8456,6 +8752,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Green_Wall_3m",
         "aabb": {
@@ -8476,6 +8774,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -8583,6 +8883,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Green_Wall_7m",
         "aabb": {
@@ -8603,6 +8905,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -8710,6 +9014,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Hall_Corrider_Floor",
         "aabb": {
@@ -8730,6 +9036,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": true,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -8837,6 +9145,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Hall_door_Frame",
         "aabb": {
@@ -8857,6 +9167,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -8987,6 +9299,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Hall_door_Left",
         "aabb": {
@@ -9007,6 +9321,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -9091,6 +9407,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Hall_door_Right",
         "aabb": {
@@ -9111,6 +9429,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -9195,6 +9515,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Hall_Entrance_Floor",
         "aabb": {
@@ -9215,6 +9537,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -9345,6 +9669,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Handrail",
         "aabb": {
@@ -9365,6 +9691,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -9449,6 +9777,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Hat01",
         "aabb": {
@@ -9469,6 +9799,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -9553,6 +9885,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Hat02",
         "aabb": {
@@ -9573,6 +9907,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -9657,6 +9993,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_HeartKey",
         "aabb": {
@@ -9677,6 +10015,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -9761,6 +10101,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Key_Room_Floor",
         "aabb": {
@@ -9781,6 +10123,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": true,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -9888,6 +10232,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Ladder",
         "aabb": {
@@ -9908,6 +10254,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -9992,6 +10340,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "VFX_CharacterRange",
         "aabb": {
@@ -10012,6 +10362,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -10096,6 +10448,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_LeafShadow",
         "aabb": {
@@ -10116,6 +10470,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -10200,6 +10556,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Lily",
         "aabb": {
@@ -10220,6 +10578,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -10304,6 +10664,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Temple_WelcomePiece",
         "aabb": {
@@ -10324,6 +10686,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -10408,6 +10772,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_MiniCandle",
         "aabb": {
@@ -10428,6 +10794,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -10512,6 +10880,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "VFX_DeBuff_Blind_Hansel",
         "aabb": {
@@ -10532,6 +10902,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -10639,6 +11011,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_MiniCandle02",
         "aabb": {
@@ -10659,6 +11033,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -10743,6 +11119,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_MiniCandle03",
         "aabb": {
@@ -10763,6 +11141,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -10847,6 +11227,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_MiniCandle04",
         "aabb": {
@@ -10867,6 +11249,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -10951,6 +11335,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "VFX_Hansel_Skill2",
         "aabb": {
@@ -10971,6 +11357,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -11055,6 +11443,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_MiniCandle05",
         "aabb": {
@@ -11075,6 +11465,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -11159,6 +11551,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_MiniCarpet",
         "aabb": {
@@ -11179,6 +11573,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -11263,6 +11659,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_MiniStair",
         "aabb": {
@@ -11283,6 +11681,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -11367,6 +11767,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Mushroom01",
         "aabb": {
@@ -11387,6 +11789,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -11471,6 +11875,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Stage1_Floor_03",
         "aabb": {
@@ -11491,6 +11897,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": true,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -11621,6 +12029,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Mushroom02",
         "aabb": {
@@ -11641,6 +12051,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -11725,6 +12137,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Pebbles_001",
         "aabb": {
@@ -11745,6 +12159,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -11829,6 +12245,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Pie",
         "aabb": {
@@ -11849,6 +12267,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -11933,6 +12353,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "VFX_DeBuff_Bleeding",
         "aabb": {
@@ -11953,6 +12375,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -12060,6 +12484,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Purple_Arch_Window_14m",
         "aabb": {
@@ -12080,6 +12506,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -12233,6 +12661,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Purple_Wall_21m",
         "aabb": {
@@ -12253,6 +12683,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -12360,6 +12792,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Purple_Wall_3m",
         "aabb": {
@@ -12380,6 +12814,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -12487,6 +12923,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_RedCarpet",
         "aabb": {
@@ -12507,6 +12945,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -12591,6 +13031,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Purple_Wall_7m",
         "aabb": {
@@ -12611,6 +13053,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -12718,6 +13162,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Room_Floor01",
         "aabb": {
@@ -12738,6 +13184,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": true,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -12868,6 +13316,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Room_Floor03",
         "aabb": {
@@ -12888,6 +13338,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": true,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -13018,6 +13470,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_SecondFloor",
         "aabb": {
@@ -13038,6 +13492,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -13122,6 +13578,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_SmallBush_001",
         "aabb": {
@@ -13142,6 +13600,8 @@
         "child": [
             {
                 "AmbientExposure": 0.10000000149011612,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 0.10000000149011612,
                 "aabb": {
                     "maxPoint": {
@@ -13226,6 +13686,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Spike01",
         "aabb": {
@@ -13246,6 +13708,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -13265,12 +13729,12 @@
                 "hasAnimation": false,
                 "materialVec": [
                     {
-                        "albedoMap": "FBX/SM_Gimmick01/SM_Gimmick01.fbm/T_Gimmick_BaseColor.dds",
-                        "armMap": "FBX/SM_Gimmick01/SM_Gimmick01.fbm/T_Gimmick_ARM.dds",
+                        "albedoMap": "FBX/SM_Spike01/SM_Spike01.fbm/T_SpikeFrame_BaseColor.dds",
+                        "armMap": "FBX/SM_Spike01/SM_Spike01.fbm/T_SpikeFrame_ARM.dds",
                         "emissionMap": "",
                         "heightMap": "",
-                        "materialName": "M_Gimmick",
-                        "normalMap": "FBX/SM_Gimmick01/SM_Gimmick01.fbm/T_Gimmick_Normal.dds",
+                        "materialName": "M_SpikeFrame",
+                        "normalMap": "FBX/SM_Spike01/SM_Spike01.fbm/T_SpikeFrame_Normal.dds",
                         "opacityMap": "",
                         "ps": "DefaultPS.cso",
                         "temp0Map": "",
@@ -13330,6 +13794,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "VFX_Buff_Healing",
         "aabb": {
@@ -13350,6 +13816,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -13434,6 +13902,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Spike02",
         "aabb": {
@@ -13454,6 +13924,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -13538,6 +14010,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_SpikeFrame",
         "aabb": {
@@ -13558,6 +14032,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -13577,12 +14053,12 @@
                 "hasAnimation": false,
                 "materialVec": [
                     {
-                        "albedoMap": "FBX/SM_SpikeFrame/SM_SpikeFrame.fbm/T_SpikeFrame_BaseColor.dds",
-                        "armMap": "FBX/SM_SpikeFrame/SM_SpikeFrame.fbm/T_SpikeFrame_ARM.dds",
+                        "albedoMap": "FBX/SM_Spike01/SM_Spike01.fbm/T_SpikeFrame_BaseColor.dds",
+                        "armMap": "FBX/SM_Spike01/SM_Spike01.fbm/T_SpikeFrame_ARM.dds",
                         "emissionMap": "",
                         "heightMap": "",
                         "materialName": "M_SpikeFrame",
-                        "normalMap": "FBX/SM_SpikeFrame/SM_SpikeFrame.fbm/T_SpikeFrame_Normal.dds",
+                        "normalMap": "FBX/SM_Spike01/SM_Spike01.fbm/T_SpikeFrame_Normal.dds",
                         "opacityMap": "",
                         "ps": "DefaultPS.cso",
                         "temp0Map": "",
@@ -13642,6 +14118,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Stage1_Floor_01",
         "aabb": {
@@ -13662,6 +14140,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": true,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -13792,6 +14272,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Stage1_Floor_02",
         "aabb": {
@@ -13812,6 +14294,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": true,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -13942,6 +14426,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Stage1_Floor_04",
         "aabb": {
@@ -13962,6 +14448,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": true,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -14092,6 +14580,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Stage1_Floor_05",
         "aabb": {
@@ -14112,6 +14602,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": true,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -14242,6 +14734,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "VFX_DeBuff_Aggro",
         "aabb": {
@@ -14262,6 +14756,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -14369,6 +14865,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Stage1_Floor_06",
         "aabb": {
@@ -14389,6 +14887,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": true,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -14519,6 +15019,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Stair",
         "aabb": {
@@ -14539,6 +15041,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -14623,6 +15127,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Stump",
         "aabb": {
@@ -14643,6 +15149,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -14727,6 +15235,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Temple_Book",
         "aabb": {
@@ -14747,6 +15257,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -14768,7 +15280,7 @@
                     {
                         "albedoMap": "FBX/SM_Temple_Book/SM_Temple_Book.fbm/T_Temple_Book_BaseColor.dds",
                         "armMap": "FBX/SM_Temple_Book/SM_Temple_Book.fbm/T_Temple_Book_ARM.dds",
-                        "emissionMap": "FBX/SM_Temple_Book/SM_Temple_Book.fbm/T_Temple_Book_Emissive.dds",
+                        "emissionMap": "",
                         "heightMap": "",
                         "materialName": "M_Temple_Book",
                         "normalMap": "FBX/SM_Temple_Book/SM_Temple_Book.fbm/T_Temple_Book_Normal.dds",
@@ -14831,6 +15343,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Temple_Floor",
         "aabb": {
@@ -14851,6 +15365,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -14935,6 +15451,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Temple_Pillar",
         "aabb": {
@@ -14955,6 +15473,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -15039,6 +15559,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Temple_Pillar_Broken",
         "aabb": {
@@ -15059,6 +15581,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -15143,6 +15667,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Temple_Rabbit",
         "aabb": {
@@ -15163,6 +15689,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -15247,6 +15775,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Temple_Welcome",
         "aabb": {
@@ -15267,6 +15797,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -15351,6 +15883,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Trunk_001",
         "aabb": {
@@ -15371,6 +15905,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -15455,6 +15991,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "VFX_HeartQueen_Skill1_Preview",
         "aabb": {
@@ -15475,6 +16013,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -15582,6 +16122,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Vine",
         "aabb": {
@@ -15602,6 +16144,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -15686,6 +16230,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Wall_21m",
         "aabb": {
@@ -15706,17 +16252,19 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
                         "x": 10.500001907348633,
-                        "y": 0.14394819736480713,
+                        "y": 0.4204808473587036,
                         "z": 24.314401626586914
                     },
                     "minPoint": {
-                        "x": -10.499998092651367,
-                        "y": 0.14393669366836548,
-                        "z": 4.265469074249268
+                        "x": -10.499999046325684,
+                        "y": -3.62850482815702e-06,
+                        "z": -1.1335519047861453e-06
                     }
                 },
                 "boneInfo": {
@@ -15813,6 +16361,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Wall_3m",
         "aabb": {
@@ -15833,6 +16383,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -15940,6 +16492,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "Spear",
         "aabb": {
@@ -15960,6 +16514,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -16044,6 +16600,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SVFX_Ursula_Skill2_Tentacle",
         "aabb": {
@@ -16064,6 +16622,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -16127,6 +16687,8 @@
             },
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -16146,6 +16708,8 @@
                 "child": [
                     {
                         "AmbientExposure": 1.0,
+                        "CalculateShadow": true,
+                        "CastDecal": false,
                         "DiffuseExposure": 1.0,
                         "aabb": {
                             "maxPoint": {
@@ -16165,6 +16729,8 @@
                         "child": [
                             {
                                 "AmbientExposure": 1.0,
+                                "CalculateShadow": true,
+                                "CastDecal": false,
                                 "DiffuseExposure": 1.0,
                                 "aabb": {
                                     "maxPoint": {
@@ -16184,6 +16750,8 @@
                                 "child": [
                                     {
                                         "AmbientExposure": 1.0,
+                                        "CalculateShadow": true,
+                                        "CastDecal": false,
                                         "DiffuseExposure": 1.0,
                                         "aabb": {
                                             "maxPoint": {
@@ -16203,6 +16771,8 @@
                                         "child": [
                                             {
                                                 "AmbientExposure": 1.0,
+                                                "CalculateShadow": true,
+                                                "CastDecal": false,
                                                 "DiffuseExposure": 1.0,
                                                 "aabb": {
                                                     "maxPoint": {
@@ -16222,6 +16792,8 @@
                                                 "child": [
                                                     {
                                                         "AmbientExposure": 1.0,
+                                                        "CalculateShadow": true,
+                                                        "CastDecal": false,
                                                         "DiffuseExposure": 1.0,
                                                         "aabb": {
                                                             "maxPoint": {
@@ -16241,6 +16813,8 @@
                                                         "child": [
                                                             {
                                                                 "AmbientExposure": 1.0,
+                                                                "CalculateShadow": true,
+                                                                "CastDecal": false,
                                                                 "DiffuseExposure": 1.0,
                                                                 "aabb": {
                                                                     "maxPoint": {
@@ -16260,6 +16834,8 @@
                                                                 "child": [
                                                                     {
                                                                         "AmbientExposure": 1.0,
+                                                                        "CalculateShadow": true,
+                                                                        "CastDecal": false,
                                                                         "DiffuseExposure": 1.0,
                                                                         "aabb": {
                                                                             "maxPoint": {
@@ -16279,6 +16855,8 @@
                                                                         "child": [
                                                                             {
                                                                                 "AmbientExposure": 1.0,
+                                                                                "CalculateShadow": true,
+                                                                                "CastDecal": false,
                                                                                 "DiffuseExposure": 1.0,
                                                                                 "aabb": {
                                                                                     "maxPoint": {
@@ -16298,6 +16876,8 @@
                                                                                 "child": [
                                                                                     {
                                                                                         "AmbientExposure": 1.0,
+                                                                                        "CalculateShadow": true,
+                                                                                        "CastDecal": false,
                                                                                         "DiffuseExposure": 1.0,
                                                                                         "aabb": {
                                                                                             "maxPoint": {
@@ -16504,6 +17084,8 @@
                     },
                     {
                         "AmbientExposure": 1.0,
+                        "CalculateShadow": true,
+                        "CastDecal": false,
                         "DiffuseExposure": 1.0,
                         "aabb": {
                             "maxPoint": {
@@ -16523,6 +17105,8 @@
                         "child": [
                             {
                                 "AmbientExposure": 1.0,
+                                "CalculateShadow": true,
+                                "CastDecal": false,
                                 "DiffuseExposure": 1.0,
                                 "aabb": {
                                     "maxPoint": {
@@ -16542,6 +17126,8 @@
                                 "child": [
                                     {
                                         "AmbientExposure": 1.0,
+                                        "CalculateShadow": true,
+                                        "CastDecal": false,
                                         "DiffuseExposure": 1.0,
                                         "aabb": {
                                             "maxPoint": {
@@ -16561,6 +17147,8 @@
                                         "child": [
                                             {
                                                 "AmbientExposure": 1.0,
+                                                "CalculateShadow": true,
+                                                "CastDecal": false,
                                                 "DiffuseExposure": 1.0,
                                                 "aabb": {
                                                     "maxPoint": {
@@ -16580,6 +17168,8 @@
                                                 "child": [
                                                     {
                                                         "AmbientExposure": 1.0,
+                                                        "CalculateShadow": true,
+                                                        "CastDecal": false,
                                                         "DiffuseExposure": 1.0,
                                                         "aabb": {
                                                             "maxPoint": {
@@ -16599,6 +17189,8 @@
                                                         "child": [
                                                             {
                                                                 "AmbientExposure": 1.0,
+                                                                "CalculateShadow": true,
+                                                                "CastDecal": false,
                                                                 "DiffuseExposure": 1.0,
                                                                 "aabb": {
                                                                     "maxPoint": {
@@ -16618,6 +17210,8 @@
                                                                 "child": [
                                                                     {
                                                                         "AmbientExposure": 1.0,
+                                                                        "CalculateShadow": true,
+                                                                        "CastDecal": false,
                                                                         "DiffuseExposure": 1.0,
                                                                         "aabb": {
                                                                             "maxPoint": {
@@ -16637,6 +17231,8 @@
                                                                         "child": [
                                                                             {
                                                                                 "AmbientExposure": 1.0,
+                                                                                "CalculateShadow": true,
+                                                                                "CastDecal": false,
                                                                                 "DiffuseExposure": 1.0,
                                                                                 "aabb": {
                                                                                     "maxPoint": {
@@ -16656,6 +17252,8 @@
                                                                                 "child": [
                                                                                     {
                                                                                         "AmbientExposure": 1.0,
+                                                                                        "CalculateShadow": true,
+                                                                                        "CastDecal": false,
                                                                                         "DiffuseExposure": 1.0,
                                                                                         "aabb": {
                                                                                             "maxPoint": {
@@ -16862,6 +17460,8 @@
                     },
                     {
                         "AmbientExposure": 1.0,
+                        "CalculateShadow": true,
+                        "CastDecal": false,
                         "DiffuseExposure": 1.0,
                         "aabb": {
                             "maxPoint": {
@@ -16881,6 +17481,8 @@
                         "child": [
                             {
                                 "AmbientExposure": 1.0,
+                                "CalculateShadow": true,
+                                "CastDecal": false,
                                 "DiffuseExposure": 1.0,
                                 "aabb": {
                                     "maxPoint": {
@@ -16900,6 +17502,8 @@
                                 "child": [
                                     {
                                         "AmbientExposure": 1.0,
+                                        "CalculateShadow": true,
+                                        "CastDecal": false,
                                         "DiffuseExposure": 1.0,
                                         "aabb": {
                                             "maxPoint": {
@@ -16919,6 +17523,8 @@
                                         "child": [
                                             {
                                                 "AmbientExposure": 1.0,
+                                                "CalculateShadow": true,
+                                                "CastDecal": false,
                                                 "DiffuseExposure": 1.0,
                                                 "aabb": {
                                                     "maxPoint": {
@@ -16938,6 +17544,8 @@
                                                 "child": [
                                                     {
                                                         "AmbientExposure": 1.0,
+                                                        "CalculateShadow": true,
+                                                        "CastDecal": false,
                                                         "DiffuseExposure": 1.0,
                                                         "aabb": {
                                                             "maxPoint": {
@@ -16957,6 +17565,8 @@
                                                         "child": [
                                                             {
                                                                 "AmbientExposure": 1.0,
+                                                                "CalculateShadow": true,
+                                                                "CastDecal": false,
                                                                 "DiffuseExposure": 1.0,
                                                                 "aabb": {
                                                                     "maxPoint": {
@@ -16976,6 +17586,8 @@
                                                                 "child": [
                                                                     {
                                                                         "AmbientExposure": 1.0,
+                                                                        "CalculateShadow": true,
+                                                                        "CastDecal": false,
                                                                         "DiffuseExposure": 1.0,
                                                                         "aabb": {
                                                                             "maxPoint": {
@@ -16995,6 +17607,8 @@
                                                                         "child": [
                                                                             {
                                                                                 "AmbientExposure": 1.0,
+                                                                                "CalculateShadow": true,
+                                                                                "CastDecal": false,
                                                                                 "DiffuseExposure": 1.0,
                                                                                 "aabb": {
                                                                                     "maxPoint": {
@@ -17014,6 +17628,8 @@
                                                                                 "child": [
                                                                                     {
                                                                                         "AmbientExposure": 1.0,
+                                                                                        "CalculateShadow": true,
+                                                                                        "CastDecal": false,
                                                                                         "DiffuseExposure": 1.0,
                                                                                         "aabb": {
                                                                                             "maxPoint": {
@@ -17220,6 +17836,8 @@
                     },
                     {
                         "AmbientExposure": 1.0,
+                        "CalculateShadow": true,
+                        "CastDecal": false,
                         "DiffuseExposure": 1.0,
                         "aabb": {
                             "maxPoint": {
@@ -17239,6 +17857,8 @@
                         "child": [
                             {
                                 "AmbientExposure": 1.0,
+                                "CalculateShadow": true,
+                                "CastDecal": false,
                                 "DiffuseExposure": 1.0,
                                 "aabb": {
                                     "maxPoint": {
@@ -17258,6 +17878,8 @@
                                 "child": [
                                     {
                                         "AmbientExposure": 1.0,
+                                        "CalculateShadow": true,
+                                        "CastDecal": false,
                                         "DiffuseExposure": 1.0,
                                         "aabb": {
                                             "maxPoint": {
@@ -17277,6 +17899,8 @@
                                         "child": [
                                             {
                                                 "AmbientExposure": 1.0,
+                                                "CalculateShadow": true,
+                                                "CastDecal": false,
                                                 "DiffuseExposure": 1.0,
                                                 "aabb": {
                                                     "maxPoint": {
@@ -17296,6 +17920,8 @@
                                                 "child": [
                                                     {
                                                         "AmbientExposure": 1.0,
+                                                        "CalculateShadow": true,
+                                                        "CastDecal": false,
                                                         "DiffuseExposure": 1.0,
                                                         "aabb": {
                                                             "maxPoint": {
@@ -17315,6 +17941,8 @@
                                                         "child": [
                                                             {
                                                                 "AmbientExposure": 1.0,
+                                                                "CalculateShadow": true,
+                                                                "CastDecal": false,
                                                                 "DiffuseExposure": 1.0,
                                                                 "aabb": {
                                                                     "maxPoint": {
@@ -17334,6 +17962,8 @@
                                                                 "child": [
                                                                     {
                                                                         "AmbientExposure": 1.0,
+                                                                        "CalculateShadow": true,
+                                                                        "CastDecal": false,
                                                                         "DiffuseExposure": 1.0,
                                                                         "aabb": {
                                                                             "maxPoint": {
@@ -17353,6 +17983,8 @@
                                                                         "child": [
                                                                             {
                                                                                 "AmbientExposure": 1.0,
+                                                                                "CalculateShadow": true,
+                                                                                "CastDecal": false,
                                                                                 "DiffuseExposure": 1.0,
                                                                                 "aabb": {
                                                                                     "maxPoint": {
@@ -17372,6 +18004,8 @@
                                                                                 "child": [
                                                                                     {
                                                                                         "AmbientExposure": 1.0,
+                                                                                        "CalculateShadow": true,
+                                                                                        "CastDecal": false,
                                                                                         "DiffuseExposure": 1.0,
                                                                                         "aabb": {
                                                                                             "maxPoint": {
@@ -17578,6 +18212,8 @@
                     },
                     {
                         "AmbientExposure": 1.0,
+                        "CalculateShadow": true,
+                        "CastDecal": false,
                         "DiffuseExposure": 1.0,
                         "aabb": {
                             "maxPoint": {
@@ -17616,6 +18252,8 @@
                     },
                     {
                         "AmbientExposure": 1.0,
+                        "CalculateShadow": true,
+                        "CastDecal": false,
                         "DiffuseExposure": 1.0,
                         "aabb": {
                             "maxPoint": {
@@ -17654,6 +18292,8 @@
                     },
                     {
                         "AmbientExposure": 1.0,
+                        "CalculateShadow": true,
+                        "CastDecal": false,
                         "DiffuseExposure": 1.0,
                         "aabb": {
                             "maxPoint": {
@@ -17692,6 +18332,8 @@
                     },
                     {
                         "AmbientExposure": 1.0,
+                        "CalculateShadow": true,
+                        "CastDecal": false,
                         "DiffuseExposure": 1.0,
                         "aabb": {
                             "maxPoint": {
@@ -17730,6 +18372,8 @@
                     },
                     {
                         "AmbientExposure": 1.0,
+                        "CalculateShadow": true,
+                        "CastDecal": false,
                         "DiffuseExposure": 1.0,
                         "aabb": {
                             "maxPoint": {
@@ -17810,6 +18454,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "VFX_HealPack",
         "aabb": {
@@ -17830,6 +18476,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -17937,6 +18585,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SVFX_Ursula_Skill2_Wave",
         "aabb": {
@@ -17957,6 +18607,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -18089,6 +18741,8 @@
             },
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -18108,6 +18762,8 @@
                 "child": [
                     {
                         "AmbientExposure": 1.0,
+                        "CalculateShadow": true,
+                        "CastDecal": false,
                         "DiffuseExposure": 1.0,
                         "aabb": {
                             "maxPoint": {
@@ -18146,6 +18802,8 @@
                     },
                     {
                         "AmbientExposure": 1.0,
+                        "CalculateShadow": true,
+                        "CastDecal": false,
                         "DiffuseExposure": 1.0,
                         "aabb": {
                             "maxPoint": {
@@ -18184,6 +18842,8 @@
                     },
                     {
                         "AmbientExposure": 1.0,
+                        "CalculateShadow": true,
+                        "CastDecal": false,
                         "DiffuseExposure": 1.0,
                         "aabb": {
                             "maxPoint": {
@@ -18264,6 +18924,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "VFX_Buff_Hansel_Pie",
         "aabb": {
@@ -18284,6 +18946,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -18368,6 +19032,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "VFX_Buff_Ursula_Contract",
         "aabb": {
@@ -18388,6 +19054,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -18495,6 +19163,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "VFX_CharacterSelected",
         "aabb": {
@@ -18515,6 +19185,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -18599,6 +19271,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "VFX_DeBuff_Blind_Ursula",
         "aabb": {
@@ -18619,6 +19293,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -18749,6 +19425,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "VFX_Frame_Summon",
         "aabb": {
@@ -18769,6 +19447,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -18853,6 +19533,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "VFX_Hansel_Attack_1",
         "aabb": {
@@ -18873,6 +19555,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -18957,6 +19641,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "VFX_Hansel_Attack_2",
         "aabb": {
@@ -18977,6 +19663,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -19061,6 +19749,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "VFX_Hansel_Skill1_1",
         "aabb": {
@@ -19081,6 +19771,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -19165,6 +19857,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "VFX_Hansel_Skill1_2",
         "aabb": {
@@ -19185,6 +19879,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -19269,6 +19965,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "VFX_HeartQueen_Appear",
         "aabb": {
@@ -19289,6 +19987,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -19396,6 +20096,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "VFX_HeartQueen_Attack",
         "aabb": {
@@ -19416,6 +20118,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -19500,6 +20204,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "VFX_HeartQueen_Skill1",
         "aabb": {
@@ -19520,6 +20226,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -19650,6 +20358,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "VFX_HeartQueen_Skill2",
         "aabb": {
@@ -19670,6 +20380,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -19777,6 +20489,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "VFX_HeartQueen_Skill2_Preview",
         "aabb": {
@@ -19797,6 +20511,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -19904,6 +20620,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "VFX_HeartQueen_Skill3_1",
         "aabb": {
@@ -19924,6 +20642,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -20008,6 +20728,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "VFX_Monster1_Attack",
         "aabb": {
@@ -20028,6 +20750,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -20112,6 +20836,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "VFX_Monster1_Skill",
         "aabb": {
@@ -20132,6 +20858,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -20216,6 +20944,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "VFX_Monster1_Skill_Preview",
         "aabb": {
@@ -20236,6 +20966,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -20343,6 +21075,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "VFX_Monster2_Skill",
         "aabb": {
@@ -20363,6 +21097,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -20470,6 +21206,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "VFX_Monster2_Skill_Preview",
         "aabb": {
@@ -20490,6 +21228,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -20597,6 +21337,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "VFX_Ursula_Skill1_2",
         "aabb": {
@@ -20617,6 +21359,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -20724,6 +21468,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "VFX_Monster_HitCC",
         "aabb": {
@@ -20744,6 +21490,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -20828,6 +21576,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "VFX_Robin_Skill1",
         "aabb": {
@@ -20848,6 +21598,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -20955,6 +21707,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "VFX_Robin_Skill2",
         "aabb": {
@@ -20975,6 +21729,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -21059,6 +21815,8 @@
     },
     {
         "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "VFX_Ursula_Attack_1",
         "aabb": {
@@ -21079,6 +21837,8 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {

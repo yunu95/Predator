@@ -349,6 +349,14 @@ void NailEngine::CreateRenderTargetGroup()
             static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
         ));
 
+		rtVec[6].texture = std::static_pointer_cast<Texture>(ResourceManager::Instance.Get().CreateTexture(
+			L"View_Pos_Decal_Target",
+			this->windowInfo.width,
+			this->windowInfo.height,
+			DXGI_FORMAT_R32G32B32A32_FLOAT,
+			static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
+		));
+
         this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)] = std::make_shared<RenderTargetGroup>();
         this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->SetRenderTargetVec(rtVec);
     }
@@ -551,17 +559,18 @@ void NailEngine::CreateRenderTargetGroup()
         ShadowPass::Instance.Get().SetTempRTV(rtVec[0].texture.get());
     }
 
-    // Decal
+    // Decal Mask
 	{
 		std::vector<RenderTarget> rtVec(DECAL_COUNT);
 		rtVec[0].texture = std::static_pointer_cast<Texture>(ResourceManager::Instance.Get().CreateTexture(
-			L"DecalTarget",
-			4096,
-			4096,
-			DXGI_FORMAT_R8G8B8A8_UNORM,
+			L"DecalMaskTarget",
+			((this->windowInfo.width)),
+			((this->windowInfo.height)),
+            DXGI_FORMAT_R32G32B32A32_FLOAT,
 			static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
 		));
 		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::DECAL)] = std::make_shared<RenderTargetGroup>();
 		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::DECAL)]->SetRenderTargetVec(rtVec);
 	}
+
 }

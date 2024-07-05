@@ -14,6 +14,7 @@ namespace application
     struct POD_GlobalConstant
     {
         GC<int> gravitySpeed = 10;
+        GC<float> manaRegen_Peace = 70.0f;
         GC<float> manaRegen = 7.0f;
         GC<float> maxMana = 100.0f;
 
