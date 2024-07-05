@@ -105,7 +105,7 @@ void TacticModeSystem::EngageTacticSystem()
     {
         wave.lock()->StopWaveElapsedTime();
     }
-  
+
     SFXManager::PlaySoundfile("sounds/Tactical mode/Tactical mode on.wav");
     ITacticObject::OnPauseAll();
     SyncWithTacticCommandQueueUI();
@@ -118,8 +118,8 @@ EnqueErrorType TacticModeSystem::EnqueueCommand(std::shared_ptr<UnitCommand> com
     // 현재 들어온 명령을 수행하는 유닛이 준비가 되었는지 검사하는 코드
     if (command->GetUnit()->IsTacTicReady() == false)
     {
-		errorType = EnqueErrorType::NotReady;
-		return errorType;
+        errorType = EnqueErrorType::NotReady;
+        return errorType;
     }
 
     // 큐가 가득 차 있는지 검사하는 코드
@@ -447,7 +447,8 @@ bool TacticModeSystem::CanSelectSkill(SkillType::Enum skillType)
 
 void TacticModeSystem::PopCommand()
 {
-    if (this->commandList.empty()) return;
+    if (!TacticModeSystem::Instance().IsOperation() || TacticModeSystem::Instance().IsExecuting() || this->commandList.empty())
+        return;
 
     auto command = this->commandList.back();
     if (command->GetCommandType() == UnitCommand::Skill)
@@ -587,8 +588,8 @@ yunutyEngine::coroutine::Coroutine TacticModeSystem::ExecuteInternal()
             this->playersTacticRevArr[each->GetPlayerType()] = PlayerController::Instance().GetPlayers()[each->GetPlayerType()].lock()->referenceTactic.Acquire();
             each->HidePreviewMesh();
         }
-		UIManager::Instance().GetUIElementByEnum(commandIcons[iconIndex])->DisableElement();
-		iconIndex++;
+        UIManager::Instance().GetUIElementByEnum(commandIcons[iconIndex])->DisableElement();
+        iconIndex++;
     }
 
     for (auto& each : this->playersTacticRevArr)

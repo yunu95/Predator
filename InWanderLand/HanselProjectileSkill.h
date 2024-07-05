@@ -3,6 +3,9 @@
 
 struct POD_HanselProjectileSkill
 {
+    float foreswingDuration = -1.0f;
+    float backswingDuration = -1.0f;
+
     float projectileSpeed = 10.0f;
     float skillRadius = 1.0f;
     float maxRange = 10.0f;
@@ -34,8 +37,13 @@ private:
 
     std::weak_ptr<UnitAcquisitionSphereCollider> pieCollider;
     std::weak_ptr<ManagedFBX> pieObject;
+    std::weak_ptr<yunutyEngine::graphics::Animator> animator;
+    yunuGI::IAnimation* throwAnim = nullptr;
 
     float colliderEffectRatio;
+    float foreswingSpeed = 1.f;
+    float backswingSpeed = 1.f;
+
 public:
     HanselProjectileSkill() {}
     virtual SkillType::Enum GetSkillType() { return SkillType::Enum::HANSEL_W; }

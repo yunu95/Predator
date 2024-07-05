@@ -5,7 +5,7 @@
 
 #include <math.h>
 
-const float paralysisForeswingTime = 1.0f;
+const float paralysisForeswingTime = 2.1f;
 
 POD_UrsulaParalysisSkill UrsulaParalysisSkill::pod = POD_UrsulaParalysisSkill();
 
@@ -15,42 +15,26 @@ coroutine::Coroutine UrsulaParalysisSkill::operator()()
     auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
     auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
     auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
-    auto animator = owner.lock()->GetAnimator();
+    animator = owner.lock()->GetAnimator();
     paralysisAnim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill2);
 
-    //if (pod.foreswingDuration > 0)
-    //{
-    //    foreswingSpeed = paralysisForeswingTime / pod.foreswingDuration;
-    //}
-
     owner.lock()->SetDefaultAnimation(UnitAnimType::None);
-    animator.lock()->GetGI().SetPlaySpeed(skillSpeed);
     owner.lock()->PlayAnimation(UnitAnimType::Skill2);
-
-    //coroutine::ForSeconds foreforSeconds{ tauntForeswingTime / foreswingSpeed };
 
     effectColliderCoroutine = owner.lock()->StartCoroutine(SpawningFieldEffect(dynamic_pointer_cast<UrsulaParalysisSkill>(selfWeakPtr.lock())));
     effectColliderCoroutine.lock()->PushDestroyCallBack([this]()
         {
+            tentacleAnimator->GetGI().SetPlaySpeed(1);
+            waveAnimator->GetGI().SetPlaySpeed(1);
+            waveVFXAnimator.lock()->SetSpeed(1);
+
             FBXPool::Instance().Return(tentacleObject);
             FBXPool::Instance().Return(waveObject);
             UnitAcquisitionSphereColliderPool::Instance().Return(damageCollider);
             UnitAcquisitionSphereColliderPool::Instance().Return(knockBackCollider);
         });
 
-    float localSkillDuration;
-    if (pod.skillDuration > 0)
-    {
-        localSkillDuration = pod.skillDuration;
-    }
-    else
-    {
-        localSkillDuration = paralysisAnim->GetDuration();
-    }
-
-    coroutine::ForSeconds forSeconds{ localSkillDuration };
-
-    while (forSeconds.Tick())
+    while (!animator.lock()->IsDone())
     {
         co_await std::suspend_always{};
     }
@@ -72,8 +56,6 @@ coroutine::Coroutine UrsulaParalysisSkill::SpawningFieldEffect(std::weak_ptr<Urs
     Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
     Vector3d direction = deltaPos.Normalized();
 
-    auto animator = owner.lock()->GetAnimator();
-
     float actualCollideRange = GetSkillRadius() * (1 / colliderEffectRatio);
 
     damageCollider = UnitAcquisitionSphereColliderPool::Instance().Borrow(owner.lock());
@@ -88,8 +70,8 @@ coroutine::Coroutine UrsulaParalysisSkill::SpawningFieldEffect(std::weak_ptr<Urs
     tentacleObject.lock()->GetTransform()->SetWorldScale({ actualCollideRange, actualCollideRange, actualCollideRange });
     waveObject.lock()->GetTransform()->SetWorldScale({ actualCollideRange, actualCollideRange, actualCollideRange });
 
-    auto tentacleAnimator = tentacleObject.lock()->GetGameObject()->GetChildren()[0]->GetComponent<yunutyEngine::graphics::Animator>();
-    auto waveAnimator = waveObject.lock()->GetGameObject()->GetChildren()[0]->GetComponent<yunutyEngine::graphics::Animator>();
+    tentacleAnimator = tentacleObject.lock()->GetGameObject()->GetChildren()[0]->GetComponent<yunutyEngine::graphics::Animator>();
+    waveAnimator = waveObject.lock()->GetGameObject()->GetChildren()[0]->GetComponent<yunutyEngine::graphics::Animator>();
     
     auto rsrcManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
     auto& animList = rsrcManager->GetAnimationList();
@@ -111,13 +93,22 @@ coroutine::Coroutine UrsulaParalysisSkill::SpawningFieldEffect(std::weak_ptr<Urs
         }
     }
 
-    auto waveVFXAnimator = waveObject.lock()->AcquireVFXAnimator();
+    waveVFXAnimator = waveObject.lock()->AcquireVFXAnimator();
     waveVFXAnimator.lock()->SetAutoActiveFalse();
     waveVFXAnimator.lock()->Init();
     tentacleObject.lock()->GetGameObject()->GetTransform()->SetWorldPosition(targetPos);
     waveObject.lock()->GetGameObject()->GetTransform()->SetWorldPosition(targetPos);
     tentacleObject.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
     waveObject.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
+
+    if (pod.foreswingDuration > 0)
+    {
+        foreswingSpeed = paralysisForeswingTime / pod.foreswingDuration;
+    }
+    
+    tentacleAnimator->GetGI().SetPlaySpeed(foreswingSpeed);
+    waveAnimator->GetGI().SetPlaySpeed(foreswingSpeed);
+    waveVFXAnimator.lock()->SetSpeed(foreswingSpeed);
 
     tentacleAnimator->Play(tentacleAnimation);
     waveAnimator->Play(waveAnimation);
@@ -133,6 +124,14 @@ coroutine::Coroutine UrsulaParalysisSkill::SpawningFieldEffect(std::weak_ptr<Urs
         if (curFrame >= 30)
         {
             hit = true;
+            if (pod.skillDuration > 0)
+            {
+                skillSpeed = (paralysisAnim->GetDuration() - paralysisForeswingTime) / pod.skillDuration;
+            }
+
+            tentacleAnimator->GetGI().SetPlaySpeed(skillSpeed);
+            waveAnimator->GetGI().SetPlaySpeed(skillSpeed);
+            waveVFXAnimator.lock()->SetSpeed(skillSpeed);
         }
 
         if (hit)
@@ -181,7 +180,7 @@ coroutine::Coroutine UrsulaParalysisSkill::SpawningFieldEffect(std::weak_ptr<Urs
 
 void UrsulaParalysisSkill::OnInterruption()
 {
-
+    animator.lock()->GetGI().SetPlaySpeed(1);
 }
 
 float UrsulaParalysisSkill::GetSkillRadius()

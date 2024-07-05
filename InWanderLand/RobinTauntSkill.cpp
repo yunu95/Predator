@@ -29,16 +29,7 @@ coroutine::Coroutine RobinTauntSkill::operator()()
     animator.lock()->GetGI().SetPlaySpeed(foreswingSpeed);
     owner.lock()->PlayAnimation(UnitAnimType::Taunt);
 
-    coroutine::ForSeconds foreforSeconds{ tauntForeswingTime / foreswingSpeed };
-
-    auto startRotation = owner.lock()->GetTransform()->GetWorldRotation();
-    auto desiredRotation = Quaternion::MakeWithForwardUp(direction, direction.up);
-
-    while (foreforSeconds.Tick())
-    {
-        owner.lock()->GetTransform()->SetWorldRotation(Quaternion::Lerp(startRotation, desiredRotation, foreforSeconds.ElapsedNormalized()));
-        co_await std::suspend_always{};
-    }
+    co_yield coroutine::WaitForSeconds(tauntForeswingTime / foreswingSpeed);
 
     animator.lock()->Pause();
 

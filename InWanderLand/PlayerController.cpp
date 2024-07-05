@@ -77,13 +77,46 @@ void PlayerController::UpgradeSkill()
 {
     SetSkillPoints(skillPointsLeft - 1);
     static constexpr float gray = 0.3f;
-    UIManager::Instance().GetUIElementByEnum(skillUpgradeUITarget)->imageComponent.lock()->GetGI().SetColor({ gray,gray,gray,1 });
+    // AdjustUpgradeButtonsByState
     skillUpgraded[skillUpgradeByUI.at(skillUpgradeUITarget)] = true;
+    for (auto each : skillUpgradeByUI)
+    {
+        UIElement* uiElement = UIManager::Instance().GetUIElementByEnum(each.first);
+        SkillUpgradeType::Enum dependentSkillUpgrade = SkillUpgradeType::NONE;
+        if (UIElement* dependent = UIManager::Instance().GetUIElementWithIndex(uiElement->importedUIData.dependentUpgrade))
+        {
+            dependentSkillUpgrade = skillUpgradeByUI.at((UIEnumID)dependent->importedUIData.enumID);
+        }
+        if (skillUpgraded[each.second])
+        {
+            // 스킬이 이미 업그레이드된 경우
+            uiElement->GetLocalUIsByEnumID().at(UIEnumID::SkillUpgradeButton_UpgradedImage)->EnableElement();
+        }
+        else if (dependentSkillUpgrade == SkillUpgradeType::NONE || skillUpgraded[dependentSkillUpgrade])
+        {
+            // 의존하는 스킬이 업그레이드된 경우
+            uiElement->GetLocalUIsByEnumID().at(UIEnumID::SkillUpgradeButton_Upgradable)->EnableElement();
+        }
+        else
+        {
+            // 아예 업그레이드를 할 수 없는 경우
+            uiElement->GetLocalUIsByEnumID().at(UIEnumID::SkillUpgradeButton_InUpgradableImage)->EnableElement();
+        }
+    }
 }
 void PlayerController::SetSkillPoints(int points)
 {
     skillPointsLeft = points;
     UIManager::Instance().GetUIElementByEnum(UIEnumID::SkillPoint_Number)->SetNumber(skillPointsLeft);
+    if (skillPointsLeft > 0)
+    {
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::InGame_SkiltreeMenu_Active)->EnableElement();
+    }
+    else
+    {
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::InGame_SkiltreeMenu_InActive)->EnableElement();
+    }
+
 }
 int PlayerController::GetSkillPoints()
 {
@@ -167,7 +200,7 @@ void PlayerController::Update()
     {
         text_State = Scene::getCurrentScene()->AddGameObject()->AddComponent<yunutyEngine::graphics::UIText>();
         text_State->GetGI().SetFontSize(30);
-        text_State->GetGI().SetColor(yunuGI::Color{ 1,0,1,1 });
+        text_State->GetGI().SetColor(yunuGI::Color{ 1,1,1,1 });
         text_State->GetTransform()->SetLocalScale(Vector3d{ 1200,500,0 });
         text_State->GetTransform()->SetLocalPosition(Vector3d{ 0,260,0 });
     }
@@ -179,6 +212,7 @@ void PlayerController::Update()
     {
         selectedDebugCharacter = Unit::debuggingUnit->GetWeakPtr<Unit>();
         wstringstream wsstream;
+        wsstream << L"\ndebug unit name: " << yutility::GetWString(Unit::debuggingUnit->name);
         wsstream << L"unitState : ";
         auto& activeStates = selectedDebugCharacter.lock()->GetBehaviourTree().GetActiveNodes();
         for (const auto& each : activeStates)
@@ -188,7 +222,10 @@ void PlayerController::Update()
         wsstream << L"\nacq : " << selectedDebugCharacter.lock()->acquisitionRange.lock()->GetEnemies().size();
         wsstream << L"\ncurrent pos : " << selectedDebugCharacter.lock()->GetTransform()->GetWorldPosition();
         wsstream << L"\nattack target pos : " << selectedDebugCharacter.lock()->attackMoveDestination;
-        wsstream << L"\nhovering unit : " << yutility::GetWString(Unit::debuggingUnit->name);
+        wsstream << L"\nnavObstacle : " << selectedDebugCharacter.lock()->referenceEnableNavObstacle.BeingReferenced();
+        wsstream << L"\nnavAgent : " << selectedDebugCharacter.lock()->navAgentComponent.lock()->GetTransform()->GetWorldPosition();
+        wsstream << L"\nnavAgent pos : " << !selectedDebugCharacter.lock()->referenceDisableNavAgent.BeingReferenced();
+        wsstream << L"\nblockFollowingNavAgent : " << selectedDebugCharacter.lock()->referenceBlockFollowingNavAgent.BeingReferenced();
         if (auto target = Unit::debuggingUnit->currentTargetUnit.lock())
         {
             wsstream << L"\nattack target unit : " << yutility::GetWString(target->name);
@@ -232,20 +269,13 @@ void PlayerController::HandleByState()
 void PlayerController::HandleInput()
 {
     if (state == State::Cinematic) return;
-    if (Input::isKeyPushed(KeyCode::Space) && UIManager::Instance().GetScriptUI("UiEnum:Toggle_TacticMode")->GetUIEnabled() && ((state == State::Battle) || state == State::Tactic))
+    if (Input::isKeyPushed(KeyCode::Space))
     {
-        if ((TacticModeSystem::Instance().IsCoolTime() == false) && (TacticModeSystem::Instance().IsExecuting() == false))
-        {
-            TacticModeSystem::Instance().EngageTacticSystem();
-        }
-        else if ((TacticModeSystem::Instance().IsOperation() == true) && (TacticModeSystem::Instance().IsExecuting() == false))
-        {
-            TacticModeSystem::Instance().ExecuteCommands();
-        }
+        TryTogglingTacticMode();
     }
 
     // 전술모드의 마지막 명령을 지우는 키
-    if (Input::isKeyPushed(KeyCode::R) && TacticModeSystem::Instance().IsOperation() && !TacticModeSystem::Instance().IsExecuting())
+    if (Input::isKeyPushed(KeyCode::R))
     {
         TacticModeSystem::Instance().PopCommand();
     }
@@ -571,13 +601,16 @@ void PlayerController::HandleMouseHover()
         {
             UIManager::Instance().GetUIElementByEnum(UIEnumID::MouseCursor_OnButton)->EnableElement();
         }
-        else if (unit->GetTeamIndex() == playerTeamIndex)
+        else if (!UIManager::Instance().IsMouseOnButton())
         {
-            UIManager::Instance().GetUIElementByEnum(UIEnumID::MouseCursor_OnAlly)->EnableElement();
-        }
-        else
-        {
-            UIManager::Instance().GetUIElementByEnum(UIEnumID::MouseCursor_OnEnemy)->EnableElement();
+            if (unit->GetTeamIndex() == playerTeamIndex)
+            {
+                UIManager::Instance().GetUIElementByEnum(UIEnumID::MouseCursor_OnAlly)->EnableElement();
+            }
+            else
+            {
+                UIManager::Instance().GetUIElementByEnum(UIEnumID::MouseCursor_OnEnemy)->EnableElement();
+            }
         }
     }
     else
@@ -728,9 +761,9 @@ void PlayerController::OnRightClick()
         if (selectedCharacter.expired()) return;
         if (state != State::Tactic)
         {
-            if (!cursorUnitDetector.lock()->GetUnits().empty() && GetUnitOnCursor()->teamIndex != playerTeamIndex)
+            if (auto target = GetUnitOnCursor(); target && target->teamIndex != playerTeamIndex)
             {
-                OrderAttack(GetUnitOnCursor()->GetWeakPtr<Unit>());
+                OrderAttack(target->GetWeakPtr<Unit>());
             }
             else
             {
@@ -742,7 +775,7 @@ void PlayerController::OnRightClick()
         {
             SkillPreviewSystem::Instance().HideTemporaryRoute();
             EnqueErrorType errorType = EnqueErrorType::NONE;
-            if (!cursorUnitDetector.lock()->GetUnits().empty() && GetUnitOnCursor()->teamIndex != playerTeamIndex)
+            if (auto target = GetUnitOnCursor(); target && target->teamIndex != playerTeamIndex)
             {
                 // Attack
                 // 걸어가서 공격을 하게 될 수 있음
@@ -841,12 +874,12 @@ void PlayerController::OrderAttackMove(Vector3d position)
     }
 }
 
-void PlayerController::OrderAttack(std::weak_ptr<Unit> unit)
+void PlayerController::OrderAttack(std::weak_ptr<Unit> target)
 {
     if (auto unit = selectedCharacter.lock())
     {
-        ApplyTargetedEffect(unit);
-        unit->OrderAttack(unit);
+        ApplyTargetedEffect(target);
+        unit->OrderAttack(target);
     }
 }
 
@@ -1099,7 +1132,6 @@ void PlayerController::Reset()
         cursorUnitDetector = Scene::getCurrentScene()->AddGameObject()->AddComponentAsWeakPtr<UnitAcquisitionBoxCollider>();
     std::for_each(skillUpgradeByUI.begin(), skillUpgradeByUI.end(), [&](auto& pair) {
         auto& [ui, upgrade] = pair;
-        UIManager::Instance().GetUIElementByEnum(ui)->imageComponent.lock()->GetGI().SetColor({ 1,1,1,1 });
         skillUpgraded[upgrade] = false;
         });
     skillPointsLeft = 0;
@@ -1234,6 +1266,22 @@ void PlayerController::SetMana(float mana)
     UIManager::Instance().GetUIElementByEnum(UIEnumID::ManaBar2)->adjuster->SetTargetFloat(1 - this->mana / gc.maxMana);
     UIManager::Instance().GetUIElementByEnum(UIEnumID::Mana_Text_MaxMP)->SetNumber(gc.maxMana);
     UIManager::Instance().GetUIElementByEnum(UIEnumID::Mana_Text_CurrentMP)->SetNumber(this->mana);
+}
+
+void PlayerController::TryTogglingTacticMode()
+{
+    if (UIManager::Instance().GetScriptUI("UiEnum:Toggle_TacticMode")->GetUIEnabled() && ((state == State::Battle) || state == State::Tactic))
+    {
+        if ((TacticModeSystem::Instance().IsCoolTime() == false) && (TacticModeSystem::Instance().IsExecuting() == false))
+        {
+            TacticModeSystem::Instance().EngageTacticSystem();
+        }
+        else if ((TacticModeSystem::Instance().IsOperation() == true) && (TacticModeSystem::Instance().IsExecuting() == false))
+        {
+            TacticModeSystem::Instance().ExecuteCommands();
+        }
+    }
+
 }
 
 Unit* PlayerController::GetUnitOnCursor()
@@ -1555,4 +1603,9 @@ std::vector<yunutyEngine::Vector3d>& PlayerController::ModifyPathForSkill(std::v
         path.clear();
     }
     return path;
+}
+
+void PlayerController::SetAttackMoveMode(bool attackMoveMode)
+{
+    this->attackMoveMode = attackMoveMode;
 }

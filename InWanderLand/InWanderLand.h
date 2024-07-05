@@ -98,3 +98,4 @@
 #include "WanderFBX.h"
 #include "SFXManager.h"
 #include "ContentsCoroutine.h"
+#include "TacticModeSystem.h"

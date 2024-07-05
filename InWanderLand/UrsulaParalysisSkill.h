@@ -40,6 +40,10 @@ private:
     std::weak_ptr<UnitAcquisitionSphereCollider> knockBackCollider;
     std::weak_ptr<ManagedFBX> tentacleObject;
     std::weak_ptr<ManagedFBX> waveObject;
+    std::weak_ptr<VFXAnimator> waveVFXAnimator;
+    std::weak_ptr<yunutyEngine::graphics::Animator> animator;
+    yunutyEngine::graphics::Animator* tentacleAnimator = nullptr;
+    yunutyEngine::graphics::Animator* waveAnimator = nullptr;
 
     yunuGI::IAnimation* paralysisAnim = nullptr;
 
