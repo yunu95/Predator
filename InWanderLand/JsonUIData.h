@@ -71,6 +71,8 @@ struct JsonUIData
     string videoPath1;
     string videoPath2;
     bool videoUnscaledDeltaTime;
+    // 숫자를 가운데 정렬할지의 여부입니다.
+    bool centerAlign;
 
     int customFlags;
     int customFlags2;

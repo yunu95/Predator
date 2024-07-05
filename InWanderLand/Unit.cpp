@@ -190,7 +190,6 @@ template<>
 void Unit::OnStateEngage<UnitBehaviourTree::Stun>()
 {
     onStateEngage[UnitBehaviourTree::Knockback]();
-    blockFollowingNavAgentByState = referenceBlockFollowingNavAgent.Acquire();
     PlayAnimation(UnitAnimType::Paralysis, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
 }
 template<>
@@ -299,10 +298,11 @@ template<>
 void Unit::OnStateEngage<UnitBehaviourTree::Move>()
 {
     onStateEngage[UnitBehaviourTree::Move]();
+    auto debugtrs = navAgentComponent.lock()->GetTransform();
     navAgentComponent.lock()->SetSpeed(unitTemplateData->pod.m_unitSpeed);
     //StartCoroutine(ShowPath(SingleNavigationField::Instance().GetSmoothPath(GetTransform()->GetWorldPosition() + GetTransform()->GetWorldRotation().Forward() * unitTemplateData->pod.collisionSize, moveDestination)));
     PlayAnimation(UnitAnimType::Move, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
-    jamCount = 0;
+    jammedDuration = 0;
 }
 template<>
 void Unit::OnStateExit<UnitBehaviourTree::Move>()
@@ -327,18 +327,21 @@ void Unit::OnStateUpdate<UnitBehaviourTree::Move>()
     float idealDeltaPosition = unitTemplateData->pod.m_unitSpeed * Time::GetDeltaTime();
     if ((lastPosition - currentPosition).MagnitudeSqr() < idealDeltaPosition * idealDeltaPosition * jamFactor)
     {
-        if (jamCount++ > maxJamCount)
+        PlayAnimation(UnitAnimType::Idle, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat | Animation::PlayFlag_::NonRedundant);
+        if ((jammedDuration += Time::GetDeltaTime()) > jamDurationThreshold)
         {
             OrderAttackMove();
-            jamCount = 0;
+            jammedDuration = 0;
         }
+        SetDesiredRotation(moveDestination - lastPosition);
     }
     else
     {
-        jamCount = 0;
+        PlayAnimation(UnitAnimType::Move, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat | Animation::PlayFlag_::NonRedundant);
+        jammedDuration = 0;
+        SetDesiredRotation(GetTransform()->GetWorldPosition() - lastPosition);
     }
     navAgentComponent.lock()->MoveTo(moveDestination);
-    SetDesiredRotation(GetTransform()->GetWorldPosition() - lastPosition);
 }
 template<>
 void Unit::OnStateEngage<UnitBehaviourTree::Skill>()
@@ -763,6 +766,12 @@ void Unit::PlayAnimation(UnitAnimType animType, Animation::PlayFlag playFlag)
     }
     auto anim = wanderResources::GetAnimation(unitTemplateData->pod.skinnedFBXName, animType);
 
+    if (playFlag & Animation::PlayFlag_::NonRedundant && animatorComponent.lock()->GetGI().GetCurrentAnimation() == anim)
+    {
+        return;
+    }
+
+    // 새로 애니메이션을 재생할지, 애니메이션 블렌딩을 시도할지
     if (animatorComponent.lock()->GetGI().GetCurrentAnimation() == nullptr
         || animatorComponent.lock()->GetGI().GetCurrentAnimation() == anim
         || !(playFlag & Animation::PlayFlag_::Blending))

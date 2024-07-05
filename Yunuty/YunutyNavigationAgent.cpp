@@ -37,9 +37,9 @@ void yunutyEngine::NavigationAgent::OnEnable()
         //    impl->agentIdx = -1;
         //}
         //navField->agents.insert(this);
-        //Vector3f pos = GetTransform()->GetWorldPosition();
+        Vector3f pos = GetTransform()->GetWorldPosition();
         //impl->agentIdx = impl->crowd->addAgent(reinterpret_cast<float*>(&pos), &impl->agentParams);
-        //Relocate(pos);
+        Relocate(pos);
     }
 }
 void yunutyEngine::NavigationAgent::OnDisable()

@@ -82,6 +82,7 @@ public:
     Vector3d GetCamPivotPoint();
     void SetManaFull();
     void SetMana(float mana);
+    void TryTogglingTacticMode();
     Unit* GetUnitOnCursor();
     virtual void OnPause() override;
     virtual void OnResume() override;
@@ -158,6 +159,7 @@ private:
     void OnPlayerUnitSkillExpiration(std::weak_ptr<Unit> unit, std::weak_ptr<Skill> skill);
     std::vector<Vector3d>& ModifyPathForAttack(std::vector<Vector3d>& path);
     std::vector<Vector3d>& ModifyPathForSkill(std::vector<Vector3d>& path, SkillType::Enum skillType);
+    void SetAttackMoveMode(bool attackMoveMode);
     int skillButtonIDHovering;
     int parentEnumIDHovering;
     int currentCombo{ 0 };
@@ -176,6 +178,7 @@ private:
     float mana{ 0 };
     State::Enum state{ State::Battle };
     SkillType::Enum selectedSkill = SkillType::NONE;
+    bool attackMoveMode{ false };
     PlayerCharacterType::Enum selectedCharacterType = PlayerCharacterType::None;
     std::weak_ptr<UnitAcquisitionBoxCollider> cursorUnitDetector;
     std::array<std::weak_ptr<Unit>, (int)PlayerCharacterType::Num> characters;

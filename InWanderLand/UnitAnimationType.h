@@ -35,5 +35,6 @@ namespace Animation
         None = 0,
         Blending = 1 << 0,
         Repeat = 1 << 1,
+        NonRedundant = 1 << 2,
     };
 }
