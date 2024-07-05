@@ -5,6 +5,9 @@ class UnitAcquisitionSphereCollider;
 class ManagedFBX;
 struct POD_EnemyImpaleSkill
 {
+    float foreswingDuration = -1.0f;
+    float backswingDuration = -1.0f;
+
     float impaleSkillDamage = 20.0f;
     float impaleSkillCoolTime = 6.0f;
     float impaleSkillApproachingTime = 2.0f;
@@ -50,10 +53,14 @@ private:
     std::weak_ptr<ManagedFBX> impaleEffect;
     std::weak_ptr<VFXAnimator> previewEffectAnimator;
     std::weak_ptr<VFXAnimator> impaleEffectAnimator;
+    std::weak_ptr<yunutyEngine::graphics::Animator> animator;
 
     static std::queue<std::weak_ptr<UnitAcquisitionSphereCollider>> knockbackColliderQueue;
     static std::queue<std::weak_ptr<ManagedFBX>> spearFbxQueue;
     std::unordered_set<Unit*> damagedUnits;
+    
+    float foreswingSpeed = 1.f;
+    float backswingSpeed = 1.f;
 };
 
 template <>

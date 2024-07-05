@@ -37,6 +37,8 @@ namespace BossSkill
 
 struct POD_BossSummonChessSkill
 {
+	float skillDuration = -1.0f;
+
 	/// 보스방 기준, 좌측 하단의 칸 중심 위치입니다.
 	float pivotPos_x = -1553.66f;
 	float pivotPos_z = -65.95f;
@@ -75,14 +77,18 @@ public:
 private:
 	coroutine::Coroutine SpawningFieldEffect(std::weak_ptr<BossSummonChessSkill> skill);
 
+	yunuGI::IAnimation* anim = nullptr;
 	std::set<std::weak_ptr<BossSummon::ChessPawn>, BossSkill::CustomCompPawn> borrowedPawns = std::set<std::weak_ptr<BossSummon::ChessPawn>, BossSkill::CustomCompPawn>();
 	std::set<std::weak_ptr<BossSummon::ChessRook>, BossSkill::CustomCompRook> borrowedRooks = std::set<std::weak_ptr<BossSummon::ChessRook>, BossSkill::CustomCompRook>();
 	std::set<std::weak_ptr<BossSummon::ChessBishop>, BossSkill::CustomCompBishop> borrowedBishops = std::set<std::weak_ptr<BossSummon::ChessBishop>, BossSkill::CustomCompBishop>();
 	std::weak_ptr<coroutine::Coroutine> effectCoroutine;
 	std::weak_ptr<ManagedFBX> stepEffect;
 	std::weak_ptr<VFXAnimator> stepEffectAnimator;
+	std::weak_ptr<yunutyEngine::graphics::Animator> animator;
 	coroutine::Coroutine SummonChess(std::weak_ptr<BossSummonChessSkill> skill, Vector2i index);
 	Vector2i GetPlaceableIndex(Vector3d pos);
+
+	float skillSpeed = 1.f;
 };
 
 

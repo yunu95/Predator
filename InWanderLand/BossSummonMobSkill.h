@@ -9,6 +9,7 @@ namespace BossSummon
 
 struct POD_BossSummonMobSkill
 {
+	float skillDuration = -1.0f;
 	int leftMeleeCount = 2;
 	int leftProjectileCount = 2;
 	/// LeftFrame 기준 소환 위치의 offset 입니다.
@@ -58,13 +59,18 @@ private:
 	coroutine::Coroutine StartSummonTimer();
 	coroutine::Coroutine SpawningFieldEffect(std::weak_ptr<BossSummonMobSkill> skill);
 
+	yunuGI::IAnimation* skillAnim = nullptr;
+
 	static std::weak_ptr<coroutine::Coroutine> summonCoroutine;
 	std::weak_ptr<coroutine::Coroutine> effectCoroutine;
 	std::weak_ptr<ManagedFBX> stepEffect;
+	std::weak_ptr<yunutyEngine::graphics::Animator> animator;
 	std::weak_ptr<VFXAnimator> stepEffectAnimator;
 
 	static BossSummon::LeftFrame * leftFrame;
 	static BossSummon::RightFrame* rightFrame;
+
+	float skillSpeed = 1.f;
 };
 
 

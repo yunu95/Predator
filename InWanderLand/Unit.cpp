@@ -134,7 +134,7 @@ void Unit::Update()
     lastPosition = GetTransform()->GetWorldPosition();
     // 재생중인 애니메이션이 없다면 기본 애니메이션 출력
     // 어떤게 기본 애니메이션인지는 행동트리의 상태에 따라 바뀔 수 있다.
-    if ((animatorComponent.lock()->IsDone() || blendWithDefaultAnimTrigger) && defaultAnimationType != UnitAnimType::None)
+    if (!referenceBlockAnimLoop.BeingReferenced() && (animatorComponent.lock()->IsDone() || blendWithDefaultAnimTrigger) && defaultAnimationType != UnitAnimType::None)
     {
         blendWithDefaultAnimTrigger = false;
         PlayAnimation(defaultAnimationType);

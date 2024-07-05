@@ -3,7 +3,7 @@
 #include "VFXAnimator.h"
 
 const float throwingPieTimingFrame = 43.0f;
-
+const float throwingPieTiming = 1.13f;
 POD_HanselProjectileSkill HanselProjectileSkill::pod = POD_HanselProjectileSkill();
 
 coroutine::Coroutine HanselProjectileSkill::ThrowingPie(std::weak_ptr<HanselProjectileSkill> skill)
@@ -78,29 +78,6 @@ coroutine::Coroutine HanselProjectileSkill::ThrowingPie(std::weak_ptr<HanselProj
     co_return;
 }
 
-//coroutine::Coroutine HanselProjectileSkill::SpawningSkillffect(std::weak_ptr<Unit> unit)
-//{
-//    auto persistance = unit.lock();
-//	auto pieEffect = FBXPool::Instance().Borrow("VFX_Hansel_Skill2");
-//    pieEffect.lock()->GetGameObject()->SetParent(unit.lock()->GetGameObject());
-//    pieEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(unit.lock()->GetTransform()->GetWorldPosition());
-//	pieEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(unit.lock()->GetTransform()->GetWorldScale());
-//
-//	auto pieEffectAnimator = pieEffect.lock()->AcquireVFXAnimator();
-//	pieEffectAnimator.lock()->SetAutoActiveFalse();
-//	pieEffectAnimator.lock()->Init();
-//	pieEffectAnimator.lock()->Play();
-//
-//    while (!pieEffectAnimator.lock()->IsDone())
-//    {
-//		co_await std::suspend_always{};
-//    }
-//
-//    FBXPool::Instance().Return(pieEffect);
-//
-//	co_return;
-//}
-
 float HanselProjectileSkill::GetCastRange()
 {
     return GetMaxRange();
@@ -113,12 +90,26 @@ coroutine::Coroutine HanselProjectileSkill::operator()()
     auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
     auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
 
-    auto animator = owner.lock()->GetAnimator();
+    animator = owner.lock()->GetAnimator();
+    throwAnim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Throw);
 
     Vector3d deltaPos = targetPos - owner.lock()->GetTransform()->GetWorldPosition();
     Vector3d direction = deltaPos.Normalized();
     owner.lock()->SetDesiredRotation(direction);
 
+    float localPieTiming;
+    if (pod.foreswingDuration > 0)
+    {
+        foreswingSpeed = throwingPieTiming / pod.foreswingDuration;
+        localPieTiming = pod.foreswingDuration;
+    }
+    else
+    {
+        localPieTiming = throwingPieTiming;
+    }
+
+    owner.lock()->SetDefaultAnimation(UnitAnimType::None);
+    animator.lock()->GetGI().SetPlaySpeed(foreswingSpeed);
     owner.lock()->PlayAnimation(UnitAnimType::Throw);
 
     while (animator.lock()->GetCurrentAnimation() != wanderResources::GetAnimation(owner.lock()->GetUnitTemplateData().pod.skinnedFBXName, UnitAnimType::Throw)
@@ -134,21 +125,29 @@ coroutine::Coroutine HanselProjectileSkill::operator()()
             FBXPool::Instance().Return(pieObject);
         });
 
-    coroutine::ForSeconds forIdleSeconds{ 1.0f };
-    while (forIdleSeconds.Tick()) { co_await std::suspend_always{}; }
-    owner.lock()->PlayAnimation(UnitAnimType::Idle);
-    co_yield coroutine::WaitForSeconds{ 0.3f };
+    if (pod.backswingDuration > 0)
+    {
+        backswingSpeed = (throwAnim->GetDuration() - localPieTiming) / pod.backswingDuration;
+    }
+    animator.lock()->GetGI().SetPlaySpeed(backswingSpeed);
+
+    while (!animator.lock()->IsDone())
+    {
+        co_await std::suspend_always{};
+    }
 
     disableNavAgent.reset();
     blockFollowingNavigation.reset();
     owner.lock()->Relocate(owner.lock()->GetTransform()->GetWorldPosition());
     OnInterruption();
+    if (owner.lock()->GetPendingOrderType() == UnitOrderType::None)
+        owner.lock()->OrderAttackMove();
     co_return;
 }
 
 void HanselProjectileSkill::OnInterruption()
 {
-
+    animator.lock()->GetGI().SetPlaySpeed(1);
 }
 
 float HanselProjectileSkill::GetMaxRange()

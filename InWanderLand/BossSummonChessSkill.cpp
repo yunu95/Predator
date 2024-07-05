@@ -21,17 +21,25 @@ coroutine::Coroutine BossSummonChessSkill::operator()()
 	auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
 	auto disableNavAgent = owner.lock()->referenceDisableNavAgent.Acquire();
 	auto rotRef = owner.lock()->referenceBlockRotation.Acquire();
-	auto animator = owner.lock()->GetAnimator();
+	animator = owner.lock()->GetAnimator();
+	anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill4);
 
-	owner.lock()->PlayAnimation(UnitAnimType::Skill4, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
+	if (pod.skillDuration > 0)
+	{
+		skillSpeed = anim->GetDuration() / pod.skillDuration;
+	}
+
+	owner.lock()->SetDefaultAnimation(UnitAnimType::None);
+	animator.lock()->GetGI().SetPlaySpeed(skillSpeed);
+	owner.lock()->PlayAnimation(UnitAnimType::Skill4);
 
 	effectCoroutine = owner.lock()->StartCoroutine(SpawningFieldEffect(std::dynamic_pointer_cast<BossSummonChessSkill>(selfWeakPtr.lock())));
 	effectCoroutine.lock()->PushDestroyCallBack([this]()
 		{
+			animator.lock()->GetGI().SetPlaySpeed(1);
+			stepEffectAnimator.lock()->SetSpeed(1);
 			FBXPool::Instance().Return(stepEffect);
 		});
-	auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill4);
-	wanderUtils::UnitCoroutine::ForSecondsFromUnit forSeconds{ owner, anim->GetDuration() };
 
 	Vector3d farUnitPos = Vector3d();
 	Vector3d ownerPos = owner.lock()->GetTransform()->GetWorldPosition();
@@ -52,6 +60,20 @@ coroutine::Coroutine BossSummonChessSkill::operator()()
 	}
 
 	owner.lock()->StartCoroutine(SummonChess(std::static_pointer_cast<BossSummonChessSkill>(selfWeakPtr.lock()), GetPlaceableIndex(farUnitPos)));
+	
+	float localSkillDuration = 0;
+
+	if (pod.skillDuration > 0)
+	{
+		localSkillDuration = pod.skillDuration;
+	}
+	else
+	{
+		localSkillDuration = anim->GetDuration();
+	}
+
+	wanderUtils::UnitCoroutine::ForSecondsFromUnit forSeconds{ owner, localSkillDuration };
+
 	while (forSeconds.Tick())
 	{
 		co_await std::suspend_always{};
@@ -60,6 +82,9 @@ coroutine::Coroutine BossSummonChessSkill::operator()()
 	disableNavAgent.reset();
 	blockFollowingNavigation.reset();
 	owner.lock()->Relocate(owner.lock()->GetTransform()->GetWorldPosition());
+	if (owner.lock()->GetPendingOrderType() == UnitOrderType::None)
+		owner.lock()->OrderAttackMove();
+	animator.lock()->GetGI().SetPlaySpeed(1);
 	co_return;
 }
 
@@ -111,10 +136,9 @@ coroutine::Coroutine BossSummonChessSkill::SpawningFieldEffect(std::weak_ptr<Bos
 	stepEffectAnimator.lock()->Init();
 	stepEffectAnimator.lock()->Play();
 
-	auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill3);
+	stepEffectAnimator.lock()->SetSpeed(skillSpeed);
 
-	wanderUtils::UnitCoroutine::ForSecondsFromUnit forSeconds{ skill.lock()->owner, anim->GetDuration() };
-	while (forSeconds.Tick())
+	while (!stepEffectAnimator.lock()->IsDone())
 	{
 		co_await std::suspend_always();
 	}

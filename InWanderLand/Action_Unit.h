@@ -189,6 +189,7 @@ namespace application
         void SetTargetUnit(editor::UnitData* unit);
         void SetAnimType(UnitAnimType animType);
         void SetDuration(float duration);
+        void SetRepeat(bool repeat);
 
         virtual void ProcessObervationEvent(ObservationTarget* target, ObservationEvent event) override;
 
@@ -202,5 +203,6 @@ namespace application
         bool isEditing = false;
         UnitAnimType animType = UnitAnimType::None;
         float duration = -1;
+        bool repeat = false;
     };
 }

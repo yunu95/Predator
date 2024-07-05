@@ -3,7 +3,10 @@
 
 struct POD_BossSpinAttackSkill
 {
-	float skillPlayTime = 6.0f;
+	float foreswingDuration = -1.0f;
+	float skillDuration = -1.0f;
+	float backswingDuration = -1.0f;
+
 	float skillDamage = 8.0f;
 	float skillRadius = 5.0f;
 	float knockBackDistance = 15.0f;
@@ -33,11 +36,15 @@ private:
 	std::weak_ptr<UnitAcquisitionSphereCollider> knockbackCollider;
 	std::weak_ptr<ManagedFBX> chargeEffect;
 	std::weak_ptr<ManagedFBX> previewEffect;
+	std::weak_ptr<yunutyEngine::graphics::Animator> animator;
 	std::weak_ptr<VFXAnimator> previewEffectAnimator;
 	std::weak_ptr<VFXAnimator> chargeEffectAnimator;
 	std::weak_ptr<coroutine::Coroutine> effectColliderCoroutine;
 
 	float colliderEffectRatio;
+	float foreswingSpeed = 1.f;
+	float skillSpeed = 1.f;
+	float backswingSpeed = 1.f;
 };
 
 
