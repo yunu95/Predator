@@ -588,7 +588,14 @@ void PlayerController::HandleManaRegen()
 {
     if (state != State::Tactic)
     {
-        SetMana(mana + GlobalConstant::GetSingletonInstance().pod.manaRegen * Time::GetDeltaTime());
+        if (state == State::Peace)
+        {
+            SetMana(mana + GlobalConstant::GetSingletonInstance().pod.manaRegen_Peace * Time::GetDeltaTime());
+        }
+        else
+        {
+            SetMana(mana + GlobalConstant::GetSingletonInstance().pod.manaRegen * Time::GetDeltaTime());
+        }
     }
 }
 
@@ -1261,7 +1268,7 @@ void PlayerController::SetManaFull()
 void PlayerController::SetMana(float mana)
 {
     const auto& gc = GlobalConstant::GetSingletonInstance().pod;
-    this->mana = std::fmin(gc.maxMana, mana);
+    this->mana = std::clamp<float>(mana, 0, gc.maxMana);
     UIManager::Instance().GetUIElementByEnum(UIEnumID::ManaBar1)->adjuster->SetTargetFloat(1 - this->mana / gc.maxMana);
     UIManager::Instance().GetUIElementByEnum(UIEnumID::ManaBar2)->adjuster->SetTargetFloat(1 - this->mana / gc.maxMana);
     UIManager::Instance().GetUIElementByEnum(UIEnumID::Mana_Text_MaxMP)->SetNumber(gc.maxMana);

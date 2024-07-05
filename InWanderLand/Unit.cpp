@@ -392,7 +392,7 @@ template<>
 void Unit::OnStateEngage<UnitBehaviourTree::Stop>()
 {
     onStateEngage[UnitBehaviourTree::Stop]();
-    PlayAnimation(UnitAnimType::Idle, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
+    PlayAnimation(UnitAnimType::Idle, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat | Animation::PlayFlag_::NonRedundant);
     enableNavObstacleByState = referenceEnableNavObstacle.Acquire();
     disableNavAgentByState = referenceDisableNavAgent.Acquire();
 }
@@ -1380,6 +1380,7 @@ void Unit::Summon(application::editor::Unit_TemplateData* templateData)
         onStateEngage.at(UnitBehaviourTree::Death).AddCallback([this]()
             {
                 PlayerController::Instance().AddCombo();
+                PlayerController::Instance().SetMana(PlayerController::Instance().GetMana() + unitTemplateData->pod.deathManaReward);
             });
     }
 }

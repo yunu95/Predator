@@ -148,7 +148,8 @@ enum class UIEnumID
     VictoryPage,
     DefeatPage,
     TacticModeIngameUI,
-    TacticModeRevertButton,
+    TacticModeRevertButton_Active,
+    TacticModeRevertButton_InActive,
     TacticModeCommandIcon1,
     TacticModeCommandIcon2,
     TacticModeCommandIcon3,
@@ -179,7 +180,7 @@ const std::unordered_map<int, std::string>& application::POD_Enum<UIEnumID>::Get
     static std::unordered_map<int, std::string> enumNameMap
     {
         // 아무것도 아님.
-        { static_cast<int>((int)UIEnumID::None), "None" },
+        { static_cast<int>((int)UIEnumID::None), "None" } ,
         // 로빈, 우르술라, 헨젤의 초상화, 초상화 위의 이름 태그, 초상화를 가리는 적색 부상 오버레이, 체력바, 체력을 표시하는 텍스트 UI
         { static_cast<int>((int)UIEnumID::CharInfo_Robin), "CharInfo_Robin" },
         { static_cast<int>((int)UIEnumID::CharInfo_Ursula), "CharInfo_Ursula" },
@@ -323,7 +324,8 @@ const std::unordered_map<int, std::string>& application::POD_Enum<UIEnumID>::Get
         { static_cast<int>((int)UIEnumID::VictoryPage), "VictoryPage" },
         { static_cast<int>((int)UIEnumID::DefeatPage), "DefeatPage" },
         { static_cast<int>((int)UIEnumID::TacticModeIngameUI), "TacticModeIngameUI" },
-        { static_cast<int>((int)UIEnumID::TacticModeRevertButton), "TacticModeRevertButton" },
+        { static_cast<int>((int)UIEnumID::TacticModeRevertButton_Active), "TacticModeRevertButton_Active" },
+        { static_cast<int>((int)UIEnumID::TacticModeRevertButton_InActive), "TacticModeRevertButton_InActive" },
         { static_cast<int>((int)UIEnumID::TacticModeCommandIcon1), "TacticModeCommandIcon1" },
         { static_cast<int>((int)UIEnumID::TacticModeCommandIcon2), "TacticModeCommandIcon2" },
         { static_cast<int>((int)UIEnumID::TacticModeCommandIcon3), "TacticModeCommandIcon3" },

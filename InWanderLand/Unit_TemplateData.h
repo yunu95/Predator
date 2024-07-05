@@ -42,6 +42,7 @@ namespace application
             // 생성될때 걸리는 시간, 생성시 번아웃 효과 연출 시간과 같다.
             float birthTime{ 0.5 };
             bool lingeringCorpse{ false };
+            float deathManaReward{ 0 };
             // 사망할 때 번아웃 효과가 연출되는 시간
             float deathBurnOffset{ 0.0 };
             float deathBurnTime{ 0.5 };
