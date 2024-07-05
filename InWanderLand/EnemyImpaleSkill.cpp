@@ -217,17 +217,26 @@ coroutine::Coroutine EnemyImpaleSkill::SpearArise(std::weak_ptr<EnemyImpaleSkill
 
     wanderUtils::UnitCoroutine::ForSecondsFromUnit waitPerSpear{ persistance->owner, pod.impaleSkillDurationPerSpear};
 
+    float localSpearAriseTimeRatio;
+
+    if (pod.spearAriseTimeRatio >= 1)
+        localSpearAriseTimeRatio = 0.99f;
+    else if (pod.spearAriseTimeRatio <= 0)
+        localSpearAriseTimeRatio = 0.01f;
+    else
+        localSpearAriseTimeRatio = pod.spearAriseTimeRatio;
+
     while (waitPerSpear.Tick())
     {
         //float heightAlpha = std::sinf(waitPerSpear.ElapsedNormalized() * math::PI);
         float heightAlpha;
-        if (waitPerSpear.ElapsedNormalized() <= 0.3f)
+        if (waitPerSpear.ElapsedNormalized() <= localSpearAriseTimeRatio)
         {
-            heightAlpha = 1 / 0.3f * waitPerSpear.ElapsedNormalized();
+            heightAlpha = 1 / localSpearAriseTimeRatio * waitPerSpear.ElapsedNormalized();
         }
-        else if (waitPerSpear.ElapsedNormalized() >= 0.7f)
+        else if (waitPerSpear.ElapsedNormalized() >= (1 - localSpearAriseTimeRatio))
         {
-            heightAlpha = -1 / 0.3f * waitPerSpear.ElapsedNormalized() + 0.3f;
+            heightAlpha = -1 / localSpearAriseTimeRatio * waitPerSpear.ElapsedNormalized() + 1 + (1 - localSpearAriseTimeRatio) / localSpearAriseTimeRatio;
         }
         else
         {

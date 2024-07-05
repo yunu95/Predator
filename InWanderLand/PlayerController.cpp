@@ -394,8 +394,8 @@ void PlayerController::HandleCamera()
     Vector3d targetPos;
     if (TacticModeSystem::Instance().IsOperation())
     {
-        camPivotPoint = tacticCameraRef->GetTransform()->GetWorldPosition();
-        camRotation = tacticCameraRef->GetTransform()->GetWorldRotation();
+        RTSCam::Instance().SetIdealPosition(tacticCameraRef->GetTransform()->GetWorldPosition());
+        RTSCam::Instance().SetIdealRotation(tacticCameraRef->GetTransform()->GetWorldRotation());
     }
     else
     {
@@ -423,12 +423,11 @@ void PlayerController::HandleCamera()
         {
             camPivotPoint = camPreviousPivotPoint + std::fmaxf(0, Vector3d::Dot(camPivotPoint - camPreviousPivotPoint, camContrainingDirection)) * camContrainingDirection;
         }
+        targetPos = camPivotPoint + camOffsetNorm * camZoomFactor * camZoomMultiplier;
+        camPreviousPivotPoint = camPivotPoint;
+        RTSCam::Instance().SetIdealPosition(targetPos);
+        RTSCam::Instance().SetIdealRotation(camRotation);
     }
-
-    targetPos = camPivotPoint + camOffsetNorm * camZoomFactor * camZoomMultiplier;
-    camPreviousPivotPoint = camPivotPoint;
-    RTSCam::Instance().SetIdealPosition(targetPos);
-    RTSCam::Instance().SetIdealRotation(camRotation);
 }
 
 void PlayerController::HandleSkillPreview()

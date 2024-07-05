@@ -25,6 +25,7 @@ struct POD_EnemyImpaleSkill
     float impaleSkillKnockbackDuration = 2.0f;
 
     float impaleStartDelay = 1.5f;
+    float spearAriseTimeRatio = 0.3f;
 
     TO_JSON(POD_EnemyImpaleSkill)
         FROM_JSON(POD_EnemyImpaleSkill)
