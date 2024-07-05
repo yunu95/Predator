@@ -461,6 +461,11 @@ namespace application
                         Action_PullScriptTrigger::ImGui_DrawDataPopup(static_cast<Action_PullScriptTrigger*>(data));
                         break;
                     }
+                    case application::ActionType::SetTacticCamera:
+                    {
+                        Action_SetTacticCamera::ImGui_DrawDataPopup(static_cast<Action_SetTacticCamera*>(data));
+                        break;
+                    }
                     default:
                         break;
                     }

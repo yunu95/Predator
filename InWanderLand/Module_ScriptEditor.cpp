@@ -1429,6 +1429,40 @@ namespace application
                             epm.Return();
                         }
                     }
+
+                    if (epm.GetReturnPopupName() == "SetTargetCamera(Tactic)")
+                    {
+                        ImGui::Begin("Tactic Camera Setting Popup", &pop, flag);
+                        auto rect = ImGui::GetContentRegionAvail();
+                        auto size = ImGui::CalcTextSize("Please Setting Camera");
+                        imgui::ShiftCursorX((rect.x - size.x) / 2);
+                        imgui::ShiftCursorY((rect.y - size.y) / 2);
+                        ImGui::Text("Please Setting Camera");
+                        ImGui::BringWindowToFocusFront(ImGui::GetCurrentWindow());
+                        ImGui::End();
+
+                        pp.ChangeTab("Cam");
+
+                        auto data = epm.GetReturnPopupData<Action_SetTacticCamera>();
+                        if (data->isEditing == false && pm.GetCurrentPalette() == &cp)
+                        {
+                            data->isEditing = true;
+                            cp.Reset();
+                        }
+
+                        if (data->isEditing == true && cp.GetSelections().size() == 1)
+                        {
+                            data->SetCamera(static_cast<CameraData*>(*cp.GetSelections().begin()));
+                            data->isEditing = false;
+                            epm.Return();
+                        }
+
+                        if (!pop)
+                        {
+                            data->isEditing = false;
+                            epm.Return();
+                        }
+                    }
                 }
             }
             ImGui::End();
@@ -2149,6 +2183,11 @@ namespace application
                             case application::ActionType::PullScriptTrigger:
                             {
                                 selectedScript->AddAction<Action_PullScriptTrigger>();
+                                break;
+                            }
+                            case application::ActionType::SetTacticCamera:
+                            {
+                                selectedScript->AddAction<Action_SetTacticCamera>();
                                 break;
                             }
                             default:
