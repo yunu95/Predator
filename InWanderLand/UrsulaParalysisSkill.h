@@ -15,6 +15,8 @@ struct POD_UrsulaParalysisSkill
     float skillDamageUpgraded = 5.f;
     float skillParalysisTime = 3.0f;
     float knockBackDuration = 2.0f;
+
+    float   zoomFactor = 1.0f;
     TO_JSON(POD_UrsulaParalysisSkill)
         FROM_JSON(POD_UrsulaParalysisSkill)
 };

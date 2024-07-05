@@ -100,11 +100,11 @@ coroutine::Coroutine BossImpaleSkill::operator()()
 
 	for (auto& each : spearVec)
 	{
-		while (each.timeOffset > waitImpaleDuration.Elapsed())
-		{
-			waitImpaleDuration.Tick();
-			co_await std::suspend_always{};
-		}
+		//while (each.timeOffset > waitImpaleDuration.Elapsed())
+		//{
+		//	waitImpaleDuration.Tick();
+		//	co_await std::suspend_always{};
+		//}
 
 		auto spearAriseCoroutine = ContentsCoroutine::StartRoutine(SpearArise(std::dynamic_pointer_cast<BossImpaleSkill>(selfWeakPtr.lock()), each.position));
 		spearAriseCoroutine.lock()->PushDestroyCallBack([this]()
@@ -140,7 +140,7 @@ coroutine::Coroutine BossImpaleSkill::operator()()
 		localBackswingDuration = wanderResources::GetAnimation(owner.lock()->GetUnitTemplateData().pod.skinnedFBXName, UnitAnimType::Skill2)->GetDuration() - localForeswingDuration;
 	}
 
-	wanderUtils::UnitCoroutine::ForSecondsFromUnit waitImpaleAfter{ owner, localBackswingDuration - waitImpaleDuration.Elapsed() };
+	wanderUtils::UnitCoroutine::ForSecondsFromUnit waitImpaleAfter{ owner, localBackswingDuration /*- waitImpaleDuration.Elapsed()*/ };
 
 	while (waitImpaleAfter.Tick())
 	{

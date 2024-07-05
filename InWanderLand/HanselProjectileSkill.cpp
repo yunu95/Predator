@@ -112,11 +112,16 @@ coroutine::Coroutine HanselProjectileSkill::operator()()
     animator.lock()->GetGI().SetPlaySpeed(foreswingSpeed);
     owner.lock()->PlayAnimation(UnitAnimType::Throw);
 
+    auto beforeSkillZoomFactor = PlayerController::Instance().GetZoomFactor();
+    PlayerController::Instance().SetZoomFactor(beforeSkillZoomFactor * pod.zoomFactor);
+
     while (animator.lock()->GetCurrentAnimation() != wanderResources::GetAnimation(owner.lock()->GetUnitTemplateData().pod.skinnedFBXName, UnitAnimType::Throw)
         || throwingPieTimingFrame >= animator.lock()->GetCurrentFrame())
     {
         co_await std::suspend_always{};
     }
+
+    PlayerController::Instance().SetZoomFactor(beforeSkillZoomFactor);
 
     auto throwingCoroutine = owner.lock()->StartCoroutine(ThrowingPie(std::dynamic_pointer_cast<HanselProjectileSkill>(selfWeakPtr.lock())));
     throwingCoroutine.lock()->PushDestroyCallBack([this]()

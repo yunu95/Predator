@@ -100,11 +100,11 @@ coroutine::Coroutine EnemyImpaleSkill::operator()()
 
     for (auto& each : spearVec)
     {
-        while (each.timeOffset > waitImpaleDuration.Elapsed())
-        {
-            waitImpaleDuration.Tick();
-            co_await std::suspend_always{};
-        }
+        //while (each.timeOffset > waitImpaleDuration.Elapsed())
+        //{
+        //    waitImpaleDuration.Tick();
+        //    co_await std::suspend_always{};
+        //}
 
         auto spearAriseCoroutine = ContentsCoroutine::StartRoutine(SpearArise(std::dynamic_pointer_cast<EnemyImpaleSkill>(selfWeakPtr.lock()), each.position));
         spearAriseCoroutine.lock()->PushDestroyCallBack([this]()
@@ -219,7 +219,20 @@ coroutine::Coroutine EnemyImpaleSkill::SpearArise(std::weak_ptr<EnemyImpaleSkill
 
     while (waitPerSpear.Tick())
     {
-        float heightAlpha = std::sinf(waitPerSpear.ElapsedNormalized() * math::PI);
+        //float heightAlpha = std::sinf(waitPerSpear.ElapsedNormalized() * math::PI);
+        float heightAlpha;
+        if (waitPerSpear.ElapsedNormalized() <= 0.3f)
+        {
+            heightAlpha = 1 / 0.3f * waitPerSpear.ElapsedNormalized();
+        }
+        else if (waitPerSpear.ElapsedNormalized() >= 0.7f)
+        {
+            heightAlpha = -1 / 0.3f * waitPerSpear.ElapsedNormalized() + 0.3f;
+        }
+        else
+        {
+            heightAlpha = 1;
+        }
         float yDelta = math::LerpF(pod.impaleSkillMinHeightPerSpear, pod.impaleSkillMaxHeightPerSpear, heightAlpha);
         fbx.lock()->GetTransform()->SetWorldPosition(worldPos + Vector3d::up * yDelta);
         co_await std::suspend_always{};
