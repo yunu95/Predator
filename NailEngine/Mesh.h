@@ -33,6 +33,8 @@ public:
 
 	virtual void SetDiffuseExposure(float exposure) override;
 	virtual void SetAmbientExposure(float exposure) override;
+    virtual void SetCastDecal(bool val) override;
+    virtual void SetCalculateShadow(bool val) override;
 
     void Render(unsigned int materialIndex = 0, D3D_PRIMITIVE_TOPOLOGY topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST ,bool isInstancing = false, int instanceCount = 1, std::shared_ptr<InstanceBuffer> buffer = nullptr);
 
@@ -48,6 +50,8 @@ public:
 	std::vector<DirectX::SimpleMath::Vector3>& GetBoundingVertexList(DirectX::SimpleMath::Matrix& mat, int index);
     float GetDiffuseExposure();
     float GetAmbientExposure();
+    bool GetCastDecal();
+    bool IsCalculateShadow();
     float GetBoundingRadius();
 #pragma endregion
 
@@ -72,6 +76,8 @@ private:
 
     float diffuseExposure = 1.f;
     float ambientExposure = 1.f;
+    bool castDecal = false;
+    bool calculateShadow = true;
 
     float boundingRadius = 0.01f;
 };

@@ -23,6 +23,7 @@ struct PS_OUT
     float4 util : SV_Target3;
     float4 arm : SV_Target4;
     float4 emissive : SV_Target5;
+    float4 viewPosDecal : SV_Target6;
 };
 
 
@@ -79,6 +80,10 @@ PS_OUT main(PixelIn input)
     output.arm.xyz = float3(1.f, 1.f, 0.f);
     
     output.position = float4(input.posV.xyz, 1.f);
+    if(castDecal == 1)
+    {
+        output.viewPosDecal = output.position;
+    }
     output.normal = float4(viewNormal.xyz, 1.f);
     output.util = float4(lightMapUV[input.id].lightMapIndex, DiffuseExposure, AmbientExposure, 1.f);
     

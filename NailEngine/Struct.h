@@ -87,7 +87,7 @@ struct MatrixBuffer
     DirectX::SimpleMath::Matrix WorldInvTrans;
     DirectX::SimpleMath::Matrix VTMInv;
     DirectX::SimpleMath::Matrix lightVP;
-    //DirectX::SimpleMath::Vector4 objectID;
+    DirectX::SimpleMath::Vector4 projInvVec;
 };
 
 struct MaterialBuffer
@@ -250,6 +250,8 @@ struct LightMapUV
 struct LightMapUVBuffer
 {
     LightMapUV lightMapUV[MAX_STATIC_MODEL];
+    int castDecal;
+    DirectX::SimpleMath::Vector3 padding;
 };
 
 

@@ -15,6 +15,7 @@
 #include "PointLight.h"
 #include "ParticleSystem.h"
 #include "FrustumCullingManager.h"
+#include "RenderTargetGroup.h"
 
 #include <cmath>
 #include <algorithm>
@@ -288,6 +289,7 @@ void InstancingManager::RenderStaticDeferred()
 					lightMapUVBuffer->lightMapUV[index].lightMapIndex = renderInfo->lightMapIndex;
 					lightMapUVBuffer->lightMapUV[index].scaling = renderInfo->uvScaling;
 					lightMapUVBuffer->lightMapUV[index].uvOffset = renderInfo->uvOffset;
+					lightMapUVBuffer->castDecal = i->mesh->GetCastDecal();
 
 					index++;
 				}
@@ -330,7 +332,7 @@ void InstancingManager::RenderStaticDeferred()
 				for (auto& i : renderInfoVec)
 				{
 					if (i == nullptr) continue;
-					
+
 
 					if (i.get() == nullptr)
 					{
@@ -366,6 +368,7 @@ void InstancingManager::RenderStaticDeferred()
 					lightMapUVBuffer->lightMapUV[index].lightMapIndex = renderInfo->lightMapIndex;
 					lightMapUVBuffer->lightMapUV[index].scaling = renderInfo->uvScaling;
 					lightMapUVBuffer->lightMapUV[index].uvOffset = renderInfo->uvOffset;
+					lightMapUVBuffer->castDecal = i->mesh->GetCastDecal();
 
 					index++;
 
@@ -490,42 +493,35 @@ void InstancingManager::RenderDecal()
 				if (i->isActive == false) continue;
 
 				const std::shared_ptr<RenderInfo>& renderInfo = i;
-				InstancingData data;
-				data.wtm = renderInfo->wtm;
-				AddData(instanceID, data);
-			}
 
-			if (renderInfoVec.size() != 0)
-			{
-				if ((*renderInfoVec.begin())->mesh == nullptr) continue;
-
-				auto& buffer = _buffers[instanceID];
-				if (buffer->GetCount() > 0)
-				{
-					// 임시 매트릭스
-					Matrix WTM = Matrix::Identity;
-
-					//// Y축으로 10만큼의 변위
-					//Matrix translationMatrix = Matrix::CreateTranslation(0.0f, 10.0f, 0.0f);
-
-					//// X축 기준으로 90도 회전 (라디안 단위로 변환)
-					//float angleInRadians = DirectX::XMConvertToRadians(90.0f);
-					////Matrix rotationMatrix = Matrix::CreateRotationX(angleInRadians);
-
-					//// 변위 행렬과 회전 행렬을 결합하여 최종 변환 행렬을 생성
-					//WTM = translationMatrix;
-
-					MatrixBuffer matrixBuffer;
-					matrixBuffer.VTM = WTM.Invert();
-					matrixBuffer.PTM = DirectX::XMMatrixOrthographicLH(200, 200, 0.1, 200);
-					NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX), true);
+				MatrixBuffer matrixBuffer;
+				// 큐브의 WTM
+				matrixBuffer.WTM = i->wtm;
+				// 메인 카메라의 VTM
+				matrixBuffer.VTM = CameraManager::Instance.Get().GetMainCamera()->GetVTM();
+				// 메인 카메라의 PTM
+				matrixBuffer.PTM = CameraManager::Instance.Get().GetMainCamera()->GetPTM();
+				matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
+				matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
+				matrixBuffer.VTMInv = matrixBuffer.VTM.Invert();
+				DirectX::SimpleMath::Vector4 tempProj{ 1,1,1,1 };
+				tempProj = DirectX::SimpleMath::Vector4::Transform(tempProj, matrixBuffer.PTM.Invert());
+				tempProj.y = -tempProj.y;
+				matrixBuffer.projInvVec = tempProj;
+				NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX));
 
 
-					(*renderInfoVec.begin())->material->PushGraphicsData();
-					auto test = (*renderInfoVec.begin())->mesh->GetMaterialCount();
-					buffer->PushData();
-					(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, true, buffer->GetCount(), buffer);
-				}
+				// 아래를 통해 머터리얼 정보를 바인딩한다.
+				i->material->PushGraphicsData();
+				// 버텍스 쉐이더만 예외적으로 따로 바인딩한다.
+				static_cast<VertexShader*>(ResourceManager::Instance.Get().GetShader(L"TestDecalVS.cso").get())->Bind();
+
+				// Temp1Map에 ViewSpace상에서의 포지션값을 넘긴다.
+				ResourceManager::Instance.Get().GetTexture(L"View_Pos_Decal_Target")->Bind(7);
+
+				// 메쉬는 Cube로 통일한다.
+				ResourceManager::Instance.Get().GetMesh(L"Cube")->Render(0, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+				//i->mesh->Render(0, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 			}
 		}
 	}
@@ -544,11 +540,16 @@ void InstancingManager::RenderStaticShadow()
 		{
 			for (auto& i : renderInfoVec)
 			{
-				if (i->lightMapIndex != -1) continue;
+				if (i->lightMapIndex != -1)
+				{
+					continue;
+				}
 
 				if (i->isActive == false) continue;
 
 				if (i->mesh == nullptr) continue;
+
+				if(!i->mesh->IsCalculateShadow()) continue;
 
 				//auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
 				//auto aabb = i->mesh->GetBoundingBox(i->wtm * CameraManager::Instance.Get().GetMainCamera()->GetVTM(), i->materialIndex);
@@ -611,6 +612,8 @@ void InstancingManager::RenderStaticShadow()
 				if (i->lightMapIndex != -1) continue;
 
 				if (i->isActive == false) continue;
+
+				if (!i->mesh->IsCalculateShadow()) continue;
 
 				const std::shared_ptr<RenderInfo>& renderInfo = i;
 				InstancingData data;
@@ -691,16 +694,16 @@ void InstancingManager::RenderSkinnedShadow()
 				AddData(instanceID, data);
 				this->instanceTransitionDesc->transitionDesc[descIndex++] = i->animator->GetTransitionDesc();
 
-				lightMapUVBuffer->lightMapUV[index].lightMapIndex = renderInfo.lightMapIndex;
-				lightMapUVBuffer->lightMapUV[index].scaling = renderInfo.uvScaling;
-				lightMapUVBuffer->lightMapUV[index].uvOffset = renderInfo.uvOffset;
+				//lightMapUVBuffer->lightMapUV[index].lightMapIndex = renderInfo.lightMapIndex;
+				//lightMapUVBuffer->lightMapUV[index].scaling = renderInfo.uvScaling;
+				//lightMapUVBuffer->lightMapUV[index].uvOffset = renderInfo.uvOffset;
 
 				index++;
 			}
 
-			NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::LIGHTMAP_UV))->PushGraphicsData(lightMapUVBuffer.get(),
-				sizeof(LightMapUVBuffer),
-				static_cast<int>(CB_TYPE::LIGHTMAP_UV), false);
+			//NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::LIGHTMAP_UV))->PushGraphicsData(lightMapUVBuffer.get(),
+			//	sizeof(LightMapUVBuffer),
+			//	static_cast<int>(CB_TYPE::LIGHTMAP_UV), false);
 
 			NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::INST_TRANSITION))->PushGraphicsData(this->instanceTransitionDesc.get(),
 				sizeof(InstanceTransitionDesc), static_cast<int>(CB_TYPE::INST_TRANSITION));
@@ -976,7 +979,7 @@ void InstancingManager::PopStaticDeferredData(std::shared_ptr<RenderInfo>& rende
 {
 	//InstanceID instanceID = std::make_pair((unsigned __int64)renderInfo->mesh, (unsigned __int64)renderInfo->material);
 	InstanceID instanceID = std::make_pair(renderInfo->mesh, renderInfo->material);
-	
+
 	// 인스턴스 인덱스 맵에 있는지 검사
 	auto instanceIter = this->staticMeshInstanceIDIndexMap.find(instanceID);
 	if (instanceIter != this->staticMeshInstanceIDIndexMap.end())
@@ -1010,24 +1013,6 @@ void InstancingManager::PopStaticDeferredData(std::shared_ptr<RenderInfo>& rende
 		if (this->staticMeshDeferredMap[instanceID].empty())
 		{
 			this->staticMeshDeferredMap.erase(instanceID);
-		}
-	}
-
-	for (auto& each : staticMeshDeferredRenderVec)
-	{
-		auto& vec = each.second;
-		for (auto& each2 : vec)
-		{
-			if (each2 != nullptr)
-			{
-				if (each2->mesh != nullptr)
-				{
-					if (each2->mesh->GetName() == L"SM_Temple_Floor")
-					{
-						int a = 1;
-					}
-				}
-			}
 		}
 	}
 }
@@ -1133,6 +1118,7 @@ void InstancingManager::RenderSkinnedDeferred()
 				lightMapUVBuffer->lightMapUV[index].lightMapIndex = renderInfo.lightMapIndex;
 				lightMapUVBuffer->lightMapUV[index].scaling = renderInfo.uvScaling;
 				lightMapUVBuffer->lightMapUV[index].uvOffset = renderInfo.uvOffset;
+				lightMapUVBuffer->castDecal = renderInfo.mesh->GetCastDecal();
 
 				index++;
 			}
@@ -1201,16 +1187,16 @@ void InstancingManager::RenderSkinnedForward()
 				AddData(instanceID, data);
 				this->instanceTransitionDesc->transitionDesc[descIndex++] = i->animator->GetTransitionDesc();
 
-				lightMapUVBuffer->lightMapUV[index].lightMapIndex = renderInfo.lightMapIndex;
-				lightMapUVBuffer->lightMapUV[index].scaling = renderInfo.uvScaling;
-				lightMapUVBuffer->lightMapUV[index].uvOffset = renderInfo.uvOffset;
+				//lightMapUVBuffer->lightMapUV[index].lightMapIndex = renderInfo.lightMapIndex;
+				//lightMapUVBuffer->lightMapUV[index].scaling = renderInfo.uvScaling;
+				//lightMapUVBuffer->lightMapUV[index].uvOffset = renderInfo.uvOffset;
 
 				index++;
 			}
 
-			NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::LIGHTMAP_UV))->PushGraphicsData(lightMapUVBuffer.get(),
-				sizeof(LightMapUVBuffer),
-				static_cast<int>(CB_TYPE::LIGHTMAP_UV), false);
+			//NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::LIGHTMAP_UV))->PushGraphicsData(lightMapUVBuffer.get(),
+			//	sizeof(LightMapUVBuffer),
+			//	static_cast<int>(CB_TYPE::LIGHTMAP_UV), false);
 
 			NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::INST_TRANSITION))->PushGraphicsData(this->instanceTransitionDesc.get(),
 				sizeof(InstanceTransitionDesc), static_cast<int>(CB_TYPE::INST_TRANSITION));

@@ -1316,6 +1316,11 @@ void PlayerController::RequestStateFromAction(State::Enum newState)
     this->stateRequestedByAction = newState;
 }
 
+void PlayerController::SetTacticCamera(GameObject* cam)
+{
+    tacticCameraRef = cam;
+}
+
 float PlayerController::GetMana()
 {
     return this->mana;
