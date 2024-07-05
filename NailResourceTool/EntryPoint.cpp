@@ -511,6 +511,10 @@ void ShowSeleteFBXInfo()
 		ImGui::SameLine();
 		ImGui::Checkbox("##CastDecal ", &g_selectFBX->castDecal);
 
+		ImGui::Text("CalculateShadow ");
+		ImGui::SameLine();
+		ImGui::Checkbox("##CalculateShadow ", &g_selectFBX->calculateShadow);
+
 		int materialIndex = 0;
 		for (auto& each : g_selectFBX->materialVec)
 		{
@@ -631,6 +635,7 @@ void ShowSeleteFBXInfo()
 		resourceManager->GetMesh(g_selectFBX->meshName)->SetDiffuseExposure(g_selectFBX->diffuseExposure);
 		resourceManager->GetMesh(g_selectFBX->meshName)->SetAmbientExposure(g_selectFBX->ambientExposure);
 		resourceManager->GetMesh(g_selectFBX->meshName)->SetCastDecal(g_selectFBX->castDecal);
+		resourceManager->GetMesh(g_selectFBX->meshName)->SetCalculateShadow(g_selectFBX->calculateShadow);
 
 		g_prevFBX = g_selectFBX;
 	}

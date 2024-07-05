@@ -187,6 +187,8 @@ struct LightMapUV
 cbuffer LightMapUVBuffer : register(b12)
 {
     LightMapUV lightMapUV[MAX_STATIC_MODEL];
+    int castDecal;
+    float3 pad7;
 };
 
 Texture2D AlbedoMap : register(t0);

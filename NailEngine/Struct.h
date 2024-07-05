@@ -250,6 +250,8 @@ struct LightMapUV
 struct LightMapUVBuffer
 {
     LightMapUV lightMapUV[MAX_STATIC_MODEL];
+    int castDecal;
+    DirectX::SimpleMath::Vector3 padding;
 };
 
 

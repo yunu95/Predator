@@ -36,7 +36,9 @@ float3 GetPixelLocal(float2 uv, float depth)
 float4 main(PixelIn input) : SV_TARGET
 {
     float2 tempUV = GetPixelUV(input.posW);
+    
     float4 depth = Temp1Map.Sample(sam, tempUV);
+
     float3 decalLocalPos = GetPixelLocal(tempUV, depth.z);
     float4 color = float4(0, 0, 0, 1);
     

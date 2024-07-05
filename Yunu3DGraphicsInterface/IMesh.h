@@ -11,6 +11,7 @@ namespace yunuGI
         virtual void SetDiffuseExposure(float exposure) = 0;
         virtual void SetAmbientExposure(float exposure) = 0;
         virtual void SetCastDecal(bool val) = 0;
+        virtual void SetCalculateShadow(bool val) = 0;
     private:
 
     };

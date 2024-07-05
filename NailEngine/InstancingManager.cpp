@@ -15,6 +15,7 @@
 #include "PointLight.h"
 #include "ParticleSystem.h"
 #include "FrustumCullingManager.h"
+#include "RenderTargetGroup.h"
 
 #include <cmath>
 #include <algorithm>
@@ -288,6 +289,7 @@ void InstancingManager::RenderStaticDeferred()
 					lightMapUVBuffer->lightMapUV[index].lightMapIndex = renderInfo->lightMapIndex;
 					lightMapUVBuffer->lightMapUV[index].scaling = renderInfo->uvScaling;
 					lightMapUVBuffer->lightMapUV[index].uvOffset = renderInfo->uvOffset;
+					lightMapUVBuffer->castDecal = i->mesh->GetCastDecal();
 
 					index++;
 				}
@@ -330,7 +332,7 @@ void InstancingManager::RenderStaticDeferred()
 				for (auto& i : renderInfoVec)
 				{
 					if (i == nullptr) continue;
-					
+
 
 					if (i.get() == nullptr)
 					{
@@ -366,6 +368,7 @@ void InstancingManager::RenderStaticDeferred()
 					lightMapUVBuffer->lightMapUV[index].lightMapIndex = renderInfo->lightMapIndex;
 					lightMapUVBuffer->lightMapUV[index].scaling = renderInfo->uvScaling;
 					lightMapUVBuffer->lightMapUV[index].uvOffset = renderInfo->uvOffset;
+					lightMapUVBuffer->castDecal = i->mesh->GetCastDecal();
 
 					index++;
 
@@ -501,11 +504,12 @@ void InstancingManager::RenderDecal()
 				matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
 				matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
 				matrixBuffer.VTMInv = matrixBuffer.VTM.Invert();
-				DirectX::SimpleMath::Vector4 tempProj{1,1,1,1};
+				DirectX::SimpleMath::Vector4 tempProj{ 1,1,1,1 };
 				tempProj = DirectX::SimpleMath::Vector4::Transform(tempProj, matrixBuffer.PTM.Invert());
 				tempProj.y = -tempProj.y;
 				matrixBuffer.projInvVec = tempProj;
 				NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX));
+
 
 				// 아래를 통해 머터리얼 정보를 바인딩한다.
 				i->material->PushGraphicsData();
@@ -513,10 +517,11 @@ void InstancingManager::RenderDecal()
 				static_cast<VertexShader*>(ResourceManager::Instance.Get().GetShader(L"TestDecalVS.cso").get())->Bind();
 
 				// Temp1Map에 ViewSpace상에서의 포지션값을 넘긴다.
-				ResourceManager::Instance.Get().GetTexture(L"PositionTarget")->Bind(7);
+				ResourceManager::Instance.Get().GetTexture(L"View_Pos_Decal_Target")->Bind(7);
 
 				// 메쉬는 Cube로 통일한다.
 				ResourceManager::Instance.Get().GetMesh(L"Cube")->Render(0, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+				//i->mesh->Render(0, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 			}
 		}
 	}
@@ -535,11 +540,16 @@ void InstancingManager::RenderStaticShadow()
 		{
 			for (auto& i : renderInfoVec)
 			{
-				if (i->lightMapIndex != -1) continue;
+				if (i->lightMapIndex != -1)
+				{
+					continue;
+				}
 
 				if (i->isActive == false) continue;
 
 				if (i->mesh == nullptr) continue;
+
+				if(!i->mesh->IsCalculateShadow()) continue;
 
 				//auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
 				//auto aabb = i->mesh->GetBoundingBox(i->wtm * CameraManager::Instance.Get().GetMainCamera()->GetVTM(), i->materialIndex);
@@ -602,6 +612,8 @@ void InstancingManager::RenderStaticShadow()
 				if (i->lightMapIndex != -1) continue;
 
 				if (i->isActive == false) continue;
+
+				if (!i->mesh->IsCalculateShadow()) continue;
 
 				const std::shared_ptr<RenderInfo>& renderInfo = i;
 				InstancingData data;
@@ -682,16 +694,16 @@ void InstancingManager::RenderSkinnedShadow()
 				AddData(instanceID, data);
 				this->instanceTransitionDesc->transitionDesc[descIndex++] = i->animator->GetTransitionDesc();
 
-				lightMapUVBuffer->lightMapUV[index].lightMapIndex = renderInfo.lightMapIndex;
-				lightMapUVBuffer->lightMapUV[index].scaling = renderInfo.uvScaling;
-				lightMapUVBuffer->lightMapUV[index].uvOffset = renderInfo.uvOffset;
+				//lightMapUVBuffer->lightMapUV[index].lightMapIndex = renderInfo.lightMapIndex;
+				//lightMapUVBuffer->lightMapUV[index].scaling = renderInfo.uvScaling;
+				//lightMapUVBuffer->lightMapUV[index].uvOffset = renderInfo.uvOffset;
 
 				index++;
 			}
 
-			NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::LIGHTMAP_UV))->PushGraphicsData(lightMapUVBuffer.get(),
-				sizeof(LightMapUVBuffer),
-				static_cast<int>(CB_TYPE::LIGHTMAP_UV), false);
+			//NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::LIGHTMAP_UV))->PushGraphicsData(lightMapUVBuffer.get(),
+			//	sizeof(LightMapUVBuffer),
+			//	static_cast<int>(CB_TYPE::LIGHTMAP_UV), false);
 
 			NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::INST_TRANSITION))->PushGraphicsData(this->instanceTransitionDesc.get(),
 				sizeof(InstanceTransitionDesc), static_cast<int>(CB_TYPE::INST_TRANSITION));
@@ -967,7 +979,7 @@ void InstancingManager::PopStaticDeferredData(std::shared_ptr<RenderInfo>& rende
 {
 	//InstanceID instanceID = std::make_pair((unsigned __int64)renderInfo->mesh, (unsigned __int64)renderInfo->material);
 	InstanceID instanceID = std::make_pair(renderInfo->mesh, renderInfo->material);
-	
+
 	// 인스턴스 인덱스 맵에 있는지 검사
 	auto instanceIter = this->staticMeshInstanceIDIndexMap.find(instanceID);
 	if (instanceIter != this->staticMeshInstanceIDIndexMap.end())
@@ -1106,6 +1118,7 @@ void InstancingManager::RenderSkinnedDeferred()
 				lightMapUVBuffer->lightMapUV[index].lightMapIndex = renderInfo.lightMapIndex;
 				lightMapUVBuffer->lightMapUV[index].scaling = renderInfo.uvScaling;
 				lightMapUVBuffer->lightMapUV[index].uvOffset = renderInfo.uvOffset;
+				lightMapUVBuffer->castDecal = renderInfo.mesh->GetCastDecal();
 
 				index++;
 			}
@@ -1174,16 +1187,16 @@ void InstancingManager::RenderSkinnedForward()
 				AddData(instanceID, data);
 				this->instanceTransitionDesc->transitionDesc[descIndex++] = i->animator->GetTransitionDesc();
 
-				lightMapUVBuffer->lightMapUV[index].lightMapIndex = renderInfo.lightMapIndex;
-				lightMapUVBuffer->lightMapUV[index].scaling = renderInfo.uvScaling;
-				lightMapUVBuffer->lightMapUV[index].uvOffset = renderInfo.uvOffset;
+				//lightMapUVBuffer->lightMapUV[index].lightMapIndex = renderInfo.lightMapIndex;
+				//lightMapUVBuffer->lightMapUV[index].scaling = renderInfo.uvScaling;
+				//lightMapUVBuffer->lightMapUV[index].uvOffset = renderInfo.uvOffset;
 
 				index++;
 			}
 
-			NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::LIGHTMAP_UV))->PushGraphicsData(lightMapUVBuffer.get(),
-				sizeof(LightMapUVBuffer),
-				static_cast<int>(CB_TYPE::LIGHTMAP_UV), false);
+			//NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::LIGHTMAP_UV))->PushGraphicsData(lightMapUVBuffer.get(),
+			//	sizeof(LightMapUVBuffer),
+			//	static_cast<int>(CB_TYPE::LIGHTMAP_UV), false);
 
 			NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::INST_TRANSITION))->PushGraphicsData(this->instanceTransitionDesc.get(),
 				sizeof(InstanceTransitionDesc), static_cast<int>(CB_TYPE::INST_TRANSITION));
