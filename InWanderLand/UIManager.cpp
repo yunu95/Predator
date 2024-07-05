@@ -1039,14 +1039,19 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
     {
         element->priorityLayout = element->GetGameObject()->AddComponent<UIPriorityLayout>();
         element->priorityLayout->duration = uiData.floats[JsonUIFloatType::layoutNormalizingTime];
-        for (auto each : element->GetGameObject()->GetChildren())
+        element->priorityLayout->centerAligned = uiData.centerAlign;
+        auto children = element->GetGameObject()->GetChildren();
+        for (auto each : children)
         {
             if (auto child = each->GetComponent<UIElement>())
             {
                 child->parentPriorityLayout = element->priorityLayout;
+                element->priorityLayout->horizontalPivot += child->GetTransform()->GetLocalPosition().x;
             }
             element->priorityLayout->positions.push_back(each->GetTransform()->GetLocalPosition());
         }
+        element->priorityLayout->horizontalPivot /= children.size();
+        element->priorityLayout->horizontalSpacing = children[1]->GetTransform()->GetLocalPosition().x - children[0]->GetTransform()->GetLocalPosition().x;
     }
     if (uiData.customFlags & (int)UIExportFlag::IsNumber)
     {
@@ -1140,9 +1145,6 @@ bool UIManager::ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* 
                 PlayerController::Instance().TryTogglingTacticMode();
             });
         break;
-    case UIEnumID::TacticModeRevertButton:
-        TacticModeSystem::Instance().PopCommand();
-        break;
     case UIEnumID::PopUpMessage_PermissionForUpgradeProceedButton:
         ImportDefaultAction(uiData, GetUIElementWithIndex(uiData.uiIndex));
         element->button->AddButtonClickFunction([=]()
@@ -1177,6 +1179,13 @@ bool UIManager::ImportDealWithSpecialCases_Post(const JsonUIData& uiData, UIElem
         ImportDefaultAction_Post(uiData, GetUIElementWithIndex(uiData.uiIndex));
         switch (element->duplicateParentEnumID)
         {
+        case UIEnumID::TacticModeRevertButton_Active:
+            element->button->AddExternalButtonClickFunction([=]()
+                {
+                    TacticModeSystem::Instance().PopCommand();
+                }
+            );
+            break;
         case UIEnumID::CharInfo_Robin:
         case UIEnumID::CharInfo_Robin_Left:
             element->button->AddExternalButtonClickFunction([=]()
