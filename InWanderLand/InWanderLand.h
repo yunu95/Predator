@@ -99,3 +99,4 @@
 #include "SFXManager.h"
 #include "ContentsCoroutine.h"
 #include "TacticModeSystem.h"
+#include "DuplicatedUIPool.h"

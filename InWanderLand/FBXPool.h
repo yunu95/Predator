@@ -1,5 +1,6 @@
 #pragma once
 #include "YunutyEngine.h"
+#include "PermanentObservee.h"
 
 class VFXAnimator;
 class FBXPool;

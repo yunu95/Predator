@@ -23,6 +23,7 @@
 #include "UnitCollider.h"
 
 class ManagedFBX;
+class ManagedDuplicatedUI;
 class PassiveSkill;
 class UIManager;
 class UnitProductor;
@@ -312,6 +313,8 @@ private:
     std::weak_ptr<ManagedFBX> attackVFX = std::weak_ptr<ManagedFBX>();
     std::weak_ptr<ManagedFBX> healVFX = std::weak_ptr<ManagedFBX>();
     std::weak_ptr<ManagedFBX> paralysisVFX = std::weak_ptr<ManagedFBX>();
+    std::weak_ptr<ManagedDuplicatedUI> dmgIndicator;
+    Vector3d dmgIndicatorPosition;
 
     bool isPaused = false;
     float localTimeScale = 1.0f;

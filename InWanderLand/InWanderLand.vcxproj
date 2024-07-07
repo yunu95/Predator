@@ -1055,6 +1055,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="DamageType.h" />
     <ClInclude Include="DirectHomingProjectile.h" />
     <ClInclude Include="DirectProjectile.h" />
+    <ClInclude Include="DuplicatedUIPool.h" />
     <ClInclude Include="EnemyAggroController.h" />
     <ClInclude Include="AnimationEventManager.h" />
     <ClInclude Include="AnimationEvents.h" />
@@ -2165,6 +2166,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="CurveProjectile.cpp" />
     <ClCompile Include="DirectHomingProjectile.cpp" />
     <ClCompile Include="DirectProjectile.cpp" />
+    <ClCompile Include="DuplicatedUIPool.cpp" />
     <ClCompile Include="EnemyAggroController.cpp" />
     <ClCompile Include="AnimationEventManager.cpp" />
     <ClCompile Include="AttackSystem.cpp">
