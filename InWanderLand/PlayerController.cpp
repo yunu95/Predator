@@ -392,7 +392,7 @@ void PlayerController::HandleCamera()
     static constexpr float tacticZoomoutDistanceFactor = 1.2f;
     // 영웅이 선택되어 있고, 카메라가 선택된 영웅을 따라가는 경우 targetPos는 영웅의 위치로 설정됩니다.
     Vector3d targetPos;
-    if (TacticModeSystem::Instance().IsOperation())
+    if (TacticModeSystem::Instance().IsOperation() && !TacticModeSystem::Instance().IsExecuting())
     {
         RTSCam::Instance().SetIdealPosition(tacticCameraRef->GetTransform()->GetWorldPosition());
         RTSCam::Instance().SetIdealRotation(tacticCameraRef->GetTransform()->GetWorldRotation());
@@ -933,7 +933,7 @@ void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
         switch (skillType)
         {
         case SkillType::ROBIN_Q:
-            selectedCharacter.lock()->OrderSkill(EnemyImpaleSkill{  }, pos);
+            selectedCharacter.lock()->OrderSkill(RobinChargeSkill{  }, pos);
             break;
         case SkillType::ROBIN_W:
             selectedCharacter.lock()->OrderSkill(RobinTauntSkill{  }, pos);
