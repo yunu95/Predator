@@ -9,7 +9,8 @@ private:
     enum class RobinQSkillInfo
     {
         ArrowHead,
-        ArrowBody
+        ArrowBody,
+        Circle
     };
     enum class RobinWSkillInfo
     {
