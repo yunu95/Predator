@@ -11,6 +11,8 @@ const float enemyImpaleStartTime = 1.5f;
 struct Spear
 {
     Vector2d position;
+    Quaternion rotation;
+    float scaleRatio;
     float timeOffset;
 };
 const std::vector<Spear> SpearsInfo()
@@ -42,10 +44,27 @@ const std::vector<Spear> SpearsInfo()
             currX += EnemyImpaleSkill::pod.impaleSkillAriseDistancePerSpear;
             if (currX >= -currOvalWidth)
             {
-                spears.push_back({ { x, y}, 0 });
+                Vector3d spearPos = Vector3d(x, 0, y);
+                Vector3d betweenVector;
+                betweenVector = spearPos - Vector3d(ovalHeight, 0, ovalWidth);
+
+                Vector3d direction = betweenVector.Normalized();
+                float distance = betweenVector.Magnitude();
+
+                float spearDegree = distance / ovalHeight * EnemyImpaleSkill::pod.maxSpearDegree;           /// 거리 비례 창 각도
+                float scaleRatio = distance / ovalHeight * (EnemyImpaleSkill::pod.minSpearScale - EnemyImpaleSkill::pod.maxSpearScale) + EnemyImpaleSkill::pod.maxSpearScale;        /// 거리 비례 창 크기 비율
+                assert(scaleRatio > 0);
+
+                Quaternion spearRotation;
+                spearRotation = Quaternion::MakeWithForwardUp(direction * -1, direction.up);
+                auto euler = spearRotation.Euler();
+                euler.x = spearDegree;
+
+
+                spears.push_back({ { x, y}, Quaternion{ euler }, scaleRatio, 0 });
                 spears.rbegin()->timeOffset = math::Random::GetRandomFloat(0, EnemyImpaleSkill::pod.impaleSkillAriseTimeNoisePerSpear);
             }
-        }
+        }       
     }
     std::for_each(spears.begin(), spears.end(), [=](Spear& a) { a.position.y += EnemyImpaleSkill::pod.impaleSkillFirstSpearOffset + ovalHeight; });
     std::sort(spears.begin(), spears.end(), [](const Spear& a, const Spear& b) { return a.timeOffset < b.timeOffset; });
@@ -100,13 +119,13 @@ coroutine::Coroutine EnemyImpaleSkill::operator()()
 
     for (auto& each : spearVec)
     {
-        while (each.timeOffset > waitImpaleDuration.Elapsed())
-        {
-            waitImpaleDuration.Tick();
-            co_await std::suspend_always{};
-        }
+        //while (each.timeOffset > waitImpaleDuration.Elapsed())
+        //{
+        //    waitImpaleDuration.Tick();
+        //    co_await std::suspend_always{};
+        //}
 
-        auto spearAriseCoroutine = ContentsCoroutine::StartRoutine(SpearArise(std::dynamic_pointer_cast<EnemyImpaleSkill>(selfWeakPtr.lock()), each.position));
+        auto spearAriseCoroutine = ContentsCoroutine::StartRoutine(SpearArise(std::dynamic_pointer_cast<EnemyImpaleSkill>(selfWeakPtr.lock()), each.position, each.rotation, each.scaleRatio));
         spearAriseCoroutine.lock()->PushDestroyCallBack([this]()
             {
                 if (!spearFbxQueue.empty())
@@ -189,7 +208,7 @@ void EnemyImpaleSkill::OnResume()
 }
 
 // 창이 한번 불쑥 튀어나왔다가 다시 꺼지는 사이클
-coroutine::Coroutine EnemyImpaleSkill::SpearArise(std::weak_ptr<EnemyImpaleSkill> skill, Vector2d pos)
+coroutine::Coroutine EnemyImpaleSkill::SpearArise(std::weak_ptr<EnemyImpaleSkill> skill, Vector2d pos, Quaternion quat, float scaleRatio)
 {
     auto persistance = skill.lock();
     auto fbx = FBXPool::Instance().Borrow(wanderResources::GetFBXName(wanderResources::WanderFBX::IMPALING_SPIKE));
@@ -202,6 +221,9 @@ coroutine::Coroutine EnemyImpaleSkill::SpearArise(std::weak_ptr<EnemyImpaleSkill
     fbx.lock()->GetTransform()->SetWorldPosition(worldPos);
     collider.lock()->SetRadius(0.01);
     collider.lock()->GetTransform()->SetWorldPosition(worldPos);
+    fbx.lock()->GetTransform()->SetLocalRotation(quat);
+    fbx.lock()->GetTransform()->SetWorldScale(Vector3d::one * scaleRatio);
+    
     co_await std::suspend_always{};
     for (auto& each : collider.lock()->GetEnemies())
     {
@@ -217,9 +239,31 @@ coroutine::Coroutine EnemyImpaleSkill::SpearArise(std::weak_ptr<EnemyImpaleSkill
 
     wanderUtils::UnitCoroutine::ForSecondsFromUnit waitPerSpear{ persistance->owner, pod.impaleSkillDurationPerSpear};
 
+    float localSpearAriseTimeRatio;
+
+    if (pod.spearAriseTimeRatio >= 1)
+        localSpearAriseTimeRatio = 0.99f;
+    else if (pod.spearAriseTimeRatio <= 0)
+        localSpearAriseTimeRatio = 0.01f;
+    else
+        localSpearAriseTimeRatio = pod.spearAriseTimeRatio;
+
     while (waitPerSpear.Tick())
     {
-        float heightAlpha = std::sinf(waitPerSpear.ElapsedNormalized() * math::PI);
+        //float heightAlpha = std::sinf(waitPerSpear.ElapsedNormalized() * math::PI);
+        float heightAlpha;
+        if (waitPerSpear.ElapsedNormalized() <= localSpearAriseTimeRatio)
+        {
+            heightAlpha = 1 / localSpearAriseTimeRatio * waitPerSpear.ElapsedNormalized();
+        }
+        else if (waitPerSpear.ElapsedNormalized() >= (1 - localSpearAriseTimeRatio))
+        {
+            heightAlpha = -1 / localSpearAriseTimeRatio * waitPerSpear.ElapsedNormalized() + 1 + (1 - localSpearAriseTimeRatio) / localSpearAriseTimeRatio;
+        }
+        else
+        {
+            heightAlpha = 1;
+        }
         float yDelta = math::LerpF(pod.impaleSkillMinHeightPerSpear, pod.impaleSkillMaxHeightPerSpear, heightAlpha);
         fbx.lock()->GetTransform()->SetWorldPosition(worldPos + Vector3d::up * yDelta);
         co_await std::suspend_always{};

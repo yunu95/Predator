@@ -29,7 +29,13 @@ coroutine::Coroutine RobinTauntSkill::operator()()
     animator.lock()->GetGI().SetPlaySpeed(foreswingSpeed);
     owner.lock()->PlayAnimation(UnitAnimType::Taunt);
 
+    auto beforeSkillZoomFactor = PlayerController::Instance().GetZoomFactor();
+
+    PlayerController::Instance().SetZoomFactor(beforeSkillZoomFactor * pod.zoomFactor);
+
     co_yield coroutine::WaitForSeconds(tauntForeswingTime / foreswingSpeed);
+
+    PlayerController::Instance().SetZoomFactor(beforeSkillZoomFactor);
 
     animator.lock()->Pause();
 

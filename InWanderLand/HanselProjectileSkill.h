@@ -25,6 +25,8 @@ struct POD_HanselProjectileSkill
     int hitCount = 1;
     int hitCountUpgraded = 1;
 
+    float   zoomFactor = 1.0f;
+
     TO_JSON(POD_HanselProjectileSkill)
         FROM_JSON(POD_HanselProjectileSkill)
 };
