@@ -2,6 +2,9 @@
 #include "YunutyEngine.h"
 #include "Unit.h"
 
+class UnitAcquisitionBoxCollider;
+class UnitAcquisitionSphereCollider;
+
 class SkillPreviewSystem : public Component, public SingletonComponent<SkillPreviewSystem>, public GameObjectPool<graphics::StaticMeshRenderer>,
     public PermanentObservee
 {
@@ -144,6 +147,10 @@ private:
     yunutyEngine::graphics::StaticMeshRenderer* temporaryRouteMeshRenderer;
     yunuGI::IMesh* temporaryRouteMesh;
 
+    // 직육각형 콜라이더
+    std::weak_ptr<UnitAcquisitionBoxCollider> boxCollider;
+    // 구체 콜라이더
+    std::array<std::weak_ptr<UnitAcquisitionSphereCollider>, 3> sphereColliders;
     // 생성된 메쉬랑 맵핑된 renderer를 보관하는 컨테이너
     std::map<yunuGI::IMesh*, graphics::StaticMeshRenderer*> rendererMap;
     // 이동 끝 메쉬를 비활성화하기위한 컨테이너 키값으로 생성된 경로 메쉬를 사용한다.
