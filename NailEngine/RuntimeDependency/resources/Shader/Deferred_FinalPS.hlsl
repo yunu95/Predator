@@ -43,7 +43,7 @@ float4 main(PixelIn input) : SV_Target
         float4 shadowColor = float4(1, 1, 1, 1);
         if (shadowFactor.x > 0)
         {
-            shadowColor *= (1 - shadowFactor * 0.6);
+            shadowColor *= (1 - shadowFactor * 0.25);
         }
 
         float4 temp = (albedoColor + specular) * shadowColor;

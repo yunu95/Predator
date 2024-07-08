@@ -42,6 +42,16 @@ namespace application
         GC<float> enemyApproachingDecayEndRate = 0.4f;
         // 유닛들이 등장할 때 등장 시간 오프셋에 대한 노이즈
         GC<float> unitBirthTimeOffsetNoise = 0.2;
+        // 유닛 한 기가 피해를 받았을 때 띄울 숫자 UI의 최대 갯수
+        GC<int> maxDmgIndicatorCount{ 2 };
+        // 숫자로 피해량을 띄울 최소 데미지
+        GC<float> dmgIndicatorMinDamage{ 5.0f };
+        // 피해를 받았을 때 UI의 크기는 dmgToScaleMultiplier * dmg^dmgSizeExponential 만큼 커진다.
+        GC<float> dmgToScalePower{ 0.3f };
+        GC<float> dmgToScaleMultiplier{ 0.3f };
+        // 피해를 받았을 때 순간적으로 dmgIndicatorPulseEnlargingScale만큼 커졌다 다시 돌아온다.
+        GC<float> dmgIndicatorPulseEnlargingScale{ 1.2f };
+        GC<float> dmgIndicatorPulseEnlargingDuration{ 0.4f };
 
         GC<float> peaceFollowingXOffest = 3.0f;
         GC<float> peaceFollowingZOffest = 2.0f;

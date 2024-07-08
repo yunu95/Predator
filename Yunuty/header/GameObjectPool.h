@@ -25,6 +25,7 @@ namespace yunutyEngine
     {
         static_assert(std::is_base_of<Component, RepresenstativeComponent>::value, "only derived classes from component are allowed");
     public:
+        virtual GameObject* GameObjectInitializer() { return Scene::getCurrentScene()->AddGameObject(); };
         // 빌려줄 오브젝트가 단 하나도 없을 경우, 활성화된 씬에서 게임 오브젝트를 생성한 뒤 RepresentativeComponent를 붙여줍니다.
         // 이 작업 이후 추가적으로 실행할 초기화 함수를 정의합니다.
         virtual void ObjectInitializer(std::weak_ptr<RepresenstativeComponent> comp) = 0;
@@ -36,6 +37,7 @@ namespace yunutyEngine
         void Return(std::weak_ptr<RepresenstativeComponent>);
         int poolObjectsSize() { return poolObjects.size(); };
         int expendableObjectsSize() { return expendableObjects.size(); };
+        void Clear();
 
     protected:
         const deque<std::weak_ptr<RepresenstativeComponent>>& GetPoolObjects() {
@@ -52,7 +54,7 @@ namespace yunutyEngine
     {
         if (expendableObjects.empty())
         {
-            auto gameObject = Scene::getCurrentScene()->AddGameObject();
+            auto gameObject = GameObjectInitializer();
             auto component = gameObject->AddComponentAsWeakPtr<RepresenstativeComponent>();
             ObjectInitializer(component);
             poolObjects.push_back(component);
@@ -76,5 +78,16 @@ namespace yunutyEngine
         expendableObjects.push_back(obj);
         expendableObjectSet.insert(obj.lock().get());
         obj.lock()->GetGameObject()->SetSelfActive(false);
+    }
+    template<typename RepresenstativeComponent>
+    inline void GameObjectPool<RepresenstativeComponent>::Clear()
+    {
+        for (auto each : poolObjects)
+        {
+            Scene::getCurrentScene()->DestroyGameObject(each.lock()->GetGameObject());
+        }
+        poolObjects.clear();
+        expendableObjects.clear();
+        expendableObjectSet.clear();
     }
 }

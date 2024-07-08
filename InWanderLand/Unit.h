@@ -23,6 +23,7 @@
 #include "UnitCollider.h"
 
 class ManagedFBX;
+class ManagedDuplicatedUI;
 class PassiveSkill;
 class UIManager;
 class UnitProductor;
@@ -204,6 +205,10 @@ public:
     // 전술모드에서 명령을 내릴 수 있는지에 대한 Ref
     Reference referenceTactic;
     Reference referenceBlockDeath;
+    // 마우스 커서가 올라갔을 때, 스킬 프리뷰 영역에 유닛들이 올라가 있을때 적용될 메시 아웃라인에 대한 레퍼런스
+    Reference referenceHoverOutline;
+    // 유닛이 선택되었을 때 적용될 메시 아웃라인에 대한 레퍼런스
+    Reference referenceSelectOutline;
     bool pauseRequested{ false };
     bool unpauseRequested{ false };
 
@@ -240,9 +245,12 @@ private:
     yunutyEngine::coroutine::Coroutine DeathCoroutine();
     yunutyEngine::coroutine::Coroutine AttackCoroutine(std::weak_ptr<Unit> opponent);
     yunutyEngine::coroutine::Coroutine MeleeAttackEffectCoroutine(std::weak_ptr<Unit> opponent);
+    // 받은 데미지 수치가 떠서 무작위 방향으로 날아가는 코루틴
+    yunutyEngine::coroutine::Coroutine DmgIndicatorCoroutine(float dmg);
     void UpdateAttackTargetWithinRange();
     float DistanceTo(const Vector3d& target);
     void ReturnToPool();
+    void SetSkinnedMeshRenderer(GameObject* fbxObj);
     int liveCountLeft{ 0 };
     // 유닛이 이동중, 정체 상태에 연속으로 jamCount번 이상 빠졌다면 이동 명령을 취소하고 공격모드 이동명령을 실행하게 된다.
     float jammedDuration = 0;
@@ -279,6 +287,7 @@ private:
     const application::editor::Unit_TemplateData* unitTemplateData{ nullptr };
     const application::editor::UnitData* unitData{ nullptr };
     GameObject* skinnedMeshGameObject{ nullptr };
+    graphics::SkinnedMesh* skinnedMeshRenderer{ nullptr };
     int teamIndex{ 0 };
     // 유닛의 회전속도는 외부에서 조절할 수 있다. 평소에는 template 데이터의 회전속도와 같다.
     float currentRotationSpeed;
@@ -312,6 +321,9 @@ private:
     std::weak_ptr<ManagedFBX> attackVFX = std::weak_ptr<ManagedFBX>();
     std::weak_ptr<ManagedFBX> healVFX = std::weak_ptr<ManagedFBX>();
     std::weak_ptr<ManagedFBX> paralysisVFX = std::weak_ptr<ManagedFBX>();
+    static constexpr int maxDmgIndicatorCount{ 5 };
+    std::array<std::weak_ptr<ManagedDuplicatedUI>, maxDmgIndicatorCount> dmgIndicators;
+    int dmgIndicatorIdx{ 0 };
 
     bool isPaused = false;
     float localTimeScale = 1.0f;

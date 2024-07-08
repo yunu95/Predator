@@ -394,8 +394,11 @@ void PlayerController::HandleCamera()
     Vector3d targetPos;
     if (TacticModeSystem::Instance().IsOperation() && !TacticModeSystem::Instance().IsExecuting())
     {
-        RTSCam::Instance().SetIdealPosition(tacticCameraRef->GetTransform()->GetWorldPosition());
-        RTSCam::Instance().SetIdealRotation(tacticCameraRef->GetTransform()->GetWorldRotation());
+        if (tacticCameraRef)
+        {
+            RTSCam::Instance().SetIdealPosition(tacticCameraRef->GetTransform()->GetWorldPosition());
+            RTSCam::Instance().SetIdealRotation(tacticCameraRef->GetTransform()->GetWorldRotation());
+        }
     }
     else
     {
@@ -627,6 +630,7 @@ void PlayerController::HandleMouseHover()
                 UIManager::Instance().GetUIElementByEnum(UIEnumID::MouseCursor_OnEnemy)->EnableElement();
             }
         }
+        unitHoverOutlineGuard = unit->referenceHoverOutline.Acquire();
     }
     else
     {
@@ -639,6 +643,7 @@ void PlayerController::HandleMouseHover()
         {
             UIManager::Instance().GetUIElementByEnum(UIEnumID::MouseCursor_Free)->EnableElement();
         }
+        unitHoverOutlineGuard.reset();
     }
 }
 // 카메라의 near plane으로부터 far plane까지 뻗는 직선의 형태로
@@ -685,6 +690,7 @@ void PlayerController::SelectPlayerUnit(PlayerCharacterType::Enum charType)
     if (auto previous = selectedCharacter.lock())
     {
         previous->unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::StatusBar_SelectionName)->DisableElement();
+        unitSelectOutlineGuard.reset();
     }
     if (charType == PlayerCharacterType::None)
     {
@@ -693,6 +699,7 @@ void PlayerController::SelectPlayerUnit(PlayerCharacterType::Enum charType)
     else
     {
         selectedCharacter = characters[charType];
+        unitSelectOutlineGuard = selectedCharacter.lock()->referenceSelectOutline.Acquire();
         ApplySelectEffect(characters[charType]);
         // 체력바의 선택 UI 활성화시키기
         characters[charType].lock()->unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::StatusBar_SelectionName)->EnableElement();
@@ -1282,7 +1289,7 @@ void PlayerController::SetTacticCameraActive(bool boolen)
     {
         auto tacticCamTransform = tacticCameraRef->GetTransform();
         Vector3d endPos = { tacticCamTransform->GetWorldPosition().x, tacticCamTransform->GetWorldPosition().y, tacticCamTransform->GetWorldPosition().z };
-        Quaternion endRot = { tacticCamTransform->GetWorldRotation().w, tacticCamTransform->GetWorldRotation().x, tacticCamTransform->GetWorldRotation().y, tacticCamTransform->GetWorldRotation().z};
+        Quaternion endRot = { tacticCamTransform->GetWorldRotation().w, tacticCamTransform->GetWorldRotation().x, tacticCamTransform->GetWorldRotation().y, tacticCamTransform->GetWorldRotation().z };
     }
     else
     {

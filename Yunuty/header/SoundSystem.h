@@ -63,6 +63,7 @@ namespace yunutyEngine
         static bool SettingSoundGroupOf3DSound(string soundPath, unsigned long long groupIndex);
         static unsigned long long GetSoundGroupIndexOf3DSound(string soundPath);
         static bool CreateSoundGroup(unsigned long long groupIndex, string name = "None");
+        static bool EraseSoundGroup(unsigned long long groupIndex);
         static FMOD::SoundGroup* GetSoundGroup(unsigned long long groupIndex);
         static bool SetSoundGroupVolume(unsigned long long groupIndex, float volume);
         static float GetSoundGroupVolume(unsigned long long groupIndex);

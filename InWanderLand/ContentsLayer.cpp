@@ -92,36 +92,23 @@ public:
 class TestComponent4 : public yunutyEngine::Component
 {
 public:
-	SkillPreviewSystem* sys;
+	yunutyEngine::graphics::SkinnedMesh* renderer;
 	virtual void Update() override
 	{
 		if (Input::isKeyDown(yunutyEngine::KeyCode::LeftArrow))
 		{
-			const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-			Vector3d temp{ 0,0,-20 };
-			sys->ShowMoveEndImage(SkillPreviewSystem::UnitType::Robin, temp, _resourceManager->GetMesh(L"Cube"), Vector3d{0,0,-1});
+			renderer->GetGI().SetOutLineInfo(false, yunuGI::Color(0, 0, 0, 1));
 		}
 		if (Input::isKeyDown(yunutyEngine::KeyCode::UpArrow))
 		{
-			const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-			Vector3d temp{ 0,0,-20 };
-			sys->ShowAttackImage(SkillPreviewSystem::UnitType::Robin, temp, Vector3d{ 0,0,-1 });
+			renderer->GetGI().SetOutLineInfo(true, yunuGI::Color(1, 0, 0, 1));
 		}
 		if (Input::isKeyDown(yunutyEngine::KeyCode::RightArrow))
 		{
-			Vector3d temp{ 0,0,-20 };
-			sys->ShowRobinQSkill(temp);
 		}
 		if (Input::isKeyDown(yunutyEngine::KeyCode::DownArrow))
 		{
-			std::vector<Vector3d> tempVec;
-			tempVec.push_back(Vector3d{ 0,0,-20 });
-			tempVec.push_back(Vector3d{ 0,0,-19 });
-			tempVec.push_back(Vector3d{ 0,0,-18 });
-			tempVec.push_back(Vector3d{ 0,0,-17 });
-			tempVec.push_back(Vector3d{ 0,0,-16 });
-			Vector3d temp{ 0,0,-20 };
-			sys->ShowRoute(SkillPreviewSystem::UnitType::Robin,tempVec);
+			
 		}
 	}
 };
@@ -167,13 +154,12 @@ void GraphicsTest()
 	}
 
 	{
-		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
-		obj->GetTransform()->SetLocalPosition(Vector3d{ 5,0,-20 });
+		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_FlyingCandle");
 	}
 
-	{
+	/*{
 		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Stage1_Floor_01");
-		
+
 	}
 
 	{
@@ -186,31 +172,7 @@ void GraphicsTest()
 		obj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-20 });
 		auto test = obj->AddComponent<TestComponent4>();
 		test->sys = systemComponent;
-	}
-	
-	//for(int i = 0; i < 2; ++i)
-	//{
-	//	auto obj = Scene::getCurrentScene()->AddGameObject();
-	//	obj->GetTransform()->SetLocalScale(Vector3d{ 10,10,10 });
-	//	auto renderer = obj->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-	//	renderer->GetGI().SetMesh(_resourceManager->GetMesh(L"Cube"));
-	//	renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::Temp0, _resourceManager->GetTexture(L"Texture/T_VFX_SkillRange_Clock.dds"));
-	//	if (i == 0)
-	//	{
-	//		obj->GetTransform()->SetLocalPosition(Vector3d{ float(i * 2),float(1),float(-20)});
-	//		renderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 1,0,0,1 });
-	//	}
-	//	else
-	//	{
-	//		obj->GetTransform()->SetLocalPosition(Vector3d{ float(i * 5),float(1),float(-20) });
-	//		renderer->GetGI().GetMaterial()->SetColor(yunuGI::Color{ 0,0,1,1 });
-	//	}
-	//	renderer->GetGI().GetMaterial()->SetPixelShader(_resourceManager->GetShader(L"TestDecalPS.cso"));
-
-	//	//auto obj2 = Scene::getCurrentScene()->AddGameObject();
-	//	//auto tset = obj2->AddComponent<TestComponent4>();
-	//	//tset->obj = obj;
-	//}
+	}*/
 
 	yunutyEngine::graphics::Renderer::SingleInstance().SortByCameraDirection();
 	//yunutyEngine::graphics::Renderer::SingleInstance().SetUseIBL(true);

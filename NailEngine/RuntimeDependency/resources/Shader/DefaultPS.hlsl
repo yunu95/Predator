@@ -23,6 +23,7 @@ struct PS_OUT
     float4 arm : SV_Target4;
     float4 emissive : SV_Target5;
     float4 viewPosDecal : SV_Target6;
+    float4 outlineInfo : SV_Target7;
 };
 
 PS_OUT main(PixelIn input)
@@ -55,13 +56,12 @@ PS_OUT main(PixelIn input)
         float3 x = max(0, lightColor.xyz - 0.004);
         lightColor.xyz = (x * (6.2 * x + 0.5)) / (x * (6.2 * x + 1.7) + 0.06);
     
-        //output.color = color * lightColor;
-        output.color = lightColor;
+        output.color = lightColor * materialColor;
     }
     else
     {
         //color = pow(color, 2.2f);
-        output.color = color;
+        output.color = color * materialColor;
     }
     
     
@@ -108,8 +108,8 @@ PS_OUT main(PixelIn input)
         output.emissive = EmissionMap.Sample(sam, input.uv);
     }
     
-    output.util = float4(lightMapUV[input.id].lightMapIndex, DiffuseExposure, AmbientExposure, 1.f);
-
+    output.util = float4(lightMapUV[input.id].lightMapIndex, DiffuseExposure, AmbientExposure, lightMapUV[input.id].isOutLine);
+    output.outlineInfo = float4(lightMapUV[input.id].outlineInfo.r, lightMapUV[input.id].outlineInfo.g, lightMapUV[input.id].outlineInfo.b, lightMapUV[input.id].outlineInfo.a);
     return output;
 }
 

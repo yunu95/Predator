@@ -1055,6 +1055,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="DamageType.h" />
     <ClInclude Include="DirectHomingProjectile.h" />
     <ClInclude Include="DirectProjectile.h" />
+    <ClInclude Include="DuplicatedUIPool.h" />
     <ClInclude Include="EnemyAggroController.h" />
     <ClInclude Include="AnimationEventManager.h" />
     <ClInclude Include="AnimationEvents.h" />
@@ -1081,6 +1082,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="MeleeEliteController.h" />
     <ClInclude Include="Module_AnimationEditor.h" />
     <ClInclude Include="Module_Skill.h" />
+    <ClInclude Include="Module_SoundEditor.h" />
     <ClInclude Include="MoveEndPreviewPool.h" />
     <ClInclude Include="Multiplier.h" />
     <ClInclude Include="PassiveHanselHeal.h" />
@@ -2165,6 +2167,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="CurveProjectile.cpp" />
     <ClCompile Include="DirectHomingProjectile.cpp" />
     <ClCompile Include="DirectProjectile.cpp" />
+    <ClCompile Include="DuplicatedUIPool.cpp" />
     <ClCompile Include="EnemyAggroController.cpp" />
     <ClCompile Include="AnimationEventManager.cpp" />
     <ClCompile Include="AttackSystem.cpp">
@@ -2364,6 +2367,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="MeleeEliteController.cpp" />
     <ClCompile Include="Module_AnimationEditor.cpp" />
     <ClCompile Include="Module_Skill.cpp" />
+    <ClCompile Include="Module_SoundEditor.cpp" />
     <ClCompile Include="MoveEndPreviewPool.cpp" />
     <ClCompile Include="ObservationTarget.cpp" />
     <ClCompile Include="ParticleBrush.cpp" />

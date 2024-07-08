@@ -907,6 +907,9 @@
     <Filter Include="Contents_Refactored\UnitController\EnemyController\RangedEliteController">
       <UniqueIdentifier>{2559020f-20b5-4a3a-bed0-6b2c31bee46b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents_Refactored\DuplicatedUIPool">
+      <UniqueIdentifier>{9e3ccf9e-51a1-4ca9-898d-eb2f025aae10}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -2221,6 +2224,12 @@
     <ClInclude Include="Action_Script.h">
       <Filter>Editor\ScriptSystem\2_Action\List</Filter>
     </ClInclude>
+    <ClInclude Include="DuplicatedUIPool.h">
+      <Filter>Contents_Refactored\DuplicatedUIPool</Filter>
+    </ClInclude>
+    <ClInclude Include="Module_SoundEditor.h">
+      <Filter>Editor\Panel\List\Module\List</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -3333,6 +3342,12 @@
     </ClCompile>
     <ClCompile Include="Action_Script.cpp">
       <Filter>Editor\ScriptSystem\2_Action\List</Filter>
+    </ClCompile>
+    <ClCompile Include="DuplicatedUIPool.cpp">
+      <Filter>Contents_Refactored\DuplicatedUIPool</Filter>
+    </ClCompile>
+    <ClCompile Include="Module_SoundEditor.cpp">
+      <Filter>Editor\Panel\List\Module\List</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
