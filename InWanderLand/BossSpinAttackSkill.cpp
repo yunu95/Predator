@@ -123,7 +123,7 @@ coroutine::Coroutine BossSpinAttackSkill::SpawningSkillffect(std::weak_ptr<BossS
     Vector3d direction = deltaPos.Normalized();
 
     previewEffect = FBXPool::Instance().Borrow("VFX_HeartQueen_Skill1_Preview");
-    previewEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos);
+    previewEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos + Vector3d(0.0f, 0.2f, 0.0f));
     previewEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(owner.lock()->GetTransform()->GetWorldRotation());
     previewEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(actualCollideRange * owner.lock()->GetTransform()->GetWorldScale().x,
         actualCollideRange * owner.lock()->GetTransform()->GetWorldScale().y,

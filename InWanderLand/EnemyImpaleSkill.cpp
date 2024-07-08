@@ -20,7 +20,7 @@ const std::vector<Spear> SpearsInfo()
     std::vector<Spear> spears;
     // 타원에 빽뺵하게 창을 생성
     // y는 캐릭터 기준 전방방향, x는 우측방향
-    float ovalHeight = (EnemyImpaleSkill::pod.impaleSkillRange - EnemyImpaleSkill::pod.impaleSkillFirstSpearOffset) * 0.5f;
+    float ovalHeight = EnemyImpaleSkill::pod.impaleSkillRange * 0.5f;
     float ovalWidth = EnemyImpaleSkill::pod.impaleSkillWidth * 0.5;
     float ovalHeightSqr = ovalHeight * ovalHeight;
     float ovalWidthSqr = ovalWidth * ovalWidth;
@@ -45,14 +45,11 @@ const std::vector<Spear> SpearsInfo()
             if (currX >= -currOvalWidth)
             {
                 Vector3d spearPos = Vector3d(x, 0, y);
-                Vector3d betweenVector;
-                betweenVector = spearPos - Vector3d(ovalHeight, 0, ovalWidth);
-
-                Vector3d direction = betweenVector.Normalized();
-                float distance = betweenVector.Magnitude();
+                Vector3d direction = spearPos.Normalized();
+                float distance = spearPos.Magnitude();
 
                 float spearDegree = distance / ovalHeight * EnemyImpaleSkill::pod.maxSpearDegree;           /// 거리 비례 창 각도
-                float scaleRatio = distance / ovalHeight * (EnemyImpaleSkill::pod.minSpearScale - EnemyImpaleSkill::pod.maxSpearScale) + EnemyImpaleSkill::pod.maxSpearScale;        /// 거리 비례 창 크기 비율
+                float scaleRatio = (1 - distance / ovalHeight) * EnemyImpaleSkill::pod.maxSpearScale + distance / ovalHeight * EnemyImpaleSkill::pod.minSpearScale;        /// 거리 비례 창 크기 비율
                 assert(scaleRatio > 0);
 
                 Quaternion spearRotation;
@@ -60,11 +57,10 @@ const std::vector<Spear> SpearsInfo()
                 auto euler = spearRotation.Euler();
                 euler.x = spearDegree;
 
-
                 spears.push_back({ { x, y}, Quaternion{ euler }, scaleRatio, 0 });
                 spears.rbegin()->timeOffset = math::Random::GetRandomFloat(0, EnemyImpaleSkill::pod.impaleSkillAriseTimeNoisePerSpear);
             }
-        }       
+        }
     }
     std::for_each(spears.begin(), spears.end(), [=](Spear& a) { a.position.y += EnemyImpaleSkill::pod.impaleSkillFirstSpearOffset + ovalHeight; });
     std::sort(spears.begin(), spears.end(), [](const Spear& a, const Spear& b) { return a.timeOffset < b.timeOffset; });
@@ -208,7 +204,7 @@ void EnemyImpaleSkill::OnResume()
 }
 
 // 창이 한번 불쑥 튀어나왔다가 다시 꺼지는 사이클
-coroutine::Coroutine EnemyImpaleSkill::SpearArise(std::weak_ptr<EnemyImpaleSkill> skill, Vector2d pos, Quaternion quat, float scaleRatio)
+coroutine::Coroutine EnemyImpaleSkill::SpearArise(std::weak_ptr<EnemyImpaleSkill> skill, Vector2d pos, Quaternion quat, float scaleRatio) 
 {
     auto persistance = skill.lock();
     auto fbx = FBXPool::Instance().Borrow(wanderResources::GetFBXName(wanderResources::WanderFBX::IMPALING_SPIKE));
@@ -219,11 +215,10 @@ coroutine::Coroutine EnemyImpaleSkill::SpearArise(std::weak_ptr<EnemyImpaleSkill
     auto right = owner.lock()->GetTransform()->GetWorldRotation().Right();
     auto worldPos = owner.lock()->GetTransform()->GetWorldPosition() + forward * pos.y + right * pos.x;
     fbx.lock()->GetTransform()->SetWorldPosition(worldPos);
-    collider.lock()->SetRadius(0.01);
-    collider.lock()->GetTransform()->SetWorldPosition(worldPos);
     fbx.lock()->GetTransform()->SetLocalRotation(quat);
     fbx.lock()->GetTransform()->SetWorldScale(Vector3d::one * scaleRatio);
-    
+    collider.lock()->SetRadius(0.01);
+    collider.lock()->GetTransform()->SetWorldPosition(worldPos);
     co_await std::suspend_always{};
     for (auto& each : collider.lock()->GetEnemies())
     {

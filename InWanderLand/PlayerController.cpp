@@ -933,7 +933,7 @@ void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
         switch (skillType)
         {
         case SkillType::ROBIN_Q:
-            selectedCharacter.lock()->OrderSkill(RobinChargeSkill{  }, pos);
+            selectedCharacter.lock()->OrderSkill(EnemyImpaleSkill{  }, pos);
             break;
         case SkillType::ROBIN_W:
             selectedCharacter.lock()->OrderSkill(RobinTauntSkill{  }, pos);
@@ -1037,7 +1037,7 @@ void PlayerController::SelectSkill(SkillType::Enum skillType)
         return;
     }
     // 이 부분은 협의가 필요함
-    if ((state == State::Peace) || (state == State::Cinematic)) return;
+    if ((state == State::Peace) || (state == State::Cinematic) || (TacticModeSystem::Instance().IsExecuting())) return;
     onSkillSelect[skillType]();
     switch (skillType)
     {
