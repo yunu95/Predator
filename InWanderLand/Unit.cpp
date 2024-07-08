@@ -119,10 +119,6 @@ void Unit::Update()
         unitStatusUI.lock()->GetTransform()->SetWorldPosition(Vector3d{ offset.x,offset.y,0 }
         + UIManager::Instance().GetUIPosFromWorld(GetTransform()->GetWorldPosition()));
     }
-    if (!dmgIndicator.expired() && dmgIndicator.lock()->GetActive() == true)
-    {
-        dmgIndicator.lock()->GetTransform()->SetWorldPosition(UIManager::Instance().GetUIPosFromWorld(dmgIndicatorPosition));
-    }
     // 버프 효과 적용
     for (auto& [buffID, buff] : buffs)
     {
@@ -314,7 +310,7 @@ template<>
 void Unit::OnStateExit<UnitBehaviourTree::Move>()
 {
     onStateExit[UnitBehaviourTree::Move]();
-    if (currentOrderType == UnitOrderType::Move)
+    if (pendingOrderType == UnitOrderType::None)
     {
         OrderHold();
         unitBehaviourTree.reAssessFlag = true;
@@ -545,6 +541,7 @@ void Unit::EraseBuff(UnitBuffType buffType)
 }
 void Unit::Damaged(std::weak_ptr<Unit> opponentUnit, float opponentDmg, DamageType damageType)
 {
+    const auto& gc = GlobalConstant::GetSingletonInstance().pod;
     switch (damageType)
     {
     case DamageType::Attack:
@@ -570,18 +567,9 @@ void Unit::Damaged(std::weak_ptr<Unit> opponentUnit, float opponentDmg, DamageTy
         break;
     }
 
-    if (opponentDmg > 1)
+    if (opponentDmg > gc.dmgIndicatorMinDamage)
     {
-        if (dmgIndicator.expired() || dmgIndicator.lock()->GetActive() == false)
-        {
-            dmgIndicator = DuplicatedUIPool::Instance().Borrow(UIEnumID::DamageIndicator_Default);
-        }
-        auto element = dmgIndicator.lock()->GetUIElement();
-        element->GetLocalUIsByEnumID().at(UIEnumID::DamageIndicator_Number)->SetNumber(opponentDmg);
-        dmgIndicatorPosition = GetTransform()->GetWorldPosition();
-        auto uiPos = UIManager::Instance().GetUIPosFromWorld(dmgIndicatorPosition);
-        element->GetTransform()->SetWorldPosition(uiPos);
-        element->EnableElement();
+        ContentsCoroutine::Instance().StartCoroutine(DmgIndicatorCoroutine(opponentDmg));
     }
 
     onDamagedFromUnit(opponentUnit);
@@ -1960,6 +1948,45 @@ yunutyEngine::coroutine::Coroutine Unit::MeleeAttackEffectCoroutine(std::weak_pt
         co_await std::suspend_always{};
     }
 
+    co_return;
+}
+yunutyEngine::coroutine::Coroutine Unit::DmgIndicatorCoroutine(float dmg)
+{
+    const auto& gc = GlobalConstant::GetSingletonInstance().pod;
+    auto dmgIndicator{ dmgIndicators.at(dmgIndicatorIdx = (dmgIndicatorIdx + 1) % gc.maxDmgIndicatorCount) };
+    if (dmgIndicator.expired() || dmgIndicator.lock()->GetActive() == false)
+    {
+        dmgIndicator = dmgIndicators[dmgIndicatorIdx] = DuplicatedUIPool::Instance().Borrow(UIEnumID::DamageIndicator_Default);
+    }
+    Vector3d dmgIndicatorPosition = GetTransform()->GetWorldPosition();
+    auto element = dmgIndicator.lock()->GetUIElement();
+    element->GetLocalUIsByEnumID().at(UIEnumID::DamageIndicator_Number)->SetNumber(dmg);
+    auto uiPos = UIManager::Instance().GetUIPosFromWorld(dmgIndicatorPosition);
+    auto idealScale = Vector3d::one * gc.dmgToScaleMultiplier * std::powf(dmg, gc.dmgToScalePower);
+    element->GetTransform()->SetWorldPosition(uiPos);
+    element->GetTransform()->SetLocalScale(idealScale);
+    element->EnableElement();
+    float randomDirection = math::Random::GetRandomFloat(-math::PI, math::PI);
+    Vector2d randomDirVector = Vector2d{ cos(randomDirection),sin(randomDirection) };
+    Vector2d uiSpaceOffsetStart{ unitTemplateData->pod.dmgIndicator_offset.x,unitTemplateData->pod.dmgIndicator_offset.y };
+    uiSpaceOffsetStart += randomDirVector * math::Random::GetRandomFloat(unitTemplateData->pod.dmgIndicator_offsetNoiseMin, unitTemplateData->pod.dmgIndicator_offsetNoiseMax);
+    Vector2d uiSpaceOffsetEnd = uiSpaceOffsetStart + randomDirVector * math::Random::GetRandomFloat(unitTemplateData->pod.dmgIndicator_travelNoiseMin, unitTemplateData->pod.dmgIndicator_travelNoiseMax);
+    //Vector2d{ unitTemplateData->pod.dmgIndicator_offset,0 };
+
+    coroutine::ForSeconds forSeconds{ 1,true };
+    while ((!dmgIndicator.expired() && dmgIndicator.lock()->GetActive() == true) && forSeconds.Tick())
+    {
+        float scaleAlpha = std::sinf(std::fminf(1, forSeconds.Elapsed() / gc.dmgIndicatorPulseEnlargingDuration) * math::PI);
+        element->GetTransform()->SetLocalScale(Vector3d::Lerp(idealScale, idealScale * gc.dmgIndicatorPulseEnlargingScale, scaleAlpha));
+        dmgIndicator.lock()->GetTransform()->SetWorldPosition(UIManager::Instance().GetUIPosFromWorld(dmgIndicatorPosition)
+            + Vector3d::Lerp(uiSpaceOffsetStart, uiSpaceOffsetEnd, std::sinf(forSeconds.ElapsedNormalized() * 0.5f * math::PI)));
+        co_await std::suspend_always{};
+    }
+    while (!dmgIndicator.expired() && dmgIndicator.lock()->GetActive() == true)
+    {
+        dmgIndicator.lock()->GetTransform()->SetWorldPosition(UIManager::Instance().GetUIPosFromWorld(dmgIndicatorPosition) + uiSpaceOffsetEnd);
+        co_await std::suspend_always{};
+    }
     co_return;
 }
 void Unit::UpdateAttackTargetWithinRange()

@@ -241,6 +241,8 @@ private:
     yunutyEngine::coroutine::Coroutine DeathCoroutine();
     yunutyEngine::coroutine::Coroutine AttackCoroutine(std::weak_ptr<Unit> opponent);
     yunutyEngine::coroutine::Coroutine MeleeAttackEffectCoroutine(std::weak_ptr<Unit> opponent);
+    // 받은 데미지 수치가 떠서 무작위 방향으로 날아가는 코루틴
+    yunutyEngine::coroutine::Coroutine DmgIndicatorCoroutine(float dmg);
     void UpdateAttackTargetWithinRange();
     float DistanceTo(const Vector3d& target);
     void ReturnToPool();
@@ -313,8 +315,9 @@ private:
     std::weak_ptr<ManagedFBX> attackVFX = std::weak_ptr<ManagedFBX>();
     std::weak_ptr<ManagedFBX> healVFX = std::weak_ptr<ManagedFBX>();
     std::weak_ptr<ManagedFBX> paralysisVFX = std::weak_ptr<ManagedFBX>();
-    std::weak_ptr<ManagedDuplicatedUI> dmgIndicator;
-    Vector3d dmgIndicatorPosition;
+    static constexpr int maxDmgIndicatorCount{ 5 };
+    std::array<std::weak_ptr<ManagedDuplicatedUI>, maxDmgIndicatorCount> dmgIndicators;
+    int dmgIndicatorIdx{ 0 };
 
     bool isPaused = false;
     float localTimeScale = 1.0f;
