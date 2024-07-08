@@ -1169,12 +1169,6 @@ bool UIManager::ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* 
                     }());
             });
         break;
-    case UIEnumID::TacticModeRevertButton_Active:
-        element->button->AddExternalButtonClickFunction([=]()
-            {
-                TacticModeSystem::Instance().PopCommand();
-            });
-        break;
     default:
         return false;
         break;
@@ -1266,6 +1260,12 @@ bool UIManager::ImportDealWithSpecialCases_Post(const JsonUIData& uiData, UIElem
                 });
             break;
         }
+        break;
+    case UIEnumID::TacticModeRevertButton_Active:
+        element->button->AddExternalButtonClickFunction([=]()
+            {
+                TacticModeSystem::Instance().PopCommand();
+            });
         break;
     default:
         return false;

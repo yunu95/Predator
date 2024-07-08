@@ -175,16 +175,18 @@ coroutine::Coroutine wanderUtils::ResourceRecursiveLoader::LoadByCoroutine(strin
     application::Application::GetInstance().layers[(int)application::Application::LayerList::EditorLayer]->Initialize();
 
     static_cast<application::editor::EditorLayer*>(application::Application::GetInstance().layers[(int)application::Application::LayerList::EditorLayer])->LateInitialize();
-#endif
+#else
 
 #ifndef GRAPHICS_TEST
-    application::editor::MapFileManager::GetSingletonInstance().LoadMapFile("InWanderLand.pmap");
+application::editor::MapFileManager::GetSingletonInstance().LoadMapFile("InWanderLand.pmap");
 #endif
-    editor::TerrainData* terrainData = nullptr;
-    for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::TerrainData>())
-    {
-        terrainData = each;
-    }
+
+#endif
+	editor::TerrainData* terrainData = nullptr;
+	for (auto& each : editor::InstanceManager::GetSingletonInstance().GetList<editor::TerrainData>())
+	{
+		terrainData = each;
+	}
 
     if (terrainData != nullptr)
     {

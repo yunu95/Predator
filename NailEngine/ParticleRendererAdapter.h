@@ -84,6 +84,10 @@ namespace yunuGIAdapter
 		{
 			InstancingManager::Instance.Get().RegisterParticleRenderInfo(particleSystem.get(), &particleRenderInfo);
 		};
+
+		virtual void SetOutLineInfo(bool isOutLine, yunuGI::Color outLineColor) override
+		{
+		};
 	private:
 		std::shared_ptr<ParticleSystem> particleSystem;
 

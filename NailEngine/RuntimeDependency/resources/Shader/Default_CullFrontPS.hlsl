@@ -55,13 +55,12 @@ PS_OUT main(PixelIn input)
         float3 x = max(0, lightColor.xyz - 0.004);
         lightColor.xyz = (x * (6.2 * x + 0.5)) / (x * (6.2 * x + 1.7) + 0.06);
     
-        //output.color = color * lightColor;
-        output.color = lightColor;
+        output.color = lightColor * materialColor;
     }
     else
     {
         //color = pow(color, 2.2f);
-        output.color = color;
+        output.color = color * materialColor;
     }
     
     
@@ -108,7 +107,7 @@ PS_OUT main(PixelIn input)
         output.emissive = EmissionMap.Sample(sam, input.uv);
     }
     
-    output.util = float4(lightMapUV[input.id].lightMapIndex, DiffuseExposure, AmbientExposure, 1.f);
+    output.util = float4(lightMapUV[input.id].lightMapIndex, DiffuseExposure, AmbientExposure, lightMapUV[input.id].isOutLine);
 
     return output;
 }

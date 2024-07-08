@@ -289,6 +289,8 @@ void InstancingManager::RenderStaticDeferred()
 					lightMapUVBuffer->lightMapUV[index].lightMapIndex = renderInfo->lightMapIndex;
 					lightMapUVBuffer->lightMapUV[index].scaling = renderInfo->uvScaling;
 					lightMapUVBuffer->lightMapUV[index].uvOffset = renderInfo->uvOffset;
+					lightMapUVBuffer->lightMapUV[index].outlineInfo = renderInfo->outlineInfo;
+					lightMapUVBuffer->lightMapUV[index].isOutLine = renderInfo->isOutLine;
 					lightMapUVBuffer->castDecal = i->mesh->GetCastDecal();
 
 					index++;
@@ -368,6 +370,8 @@ void InstancingManager::RenderStaticDeferred()
 					lightMapUVBuffer->lightMapUV[index].lightMapIndex = renderInfo->lightMapIndex;
 					lightMapUVBuffer->lightMapUV[index].scaling = renderInfo->uvScaling;
 					lightMapUVBuffer->lightMapUV[index].uvOffset = renderInfo->uvOffset;
+					lightMapUVBuffer->lightMapUV[index].outlineInfo = renderInfo->outlineInfo;
+					lightMapUVBuffer->lightMapUV[index].isOutLine = renderInfo->isOutLine;
 					lightMapUVBuffer->castDecal = i->mesh->GetCastDecal();
 
 					index++;
@@ -1118,6 +1122,8 @@ void InstancingManager::RenderSkinnedDeferred()
 				lightMapUVBuffer->lightMapUV[index].lightMapIndex = renderInfo.lightMapIndex;
 				lightMapUVBuffer->lightMapUV[index].scaling = renderInfo.uvScaling;
 				lightMapUVBuffer->lightMapUV[index].uvOffset = renderInfo.uvOffset;
+				lightMapUVBuffer->lightMapUV[index].outlineInfo = renderInfo.outlineInfo;
+				lightMapUVBuffer->lightMapUV[index].isOutLine = renderInfo.isOutLine;
 				lightMapUVBuffer->castDecal = renderInfo.mesh->GetCastDecal();
 
 				index++;

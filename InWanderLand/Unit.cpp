@@ -141,6 +141,23 @@ void Unit::Update()
         blendWithDefaultAnimTrigger = false;
         PlayAnimation(defaultAnimationType);
     }
+    // 아웃라인 출력여부를 판별한다.
+    if (referenceSelectOutline.BeingReferenced())
+    {
+        skinnedMeshRenderer->GetGI().SetOutLineInfo(true, yunuGI::Color::green());
+    }
+    else
+    {
+        if (referenceHoverOutline.BeingReferenced())
+        {
+            skinnedMeshRenderer->GetGI().SetOutLineInfo(true, teamIndex == PlayerController::playerTeamIndex ? yunuGI::Color::white() : yunuGI::Color::red());
+        }
+        else
+        {
+            skinnedMeshRenderer->GetGI().SetOutLineInfo(false, yunuGI::Color::white());
+        }
+    }
+    Reference referenceSelectOutline;
 }
 
 void Unit::OnDestroy()
@@ -1006,6 +1023,7 @@ void Unit::Init(const application::editor::Unit_TemplateData* unitTemplateData)
     skinnedMeshGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(unitTemplateData->pod.skinnedFBXName);
     burnEffect = skinnedMeshGameObject->AddComponentAsWeakPtr<BurnEffect>();
     animatorComponent = skinnedMeshGameObject->GetComponentWeakPtr<graphics::Animator>();
+    SetSkinnedMeshRenderer(skinnedMeshGameObject);
     skinnedMeshGameObject->SetParent(GetGameObject());
     skinnedMeshGameObject->GetTransform()->SetLocalPosition(Vector3d::zero);
     skinnedMeshGameObject->GetTransform()->SetLocalRotation(Quaternion{ {0,180,0} });
@@ -2029,6 +2047,16 @@ void Unit::ReturnToPool()
         unitData = nullptr;
     }
     UnitPool::SingleInstance().Return(GetWeakPtr<Unit>());
+}
+void Unit::SetSkinnedMeshRenderer(GameObject* fbxObj)
+{
+    for (auto each : fbxObj->GetChildren())
+    {
+        if (this->skinnedMeshRenderer = each->GetComponent<graphics::SkinnedMesh>())
+        {
+            return;
+        }
+    }
 }
 void Unit::ResetSharedRef()
 {

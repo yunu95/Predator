@@ -2227,6 +2227,9 @@
     <ClInclude Include="DuplicatedUIPool.h">
       <Filter>Contents_Refactored\DuplicatedUIPool</Filter>
     </ClInclude>
+    <ClInclude Include="Module_SoundEditor.h">
+      <Filter>Editor\Panel\List\Module\List</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -3342,6 +3345,9 @@
     </ClCompile>
     <ClCompile Include="DuplicatedUIPool.cpp">
       <Filter>Contents_Refactored\DuplicatedUIPool</Filter>
+    </ClCompile>
+    <ClCompile Include="Module_SoundEditor.cpp">
+      <Filter>Editor\Panel\List\Module\List</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
