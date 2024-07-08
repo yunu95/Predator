@@ -205,6 +205,8 @@ private:
     GameObject* allySelectedEffect{ nullptr };
     yunutyEngine::graphics::StaticMeshRenderer* allySelectedEffectRenderer{ nullptr };
 
+    std::shared_ptr<Reference::Guard> unitHoverOutlineGuard;
+    std::shared_ptr<Reference::Guard> unitSelectOutlineGuard;
     // 유닛이 타겟으로 지정되었을 떄의 효과(사실상 평타 우클릭밖에 없음)
     std::array<GameObject*, 3> enemyTargetedEffect{ nullptr };
     std::array<VFXAnimator*, 3> enemyTargetedEffectAnimator{ nullptr };

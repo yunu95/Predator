@@ -179,9 +179,11 @@ cbuffer ParticleBuffer : register(b11)
 struct LightMapUV
 {
     float lightMapIndex;
-    float3 pad;
+    int isOutLine;
+    float2 pad;
     float2 uvOffset;
     float2 scaling;
+    float4 outlineInfo;
 };
 
 cbuffer LightMapUVBuffer : register(b12)

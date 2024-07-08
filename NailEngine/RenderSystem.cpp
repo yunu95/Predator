@@ -525,10 +525,6 @@ void RenderSystem::RenderDecal()
 
 void RenderSystem::RenderBackBuffer()
 {
-    //ResourceBuilder::Instance.Get().device->GetDeviceContext()->OMSetBlendState(nullptr, nullptr, 0xFFFFFFFF);
-
-
-
     ResourceBuilder::Instance.Get().device->GetDeviceContext()->OMSetRenderTargets(1,
         ResourceBuilder::Instance.Get().swapChain->GetRTV().GetAddressOf(),
         ResourceBuilder::Instance.Get().swapChain->GetDSV().Get());

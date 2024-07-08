@@ -7,5 +7,6 @@ enum class EnqueErrorType
     QueueFull,
     UseSkill,
     NotReady,
+    Executing,
 	Success,
 };

@@ -86,6 +86,12 @@ namespace application
             float projectile_scale{ 1.0f };
             float m_attackPreDelay = 0.5f;
             float m_attackPostDelay = 0.5f;
+            bool showDmgIndicator{ false };
+            POD_Vector2<float> dmgIndicator_offset;
+            float dmgIndicator_offsetNoiseMin = 2.5f;
+            float dmgIndicator_offsetNoiseMax = 20.0f;
+            float dmgIndicator_travelNoiseMin = 2.5f;
+            float dmgIndicator_travelNoiseMax = 40.0f;
 
             float unit_scale{ 1.0f };
 

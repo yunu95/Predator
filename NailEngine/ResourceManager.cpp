@@ -1252,6 +1252,10 @@ void ResourceManager::CreateDefaultMaterial()
             renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::FINAL)]->GetRTTexture(static_cast<int>(FINAL)).get());
         material->SetTexture(yunuGI::Texture_Type::Temp1,
             renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(POSITION)).get());
+		material->SetTexture(yunuGI::Texture_Type::Temp2,
+			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(OUTLINE_INFO)).get());
+		material->SetTexture(yunuGI::Texture_Type::Temp3,
+			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(UTIL)).get());
     }
 
     // 파티클 전용 머터리얼
