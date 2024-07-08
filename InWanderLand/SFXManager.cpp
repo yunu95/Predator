@@ -108,3 +108,33 @@ std::vector<std::string>& SFXManager::GetSoundGroupNames()
 {
 	return SingleInstance().soundGroupNames;
 }
+
+void SFXManager::Clear()
+{
+	/// 모든 Sound 의 Priority, SoundGroup 과 MaxAudible, MaxAudibleBehavior 를 초기화합니다.
+	/// 굳이 SoundGroup 을 Erase 하지는 않습니다.
+	for (int i = 0; i < initSoundGroupCount; i++)
+	{
+		
+	}
+}
+
+bool SFXManager::PreEncoding(json& data) const
+{
+	return true;
+}
+
+bool SFXManager::PostEncoding(json& data) const
+{
+	return true;
+}
+
+bool SFXManager::PreDecoding(const json& data)
+{
+	return true;
+}
+
+bool SFXManager::PostDecoding(const json& data)
+{
+	return true;
+}

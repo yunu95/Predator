@@ -277,6 +277,27 @@ bool yunutyEngine::SoundSystem::CreateSoundGroup(unsigned long long groupIndex, 
 {
     return SingleInstance()->mCreateSoundGroup(groupIndex, name);
 }
+bool yunutyEngine::SoundSystem::EraseSoundGroup(unsigned long long groupIndex)
+{
+    auto soundSystem = SingleInstance();
+    if (groupIndex == 0 || !soundSystem->soundGroups.contains(groupIndex))
+    {
+        return false;
+    }
+
+    for (auto& [sound, idx] : soundSystem->soundGroupIndexMap)
+    {
+        if (idx == groupIndex)
+        {
+            sound->setSoundGroup(GetSoundGroup(0));
+            idx = 0;
+        }
+    }
+
+    soundSystem->soundGroups[groupIndex]->release();
+    soundSystem->soundGroups.erase(groupIndex);
+    return true;
+}
 FMOD::SoundGroup* yunutyEngine::SoundSystem::GetSoundGroup(unsigned long long groupIndex)
 {
     auto soundSystem = SingleInstance(); 
