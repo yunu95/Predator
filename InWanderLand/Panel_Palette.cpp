@@ -1174,7 +1174,7 @@ namespace application
                             continue;
                         }
 
-                        ImGui::PushID(("Light Name" + each->pod.name).c_str() + idx);
+                        ImGui::PushID(("Light Name" + each->pod.name + to_string(idx)).c_str());
                         if (ImGui::Selectable(each->pod.name.c_str(), palette::LightPalette::SingleInstance().GetSingleSelectedLight() == each))
                         {
                             palette::LightPalette::SingleInstance().SelectLight(each);
@@ -1297,7 +1297,7 @@ namespace application
                     int idx = 0;
                     for (auto& each : CameraData::GetInstances())
                     {
-                        ImGui::PushID(("Camera Name" + each->pod.name).c_str() + idx);
+                        ImGui::PushID(("Camera Name" + each->pod.name + to_string(idx)).c_str());
                         if (ImGui::Selectable(each->pod.name.c_str(), palette::CameraPalette::SingleInstance().GetSingleSelectedCamera() == each))
                         {
                             palette::CameraPalette::SingleInstance().SelectCamera(each);
@@ -1448,7 +1448,7 @@ namespace application
                             continue;
                         }
 
-                        ImGui::PushID(("Particle Name" + each->pod.name).c_str() + idx);
+                        ImGui::PushID(("Particle Name" + each->pod.name + to_string(idx)).c_str());
                         if (ImGui::Selectable(each->pod.name.c_str(), palette::ParticlePalette::SingleInstance().GetSingleSelectedParticle() == each))
                         {
                             palette::ParticlePalette::SingleInstance().SelectParticle(each);

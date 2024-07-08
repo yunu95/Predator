@@ -1044,7 +1044,7 @@ void PlayerController::SelectSkill(SkillType::Enum skillType)
         return;
     }
     // 이 부분은 협의가 필요함
-    if ((state == State::Peace) || (state == State::Cinematic)) return;
+    if ((state == State::Peace) || (state == State::Cinematic) || (TacticModeSystem::Instance().IsExecuting())) return;
     onSkillSelect[skillType]();
     switch (skillType)
     {

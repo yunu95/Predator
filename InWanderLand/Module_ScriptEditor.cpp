@@ -1521,7 +1521,7 @@ namespace application
             std::sort(sortedScriptList.begin(), sortedScriptList.end(), [](Script* a, Script* b) { return a->name < b->name; });
             for (auto each : sortedScriptList)
             {
-                ImGui::PushID(("Script_Name" + each->name).c_str() + idx);
+                ImGui::PushID(("Script_Name" + each->name + to_string(idx)).c_str());
 
                 if (ImGui::Selectable(each->name.c_str(), selectedData == each))
                 {

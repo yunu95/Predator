@@ -117,6 +117,12 @@ EnqueErrorType TacticModeSystem::EnqueueCommand(std::shared_ptr<UnitCommand> com
 {
     EnqueErrorType errorType = EnqueErrorType::NONE;
 
+    if (isExecuting)
+    {
+        errorType = EnqueErrorType::Executing;
+        return errorType;
+    }
+
     // 현재 들어온 명령을 수행하는 유닛이 준비가 되었는지 검사하는 코드
     if (command->GetUnit()->IsTacTicReady() == false)
     {

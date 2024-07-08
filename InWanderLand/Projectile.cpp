@@ -95,16 +95,20 @@ void Projectile::OnContentsStop()
 void Projectile::ExplodeAtCurrentPosition()
 {
     fbxObject->SetSelfActive(false);
-    StartCoroutine(ProjectileEffectCoroutine(std::weak_ptr<Unit>())).lock()->PushDestroyCallBack([this]()
-        {
-            if (!damagedVFX.expired())
-            {
-                FBXPool::Instance().Return(damagedVFX);
-            }
-            fbxObject->SetSelfActive(true);
-            ProjectilePool::SingleInstance().Return(GetWeakPtr<Projectile>());
-        });
     traveling = false;
+
+    if (owner.lock()->GetUnitTemplateData().pod.skinnedFBXName != "SKM_Monster2")
+    {
+        StartCoroutine(ProjectileEffectCoroutine(std::weak_ptr<Unit>())).lock()->PushDestroyCallBack([this]()
+            {
+                if (!damagedVFX.expired())
+                {
+                    FBXPool::Instance().Return(damagedVFX);
+                }
+                fbxObject->SetSelfActive(true);
+                ProjectilePool::SingleInstance().Return(GetWeakPtr<Projectile>());
+            });
+    }
 }
 
 coroutine::Coroutine Projectile::ProjectileEffectCoroutine(std::weak_ptr<Unit> opponent)
