@@ -16246,7 +16246,7 @@
             "imagePath": "Texture/Ingame/NewFolder/Button_Credit.png",
             "imagePriority": -1,
             "openTargets": [
-                1006
+                1008
             ],
             "closeTargets": [],
             "disablePropagationTargets": [],
@@ -16508,7 +16508,7 @@
             "imagePath": "Texture/Ingame/NewFolder/Button_GameQuit.png",
             "imagePriority": -1,
             "openTargets": [
-                1019
+                1021
             ],
             "closeTargets": [],
             "disablePropagationTargets": [],
@@ -19061,7 +19061,7 @@
                 150,
                 151
             ],
-            "numberFontSet": 971,
+            "numberFontSet": 973,
             "numberFontSetImages": [],
             "numberCeil": true,
             "numberShowZero": true,
@@ -19836,7 +19836,7 @@
                 154,
                 153
             ],
-            "numberFontSet": 971,
+            "numberFontSet": 973,
             "numberFontSetImages": [],
             "numberCeil": true,
             "numberShowZero": false,
@@ -21104,7 +21104,7 @@
             ],
             "uiIndex": 162,
             "parentUIIndex": 158,
-            "imagePath": "Texture/Ingame/NewFolder/Tooltip/ToolTipn_R.png",
+            "imagePath": "Texture/Ingame/NewFolder/Tooltip/ToolTipn_H.png",
             "imagePriority": 123456789,
             "openTargets": [],
             "closeTargets": [],
@@ -21881,7 +21881,7 @@
                 0.0,
                 0.0,
                 0.0,
-                0.0,
+                0.5,
                 0.0,
                 0.0,
                 0.0,
@@ -21953,7 +21953,7 @@
                 169,
                 170
             ],
-            "numberFontSet": 960,
+            "numberFontSet": 962,
             "numberFontSetImages": [],
             "numberCeil": true,
             "numberShowZero": false,
@@ -21988,8 +21988,8 @@
             "videoPath1": "",
             "videoPath2": "",
             "videoUnscaledDeltaTime": false,
-            "centerAlign": false,
-            "customFlags": 524288,
+            "centerAlign": true,
+            "customFlags": 17301504,
             "customFlags2": 0,
             "enumID": 23,
             "soundEnumID": 0
@@ -22656,7 +22656,7 @@
                 0.0,
                 0.0,
                 0.0,
-                0.0,
+                0.5,
                 0.0,
                 0.0,
                 0.0,
@@ -22728,7 +22728,7 @@
                 175,
                 176
             ],
-            "numberFontSet": 960,
+            "numberFontSet": 962,
             "numberFontSetImages": [],
             "numberCeil": true,
             "numberShowZero": false,
@@ -22763,8 +22763,8 @@
             "videoPath1": "",
             "videoPath2": "",
             "videoUnscaledDeltaTime": false,
-            "centerAlign": false,
-            "customFlags": 524288,
+            "centerAlign": true,
+            "customFlags": 17301504,
             "customFlags2": 0,
             "enumID": 26,
             "soundEnumID": 0
@@ -27291,7 +27291,7 @@
                 213,
                 214
             ],
-            "numberFontSet": 971,
+            "numberFontSet": 973,
             "numberFontSetImages": [],
             "numberCeil": true,
             "numberShowZero": true,
@@ -28066,7 +28066,7 @@
                 217,
                 216
             ],
-            "numberFontSet": 971,
+            "numberFontSet": 973,
             "numberFontSetImages": [],
             "numberCeil": true,
             "numberShowZero": false,
@@ -29334,7 +29334,7 @@
             ],
             "uiIndex": 225,
             "parentUIIndex": 221,
-            "imagePath": "Texture/Ingame/NewFolder/Tooltip/ToolTipn_R.png",
+            "imagePath": "Texture/Ingame/NewFolder/Tooltip/ToolTipn_H.png",
             "imagePriority": 123456789,
             "openTargets": [],
             "closeTargets": [],
@@ -30111,7 +30111,7 @@
                 0.0,
                 0.0,
                 0.0,
-                0.0,
+                0.5,
                 0.0,
                 0.0,
                 0.0,
@@ -30183,7 +30183,7 @@
                 232,
                 233
             ],
-            "numberFontSet": 960,
+            "numberFontSet": 962,
             "numberFontSetImages": [],
             "numberCeil": true,
             "numberShowZero": false,
@@ -30218,8 +30218,8 @@
             "videoPath1": "",
             "videoPath2": "",
             "videoUnscaledDeltaTime": false,
-            "centerAlign": false,
-            "customFlags": 524288,
+            "centerAlign": true,
+            "customFlags": 17301504,
             "customFlags2": 0,
             "enumID": 23,
             "soundEnumID": 0
@@ -30886,7 +30886,7 @@
                 0.0,
                 0.0,
                 0.0,
-                0.0,
+                0.5,
                 0.0,
                 0.0,
                 0.0,
@@ -30958,7 +30958,7 @@
                 238,
                 239
             ],
-            "numberFontSet": 960,
+            "numberFontSet": 962,
             "numberFontSetImages": [],
             "numberCeil": true,
             "numberShowZero": false,
@@ -30993,8 +30993,8 @@
             "videoPath1": "",
             "videoPath2": "",
             "videoUnscaledDeltaTime": false,
-            "centerAlign": false,
-            "customFlags": 524288,
+            "centerAlign": true,
+            "customFlags": 17301504,
             "customFlags2": 0,
             "enumID": 26,
             "soundEnumID": 0
@@ -35521,7 +35521,7 @@
                 276,
                 277
             ],
-            "numberFontSet": 971,
+            "numberFontSet": 973,
             "numberFontSetImages": [],
             "numberCeil": true,
             "numberShowZero": true,
@@ -36296,7 +36296,7 @@
                 280,
                 279
             ],
-            "numberFontSet": 971,
+            "numberFontSet": 973,
             "numberFontSetImages": [],
             "numberCeil": true,
             "numberShowZero": false,
@@ -37564,7 +37564,7 @@
             ],
             "uiIndex": 288,
             "parentUIIndex": 284,
-            "imagePath": "Texture/Ingame/NewFolder/Tooltip/ToolTipn_R.png",
+            "imagePath": "Texture/Ingame/NewFolder/Tooltip/ToolTipn_H.png",
             "imagePriority": 123456789,
             "openTargets": [],
             "closeTargets": [],
@@ -38341,7 +38341,7 @@
                 0.0,
                 0.0,
                 0.0,
-                0.0,
+                0.5,
                 0.0,
                 0.0,
                 0.0,
@@ -38413,7 +38413,7 @@
                 295,
                 296
             ],
-            "numberFontSet": 960,
+            "numberFontSet": 962,
             "numberFontSetImages": [],
             "numberCeil": true,
             "numberShowZero": false,
@@ -38448,8 +38448,8 @@
             "videoPath1": "",
             "videoPath2": "",
             "videoUnscaledDeltaTime": false,
-            "centerAlign": false,
-            "customFlags": 524288,
+            "centerAlign": true,
+            "customFlags": 17301504,
             "customFlags2": 0,
             "enumID": 23,
             "soundEnumID": 0
@@ -39116,7 +39116,7 @@
                 0.0,
                 0.0,
                 0.0,
-                0.0,
+                0.5,
                 0.0,
                 0.0,
                 0.0,
@@ -39188,7 +39188,7 @@
                 301,
                 302
             ],
-            "numberFontSet": 960,
+            "numberFontSet": 962,
             "numberFontSetImages": [],
             "numberCeil": true,
             "numberShowZero": false,
@@ -39223,8 +39223,8 @@
             "videoPath1": "",
             "videoPath2": "",
             "videoUnscaledDeltaTime": false,
-            "centerAlign": false,
-            "customFlags": 524288,
+            "centerAlign": true,
+            "customFlags": 17301504,
             "customFlags2": 0,
             "enumID": 26,
             "soundEnumID": 0
@@ -47311,7 +47311,7 @@
                 367,
                 368
             ],
-            "numberFontSet": 971,
+            "numberFontSet": 973,
             "numberFontSetImages": [],
             "numberCeil": false,
             "numberShowZero": false,
@@ -48086,7 +48086,7 @@
                 371,
                 370
             ],
-            "numberFontSet": 971,
+            "numberFontSet": 973,
             "numberFontSetImages": [],
             "numberCeil": true,
             "numberShowZero": false,
@@ -50342,7 +50342,7 @@
                 390,
                 391
             ],
-            "numberFontSet": 971,
+            "numberFontSet": 973,
             "numberFontSetImages": [],
             "numberCeil": true,
             "numberShowZero": true,
@@ -51117,7 +51117,7 @@
                 394,
                 393
             ],
-            "numberFontSet": 971,
+            "numberFontSet": 973,
             "numberFontSetImages": [],
             "numberCeil": true,
             "numberShowZero": false,
@@ -53162,7 +53162,7 @@
                 0.0,
                 0.0,
                 0.0,
-                0.0,
+                0.5,
                 0.0,
                 0.0,
                 0.0,
@@ -53234,7 +53234,7 @@
                 409,
                 410
             ],
-            "numberFontSet": 960,
+            "numberFontSet": 962,
             "numberFontSetImages": [],
             "numberCeil": true,
             "numberShowZero": false,
@@ -53269,8 +53269,8 @@
             "videoPath1": "",
             "videoPath2": "",
             "videoUnscaledDeltaTime": false,
-            "centerAlign": false,
-            "customFlags": 524288,
+            "centerAlign": true,
+            "customFlags": 17301504,
             "customFlags2": 0,
             "enumID": 23,
             "soundEnumID": 0
@@ -53937,7 +53937,7 @@
                 0.0,
                 0.0,
                 0.0,
-                0.0,
+                0.5,
                 0.0,
                 0.0,
                 0.0,
@@ -54009,7 +54009,7 @@
                 415,
                 416
             ],
-            "numberFontSet": 960,
+            "numberFontSet": 962,
             "numberFontSetImages": [],
             "numberCeil": true,
             "numberShowZero": false,
@@ -54044,8 +54044,8 @@
             "videoPath1": "",
             "videoPath2": "",
             "videoUnscaledDeltaTime": false,
-            "centerAlign": false,
-            "customFlags": 524288,
+            "centerAlign": true,
+            "customFlags": 17301504,
             "customFlags2": 0,
             "enumID": 26,
             "soundEnumID": 0
@@ -58566,7 +58566,7 @@
                 453,
                 454
             ],
-            "numberFontSet": 971,
+            "numberFontSet": 973,
             "numberFontSetImages": [],
             "numberCeil": true,
             "numberShowZero": true,
@@ -59341,7 +59341,7 @@
                 457,
                 456
             ],
-            "numberFontSet": 971,
+            "numberFontSet": 973,
             "numberFontSetImages": [],
             "numberCeil": true,
             "numberShowZero": false,
@@ -60609,7 +60609,7 @@
             ],
             "uiIndex": 465,
             "parentUIIndex": 461,
-            "imagePath": "Texture/Ingame/NewFolder/Tooltip/ToolTipn_R.png",
+            "imagePath": "Texture/Ingame/NewFolder/Tooltip/ToolTipn_U.png",
             "imagePriority": 123456789,
             "openTargets": [],
             "closeTargets": [],
@@ -61386,7 +61386,7 @@
                 0.0,
                 0.0,
                 0.0,
-                0.0,
+                0.5,
                 0.0,
                 0.0,
                 0.0,
@@ -61458,7 +61458,7 @@
                 472,
                 473
             ],
-            "numberFontSet": 960,
+            "numberFontSet": 962,
             "numberFontSetImages": [],
             "numberCeil": true,
             "numberShowZero": false,
@@ -61493,8 +61493,8 @@
             "videoPath1": "",
             "videoPath2": "",
             "videoUnscaledDeltaTime": false,
-            "centerAlign": false,
-            "customFlags": 524288,
+            "centerAlign": true,
+            "customFlags": 17301504,
             "customFlags2": 0,
             "enumID": 23,
             "soundEnumID": 0
@@ -62161,7 +62161,7 @@
                 0.0,
                 0.0,
                 0.0,
-                0.0,
+                0.5,
                 0.0,
                 0.0,
                 0.0,
@@ -62233,7 +62233,7 @@
                 478,
                 479
             ],
-            "numberFontSet": 960,
+            "numberFontSet": 962,
             "numberFontSetImages": [],
             "numberCeil": true,
             "numberShowZero": false,
@@ -62268,8 +62268,8 @@
             "videoPath1": "",
             "videoPath2": "",
             "videoUnscaledDeltaTime": false,
-            "centerAlign": false,
-            "customFlags": 524288,
+            "centerAlign": true,
+            "customFlags": 17301504,
             "customFlags2": 0,
             "enumID": 26,
             "soundEnumID": 0
@@ -66790,7 +66790,7 @@
                 516,
                 517
             ],
-            "numberFontSet": 971,
+            "numberFontSet": 973,
             "numberFontSetImages": [],
             "numberCeil": true,
             "numberShowZero": true,
@@ -67565,7 +67565,7 @@
                 520,
                 519
             ],
-            "numberFontSet": 971,
+            "numberFontSet": 973,
             "numberFontSetImages": [],
             "numberCeil": true,
             "numberShowZero": false,
@@ -68833,7 +68833,7 @@
             ],
             "uiIndex": 528,
             "parentUIIndex": 524,
-            "imagePath": "Texture/Ingame/NewFolder/Tooltip/ToolTipn_R.png",
+            "imagePath": "Texture/Ingame/NewFolder/Tooltip/ToolTipn_H.png",
             "imagePriority": 123456789,
             "openTargets": [],
             "closeTargets": [],
@@ -69610,7 +69610,7 @@
                 0.0,
                 0.0,
                 0.0,
-                0.0,
+                0.5,
                 0.0,
                 0.0,
                 0.0,
@@ -69682,7 +69682,7 @@
                 535,
                 536
             ],
-            "numberFontSet": 960,
+            "numberFontSet": 962,
             "numberFontSetImages": [],
             "numberCeil": true,
             "numberShowZero": false,
@@ -69717,8 +69717,8 @@
             "videoPath1": "",
             "videoPath2": "",
             "videoUnscaledDeltaTime": false,
-            "centerAlign": false,
-            "customFlags": 524288,
+            "centerAlign": true,
+            "customFlags": 17301504,
             "customFlags2": 0,
             "enumID": 23,
             "soundEnumID": 0
@@ -70385,7 +70385,7 @@
                 0.0,
                 0.0,
                 0.0,
-                0.0,
+                0.5,
                 0.0,
                 0.0,
                 0.0,
@@ -70457,7 +70457,7 @@
                 541,
                 542
             ],
-            "numberFontSet": 960,
+            "numberFontSet": 962,
             "numberFontSetImages": [],
             "numberCeil": true,
             "numberShowZero": false,
@@ -70492,8 +70492,8 @@
             "videoPath1": "",
             "videoPath2": "",
             "videoUnscaledDeltaTime": false,
-            "centerAlign": false,
-            "customFlags": 524288,
+            "centerAlign": true,
+            "customFlags": 17301504,
             "customFlags2": 0,
             "enumID": 26,
             "soundEnumID": 0
@@ -74267,7 +74267,7 @@
                 0.0,
                 0.0,
                 0.0,
-                0.0,
+                0.5,
                 0.0,
                 0.0,
                 0.0,
@@ -74339,7 +74339,7 @@
                 571,
                 572
             ],
-            "numberFontSet": 960,
+            "numberFontSet": 973,
             "numberFontSetImages": [],
             "numberCeil": true,
             "numberShowZero": false,
@@ -74374,8 +74374,8 @@
             "videoPath1": "",
             "videoPath2": "",
             "videoUnscaledDeltaTime": false,
-            "centerAlign": false,
-            "customFlags": 524288,
+            "centerAlign": true,
+            "customFlags": 17301504,
             "customFlags2": 0,
             "enumID": 29,
             "soundEnumID": 0
@@ -75367,7 +75367,7 @@
                 582,
                 583
             ],
-            "numberFontSet": 971,
+            "numberFontSet": 973,
             "numberFontSetImages": [],
             "numberCeil": false,
             "numberShowZero": false,
@@ -76142,7 +76142,7 @@
                 586,
                 585
             ],
-            "numberFontSet": 971,
+            "numberFontSet": 973,
             "numberFontSetImages": [],
             "numberCeil": true,
             "numberShowZero": false,
@@ -77843,7 +77843,7 @@
                 600,
                 601
             ],
-            "numberFontSet": 960,
+            "numberFontSet": 995,
             "numberFontSetImages": [],
             "numberCeil": true,
             "numberShowZero": true,
@@ -79022,7 +79022,7 @@
                 607,
                 608
             ],
-            "numberFontSet": 960,
+            "numberFontSet": 995,
             "numberFontSetImages": [],
             "numberCeil": true,
             "numberShowZero": true,
@@ -79554,7 +79554,7 @@
                 611,
                 612
             ],
-            "numberFontSet": 960,
+            "numberFontSet": 995,
             "numberFontSetImages": [],
             "numberCeil": true,
             "numberShowZero": true,
@@ -80356,7 +80356,7 @@
                 617,
                 618
             ],
-            "numberFontSet": 960,
+            "numberFontSet": 995,
             "numberFontSetImages": [],
             "numberCeil": true,
             "numberShowZero": true,
@@ -80888,7 +80888,7 @@
                 621,
                 622
             ],
-            "numberFontSet": 960,
+            "numberFontSet": 995,
             "numberFontSetImages": [],
             "numberCeil": true,
             "numberShowZero": true,
@@ -81690,7 +81690,7 @@
                 627,
                 628
             ],
-            "numberFontSet": 960,
+            "numberFontSet": 995,
             "numberFontSetImages": [],
             "numberCeil": true,
             "numberShowZero": true,
@@ -82222,7 +82222,7 @@
                 631,
                 632
             ],
-            "numberFontSet": 960,
+            "numberFontSet": 995,
             "numberFontSetImages": [],
             "numberCeil": true,
             "numberShowZero": true,
@@ -83637,7 +83637,7 @@
             "imagePath": "Texture/Ingame/NewFolder/Button_Restart.png",
             "imagePriority": -1,
             "openTargets": [
-                953
+                955
             ],
             "closeTargets": [],
             "disablePropagationTargets": [],
@@ -86291,7 +86291,7 @@
                 663,
                 662
             ],
-            "numberFontSet": 982,
+            "numberFontSet": 984,
             "numberFontSetImages": [],
             "numberCeil": true,
             "numberShowZero": true,
@@ -109221,7 +109221,8 @@
             "closeTargets": [],
             "disablePropagationTargets": [
                 838,
-                841
+                841,
+                843
             ],
             "enablePropagationTargets": [
                 838
@@ -109451,7 +109452,7 @@
                 0.0,
                 0.0,
                 2164.771728515625,
-                2085.228515625,
+                1943.8504638671875,
                 0.0,
                 0.0,
                 0.0,
@@ -109500,7 +109501,7 @@
             ],
             "anchoredPosition": [
                 122.3795166015625,
-                -437.45025634765627
+                -431.93511962890627
             ],
             "enableOffset": [],
             "disableOffset": [],
@@ -109737,9 +109738,11 @@
             "parentUIIndex": 837,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
-            "openTargets": [],
+            "openTargets": [
+                843
+            ],
             "closeTargets": [
-                837
+                841
             ],
             "disablePropagationTargets": [],
             "enablePropagationTargets": [],
@@ -109942,7 +109945,7 @@
             "soundEnumID": 0
         },
         {
-            "uiName": "Skillup",
+            "uiName": "first tutorial (5)",
             "floats": [
                 0.0,
                 0.0,
@@ -109994,16 +109997,276 @@
                 0.0
             ],
             "uiIndex": 843,
+            "parentUIIndex": 837,
+            "imagePath": "Texture/plainWhite.png",
+            "imagePriority": -1,
+            "openTargets": [],
+            "closeTargets": [
+                837
+            ],
+            "disablePropagationTargets": [],
+            "enablePropagationTargets": [],
+            "hoverEnableTargets": [],
+            "color": [
+                0.0,
+                0.0,
+                0.0,
+                0.003921568859368563
+            ],
+            "pivot": [
+                0.0,
+                1.0
+            ],
+            "anchor": [
+                0.0,
+                1.0
+            ],
+            "anchoredPosition": [
+                0.0,
+                0.0
+            ],
+            "enableOffset": [],
+            "disableOffset": [],
+            "popUpX": false,
+            "popUpY": false,
+            "popUpZ": false,
+            "popDownX": false,
+            "popDownY": false,
+            "popDownZ": false,
+            "numberDigits": [],
+            "numberFontSet": 0,
+            "numberFontSetImages": [],
+            "numberCeil": false,
+            "numberShowZero": false,
+            "soundOnClick": "",
+            "soundOnHover": "",
+            "soundOnEnable": "sounds/Btn/Sound on off.mp3",
+            "soundOnDisable": "",
+            "enableCurveType": 0,
+            "disableCurveType": 0,
+            "dependentUpgrade": -1,
+            "linearClipOnEnableStart": [],
+            "linearClipOnEnableDir": [],
+            "linearClipOnEnableCurveType": 0,
+            "linearClipOnDisableStart": [],
+            "linearClipOnDisableDir": [],
+            "linearClipOnDisableCurveType": 0,
+            "colorTintOnEnableStart": [],
+            "colorTintOnEnableEnd": [],
+            "colorTintOnEnableCurveType": 0,
+            "colorTintOnDisableStart": [],
+            "colorTintOnDisableEnd": [],
+            "colorTintOnDisableCurveType": 0,
+            "barCells_CellNumber": 0,
+            "disableOnStartEdtior": true,
+            "disableOnStartExe": true,
+            "musicPlayOnEnable_musicClip": "",
+            "musicPlayOnDisable_musicClip": "",
+            "exclusiveEnableGroup": [],
+            "animatedSpriteFolderPath": "",
+            "animatedSpriteIsRepeat": false,
+            "duplicate_poolable": false,
+            "videoPath1": "",
+            "videoPath2": "",
+            "videoUnscaledDeltaTime": false,
+            "centerAlign": false,
+            "customFlags": 4195079,
+            "customFlags2": 0,
+            "enumID": 0,
+            "soundEnumID": 0
+        },
+        {
+            "uiName": "message",
+            "floats": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                800.0,
+                180.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "uiIndex": 844,
+            "parentUIIndex": 843,
+            "imagePath": "Texture/Ingame/NewFolder/TutorialAsset/TutorialScript_Tactical6.png",
+            "imagePriority": -1,
+            "openTargets": [],
+            "closeTargets": [],
+            "disablePropagationTargets": [],
+            "enablePropagationTargets": [],
+            "hoverEnableTargets": [],
+            "color": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+            ],
+            "pivot": [
+                0.5,
+                0.5
+            ],
+            "anchor": [
+                0.5,
+                0.5
+            ],
+            "anchoredPosition": [
+                53.0,
+                -142.0
+            ],
+            "enableOffset": [],
+            "disableOffset": [],
+            "popUpX": false,
+            "popUpY": false,
+            "popUpZ": false,
+            "popDownX": false,
+            "popDownY": false,
+            "popDownZ": false,
+            "numberDigits": [],
+            "numberFontSet": 0,
+            "numberFontSetImages": [],
+            "numberCeil": false,
+            "numberShowZero": false,
+            "soundOnClick": "",
+            "soundOnHover": "",
+            "soundOnEnable": "",
+            "soundOnDisable": "",
+            "enableCurveType": 0,
+            "disableCurveType": 0,
+            "dependentUpgrade": -1,
+            "linearClipOnEnableStart": [],
+            "linearClipOnEnableDir": [],
+            "linearClipOnEnableCurveType": 0,
+            "linearClipOnDisableStart": [],
+            "linearClipOnDisableDir": [],
+            "linearClipOnDisableCurveType": 0,
+            "colorTintOnEnableStart": [],
+            "colorTintOnEnableEnd": [],
+            "colorTintOnEnableCurveType": 0,
+            "colorTintOnDisableStart": [],
+            "colorTintOnDisableEnd": [],
+            "colorTintOnDisableCurveType": 0,
+            "barCells_CellNumber": 0,
+            "disableOnStartEdtior": false,
+            "disableOnStartExe": false,
+            "musicPlayOnEnable_musicClip": "",
+            "musicPlayOnDisable_musicClip": "",
+            "exclusiveEnableGroup": [],
+            "animatedSpriteFolderPath": "",
+            "animatedSpriteIsRepeat": false,
+            "duplicate_poolable": false,
+            "videoPath1": "",
+            "videoPath2": "",
+            "videoUnscaledDeltaTime": false,
+            "centerAlign": false,
+            "customFlags": 131072,
+            "customFlags2": 0,
+            "enumID": 0,
+            "soundEnumID": 0
+        },
+        {
+            "uiName": "Skillup",
+            "floats": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1920.0,
+                1080.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "uiIndex": 845,
             "parentUIIndex": -1,
             "imagePath": "",
             "imagePriority": -1,
             "openTargets": [],
             "closeTargets": [],
             "disablePropagationTargets": [
-                844
+                846
             ],
             "enablePropagationTargets": [
-                844
+                846
             ],
             "hoverEnableTargets": [],
             "color": [],
@@ -110121,13 +110384,13 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 844,
-            "parentUIIndex": 843,
+            "uiIndex": 846,
+            "parentUIIndex": 845,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
             "openTargets": [],
             "closeTargets": [
-                843
+                845
             ],
             "disablePropagationTargets": [],
             "enablePropagationTargets": [],
@@ -110226,9 +110489,9 @@
                 0.0,
                 0.0,
                 0.0,
-                89.99983215332031,
-                2111.636962890625,
-                3220.470703125,
+                0.0,
+                3136.0302734375,
+                2893.80712890625,
                 0.0,
                 0.0,
                 0.0,
@@ -110252,8 +110515,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 845,
-            "parentUIIndex": 844,
+            "uiIndex": 847,
+            "parentUIIndex": 846,
             "imagePath": "Texture/Ingame/NewFolder/TutorialAsset/highlighting torus.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -110276,8 +110539,8 @@
                 0.5
             ],
             "anchoredPosition": [
-                609.09716796875,
-                -501.0048828125
+                608.025146484375,
+                -503.304931640625
             ],
             "enableOffset": [],
             "disableOffset": [],
@@ -110381,8 +110644,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 846,
-            "parentUIIndex": 844,
+            "uiIndex": 848,
+            "parentUIIndex": 846,
             "imagePath": "Texture/Ingame/NewFolder/TutorialAsset/TutorialScript_SkillUp1.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -110510,17 +110773,17 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 847,
+            "uiIndex": 849,
             "parentUIIndex": -1,
             "imagePath": "",
             "imagePriority": -1,
             "openTargets": [],
             "closeTargets": [],
             "disablePropagationTargets": [
-                848
+                850
             ],
             "enablePropagationTargets": [
-                848
+                850
             ],
             "hoverEnableTargets": [],
             "color": [],
@@ -110638,13 +110901,13 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 848,
-            "parentUIIndex": 847,
+            "uiIndex": 850,
+            "parentUIIndex": 849,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
             "openTargets": [],
             "closeTargets": [
-                847
+                849
             ],
             "disablePropagationTargets": [],
             "enablePropagationTargets": [],
@@ -110769,8 +111032,8 @@
                 0.0,
                 5.0
             ],
-            "uiIndex": 849,
-            "parentUIIndex": 848,
+            "uiIndex": 851,
+            "parentUIIndex": 850,
             "imagePath": "Texture/Ingame/NewFolder/Portrait_Robin.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -110898,8 +111161,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 850,
-            "parentUIIndex": 848,
+            "uiIndex": 852,
+            "parentUIIndex": 850,
             "imagePath": "Texture/Ingame/NewFolder/TutorialAsset/2StageScript1.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -111027,18 +111290,18 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 851,
+            "uiIndex": 853,
             "parentUIIndex": -1,
             "imagePath": "",
             "imagePriority": -1,
             "openTargets": [],
             "closeTargets": [],
             "disablePropagationTargets": [
-                852,
-                855
+                854,
+                857
             ],
             "enablePropagationTargets": [
-                852
+                854
             ],
             "hoverEnableTargets": [],
             "color": [],
@@ -111156,15 +111419,15 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 852,
-            "parentUIIndex": 851,
+            "uiIndex": 854,
+            "parentUIIndex": 853,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
             "openTargets": [
-                855
+                857
             ],
             "closeTargets": [
-                852
+                854
             ],
             "disablePropagationTargets": [],
             "enablePropagationTargets": [],
@@ -111289,8 +111552,8 @@
                 0.0,
                 5.0
             ],
-            "uiIndex": 853,
-            "parentUIIndex": 852,
+            "uiIndex": 855,
+            "parentUIIndex": 854,
             "imagePath": "Texture/Ingame/NewFolder/Portrait_Ursula.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -111418,8 +111681,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 854,
-            "parentUIIndex": 852,
+            "uiIndex": 856,
+            "parentUIIndex": 854,
             "imagePath": "Texture/Ingame/NewFolder/TutorialAsset/2StageScript2.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -111547,13 +111810,13 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 855,
-            "parentUIIndex": 851,
+            "uiIndex": 857,
+            "parentUIIndex": 853,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
             "openTargets": [],
             "closeTargets": [
-                851
+                853
             ],
             "disablePropagationTargets": [],
             "enablePropagationTargets": [],
@@ -111678,8 +111941,8 @@
                 0.0,
                 5.0
             ],
-            "uiIndex": 856,
-            "parentUIIndex": 855,
+            "uiIndex": 858,
+            "parentUIIndex": 857,
             "imagePath": "Texture/Ingame/NewFolder/Portrait_Hansel.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -111807,8 +112070,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 857,
-            "parentUIIndex": 855,
+            "uiIndex": 859,
+            "parentUIIndex": 857,
             "imagePath": "Texture/Ingame/NewFolder/TutorialAsset/2StageScript3.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -111936,19 +112199,19 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 858,
+            "uiIndex": 860,
             "parentUIIndex": -1,
             "imagePath": "",
             "imagePriority": -1,
             "openTargets": [],
             "closeTargets": [],
             "disablePropagationTargets": [
-                859,
                 861,
-                864
+                863,
+                866
             ],
             "enablePropagationTargets": [
-                859
+                861
             ],
             "hoverEnableTargets": [],
             "color": [],
@@ -112066,15 +112329,15 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 859,
-            "parentUIIndex": 858,
+            "uiIndex": 861,
+            "parentUIIndex": 860,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
             "openTargets": [
-                861
+                863
             ],
             "closeTargets": [
-                859
+                861
             ],
             "disablePropagationTargets": [],
             "enablePropagationTargets": [],
@@ -112199,8 +112462,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 860,
-            "parentUIIndex": 859,
+            "uiIndex": 862,
+            "parentUIIndex": 861,
             "imagePath": "Texture/Ingame/NewFolder/TutorialAsset/TutorialScript_Tactical1.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -112328,15 +112591,15 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 861,
-            "parentUIIndex": 858,
+            "uiIndex": 863,
+            "parentUIIndex": 860,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
             "openTargets": [
-                864
+                866
             ],
             "closeTargets": [
-                861
+                863
             ],
             "disablePropagationTargets": [],
             "enablePropagationTargets": [],
@@ -112435,9 +112698,9 @@
                 0.0,
                 0.0,
                 0.0,
-                89.99983215332031,
-                3115.81005859375,
-                2956.923828125,
+                0.0,
+                2951.90869140625,
+                2591.63818359375,
                 0.0,
                 0.0,
                 0.0,
@@ -112461,8 +112724,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 862,
-            "parentUIIndex": 861,
+            "uiIndex": 864,
+            "parentUIIndex": 863,
             "imagePath": "Texture/Ingame/NewFolder/TutorialAsset/highlighting torus.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -112485,8 +112748,8 @@
                 0.5
             ],
             "anchoredPosition": [
-                -272.4259033203125,
-                -477.61883544921877
+                -515.9644775390625,
+                -474.6708984375
             ],
             "enableOffset": [],
             "disableOffset": [],
@@ -112590,8 +112853,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 863,
-            "parentUIIndex": 861,
+            "uiIndex": 865,
+            "parentUIIndex": 863,
             "imagePath": "Texture/Ingame/NewFolder/TutorialAsset/TutorialScript_Tactical2.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -112719,13 +112982,13 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 864,
-            "parentUIIndex": 858,
+            "uiIndex": 866,
+            "parentUIIndex": 860,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
             "openTargets": [],
             "closeTargets": [
-                858
+                860
             ],
             "disablePropagationTargets": [],
             "enablePropagationTargets": [],
@@ -112850,8 +113113,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 865,
-            "parentUIIndex": 864,
+            "uiIndex": 867,
+            "parentUIIndex": 866,
             "imagePath": "Texture/Ingame/NewFolder/TutorialAsset/TutorialScript_Tactical3.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -112979,13 +113242,13 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 866,
-            "parentUIIndex": 858,
+            "uiIndex": 868,
+            "parentUIIndex": 860,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
             "openTargets": [],
             "closeTargets": [
-                858
+                860
             ],
             "disablePropagationTargets": [],
             "enablePropagationTargets": [],
@@ -113110,8 +113373,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 867,
-            "parentUIIndex": 866,
+            "uiIndex": 869,
+            "parentUIIndex": 868,
             "imagePath": "Texture/Ingame/NewFolder/TutorialAsset/TutorialScript_Tactical4.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -113239,13 +113502,13 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 868,
-            "parentUIIndex": 858,
+            "uiIndex": 870,
+            "parentUIIndex": 860,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
             "openTargets": [],
             "closeTargets": [
-                858
+                860
             ],
             "disablePropagationTargets": [],
             "enablePropagationTargets": [],
@@ -113370,8 +113633,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 869,
-            "parentUIIndex": 868,
+            "uiIndex": 871,
+            "parentUIIndex": 870,
             "imagePath": "Texture/Ingame/NewFolder/TutorialAsset/TutorialScript_Tactical5.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -113499,7 +113762,7 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 870,
+            "uiIndex": 872,
             "parentUIIndex": -1,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
@@ -113628,8 +113891,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 871,
-            "parentUIIndex": 870,
+            "uiIndex": 873,
+            "parentUIIndex": 872,
             "imagePath": "Texture/Ingame/NewFolder/TutorialAsset/highlighting torus.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -113757,8 +114020,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 872,
-            "parentUIIndex": 870,
+            "uiIndex": 874,
+            "parentUIIndex": 872,
             "imagePath": "Texture/Ingame/NewFolder/PopUp_Restart.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -113886,8 +114149,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 873,
-            "parentUIIndex": 870,
+            "uiIndex": 875,
+            "parentUIIndex": 872,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -114015,8 +114278,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 874,
-            "parentUIIndex": 870,
+            "uiIndex": 876,
+            "parentUIIndex": 872,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -114144,8 +114407,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 875,
-            "parentUIIndex": 870,
+            "uiIndex": 877,
+            "parentUIIndex": 872,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -114273,8 +114536,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 876,
-            "parentUIIndex": 870,
+            "uiIndex": 878,
+            "parentUIIndex": 872,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -114402,7 +114665,7 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 877,
+            "uiIndex": 879,
             "parentUIIndex": -1,
             "imagePath": "",
             "imagePriority": -1,
@@ -114526,8 +114789,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 878,
-            "parentUIIndex": 877,
+            "uiIndex": 880,
+            "parentUIIndex": 879,
             "imagePath": "Texture/Ingame/NewFolder/TutorialAsset/TutorialScript_Revive.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -114655,7 +114918,7 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 879,
+            "uiIndex": 881,
             "parentUIIndex": -1,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
@@ -114784,8 +115047,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 880,
-            "parentUIIndex": 879,
+            "uiIndex": 882,
+            "parentUIIndex": 881,
             "imagePath": "Texture/Ingame/NewFolder/TutorialAsset/highlighting torus.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -114913,8 +115176,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 881,
-            "parentUIIndex": 879,
+            "uiIndex": 883,
+            "parentUIIndex": 881,
             "imagePath": "Texture/Ingame/NewFolder/PopUp_Restart.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -115042,7 +115305,7 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 882,
+            "uiIndex": 884,
             "parentUIIndex": -1,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
@@ -115171,8 +115434,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 883,
-            "parentUIIndex": 882,
+            "uiIndex": 885,
+            "parentUIIndex": 884,
             "imagePath": "Texture/Ingame/NewFolder/TutorialAsset/highlighting torus.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -115300,8 +115563,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 884,
-            "parentUIIndex": 882,
+            "uiIndex": 886,
+            "parentUIIndex": 884,
             "imagePath": "Texture/Ingame/NewFolder/PopUp_Restart.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -115429,8 +115692,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 885,
-            "parentUIIndex": 882,
+            "uiIndex": 887,
+            "parentUIIndex": 884,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -115558,8 +115821,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 886,
-            "parentUIIndex": 882,
+            "uiIndex": 888,
+            "parentUIIndex": 884,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -115687,8 +115950,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 887,
-            "parentUIIndex": 882,
+            "uiIndex": 889,
+            "parentUIIndex": 884,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -115816,8 +116079,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 888,
-            "parentUIIndex": 882,
+            "uiIndex": 890,
+            "parentUIIndex": 884,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -115945,7 +116208,7 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 889,
+            "uiIndex": 891,
             "parentUIIndex": -1,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
@@ -116074,8 +116337,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 890,
-            "parentUIIndex": 889,
+            "uiIndex": 892,
+            "parentUIIndex": 891,
             "imagePath": "Texture/Ingame/NewFolder/TutorialAsset/highlighting torus.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -116203,8 +116466,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 891,
-            "parentUIIndex": 889,
+            "uiIndex": 893,
+            "parentUIIndex": 891,
             "imagePath": "Texture/Ingame/NewFolder/PopUp_Restart.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -116332,22 +116595,22 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 892,
+            "uiIndex": 894,
             "parentUIIndex": -1,
             "imagePath": "",
             "imagePriority": -1,
             "openTargets": [],
             "closeTargets": [],
             "disablePropagationTargets": [
-                893,
-                896,
-                899,
-                902,
-                905,
-                907
+                895,
+                898,
+                901,
+                904,
+                907,
+                909
             ],
             "enablePropagationTargets": [
-                893
+                895
             ],
             "hoverEnableTargets": [],
             "color": [],
@@ -116465,15 +116728,15 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 893,
-            "parentUIIndex": 892,
+            "uiIndex": 895,
+            "parentUIIndex": 894,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
             "openTargets": [
-                896
+                898
             ],
             "closeTargets": [
-                893
+                895
             ],
             "disablePropagationTargets": [],
             "enablePropagationTargets": [],
@@ -116598,8 +116861,8 @@
                 0.0,
                 5.0
             ],
-            "uiIndex": 894,
-            "parentUIIndex": 893,
+            "uiIndex": 896,
+            "parentUIIndex": 895,
             "imagePath": "Texture/Ingame/NewFolder/Portrait_Robin.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -116727,8 +116990,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 895,
-            "parentUIIndex": 893,
+            "uiIndex": 897,
+            "parentUIIndex": 895,
             "imagePath": "Texture/Ingame/NewFolder/TutorialAsset/BossScript1.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -116856,15 +117119,15 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 896,
-            "parentUIIndex": 892,
+            "uiIndex": 898,
+            "parentUIIndex": 894,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
             "openTargets": [
-                899
+                901
             ],
             "closeTargets": [
-                896
+                898
             ],
             "disablePropagationTargets": [],
             "enablePropagationTargets": [],
@@ -116989,8 +117252,8 @@
                 0.0,
                 5.0
             ],
-            "uiIndex": 897,
-            "parentUIIndex": 896,
+            "uiIndex": 899,
+            "parentUIIndex": 898,
             "imagePath": "Texture/Ingame/NewFolder/Portrait_Ursula.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -117118,8 +117381,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 898,
-            "parentUIIndex": 896,
+            "uiIndex": 900,
+            "parentUIIndex": 898,
             "imagePath": "Texture/Ingame/NewFolder/TutorialAsset/BossScript2.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -117247,15 +117510,15 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 899,
-            "parentUIIndex": 892,
+            "uiIndex": 901,
+            "parentUIIndex": 894,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
             "openTargets": [
-                902
+                904
             ],
             "closeTargets": [
-                899
+                901
             ],
             "disablePropagationTargets": [],
             "enablePropagationTargets": [],
@@ -117380,8 +117643,8 @@
                 0.0,
                 5.0
             ],
-            "uiIndex": 900,
-            "parentUIIndex": 899,
+            "uiIndex": 902,
+            "parentUIIndex": 901,
             "imagePath": "Texture/Ingame/NewFolder/Portrait_Ursula.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -117509,8 +117772,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 901,
-            "parentUIIndex": 899,
+            "uiIndex": 903,
+            "parentUIIndex": 901,
             "imagePath": "Texture/Ingame/NewFolder/TutorialAsset/BossScript3.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -117638,15 +117901,15 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 902,
-            "parentUIIndex": 892,
+            "uiIndex": 904,
+            "parentUIIndex": 894,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
             "openTargets": [
-                905
+                907
             ],
             "closeTargets": [
-                902
+                904
             ],
             "disablePropagationTargets": [],
             "enablePropagationTargets": [],
@@ -117771,8 +118034,8 @@
                 0.0,
                 5.0
             ],
-            "uiIndex": 903,
-            "parentUIIndex": 902,
+            "uiIndex": 905,
+            "parentUIIndex": 904,
             "imagePath": "Texture/Ingame/NewFolder/Portrait_Robin.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -117900,8 +118163,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 904,
-            "parentUIIndex": 902,
+            "uiIndex": 906,
+            "parentUIIndex": 904,
             "imagePath": "Texture/Ingame/NewFolder/TutorialAsset/BossScript4.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -118029,15 +118292,15 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 905,
-            "parentUIIndex": 892,
+            "uiIndex": 907,
+            "parentUIIndex": 894,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
             "openTargets": [
-                907
+                909
             ],
             "closeTargets": [
-                905
+                907
             ],
             "disablePropagationTargets": [],
             "enablePropagationTargets": [],
@@ -118162,8 +118425,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 906,
-            "parentUIIndex": 905,
+            "uiIndex": 908,
+            "parentUIIndex": 907,
             "imagePath": "Texture/Ingame/NewFolder/TutorialAsset/BossScript5.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -118291,13 +118554,13 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 907,
-            "parentUIIndex": 892,
+            "uiIndex": 909,
+            "parentUIIndex": 894,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
             "openTargets": [],
             "closeTargets": [
-                892
+                894
             ],
             "disablePropagationTargets": [],
             "enablePropagationTargets": [],
@@ -118422,8 +118685,8 @@
                 0.0,
                 5.0
             ],
-            "uiIndex": 908,
-            "parentUIIndex": 907,
+            "uiIndex": 910,
+            "parentUIIndex": 909,
             "imagePath": "Texture/Ingame/NewFolder/Portrait_Hansel.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -118551,8 +118814,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 909,
-            "parentUIIndex": 907,
+            "uiIndex": 911,
+            "parentUIIndex": 909,
             "imagePath": "Texture/Ingame/NewFolder/TutorialAsset/BossScript6.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -118680,19 +118943,19 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 910,
+            "uiIndex": 912,
             "parentUIIndex": -1,
             "imagePath": "",
             "imagePriority": -1,
             "openTargets": [],
             "closeTargets": [],
             "disablePropagationTargets": [
-                911,
                 913,
-                915
+                915,
+                917
             ],
             "enablePropagationTargets": [
-                911
+                913
             ],
             "hoverEnableTargets": [],
             "color": [],
@@ -118810,15 +119073,15 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 911,
-            "parentUIIndex": 910,
+            "uiIndex": 913,
+            "parentUIIndex": 912,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
             "openTargets": [
-                913
+                915
             ],
             "closeTargets": [
-                911
+                913
             ],
             "disablePropagationTargets": [],
             "enablePropagationTargets": [],
@@ -118943,8 +119206,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 912,
-            "parentUIIndex": 911,
+            "uiIndex": 914,
+            "parentUIIndex": 913,
             "imagePath": "Texture/Ingame/NewFolder/TutorialAsset/TutorialScript_Rabbit5.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -119072,15 +119335,15 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 913,
-            "parentUIIndex": 910,
+            "uiIndex": 915,
+            "parentUIIndex": 912,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
             "openTargets": [
-                915
+                917
             ],
             "closeTargets": [
-                913
+                915
             ],
             "disablePropagationTargets": [],
             "enablePropagationTargets": [],
@@ -119205,8 +119468,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 914,
-            "parentUIIndex": 913,
+            "uiIndex": 916,
+            "parentUIIndex": 915,
             "imagePath": "Texture/Ingame/NewFolder/TutorialAsset/TutorialScript_Rabbit6.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -119334,13 +119597,13 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 915,
-            "parentUIIndex": 910,
+            "uiIndex": 917,
+            "parentUIIndex": 912,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
             "openTargets": [],
             "closeTargets": [
-                910
+                912
             ],
             "disablePropagationTargets": [],
             "enablePropagationTargets": [],
@@ -119465,8 +119728,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 916,
-            "parentUIIndex": 915,
+            "uiIndex": 918,
+            "parentUIIndex": 917,
             "imagePath": "Texture/Ingame/NewFolder/TutorialAsset/TutorialScript_Rabbit7.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -119594,21 +119857,21 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 917,
+            "uiIndex": 919,
             "parentUIIndex": -1,
             "imagePath": "",
             "imagePriority": -1,
             "openTargets": [],
             "closeTargets": [],
             "disablePropagationTargets": [
-                918,
                 920,
                 922,
                 924,
-                926
+                926,
+                928
             ],
             "enablePropagationTargets": [
-                918
+                920
             ],
             "hoverEnableTargets": [],
             "color": [],
@@ -119726,15 +119989,15 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 918,
-            "parentUIIndex": 917,
+            "uiIndex": 920,
+            "parentUIIndex": 919,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
             "openTargets": [
-                920
+                922
             ],
             "closeTargets": [
-                918
+                920
             ],
             "disablePropagationTargets": [],
             "enablePropagationTargets": [],
@@ -119859,8 +120122,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 919,
-            "parentUIIndex": 918,
+            "uiIndex": 921,
+            "parentUIIndex": 920,
             "imagePath": "Texture/Ingame/NewFolder/TutorialAsset/ClueScript1.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -119988,270 +120251,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 920,
-            "parentUIIndex": 917,
-            "imagePath": "Texture/plainWhite.png",
-            "imagePriority": -1,
-            "openTargets": [
-                922
-            ],
-            "closeTargets": [
-                920
-            ],
-            "disablePropagationTargets": [],
-            "enablePropagationTargets": [],
-            "hoverEnableTargets": [],
-            "color": [
-                0.0,
-                0.0,
-                0.0,
-                0.003921568859368563
-            ],
-            "pivot": [
-                0.0,
-                1.0
-            ],
-            "anchor": [
-                0.0,
-                1.0
-            ],
-            "anchoredPosition": [
-                0.0,
-                0.0
-            ],
-            "enableOffset": [],
-            "disableOffset": [],
-            "popUpX": false,
-            "popUpY": false,
-            "popUpZ": false,
-            "popDownX": false,
-            "popDownY": false,
-            "popDownZ": false,
-            "numberDigits": [],
-            "numberFontSet": 0,
-            "numberFontSetImages": [],
-            "numberCeil": false,
-            "numberShowZero": false,
-            "soundOnClick": "",
-            "soundOnHover": "",
-            "soundOnEnable": "sounds/Btn/Sound on off.mp3",
-            "soundOnDisable": "",
-            "enableCurveType": 0,
-            "disableCurveType": 0,
-            "dependentUpgrade": -1,
-            "linearClipOnEnableStart": [],
-            "linearClipOnEnableDir": [],
-            "linearClipOnEnableCurveType": 0,
-            "linearClipOnDisableStart": [],
-            "linearClipOnDisableDir": [],
-            "linearClipOnDisableCurveType": 0,
-            "colorTintOnEnableStart": [],
-            "colorTintOnEnableEnd": [],
-            "colorTintOnEnableCurveType": 0,
-            "colorTintOnDisableStart": [],
-            "colorTintOnDisableEnd": [],
-            "colorTintOnDisableCurveType": 0,
-            "barCells_CellNumber": 0,
-            "disableOnStartEdtior": true,
-            "disableOnStartExe": true,
-            "musicPlayOnEnable_musicClip": "",
-            "musicPlayOnDisable_musicClip": "",
-            "exclusiveEnableGroup": [],
-            "animatedSpriteFolderPath": "",
-            "animatedSpriteIsRepeat": false,
-            "duplicate_poolable": false,
-            "videoPath1": "",
-            "videoPath2": "",
-            "videoUnscaledDeltaTime": false,
-            "centerAlign": false,
-            "customFlags": 4195079,
-            "customFlags2": 0,
-            "enumID": 0,
-            "soundEnumID": 0
-        },
-        {
-            "uiName": "message",
-            "floats": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                800.0,
-                180.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ],
-            "uiIndex": 921,
-            "parentUIIndex": 920,
-            "imagePath": "Texture/Ingame/NewFolder/TutorialAsset/ClueScript2.png",
-            "imagePriority": -1,
-            "openTargets": [],
-            "closeTargets": [],
-            "disablePropagationTargets": [],
-            "enablePropagationTargets": [],
-            "hoverEnableTargets": [],
-            "color": [
-                1.0,
-                1.0,
-                1.0,
-                1.0
-            ],
-            "pivot": [
-                0.5,
-                0.5
-            ],
-            "anchor": [
-                0.5,
-                0.5
-            ],
-            "anchoredPosition": [
-                53.0,
-                -142.0
-            ],
-            "enableOffset": [],
-            "disableOffset": [],
-            "popUpX": false,
-            "popUpY": false,
-            "popUpZ": false,
-            "popDownX": false,
-            "popDownY": false,
-            "popDownZ": false,
-            "numberDigits": [],
-            "numberFontSet": 0,
-            "numberFontSetImages": [],
-            "numberCeil": false,
-            "numberShowZero": false,
-            "soundOnClick": "",
-            "soundOnHover": "",
-            "soundOnEnable": "",
-            "soundOnDisable": "",
-            "enableCurveType": 0,
-            "disableCurveType": 0,
-            "dependentUpgrade": -1,
-            "linearClipOnEnableStart": [],
-            "linearClipOnEnableDir": [],
-            "linearClipOnEnableCurveType": 0,
-            "linearClipOnDisableStart": [],
-            "linearClipOnDisableDir": [],
-            "linearClipOnDisableCurveType": 0,
-            "colorTintOnEnableStart": [],
-            "colorTintOnEnableEnd": [],
-            "colorTintOnEnableCurveType": 0,
-            "colorTintOnDisableStart": [],
-            "colorTintOnDisableEnd": [],
-            "colorTintOnDisableCurveType": 0,
-            "barCells_CellNumber": 0,
-            "disableOnStartEdtior": false,
-            "disableOnStartExe": false,
-            "musicPlayOnEnable_musicClip": "",
-            "musicPlayOnDisable_musicClip": "",
-            "exclusiveEnableGroup": [],
-            "animatedSpriteFolderPath": "",
-            "animatedSpriteIsRepeat": false,
-            "duplicate_poolable": false,
-            "videoPath1": "",
-            "videoPath2": "",
-            "videoUnscaledDeltaTime": false,
-            "centerAlign": false,
-            "customFlags": 131072,
-            "customFlags2": 0,
-            "enumID": 0,
-            "soundEnumID": 0
-        },
-        {
-            "uiName": "first tutorial (3)",
-            "floats": [
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                1920.0,
-                1080.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ],
             "uiIndex": 922,
-            "parentUIIndex": 917,
+            "parentUIIndex": 919,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
             "openTargets": [
@@ -120385,7 +120386,7 @@
             ],
             "uiIndex": 923,
             "parentUIIndex": 922,
-            "imagePath": "Texture/Ingame/NewFolder/TutorialAsset/ClueScript3.png",
+            "imagePath": "Texture/Ingame/NewFolder/TutorialAsset/ClueScript2.png",
             "imagePriority": -1,
             "openTargets": [],
             "closeTargets": [],
@@ -120461,7 +120462,7 @@
             "soundEnumID": 0
         },
         {
-            "uiName": "first tutorial (4)",
+            "uiName": "first tutorial (3)",
             "floats": [
                 0.0,
                 0.0,
@@ -120513,7 +120514,7 @@
                 0.0
             ],
             "uiIndex": 924,
-            "parentUIIndex": 917,
+            "parentUIIndex": 919,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
             "openTargets": [
@@ -120647,6 +120648,268 @@
             ],
             "uiIndex": 925,
             "parentUIIndex": 924,
+            "imagePath": "Texture/Ingame/NewFolder/TutorialAsset/ClueScript3.png",
+            "imagePriority": -1,
+            "openTargets": [],
+            "closeTargets": [],
+            "disablePropagationTargets": [],
+            "enablePropagationTargets": [],
+            "hoverEnableTargets": [],
+            "color": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+            ],
+            "pivot": [
+                0.5,
+                0.5
+            ],
+            "anchor": [
+                0.5,
+                0.5
+            ],
+            "anchoredPosition": [
+                53.0,
+                -142.0
+            ],
+            "enableOffset": [],
+            "disableOffset": [],
+            "popUpX": false,
+            "popUpY": false,
+            "popUpZ": false,
+            "popDownX": false,
+            "popDownY": false,
+            "popDownZ": false,
+            "numberDigits": [],
+            "numberFontSet": 0,
+            "numberFontSetImages": [],
+            "numberCeil": false,
+            "numberShowZero": false,
+            "soundOnClick": "",
+            "soundOnHover": "",
+            "soundOnEnable": "",
+            "soundOnDisable": "",
+            "enableCurveType": 0,
+            "disableCurveType": 0,
+            "dependentUpgrade": -1,
+            "linearClipOnEnableStart": [],
+            "linearClipOnEnableDir": [],
+            "linearClipOnEnableCurveType": 0,
+            "linearClipOnDisableStart": [],
+            "linearClipOnDisableDir": [],
+            "linearClipOnDisableCurveType": 0,
+            "colorTintOnEnableStart": [],
+            "colorTintOnEnableEnd": [],
+            "colorTintOnEnableCurveType": 0,
+            "colorTintOnDisableStart": [],
+            "colorTintOnDisableEnd": [],
+            "colorTintOnDisableCurveType": 0,
+            "barCells_CellNumber": 0,
+            "disableOnStartEdtior": false,
+            "disableOnStartExe": false,
+            "musicPlayOnEnable_musicClip": "",
+            "musicPlayOnDisable_musicClip": "",
+            "exclusiveEnableGroup": [],
+            "animatedSpriteFolderPath": "",
+            "animatedSpriteIsRepeat": false,
+            "duplicate_poolable": false,
+            "videoPath1": "",
+            "videoPath2": "",
+            "videoUnscaledDeltaTime": false,
+            "centerAlign": false,
+            "customFlags": 131072,
+            "customFlags2": 0,
+            "enumID": 0,
+            "soundEnumID": 0
+        },
+        {
+            "uiName": "first tutorial (4)",
+            "floats": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1920.0,
+                1080.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "uiIndex": 926,
+            "parentUIIndex": 919,
+            "imagePath": "Texture/plainWhite.png",
+            "imagePriority": -1,
+            "openTargets": [
+                928
+            ],
+            "closeTargets": [
+                926
+            ],
+            "disablePropagationTargets": [],
+            "enablePropagationTargets": [],
+            "hoverEnableTargets": [],
+            "color": [
+                0.0,
+                0.0,
+                0.0,
+                0.003921568859368563
+            ],
+            "pivot": [
+                0.0,
+                1.0
+            ],
+            "anchor": [
+                0.0,
+                1.0
+            ],
+            "anchoredPosition": [
+                0.0,
+                0.0
+            ],
+            "enableOffset": [],
+            "disableOffset": [],
+            "popUpX": false,
+            "popUpY": false,
+            "popUpZ": false,
+            "popDownX": false,
+            "popDownY": false,
+            "popDownZ": false,
+            "numberDigits": [],
+            "numberFontSet": 0,
+            "numberFontSetImages": [],
+            "numberCeil": false,
+            "numberShowZero": false,
+            "soundOnClick": "",
+            "soundOnHover": "",
+            "soundOnEnable": "sounds/Btn/Sound on off.mp3",
+            "soundOnDisable": "",
+            "enableCurveType": 0,
+            "disableCurveType": 0,
+            "dependentUpgrade": -1,
+            "linearClipOnEnableStart": [],
+            "linearClipOnEnableDir": [],
+            "linearClipOnEnableCurveType": 0,
+            "linearClipOnDisableStart": [],
+            "linearClipOnDisableDir": [],
+            "linearClipOnDisableCurveType": 0,
+            "colorTintOnEnableStart": [],
+            "colorTintOnEnableEnd": [],
+            "colorTintOnEnableCurveType": 0,
+            "colorTintOnDisableStart": [],
+            "colorTintOnDisableEnd": [],
+            "colorTintOnDisableCurveType": 0,
+            "barCells_CellNumber": 0,
+            "disableOnStartEdtior": true,
+            "disableOnStartExe": true,
+            "musicPlayOnEnable_musicClip": "",
+            "musicPlayOnDisable_musicClip": "",
+            "exclusiveEnableGroup": [],
+            "animatedSpriteFolderPath": "",
+            "animatedSpriteIsRepeat": false,
+            "duplicate_poolable": false,
+            "videoPath1": "",
+            "videoPath2": "",
+            "videoUnscaledDeltaTime": false,
+            "centerAlign": false,
+            "customFlags": 4195079,
+            "customFlags2": 0,
+            "enumID": 0,
+            "soundEnumID": 0
+        },
+        {
+            "uiName": "message",
+            "floats": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                800.0,
+                180.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "uiIndex": 927,
+            "parentUIIndex": 926,
             "imagePath": "Texture/Ingame/NewFolder/TutorialAsset/ClueScript4.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -120774,13 +121037,13 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 926,
-            "parentUIIndex": 917,
+            "uiIndex": 928,
+            "parentUIIndex": 919,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
             "openTargets": [],
             "closeTargets": [
-                917
+                919
             ],
             "disablePropagationTargets": [],
             "enablePropagationTargets": [],
@@ -120905,8 +121168,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 927,
-            "parentUIIndex": 926,
+            "uiIndex": 929,
+            "parentUIIndex": 928,
             "imagePath": "Texture/Ingame/NewFolder/TutorialAsset/ClueScript5.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -121034,19 +121297,19 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 928,
+            "uiIndex": 930,
             "parentUIIndex": -1,
             "imagePath": "",
             "imagePriority": -1,
             "openTargets": [],
             "closeTargets": [],
             "disablePropagationTargets": [
-                929,
-                932,
-                935
+                931,
+                934,
+                937
             ],
             "enablePropagationTargets": [
-                929
+                931
             ],
             "hoverEnableTargets": [],
             "color": [],
@@ -121164,15 +121427,15 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 929,
-            "parentUIIndex": 928,
+            "uiIndex": 931,
+            "parentUIIndex": 930,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
             "openTargets": [
-                932
+                934
             ],
             "closeTargets": [
-                929
+                931
             ],
             "disablePropagationTargets": [],
             "enablePropagationTargets": [],
@@ -121297,8 +121560,8 @@
                 0.0,
                 5.0
             ],
-            "uiIndex": 930,
-            "parentUIIndex": 929,
+            "uiIndex": 932,
+            "parentUIIndex": 931,
             "imagePath": "Texture/Ingame/NewFolder/Portrait_Hansel.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -121426,8 +121689,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 931,
-            "parentUIIndex": 929,
+            "uiIndex": 933,
+            "parentUIIndex": 931,
             "imagePath": "Texture/Ingame/NewFolder/TutorialAsset/EndingScript1.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -121555,15 +121818,15 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 932,
-            "parentUIIndex": 928,
+            "uiIndex": 934,
+            "parentUIIndex": 930,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
             "openTargets": [
-                935
+                937
             ],
             "closeTargets": [
-                932
+                934
             ],
             "disablePropagationTargets": [],
             "enablePropagationTargets": [],
@@ -121688,8 +121951,8 @@
                 0.0,
                 5.0
             ],
-            "uiIndex": 933,
-            "parentUIIndex": 932,
+            "uiIndex": 935,
+            "parentUIIndex": 934,
             "imagePath": "Texture/Ingame/NewFolder/Portrait_Ursula.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -121817,8 +122080,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 934,
-            "parentUIIndex": 932,
+            "uiIndex": 936,
+            "parentUIIndex": 934,
             "imagePath": "Texture/Ingame/NewFolder/TutorialAsset/EndingScript2.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -121946,13 +122209,13 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 935,
-            "parentUIIndex": 928,
+            "uiIndex": 937,
+            "parentUIIndex": 930,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
             "openTargets": [],
             "closeTargets": [
-                928
+                930
             ],
             "disablePropagationTargets": [],
             "enablePropagationTargets": [],
@@ -122077,8 +122340,8 @@
                 0.0,
                 5.0
             ],
-            "uiIndex": 936,
-            "parentUIIndex": 935,
+            "uiIndex": 938,
+            "parentUIIndex": 937,
             "imagePath": "Texture/Ingame/NewFolder/Portrait_Robin.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -122206,8 +122469,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 937,
-            "parentUIIndex": 935,
+            "uiIndex": 939,
+            "parentUIIndex": 937,
             "imagePath": "Texture/Ingame/NewFolder/TutorialAsset/EndingScript3.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -122335,7 +122598,7 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 938,
+            "uiIndex": 940,
             "parentUIIndex": -1,
             "imagePath": "",
             "imagePriority": -1,
@@ -122459,8 +122722,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 939,
-            "parentUIIndex": 938,
+            "uiIndex": 941,
+            "parentUIIndex": 940,
             "imagePath": "Texture/Ingame/NewFolder/TutorialAsset/TutorialScript_EpicEnemy1.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -122588,7 +122851,7 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 940,
+            "uiIndex": 942,
             "parentUIIndex": -1,
             "imagePath": "",
             "imagePriority": -1,
@@ -122712,13 +122975,13 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 941,
-            "parentUIIndex": 940,
+            "uiIndex": 943,
+            "parentUIIndex": 942,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
             "openTargets": [],
             "closeTargets": [
-                940
+                942
             ],
             "disablePropagationTargets": [],
             "enablePropagationTargets": [],
@@ -122843,8 +123106,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 942,
-            "parentUIIndex": 940,
+            "uiIndex": 944,
+            "parentUIIndex": 942,
             "imagePath": "Texture/Ingame/NewFolder/PopUp_Warning_SPT1.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -122972,7 +123235,7 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 943,
+            "uiIndex": 945,
             "parentUIIndex": -1,
             "imagePath": "",
             "imagePriority": -1,
@@ -123096,13 +123359,13 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 944,
-            "parentUIIndex": 943,
+            "uiIndex": 946,
+            "parentUIIndex": 945,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
             "openTargets": [],
             "closeTargets": [
-                943
+                945
             ],
             "disablePropagationTargets": [],
             "enablePropagationTargets": [],
@@ -123227,8 +123490,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 945,
-            "parentUIIndex": 943,
+            "uiIndex": 947,
+            "parentUIIndex": 945,
             "imagePath": "Texture/Ingame/NewFolder/PopUp_Warning_SP2.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -123356,7 +123619,7 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 946,
+            "uiIndex": 948,
             "parentUIIndex": -1,
             "imagePath": "",
             "imagePriority": -1,
@@ -123480,8 +123743,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 947,
-            "parentUIIndex": 946,
+            "uiIndex": 949,
+            "parentUIIndex": 948,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -123609,8 +123872,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 948,
-            "parentUIIndex": 946,
+            "uiIndex": 950,
+            "parentUIIndex": 948,
             "imagePath": "Texture/Ingame/NewFolder/PopUp_UpgradeCheck.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -123738,18 +124001,18 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 949,
-            "parentUIIndex": 946,
+            "uiIndex": 951,
+            "parentUIIndex": 948,
             "imagePath": "Texture/Ingame/NewFolder/Button_No.png",
             "imagePriority": -1,
             "openTargets": [],
             "closeTargets": [
-                946
+                948
             ],
             "disablePropagationTargets": [],
             "enablePropagationTargets": [],
             "hoverEnableTargets": [
-                950
+                952
             ],
             "color": [
                 1.0,
@@ -123871,8 +124134,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 950,
-            "parentUIIndex": 949,
+            "uiIndex": 952,
+            "parentUIIndex": 951,
             "imagePath": "Texture/Ingame/NewFolder/Button_No.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -124000,18 +124263,18 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 951,
-            "parentUIIndex": 946,
+            "uiIndex": 953,
+            "parentUIIndex": 948,
             "imagePath": "Texture/Ingame/NewFolder/Button_Yes.png",
             "imagePriority": -1,
             "openTargets": [],
             "closeTargets": [
-                946
+                948
             ],
             "disablePropagationTargets": [],
             "enablePropagationTargets": [],
             "hoverEnableTargets": [
-                952
+                954
             ],
             "color": [
                 1.0,
@@ -124133,8 +124396,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 952,
-            "parentUIIndex": 951,
+            "uiIndex": 954,
+            "parentUIIndex": 953,
             "imagePath": "Texture/Ingame/NewFolder/Button_Yes.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -124262,7 +124525,7 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 953,
+            "uiIndex": 955,
             "parentUIIndex": -1,
             "imagePath": "",
             "imagePriority": -1,
@@ -124386,8 +124649,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 954,
-            "parentUIIndex": 953,
+            "uiIndex": 956,
+            "parentUIIndex": 955,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -124515,8 +124778,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 955,
-            "parentUIIndex": 953,
+            "uiIndex": 957,
+            "parentUIIndex": 955,
             "imagePath": "Texture/Ingame/NewFolder/PopUp_Restart.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -124644,18 +124907,18 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 956,
-            "parentUIIndex": 953,
+            "uiIndex": 958,
+            "parentUIIndex": 955,
             "imagePath": "Texture/Ingame/NewFolder/Button_No.png",
             "imagePriority": -1,
             "openTargets": [],
             "closeTargets": [
-                953
+                955
             ],
             "disablePropagationTargets": [],
             "enablePropagationTargets": [],
             "hoverEnableTargets": [
-                957
+                959
             ],
             "color": [
                 1.0,
@@ -124777,8 +125040,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 957,
-            "parentUIIndex": 956,
+            "uiIndex": 959,
+            "parentUIIndex": 958,
             "imagePath": "Texture/Ingame/NewFolder/Button_No.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -124906,13 +125169,13 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 958,
-            "parentUIIndex": 953,
+            "uiIndex": 960,
+            "parentUIIndex": 955,
             "imagePath": "Texture/Ingame/NewFolder/Button_Yes.png",
             "imagePriority": -1,
             "openTargets": [],
             "closeTargets": [
-                953,
+                955,
                 376,
                 378,
                 634,
@@ -124921,7 +125184,7 @@
             "disablePropagationTargets": [],
             "enablePropagationTargets": [],
             "hoverEnableTargets": [
-                959
+                961
             ],
             "color": [
                 1.0,
@@ -125043,8 +125306,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 959,
-            "parentUIIndex": 958,
+            "uiIndex": 961,
+            "parentUIIndex": 960,
             "imagePath": "Texture/Ingame/NewFolder/Button_Yes.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -125172,7 +125435,7 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 960,
+            "uiIndex": 962,
             "parentUIIndex": -1,
             "imagePath": "",
             "imagePriority": -1,
@@ -125205,8 +125468,6 @@
             "numberDigits": [],
             "numberFontSet": 0,
             "numberFontSetImages": [
-                961,
-                962,
                 963,
                 964,
                 965,
@@ -125214,7 +125475,9 @@
                 967,
                 968,
                 969,
-                970
+                970,
+                971,
+                972
             ],
             "numberCeil": false,
             "numberShowZero": false,
@@ -125307,8 +125570,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 961,
-            "parentUIIndex": 960,
+            "uiIndex": 963,
+            "parentUIIndex": 962,
             "imagePath": "Texture/Ingame/_0030_Font_0.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -125436,8 +125699,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 962,
-            "parentUIIndex": 960,
+            "uiIndex": 964,
+            "parentUIIndex": 962,
             "imagePath": "Texture/Ingame/_0039_Font_1.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -125565,8 +125828,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 963,
-            "parentUIIndex": 960,
+            "uiIndex": 965,
+            "parentUIIndex": 962,
             "imagePath": "Texture/Ingame/_0038_Font_2.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -125694,8 +125957,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 964,
-            "parentUIIndex": 960,
+            "uiIndex": 966,
+            "parentUIIndex": 962,
             "imagePath": "Texture/Ingame/_0037_Font_3.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -125823,8 +126086,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 965,
-            "parentUIIndex": 960,
+            "uiIndex": 967,
+            "parentUIIndex": 962,
             "imagePath": "Texture/Ingame/_0036_Font_4.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -125952,8 +126215,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 966,
-            "parentUIIndex": 960,
+            "uiIndex": 968,
+            "parentUIIndex": 962,
             "imagePath": "Texture/Ingame/_0035_Font_5.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -126081,8 +126344,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 967,
-            "parentUIIndex": 960,
+            "uiIndex": 969,
+            "parentUIIndex": 962,
             "imagePath": "Texture/Ingame/_0034_Font_6.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -126210,8 +126473,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 968,
-            "parentUIIndex": 960,
+            "uiIndex": 970,
+            "parentUIIndex": 962,
             "imagePath": "Texture/Ingame/_0033_Font_7.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -126339,8 +126602,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 969,
-            "parentUIIndex": 960,
+            "uiIndex": 971,
+            "parentUIIndex": 962,
             "imagePath": "Texture/Ingame/_0032_Font_8.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -126468,8 +126731,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 970,
-            "parentUIIndex": 960,
+            "uiIndex": 972,
+            "parentUIIndex": 962,
             "imagePath": "Texture/Ingame/_0031_Font_9.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -126597,7 +126860,7 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 971,
+            "uiIndex": 973,
             "parentUIIndex": -1,
             "imagePath": "",
             "imagePriority": -1,
@@ -126630,8 +126893,6 @@
             "numberDigits": [],
             "numberFontSet": 0,
             "numberFontSetImages": [
-                972,
-                973,
                 974,
                 975,
                 976,
@@ -126639,7 +126900,9 @@
                 978,
                 979,
                 980,
-                981
+                981,
+                982,
+                983
             ],
             "numberCeil": false,
             "numberShowZero": false,
@@ -126732,8 +126995,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 972,
-            "parentUIIndex": 971,
+            "uiIndex": 974,
+            "parentUIIndex": 973,
             "imagePath": "Texture/Ingame/NewFolder/HPSprite/HpFont_0.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -126861,8 +127124,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 973,
-            "parentUIIndex": 971,
+            "uiIndex": 975,
+            "parentUIIndex": 973,
             "imagePath": "Texture/Ingame/NewFolder/HPSprite/HpFont_1.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -126990,8 +127253,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 974,
-            "parentUIIndex": 971,
+            "uiIndex": 976,
+            "parentUIIndex": 973,
             "imagePath": "Texture/Ingame/NewFolder/HPSprite/HpFont_2.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -127119,8 +127382,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 975,
-            "parentUIIndex": 971,
+            "uiIndex": 977,
+            "parentUIIndex": 973,
             "imagePath": "Texture/Ingame/NewFolder/HPSprite/HpFont_3.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -127248,8 +127511,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 976,
-            "parentUIIndex": 971,
+            "uiIndex": 978,
+            "parentUIIndex": 973,
             "imagePath": "Texture/Ingame/NewFolder/HPSprite/HpFont_4.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -127377,8 +127640,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 977,
-            "parentUIIndex": 971,
+            "uiIndex": 979,
+            "parentUIIndex": 973,
             "imagePath": "Texture/Ingame/NewFolder/HPSprite/HpFont_5.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -127506,8 +127769,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 978,
-            "parentUIIndex": 971,
+            "uiIndex": 980,
+            "parentUIIndex": 973,
             "imagePath": "Texture/Ingame/NewFolder/HPSprite/HpFont_6.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -127635,8 +127898,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 979,
-            "parentUIIndex": 971,
+            "uiIndex": 981,
+            "parentUIIndex": 973,
             "imagePath": "Texture/Ingame/NewFolder/HPSprite/HpFont_7.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -127764,8 +128027,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 980,
-            "parentUIIndex": 971,
+            "uiIndex": 982,
+            "parentUIIndex": 973,
             "imagePath": "Texture/Ingame/NewFolder/HPSprite/HpFont_8.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -127893,8 +128156,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 981,
-            "parentUIIndex": 971,
+            "uiIndex": 983,
+            "parentUIIndex": 973,
             "imagePath": "Texture/Ingame/NewFolder/HPSprite/HpFont_9.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -128022,7 +128285,7 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 982,
+            "uiIndex": 984,
             "parentUIIndex": -1,
             "imagePath": "",
             "imagePriority": -1,
@@ -128055,8 +128318,6 @@
             "numberDigits": [],
             "numberFontSet": 0,
             "numberFontSetImages": [
-                983,
-                984,
                 985,
                 986,
                 987,
@@ -128064,7 +128325,9 @@
                 989,
                 990,
                 991,
-                992
+                992,
+                993,
+                994
             ],
             "numberCeil": false,
             "numberShowZero": false,
@@ -128157,8 +128420,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 983,
-            "parentUIIndex": 982,
+            "uiIndex": 985,
+            "parentUIIndex": 984,
             "imagePath": "Texture/Ingame/NewFolder/SPSprite/SpFont_0.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -128286,8 +128549,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 984,
-            "parentUIIndex": 982,
+            "uiIndex": 986,
+            "parentUIIndex": 984,
             "imagePath": "Texture/Ingame/NewFolder/SPSprite/SpFont_1.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -128415,8 +128678,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 985,
-            "parentUIIndex": 982,
+            "uiIndex": 987,
+            "parentUIIndex": 984,
             "imagePath": "Texture/Ingame/NewFolder/SPSprite/SpFont_2.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -128544,8 +128807,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 986,
-            "parentUIIndex": 982,
+            "uiIndex": 988,
+            "parentUIIndex": 984,
             "imagePath": "Texture/Ingame/NewFolder/SPSprite/SpFont_3.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -128673,8 +128936,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 987,
-            "parentUIIndex": 982,
+            "uiIndex": 989,
+            "parentUIIndex": 984,
             "imagePath": "Texture/Ingame/NewFolder/SPSprite/SpFont_4.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -128802,8 +129065,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 988,
-            "parentUIIndex": 982,
+            "uiIndex": 990,
+            "parentUIIndex": 984,
             "imagePath": "Texture/Ingame/NewFolder/SPSprite/SpFont_5.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -128931,8 +129194,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 989,
-            "parentUIIndex": 982,
+            "uiIndex": 991,
+            "parentUIIndex": 984,
             "imagePath": "Texture/Ingame/NewFolder/SPSprite/SpFont_6.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -129060,8 +129323,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 990,
-            "parentUIIndex": 982,
+            "uiIndex": 992,
+            "parentUIIndex": 984,
             "imagePath": "Texture/Ingame/NewFolder/SPSprite/SpFont_7.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -129189,8 +129452,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 991,
-            "parentUIIndex": 982,
+            "uiIndex": 993,
+            "parentUIIndex": 984,
             "imagePath": "Texture/Ingame/NewFolder/SPSprite/SpFont_8.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -129318,8 +129581,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 992,
-            "parentUIIndex": 982,
+            "uiIndex": 994,
+            "parentUIIndex": 984,
             "imagePath": "Texture/Ingame/NewFolder/SPSprite/SpFont_9.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -129447,7 +129710,7 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 993,
+            "uiIndex": 995,
             "parentUIIndex": -1,
             "imagePath": "",
             "imagePriority": -1,
@@ -129480,8 +129743,6 @@
             "numberDigits": [],
             "numberFontSet": 0,
             "numberFontSetImages": [
-                994,
-                995,
                 996,
                 997,
                 998,
@@ -129489,7 +129750,9 @@
                 1000,
                 1001,
                 1002,
-                1003
+                1003,
+                1004,
+                1005
             ],
             "numberCeil": false,
             "numberShowZero": false,
@@ -129582,8 +129845,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 994,
-            "parentUIIndex": 993,
+            "uiIndex": 996,
+            "parentUIIndex": 995,
             "imagePath": "Texture/Ingame/NewFolder/ComboSprite/Font_0.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -129711,8 +129974,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 995,
-            "parentUIIndex": 993,
+            "uiIndex": 997,
+            "parentUIIndex": 995,
             "imagePath": "Texture/Ingame/NewFolder/ComboSprite/Font_1.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -129840,8 +130103,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 996,
-            "parentUIIndex": 993,
+            "uiIndex": 998,
+            "parentUIIndex": 995,
             "imagePath": "Texture/Ingame/NewFolder/ComboSprite/Font_2.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -129969,8 +130232,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 997,
-            "parentUIIndex": 993,
+            "uiIndex": 999,
+            "parentUIIndex": 995,
             "imagePath": "Texture/Ingame/NewFolder/ComboSprite/Font_3.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -130098,8 +130361,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 998,
-            "parentUIIndex": 993,
+            "uiIndex": 1000,
+            "parentUIIndex": 995,
             "imagePath": "Texture/Ingame/NewFolder/ComboSprite/Font_4.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -130227,8 +130490,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 999,
-            "parentUIIndex": 993,
+            "uiIndex": 1001,
+            "parentUIIndex": 995,
             "imagePath": "Texture/Ingame/NewFolder/ComboSprite/Font_5.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -130356,8 +130619,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1000,
-            "parentUIIndex": 993,
+            "uiIndex": 1002,
+            "parentUIIndex": 995,
             "imagePath": "Texture/Ingame/NewFolder/ComboSprite/Font_6.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -130485,8 +130748,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1001,
-            "parentUIIndex": 993,
+            "uiIndex": 1003,
+            "parentUIIndex": 995,
             "imagePath": "Texture/Ingame/NewFolder/ComboSprite/Font_7.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -130614,8 +130877,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1002,
-            "parentUIIndex": 993,
+            "uiIndex": 1004,
+            "parentUIIndex": 995,
             "imagePath": "Texture/Ingame/NewFolder/ComboSprite/Font_8.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -130743,8 +131006,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1003,
-            "parentUIIndex": 993,
+            "uiIndex": 1005,
+            "parentUIIndex": 995,
             "imagePath": "Texture/Ingame/NewFolder/ComboSprite/Font_9.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -130872,7 +131135,7 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1004,
+            "uiIndex": 1006,
             "parentUIIndex": -1,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
@@ -131007,7 +131270,7 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1005,
+            "uiIndex": 1007,
             "parentUIIndex": -1,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
@@ -131142,7 +131405,7 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1006,
+            "uiIndex": 1008,
             "parentUIIndex": -1,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
@@ -131271,8 +131534,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1007,
-            "parentUIIndex": 1006,
+            "uiIndex": 1009,
+            "parentUIIndex": 1008,
             "imagePath": "Texture/Ingame/NewFolder/TeamLogo.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -131413,18 +131676,18 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1008,
-            "parentUIIndex": 1006,
+            "uiIndex": 1010,
+            "parentUIIndex": 1008,
             "imagePath": "Texture/Ingame/NewFolder/Button_Close.png",
             "imagePriority": -1,
             "openTargets": [],
             "closeTargets": [
-                1006
+                1008
             ],
             "disablePropagationTargets": [],
             "enablePropagationTargets": [],
             "hoverEnableTargets": [
-                1009
+                1011
             ],
             "color": [
                 1.0,
@@ -131546,8 +131809,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1009,
-            "parentUIIndex": 1008,
+            "uiIndex": 1011,
+            "parentUIIndex": 1010,
             "imagePath": "Texture/Ingame/NewFolder/Button_Close.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -131675,8 +131938,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1010,
-            "parentUIIndex": 1006,
+            "uiIndex": 1012,
+            "parentUIIndex": 1008,
             "imagePath": "Texture/Ingame/NewFolder/MainLogo.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -131812,22 +132075,22 @@
                 0.0,
                 0.0,
                 0.0,
-                8.0,
+                1.0,
                 0.0,
                 0.0,
                 0.0
             ],
-            "uiIndex": 1011,
+            "uiIndex": 1013,
             "parentUIIndex": -1,
             "imagePath": "",
             "imagePriority": -1,
             "openTargets": [],
             "closeTargets": [],
             "disablePropagationTargets": [
-                1012
+                1014
             ],
             "enablePropagationTargets": [
-                1012
+                1014
             ],
             "hoverEnableTargets": [],
             "color": [],
@@ -131840,8 +132103,8 @@
                 0.5
             ],
             "anchoredPosition": [
-                10.0,
-                -330.0
+                -0.00002670299909368623,
+                423.0
             ],
             "enableOffset": [],
             "disableOffset": [],
@@ -131881,10 +132144,10 @@
             "musicPlayOnEnable_musicClip": "",
             "musicPlayOnDisable_musicClip": "",
             "exclusiveEnableGroup": [
-                1011,
                 1013,
                 1015,
-                1017
+                1017,
+                1019
             ],
             "animatedSpriteFolderPath": "",
             "animatedSpriteIsRepeat": false,
@@ -131950,8 +132213,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1012,
-            "parentUIIndex": 1011,
+            "uiIndex": 1014,
+            "parentUIIndex": 1013,
             "imagePath": "Texture/Ingame/NewFolder/PopUp_Warning_Mp.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -132094,22 +132357,22 @@
                 0.0,
                 0.0,
                 0.0,
-                8.0,
+                1.0,
                 0.0,
                 0.0,
                 0.0
             ],
-            "uiIndex": 1013,
+            "uiIndex": 1015,
             "parentUIIndex": -1,
             "imagePath": "",
             "imagePriority": -1,
             "openTargets": [],
             "closeTargets": [],
             "disablePropagationTargets": [
-                1014
+                1016
             ],
             "enablePropagationTargets": [
-                1014
+                1016
             ],
             "hoverEnableTargets": [],
             "color": [],
@@ -132122,8 +132385,8 @@
                 0.5
             ],
             "anchoredPosition": [
-                10.0,
-                380.0
+                -0.00010681000276235864,
+                423.0
             ],
             "enableOffset": [],
             "disableOffset": [],
@@ -132163,10 +132426,10 @@
             "musicPlayOnEnable_musicClip": "",
             "musicPlayOnDisable_musicClip": "",
             "exclusiveEnableGroup": [
-                1011,
                 1013,
                 1015,
-                1017
+                1017,
+                1019
             ],
             "animatedSpriteFolderPath": "",
             "animatedSpriteIsRepeat": false,
@@ -132232,8 +132495,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1014,
-            "parentUIIndex": 1013,
+            "uiIndex": 1016,
+            "parentUIIndex": 1015,
             "imagePath": "Texture/Ingame/NewFolder/PopUp_Warning_CoolTime.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -132376,22 +132639,22 @@
                 0.0,
                 0.0,
                 0.0,
-                8.0,
+                1.0,
                 0.0,
                 0.0,
                 0.0
             ],
-            "uiIndex": 1015,
+            "uiIndex": 1017,
             "parentUIIndex": -1,
             "imagePath": "",
             "imagePriority": -1,
             "openTargets": [],
             "closeTargets": [],
             "disablePropagationTargets": [
-                1016
+                1018
             ],
             "enablePropagationTargets": [
-                1016
+                1018
             ],
             "hoverEnableTargets": [],
             "color": [],
@@ -132405,7 +132668,7 @@
             ],
             "anchoredPosition": [
                 10.0,
-                380.0
+                423.0
             ],
             "enableOffset": [],
             "disableOffset": [],
@@ -132445,10 +132708,10 @@
             "musicPlayOnEnable_musicClip": "",
             "musicPlayOnDisable_musicClip": "",
             "exclusiveEnableGroup": [
-                1011,
                 1013,
                 1015,
-                1017
+                1017,
+                1019
             ],
             "animatedSpriteFolderPath": "",
             "animatedSpriteIsRepeat": false,
@@ -132514,8 +132777,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1016,
-            "parentUIIndex": 1015,
+            "uiIndex": 1018,
+            "parentUIIndex": 1017,
             "imagePath": "Texture/Ingame/NewFolder/ErrorPopup_CantLand.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -132658,22 +132921,22 @@
                 0.0,
                 0.0,
                 0.0,
-                8.0,
+                1.0,
                 0.0,
                 0.0,
                 0.0
             ],
-            "uiIndex": 1017,
+            "uiIndex": 1019,
             "parentUIIndex": -1,
             "imagePath": "",
             "imagePriority": -1,
             "openTargets": [],
             "closeTargets": [],
             "disablePropagationTargets": [
-                1018
+                1020
             ],
             "enablePropagationTargets": [
-                1018
+                1020
             ],
             "hoverEnableTargets": [],
             "color": [],
@@ -132687,7 +132950,7 @@
             ],
             "anchoredPosition": [
                 10.0,
-                -300.0
+                423.0
             ],
             "enableOffset": [],
             "disableOffset": [],
@@ -132727,10 +132990,10 @@
             "musicPlayOnEnable_musicClip": "",
             "musicPlayOnDisable_musicClip": "",
             "exclusiveEnableGroup": [
-                1011,
                 1013,
                 1015,
-                1017
+                1017,
+                1019
             ],
             "animatedSpriteFolderPath": "",
             "animatedSpriteIsRepeat": false,
@@ -132796,8 +133059,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1018,
-            "parentUIIndex": 1017,
+            "uiIndex": 1020,
+            "parentUIIndex": 1019,
             "imagePath": "Texture/Ingame/NewFolder/PopUp_Warning_TicTacQue.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -132945,7 +133208,7 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1019,
+            "uiIndex": 1021,
             "parentUIIndex": -1,
             "imagePath": "",
             "imagePriority": -1,
@@ -133069,8 +133332,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1020,
-            "parentUIIndex": 1019,
+            "uiIndex": 1022,
+            "parentUIIndex": 1021,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -133198,8 +133461,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1021,
-            "parentUIIndex": 1019,
+            "uiIndex": 1023,
+            "parentUIIndex": 1021,
             "imagePath": "Texture/Ingame_Menu/PopUp_Guide.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -133327,18 +133590,18 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1022,
-            "parentUIIndex": 1019,
+            "uiIndex": 1024,
+            "parentUIIndex": 1021,
             "imagePath": "Texture/Ingame/NewFolder/Button_No.png",
             "imagePriority": -1,
             "openTargets": [],
             "closeTargets": [
-                1019
+                1021
             ],
             "disablePropagationTargets": [],
             "enablePropagationTargets": [],
             "hoverEnableTargets": [
-                1023
+                1025
             ],
             "color": [
                 1.0,
@@ -133460,8 +133723,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1023,
-            "parentUIIndex": 1022,
+            "uiIndex": 1025,
+            "parentUIIndex": 1024,
             "imagePath": "Texture/Ingame/NewFolder/Button_No.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -133589,18 +133852,18 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1024,
-            "parentUIIndex": 1019,
+            "uiIndex": 1026,
+            "parentUIIndex": 1021,
             "imagePath": "Texture/Ingame/NewFolder/Button_Yes.png",
             "imagePriority": -1,
             "openTargets": [],
             "closeTargets": [
-                1019
+                1021
             ],
             "disablePropagationTargets": [],
             "enablePropagationTargets": [],
             "hoverEnableTargets": [
-                1025
+                1027
             ],
             "color": [
                 1.0,
@@ -133722,8 +133985,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1025,
-            "parentUIIndex": 1024,
+            "uiIndex": 1027,
+            "parentUIIndex": 1026,
             "imagePath": "Texture/Ingame/NewFolder/Button_Yes.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -133851,7 +134114,7 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1026,
+            "uiIndex": 1028,
             "parentUIIndex": -1,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
@@ -133980,8 +134243,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1027,
-            "parentUIIndex": 1026,
+            "uiIndex": 1029,
+            "parentUIIndex": 1028,
             "imagePath": "Texture/Ingame/NewFolder/TeamLogo.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -134122,18 +134385,18 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1028,
-            "parentUIIndex": 1026,
+            "uiIndex": 1030,
+            "parentUIIndex": 1028,
             "imagePath": "Texture/Ingame/NewFolder/Button_Close.png",
             "imagePriority": -1,
             "openTargets": [],
             "closeTargets": [
-                1026
+                1028
             ],
             "disablePropagationTargets": [],
             "enablePropagationTargets": [],
             "hoverEnableTargets": [
-                1029
+                1031
             ],
             "color": [
                 1.0,
@@ -134255,8 +134518,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1029,
-            "parentUIIndex": 1028,
+            "uiIndex": 1031,
+            "parentUIIndex": 1030,
             "imagePath": "Texture/Ingame/NewFolder/Button_Close.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -134384,8 +134647,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1030,
-            "parentUIIndex": 1026,
+            "uiIndex": 1032,
+            "parentUIIndex": 1028,
             "imagePath": "Texture/Ingame/NewFolder/Button_Title.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -134393,7 +134656,7 @@
             "disablePropagationTargets": [],
             "enablePropagationTargets": [],
             "hoverEnableTargets": [
-                1031
+                1033
             ],
             "color": [
                 1.0,
@@ -134515,8 +134778,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1031,
-            "parentUIIndex": 1030,
+            "uiIndex": 1033,
+            "parentUIIndex": 1032,
             "imagePath": "Texture/Ingame/NewFolder/Button_Interactive_Title.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -134644,8 +134907,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1032,
-            "parentUIIndex": 1026,
+            "uiIndex": 1034,
+            "parentUIIndex": 1028,
             "imagePath": "Texture/Ingame/NewFolder/MainLogo.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -134786,7 +135049,7 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1033,
+            "uiIndex": 1035,
             "parentUIIndex": -1,
             "imagePath": "Texture/plainWhite.png",
             "imagePriority": -1,
@@ -134915,8 +135178,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1034,
-            "parentUIIndex": 1033,
+            "uiIndex": 1036,
+            "parentUIIndex": 1035,
             "imagePath": "Texture/Ingame/NewFolder/Button_CheckPoint.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -134924,7 +135187,7 @@
             "disablePropagationTargets": [],
             "enablePropagationTargets": [],
             "hoverEnableTargets": [
-                1035
+                1037
             ],
             "color": [
                 1.0,
@@ -135046,8 +135309,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1035,
-            "parentUIIndex": 1034,
+            "uiIndex": 1037,
+            "parentUIIndex": 1036,
             "imagePath": "Texture/Ingame/NewFolder/Button_Interactive_CheckPoint.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -135175,8 +135438,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1036,
-            "parentUIIndex": 1033,
+            "uiIndex": 1038,
+            "parentUIIndex": 1035,
             "imagePath": "Texture/Ingame/NewFolder/Button_Restart.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -135184,7 +135447,7 @@
             "disablePropagationTargets": [],
             "enablePropagationTargets": [],
             "hoverEnableTargets": [
-                1037
+                1039
             ],
             "color": [
                 1.0,
@@ -135306,8 +135569,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1037,
-            "parentUIIndex": 1036,
+            "uiIndex": 1039,
+            "parentUIIndex": 1038,
             "imagePath": "Texture/Ingame/NewFolder/Overay_Restart.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -135435,8 +135698,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1038,
-            "parentUIIndex": 1033,
+            "uiIndex": 1040,
+            "parentUIIndex": 1035,
             "imagePath": "Texture/Ingame/NewFolder/Button_Title.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -135444,7 +135707,7 @@
             "disablePropagationTargets": [],
             "enablePropagationTargets": [],
             "hoverEnableTargets": [
-                1039
+                1041
             ],
             "color": [
                 1.0,
@@ -135566,8 +135829,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1039,
-            "parentUIIndex": 1038,
+            "uiIndex": 1041,
+            "parentUIIndex": 1040,
             "imagePath": "Texture/Ingame/NewFolder/Button_Interactive_Title.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -135695,7 +135958,7 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1040,
+            "uiIndex": 1042,
             "parentUIIndex": -1,
             "imagePath": "Texture/blackMask.png",
             "imagePriority": 234567891,
@@ -135830,7 +136093,7 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1041,
+            "uiIndex": 1043,
             "parentUIIndex": -1,
             "imagePath": "Texture/blackMask_Vertical.png",
             "imagePriority": 234567891,
@@ -135965,7 +136228,7 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1042,
+            "uiIndex": 1044,
             "parentUIIndex": -1,
             "imagePath": "Texture/blackMask.png",
             "imagePriority": 234567891,
@@ -136100,7 +136363,7 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1043,
+            "uiIndex": 1045,
             "parentUIIndex": -1,
             "imagePath": "Texture/blackMask_Vertical.png",
             "imagePriority": 234567891,
@@ -136235,7 +136498,7 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1044,
+            "uiIndex": 1046,
             "parentUIIndex": -1,
             "imagePath": "Texture/Ingame/NewFolder/SpriteAnimations/MoveClickAnim/06(40ms).png",
             "imagePriority": -1,
@@ -136364,7 +136627,7 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1045,
+            "uiIndex": 1047,
             "parentUIIndex": -1,
             "imagePath": "",
             "imagePriority": -1,
@@ -136488,8 +136751,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1046,
-            "parentUIIndex": 1045,
+            "uiIndex": 1048,
+            "parentUIIndex": 1047,
             "imagePath": "Texture/Ingame/NewFolder/Cursor.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -136553,12 +136816,12 @@
             "musicPlayOnEnable_musicClip": "",
             "musicPlayOnDisable_musicClip": "",
             "exclusiveEnableGroup": [
-                1046,
-                1047,
                 1048,
                 1049,
                 1050,
-                1051
+                1051,
+                1052,
+                1053
             ],
             "animatedSpriteFolderPath": "",
             "animatedSpriteIsRepeat": false,
@@ -136624,8 +136887,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1047,
-            "parentUIIndex": 1045,
+            "uiIndex": 1049,
+            "parentUIIndex": 1047,
             "imagePath": "Texture/Ingame/NewFolder/Cursor.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -136689,12 +136952,12 @@
             "musicPlayOnEnable_musicClip": "",
             "musicPlayOnDisable_musicClip": "",
             "exclusiveEnableGroup": [
-                1046,
-                1047,
                 1048,
                 1049,
                 1050,
-                1051
+                1051,
+                1052,
+                1053
             ],
             "animatedSpriteFolderPath": "",
             "animatedSpriteIsRepeat": false,
@@ -136760,8 +137023,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1048,
-            "parentUIIndex": 1045,
+            "uiIndex": 1050,
+            "parentUIIndex": 1047,
             "imagePath": "Texture/Ingame/NewFolder/Cursor.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -136825,12 +137088,12 @@
             "musicPlayOnEnable_musicClip": "",
             "musicPlayOnDisable_musicClip": "",
             "exclusiveEnableGroup": [
-                1046,
-                1047,
                 1048,
                 1049,
                 1050,
-                1051
+                1051,
+                1052,
+                1053
             ],
             "animatedSpriteFolderPath": "",
             "animatedSpriteIsRepeat": false,
@@ -136896,8 +137159,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1049,
-            "parentUIIndex": 1045,
+            "uiIndex": 1051,
+            "parentUIIndex": 1047,
             "imagePath": "Texture/Ingame/NewFolder/Cursor.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -136961,12 +137224,12 @@
             "musicPlayOnEnable_musicClip": "",
             "musicPlayOnDisable_musicClip": "",
             "exclusiveEnableGroup": [
-                1046,
-                1047,
                 1048,
                 1049,
                 1050,
-                1051
+                1051,
+                1052,
+                1053
             ],
             "animatedSpriteFolderPath": "",
             "animatedSpriteIsRepeat": false,
@@ -137032,8 +137295,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1050,
-            "parentUIIndex": 1045,
+            "uiIndex": 1052,
+            "parentUIIndex": 1047,
             "imagePath": "Texture/Ingame/NewFolder/Cursor.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -137097,12 +137360,12 @@
             "musicPlayOnEnable_musicClip": "",
             "musicPlayOnDisable_musicClip": "",
             "exclusiveEnableGroup": [
-                1046,
-                1047,
                 1048,
                 1049,
                 1050,
-                1051
+                1051,
+                1052,
+                1053
             ],
             "animatedSpriteFolderPath": "",
             "animatedSpriteIsRepeat": false,
@@ -137168,8 +137431,8 @@
                 0.0,
                 0.0
             ],
-            "uiIndex": 1051,
-            "parentUIIndex": 1045,
+            "uiIndex": 1053,
+            "parentUIIndex": 1047,
             "imagePath": "Texture/Ingame/NewFolder/Cursor.png",
             "imagePriority": -1,
             "openTargets": [],
@@ -137233,12 +137496,12 @@
             "musicPlayOnEnable_musicClip": "",
             "musicPlayOnDisable_musicClip": "",
             "exclusiveEnableGroup": [
-                1046,
-                1047,
                 1048,
                 1049,
                 1050,
-                1051
+                1051,
+                1052,
+                1053
             ],
             "animatedSpriteFolderPath": "",
             "animatedSpriteIsRepeat": false,
@@ -137250,6 +137513,915 @@
             "customFlags": 131328,
             "customFlags2": 1024,
             "enumID": 114,
+            "soundEnumID": 0
+        },
+        {
+            "uiName": "UiEnum:DamageIndicator_Default",
+            "floats": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                2.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                45.0,
+                22.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                2.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "uiIndex": 1054,
+            "parentUIIndex": -1,
+            "imagePath": "",
+            "imagePriority": -1,
+            "openTargets": [],
+            "closeTargets": [],
+            "disablePropagationTargets": [
+                1055
+            ],
+            "enablePropagationTargets": [
+                1055
+            ],
+            "hoverEnableTargets": [],
+            "color": [],
+            "pivot": [
+                1.0,
+                0.5
+            ],
+            "anchor": [
+                0.5,
+                0.5
+            ],
+            "anchoredPosition": [
+                -1040.0,
+                1563.0
+            ],
+            "enableOffset": [],
+            "disableOffset": [
+                0.0,
+                0.0
+            ],
+            "popUpX": false,
+            "popUpY": false,
+            "popUpZ": false,
+            "popDownX": false,
+            "popDownY": false,
+            "popDownZ": false,
+            "numberDigits": [],
+            "numberFontSet": 0,
+            "numberFontSetImages": [],
+            "numberCeil": false,
+            "numberShowZero": false,
+            "soundOnClick": "",
+            "soundOnHover": "",
+            "soundOnEnable": "",
+            "soundOnDisable": "",
+            "enableCurveType": 0,
+            "disableCurveType": 2,
+            "dependentUpgrade": -1,
+            "linearClipOnEnableStart": [],
+            "linearClipOnEnableDir": [],
+            "linearClipOnEnableCurveType": 0,
+            "linearClipOnDisableStart": [],
+            "linearClipOnDisableDir": [],
+            "linearClipOnDisableCurveType": 0,
+            "colorTintOnEnableStart": [],
+            "colorTintOnEnableEnd": [],
+            "colorTintOnEnableCurveType": 0,
+            "colorTintOnDisableStart": [],
+            "colorTintOnDisableEnd": [],
+            "colorTintOnDisableCurveType": 0,
+            "barCells_CellNumber": 0,
+            "disableOnStartEdtior": false,
+            "disableOnStartExe": false,
+            "musicPlayOnEnable_musicClip": "",
+            "musicPlayOnDisable_musicClip": "",
+            "exclusiveEnableGroup": [],
+            "animatedSpriteFolderPath": "",
+            "animatedSpriteIsRepeat": false,
+            "duplicate_poolable": true,
+            "videoPath1": "",
+            "videoPath2": "",
+            "videoUnscaledDeltaTime": false,
+            "centerAlign": false,
+            "customFlags": 2048,
+            "customFlags2": 12601348,
+            "enumID": 147,
+            "soundEnumID": 0
+        },
+        {
+            "uiName": "UiEnum:DamageIndicator_Number",
+            "floats": [
+                0.0,
+                0.20000000298023225,
+                0.800000011920929,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.5,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.30000001192092898,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                93.48600006103516,
+                22.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "uiIndex": 1055,
+            "parentUIIndex": 1054,
+            "imagePath": "",
+            "imagePriority": -1,
+            "openTargets": [],
+            "closeTargets": [],
+            "disablePropagationTargets": [],
+            "enablePropagationTargets": [],
+            "hoverEnableTargets": [],
+            "color": [],
+            "pivot": [
+                0.5,
+                0.5
+            ],
+            "anchor": [
+                0.5,
+                0.5
+            ],
+            "anchoredPosition": [
+                24.24350357055664,
+                0.0
+            ],
+            "enableOffset": [
+                0.0,
+                -20.0
+            ],
+            "disableOffset": [],
+            "popUpX": true,
+            "popUpY": true,
+            "popUpZ": false,
+            "popDownX": false,
+            "popDownY": false,
+            "popDownZ": false,
+            "numberDigits": [
+                1056,
+                1057,
+                1058,
+                1059,
+                1060
+            ],
+            "numberFontSet": 962,
+            "numberFontSetImages": [],
+            "numberCeil": true,
+            "numberShowZero": true,
+            "soundOnClick": "",
+            "soundOnHover": "",
+            "soundOnEnable": "",
+            "soundOnDisable": "",
+            "enableCurveType": 2,
+            "disableCurveType": 0,
+            "dependentUpgrade": -1,
+            "linearClipOnEnableStart": [],
+            "linearClipOnEnableDir": [],
+            "linearClipOnEnableCurveType": 0,
+            "linearClipOnDisableStart": [],
+            "linearClipOnDisableDir": [],
+            "linearClipOnDisableCurveType": 0,
+            "colorTintOnEnableStart": [],
+            "colorTintOnEnableEnd": [],
+            "colorTintOnEnableCurveType": 0,
+            "colorTintOnDisableStart": [],
+            "colorTintOnDisableEnd": [],
+            "colorTintOnDisableCurveType": 0,
+            "barCells_CellNumber": 0,
+            "disableOnStartEdtior": false,
+            "disableOnStartExe": false,
+            "musicPlayOnEnable_musicClip": "",
+            "musicPlayOnDisable_musicClip": "",
+            "exclusiveEnableGroup": [],
+            "animatedSpriteFolderPath": "",
+            "animatedSpriteIsRepeat": false,
+            "duplicate_poolable": false,
+            "videoPath1": "",
+            "videoPath2": "",
+            "videoUnscaledDeltaTime": false,
+            "centerAlign": true,
+            "customFlags": 17302560,
+            "customFlags2": 16384,
+            "enumID": 148,
+            "soundEnumID": 0
+        },
+        {
+            "uiName": "digit 0",
+            "floats": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                20.0,
+                30.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "uiIndex": 1056,
+            "parentUIIndex": 1055,
+            "imagePath": "Texture/Ingame/NewFolder/HPSprite/HpFont_0.png",
+            "imagePriority": -1,
+            "openTargets": [],
+            "closeTargets": [],
+            "disablePropagationTargets": [],
+            "enablePropagationTargets": [],
+            "hoverEnableTargets": [],
+            "color": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+            ],
+            "pivot": [
+                0.5,
+                0.5
+            ],
+            "anchor": [
+                0.0,
+                1.0
+            ],
+            "anchoredPosition": [
+                90.0,
+                -11.0
+            ],
+            "enableOffset": [],
+            "disableOffset": [],
+            "popUpX": false,
+            "popUpY": false,
+            "popUpZ": false,
+            "popDownX": false,
+            "popDownY": false,
+            "popDownZ": false,
+            "numberDigits": [],
+            "numberFontSet": 0,
+            "numberFontSetImages": [],
+            "numberCeil": false,
+            "numberShowZero": false,
+            "soundOnClick": "",
+            "soundOnHover": "",
+            "soundOnEnable": "",
+            "soundOnDisable": "",
+            "enableCurveType": 0,
+            "disableCurveType": 0,
+            "dependentUpgrade": -1,
+            "linearClipOnEnableStart": [],
+            "linearClipOnEnableDir": [],
+            "linearClipOnEnableCurveType": 0,
+            "linearClipOnDisableStart": [],
+            "linearClipOnDisableDir": [],
+            "linearClipOnDisableCurveType": 0,
+            "colorTintOnEnableStart": [],
+            "colorTintOnEnableEnd": [],
+            "colorTintOnEnableCurveType": 0,
+            "colorTintOnDisableStart": [],
+            "colorTintOnDisableEnd": [],
+            "colorTintOnDisableCurveType": 0,
+            "barCells_CellNumber": 0,
+            "disableOnStartEdtior": false,
+            "disableOnStartExe": false,
+            "musicPlayOnEnable_musicClip": "",
+            "musicPlayOnDisable_musicClip": "",
+            "exclusiveEnableGroup": [],
+            "animatedSpriteFolderPath": "",
+            "animatedSpriteIsRepeat": false,
+            "duplicate_poolable": false,
+            "videoPath1": "",
+            "videoPath2": "",
+            "videoUnscaledDeltaTime": false,
+            "centerAlign": false,
+            "customFlags": 131072,
+            "customFlags2": 0,
+            "enumID": 0,
+            "soundEnumID": 0
+        },
+        {
+            "uiName": "digit 10",
+            "floats": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                20.0,
+                30.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "uiIndex": 1057,
+            "parentUIIndex": 1055,
+            "imagePath": "Texture/Ingame/NewFolder/HPSprite/HpFont_0.png",
+            "imagePriority": -1,
+            "openTargets": [],
+            "closeTargets": [],
+            "disablePropagationTargets": [],
+            "enablePropagationTargets": [],
+            "hoverEnableTargets": [],
+            "color": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+            ],
+            "pivot": [
+                0.5,
+                0.5
+            ],
+            "anchor": [
+                0.0,
+                1.0
+            ],
+            "anchoredPosition": [
+                70.0,
+                -11.0
+            ],
+            "enableOffset": [],
+            "disableOffset": [],
+            "popUpX": false,
+            "popUpY": false,
+            "popUpZ": false,
+            "popDownX": false,
+            "popDownY": false,
+            "popDownZ": false,
+            "numberDigits": [],
+            "numberFontSet": 0,
+            "numberFontSetImages": [],
+            "numberCeil": false,
+            "numberShowZero": false,
+            "soundOnClick": "",
+            "soundOnHover": "",
+            "soundOnEnable": "",
+            "soundOnDisable": "",
+            "enableCurveType": 0,
+            "disableCurveType": 0,
+            "dependentUpgrade": -1,
+            "linearClipOnEnableStart": [],
+            "linearClipOnEnableDir": [],
+            "linearClipOnEnableCurveType": 0,
+            "linearClipOnDisableStart": [],
+            "linearClipOnDisableDir": [],
+            "linearClipOnDisableCurveType": 0,
+            "colorTintOnEnableStart": [],
+            "colorTintOnEnableEnd": [],
+            "colorTintOnEnableCurveType": 0,
+            "colorTintOnDisableStart": [],
+            "colorTintOnDisableEnd": [],
+            "colorTintOnDisableCurveType": 0,
+            "barCells_CellNumber": 0,
+            "disableOnStartEdtior": false,
+            "disableOnStartExe": false,
+            "musicPlayOnEnable_musicClip": "",
+            "musicPlayOnDisable_musicClip": "",
+            "exclusiveEnableGroup": [],
+            "animatedSpriteFolderPath": "",
+            "animatedSpriteIsRepeat": false,
+            "duplicate_poolable": false,
+            "videoPath1": "",
+            "videoPath2": "",
+            "videoUnscaledDeltaTime": false,
+            "centerAlign": false,
+            "customFlags": 131072,
+            "customFlags2": 0,
+            "enumID": 0,
+            "soundEnumID": 0
+        },
+        {
+            "uiName": "digit 100",
+            "floats": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                20.0,
+                30.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "uiIndex": 1058,
+            "parentUIIndex": 1055,
+            "imagePath": "Texture/Ingame/NewFolder/HPSprite/HpFont_0.png",
+            "imagePriority": -1,
+            "openTargets": [],
+            "closeTargets": [],
+            "disablePropagationTargets": [],
+            "enablePropagationTargets": [],
+            "hoverEnableTargets": [],
+            "color": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+            ],
+            "pivot": [
+                0.5,
+                0.5
+            ],
+            "anchor": [
+                0.0,
+                1.0
+            ],
+            "anchoredPosition": [
+                50.0,
+                -11.0
+            ],
+            "enableOffset": [],
+            "disableOffset": [],
+            "popUpX": false,
+            "popUpY": false,
+            "popUpZ": false,
+            "popDownX": false,
+            "popDownY": false,
+            "popDownZ": false,
+            "numberDigits": [],
+            "numberFontSet": 0,
+            "numberFontSetImages": [],
+            "numberCeil": false,
+            "numberShowZero": false,
+            "soundOnClick": "",
+            "soundOnHover": "",
+            "soundOnEnable": "",
+            "soundOnDisable": "",
+            "enableCurveType": 0,
+            "disableCurveType": 0,
+            "dependentUpgrade": -1,
+            "linearClipOnEnableStart": [],
+            "linearClipOnEnableDir": [],
+            "linearClipOnEnableCurveType": 0,
+            "linearClipOnDisableStart": [],
+            "linearClipOnDisableDir": [],
+            "linearClipOnDisableCurveType": 0,
+            "colorTintOnEnableStart": [],
+            "colorTintOnEnableEnd": [],
+            "colorTintOnEnableCurveType": 0,
+            "colorTintOnDisableStart": [],
+            "colorTintOnDisableEnd": [],
+            "colorTintOnDisableCurveType": 0,
+            "barCells_CellNumber": 0,
+            "disableOnStartEdtior": false,
+            "disableOnStartExe": false,
+            "musicPlayOnEnable_musicClip": "",
+            "musicPlayOnDisable_musicClip": "",
+            "exclusiveEnableGroup": [],
+            "animatedSpriteFolderPath": "",
+            "animatedSpriteIsRepeat": false,
+            "duplicate_poolable": false,
+            "videoPath1": "",
+            "videoPath2": "",
+            "videoUnscaledDeltaTime": false,
+            "centerAlign": false,
+            "customFlags": 131072,
+            "customFlags2": 0,
+            "enumID": 0,
+            "soundEnumID": 0
+        },
+        {
+            "uiName": "digit 1000",
+            "floats": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                20.0,
+                30.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "uiIndex": 1059,
+            "parentUIIndex": 1055,
+            "imagePath": "Texture/Ingame/NewFolder/HPSprite/HpFont_0.png",
+            "imagePriority": -1,
+            "openTargets": [],
+            "closeTargets": [],
+            "disablePropagationTargets": [],
+            "enablePropagationTargets": [],
+            "hoverEnableTargets": [],
+            "color": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+            ],
+            "pivot": [
+                0.5,
+                0.5
+            ],
+            "anchor": [
+                0.0,
+                1.0
+            ],
+            "anchoredPosition": [
+                30.0,
+                -11.0
+            ],
+            "enableOffset": [],
+            "disableOffset": [],
+            "popUpX": false,
+            "popUpY": false,
+            "popUpZ": false,
+            "popDownX": false,
+            "popDownY": false,
+            "popDownZ": false,
+            "numberDigits": [],
+            "numberFontSet": 0,
+            "numberFontSetImages": [],
+            "numberCeil": false,
+            "numberShowZero": false,
+            "soundOnClick": "",
+            "soundOnHover": "",
+            "soundOnEnable": "",
+            "soundOnDisable": "",
+            "enableCurveType": 0,
+            "disableCurveType": 0,
+            "dependentUpgrade": -1,
+            "linearClipOnEnableStart": [],
+            "linearClipOnEnableDir": [],
+            "linearClipOnEnableCurveType": 0,
+            "linearClipOnDisableStart": [],
+            "linearClipOnDisableDir": [],
+            "linearClipOnDisableCurveType": 0,
+            "colorTintOnEnableStart": [],
+            "colorTintOnEnableEnd": [],
+            "colorTintOnEnableCurveType": 0,
+            "colorTintOnDisableStart": [],
+            "colorTintOnDisableEnd": [],
+            "colorTintOnDisableCurveType": 0,
+            "barCells_CellNumber": 0,
+            "disableOnStartEdtior": false,
+            "disableOnStartExe": false,
+            "musicPlayOnEnable_musicClip": "",
+            "musicPlayOnDisable_musicClip": "",
+            "exclusiveEnableGroup": [],
+            "animatedSpriteFolderPath": "",
+            "animatedSpriteIsRepeat": false,
+            "duplicate_poolable": false,
+            "videoPath1": "",
+            "videoPath2": "",
+            "videoUnscaledDeltaTime": false,
+            "centerAlign": false,
+            "customFlags": 131072,
+            "customFlags2": 0,
+            "enumID": 0,
+            "soundEnumID": 0
+        },
+        {
+            "uiName": "digit 10000",
+            "floats": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                20.0,
+                30.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "uiIndex": 1060,
+            "parentUIIndex": 1055,
+            "imagePath": "Texture/Ingame/NewFolder/HPSprite/HpFont_0.png",
+            "imagePriority": -1,
+            "openTargets": [],
+            "closeTargets": [],
+            "disablePropagationTargets": [],
+            "enablePropagationTargets": [],
+            "hoverEnableTargets": [],
+            "color": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+            ],
+            "pivot": [
+                0.5,
+                0.5
+            ],
+            "anchor": [
+                0.0,
+                1.0
+            ],
+            "anchoredPosition": [
+                10.0,
+                -11.0
+            ],
+            "enableOffset": [],
+            "disableOffset": [],
+            "popUpX": false,
+            "popUpY": false,
+            "popUpZ": false,
+            "popDownX": false,
+            "popDownY": false,
+            "popDownZ": false,
+            "numberDigits": [],
+            "numberFontSet": 0,
+            "numberFontSetImages": [],
+            "numberCeil": false,
+            "numberShowZero": false,
+            "soundOnClick": "",
+            "soundOnHover": "",
+            "soundOnEnable": "",
+            "soundOnDisable": "",
+            "enableCurveType": 0,
+            "disableCurveType": 0,
+            "dependentUpgrade": -1,
+            "linearClipOnEnableStart": [],
+            "linearClipOnEnableDir": [],
+            "linearClipOnEnableCurveType": 0,
+            "linearClipOnDisableStart": [],
+            "linearClipOnDisableDir": [],
+            "linearClipOnDisableCurveType": 0,
+            "colorTintOnEnableStart": [],
+            "colorTintOnEnableEnd": [],
+            "colorTintOnEnableCurveType": 0,
+            "colorTintOnDisableStart": [],
+            "colorTintOnDisableEnd": [],
+            "colorTintOnDisableCurveType": 0,
+            "barCells_CellNumber": 0,
+            "disableOnStartEdtior": false,
+            "disableOnStartExe": false,
+            "musicPlayOnEnable_musicClip": "",
+            "musicPlayOnDisable_musicClip": "",
+            "exclusiveEnableGroup": [],
+            "animatedSpriteFolderPath": "",
+            "animatedSpriteIsRepeat": false,
+            "duplicate_poolable": false,
+            "videoPath1": "",
+            "videoPath2": "",
+            "videoUnscaledDeltaTime": false,
+            "centerAlign": false,
+            "customFlags": 131072,
+            "customFlags2": 0,
+            "enumID": 0,
             "soundEnumID": 0
         }
     ]

@@ -93,6 +93,8 @@ void TacticModeSystem::OnContentsStop()
 
 void TacticModeSystem::EngageTacticSystem()
 {
+    PlayerController::Instance().SetManaFull();
+
     this->isOperating = true;
     this->isCoolTime = true;
 
@@ -175,6 +177,7 @@ EnqueErrorType TacticModeSystem::EnqueueCommand(std::shared_ptr<UnitCommand> com
 
 void TacticModeSystem::ExecuteCommands()
 {
+    PlayerController::Instance().ApplyBeforeEngageSkillCoolTime();
     SkillPreviewSystem::Instance().HideTemporaryRoute();
     this->isExecuting = true;
     StartCoroutine(this->ExecuteInternal());

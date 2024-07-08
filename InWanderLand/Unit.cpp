@@ -115,8 +115,14 @@ void Unit::Update()
     // UI가 유닛을 따라다니게 만듬
     auto& offset = unitTemplateData->pod.statusBarOffset;
     if (!unitStatusUI.expired())
+    {
         unitStatusUI.lock()->GetTransform()->SetWorldPosition(Vector3d{ offset.x,offset.y,0 }
-    + UIManager::Instance().GetUIPosFromWorld(GetTransform()->GetWorldPosition()));
+        + UIManager::Instance().GetUIPosFromWorld(GetTransform()->GetWorldPosition()));
+    }
+    if (!dmgIndicator.expired() && dmgIndicator.lock()->GetActive() == true)
+    {
+        dmgIndicator.lock()->GetTransform()->SetWorldPosition(UIManager::Instance().GetUIPosFromWorld(dmgIndicatorPosition));
+    }
     // 버프 효과 적용
     for (auto& [buffID, buff] : buffs)
     {
@@ -562,6 +568,20 @@ void Unit::Damaged(std::weak_ptr<Unit> opponentUnit, float opponentDmg, DamageTy
         break;
     default:
         break;
+    }
+
+    if (opponentDmg > 1)
+    {
+        if (dmgIndicator.expired() || dmgIndicator.lock()->GetActive() == false)
+        {
+            dmgIndicator = DuplicatedUIPool::Instance().Borrow(UIEnumID::DamageIndicator_Default);
+        }
+        auto element = dmgIndicator.lock()->GetUIElement();
+        element->GetLocalUIsByEnumID().at(UIEnumID::DamageIndicator_Number)->SetNumber(opponentDmg);
+        dmgIndicatorPosition = GetTransform()->GetWorldPosition();
+        auto uiPos = UIManager::Instance().GetUIPosFromWorld(dmgIndicatorPosition);
+        element->GetTransform()->SetWorldPosition(uiPos);
+        element->EnableElement();
     }
 
     onDamagedFromUnit(opponentUnit);

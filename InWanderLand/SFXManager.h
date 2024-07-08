@@ -5,6 +5,7 @@
 #include "YunutyEngine.h"
 #include "PlayableComponent.h"
 #include "SoundSystem.h"
+#include "Storable.h"
 
 #include <vector>
 #include <string>
@@ -15,8 +16,9 @@ namespace FMOD
 }
 
 class SFXManager
-	: public SingletonClass<SFXManager>, public application::PlayableComponent
+	: public SingletonClass<SFXManager>, public application::PlayableComponent, public application::Storable
 {
+	friend class application::editor::MapFileManager;
 public:
 	SFXManager();
 	static void PlaySoundfile(string soundPath);
@@ -40,6 +42,13 @@ public:
 	virtual void OnGameStop() override;
 
 	static std::vector<std::string>& GetSoundGroupNames();
+
+	void Clear();
+
+	virtual bool PreEncoding(json& data) const override;
+	virtual bool PostEncoding(json& data) const override;
+	virtual bool PreDecoding(const json& data) override;
+	virtual bool PostDecoding(const json& data) override;
 
 private:
 	float localSFXVolume = 1.0f;

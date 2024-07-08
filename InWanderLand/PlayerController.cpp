@@ -392,34 +392,42 @@ void PlayerController::HandleCamera()
     static constexpr float tacticZoomoutDistanceFactor = 1.2f;
     // 영웅이 선택되어 있고, 카메라가 선택된 영웅을 따라가는 경우 targetPos는 영웅의 위치로 설정됩니다.
     Vector3d targetPos;
-    if (!selectedCharacter.expired())
+    if (TacticModeSystem::Instance().IsOperation() && !TacticModeSystem::Instance().IsExecuting())
     {
-        camPivotPoint = selectedCharacter.lock()->GetTransform()->GetWorldPosition();
-        zoomMultiplierByNonSelection.reset();
+        RTSCam::Instance().SetIdealPosition(tacticCameraRef->GetTransform()->GetWorldPosition());
+        RTSCam::Instance().SetIdealRotation(tacticCameraRef->GetTransform()->GetWorldRotation());
     }
     else
     {
-        if (!zoomMultiplierByNonSelection)
+        if (!selectedCharacter.expired())
         {
-            zoomMultiplierByNonSelection = camZoomMultiplier.AcquireFactor();
-            *zoomMultiplierByNonSelection = GlobalConstant::GetSingletonInstance().pod.tacticZoomMultiplier;
+            camPivotPoint = selectedCharacter.lock()->GetTransform()->GetWorldPosition();
+            zoomMultiplierByNonSelection.reset();
         }
-        camPivotPoint = GetMiddlePoint();
+        else
+        {
+            if (!zoomMultiplierByNonSelection)
+            {
+                zoomMultiplierByNonSelection = camZoomMultiplier.AcquireFactor();
+                *zoomMultiplierByNonSelection = GlobalConstant::GetSingletonInstance().pod.tacticZoomMultiplier;
+            }
+            camPivotPoint = GetMiddlePoint();
+        }
+        // 카메라가 지역 제한에 걸렸을 경우, targetPos를 지역 안으로 정의합니다.
+        if (camLockRegion)
+        {
+            camPivotPoint.x = std::clamp(camPivotPoint.x, camLockRegion->pod.x - camLockRegion->pod.width * 0.5, camLockRegion->pod.x + camLockRegion->pod.width * 0.5);
+            camPivotPoint.z = std::clamp(camPivotPoint.z, camLockRegion->pod.z - camLockRegion->pod.height * 0.5, camLockRegion->pod.z + camLockRegion->pod.height * 0.5);
+        }
+        if (isConstraingCamUpdateDirection)
+        {
+            camPivotPoint = camPreviousPivotPoint + std::fmaxf(0, Vector3d::Dot(camPivotPoint - camPreviousPivotPoint, camContrainingDirection)) * camContrainingDirection;
+        }
+        targetPos = camPivotPoint + camOffsetNorm * camZoomFactor * camZoomMultiplier;
+        camPreviousPivotPoint = camPivotPoint;
+        RTSCam::Instance().SetIdealPosition(targetPos);
+        RTSCam::Instance().SetIdealRotation(camRotation);
     }
-    // 카메라가 지역 제한에 걸렸을 경우, targetPos를 지역 안으로 정의합니다.
-    if (camLockRegion)
-    {
-        camPivotPoint.x = std::clamp(camPivotPoint.x, camLockRegion->pod.x - camLockRegion->pod.width * 0.5, camLockRegion->pod.x + camLockRegion->pod.width * 0.5);
-        camPivotPoint.z = std::clamp(camPivotPoint.z, camLockRegion->pod.z - camLockRegion->pod.height * 0.5, camLockRegion->pod.z + camLockRegion->pod.height * 0.5);
-    }
-    if (isConstraingCamUpdateDirection)
-    {
-        camPivotPoint = camPreviousPivotPoint + std::fmaxf(0, Vector3d::Dot(camPivotPoint - camPreviousPivotPoint, camContrainingDirection)) * camContrainingDirection;
-    }
-    targetPos = camPivotPoint + camOffsetNorm * camZoomFactor * camZoomMultiplier;
-    camPreviousPivotPoint = camPivotPoint;
-    RTSCam::Instance().SetIdealPosition(targetPos);
-    RTSCam::Instance().SetIdealRotation(camRotation);
 }
 
 void PlayerController::HandleSkillPreview()
@@ -1063,8 +1071,8 @@ void PlayerController::SetState(State::Enum newState)
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Vinetting)->EnableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_MenuButton)->EnableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Bottom_Layout)->EnableElement();
-        skillCooltimeLeft.fill(0);
-        skillCooltimeLeft.fill(0);
+        //skillCooltimeLeft.fill(0);
+        //skillCooltimeLeft.fill(0);
         break;
     case PlayerController::State::Battle:
         zoomMultiplierByState.reset();
@@ -1109,6 +1117,13 @@ void PlayerController::SetState(State::Enum newState)
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Bottom_Layout)->DisableElement();
         UnselectUnit();
         UnSelectSkill();
+        previousSkillCooltimeLeft = skillCooltimeLeft;
+        skillCooltimeLeft.fill(0);
+        for (int skillType = SkillType::ROBIN_Q; skillType <= SkillType::HANSEL_W; skillType++)
+        {
+            SetCooltime((SkillType::Enum)skillType, 0);
+        }
+
     }
     break;
     }
@@ -1261,6 +1276,24 @@ void PlayerController::ResetCombo()
     UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Combo_Text)->DisableElement();
 }
 
+void PlayerController::SetTacticCameraActive(bool boolen)
+{
+    if (boolen)
+    {
+        auto tacticCamTransform = tacticCameraRef->GetTransform();
+        Vector3d endPos = { tacticCamTransform->GetWorldPosition().x, tacticCamTransform->GetWorldPosition().y, tacticCamTransform->GetWorldPosition().z };
+        Quaternion endRot = { tacticCamTransform->GetWorldRotation().w, tacticCamTransform->GetWorldRotation().x, tacticCamTransform->GetWorldRotation().y, tacticCamTransform->GetWorldRotation().z};
+    }
+    else
+    {
+
+    }
+    if (GlobalConstant::GetSingletonInstance().pod.tacticCameraLerpTime == 0)
+    {
+
+    }
+}
+
 void PlayerController::SetManaFull()
 {
     SetMana(GlobalConstant::GetSingletonInstance().pod.maxMana);
@@ -1316,6 +1349,11 @@ void PlayerController::RequestStateFromAction(State::Enum newState)
     this->stateRequestedByAction = newState;
 }
 
+void PlayerController::ApplyBeforeEngageSkillCoolTime()
+{
+    skillCooltimeLeft = previousSkillCooltimeLeft;
+}
+
 void PlayerController::SetTacticCamera(GameObject* cam)
 {
     tacticCameraRef = cam;
@@ -1333,6 +1371,8 @@ Vector3d PlayerController::GetCamPivotPoint()
 
 void PlayerController::SetCooltime(SkillType::Enum skillType, float cooltime)
 {
+    if (skillType == SkillType::EnemyImpale)
+        return;
     skillCooltimeLeft[skillType] = std::fmax(0.0f, cooltime);
     PlayerPortraitUIs::ReflectCooltime(skillType, cooltime, GetCooltimeForSkill(skillType));
 }
@@ -1511,10 +1551,10 @@ void PlayerController::OnPlayerUnitSkillActivation(std::weak_ptr<Unit> unit, std
     SetCooltime(skillType, GetCooltimeForSkill(skillType));
     if (skillType != SkillType::NONE)
     {
-        if (state != State::Tactic)
-        {
-            SetMana(mana - RequiredManaForSkill(skillType));
-        }
+        //if (state != State::Tactic)
+        //{
+        //    //SetMana(mana - RequiredManaForSkill(skillType));
+        //}
         onSkillActivate[skillType]();
     }
 }

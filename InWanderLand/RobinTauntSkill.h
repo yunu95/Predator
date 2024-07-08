@@ -5,7 +5,7 @@ struct POD_RobinTauntSkill
 {
     float   foreswingDuration = -1.0f;
     float	skillDuration = -1.0f;
-
+    
     float	coolTime = 2.0f;
     float	skillCost = 10.0f;
     float   skillRadius = 1.0f;
@@ -14,6 +14,7 @@ struct POD_RobinTauntSkill
     float	skillDamageUpgraded = 5.0f;
     float	skillTauntTime = 3.0f;
 
+    float   zoomFactor = 1.0f;
     TO_JSON(POD_RobinTauntSkill)
         FROM_JSON(POD_RobinTauntSkill)
 };

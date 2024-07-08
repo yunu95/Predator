@@ -99,7 +99,7 @@ public:
     Reference referenceCinematic;
 
     void RequestStateFromAction(State::Enum newState);
-
+    void ApplyBeforeEngageSkillCoolTime();
     void SetTacticCamera(GameObject* cam);
 
     // 스킬 업그레이드와 관련된 부분
@@ -146,6 +146,7 @@ private:
     Vector3d GetMiddlePoint();
     // 연속으로 쌓은 콤보를 초기화한다.
     void ResetCombo();
+    void SetTacticCameraActive(bool boolen);
 
     void SetCooltime(SkillType::Enum skillType, float cooltime);
     void SetCooltime(std::weak_ptr<Unit> unit);
@@ -167,6 +168,7 @@ private:
     int currentCombo{ 0 };
     std::array<int, 3> comboObjective{ 10, 20, 30 };
     std::array<bool, 3> comboAchieved{ false };
+    std::array<float, SkillType::SKILL_NUM> previousSkillCooltimeLeft;
     std::array<float, SkillType::SKILL_NUM> skillCooltimeLeft;
     std::array<UIElement*, SkillType::SKILL_NUM> skillCooltimeNumberUI;
     std::array<UIElement*, SkillType::SKILL_NUM> skillCooltimeMaskUI;

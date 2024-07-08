@@ -169,6 +169,9 @@ enum class UIEnumID
     BeaconOutside_ArrowBottom,
     BeaconOutside_ArrowRight,
     BeaconOutside_ArrowLeft,
+    // 일반 잡졸들에 적용되는 데미지 표시기
+    DamageIndicator_Default,
+    DamageIndicator_Number,
 };
 
 template<>
@@ -345,6 +348,9 @@ const std::unordered_map<int, std::string>& application::POD_Enum<UIEnumID>::Get
         { static_cast<int>((int)UIEnumID::BeaconOutside_ArrowBottom), "BeaconOutside_ArrowBottom" },
         { static_cast<int>((int)UIEnumID::BeaconOutside_ArrowRight), "BeaconOutside_ArrowRight" },
         { static_cast<int>((int)UIEnumID::BeaconOutside_ArrowLeft), "BeaconOutside_ArrowLeft" },
+        // 일반 잡졸들에 적용되는 데미지 표시기
+        { static_cast<int>((int)UIEnumID::DamageIndicator_Default), "DamageIndicator_Default" },
+        { static_cast<int>((int)UIEnumID::DamageIndicator_Number), "DamageIndicator_Number" },
     };
     return enumNameMap;
 }

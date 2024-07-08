@@ -25,6 +25,11 @@ struct POD_EnemyImpaleSkill
     float impaleSkillKnockbackDuration = 2.0f;
 
     float impaleStartDelay = 1.5f;
+    float spearAriseTimeRatio = 0.3f;
+
+    float maxSpearDegree = 70.0f;
+    float maxSpearScale = 2.0f;
+    float minSpearScale = 0.5f;
 
     TO_JSON(POD_EnemyImpaleSkill)
         FROM_JSON(POD_EnemyImpaleSkill)
@@ -45,7 +50,7 @@ public:
     static POD_EnemyImpaleSkill pod;
 
 private:
-    coroutine::Coroutine SpearArise(std::weak_ptr<EnemyImpaleSkill> skill, Vector2d pos);
+    coroutine::Coroutine SpearArise(std::weak_ptr<EnemyImpaleSkill> skill, Vector2d pos, Quaternion quat, float scaleRatio);
     coroutine::Coroutine SpawningSkillffect(std::weak_ptr<EnemyImpaleSkill> skill);
 
     std::weak_ptr<coroutine::Coroutine> effectCoroutine;

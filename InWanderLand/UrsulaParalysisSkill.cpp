@@ -106,6 +106,10 @@ coroutine::Coroutine UrsulaParalysisSkill::SpawningFieldEffect(std::weak_ptr<Urs
         foreswingSpeed = paralysisForeswingTime / pod.foreswingDuration;
     }
     
+    auto beforeSkillZoomFactor = PlayerController::Instance().GetZoomFactor();
+
+    PlayerController::Instance().SetZoomFactor(beforeSkillZoomFactor * pod.zoomFactor);
+
     tentacleAnimator->GetGI().SetPlaySpeed(foreswingSpeed);
     waveAnimator->GetGI().SetPlaySpeed(foreswingSpeed);
     waveVFXAnimator.lock()->SetSpeed(foreswingSpeed);
@@ -132,6 +136,7 @@ coroutine::Coroutine UrsulaParalysisSkill::SpawningFieldEffect(std::weak_ptr<Urs
             tentacleAnimator->GetGI().SetPlaySpeed(skillSpeed);
             waveAnimator->GetGI().SetPlaySpeed(skillSpeed);
             waveVFXAnimator.lock()->SetSpeed(skillSpeed);
+            PlayerController::Instance().SetZoomFactor(beforeSkillZoomFactor);
         }
 
         if (hit)

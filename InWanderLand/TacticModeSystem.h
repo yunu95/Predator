@@ -92,6 +92,7 @@ private:
 
     std::array<std::shared_ptr<Reference::Guard>, 3> playersTacticRevArr;
     std::array<bool, 6> useSkill;
+    std::array<float, SkillType::SKILL_NUM> skillCooltimeLeft;
 
     friend class PlayerController;
     friend class UnitAttackCommand;

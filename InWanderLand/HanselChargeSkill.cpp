@@ -217,6 +217,12 @@ coroutine::Coroutine HanselChargeSkill::SpawningFieldEffect(std::weak_ptr<Hansel
     for (auto each : stompCollider.lock()->GetEnemies())
     {
         each->Damaged(owner, GetDamage());
+        Vector3d delta = pod.impactKnockbackDistance * (each->GetTransform()->GetWorldPosition() - currentPos).Normalized();
+
+        if (BossSummonMobSkill::GetRightFrameUnit().expired() || (each != BossSummonMobSkill::GetLeftFrameUnit().lock().get() && each != BossSummonMobSkill::GetRightFrameUnit().lock().get()))
+        {
+            each->KnockBack(each->GetTransform()->GetWorldPosition() + delta, pod.impactKnockbackDuration);
+        }
     }
     RTSCam::Instance().ApplyShake(pod.impactCamShakeDistance2, pod.impactCamShakeFrequency2, pod.impactCamShakeDecreaseFactor2, endPos);
 

@@ -1179,13 +1179,6 @@ bool UIManager::ImportDealWithSpecialCases_Post(const JsonUIData& uiData, UIElem
         ImportDefaultAction_Post(uiData, GetUIElementWithIndex(uiData.uiIndex));
         switch (element->duplicateParentEnumID)
         {
-        case UIEnumID::TacticModeRevertButton_Active:
-            element->button->AddExternalButtonClickFunction([=]()
-                {
-                    TacticModeSystem::Instance().PopCommand();
-                }
-            );
-            break;
         case UIEnumID::CharInfo_Robin:
         case UIEnumID::CharInfo_Robin_Left:
             element->button->AddExternalButtonClickFunction([=]()
@@ -1259,6 +1252,12 @@ bool UIManager::ImportDealWithSpecialCases_Post(const JsonUIData& uiData, UIElem
             element->button->AddExternalButtonClickFunction([=]()
                 {
                     PlayerController::Instance().SelectSkill(SkillType::HANSEL_W);
+                });
+            break;
+        case UIEnumID::TacticModeRevertButton_Active:
+            element->button->AddExternalButtonClickFunction([=]()
+                {
+                    TacticModeSystem::Instance().PopCommand();
                 });
             break;
         }

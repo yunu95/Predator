@@ -50,6 +50,7 @@ namespace application
         GC<float> tacticSkillCost = 10.0f;
         GC<float> tacticMoveCost = 10.0f;
         GC<float> tacticAttackCost = 10.0f;
+        GC<float> tacticCameraLerpTime = 2.0f;
 
         GC<float> tacticGaugeRecoveryPerSecond = 2.0f;
         GC<float> battleZoomMultiplier = 0.95f;
