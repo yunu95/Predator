@@ -22,6 +22,8 @@ namespace application
 	}
 }
 
+class SFXManager;
+
 namespace application
 {
 	namespace editor
@@ -49,6 +51,7 @@ namespace application
 			TemplateDataManager& templateDataManager;
 			CommandManager& commandManager;
 			SkillManager& skillManager;
+			SFXManager& sfxManager;
 
 			std::string currentMapPath;
 		};

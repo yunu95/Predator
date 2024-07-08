@@ -105,7 +105,7 @@ bool yunutyEngine::SoundSystem::mLoad3DSound(string soundPath)
     }
     sounds3D[soundPath]->setSoundGroup(GetSoundGroup(0));
     soundGroupIndexMap[sounds3D[soundPath]] = 0;
-    soundPriorityMap[sounds3D[soundPath]] = 0;
+    soundPriorityMap[sounds3D[soundPath]] = 128;
     return true;
 }
 bool yunutyEngine::SoundSystem::mLoadSound(string soundPath)
@@ -117,7 +117,7 @@ bool yunutyEngine::SoundSystem::mLoadSound(string soundPath)
     }
     sounds[soundPath]->setSoundGroup(GetSoundGroup(0));
     soundGroupIndexMap[sounds[soundPath]] = 0;
-    soundPriorityMap[sounds[soundPath]] = 0;
+    soundPriorityMap[sounds[soundPath]] = 128;
     return true;
 }
 bool yunutyEngine::SoundSystem::mIsSoundLoaded(string soundPath)
