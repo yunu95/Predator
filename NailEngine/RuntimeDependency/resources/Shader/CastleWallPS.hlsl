@@ -113,7 +113,7 @@ PS_OUT main(PixelIn input)
     
    
     
-    output.util = float4(lightMapUV[input.id].lightMapIndex, DiffuseExposure, AmbientExposure, lightMapUV[input.id].isOutLine);
+    output.util = float4(lightMapUV[input.id].lightMapIndex, lightMapUV[input.id].isOutLine, AmbientExposure, DiffuseExposure);
     
     return output;
 }

@@ -154,7 +154,7 @@ void GraphicsTest()
 	}
 
 	{
-		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_FlyingCandle");
+		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("VFX_CandleLight");
 	}
 
 	/*{
