@@ -154,15 +154,7 @@ void GraphicsTest()
 	}
 
 	{
-		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Temple_Floor");
-		obj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-20 });
-	}
-	{
-		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Stage1_Floor_01");
-	}
-	{
-		yunutyEngine::Vector3d temp{ 6,0,-20 };
-		systemComponent->ShowRobinWSkill(temp, 5);
+		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_FlyingCandle");
 	}
 
 	/*{
