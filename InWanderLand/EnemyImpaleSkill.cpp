@@ -49,11 +49,22 @@ const std::vector<Spear> SpearsInfo()
                 float distance = spearPos.Magnitude();
 
                 float spearDegree = distance / ovalHeight * EnemyImpaleSkill::pod.maxSpearDegree;           /// 거리 비례 창 각도
+                if (y < 0)
+                {
+                    spearDegree *= -1;
+                }
                 float scaleRatio = (1 - distance / ovalHeight) * EnemyImpaleSkill::pod.maxSpearScale + distance / ovalHeight * EnemyImpaleSkill::pod.minSpearScale;        /// 거리 비례 창 크기 비율
                 assert(scaleRatio > 0);
 
                 Quaternion spearRotation;
-                spearRotation = Quaternion::MakeWithForwardUp(direction * -1, direction.up);
+                if (y < 0)
+                {
+                    spearRotation = Quaternion::MakeWithForwardUp(direction * -1, direction.down);
+                }
+                else
+                {
+                    spearRotation = Quaternion::MakeWithForwardUp(direction * -1, direction.up);
+                }
                 auto euler = spearRotation.Euler();
                 euler.x = spearDegree;
 
