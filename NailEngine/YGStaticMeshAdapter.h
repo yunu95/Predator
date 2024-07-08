@@ -193,7 +193,14 @@ namespace yunuGIAdapter
 				return this->materialVec[index].get()->GetMaterial();
 			}
 		};
-
+		virtual void SetOutLineInfo(bool isOutLine, yunuGI::Color outLineColor) override
+		{
+			for (auto& each : renderable->renderInfoVec)
+			{
+				each->outlineInfo = DirectX::SimpleMath::Vector4{ outLineColor.r,outLineColor.g,outLineColor.b, renderable->GetID() };
+				each->isOutLine = isOutLine;
+			}
+		};
 
 	private:
 		std::shared_ptr<StaticMesh> renderable;

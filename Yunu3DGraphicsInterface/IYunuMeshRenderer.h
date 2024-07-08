@@ -15,5 +15,6 @@ namespace yunuGI
 		virtual int GetMaterialCount() = 0;
 		virtual void SetMesh(IMesh* mesh) = 0;
 		virtual IMesh* GetMesh() const= 0;
+		virtual void SetOutLineInfo(bool isOutLine, yunuGI::Color outLineColor) = 0;
 	};
 }

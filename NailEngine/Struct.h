@@ -188,6 +188,9 @@ struct RenderInfo
     DirectX::SimpleMath::Vector2 uvScaling;
 
     float depthBias = 0.001f;
+
+	DirectX::SimpleMath::Vector4 outlineInfo{ 0,0,0,-1 };
+	bool isOutLine = false;
 };
 
 class NailAnimator;
@@ -242,9 +245,11 @@ struct ParticleBuffer
 struct LightMapUV
 {
     float lightMapIndex;
-    DirectX::SimpleMath::Vector3 padding;
+    int isOutLine = 0;
+    DirectX::SimpleMath::Vector2 padding;
     DirectX::SimpleMath::Vector2 uvOffset;
     DirectX::SimpleMath::Vector2 scaling;
+    DirectX::SimpleMath::Vector4 outlineInfo{0,0,0,-1};
 };
 
 struct LightMapUVBuffer

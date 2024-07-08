@@ -154,6 +154,15 @@ namespace yunuGIAdapter
 		{
 			return this->materialVec.size();
 		};
+
+		virtual void SetOutLineInfo(bool isOutLine, yunuGI::Color outLineColor) override 
+		{
+			for (auto& each : renderable->renderInfoVec)
+			{
+				each->renderInfo.outlineInfo = DirectX::SimpleMath::Vector4{ outLineColor.r,outLineColor.g,outLineColor.b, renderable->GetID() };
+				each->renderInfo.isOutLine = isOutLine;
+			}
+		};
 	private:
 		std::shared_ptr<SkinnedMesh> renderable;
 		std::vector<std::shared_ptr<MaterialWrapper>> materialVec;

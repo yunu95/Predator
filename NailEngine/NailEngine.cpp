@@ -333,6 +333,11 @@ void NailEngine::CreateRenderTargetGroup()
             static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
         ));
 
+		rtVec[3].clearColor[0] = 0.f;
+		rtVec[3].clearColor[1] = 0.f;
+		rtVec[3].clearColor[2] = 0.f;
+		rtVec[3].clearColor[3] = 0.f;
+
         rtVec[4].texture = std::static_pointer_cast<Texture>(ResourceManager::Instance.Get().CreateTexture(
             L"ARMTarget",
             this->windowInfo.width,
@@ -351,6 +356,14 @@ void NailEngine::CreateRenderTargetGroup()
 
 		rtVec[6].texture = std::static_pointer_cast<Texture>(ResourceManager::Instance.Get().CreateTexture(
 			L"View_Pos_Decal_Target",
+			this->windowInfo.width,
+			this->windowInfo.height,
+			DXGI_FORMAT_R32G32B32A32_FLOAT,
+			static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
+		));
+
+		rtVec[7].texture = std::static_pointer_cast<Texture>(ResourceManager::Instance.Get().CreateTexture(
+			L"OutLineInfoTarget",
 			this->windowInfo.width,
 			this->windowInfo.height,
 			DXGI_FORMAT_R32G32B32A32_FLOAT,
