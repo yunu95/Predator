@@ -25,6 +25,7 @@
 #include "EditorPopupManager.h"
 #include "EditableDataList.h"
 #include "SkillManager.h"
+#include "SFXManager.h"
 
 #include <fstream>
 
@@ -38,6 +39,7 @@ namespace application
 			templateDataManager(TemplateDataManager::GetSingletonInstance()),
 			commandManager(CommandManager::GetSingletonInstance()),
 			skillManager(SkillManager::GetSingletonInstance()),
+			sfxManager(SFXManager::SingleInstance()),
 			currentMapPath()
 		{
 
@@ -266,13 +268,13 @@ namespace application
 
 				auto& scriptSystem = ScriptSystem::Instance();
 
-				if (!globalConstant.PreDecoding(mapData) || !scriptSystem.PreDecoding(mapData) || !instanceManager.PreDecoding(mapData) || !templateDataManager.PreDecoding(mapData) || !skillManager.PreDecoding(mapData))
+				if (!globalConstant.PreDecoding(mapData) || !scriptSystem.PreDecoding(mapData) || !instanceManager.PreDecoding(mapData) || !templateDataManager.PreDecoding(mapData) || !skillManager.PreDecoding(mapData) || !sfxManager.PreDecoding(mapData))
 				{
 					loadFile.close();
 					return false;
 				}
 
-				if (!scriptSystem.PostDecoding(mapData) || !instanceManager.PostDecoding(mapData) || !templateDataManager.PostDecoding(mapData) || !skillManager.PostDecoding(mapData))
+				if (!scriptSystem.PostDecoding(mapData) || !instanceManager.PostDecoding(mapData) || !templateDataManager.PostDecoding(mapData) || !skillManager.PostDecoding(mapData) || !sfxManager.PostDecoding(mapData))
 				{
 					loadFile.close();
 					return false;
@@ -311,13 +313,13 @@ namespace application
 			}
 
 			// Pre
-			if (!globalConstant.PreEncoding(mapData) || !scriptSystem.PreEncoding(mapData) || !instanceManager.PreEncoding(mapData) || !templateDataManager.PreEncoding(mapData) || !skillManager.PreEncoding(mapData))
+			if (!globalConstant.PreEncoding(mapData) || !scriptSystem.PreEncoding(mapData) || !instanceManager.PreEncoding(mapData) || !templateDataManager.PreEncoding(mapData) || !skillManager.PreEncoding(mapData) || !sfxManager.PreEncoding(mapData))
 			{
 				return false;
 			}
 
 			// Post
-			if (!scriptSystem.PostEncoding(mapData) || !instanceManager.PostEncoding(mapData) || !templateDataManager.PostEncoding(mapData) || !skillManager.PostEncoding(mapData))
+			if (!scriptSystem.PostEncoding(mapData) || !instanceManager.PostEncoding(mapData) || !templateDataManager.PostEncoding(mapData) || !skillManager.PostEncoding(mapData) || !sfxManager.PostEncoding(mapData))
 			{
 				return false;
 			}
@@ -389,6 +391,7 @@ namespace application
 			instanceManager.Clear();
 			templateDataManager.Clear();
 			skillManager.Clear();
+			sfxManager.Clear();
 			UUIDManager::GetSingletonInstance().Clear();
 		}
 	}

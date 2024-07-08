@@ -15,8 +15,9 @@ struct PixelIn
 float4 FixColor(int2 uv)
 {
     float4 color = float4(-1, -1, -1, 1);
+
     float isOutLine = Temp3Map.Load(float3(uv.x,uv.y,0)).g;
-    int outLineRange = 2;
+    int outLineRange = 1;
     int filterSize = 2 * outLineRange + 1;
     float4 outLineInfo = Temp2Map.Load(float3(uv.x, uv.y, 0));
     int id = outLineInfo.a;

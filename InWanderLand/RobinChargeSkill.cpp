@@ -141,7 +141,8 @@ void RobinChargeSkill::OnInterruption()
 	auto animator = owner.lock()->GetAnimator();
 	animator.lock()->Resume();
 	animator.lock()->GetGI().SetPlaySpeed(1);
-	chargeEffectAnimator.lock()->SetSpeed(1);
+	if (!chargeEffectAnimator.expired())
+		chargeEffectAnimator.lock()->SetSpeed(1);
 	owner.lock()->SetRotation(owner.lock()->GetTransform()->GetWorldRotation() * Quaternion(Vector3d(0, 180, 0)), 0);
 }
 

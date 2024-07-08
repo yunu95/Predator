@@ -100,11 +100,11 @@ coroutine::Coroutine BossImpaleSkill::operator()()
 
 	for (auto& each : spearVec)
 	{
-		//while (each.timeOffset > waitImpaleDuration.Elapsed())
-		//{
-		//	waitImpaleDuration.Tick();
-		//	co_await std::suspend_always{};
-		//}
+		while (each.timeOffset > waitImpaleDuration.Elapsed())
+		{
+			waitImpaleDuration.Tick();
+			co_await std::suspend_always{};
+		}
 
 		auto spearAriseCoroutine = ContentsCoroutine::StartRoutine(SpearArise(std::dynamic_pointer_cast<BossImpaleSkill>(selfWeakPtr.lock()), each.position));
 		spearAriseCoroutine.lock()->PushDestroyCallBack([this]()
@@ -241,7 +241,7 @@ coroutine::Coroutine BossImpaleSkill::SpawningSkillffect(std::weak_ptr<BossImpal
 
 	previewEffect = FBXPool::Instance().Borrow("VFX_HeartQueen_Skill2_Preview");
 
-	previewEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos + owner.lock()->GetTransform()->GetWorldRotation().Forward() * pod.impaleSkillRange / 2);
+	previewEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos + owner.lock()->GetTransform()->GetWorldRotation().Forward() * pod.impaleSkillRange / 2 + Vector3d(0.0f, 0.2f, 0.0f));
 	previewEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(owner.lock()->GetTransform()->GetWorldRotation());
 	previewEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(pod.impaleSkillWidth / colliderEffectRatio,
 		1,

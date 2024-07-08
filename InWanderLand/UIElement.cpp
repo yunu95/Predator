@@ -23,7 +23,10 @@ void UIElement::EnableElement()
     enabled = true;
     GetGameObject()->SetSelfActive(true);
     if (colorTintOnDisable)
+    {
+        imageComponent.lock()->GetGI().SetColor(colorTintOnDisable->startColor);
         colorTintOnDisable->StopTimer();
+    }
     if (scalePopDownTransition)
         scalePopDownTransition->StopTimer();
     if (soundOnDisable)
