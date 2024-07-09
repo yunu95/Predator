@@ -15,15 +15,6 @@ float GetBloomCurve(float x, float threshold)
     
     result = x * 0.05 + max(0, x - threshold) * 0.5; // default threshold = 1.26
     
-//#ifdef BLOOMCURVE_METHOD_2
-//    result = x*x/3.2;
-//#endif
-    
-//#ifdef BLOOMCURVE_METHOD_3
-//    result = max(0,x-threshold); // default threshold = 1.0
-//    result *= result;
-//#endif 
-    
     return result * 0.5f;
 }
 

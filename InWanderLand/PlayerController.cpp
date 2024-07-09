@@ -504,6 +504,7 @@ void PlayerController::HandleSkillPreview()
             parentEnumIDHovering = parentEnumIDHoveringPending;
 
             SkillPreviewSystem::Instance().HideRobinQSkill();
+            SkillPreviewSystem::Instance().HideRobinWSkill();
             SkillPreviewSystem::Instance().HideUrsulaQSkill();
             SkillPreviewSystem::Instance().HideUrsulaWSkill();
             SkillPreviewSystem::Instance().HideHanselQSkill();
@@ -554,8 +555,11 @@ void PlayerController::HandleSkillPreview()
             {
             case (int)UIEnumID::CharInfo_Robin:
             case (int)UIEnumID::CharInfo_Robin_Left:
-                SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Robin, characters[PlayerCharacterType::Robin].lock()->GetTransform()->GetWorldPosition(), RobinTauntSkill::GetSkillRadius());
+            {
+                auto pos{ characters[PlayerCharacterType::Robin].lock()->GetTransform()->GetWorldPosition() };
+                SkillPreviewSystem::Instance().ShowRobinWSkill(pos, RobinTauntSkill::GetSkillRadius());
                 break;
+            }
             case (int)UIEnumID::CharInfo_Ursula:
             case (int)UIEnumID::CharInfo_Ursula_Left:
             {

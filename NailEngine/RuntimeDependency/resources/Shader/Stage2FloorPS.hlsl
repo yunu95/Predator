@@ -53,12 +53,10 @@ PS_OUT main(PixelIn input)
         float3 x = max(0, lightColor.xyz - 0.004);
         lightColor.xyz = (x * (6.2 * x + 0.5)) / (x * (6.2 * x + 1.7) + 0.06);
     
-        //output.color = color * lightColor;
         output.color = lightColor;
     }
     else
     {
-        //color = pow(color, 2.2f);
     }
     output.color.w = 0.7;
     //color.w = 1;
@@ -101,7 +99,7 @@ PS_OUT main(PixelIn input)
     float4 tempNormal = float4(viewNormal.xyz, 1.f);
     output.normal = tempNormal;
     
-    output.util = float4(lightMapUV[input.id].lightMapIndex, DiffuseExposure, AmbientExposure, lightMapUV[input.id].isOutLine);
+    output.util = float4(lightMapUV[input.id].lightMapIndex, lightMapUV[input.id].isOutLine, AmbientExposure, DiffuseExposure);
 
     return output;
 }

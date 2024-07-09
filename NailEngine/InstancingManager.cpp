@@ -307,7 +307,8 @@ void InstancingManager::RenderStaticDeferred()
 					{
 						ExposureBuffer exposurrBuffer;
 						exposurrBuffer.diffuseExposure = (*renderInfoVec.begin())->mesh->GetDiffuseExposure();
-						exposurrBuffer.ambientExposure = (*renderInfoVec.begin())->mesh->GetAmbientExposure();;
+						exposurrBuffer.ambientExposure = (*renderInfoVec.begin())->mesh->GetAmbientExposure();
+
 						NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::EXPOSURE))->PushGraphicsData(&exposurrBuffer,
 							sizeof(ExposureBuffer),
 							static_cast<int>(CB_TYPE::EXPOSURE), false);
@@ -406,6 +407,7 @@ void InstancingManager::RenderStaticDeferred()
 						ExposureBuffer exposurrBuffer;
 						exposurrBuffer.diffuseExposure = renderInfo->mesh->GetDiffuseExposure();
 						exposurrBuffer.ambientExposure = renderInfo->mesh->GetAmbientExposure();
+
 						NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::EXPOSURE))->PushGraphicsData(&exposurrBuffer,
 							sizeof(ExposureBuffer),
 							static_cast<int>(CB_TYPE::EXPOSURE), false);

@@ -108,7 +108,7 @@ PS_OUT main(PixelIn input)
         output.emissive = EmissionMap.Sample(sam, input.uv);
     }
     
-    output.util = float4(lightMapUV[input.id].lightMapIndex, DiffuseExposure, AmbientExposure, lightMapUV[input.id].isOutLine);
+    output.util = float4(lightMapUV[input.id].lightMapIndex, lightMapUV[input.id].isOutLine, AmbientExposure, DiffuseExposure);
     output.outlineInfo = float4(lightMapUV[input.id].outlineInfo.r, lightMapUV[input.id].outlineInfo.g, lightMapUV[input.id].outlineInfo.b, lightMapUV[input.id].outlineInfo.a);
     return output;
 }

@@ -26,6 +26,7 @@ namespace application
             {
             public:
                 virtual void Start() override;
+                virtual void Update() override;
                 void Init(const application::editor::OrnamentData* ornamentData);
                 void Init(const application::editor::Ornament_TemplateData* ornamentTemplateData);
                 void ChangeTemplateData(const application::editor::OrnamentData* ornamentData);

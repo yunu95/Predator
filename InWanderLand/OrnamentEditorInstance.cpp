@@ -12,6 +12,21 @@ namespace application::editor::palette
         PaletteInstance::Start();
     }
 
+    void OrnamentEditorInstance::Update()
+    {
+        if (ornamentData->pod.isBillBoard)
+        {
+            if (auto cam = graphics::Camera::GetMainCamera())
+            {
+                GetTransform()->SetWorldRotation(cam->GetTransform()->GetWorldRotation());
+            }
+        }
+        else
+        {
+            Component::Update();
+        }
+    }
+
     void OrnamentEditorInstance::Init(const application::editor::OrnamentData* ornamentData)
     {
         this->ornamentData = ornamentData;

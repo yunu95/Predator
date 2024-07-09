@@ -39,6 +39,7 @@ namespace application
             int stage = 1;
             bool isGuide = false;
             bool madeEditor = false;
+            bool isBillBoard = false;
             std::string punrealGUID = "";
 
             TO_JSON(POD_Ornament)
