@@ -64,6 +64,7 @@ public:
     void RenderLight();
     void RenderFinal();
     void RenderDecal();
+    void AAPass();
     void RenderBackBuffer();
     void RenderUI();
 

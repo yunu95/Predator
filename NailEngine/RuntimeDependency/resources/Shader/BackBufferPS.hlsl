@@ -46,6 +46,20 @@ float4 FixColor(int2 uv)
     return color;
 }
 
+float rgb2luma(float3 rgb)
+{
+    return sqrt(dot(rgb, float3(0.299, 0.587, 0.114)));
+}
+
+float3 AA(float3 rgb)
+{
+    
+    float3 color = rgb;
+    
+    
+    return color;
+}
+
 float4 main(PixelIn input) : SV_Target
 {
     float4 color = Temp0Map.Sample(sam, input.uv);

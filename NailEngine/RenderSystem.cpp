@@ -523,21 +523,17 @@ void RenderSystem::RenderDecal()
     InstancingManager::Instance.Get().RenderDecal();
 }
 
+void RenderSystem::AAPass()
+{
+    // 여기서 AA가 실행된다.
+}
+
 void RenderSystem::RenderBackBuffer()
 {
     ResourceBuilder::Instance.Get().device->GetDeviceContext()->OMSetRenderTargets(1,
         ResourceBuilder::Instance.Get().swapChain->GetRTV().GetAddressOf(),
         ResourceBuilder::Instance.Get().swapChain->GetDSV().Get());
 
-    ///MatrixBuffer matrixBuffer;
-    /////matrixBuffer.WTM = e.wtm;
-    ///matrixBuffer.VTM = CameraManager::Instance.Get().GetMainCamera()->GetVTM();
-    ///matrixBuffer.PTM = CameraManager::Instance.Get().GetMainCamera()->GetPTM();
-    ///matrixBuffer.WVP = matrixBuffer.WTM * matrixBuffer.VTM * matrixBuffer.PTM;
-    ///matrixBuffer.WorldInvTrans = matrixBuffer.WTM.Invert().Transpose();
-    ///matrixBuffer.VTMInv = matrixBuffer.VTM.Invert();
-    /////matrixBuffer.objectID = DirectX::SimpleMath::Vector4{};
-    ///NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATRIX))->PushGraphicsData(&matrixBuffer, sizeof(MatrixBuffer), static_cast<int>(CB_TYPE::MATRIX));
 
     // backBufferMaterial처럼 항상 상수 키로 쓰이는 버퍼는 static을 넣어 한번만 초기화한다.
     // 이렇게 해야 리소스 로딩 스레드와의 충돌 가능성을 줄일 수 있다. 

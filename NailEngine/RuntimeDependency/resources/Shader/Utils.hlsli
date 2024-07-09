@@ -349,8 +349,8 @@ void CalculateDirectionalPBR(int lightIndex, float3 normal, float3 pos, out floa
     ambient = float4(0.f, 0.f, 0.f, 0.f);
     specular = float4(0.f, 0.f, 0.f, 0.f);
     
-    // 새로운 변수: 알베도의 영향을 받지 않는 스펙큘러 계산
     float4 specularNoAlbedo = float4(0.f, 0.f, 0.f, 0.f);
+    
     
     // 뷰 디렉션
     float3 Lo = normalize(pos);
@@ -364,7 +364,9 @@ void CalculateDirectionalPBR(int lightIndex, float3 normal, float3 pos, out floa
     
     // 프레넬
     float3 F0 = lerp(Fdielectric, albedo, metalness);
-    float3 F0_no_albedo = float3(0.04, 0.04, 0.04); // 고정된 값으로 프레넬 반사 설정
+    //float3 F0_no_albedo = float3(0.04, 0.04, 0.04); // 고정된 값으로 프레넬 반사 설정
+    //float3 F0_no_albedo = lerp(float3(0.04, 0.04, 0.04), float3(1.0, 1.0, 1.0), metalness); // 메탈릭 반영
+    float3 F0_no_albedo = lerp(float3(0.04, 0.04, 0.04), albedo, metalness); // 메탈릭 반영
     
     float3 Li = normalize(mul(float4(-lights[lightIndex].direction.xyz, 0.f), VTM).xyz);
     float3 Lradiance = float3(1, 1, 1);
