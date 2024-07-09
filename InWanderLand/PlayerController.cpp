@@ -1382,6 +1382,8 @@ Vector3d PlayerController::GetCamPivotPoint()
 
 void PlayerController::SetCooltime(SkillType::Enum skillType, float cooltime)
 {
+    if (TacticModeSystem::Instance().IsExecuting())
+        return;
     if (skillType == SkillType::EnemyImpale)
         return;
     skillCooltimeLeft[skillType] = std::fmax(0.0f, cooltime);
