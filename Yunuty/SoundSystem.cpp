@@ -8,6 +8,10 @@
 using namespace FMOD;
 
 SoundSystem* SoundSystem::soundInstance = nullptr;
+void yunutyEngine::SoundSystem::Update()
+{
+    SingleInstance()->fmodSystem->update();
+}
 SoundChannel yunutyEngine::SoundSystem::PlaySoundfile(string soundPath)
 {
     return SingleInstance()->mPlaySound(soundPath);
@@ -29,7 +33,7 @@ SoundSystem* yunutyEngine::SoundSystem::SingleInstance()
 SoundSystem::SoundSystem()
 {
     FMOD::System_Create(&fmodSystem);
-    fmodSystem->init(64 + 1, FMOD_INIT_NORMAL, extradriverdata);
+    fmodSystem->init(128 + 1, FMOD_INIT_NORMAL, extradriverdata);
     fmodSystem->getMasterSoundGroup(&soundGroups[0]);
 }
 SoundSystem::~SoundSystem()
@@ -42,15 +46,15 @@ SoundChannel yunutyEngine::SoundSystem::mPlaySound(string soundPath)
     {
         mLoadSound(soundPath);
     }
-    for (int i = 0; i < 64; i++)
+    for (int i = 0; i < 128; i++)
     {
         bool isPlaying;
-        lastChannelIndex = (lastChannelIndex + 1) % 64;
+        lastChannelIndex = (lastChannelIndex + 1) % 128;
         channels[lastChannelIndex]->isPlaying(&isPlaying);
         if (!isPlaying)
         {
-            channels[lastChannelIndex]->setPriority(soundPriorityMap[sounds[soundPath]]);
             fmodSystem->playSound(sounds[soundPath], 0, false, &channels[lastChannelIndex]);
+            channels[lastChannelIndex]->setPriority(soundPriorityMap[sounds[soundPath]]);
             SetSFXVolume(sfxVolume);
             break;
         }
@@ -65,21 +69,21 @@ SoundChannel yunutyEngine::SoundSystem::mPlay3DSound(string soundPath, Vector3d 
     {
         mLoad3DSound(soundPath);
     }
-    for (int i = 0; i < 64; i++)
+    for (int i = 0; i < 128; i++)
     {
         bool isPlaying;
-        lastChannelIndex = (lastChannelIndex + 1) % 64;
+        lastChannelIndex = (lastChannelIndex + 1) % 128;
         channels[lastChannelIndex]->isPlaying(&isPlaying);
 
         if (!isPlaying)
         {
             FMOD_VECTOR position = { viewPos.x, viewPos.y, viewPos.z };
             FMOD_VECTOR velocity = { 0,0,0 };
+
+            fmodSystem->playSound(sounds3D[soundPath], 0, false, &channels[lastChannelIndex]);
             channels[lastChannelIndex]->set3DAttributes(&position, &velocity);
             channels[lastChannelIndex]->set3DMinMaxDistance(0, 50);
             channels[lastChannelIndex]->setPriority(soundPriorityMap[sounds3D[soundPath]]);
-
-            fmodSystem->playSound(sounds3D[soundPath], 0, false, &channels[lastChannelIndex]);
             SetSFXVolume(sfxVolume);
             break;
         }
@@ -88,7 +92,7 @@ SoundChannel yunutyEngine::SoundSystem::mPlay3DSound(string soundPath, Vector3d 
 }
 void yunutyEngine::SoundSystem::mStopSound(double fadeLength)
 {
-    for (int i = 0; i < 64; i++)
+    for (int i = 0; i < 128; i++)
     {
         if (channels[i])
         {
@@ -100,12 +104,12 @@ bool yunutyEngine::SoundSystem::mLoad3DSound(string soundPath)
 {
     if (sounds3D.find(soundPath) == sounds3D.end())
     {
-        fmodSystem->createSound(soundPath.c_str(), FMOD_3D, 0, &sounds3D[soundPath]);
+        fmodSystem->createSound(soundPath.c_str(), FMOD_3D | FMOD_LOOP_OFF, 0, &sounds3D[soundPath]);
         loadedSounds3D.insert(soundPath);
+        sounds3D[soundPath]->setSoundGroup(GetSoundGroup(0));
+        soundGroupIndexMap[sounds3D[soundPath]] = 0;
+        soundPriorityMap[sounds3D[soundPath]] = 128;
     }
-    sounds3D[soundPath]->setSoundGroup(GetSoundGroup(0));
-    soundGroupIndexMap[sounds3D[soundPath]] = 0;
-    soundPriorityMap[sounds3D[soundPath]] = 128;
     return true;
 }
 bool yunutyEngine::SoundSystem::mLoadSound(string soundPath)
@@ -114,10 +118,10 @@ bool yunutyEngine::SoundSystem::mLoadSound(string soundPath)
     {
         fmodSystem->createSound(soundPath.c_str(), FMOD_LOOP_OFF, 0, &sounds[soundPath]);
         loadedSounds.insert(soundPath);
+        sounds[soundPath]->setSoundGroup(GetSoundGroup(0));
+        soundGroupIndexMap[sounds[soundPath]] = 0;
+        soundPriorityMap[sounds[soundPath]] = 128;
     }
-    sounds[soundPath]->setSoundGroup(GetSoundGroup(0));
-    soundGroupIndexMap[sounds[soundPath]] = 0;
-    soundPriorityMap[sounds[soundPath]] = 128;
     return true;
 }
 bool yunutyEngine::SoundSystem::mIsSoundLoaded(string soundPath)
@@ -191,7 +195,7 @@ float yunutyEngine::SoundSystem::GetMusicVolume()
 void yunutyEngine::SoundSystem::SetSFXVolume(float volume)
 {
     SingleInstance()->sfxVolume = volume;
-    for (int i = 0; i < 64; i++)
+    for (int i = 0; i < 128; i++)
     {
         if (soundInstance->channels[i])
         {
@@ -245,8 +249,11 @@ int yunutyEngine::SoundSystem::Get3DSoundPriority(string soundPath)
 }
 bool yunutyEngine::SoundSystem::SettingSoundGroupOfSound(string soundPath, unsigned long long groupIndex)
 {
-    LoadSound(soundPath);
     auto soundSystem = SingleInstance();
+    if (!soundSystem->mIsSoundLoaded(soundPath))
+    {
+        LoadSound(soundPath);
+    }
     soundSystem->mCreateSoundGroup(groupIndex);
     soundSystem->sounds[soundPath]->setSoundGroup(GetSoundGroup(groupIndex));
     soundSystem->soundGroupIndexMap[soundSystem->sounds[soundPath]] = groupIndex;
@@ -254,14 +261,20 @@ bool yunutyEngine::SoundSystem::SettingSoundGroupOfSound(string soundPath, unsig
 }
 unsigned long long yunutyEngine::SoundSystem::GetSoundGroupIndexOfSound(string soundPath)
 {
-    LoadSound(soundPath);
     auto soundSystem = SingleInstance();
+    if (!soundSystem->mIsSoundLoaded(soundPath))
+    {
+        LoadSound(soundPath);
+    }
     return soundSystem->soundGroupIndexMap[soundSystem->sounds[soundPath]];
 }
 bool yunutyEngine::SoundSystem::SettingSoundGroupOf3DSound(string soundPath, unsigned long long groupIndex)
 {
-    Load3DSound(soundPath);
     auto soundSystem = SingleInstance();
+    if (!soundSystem->mIs3DSoundLoaded(soundPath))
+    {
+        Load3DSound(soundPath);
+    }
     soundSystem->mCreateSoundGroup(groupIndex);
     soundSystem->sounds3D[soundPath]->setSoundGroup(GetSoundGroup(groupIndex));
     soundSystem->soundGroupIndexMap[soundSystem->sounds3D[soundPath]] = groupIndex;
@@ -269,8 +282,11 @@ bool yunutyEngine::SoundSystem::SettingSoundGroupOf3DSound(string soundPath, uns
 }
 unsigned long long yunutyEngine::SoundSystem::GetSoundGroupIndexOf3DSound(string soundPath)
 {
-    Load3DSound(soundPath);
     auto soundSystem = SingleInstance();
+    if (!soundSystem->mIs3DSoundLoaded(soundPath))
+    {
+        Load3DSound(soundPath);
+    }
     return soundSystem->soundGroupIndexMap[soundSystem->sounds3D[soundPath]];
 }
 bool yunutyEngine::SoundSystem::CreateSoundGroup(unsigned long long groupIndex, string name)
@@ -306,6 +322,17 @@ FMOD::SoundGroup* yunutyEngine::SoundSystem::GetSoundGroup(unsigned long long gr
         return soundSystem->soundGroups[groupIndex];
     }
     return nullptr;
+}
+int yunutyEngine::SoundSystem::GetSoundGroupUseCount(unsigned long long groupIndex)
+{
+    auto soundSystem = SingleInstance();
+    if (soundSystem->soundGroups.contains(groupIndex))
+    {
+        int count = -1;
+        soundSystem->soundGroups[groupIndex]->getNumSounds(&count);
+        return count;
+    }
+    return -1;
 }
 bool yunutyEngine::SoundSystem::SetSoundGroupVolume(unsigned long long groupIndex, float volume)
 {
