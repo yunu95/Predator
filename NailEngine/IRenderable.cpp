@@ -6,6 +6,7 @@ float nail::IRenderable::objectID = 1.f;
 
 nail::IRenderable::IRenderable()
 {
+	this->renderableID = objectID;
 	objectID++;
 	this->materialVec.emplace_back(reinterpret_cast<Material*>(ResourceManager::Instance.Get().GetMaterial(L"DefaultMaterial").get()));
 }

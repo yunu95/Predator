@@ -30,7 +30,6 @@ namespace yunuGIAdapter
 
 		~SkinnedMeshAdapter()
 		{
-
 			for (int i = 0; i < static_cast<SkinnedMesh*>(renderable.get())->renderInfoVec.size(); ++i)
 			{
 				if (static_cast<SkinnedMesh*>(renderable.get())->renderInfoVec[i]->renderInfo.material->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred)
@@ -42,6 +41,7 @@ namespace yunuGIAdapter
 					InstancingManager::Instance.Get().PopSkinnedForwardData(static_cast<SkinnedMesh*>(renderable.get())->renderInfoVec[i]);
 				}
 			}
+			this->renderable.reset();
 		}
 
 		virtual void SetBone(std::wstring fbxName) override
@@ -165,8 +165,16 @@ namespace yunuGIAdapter
             lastOutlineRequest_outLineColor = outLineColor;
 			for (auto& each : renderable->renderInfoVec)
 			{
-				each->renderInfo.outlineInfo = DirectX::SimpleMath::Vector4{ outLineColor.r,outLineColor.g,outLineColor.b, renderable->GetID() };
-				each->renderInfo.isOutLine = isOutLine;
+				if (!isOutLine)
+				{
+					each->renderInfo.outlineInfo = DirectX::SimpleMath::Vector4{ 0,0,0, renderable->GetID() };
+					each->renderInfo.isOutLine = isOutLine;
+				}
+				else
+				{
+					each->renderInfo.outlineInfo = DirectX::SimpleMath::Vector4{ outLineColor.r,outLineColor.g,outLineColor.b, renderable->GetID() };
+					each->renderInfo.isOutLine = isOutLine;
+				}
 			}
 		};
 	private:

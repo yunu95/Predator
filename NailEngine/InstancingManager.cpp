@@ -305,17 +305,31 @@ void InstancingManager::RenderStaticDeferred()
 					auto& buffer = _buffers[instanceID];
 					if (buffer->GetCount() > 0)
 					{
+						std::shared_ptr<RenderInfo> renderInfo = nullptr;
+						for (auto& each : renderInfoVec)
+						{
+							if (each.get())
+							{
+								renderInfo = each;
+							}
+						}
+
+						if (renderInfo == nullptr)
+						{
+							continue;
+						}
+
 						ExposureBuffer exposurrBuffer;
-						exposurrBuffer.diffuseExposure = (*renderInfoVec.begin())->mesh->GetDiffuseExposure();
-						exposurrBuffer.ambientExposure = (*renderInfoVec.begin())->mesh->GetAmbientExposure();
+						exposurrBuffer.diffuseExposure = renderInfo->mesh->GetDiffuseExposure();
+						exposurrBuffer.ambientExposure = renderInfo->mesh->GetAmbientExposure();
 
 						NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::EXPOSURE))->PushGraphicsData(&exposurrBuffer,
 							sizeof(ExposureBuffer),
 							static_cast<int>(CB_TYPE::EXPOSURE), false);
 
-						(*renderInfoVec.begin())->material->PushGraphicsData();
+						renderInfo->material->PushGraphicsData();
 						buffer->PushData();
-						(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, true, buffer->GetCount(), buffer);
+						renderInfo->mesh->Render(renderInfo->materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, true, buffer->GetCount(), buffer);
 					}
 				}
 			}
@@ -472,10 +486,25 @@ void InstancingManager::RenderStaticForward()
 				auto& buffer = _buffers[instanceID];
 				if (buffer->GetCount() > 0)
 				{
-					(*renderInfoVec.begin())->material->PushGraphicsData();
-					auto test = (*renderInfoVec.begin())->mesh->GetMaterialCount();
+					std::shared_ptr<RenderInfo> renderInfo = nullptr;
+					for (auto& each : renderInfoVec)
+					{
+						if (each.get())
+						{
+							renderInfo = each;
+						}
+					}
+
+					if (renderInfo == nullptr)
+					{
+						continue;
+					}
+
+
+					renderInfo->material->PushGraphicsData();
+					auto test = renderInfo->mesh->GetMaterialCount();
 					buffer->PushData();
-					(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, true, buffer->GetCount(), buffer);
+					renderInfo->mesh->Render(renderInfo->materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, true, buffer->GetCount(), buffer);
 				}
 			}
 		}

@@ -222,7 +222,7 @@ void RenderSystem::Render()
     RenderSkinnedForward();
     RenderParticle();
     RenderBackBuffer();
-
+    AAPass();
 
     RenderUI();
 
@@ -526,14 +526,21 @@ void RenderSystem::RenderDecal()
 void RenderSystem::AAPass()
 {
     // 여기서 AA가 실행된다.
+    // AA가 실행된 결과를 스왑체인의 백버퍼에 기록한다.
+	ResourceBuilder::Instance.Get().device->GetDeviceContext()->OMSetRenderTargets(1,
+		ResourceBuilder::Instance.Get().swapChain->GetRTV().GetAddressOf(),
+		ResourceBuilder::Instance.Get().swapChain->GetDSV().Get());
+
+	static auto backBufferMaterial = ResourceManager::Instance.Get().GetMaterial(L"AAMaterial");
+	std::static_pointer_cast<Material>(backBufferMaterial)->PushGraphicsData();
+	static auto rectangleMesh = ResourceManager::Instance.Get().GetMesh(L"Rectangle");
+	rectangleMesh->Render();
 }
 
 void RenderSystem::RenderBackBuffer()
 {
-    ResourceBuilder::Instance.Get().device->GetDeviceContext()->OMSetRenderTargets(1,
-        ResourceBuilder::Instance.Get().swapChain->GetRTV().GetAddressOf(),
-        ResourceBuilder::Instance.Get().swapChain->GetDSV().Get());
-
+	auto& renderTargetGroup = NailEngine::Instance.Get().GetRenderTargetGroup();
+	renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::BACKBUFFER)]->OMSetRenderTarget();
 
     // backBufferMaterial처럼 항상 상수 키로 쓰이는 버퍼는 static을 넣어 한번만 초기화한다.
     // 이렇게 해야 리소스 로딩 스레드와의 충돌 가능성을 줄일 수 있다. 

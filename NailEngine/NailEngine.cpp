@@ -572,18 +572,18 @@ void NailEngine::CreateRenderTargetGroup()
         ShadowPass::Instance.Get().SetTempRTV(rtVec[0].texture.get());
     }
 
-    // Decal Mask
+    // back buffer
 	{
-		std::vector<RenderTarget> rtVec(DECAL_COUNT);
+		std::vector<RenderTarget> rtVec(BACKBUFFER_COUNT);
 		rtVec[0].texture = std::static_pointer_cast<Texture>(ResourceManager::Instance.Get().CreateTexture(
-			L"DecalMaskTarget",
+			L"BackBufferTarget",
 			((this->windowInfo.width)),
 			((this->windowInfo.height)),
             DXGI_FORMAT_R32G32B32A32_FLOAT,
 			static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
 		));
-		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::DECAL)] = std::make_shared<RenderTargetGroup>();
-		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::DECAL)]->SetRenderTargetVec(rtVec);
+		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::BACKBUFFER)] = std::make_shared<RenderTargetGroup>();
+		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::BACKBUFFER)]->SetRenderTargetVec(rtVec);
 	}
 
 }
