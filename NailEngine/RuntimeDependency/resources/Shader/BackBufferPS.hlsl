@@ -10,12 +10,13 @@ struct PixelIn
 // Temp0Map : Final Target
 // Temp1Map : View Position
 // Temp2Map : OutLine Info (r,g,b,a(objectID))
-// Temp3Map : Utils (a(isOutLine))
+// Temp3Map : Utils (g(isOutLine))
 
 float4 FixColor(int2 uv)
 {
     float4 color = float4(-1, -1, -1, 1);
-    float isOutLine = Temp3Map.Load(float3(uv.x,uv.y,0)).a;
+
+    float isOutLine = Temp3Map.Load(float3(uv.x,uv.y,0)).g;
     int outLineRange = 1;
     int filterSize = 2 * outLineRange + 1;
     float4 outLineInfo = Temp2Map.Load(float3(uv.x, uv.y, 0));

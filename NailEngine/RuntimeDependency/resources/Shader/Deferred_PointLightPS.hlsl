@@ -60,7 +60,7 @@ PS_OUT main(PixelIn input)
     
     float shadowFactor = 1.f;
     CalculatePointPBR(temp_int0, viewNormal, viewPos, color.diffuse, color.ambient, color.specular, albedo,
-    arm.r, arm.b, arm.g, util.y, util.z, util.x, shadowFactor);
+    arm.r, arm.b, arm.g, util.a, util.z, util.x, shadowFactor);
     
     //CalculateLight(lightIndex, viewNormal, viewPos, color.diffuse, color.ambient, color.specular);
     

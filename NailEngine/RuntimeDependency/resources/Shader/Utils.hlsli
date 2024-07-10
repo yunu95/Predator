@@ -411,6 +411,7 @@ void CalculateDirectionalPBR(int lightIndex, float3 normal, float3 pos, out floa
     specularNoAlbedo.xyz = (x1 * (6.2 * x1 + 0.5)) / (x1 * (6.2 * x1 + 1.7) + 0.06);
     
     directionalLighting *= diffuseExposure;
+    //directionalLighting *= 1.f;
     float3 x = max(0, directionalLighting.xyz - 0.004);
     directionalLighting.xyz = (x * (6.2 * x + 0.5)) / (x * (6.2 * x + 1.7) + 0.06);
     
@@ -437,6 +438,7 @@ void CalculateDirectionalPBR(int lightIndex, float3 normal, float3 pos, out floa
         ambientLighting = (diffuseIBL + specularIBL) * ao;
         
         ambientLighting *= ambientExposure;
+        //ambientLighting *= 1.f;
         ambientLighting = ambientLighting / (1 + ambientLighting);
         ambientLighting = pow(ambientLighting, 1 / 2.2);
         

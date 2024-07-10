@@ -54,7 +54,7 @@ PS_OUT main(PixelIn input)
     float shadowFactor = 1.f;
     float4 specular = float4(0,0,0,0);
     CalculateDirectionalPBR(temp_int0, viewNormal, viewPos, color.diffuse, color.ambient, specular, albedo,
-    arm.r, arm.b, arm.g, util.y, util.z, util.x, shadowFactor);
+    arm.r, arm.b, arm.g, util.a, util.z, util.x, shadowFactor);
     
     if (util.x != -1 && useLightMap)
     {
