@@ -1126,7 +1126,7 @@ void PlayerController::SetState(State::Enum newState)
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Vinetting)->DisableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_MenuButton)->DisableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Bottom_Layout)->DisableElement();
-        UnselectUnit();
+        //UnselectUnit();
         UnSelectSkill();
         previousSkillCooltimeLeft = skillCooltimeLeft;
         skillCooltimeLeft.fill(0);
