@@ -79,9 +79,11 @@ public:
     void UnlockCamFromRegion();
     bool CanUnitSelectSkill(std::weak_ptr<Unit> unit);
     float GetMana();
+    float GetManaNormalized();
     Vector3d GetCamPivotPoint();
     void SetManaFull();
     void SetMana(float mana);
+    void SetPendingManaCost(float manaCost);
     void TryTogglingTacticMode();
     Unit* GetUnitOnCursor();
     virtual void OnPause() override;

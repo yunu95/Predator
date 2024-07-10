@@ -146,6 +146,7 @@ bool SFXManager::PreEncoding(json& data) const
 		data["SoundGroupList"][i]["Volume"] = GetSFXGroupVolume(i);
 		data["SoundGroupList"][i]["MaxAudible"] = GetSFXGroupMaxAudible(i);
 		data["SoundGroupList"][i]["Behavior"] = (int)GetSFXGroupMaxAudibleBehavior(i);
+		data["SoundGroupList"][i]["Name"] = soundGroupNames[i];
 	}
 
 	return true;
@@ -172,6 +173,7 @@ bool SFXManager::PreDecoding(const json& data)
 		SetSFXGroupVolume(i, data["SoundGroupList"][i]["Volume"]);
 		SetSFXGroupMaxAudible(i, data["SoundGroupList"][i]["MaxAudible"]);
 		SetSFXGroupMaxAudibleBehavior(i, (SoundSystem::SOUNDGROUP_BEHAVIOR)data["SoundGroupList"][i]["Behavior"]);
+		soundGroupNames[i] = data["SoundGroupList"][i]["Name"];
 	}
 
 	return true;

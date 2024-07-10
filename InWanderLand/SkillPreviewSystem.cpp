@@ -1,3 +1,4 @@
+#include "InWanderLand.h"
 #include "SkillPreviewSystem.h"
 
 #include "MoveEndPreviewPool.h"
@@ -105,14 +106,14 @@ void SkillPreviewSystem::Init()
         bodyRenderer->GetGI().GetMaterial()->SetColor(wanderResources::unitColor::ROBIN_COLOR);
 
 
-		auto circleOne = Scene::getCurrentScene()->AddGameObject();
-		circleOne->SetParent(this->robinQSkillPreviewObj);
-		auto circleOneRenderer = circleOne->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-		circleOneRenderer->GetGI().SetMesh(cubeMesh);
-		circleOneRenderer->GetGI().GetMaterial()->SetVertexShader(vs);
-		circleOneRenderer->GetGI().GetMaterial()->SetPixelShader(ps);
-		circleOneRenderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::Temp0, robinWSkillTexture);
-		circleOneRenderer->GetGI().GetMaterial()->SetColor(wanderResources::unitColor::ROBIN_COLOR);
+        auto circleOne = Scene::getCurrentScene()->AddGameObject();
+        circleOne->SetParent(this->robinQSkillPreviewObj);
+        auto circleOneRenderer = circleOne->AddComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+        circleOneRenderer->GetGI().SetMesh(cubeMesh);
+        circleOneRenderer->GetGI().GetMaterial()->SetVertexShader(vs);
+        circleOneRenderer->GetGI().GetMaterial()->SetPixelShader(ps);
+        circleOneRenderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::Temp0, robinWSkillTexture);
+        circleOneRenderer->GetGI().GetMaterial()->SetColor(wanderResources::unitColor::ROBIN_COLOR);
 
         this->robinQSkillPreviewObj->SetSelfActive(false);
     }
@@ -244,6 +245,15 @@ void SkillPreviewSystem::Init()
     skillMaxRangePreviewObj->SetSelfActive(false);
     temporaryRouteMeshRendererObj->SetSelfActive(false);
 #pragma endregion 
+    for (auto& each : sphereColliders)
+    {
+        each = Scene::getCurrentScene()->AddGameObject()->AddComponentAsWeakPtr<UnitAcquisitionSphereCollider>();
+        each.lock()->teamIndex = PlayerController::playerTeamIndex;
+        each.lock()->GetGameObject()->SetSelfActive(false);
+    }
+    boxCollider = Scene::getCurrentScene()->AddGameObject()->AddComponentAsWeakPtr<UnitAcquisitionBoxCollider>();
+    boxCollider.lock()->teamIndex = PlayerController::playerTeamIndex;
+    boxCollider.lock()->GetGameObject()->SetSelfActive(true);
 }
 
 void SkillPreviewSystem::ShowRobinQSkill(const yunutyEngine::Vector3d& objectPos)
@@ -264,6 +274,8 @@ void SkillPreviewSystem::ShowRobinQSkill(const yunutyEngine::Vector3d& objectPos
 
     Vector3d mouseVector = destination - objectPos;
     auto normalizedVec = mouseVector.Normalize(mouseVector);
+    // thickness는 반지름 개념
+    float rushThickness = RobinChargeSkill::pod.rushKnockbackRadius;
 
 
     auto basicAxis = AXIS;
@@ -283,29 +295,51 @@ void SkillPreviewSystem::ShowRobinQSkill(const yunutyEngine::Vector3d& objectPos
 
     float distance = abs((objectPos - destination).Magnitude());
 
-    if (distance > 1)
+    if (distance > rushThickness * 2)
     {
-        this->robinQSkillPreviewObj->GetChildren()[static_cast<int>(RobinQSkillInfo::ArrowBody)]->GetTransform()->SetLocalPosition(normalizedVec * ((distance - 1) / 2));
-        this->robinQSkillPreviewObj->GetChildren()[static_cast<int>(RobinQSkillInfo::ArrowBody)]->GetTransform()->SetLocalScale(Vector3d{ (distance - 1),1.0,1.0 });
-        this->robinQSkillPreviewObj->GetChildren()[static_cast<int>(RobinQSkillInfo::ArrowHead)]->GetTransform()->SetLocalPosition(normalizedVec * (distance - (0.5)));
+        this->robinQSkillPreviewObj->GetChildren()[static_cast<int>(RobinQSkillInfo::ArrowBody)]->GetTransform()->SetLocalPosition(normalizedVec * ((distance - rushThickness * 2) / 2));
+        this->robinQSkillPreviewObj->GetChildren()[static_cast<int>(RobinQSkillInfo::ArrowBody)]->GetTransform()->SetLocalScale(Vector3d{ (distance - rushThickness * 2),rushThickness, rushThickness });
+        this->robinQSkillPreviewObj->GetChildren()[static_cast<int>(RobinQSkillInfo::ArrowHead)]->GetTransform()->SetLocalPosition(normalizedVec * (distance - rushThickness));
+        this->robinQSkillPreviewObj->GetChildren()[static_cast<int>(RobinQSkillInfo::ArrowHead)]->GetTransform()->SetLocalScale(Vector3d::one * rushThickness * 2);
     }
     else
     {
         this->robinQSkillPreviewObj->GetChildren()[static_cast<int>(RobinQSkillInfo::ArrowBody)]->GetTransform()->SetLocalPosition(Vector3d{ 0,0,0 });
         this->robinQSkillPreviewObj->GetChildren()[static_cast<int>(RobinQSkillInfo::ArrowBody)]->GetTransform()->SetLocalScale(Vector3d{ 0,0,0 });
-        this->robinQSkillPreviewObj->GetChildren()[static_cast<int>(RobinQSkillInfo::ArrowHead)]->GetTransform()->SetLocalPosition(normalizedVec * 0.5);
+        this->robinQSkillPreviewObj->GetChildren()[static_cast<int>(RobinQSkillInfo::ArrowHead)]->GetTransform()->SetLocalPosition(normalizedVec * rushThickness);
+        this->robinQSkillPreviewObj->GetChildren()[static_cast<int>(RobinQSkillInfo::ArrowHead)]->GetTransform()->SetLocalScale(Vector3d::one * rushThickness * 2);
     }
     this->robinQSkillPreviewObj->GetChildren()[static_cast<int>(RobinQSkillInfo::Circle)]->GetTransform()->SetWorldPosition(destination);
-    this->robinQSkillPreviewObj->GetChildren()[static_cast<int>(RobinQSkillInfo::Circle)]->GetTransform()->SetLocalScale(Vector3d{RobinChargeSkill::pod.impactKnockbackRadius*2,1,RobinChargeSkill::pod.impactKnockbackRadius*2 });
+    this->robinQSkillPreviewObj->GetChildren()[static_cast<int>(RobinQSkillInfo::Circle)]->GetTransform()->SetLocalScale(Vector3d{ RobinChargeSkill::pod.impactKnockbackRadius * 2,1,RobinChargeSkill::pod.impactKnockbackRadius * 2 });
 
     if (this->robinQSkillPreviewObj->GetActive() == false)
     {
         this->robinQSkillPreviewObj->SetSelfActive(true);
     }
+    // 콜라이더 배치후 맞닿는 적들에 호버 표시
+    bool freshCollision = !sphereColliders[0].lock()->GetGameObject()->GetActive();
+    sphereColliders[0].lock()->GetGameObject()->SetSelfActive(true);
+    boxCollider.lock()->GetGameObject()->SetSelfActive(true);
+
+    boxCollider.lock()->GetTransform()->SetWorldPosition((objectPos + destination) / 2.0f);
+    boxCollider.lock()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(destination - objectPos, Vector3d::up));
+    boxCollider.lock()->SetHalfExtent(Vector3f{ rushThickness * 0.5f, 5.0f, distance / 2.0f });
+    sphereColliders[0].lock()->GetTransform()->SetWorldPosition(destination);
+    sphereColliders[0].lock()->SetRadius(RobinChargeSkill::pod.impactKnockbackRadius);
+
+    unitHoverGuards.clear();
+    if (!freshCollision)
+    {
+        std::transform(boxCollider.lock()->GetEnemies().begin(), boxCollider.lock()->GetEnemies().end(), std::inserter(unitHoverGuards, unitHoverGuards.end()),
+            [](Unit* each) {return std::make_pair(each, each->referenceHoverOutline.Acquire()); });
+        std::transform(sphereColliders[0].lock()->GetEnemies().begin(), sphereColliders[0].lock()->GetEnemies().end(), std::inserter(unitHoverGuards, unitHoverGuards.end()),
+            [](Unit* each) {return std::make_pair(each, each->referenceHoverOutline.Acquire()); });
+    }
 }
 
 void SkillPreviewSystem::HideRobinQSkill()
 {
+    DisableColliders();
     if (this->robinQSkillPreviewObj->GetActive() == true)
     {
         this->robinQSkillPreviewObj->SetSelfActive(false);
@@ -315,19 +349,31 @@ void SkillPreviewSystem::HideRobinQSkill()
 void SkillPreviewSystem::ShowRobinWSkill(Vector3d& objectPos, float circleRadius)
 {
     objectPos.y = 0.f;
-    circleRadius *= 2;
+    //circleRadius *= 2;
 
     this->robinWSkillPreviewObj->GetChildren()[static_cast<int>(RobinWSkillInfo::CircleOne)]->GetTransform()->SetLocalPosition(objectPos);
-    this->robinWSkillPreviewObj->GetChildren()[static_cast<int>(RobinWSkillInfo::CircleOne)]->GetTransform()->SetLocalScale(Vector3d{ circleRadius,1.0,circleRadius });
+    this->robinWSkillPreviewObj->GetChildren()[static_cast<int>(RobinWSkillInfo::CircleOne)]->GetTransform()->SetLocalScale(Vector3d{ circleRadius * 2,1.0,circleRadius * 2 });
 
     if (this->robinWSkillPreviewObj->GetActive() == false)
     {
         this->robinWSkillPreviewObj->SetSelfActive(true);
     }
+    // 콜라이더 배치후 맞닿는 적들에 호버 표시
+    bool freshCollision = !sphereColliders[0].lock()->GetGameObject()->GetActive();
+    sphereColliders[0].lock()->GetGameObject()->SetSelfActive(true);
+    sphereColliders[0].lock()->GetTransform()->SetWorldPosition(objectPos);
+    sphereColliders[0].lock()->SetRadius(circleRadius);
+    unitHoverGuards.clear();
+    if (!freshCollision)
+    {
+        std::transform(sphereColliders[0].lock()->GetEnemies().begin(), sphereColliders[0].lock()->GetEnemies().end(), std::inserter(unitHoverGuards, unitHoverGuards.end()),
+            [](Unit* each) {return std::make_pair(each, each->referenceHoverOutline.Acquire()); });
+    }
 }
 
 void SkillPreviewSystem::HideRobinWSkill()
 {
+    DisableColliders();
     if (this->robinWSkillPreviewObj->GetActive() == true)
     {
         this->robinWSkillPreviewObj->SetSelfActive(false);
@@ -340,28 +386,50 @@ void SkillPreviewSystem::ShowUrsulaQSkill(Vector3d& circleOnePos, Vector3d& circ
     circleTwoPos.y = 0;
     circleThreePos.y = 0;
 
-    circleRadius.x *= 2;
-    circleRadius.y *= 2;
-    circleRadius.z *= 2;
+    //circleRadius.x *= 2;
+    //circleRadius.y *= 2;
+    //circleRadius.z *= 2;
 
     // 원 3개 출력
     this->ursulaQSkillPreviewObj->GetChildren()[static_cast<int>(UrsulaQSkillInfo::CircleOne)]->GetTransform()->SetLocalPosition(circleOnePos);
-    this->ursulaQSkillPreviewObj->GetChildren()[static_cast<int>(UrsulaQSkillInfo::CircleOne)]->GetTransform()->SetLocalScale(Vector3d{ circleRadius.x,1.f,circleRadius.x });
+    this->ursulaQSkillPreviewObj->GetChildren()[static_cast<int>(UrsulaQSkillInfo::CircleOne)]->GetTransform()->SetLocalScale(Vector3d{ circleRadius.x * 2, 1.f, circleRadius.x * 2 });
 
     this->ursulaQSkillPreviewObj->GetChildren()[static_cast<int>(UrsulaQSkillInfo::CircleTwo)]->GetTransform()->SetLocalPosition(circleTwoPos);
-    this->ursulaQSkillPreviewObj->GetChildren()[static_cast<int>(UrsulaQSkillInfo::CircleTwo)]->GetTransform()->SetLocalScale(Vector3d{ circleRadius.y,1.f,circleRadius.y });
+    this->ursulaQSkillPreviewObj->GetChildren()[static_cast<int>(UrsulaQSkillInfo::CircleTwo)]->GetTransform()->SetLocalScale(Vector3d{ circleRadius.y * 2, 1.f, circleRadius.y * 2 });
 
     this->ursulaQSkillPreviewObj->GetChildren()[static_cast<int>(UrsulaQSkillInfo::CircleThree)]->GetTransform()->SetLocalPosition(circleThreePos);
-    this->ursulaQSkillPreviewObj->GetChildren()[static_cast<int>(UrsulaQSkillInfo::CircleThree)]->GetTransform()->SetLocalScale(Vector3d{ circleRadius.z,1.f,circleRadius.z });
+    this->ursulaQSkillPreviewObj->GetChildren()[static_cast<int>(UrsulaQSkillInfo::CircleThree)]->GetTransform()->SetLocalScale(Vector3d{ circleRadius.z * 2, 1.f, circleRadius.z * 2 });
 
     if (this->ursulaQSkillPreviewObj->GetActive() == false)
     {
         this->ursulaQSkillPreviewObj->SetSelfActive(true);
     }
+    // 콜라이더 배치후 맞닿는 적들에 호버 표시
+    bool freshCollision = !sphereColliders[0].lock()->GetGameObject()->GetActive();
+    sphereColliders[0].lock()->GetGameObject()->SetSelfActive(true);
+    sphereColliders[0].lock()->GetTransform()->SetWorldPosition(circleOnePos);
+    sphereColliders[0].lock()->SetRadius(circleRadius.x);
+    sphereColliders[1].lock()->GetGameObject()->SetSelfActive(true);
+    sphereColliders[1].lock()->GetTransform()->SetWorldPosition(circleTwoPos);
+    sphereColliders[1].lock()->SetRadius(circleRadius.y);
+    sphereColliders[2].lock()->GetGameObject()->SetSelfActive(true);
+    sphereColliders[2].lock()->GetTransform()->SetWorldPosition(circleThreePos);
+    sphereColliders[2].lock()->SetRadius(circleRadius.z);
+    unitHoverGuards.clear();
+    if (!freshCollision)
+    {
+        std::transform(sphereColliders[0].lock()->GetEnemies().begin(), sphereColliders[0].lock()->GetEnemies().end(), std::inserter(unitHoverGuards, unitHoverGuards.end()),
+            [](Unit* each) {return std::make_pair(each, each->referenceHoverOutline.Acquire()); });
+        std::transform(sphereColliders[1].lock()->GetEnemies().begin(), sphereColliders[1].lock()->GetEnemies().end(), std::inserter(unitHoverGuards, unitHoverGuards.end()),
+            [](Unit* each) {return std::make_pair(each, each->referenceHoverOutline.Acquire()); });
+        std::transform(sphereColliders[2].lock()->GetEnemies().begin(), sphereColliders[2].lock()->GetEnemies().end(), std::inserter(unitHoverGuards, unitHoverGuards.end()),
+            [](Unit* each) {return std::make_pair(each, each->referenceHoverOutline.Acquire()); });
+    }
 }
 
 void SkillPreviewSystem::HideUrsulaQSkill()
 {
+    DisableColliders();
     if (this->ursulaQSkillPreviewObj->GetActive() == true)
     {
         this->ursulaQSkillPreviewObj->SetSelfActive(false);
@@ -371,19 +439,30 @@ void SkillPreviewSystem::HideUrsulaQSkill()
 void SkillPreviewSystem::ShowUrsulaWSkill(Vector3d circlePos, float circleRadius)
 {
     circlePos.y = 0;
-    circleRadius *= 2;
 
     ursulaWSkillPreviewObj->GetChildren()[static_cast<int>(UrsulaWSkillInfo::CircleOne)]->GetTransform()->SetLocalPosition(circlePos);
-    ursulaWSkillPreviewObj->GetChildren()[static_cast<int>(UrsulaWSkillInfo::CircleOne)]->GetTransform()->SetLocalScale(Vector3d{ circleRadius,1.f, circleRadius });
+    ursulaWSkillPreviewObj->GetChildren()[static_cast<int>(UrsulaWSkillInfo::CircleOne)]->GetTransform()->SetLocalScale(Vector3d{ circleRadius * 2,1.f, circleRadius * 2 });
 
     if (this->ursulaWSkillPreviewObj->GetActive() == false)
     {
         this->ursulaWSkillPreviewObj->SetSelfActive(true);
     }
+    // 콜라이더 배치후 맞닿는 적들에 호버 표시
+    bool freshCollision = !sphereColliders[0].lock()->GetGameObject()->GetActive();
+    sphereColliders[0].lock()->GetGameObject()->SetSelfActive(true);
+    sphereColliders[0].lock()->GetTransform()->SetWorldPosition(circlePos);
+    sphereColliders[0].lock()->SetRadius(circleRadius);
+    unitHoverGuards.clear();
+    if (!freshCollision)
+    {
+        std::transform(sphereColliders[0].lock()->GetEnemies().begin(), sphereColliders[0].lock()->GetEnemies().end(), std::inserter(unitHoverGuards, unitHoverGuards.end()),
+            [](Unit* each) {return std::make_pair(each, each->referenceHoverOutline.Acquire()); });
+    }
 }
 
 void SkillPreviewSystem::HideUrsulaWSkill()
 {
+    DisableColliders();
     if (this->ursulaWSkillPreviewObj->GetActive() == true)
     {
         this->ursulaWSkillPreviewObj->SetSelfActive(false);
@@ -393,20 +472,30 @@ void SkillPreviewSystem::HideUrsulaWSkill()
 void SkillPreviewSystem::ShowHanselQSkill(Vector3d circlePos, float circleRadius)
 {
     circlePos.y = 0;
-    circleRadius *= 2;
 
     // 원 출력
     this->hanselQSkillPreviewObj->GetChildren()[static_cast<int>(HanselQSkillInfo::CircleOne)]->GetTransform()->SetLocalPosition(circlePos);
-    this->hanselQSkillPreviewObj->GetChildren()[static_cast<int>(HanselQSkillInfo::CircleOne)]->GetTransform()->SetLocalScale(Vector3d{ circleRadius,1.f,circleRadius });
+    this->hanselQSkillPreviewObj->GetChildren()[static_cast<int>(HanselQSkillInfo::CircleOne)]->GetTransform()->SetLocalScale(Vector3d{ circleRadius * 2, 1.f, circleRadius * 2 });
 
     if (this->hanselQSkillPreviewObj->GetActive() == false)
     {
         this->hanselQSkillPreviewObj->SetSelfActive(true);
     }
+    bool freshCollision = !sphereColliders[0].lock()->GetGameObject()->GetActive();
+    sphereColliders[0].lock()->GetGameObject()->SetSelfActive(true);
+    sphereColliders[0].lock()->GetTransform()->SetWorldPosition(circlePos);
+    sphereColliders[0].lock()->SetRadius(circleRadius);
+    unitHoverGuards.clear();
+    if (!freshCollision)
+    {
+        std::transform(sphereColliders[0].lock()->GetEnemies().begin(), sphereColliders[0].lock()->GetEnemies().end(), std::inserter(unitHoverGuards, unitHoverGuards.end()),
+            [](Unit* each) {return std::make_pair(each, each->referenceHoverOutline.Acquire()); });
+    }
 }
 
 void SkillPreviewSystem::HideHanselQSkill()
 {
+    DisableColliders();
     if (this->hanselQSkillPreviewObj->GetActive() == true)
     {
         this->hanselQSkillPreviewObj->SetSelfActive(false);
@@ -438,6 +527,7 @@ void SkillPreviewSystem::ShowHanselWSkill(const Vector3d& objectPos, const Vecto
     float dotValue = (Vector3d::Dot(basicAxis, normalizedVec));
 
     float angle = acos(dotValue);
+    float thickness = HanselProjectileSkill::pod.skillRadius;
     angle = angle * (180 / yunutyEngine::math::PI);
 
     if (destination.z - objectPos.z < 0)
@@ -450,28 +540,45 @@ void SkillPreviewSystem::ShowHanselWSkill(const Vector3d& objectPos, const Vecto
 
     float distance = abs((objectPos - destination).Magnitude());
 
-    if (distance > 1)
+    if (distance > thickness * 2)
     {
-        this->hanselWSkillPreviewObj->GetChildren()[static_cast<int>(HanselWSkillInfo::ArrowBody)]->GetTransform()->SetLocalPosition(normalizedVec * ((distance - 1) / 2));
-        this->hanselWSkillPreviewObj->GetChildren()[static_cast<int>(HanselWSkillInfo::ArrowBody)]->GetTransform()->SetLocalScale(Vector3d{ (distance - 1),1.0,1.0 });
-        this->hanselWSkillPreviewObj->GetChildren()[static_cast<int>(HanselWSkillInfo::ArrowHead)]->GetTransform()->SetLocalPosition(normalizedVec * (distance - (0.5)));
+        this->hanselWSkillPreviewObj->GetChildren()[static_cast<int>(HanselWSkillInfo::ArrowBody)]->GetTransform()->SetLocalPosition(normalizedVec * ((distance - thickness * 2) / 2));
+        this->hanselWSkillPreviewObj->GetChildren()[static_cast<int>(HanselWSkillInfo::ArrowBody)]->GetTransform()->SetLocalScale(Vector3d{ (distance - thickness * 2),thickness, thickness });
+        this->hanselWSkillPreviewObj->GetChildren()[static_cast<int>(HanselWSkillInfo::ArrowHead)]->GetTransform()->SetLocalPosition(normalizedVec * (distance - thickness));
+        this->hanselWSkillPreviewObj->GetChildren()[static_cast<int>(HanselWSkillInfo::ArrowHead)]->GetTransform()->SetLocalScale(Vector3d::one * thickness * 2);
     }
     else
     {
         this->hanselWSkillPreviewObj->GetChildren()[static_cast<int>(HanselWSkillInfo::ArrowBody)]->GetTransform()->SetLocalPosition(Vector3d{ 0,0,0 });
         this->hanselWSkillPreviewObj->GetChildren()[static_cast<int>(HanselWSkillInfo::ArrowBody)]->GetTransform()->SetLocalScale(Vector3d{ 0,0,0 });
-        this->hanselWSkillPreviewObj->GetChildren()[static_cast<int>(HanselWSkillInfo::ArrowHead)]->GetTransform()->SetLocalPosition(normalizedVec * 0.5);
+        this->hanselWSkillPreviewObj->GetChildren()[static_cast<int>(HanselWSkillInfo::ArrowHead)]->GetTransform()->SetLocalPosition(normalizedVec * thickness);
+        this->hanselWSkillPreviewObj->GetChildren()[static_cast<int>(HanselWSkillInfo::ArrowHead)]->GetTransform()->SetLocalScale(Vector3d::one * thickness * 2);
     }
 
     if (this->hanselWSkillPreviewObj->GetActive() == false)
     {
         this->hanselWSkillPreviewObj->SetSelfActive(true);
     }
+    // 콜라이더 배치후 맞닿는 적들에 호버 표시
+    bool freshCollision = !boxCollider.lock()->GetGameObject()->GetActive();
+    boxCollider.lock()->GetGameObject()->SetSelfActive(true);
+
+    boxCollider.lock()->GetTransform()->SetWorldPosition((objectPos + destination) / 2.0f);
+    boxCollider.lock()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(destination - objectPos, Vector3d::up));
+    boxCollider.lock()->SetHalfExtent(Vector3f{ thickness * 0.5f, 5.0f, distance / 2.0f });
+
+    unitHoverGuards.clear();
+    if (!freshCollision)
+    {
+        std::transform(boxCollider.lock()->GetUnits().begin(), boxCollider.lock()->GetUnits().end(), std::inserter(unitHoverGuards, unitHoverGuards.end()),
+            [](Unit* each) {return std::make_pair(each, each->referenceHoverOutline.Acquire()); });
+    }
 }
 
 
 void SkillPreviewSystem::HideHanselWSkill()
 {
+    DisableColliders();
     if (this->hanselWSkillPreviewObj->GetActive() == true)
     {
         this->hanselWSkillPreviewObj->SetSelfActive(false);
@@ -779,6 +886,16 @@ void SkillPreviewSystem::HideShowMoveEndImage(yunuGI::IMesh* mesh)
         MoveEndPreviewPool::SingleInstance().Return(iter2->second->GetWeakPtr<graphics::StaticMeshRenderer>());
         this->moveEndRendererMap.erase(iter2);
     }
+}
+
+void SkillPreviewSystem::DisableColliders()
+{
+    unitHoverGuards.clear();
+    for (auto& each : sphereColliders)
+    {
+        each.lock()->GetGameObject()->SetSelfActive(false);
+    }
+    boxCollider.lock()->GetGameObject()->SetSelfActive(false);
 }
 
 yunuGI::IMesh* SkillPreviewSystem::CreateRouteMesh(std::vector<Vector3d>& vertexList)

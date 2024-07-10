@@ -14,6 +14,7 @@ std::weak_ptr<ManagedDuplicatedUI> DuplicatedUIPool::Borrow(UIEnumID id)
 
     auto wptr = poolsByID[id]->Borrow();
     borrowedList.insert(wptr.lock().get());
+    wptr.lock()->uiElement->EnableElement();
     return wptr;
 }
 

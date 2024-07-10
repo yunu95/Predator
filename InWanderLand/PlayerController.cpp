@@ -504,6 +504,7 @@ void PlayerController::HandleSkillPreview()
             parentEnumIDHovering = parentEnumIDHoveringPending;
 
             SkillPreviewSystem::Instance().HideRobinQSkill();
+            SkillPreviewSystem::Instance().HideRobinWSkill();
             SkillPreviewSystem::Instance().HideUrsulaQSkill();
             SkillPreviewSystem::Instance().HideUrsulaWSkill();
             SkillPreviewSystem::Instance().HideHanselQSkill();
@@ -523,6 +524,7 @@ void PlayerController::HandleSkillPreview()
                 auto forward{ characters[PlayerCharacterType::Robin].lock()->GetTransform()->GetWorldRotation().Forward() };
                 SkillPreviewSystem::Instance().ShowRobinQSkill(pos, pos + forward * RobinChargeSkill::GetMaxDistance());
                 SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Robin, characters[PlayerCharacterType::Robin].lock()->GetTransform()->GetWorldPosition(), RobinChargeSkill::GetMaxDistance());
+                SetPendingManaCost(RobinChargeSkill::pod.cost);
                 break;
             }
             case (int)UIEnumID::CharInfo_Ursula:
@@ -537,6 +539,7 @@ void PlayerController::HandleSkillPreview()
                 auto pos3 = UrsulaBlindSkill::GetSkillObjectPos_Top(pos);
                 SkillPreviewSystem::Instance().ShowUrsulaQSkill(pos1, pos2, pos3, Vector3d::one * UrsulaBlindSkill::pod.skillRadius);
                 SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Ursula, characters[PlayerCharacterType::Ursula].lock()->GetTransform()->GetWorldPosition(), UrsulaBlindSkill::GetSkillRange());
+                SetPendingManaCost(UrsulaBlindSkill::pod.skillCost);
                 break;
             }
             case (int)UIEnumID::CharInfo_Hansel:
@@ -545,6 +548,7 @@ void PlayerController::HandleSkillPreview()
                 auto pos{ characters[PlayerCharacterType::Hansel].lock()->GetTransform()->GetWorldPosition() };
                 SkillPreviewSystem::Instance().ShowHanselQSkill(pos, HanselChargeSkill::pod.skillRadius);
                 SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Hansel, characters[PlayerCharacterType::Hansel].lock()->GetTransform()->GetWorldPosition(), HanselChargeSkill::GetMaxRange());
+                SetPendingManaCost(HanselChargeSkill::pod.skillCost);
                 break;
             }
             }
@@ -554,14 +558,19 @@ void PlayerController::HandleSkillPreview()
             {
             case (int)UIEnumID::CharInfo_Robin:
             case (int)UIEnumID::CharInfo_Robin_Left:
-                SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Robin, characters[PlayerCharacterType::Robin].lock()->GetTransform()->GetWorldPosition(), RobinTauntSkill::GetSkillRadius());
+            {
+                auto pos{ characters[PlayerCharacterType::Robin].lock()->GetTransform()->GetWorldPosition() };
+                SkillPreviewSystem::Instance().ShowRobinWSkill(pos, RobinTauntSkill::GetSkillRadius());
+                SetPendingManaCost(RobinTauntSkill::pod.skillCost);
                 break;
+            }
             case (int)UIEnumID::CharInfo_Ursula:
             case (int)UIEnumID::CharInfo_Ursula_Left:
             {
                 auto pos{ characters[PlayerCharacterType::Ursula].lock()->GetTransform()->GetWorldPosition() };
                 SkillPreviewSystem::Instance().ShowUrsulaWSkill(pos, UrsulaParalysisSkill::GetSkillRadius());
                 SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Ursula, characters[PlayerCharacterType::Ursula].lock()->GetTransform()->GetWorldPosition(), UrsulaParalysisSkill::pod.skillRange);
+                SetPendingManaCost(UrsulaParalysisSkill::pod.skillCost);
                 break;
             }
             case (int)UIEnumID::CharInfo_Hansel:
@@ -571,12 +580,14 @@ void PlayerController::HandleSkillPreview()
                 auto forward{ characters[PlayerCharacterType::Hansel].lock()->GetTransform()->GetWorldRotation().Forward() };
                 SkillPreviewSystem::Instance().ShowHanselWSkill(pos, pos + forward * HanselProjectileSkill::GetMaxRange());
                 SkillPreviewSystem::Instance().ShowSkillMaxRange(SkillPreviewSystem::UnitType::Hansel, characters[PlayerCharacterType::Hansel].lock()->GetTransform()->GetWorldPosition(), HanselProjectileSkill::GetMaxRange());
+                SetPendingManaCost(HanselProjectileSkill::pod.skillCost);
                 break;
             }
             }
 
             break;
         default:
+            SetPendingManaCost(0);
             break;
         }
     }
@@ -612,7 +623,7 @@ void PlayerController::HandleManaRegen()
 
 void PlayerController::HandleMouseHover()
 {
-    if (auto unit = GetUnitOnCursor())
+    if (auto unit = GetUnitOnCursor(); unit && state != State::Cinematic)
     {
         ApplyHoverEffect(unit->GetWeakPtr<Unit>());
         if (auto btn = UIManager::Instance().GetHighlightedButton(); btn && btn->IsFunctioningButton())
@@ -1032,6 +1043,16 @@ void PlayerController::SelectSkill(SkillType::Enum skillType)
     }
 
     UnSelectSkill();
+    // 소모될 마나량을 출력
+    switch (skillType)
+    {
+    case SkillType::ROBIN_Q:  SetPendingManaCost(RobinChargeSkill::pod.cost); break;
+    case SkillType::ROBIN_W:  SetPendingManaCost(RobinTauntSkill::pod.skillCost); break;
+    case SkillType::URSULA_Q: SetPendingManaCost(UrsulaBlindSkill::pod.skillCost); break;
+    case SkillType::URSULA_W: SetPendingManaCost(UrsulaParalysisSkill::pod.skillCost); break;
+    case SkillType::HANSEL_Q: SetPendingManaCost(HanselChargeSkill::pod.skillCost); break;
+    case SkillType::HANSEL_W: SetPendingManaCost(HanselProjectileSkill::pod.skillCost); break;
+    }
     SkillPreviewSystem::Instance().HideTemporaryRoute();
     if (skillCooltimeLeft[skillType] > 0)
     {
@@ -1229,7 +1250,10 @@ void PlayerController::UnSelectSkill(bool forceUnselect)
     case SkillType::HANSEL_W: SkillPreviewSystem::Instance().HideHanselWSkill(); break;
     }
     if (selectedSkill != SkillType::NONE)
+    {
         SkillPreviewSystem::Instance().HideSkillMaxRange();
+        SetPendingManaCost(0);
+    }
     selectedSkill = SkillType::NONE;
 }
 
@@ -1309,10 +1333,21 @@ void PlayerController::SetMana(float mana)
 {
     const auto& gc = GlobalConstant::GetSingletonInstance().pod;
     this->mana = std::clamp<float>(mana, 0, gc.maxMana);
-    UIManager::Instance().GetUIElementByEnum(UIEnumID::ManaBar1)->adjuster->SetTargetFloat(1 - this->mana / gc.maxMana);
-    UIManager::Instance().GetUIElementByEnum(UIEnumID::ManaBar2)->adjuster->SetTargetFloat(1 - this->mana / gc.maxMana);
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::ManaBar1)->adjuster->SetTargetFloat(1 - GetManaNormalized());
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::ManaBar2)->adjuster->SetTargetFloat(1 - GetManaNormalized());
     UIManager::Instance().GetUIElementByEnum(UIEnumID::Mana_Text_MaxMP)->SetNumber(gc.maxMana);
     UIManager::Instance().GetUIElementByEnum(UIEnumID::Mana_Text_CurrentMP)->SetNumber(this->mana);
+}
+
+void PlayerController::SetPendingManaCost(float manaCost)
+{
+    const auto& maxMana = GlobalConstant::GetSingletonInstance().pod.maxMana;
+    float manabar1Width = UIManager::Instance().GetUIElementByEnum(UIEnumID::ManaBar1)->imageComponent.lock()->GetGI().GetWidth();
+    float manabar2Width = UIManager::Instance().GetUIElementByEnum(UIEnumID::ManaBar2)->imageComponent.lock()->GetGI().GetWidth();
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::ManaBarSpendOverlay1)->adjuster->SetTargetFloat(std::fminf(manaCost / maxMana, GetManaNormalized()));
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::ManaBarSpendOverlay2)->adjuster->SetTargetFloat(std::fminf(manaCost / maxMana, GetManaNormalized()));
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::ManaBarSpendOverlay1)->GetTransform()->SetLocalPosition(Vector3d::right * manabar1Width * GetManaNormalized());
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::ManaBarSpendOverlay2)->GetTransform()->SetLocalPosition(Vector3d::right * manabar2Width * GetManaNormalized());
 }
 
 void PlayerController::TryTogglingTacticMode()
@@ -1371,6 +1406,11 @@ float PlayerController::GetMana()
     return this->mana;
 }
 
+float PlayerController::GetManaNormalized()
+{
+    return this->mana / GlobalConstant::GetSingletonInstance().pod.maxMana;
+}
+
 Vector3d PlayerController::GetCamPivotPoint()
 {
     return camPivotPoint;
@@ -1378,6 +1418,8 @@ Vector3d PlayerController::GetCamPivotPoint()
 
 void PlayerController::SetCooltime(SkillType::Enum skillType, float cooltime)
 {
+    if (TacticModeSystem::Instance().IsExecuting())
+        return;
     if (skillType == SkillType::EnemyImpale)
         return;
     skillCooltimeLeft[skillType] = std::fmax(0.0f, cooltime);
