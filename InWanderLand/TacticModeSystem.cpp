@@ -93,8 +93,6 @@ void TacticModeSystem::OnContentsStop()
 
 void TacticModeSystem::EngageTacticSystem()
 {
-    PlayerController::Instance().SetManaFull();
-
     this->isOperating = true;
     this->isCoolTime = true;
 

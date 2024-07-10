@@ -11,8 +11,6 @@ struct POD_BossSpinAttackSkill
 	float skillRadius = 5.0f;
 	float knockBackDistance = 15.0f;
 	float knockBackDuration = 1.0f;
-	float paralyzingDuration = 2.0f;
-	float skillEndTimeAfterDamaged = 0.1f;
 
 	TO_JSON(POD_BossSpinAttackSkill)
 	FROM_JSON(POD_BossSpinAttackSkill)

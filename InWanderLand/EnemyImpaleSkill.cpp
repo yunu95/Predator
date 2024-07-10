@@ -113,6 +113,8 @@ coroutine::Coroutine EnemyImpaleSkill::operator()()
                 {
                     if (!spearFbxQueue.front().expired())
                     {
+                        spearFbxQueue.front().lock()->GetTransform()->SetWorldRotation(Quaternion::Identity());
+                        spearFbxQueue.front().lock()->GetTransform()->SetWorldScale(Vector3d::one);
                         FBXPool::Instance().Return(spearFbxQueue.front());
                         spearFbxQueue.pop();
                     }
@@ -271,7 +273,7 @@ coroutine::Coroutine EnemyImpaleSkill::SpawningSkillffect(std::weak_ptr<EnemyImp
 
     previewEffect = FBXPool::Instance().Borrow("VFX_Monster2_Skill_Preview");
 
-    previewEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos + owner.lock()->GetTransform()->GetWorldRotation().Forward() * pod.impaleSkillRange / 2);
+    previewEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos + owner.lock()->GetTransform()->GetWorldRotation().Forward() * pod.impaleSkillRange / 2 + owner.lock()->GetTransform()->GetWorldRotation().Forward() * pod.impaleSkillFirstSpearOffset);
     previewEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(owner.lock()->GetTransform()->GetWorldRotation());
     previewEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(pod.impaleSkillWidth / colliderEffectRatio,
         1,

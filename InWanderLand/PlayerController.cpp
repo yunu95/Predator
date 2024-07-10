@@ -1564,10 +1564,10 @@ void PlayerController::OnPlayerUnitSkillActivation(std::weak_ptr<Unit> unit, std
     SetCooltime(skillType, GetCooltimeForSkill(skillType));
     if (skillType != SkillType::NONE)
     {
-        //if (state != State::Tactic)
-        //{
-        //    //SetMana(mana - RequiredManaForSkill(skillType));
-        //}
+        if (state != State::Tactic)
+        {
+            SetMana(mana - RequiredManaForSkill(skillType));
+        }
         onSkillActivate[skillType]();
     }
 }
