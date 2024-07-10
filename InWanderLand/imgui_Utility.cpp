@@ -212,12 +212,14 @@ namespace application
 					for (int i = 0; i < optionCount; i++)
 					{
 						const bool is_selected = (current == options[i]);
+						ImGui::PushID((options[i] + std::to_string(i)).c_str());
 						if (ImGui::Selectable(options[i], is_selected))
 						{
 							current = options[i];
 							*selected = i;
 							result = true;
 						}
+						ImGui::PopID();
 
 						if (is_selected)
 							ImGui::SetItemDefaultFocus();

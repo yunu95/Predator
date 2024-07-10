@@ -9,3 +9,4 @@
 #include "Module_ScriptEditor.h"
 #include "Module_Skill.h"
 #include "Module_AnimationEditor.h"
+#include "Module_SoundEditor.h"
