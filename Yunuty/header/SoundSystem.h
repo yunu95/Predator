@@ -36,6 +36,7 @@ namespace yunutyEngine
             MAX, 
         };
 
+        static void Update();
         static SoundChannel PlaySoundfile(string soundPath);
         static SoundChannel PlaySoundfile3D(string soundPath, Vector3d worldPosition);
         static void StopSound(double fadeLength = 0);
@@ -65,6 +66,7 @@ namespace yunutyEngine
         static bool CreateSoundGroup(unsigned long long groupIndex, string name = "None");
         static bool EraseSoundGroup(unsigned long long groupIndex);
         static FMOD::SoundGroup* GetSoundGroup(unsigned long long groupIndex);
+        static int GetSoundGroupUseCount(unsigned long long groupIndex);
         static bool SetSoundGroupVolume(unsigned long long groupIndex, float volume);
         static float GetSoundGroupVolume(unsigned long long groupIndex);
         static bool SetSoundGroupMaxAudible(unsigned long long groupIndex, int audible);
@@ -92,7 +94,7 @@ namespace yunutyEngine
         void mStopMusic(double fadeLength);
         bool mCreateSoundGroup(unsigned long long groupIndex, string name = "None");
         // fire and forget channels
-        FMOD::Channel* channels[64] = { nullptr };
+        FMOD::Channel* channels[128] = { nullptr };
         FMOD::Channel* bgmChannel = nullptr;
         FMOD::System* fmodSystem = nullptr;
         // 0번 Index 는 masterSoundGroup 으로 사용하며, 기본적으로 생성합니다.
