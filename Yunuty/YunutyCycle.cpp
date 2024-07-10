@@ -167,6 +167,7 @@ void yunutyEngine::YunutyCycle::ThreadUpdate()
 {
     std::scoped_lock lock{ updateMutex };
     Time::Update();
+    SoundSystem::Update();
 
     for (auto i = GlobalComponent::globalComponents.begin(); i != GlobalComponent::globalComponents.end(); i++)
         (*i)->Update();
