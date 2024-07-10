@@ -25,17 +25,26 @@ void UIOffsetTransition::Init(const JsonUIData& jsonData, bool isEnableEffect)
     isRealtime = true;
     onCompleteFunction = [=]()
         {
-            GetTransform()->SetLocalPosition(endPosition);
-            GetGameObject()->SetSelfActive(isEnableEffect);
+            if (startPosition != endPosition)
+            {
+                GetTransform()->SetLocalPosition(endPosition);
+                GetGameObject()->SetSelfActive(isEnableEffect);
+            }
         };
     onUpdate = [=](float t)
         {
-            t = max(0.0f, (t * duration - delay) / (duration - delay));
-            GetTransform()->SetLocalPosition(Vector3d::Lerp(startPosition, endPosition, UICurveFunctions[curveType](t)));
+            if (startPosition != endPosition)
+            {
+                t = max(0.0f, (t * duration - delay) / (duration - delay));
+                GetTransform()->SetLocalPosition(Vector3d::Lerp(startPosition, endPosition, UICurveFunctions[curveType](t)));
+            }
         };
     onActivation = [=]()
         {
-            GetTransform()->SetLocalPosition(startPosition);
-            GetGameObject()->SetSelfActive(true);
+            if (startPosition != endPosition)
+            {
+                GetTransform()->SetLocalPosition(startPosition);
+                GetGameObject()->SetSelfActive(true);
+            }
         };
 };
