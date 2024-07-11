@@ -220,114 +220,6 @@
         "CalculateShadow": true,
         "CastDecal": false,
         "DiffuseExposure": 1.0,
-        "FBXName : ": "SM_Book01",
-        "aabb": {
-            "maxPoint": {
-                "x": -431602080.0,
-                "y": -431602080.0,
-                "z": -431602080.0
-            },
-            "minPoint": {
-                "x": -431602080.0,
-                "y": -431602080.0,
-                "z": -431602080.0
-            }
-        },
-        "boneInfo": {
-            "index": -1
-        },
-        "child": [
-            {
-                "AmbientExposure": 1.0,
-                "CalculateShadow": true,
-                "CastDecal": false,
-                "DiffuseExposure": 1.0,
-                "aabb": {
-                    "maxPoint": {
-                        "x": 2.6573832035064697,
-                        "y": 1.6067355871200562,
-                        "z": 0.8482630848884583
-                    },
-                    "minPoint": {
-                        "x": -2.9554765224456787,
-                        "y": -1.2801133394241333,
-                        "z": -1.198810338973999
-                    }
-                },
-                "boneInfo": {
-                    "index": -1
-                },
-                "hasAnimation": false,
-                "materialVec": [
-                    {
-                        "albedoMap": "FBX/SM_Book01/SM_Book01.fbm/T_Bookshelve_BaseColor.dds",
-                        "armMap": "FBX/SM_Book01/SM_Book01.fbm/T_Bookshelve_ARM.dds",
-                        "emissionMap": "",
-                        "heightMap": "",
-                        "materialName": "M_Bookshelf",
-                        "normalMap": "FBX/SM_Book01/SM_Book01.fbm/T_Bookshelve_Normal.dds",
-                        "opacityMap": "FBX/SM_Book01/SM_Book01.fbm/T_Bookshelve_Opacity.dds",
-                        "ps": "DefaultPS.cso",
-                        "temp0Map": "",
-                        "temp10Map": "",
-                        "temp11Map": "",
-                        "temp1Map": "",
-                        "temp2Map": "",
-                        "temp3Map": "",
-                        "temp4Map": "",
-                        "temp5Map": "",
-                        "temp6Map": "",
-                        "temp7Map": "",
-                        "temp8Map": "",
-                        "temp9Map": "",
-                        "vs": "DefaultVS.cso"
-                    }
-                ],
-                "meshName": "SM_Book01",
-                "nodeName": "SM_Book01",
-                "pos": {
-                    "x": 0.0,
-                    "y": 0.0,
-                    "z": -0.0
-                },
-                "quat": {
-                    "w": -0.7071068286895752,
-                    "x": 0.7071068286895752,
-                    "y": 0.0,
-                    "z": 0.0
-                },
-                "scale": {
-                    "x": 1.0,
-                    "y": 1.0,
-                    "z": 1.0
-                }
-            }
-        ],
-        "hasAnimation": false,
-        "meshName": "",
-        "nodeName": "RootNode",
-        "pos": {
-            "x": -431602080.0,
-            "y": -431602080.0,
-            "z": -431602080.0
-        },
-        "quat": {
-            "w": -0.5,
-            "x": -0.5,
-            "y": -0.5,
-            "z": -0.5
-        },
-        "scale": {
-            "x": -431602080.0,
-            "y": -431602080.0,
-            "z": -431602080.0
-        }
-    },
-    {
-        "AmbientExposure": 1.0,
-        "CalculateShadow": true,
-        "CastDecal": false,
-        "DiffuseExposure": 1.0,
         "FBXName : ": "Sphere",
         "aabb": {
             "maxPoint": {
@@ -393,6 +285,114 @@
                 ],
                 "meshName": "Sphere",
                 "nodeName": "Sphere",
+                "pos": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": -0.0
+                },
+                "quat": {
+                    "w": -0.7071068286895752,
+                    "x": 0.7071068286895752,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        ],
+        "hasAnimation": false,
+        "meshName": "",
+        "nodeName": "RootNode",
+        "pos": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        },
+        "quat": {
+            "w": -0.5,
+            "x": -0.5,
+            "y": -0.5,
+            "z": -0.5
+        },
+        "scale": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        }
+    },
+    {
+        "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
+        "DiffuseExposure": 1.0,
+        "FBXName : ": "SM_Book01",
+        "aabb": {
+            "maxPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            },
+            "minPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            }
+        },
+        "boneInfo": {
+            "index": -1
+        },
+        "child": [
+            {
+                "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
+                "DiffuseExposure": 1.0,
+                "aabb": {
+                    "maxPoint": {
+                        "x": 2.6573832035064697,
+                        "y": 1.6067355871200562,
+                        "z": 0.8482630848884583
+                    },
+                    "minPoint": {
+                        "x": -2.9554765224456787,
+                        "y": -1.2801133394241333,
+                        "z": -1.198810338973999
+                    }
+                },
+                "boneInfo": {
+                    "index": -1
+                },
+                "hasAnimation": false,
+                "materialVec": [
+                    {
+                        "albedoMap": "FBX/SM_Book01/SM_Book01.fbm/T_Bookshelve_BaseColor.dds",
+                        "armMap": "FBX/SM_Book01/SM_Book01.fbm/T_Bookshelve_ARM.dds",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "M_Bookshelf",
+                        "normalMap": "FBX/SM_Book01/SM_Book01.fbm/T_Bookshelve_Normal.dds",
+                        "opacityMap": "FBX/SM_Book01/SM_Book01.fbm/T_Bookshelve_Opacity.dds",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    }
+                ],
+                "meshName": "SM_Book01",
+                "nodeName": "SM_Book01",
                 "pos": {
                     "x": 0.0,
                     "y": 0.0,
@@ -544,114 +544,6 @@
         "CalculateShadow": true,
         "CastDecal": false,
         "DiffuseExposure": 1.0,
-        "FBXName : ": "Cylinder",
-        "aabb": {
-            "maxPoint": {
-                "x": -431602080.0,
-                "y": -431602080.0,
-                "z": -431602080.0
-            },
-            "minPoint": {
-                "x": -431602080.0,
-                "y": -431602080.0,
-                "z": -431602080.0
-            }
-        },
-        "boneInfo": {
-            "index": -1
-        },
-        "child": [
-            {
-                "AmbientExposure": 1.0,
-                "CalculateShadow": true,
-                "CastDecal": false,
-                "DiffuseExposure": 1.0,
-                "aabb": {
-                    "maxPoint": {
-                        "x": 0.004999999888241291,
-                        "y": 0.004999998956918716,
-                        "z": 0.004999999422580004
-                    },
-                    "minPoint": {
-                        "x": -0.004999999888241291,
-                        "y": -0.004999998956918716,
-                        "z": -0.004999999422580004
-                    }
-                },
-                "boneInfo": {
-                    "index": -1
-                },
-                "hasAnimation": false,
-                "materialVec": [
-                    {
-                        "albedoMap": "",
-                        "armMap": "",
-                        "emissionMap": "",
-                        "heightMap": "",
-                        "materialName": "DefaultMaterial",
-                        "normalMap": "",
-                        "opacityMap": "",
-                        "ps": "DefaultPS.cso",
-                        "temp0Map": "",
-                        "temp10Map": "",
-                        "temp11Map": "",
-                        "temp1Map": "",
-                        "temp2Map": "",
-                        "temp3Map": "",
-                        "temp4Map": "",
-                        "temp5Map": "",
-                        "temp6Map": "",
-                        "temp7Map": "",
-                        "temp8Map": "",
-                        "temp9Map": "",
-                        "vs": "DefaultVS.cso"
-                    }
-                ],
-                "meshName": "Cylinder",
-                "nodeName": "Cylinder",
-                "pos": {
-                    "x": 0.0,
-                    "y": 0.0,
-                    "z": -0.0
-                },
-                "quat": {
-                    "w": 0.7071067094802856,
-                    "x": 0.70710688829422,
-                    "y": 0.0,
-                    "z": 0.0
-                },
-                "scale": {
-                    "x": 100.0,
-                    "y": 100.0,
-                    "z": 100.0
-                }
-            }
-        ],
-        "hasAnimation": false,
-        "meshName": "",
-        "nodeName": "RootNode",
-        "pos": {
-            "x": -431602080.0,
-            "y": -431602080.0,
-            "z": -431602080.0
-        },
-        "quat": {
-            "w": -0.5,
-            "x": -0.5,
-            "y": -0.5,
-            "z": -0.5
-        },
-        "scale": {
-            "x": -431602080.0,
-            "y": -431602080.0,
-            "z": -431602080.0
-        }
-    },
-    {
-        "AmbientExposure": 1.0,
-        "CalculateShadow": true,
-        "CastDecal": false,
-        "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Frame_001",
         "aabb": {
             "maxPoint": {
@@ -732,6 +624,114 @@
                     "x": 1.0,
                     "y": 1.0,
                     "z": 1.0
+                }
+            }
+        ],
+        "hasAnimation": false,
+        "meshName": "",
+        "nodeName": "RootNode",
+        "pos": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        },
+        "quat": {
+            "w": -0.5,
+            "x": -0.5,
+            "y": -0.5,
+            "z": -0.5
+        },
+        "scale": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        }
+    },
+    {
+        "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
+        "DiffuseExposure": 1.0,
+        "FBXName : ": "Cylinder",
+        "aabb": {
+            "maxPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            },
+            "minPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            }
+        },
+        "boneInfo": {
+            "index": -1
+        },
+        "child": [
+            {
+                "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
+                "DiffuseExposure": 1.0,
+                "aabb": {
+                    "maxPoint": {
+                        "x": 0.004999999888241291,
+                        "y": 0.004999998956918716,
+                        "z": 0.004999999422580004
+                    },
+                    "minPoint": {
+                        "x": -0.004999999888241291,
+                        "y": -0.004999998956918716,
+                        "z": -0.004999999422580004
+                    }
+                },
+                "boneInfo": {
+                    "index": -1
+                },
+                "hasAnimation": false,
+                "materialVec": [
+                    {
+                        "albedoMap": "",
+                        "armMap": "",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "DefaultMaterial",
+                        "normalMap": "",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    }
+                ],
+                "meshName": "Cylinder",
+                "nodeName": "Cylinder",
+                "pos": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": -0.0
+                },
+                "quat": {
+                    "w": 0.7071067094802856,
+                    "x": 0.70710688829422,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 100.0,
+                    "y": 100.0,
+                    "z": 100.0
                 }
             }
         ],
@@ -2149,14 +2149,14 @@
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
-                        "x": 3.6807444095611572,
-                        "y": 0.07397636026144028,
-                        "z": 8.786382675170898
+                        "x": 3.725008010864258,
+                        "y": 0.5691750645637512,
+                        "z": 9.339872360229492
                     },
                     "minPoint": {
-                        "x": -3.625345468521118,
-                        "y": -1.5640074014663696,
-                        "z": 0.4987708330154419
+                        "x": -3.836183547973633,
+                        "y": -6.484780311584473,
+                        "z": 0.02781197614967823
                     }
                 },
                 "boneInfo": {
@@ -2165,7 +2165,7 @@
                 "hasAnimation": false,
                 "materialVec": [
                     {
-                        "albedoMap": "FBX/VFX_Frame_Summoning/VFX_Frame_Summoning.fbm/T_VFX_Monster.dds",
+                        "albedoMap": "FBX/VFX_Frame_Summoning/VFX_Frame_Summoning.fbm/T_VFX_Frame.dds",
                         "armMap": "",
                         "emissionMap": "",
                         "heightMap": "",
@@ -2600,7 +2600,7 @@
             {
                 "AmbientExposure": 1.0,
                 "CalculateShadow": true,
-                "CastDecal": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -6651,14 +6651,14 @@
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
-                        "x": 1.8923227787017822,
-                        "y": 1.1754943508222875e-38,
-                        "z": 3.3892698287963867
+                        "x": 2.0138614177703857,
+                        "y": 2.108473300933838,
+                        "z": 3.680938482284546
                     },
                     "minPoint": {
-                        "x": -1.9161497354507446,
-                        "y": -2.9949498176574707,
-                        "z": 0.02089453488588333
+                        "x": -2.0480494499206543,
+                        "y": -2.99495005607605,
+                        "z": 0.017343394458293915
                     }
                 },
                 "boneInfo": {
@@ -9321,7 +9321,7 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
-                "CalculateShadow": true,
+                "CalculateShadow": false,
                 "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
@@ -9429,7 +9429,7 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
-                "CalculateShadow": true,
+                "CalculateShadow": false,
                 "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
@@ -12380,14 +12380,14 @@
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
-                        "x": 2.553361415863037,
+                        "x": 1.9333992004394531,
                         "y": 2.011841297149658,
                         "z": 4.574946880340576
                     },
                     "minPoint": {
-                        "x": -3.501887798309326,
+                        "x": -2.969731092453003,
                         "y": -2.1795454025268555,
-                        "z": 1.1463748216629028
+                        "z": 1.1463749408721924
                     }
                 },
                 "boneInfo": {
@@ -13821,14 +13821,14 @@
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
-                        "x": 1.1999157667160034,
-                        "y": 2.200746536254883,
-                        "z": 5.338397979736328
+                        "x": 1.8607605695724487,
+                        "y": 2.8607606887817383,
+                        "z": 1.1754943508222875e-38
                     },
                     "minPoint": {
-                        "x": -1.2020246982574463,
-                        "y": -0.21165718138217926,
-                        "z": -0.208570197224617
+                        "x": -1.8607606887817383,
+                        "y": -0.8607605695724487,
+                        "z": -1.000000238418579
                     }
                 },
                 "boneInfo": {
@@ -13842,6 +13842,29 @@
                         "emissionMap": "",
                         "heightMap": "",
                         "materialName": "VFX_Buff_Healing",
+                        "normalMap": "",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    },
+                    {
+                        "albedoMap": "FBX/VFX_Buff_Healing/VFX_Buff_Healing.fbm/T_VFX_HealBuff.dds",
+                        "armMap": "",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "VFX_Buff_Healing_1",
                         "normalMap": "",
                         "opacityMap": "",
                         "ps": "DefaultPS.cso",
@@ -19426,52 +19449,6 @@
                         "armMap": "",
                         "emissionMap": "",
                         "heightMap": "",
-                        "materialName": "VFX_DeBuff_Blind_Ursula_1",
-                        "normalMap": "",
-                        "opacityMap": "",
-                        "ps": "DefaultPS.cso",
-                        "temp0Map": "",
-                        "temp10Map": "",
-                        "temp11Map": "",
-                        "temp1Map": "",
-                        "temp2Map": "",
-                        "temp3Map": "",
-                        "temp4Map": "",
-                        "temp5Map": "",
-                        "temp6Map": "",
-                        "temp7Map": "",
-                        "temp8Map": "",
-                        "temp9Map": "",
-                        "vs": "DefaultVS.cso"
-                    },
-                    {
-                        "albedoMap": "FBX/VFX_DeBuff_Blind_Ursula/VFX_DeBuff_Blind_Ursula.fbm/T_VFX_Ursula_Debuff.dds",
-                        "armMap": "",
-                        "emissionMap": "",
-                        "heightMap": "",
-                        "materialName": "VFX_DeBuff_Blind_Ursula_2",
-                        "normalMap": "",
-                        "opacityMap": "",
-                        "ps": "DefaultPS.cso",
-                        "temp0Map": "",
-                        "temp10Map": "",
-                        "temp11Map": "",
-                        "temp1Map": "",
-                        "temp2Map": "",
-                        "temp3Map": "",
-                        "temp4Map": "",
-                        "temp5Map": "",
-                        "temp6Map": "",
-                        "temp7Map": "",
-                        "temp8Map": "",
-                        "temp9Map": "",
-                        "vs": "DefaultVS.cso"
-                    },
-                    {
-                        "albedoMap": "FBX/VFX_DeBuff_Blind_Ursula/VFX_DeBuff_Blind_Ursula.fbm/T_VFX_Ursula_Debuff.dds",
-                        "armMap": "",
-                        "emissionMap": "",
-                        "heightMap": "",
                         "materialName": "VFX_DeBuff_Blind_Ursula_3",
                         "normalMap": "",
                         "opacityMap": "",
@@ -19560,14 +19537,14 @@
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
-                        "x": 3.6807444095611572,
-                        "y": 0.07397636026144028,
-                        "z": 8.786382675170898
+                        "x": 3.725008010864258,
+                        "y": 0.5691750645637512,
+                        "z": 9.339872360229492
                     },
                     "minPoint": {
-                        "x": -3.625345468521118,
-                        "y": -1.5640074014663696,
-                        "z": 0.4987708330154419
+                        "x": -3.836183547973633,
+                        "y": -6.484780311584473,
+                        "z": 0.02781197614967823
                     }
                 },
                 "boneInfo": {
@@ -19576,7 +19553,7 @@
                 "hasAnimation": false,
                 "materialVec": [
                     {
-                        "albedoMap": "FBX/VFX_Frame_Summon/VFX_Frame_Summon.fbm/T_VFX_Monster.dds",
+                        "albedoMap": "FBX/VFX_Frame_Summon/VFX_Frame_Summon.fbm/T_VFX_Frame.dds",
                         "armMap": "",
                         "emissionMap": "",
                         "heightMap": "",
@@ -19992,14 +19969,14 @@
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
-                        "x": 3.751034736633301,
-                        "y": 3.7504894733428955,
-                        "z": 0.20333971083164215
+                        "x": 4.368549346923828,
+                        "y": 4.367914199829102,
+                        "z": 0.20334139466285706
                     },
                     "minPoint": {
-                        "x": -3.7510316371917725,
-                        "y": -3.750490188598633,
-                        "z": -0.028426028788089752
+                        "x": -4.368545055389404,
+                        "y": -4.36791467666626,
+                        "z": -0.028426025062799454
                     }
                 },
                 "boneInfo": {
@@ -20008,7 +19985,7 @@
                 "hasAnimation": false,
                 "materialVec": [
                     {
-                        "albedoMap": "FBX/VFX_Hansel_Skill1_2/VFX_Hansel_Skill1_2.fbm/T_VFX_Hansel_Attack.dds",
+                        "albedoMap": "FBX/VFX_Hansel_Skill1_2/VFX_Hansel_Skill1_2.fbm/T_VFX_Crack.dds",
                         "armMap": "",
                         "emissionMap": "",
                         "heightMap": "",
@@ -20341,7 +20318,7 @@
                     "maxPoint": {
                         "x": 3.8151745796203613,
                         "y": 5.11722469329834,
-                        "z": 5.824519634246826
+                        "z": 6.9944024085998535
                     },
                     "minPoint": {
                         "x": -5.769143581390381,
@@ -20493,14 +20470,14 @@
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
-                        "x": 0.2583075165748596,
+                        "x": 0.6937445402145386,
                         "y": 1.1754943508222875e-38,
-                        "z": 6.361051559448242
+                        "z": 8.800806045532227
                     },
                     "minPoint": {
-                        "x": -1.5162686109542847,
-                        "y": -4.22417688369751,
-                        "z": 0.27122774720191956
+                        "x": -1.948010802268982,
+                        "y": -4.946674346923828,
+                        "z": 0.009841804392635822
                     }
                 },
                 "boneInfo": {
@@ -20863,14 +20840,14 @@
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
-                        "x": 4.467220306396484,
-                        "y": 0.6381556391716003,
-                        "z": 2.2278265953063965
+                        "x": 5.690138816833496,
+                        "y": 1.5808745622634888,
+                        "z": 0.12660619616508484
                     },
                     "minPoint": {
-                        "x": -3.214735507965088,
-                        "y": -7.125814437866211,
-                        "z": -2.3785389657859923e-07
+                        "x": -3.935652017593384,
+                        "y": -8.086153984069824,
+                        "z": -1.000000238418579
                     }
                 },
                 "boneInfo": {
@@ -20879,11 +20856,34 @@
                 "hasAnimation": false,
                 "materialVec": [
                     {
-                        "albedoMap": "FBX/VFX_Monster1_Attack/VFX_Monster1_Attack.fbm/T_VFX_HeartQueen_Attack.dds",
+                        "albedoMap": "FBX/VFX_Monster1_Attack/VFX_Monster1_Attack.fbm/T_VFX_Monster.dds",
                         "armMap": "",
                         "emissionMap": "",
                         "heightMap": "",
                         "materialName": "VFX_Monster1_Attack",
+                        "normalMap": "",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    },
+                    {
+                        "albedoMap": "FBX/VFX_Monster1_Attack/VFX_Monster1_Attack.fbm/T_VFX_Crack.dds",
+                        "armMap": "",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "VFX_Monster1_Attack_1",
                         "normalMap": "",
                         "opacityMap": "",
                         "ps": "DefaultPS.cso",
@@ -20971,14 +20971,14 @@
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
-                        "x": 4.111140727996826,
-                        "y": 4.109020709991455,
-                        "z": 4.465972900390625
+                        "x": 3.883033037185669,
+                        "y": 3.880903482437134,
+                        "z": 6.415242671966553
                     },
                     "minPoint": {
-                        "x": -4.551766872406006,
-                        "y": -4.552694320678711,
-                        "z": 2.5590438842773438
+                        "x": -4.323116779327393,
+                        "y": -4.324115753173828,
+                        "z": 1.2384225130081177
                     }
                 },
                 "boneInfo": {
@@ -21210,14 +21210,14 @@
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
-                        "x": 4.605212688446045,
-                        "y": 0.7750858068466187,
-                        "z": 2.0415375232696533
+                        "x": 5.216000556945801,
+                        "y": 2.572272777557373,
+                        "z": 0.12660641968250275
                     },
                     "minPoint": {
-                        "x": -3.214735507965088,
-                        "y": -7.125814437866211,
-                        "z": -2.3785389657859923e-07
+                        "x": -6.384128093719482,
+                        "y": -9.07755184173584,
+                        "z": -1.0000001192092896
                     }
                 },
                 "boneInfo": {
@@ -21254,6 +21254,29 @@
                         "emissionMap": "",
                         "heightMap": "",
                         "materialName": "VFX_Monster2_Skill_2",
+                        "normalMap": "",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    },
+                    {
+                        "albedoMap": "FBX/VFX_Monster2_Skill/VFX_Monster2_Skill.fbm/T_VFX_Crack.dds",
+                        "armMap": "",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "VFX_Monster1_Skill_3",
                         "normalMap": "",
                         "opacityMap": "",
                         "ps": "DefaultPS.cso",
@@ -21842,14 +21865,14 @@
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
-                        "x": 4.084273815155029,
-                        "y": 3.692976951599121,
-                        "z": 5.042462348937988
+                        "x": 2.4341630935668945,
+                        "y": 0.2160627245903015,
+                        "z": 12.734868049621582
                     },
                     "minPoint": {
-                        "x": -4.06304407119751,
-                        "y": -4.387101173400879,
-                        "z": -0.05229642987251282
+                        "x": -2.353147506713867,
+                        "y": -0.7725183963775635,
+                        "z": -0.408888578414917
                     }
                 },
                 "boneInfo": {
@@ -21863,6 +21886,29 @@
                         "emissionMap": "",
                         "heightMap": "",
                         "materialName": "VFX_Robin_Skill2",
+                        "normalMap": "",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    },
+                    {
+                        "albedoMap": "FBX/VFX_Robin_Skill2/VFX_Robin_Skill2.fbm/T_VFX_Robin_Aggro.dds",
+                        "armMap": "",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "VFX_Robin_Aggro",
                         "normalMap": "",
                         "opacityMap": "",
                         "ps": "DefaultPS.cso",
