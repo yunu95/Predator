@@ -99,7 +99,7 @@ VertexOut main(VertexIn input)
     if (transitionDesc[input.instanceID].curr.animIndex == -1)
     {
         output.pos = mul(float4(input.pos, 1.f), _WVP);
-        output.pos.z += depthBias;
+        ///output.pos.z += depthBias;
         output.clipPos = output.pos;
     }
     else
@@ -108,7 +108,7 @@ VertexOut main(VertexIn input)
         
         output.pos = mul(float4(input.pos, 1.f), boneMat);
         output.pos = mul(output.pos, _WVP);
-        output.pos.z += depthBias;
+        ///output.pos.z += depthBias;
         output.clipPos = output.pos;
     }
     

@@ -273,10 +273,10 @@ void wanderUtils::ChangeLightMap(Stage stage)
         graphics::Camera::GetMainCamera()->GetGI().SetClearColor(yunuGI::Color{ 0.7686,0.8784,0.9451,1 });
         yunutyEngine::graphics::Renderer::SingleInstance().SetLightMap(L"Stage1LightMap");
         Quaternion inGameRot;
-        inGameRot.x = 0.860572696;
-        inGameRot.y = 0.0646217689;
-        inGameRot.z = 0.11142046;
-        inGameRot.w = 0.492771924;
+        inGameRot.x = 0.3082262;
+        inGameRot.y = -0.7084721;
+        inGameRot.z = 0.4369155;
+        inGameRot.w = 0.4606178;
         if (Application::GetInstance().IsContentsPlaying())
         {
             application::editor::LightData::GetPlaytimeDirectionalLight()->GetTransform()->SetWorldRotation(inGameRot);

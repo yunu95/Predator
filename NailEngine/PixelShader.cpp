@@ -158,10 +158,10 @@ void PixelShader::CreateRasterizerState(const std::string& fileContent)
 			}
 			else if (shaderType == "Shadow")
 			{
-				//rasterDesc.DepthBias = 16777;
-				//rasterDesc.DepthBiasClamp = 0.f;
-				//rasterDesc.DepthClipEnable = true;
-				//rasterDesc.SlopeScaledDepthBias = 1.f;
+				rasterDesc.DepthBias = 16777;
+				rasterDesc.DepthBiasClamp = 0.f;
+				rasterDesc.DepthClipEnable = true;
+				rasterDesc.SlopeScaledDepthBias = 1.f;
 
 				this->shaderInfo.rasterizer = yunuGI::Rasterizer::Solid;
 				rasterDesc.FillMode = D3D11_FILL_SOLID;
