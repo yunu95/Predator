@@ -736,9 +736,22 @@ yunutyEngine::coroutine::Coroutine Unit::ParalyzeEffectCoroutine(float paralyzeD
     paralysisEffectAnimator.lock()->Play();
     paralysisEffectAnimator.lock()->SetLoop(true);
 
+    float localScaleInfo = 1.0f;
+    if (this->GetUnitTemplateData().pod.unitControllerType.enumValue == UnitControllerType::Enum::HEART_QUEEN)
+    {
+        localScaleInfo = 1.5f;
+    }
+    else if (this->GetUnitTemplateData().pod.unitControllerType.enumValue == UnitControllerType::Enum::MELEE_ELITE)
+    {
+        localScaleInfo = 1.5f;
+    }
+    else if (this->GetUnitTemplateData().pod.unitControllerType.enumValue == UnitControllerType::Enum::RANGED_ELITE)
+    {
+        localScaleInfo = 1.5f;
+    }
     paralysisVFX.lock()->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
     paralysisVFX.lock()->GetTransform()->SetWorldRotation(GetTransform()->GetWorldRotation());
-    paralysisVFX.lock()->GetTransform()->SetWorldScale(GetTransform()->GetWorldScale());
+    paralysisVFX.lock()->GetTransform()->SetWorldScale(GetTransform()->GetWorldScale() * localScaleInfo);
 
     coroutine::ForSeconds forSeconds = paralyzeDuration;
 

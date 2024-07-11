@@ -17,9 +17,12 @@ private:
     std::weak_ptr<UIElement> buffIcon2;
     std::weak_ptr<UIElement> buffIcon3;
     void Init(std::weak_ptr<Unit> owner);
+
 protected:
     std::weak_ptr<Unit> owner;
     std::weak_ptr<ManagedFBX> buffEffect;
+    Vector3d ownerUnitActualScale = Vector3d::one;
+
 public:
     float durationLeft = 1;
     virtual UnitBuffType GetBuffType() = 0;
