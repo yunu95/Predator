@@ -38,7 +38,7 @@ namespace yunutyEngine
 
         static void Update();
         static SoundChannel PlaySoundfile(string soundPath);
-        static SoundChannel PlaySoundfile3D(string soundPath, Vector3d worldPosition);
+        static SoundChannel PlaySoundfile3D(string soundPath, Vector3d worldPosition, float maxDistance = 50.0f);
         static void StopSound(double fadeLength = 0);
         // Music을 따로 채널에서 관리한다? 이건 찐빠같은 설계로, 복잡한 게임을 구현하기 위해서는 AudioSource 객체에서 채널 컨트롤이 가능하게 해야한다.
         static void PlayMusic(string soundPath);
@@ -73,13 +73,15 @@ namespace yunutyEngine
         static int GetSoundGroupMaxAudible(unsigned long long groupIndex);
         static bool SetSoundGroupMaxAudibleBehavior(unsigned long long groupIndex, SOUNDGROUP_BEHAVIOR behavior);
         static SOUNDGROUP_BEHAVIOR GetSoundGroupMaxAudibleBehavior(unsigned long long groupIndex);
+        static void Set3DRolloffScale(float rolloffScale);
+        static float Get3DRolloffScale();
     private:
         static SoundSystem* soundInstance;
         static SoundSystem* SingleInstance();
         SoundSystem();
         ~SoundSystem();
         SoundChannel mPlaySound(string soundPath);
-        SoundChannel mPlay3DSound(string soundPath, Vector3d worldPosition);
+        SoundChannel mPlay3DSound(string soundPath, Vector3d worldPosition, float maxDistance);
         void mStopSound(double fadeLength);
         bool mLoad3DSound(string soundPath);
         bool mLoadSound(string soundPath);
@@ -109,5 +111,6 @@ namespace yunutyEngine
         unordered_map<string, FMOD::Sound*> sounds3D;
         unordered_map<FMOD::Sound*, unsigned long long> soundGroupIndexMap;
         unordered_map<FMOD::Sound*, int> soundPriorityMap;
+        float rolloffScale = 1.0f;
     };
 };

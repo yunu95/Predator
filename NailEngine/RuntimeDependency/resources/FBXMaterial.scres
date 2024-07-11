@@ -2230,7 +2230,7 @@
     },
     {
         "AmbientExposure": 1.0,
-        "CalculateShadow": false,
+        "CalculateShadow": true,
         "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_CastleWall_Door",
@@ -2252,7 +2252,7 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
-                "CalculateShadow": false,
+                "CalculateShadow": true,
                 "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
@@ -5173,7 +5173,7 @@
                     {
                         "albedoMap": "FBX/SM_Candle/SM_Candle.fbm/T_Candle_BaseColor.dds",
                         "armMap": "FBX/SM_Candle/SM_Candle.fbm/T_Candle_ARM.dds",
-                        "emissionMap": "",
+                        "emissionMap": "FBX/SM_Candle/SM_Candle.fbm/T_Candle_Emissive.dds",
                         "heightMap": "",
                         "materialName": "M_Candle",
                         "normalMap": "FBX/SM_Candle/SM_Candle.fbm/T_Candle_Normal.dds",
@@ -7042,7 +7042,7 @@
                         "emissionMap": "",
                         "heightMap": "",
                         "materialName": "M_Fence",
-                        "normalMap": "",
+                        "normalMap": "FBX/SM_Fence/SM_Fence.fbm/T_Fence_Normal.dds",
                         "opacityMap": "",
                         "ps": "DefaultPS.cso",
                         "temp0Map": "",
@@ -7362,7 +7362,7 @@
                 "materialVec": [
                     {
                         "albedoMap": "FBX/SM_FlyingCandle/SM_FlyingCandle.fbm/T_FlyingCandle_BaseColor.dds",
-                        "armMap": "",
+                        "armMap": "FBX/SM_FlyingCandle/SM_FlyingCandle.fbm/T_FlyingCandle_ARM.dds",
                         "emissionMap": "FBX/SM_FlyingCandle/SM_FlyingCandle.fbm/T_FlyingCandle_Emissive.dds",
                         "heightMap": "",
                         "materialName": "M_FlyingCandle",
@@ -9190,7 +9190,7 @@
                     {
                         "albedoMap": "FBX/SM_Hall_door_Frame/SM_Hall_door_Frame.fbm/T_Door_BaseColor.dds",
                         "armMap": "FBX/SM_Hall_door_Frame/SM_Hall_door_Frame.fbm/T_Door_ARM.dds",
-                        "emissionMap": "",
+                        "emissionMap": "FBX/SM_Hall_door_Frame/SM_Hall_door_Frame.fbm/T_Door_Emissive.dds",
                         "heightMap": "",
                         "materialName": "M_Door",
                         "normalMap": "FBX/SM_Hall_door_Frame/SM_Hall_door_Frame.fbm/T_Door_Normal.dds",
@@ -9344,7 +9344,7 @@
                     {
                         "albedoMap": "FBX/SM_Hall_door_Frame/SM_Hall_door_Frame.fbm/T_Door_BaseColor.dds",
                         "armMap": "FBX/SM_Hall_door_Frame/SM_Hall_door_Frame.fbm/T_Door_ARM.dds",
-                        "emissionMap": "",
+                        "emissionMap": "FBX/SM_Hall_door_Frame/SM_Hall_door_Frame.fbm/T_Door_Emissive.dds",
                         "heightMap": "",
                         "materialName": "M_Door",
                         "normalMap": "FBX/SM_Hall_door_Frame/SM_Hall_door_Frame.fbm/T_Door_Normal.dds",
@@ -9452,7 +9452,7 @@
                     {
                         "albedoMap": "FBX/SM_Hall_door_Frame/SM_Hall_door_Frame.fbm/T_Door_BaseColor.dds",
                         "armMap": "FBX/SM_Hall_door_Frame/SM_Hall_door_Frame.fbm/T_Door_ARM.dds",
-                        "emissionMap": "",
+                        "emissionMap": "FBX/SM_Hall_door_Frame/SM_Hall_door_Frame.fbm/T_Door_Emissive.dds",
                         "heightMap": "",
                         "materialName": "M_Door",
                         "normalMap": "FBX/SM_Hall_door_Frame/SM_Hall_door_Frame.fbm/T_Door_Normal.dds",
@@ -9538,7 +9538,7 @@
             {
                 "AmbientExposure": 1.0,
                 "CalculateShadow": true,
-                "CastDecal": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -12164,14 +12164,14 @@
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
-                        "x": 0.5223225951194763,
-                        "y": 0.9447450041770935,
-                        "z": 0.1812036633491516
+                        "x": 2.1824240684509277,
+                        "y": 2.2821145057678223,
+                        "z": 0.14134442806243896
                     },
                     "minPoint": {
-                        "x": -0.8068743348121643,
-                        "y": -0.6543878316879272,
-                        "z": -0.1700127124786377
+                        "x": -1.6015397310256958,
+                        "y": -1.95365309715271,
+                        "z": -0.10152137279510498
                     }
                 },
                 "boneInfo": {
@@ -15344,7 +15344,7 @@
     {
         "AmbientExposure": 1.0,
         "CalculateShadow": true,
-        "CastDecal": true,
+        "CastDecal": false,
         "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Temple_Floor",
         "aabb": {
@@ -15366,7 +15366,7 @@
             {
                 "AmbientExposure": 1.0,
                 "CalculateShadow": true,
-                "CastDecal": true,
+                "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -15910,14 +15910,14 @@
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
-                        "x": 1.5552431344985962,
-                        "y": 0.795158863067627,
-                        "z": 6.283442974090576
+                        "x": 1.5766152143478394,
+                        "y": 0.7763493657112122,
+                        "z": 6.281130790710449
                     },
                     "minPoint": {
-                        "x": -1.885807752609253,
-                        "y": -0.7951570153236389,
-                        "z": 1.23548034025589e-07
+                        "x": -1.8903074264526367,
+                        "y": -0.7763472199440002,
+                        "z": -0.07155293971300125
                     }
                 },
                 "boneInfo": {
@@ -15931,7 +15931,7 @@
                         "emissionMap": "",
                         "heightMap": "",
                         "materialName": "M_Trunk",
-                        "normalMap": "",
+                        "normalMap": "FBX/SM_Trunk_001/SM_Trunk_001.fbm/T_Trunk_Normal.dds",
                         "opacityMap": "",
                         "ps": "DefaultPS.cso",
                         "temp0Map": "",
@@ -19166,6 +19166,114 @@
         "CalculateShadow": true,
         "CastDecal": false,
         "DiffuseExposure": 1.0,
+        "FBXName : ": "VFX_CandleLight",
+        "aabb": {
+            "maxPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            },
+            "minPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            }
+        },
+        "boneInfo": {
+            "index": -1
+        },
+        "child": [
+            {
+                "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
+                "DiffuseExposure": 1.0,
+                "aabb": {
+                    "maxPoint": {
+                        "x": 2.709963083267212,
+                        "y": 0.9735954999923706,
+                        "z": 2.709963083267212
+                    },
+                    "minPoint": {
+                        "x": -2.709963083267212,
+                        "y": 0.9735323786735535,
+                        "z": -2.709963083267212
+                    }
+                },
+                "boneInfo": {
+                    "index": -1
+                },
+                "hasAnimation": false,
+                "materialVec": [
+                    {
+                        "albedoMap": "FBX/VFX_CandleLight/VFX_CandleLight.fbm/T_FlyingCandle_Light_BaseColor.dds",
+                        "armMap": "",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "M_CandleLight",
+                        "normalMap": "",
+                        "opacityMap": "",
+                        "ps": "CandleLightPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "TextureVS.cso"
+                    }
+                ],
+                "meshName": "VFX_CandleLight",
+                "nodeName": "VFX_CandleLight",
+                "pos": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": -0.0
+                },
+                "quat": {
+                    "w": -0.7071068286895752,
+                    "x": 0.7071068286895752,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        ],
+        "hasAnimation": false,
+        "meshName": "",
+        "nodeName": "RootNode",
+        "pos": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        },
+        "quat": {
+            "w": -0.5,
+            "x": -0.5,
+            "y": -0.5,
+            "z": -0.5
+        },
+        "scale": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        }
+    },
+    {
+        "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
+        "DiffuseExposure": 1.0,
         "FBXName : ": "VFX_CharacterSelected",
         "aabb": {
             "maxPoint": {
@@ -21883,114 +21991,6 @@
                 ],
                 "meshName": "VFX_Ursula_Attack_1",
                 "nodeName": "VFX_Ursula_Attack_1",
-                "pos": {
-                    "x": 0.0,
-                    "y": 0.0,
-                    "z": -0.0
-                },
-                "quat": {
-                    "w": -0.7071068286895752,
-                    "x": 0.7071068286895752,
-                    "y": 0.0,
-                    "z": 0.0
-                },
-                "scale": {
-                    "x": 1.0,
-                    "y": 1.0,
-                    "z": 1.0
-                }
-            }
-        ],
-        "hasAnimation": false,
-        "meshName": "",
-        "nodeName": "RootNode",
-        "pos": {
-            "x": -431602080.0,
-            "y": -431602080.0,
-            "z": -431602080.0
-        },
-        "quat": {
-            "w": -0.5,
-            "x": -0.5,
-            "y": -0.5,
-            "z": -0.5
-        },
-        "scale": {
-            "x": -431602080.0,
-            "y": -431602080.0,
-            "z": -431602080.0
-        }
-    },
-    {
-        "AmbientExposure": 1.0,
-        "CalculateShadow": true,
-        "CastDecal": false,
-        "DiffuseExposure": 1.0,
-        "FBXName : ": "VFX_CandleLight",
-        "aabb": {
-            "maxPoint": {
-                "x": -431602080.0,
-                "y": -431602080.0,
-                "z": -431602080.0
-            },
-            "minPoint": {
-                "x": -431602080.0,
-                "y": -431602080.0,
-                "z": -431602080.0
-            }
-        },
-        "boneInfo": {
-            "index": -1
-        },
-        "child": [
-            {
-                "AmbientExposure": 1.0,
-                "CalculateShadow": true,
-                "CastDecal": false,
-                "DiffuseExposure": 1.0,
-                "aabb": {
-                    "maxPoint": {
-                        "x": 2.709963083267212,
-                        "y": 0.9735954999923706,
-                        "z": 2.709963083267212
-                    },
-                    "minPoint": {
-                        "x": -2.709963083267212,
-                        "y": 0.9735323786735535,
-                        "z": -2.709963083267212
-                    }
-                },
-                "boneInfo": {
-                    "index": -1
-                },
-                "hasAnimation": false,
-                "materialVec": [
-                    {
-                        "albedoMap": "FBX/VFX_CandleLight/VFX_CandleLight.fbm/T_FlyingCandle_Light_BaseColor.dds",
-                        "armMap": "",
-                        "emissionMap": "",
-                        "heightMap": "",
-                        "materialName": "M_CandleLight",
-                        "normalMap": "",
-                        "opacityMap": "",
-                        "ps": "CandleLightPS.cso",
-                        "temp0Map": "",
-                        "temp10Map": "",
-                        "temp11Map": "",
-                        "temp1Map": "",
-                        "temp2Map": "",
-                        "temp3Map": "",
-                        "temp4Map": "",
-                        "temp5Map": "",
-                        "temp6Map": "",
-                        "temp7Map": "",
-                        "temp8Map": "",
-                        "temp9Map": "",
-                        "vs": "DefaultVS.cso"
-                    }
-                ],
-                "meshName": "VFX_CandleLight",
-                "nodeName": "VFX_CandleLight",
                 "pos": {
                     "x": 0.0,
                     "y": 0.0,

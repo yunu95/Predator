@@ -78,6 +78,8 @@ namespace application
         GC<float> bossSkillPeriod_3 = 6.f;
         GC<float> bossSkillPeriod_4 = 8.f;
 
+        GC<float> soundRolloffScale = 0.01f;
+
         TO_JSON(POD_GlobalConstant)
             FROM_JSON(POD_GlobalConstant)
     };
