@@ -22,8 +22,8 @@ struct POD_HanselProjectileSkill
     float attackSpeedBonus = 0.5f;
     float debuffAttackSpeedAdder = -0.5f;
     float debuffAttackDamageMultiplier = 0.5f;
-    int hitCount = 1;
-    int hitCountUpgraded = 1;
+    int maxApplicableUnitCount = 4;         /// 한 파이가 버프 및 디버프를 적용할 수 있는 최대 유닛 수
+    int maxApplicableUnitCountUpgraded = 6;
 
     float   zoomFactor = 1.0f;
 
@@ -53,7 +53,7 @@ public:
     virtual coroutine::Coroutine operator()() override;
     virtual void OnInterruption() override;
     static float GetMaxRange();
-    static int GetHitCount();
+    static int GetMaxApplicableCount();
 
     static POD_HanselProjectileSkill pod;
 };

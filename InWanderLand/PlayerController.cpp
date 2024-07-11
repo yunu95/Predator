@@ -234,6 +234,7 @@ void PlayerController::Update()
         text_State->GetGI().SetText(wsstream.str());
     }
     text_State->SetActive(Unit::debuggingUnit && DebugGraphic::AreDebugGraphicsEnabled());
+    SoundSystem::Set3DRolloffScale(GlobalConstant::GetSingletonInstance().pod.soundRolloffScale);
 }
 
 void PlayerController::HandleByState()
@@ -1143,7 +1144,7 @@ void PlayerController::SetState(State::Enum newState)
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Vinetting)->DisableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_MenuButton)->DisableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Bottom_Layout)->DisableElement();
-        UnselectUnit();
+        //UnselectUnit();
         UnSelectSkill();
         previousSkillCooltimeLeft = skillCooltimeLeft;
         skillCooltimeLeft.fill(0);
@@ -1420,8 +1421,6 @@ void PlayerController::SetCooltime(SkillType::Enum skillType, float cooltime)
 {
     if (TacticModeSystem::Instance().IsExecuting())
         return;
-    if (skillType == SkillType::EnemyImpale)
-        return;
     skillCooltimeLeft[skillType] = std::fmax(0.0f, cooltime);
     PlayerPortraitUIs::ReflectCooltime(skillType, cooltime, GetCooltimeForSkill(skillType));
 }
@@ -1600,10 +1599,10 @@ void PlayerController::OnPlayerUnitSkillActivation(std::weak_ptr<Unit> unit, std
     SetCooltime(skillType, GetCooltimeForSkill(skillType));
     if (skillType != SkillType::NONE)
     {
-        //if (state != State::Tactic)
-        //{
-        //    //SetMana(mana - RequiredManaForSkill(skillType));
-        //}
+        if (state != State::Tactic)
+        {
+            SetMana(mana - RequiredManaForSkill(skillType));
+        }
         onSkillActivate[skillType]();
     }
 }

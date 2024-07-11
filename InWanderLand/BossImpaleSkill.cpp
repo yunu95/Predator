@@ -19,7 +19,7 @@ const std::vector<BossSpear> BossSpearsInfo()
 	std::vector<BossSpear> spears;
 	// 타원에 빽뺵하게 창을 생성
 	// y는 캐릭터 기준 전방방향, x는 우측방향
-	float ovalHeight = (BossImpaleSkill::pod.impaleSkillRange - BossImpaleSkill::pod.impaleSkillFirstSpearOffset) * 0.5f;
+	float ovalHeight = BossImpaleSkill::pod.impaleSkillRange * 0.5f;
 	float ovalWidth = BossImpaleSkill::pod.impaleSkillWidth * 0.5;
 	float ovalHeightSqr = ovalHeight * ovalHeight;
 	float ovalWidthSqr = ovalWidth * ovalWidth;
@@ -48,7 +48,7 @@ const std::vector<BossSpear> BossSpearsInfo()
 			}
 		}
 	}
-	std::for_each(spears.begin(), spears.end(), [=](BossSpear& a) { a.position.y += BossImpaleSkill::pod.impaleSkillFirstSpearOffset + ovalHeight; });
+	std::for_each(spears.begin(), spears.end(), [=](BossSpear& a) { a.position.y += BossImpaleSkill::pod.impaleSkillRange * 0.5f; });
 	std::sort(spears.begin(), spears.end(), [](const BossSpear& a, const BossSpear& b) { return a.timeOffset < b.timeOffset; });
 	return spears;
 }
@@ -199,7 +199,7 @@ coroutine::Coroutine BossImpaleSkill::SpearArise(std::weak_ptr<BossImpaleSkill> 
 	knockbackColliderQueue.push(collider);
 	auto forward = owner.lock()->GetTransform()->GetWorldRotation().Forward();
 	auto right = owner.lock()->GetTransform()->GetWorldRotation().Right();
-	auto worldPos = owner.lock()->GetTransform()->GetWorldPosition() + forward * pos.y + right * pos.x;
+	auto worldPos = owner.lock()->GetTransform()->GetWorldPosition() + forward * (pos.y + BossImpaleSkill::pod.impaleSkillFirstSpearOffset) + right * pos.x;
 	fbx.lock()->GetTransform()->SetWorldPosition(worldPos);
 	collider.lock()->SetRadius(0.01);
 	collider.lock()->GetTransform()->SetWorldPosition(worldPos);
@@ -231,7 +231,7 @@ coroutine::Coroutine BossImpaleSkill::SpearArise(std::weak_ptr<BossImpaleSkill> 
 
 coroutine::Coroutine BossImpaleSkill::SpawningSkillffect(std::weak_ptr<BossImpaleSkill> skill)
 {
-	const float colliderEffectRatio = 12.0f;
+	const float colliderEffectRatio = 13.5f;
 
 	auto persistance = skill.lock();
 
@@ -241,7 +241,7 @@ coroutine::Coroutine BossImpaleSkill::SpawningSkillffect(std::weak_ptr<BossImpal
 
 	previewEffect = FBXPool::Instance().Borrow("VFX_HeartQueen_Skill2_Preview");
 
-	previewEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos + owner.lock()->GetTransform()->GetWorldRotation().Forward() * pod.impaleSkillRange / 2 + Vector3d(0.0f, 0.2f, 0.0f));
+	previewEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos + owner.lock()->GetTransform()->GetWorldRotation().Forward() * pod.impaleSkillRange / 2 + Vector3d(0.0f, 0.2f, 0.0f) + owner.lock()->GetTransform()->GetWorldRotation().Forward() * pod.impaleSkillFirstSpearOffset);
 	previewEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(owner.lock()->GetTransform()->GetWorldRotation());
 	previewEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(pod.impaleSkillWidth / colliderEffectRatio,
 		1,

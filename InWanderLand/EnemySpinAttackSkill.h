@@ -9,14 +9,11 @@ struct POD_EnemySpinAttackSkill
 	float skillDuration = -1.0f;
 	float backswingDuration = -1.0f;
 
-	float skillPlayTime = 6.0f;
 	float skillCoolTime = 6.0f;
 	float skillDamage = 8.0f;
 	float skillRadius = 1.0f;
 	float knockBackDistance = 15.0f;
 	float knockBackDuration = 1.0f;
-	float paralyzingDuration = 2.0f;
-	float skillEndTimeAfterDamaged = 0.1f;
 
 	TO_JSON(POD_EnemySpinAttackSkill)
 	FROM_JSON(POD_EnemySpinAttackSkill)
