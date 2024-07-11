@@ -9,6 +9,8 @@
 #include "SkillPreviewSystem.h"
 #include "CinematicManager.h"
 #include "RTSCam.h"
+#include "RegionData.h"
+#include "PlaytimeRegion.h"
 
 // UI
 #include "UIElement.h"

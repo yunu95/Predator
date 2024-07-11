@@ -1,4 +1,5 @@
 #include "InWanderLand.h"
+#include "InstanceManager.h"
 #include "RegionData.h"
 #include "RegionPalette.h"
 #include "InstanceManager.h"

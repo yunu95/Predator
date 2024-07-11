@@ -10,6 +10,7 @@
 #include "Identifiable.h"
 #include "EditableDataList.h"
 #include "TemplateDataManager.h"
+#include "RegionData.h"
 
 #include <string>
 #include <memory>

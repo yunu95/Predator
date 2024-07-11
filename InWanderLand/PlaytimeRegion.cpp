@@ -8,6 +8,7 @@
 #include "Application.h"
 #include "ContentsLayer.h"
 
+std::weak_ptr<PlaytimeRegion> PlaytimeRegion::playerConstrainingRegion;
 PlaytimeRegion::~PlaytimeRegion()
 {
     if (regionData->playtimeRegion == this)
@@ -27,6 +28,11 @@ void PlaytimeRegion::Start()
 {
     //application::contents::ContentsLayer* contentsLayer = dynamic_cast<application::contents::ContentsLayer*>(application::Application::GetInstance().GetContentsLayer());
     //contentsLayer->RegisterToEditorComponentVector(this);
+}
+
+bool PlaytimeRegion::IsUnitInside(physics::Collider* unitCollider)
+{
+    return enteredPlayerColliders.contains(unitCollider);
 }
 
 //void PlaytimeRegion::SetRegionName(std::wstring p_name)
@@ -87,4 +93,30 @@ void PlaytimeRegion::OnTriggerExit(physics::Collider* collider)
             disablingReferences.clear();
         }
     }
+}
+
+void PlaytimeRegion::ApplyAsObstacle(bool asObstacle)
+{
+    if (asObstacle)
+    {
+        if (regionAsNavObstacle == nullptr)
+        {
+            regionAsNavObstacle = GetGameObject()->AddComponent<NavigationObstacle>();
+            regionAsNavObstacle->AssignToNavigationField(&SingleNavigationField::Instance());
+            regionAsNavObstacle->SetHalfExtents(Vector3d{ regionData->pod.width, 10, regionData->pod.height });
+        }
+        regionAsNavObstacle->SetActive(true);
+    }
+    else
+    {
+        if (regionAsNavObstacle)
+        {
+            regionAsNavObstacle->SetActive(false);
+        }
+    }
+}
+
+std::weak_ptr<PlaytimeRegion> PlaytimeRegion::GetPlayerConstrainingRegion()
+{
+    return playerConstrainingRegion;
 }
