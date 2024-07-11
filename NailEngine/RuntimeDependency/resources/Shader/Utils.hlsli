@@ -127,18 +127,7 @@ float CalcShadowFactor(SamplerComparisonState samShadow,
     {
         return 1;
     }
-    //for (int i = 0; i < 9; ++i)
-    //{
-    //    float shadowDepth = shadowMap.Sample(sam, tempuv + offsets[i]).r;
-    //    if (shadowDepth < depth - 0.0065731)
-    //    {
-    //        percentLit += 0;
-    //    }
-    //    else
-    //    {
-    //        percentLit += 1;
-    //    }
-    //}
+    
     for (int i = 0; i < 9; ++i)
     {
         percentLit += shadowMap.SampleCmpLevelZero(samShadow, tempuv + offsets[i], depth).r;
