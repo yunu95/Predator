@@ -20,7 +20,7 @@ public:
 	void UnBind(unsigned int slot);
 
 	void CreateFromResource(Microsoft::WRL::ComPtr<ID3D11Texture2D>& tex2D);
-	void CreateTexture(const std::wstring& texturePath, unsigned int width, unsigned int height, DXGI_FORMAT format, D3D11_BIND_FLAG bindFlag, int arraySize = 1, int sliceCount = 1);
+	void CreateTexture(const std::wstring& texturePath, unsigned int width, unsigned int height, DXGI_FORMAT format, D3D11_BIND_FLAG bindFlag, bool isMSAA=false, int arraySize = 1, int sliceCount = 1);
 
 	void CreateLightMapArray(std::vector<yunuGI::ITexture*> textureVec);
 

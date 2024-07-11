@@ -62,7 +62,7 @@ namespace nail
 		}
 		bool IsStatic() { return isStatic; }
 
-		float GetID() { return this->objectID; }
+		float GetID() { return this->renderableID; }
 #pragma endregion
 
 	protected:
@@ -72,6 +72,7 @@ namespace nail
 		bool isActive = true;
 		bool isStatic;
 
+		float renderableID;
 		static float objectID;
 	};
 

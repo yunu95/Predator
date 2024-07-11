@@ -169,6 +169,7 @@ public:
     std::array<DelegateCallback<void>, UnitBehaviourTree::Keywords::KeywordNum>& OnStateEngageCallback() { return onStateEngage; };
     std::array<DelegateCallback<void>, UnitBehaviourTree::Keywords::KeywordNum>& OnStateExitCallback() { return onStateExit; };
     void Revive();
+    void ShowMissedUI();
     string name;
     bool playingBattleAnim{ true };
     // 내가 공격할 때, 매개변수는 내가 공격하는 상대
@@ -246,7 +247,7 @@ private:
     yunutyEngine::coroutine::Coroutine AttackCoroutine(std::weak_ptr<Unit> opponent);
     yunutyEngine::coroutine::Coroutine MeleeAttackEffectCoroutine(std::weak_ptr<Unit> opponent);
     // 받은 데미지 수치가 떠서 무작위 방향으로 날아가는 코루틴
-    yunutyEngine::coroutine::Coroutine DmgIndicatorCoroutine(float dmg);
+    yunutyEngine::coroutine::Coroutine DmgIndicatorCoroutine(float dmg, UIEnumID uiId);
     void UpdateAttackTargetWithinRange();
     float DistanceTo(const Vector3d& target);
     void ReturnToPool();

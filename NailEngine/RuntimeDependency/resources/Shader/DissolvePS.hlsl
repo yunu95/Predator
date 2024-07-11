@@ -23,6 +23,7 @@ struct PS_OUT
     float4 arm : SV_Target4;
     float4 emissive : SV_Target5;
     float4 viewPosDecal : SV_Target6;
+    float4 outlineInfo : SV_Target7;
 };
 
 // Temp0Map : Dissolve Texture
@@ -108,7 +109,7 @@ PS_OUT main(PixelIn input)
     }
     
     output.util = float4(lightMapUV[input.id].lightMapIndex, lightMapUV[input.id].isOutLine, AmbientExposure, DiffuseExposure);
-    
+    output.outlineInfo = float4(lightMapUV[input.id].outlineInfo.r, lightMapUV[input.id].outlineInfo.g, lightMapUV[input.id].outlineInfo.b, lightMapUV[input.id].outlineInfo.a);
     return output;
 }
 

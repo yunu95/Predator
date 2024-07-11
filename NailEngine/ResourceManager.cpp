@@ -390,14 +390,14 @@ void ResourceManager::CreateTextures(const std::vector<std::wstring>& texturePat
     }
 }
 
-std::shared_ptr<yunuGI::ITexture>& ResourceManager::CreateTexture(const std::wstring& texturePath, unsigned int width, unsigned int height, DXGI_FORMAT format, D3D11_BIND_FLAG bindFlag, int arraySize, int sliceCount)
+std::shared_ptr<yunuGI::ITexture>& ResourceManager::CreateTexture(const std::wstring& texturePath, unsigned int width, unsigned int height, DXGI_FORMAT format, D3D11_BIND_FLAG bindFlag,bool isMSAA, int arraySize, int sliceCount)
 {
     auto iter = this->deferredTextureMap.find(texturePath);
     if (iter == this->deferredTextureMap.end())
     {
         std::shared_ptr<Texture> texture = std::make_shared<Texture>();
 
-        texture->CreateTexture(texturePath, width, height, format, bindFlag, arraySize, sliceCount);
+        texture->CreateTexture(texturePath, width, height, format, bindFlag, isMSAA, arraySize, sliceCount);
         texture->SetName(texturePath);
 
         this->deferredTextureMap.insert({ texturePath, texture });
@@ -1129,6 +1129,7 @@ void ResourceManager::CreateDefaultShader()
 	CreateShader(L"MoveAnimTexturePS.cso");
 	CreateShader(L"TestDecalPS.cso");
 	CreateShader(L"TestDecalMaskPS.cso");
+	CreateShader(L"AAPassPS.cso");
 #pragma endregion
 
 #pragma region GS
@@ -1258,6 +1259,14 @@ void ResourceManager::CreateDefaultMaterial()
 			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(UTIL)).get());
     }
 
+    // AAMaterial -> 스왑체인의 백버퍼에 기록될 때 사용될 머터리얼
+    {
+		yunuGI::IMaterial* material = CrateMaterial(L"AAMaterial");
+		material->SetVertexShader(GetDeferredShader(L"Deferred_FinalVS.cso").get());
+		material->SetPixelShader(GetShader(L"AAPassPS.cso").get());
+		material->SetTexture(yunuGI::Texture_Type::Temp0,
+			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::BACKBUFFER)]->GetRTTexture(static_cast<int>(BACKBUFFER)).get());
+    }
     // 파티클 전용 머터리얼
     {
         yunuGI::IMaterial* material = CrateMaterial(L"ParticleMaterial");
@@ -1409,7 +1418,7 @@ void ResourceManager::CreateDefaultTexture()
 
     CreateTexture(L"ShadowDepth", SM_SIZE, SM_SIZE, DXGI_FORMAT_R24G8_TYPELESS, static_cast<D3D11_BIND_FLAG>(D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE));
 
-    CreateTexture(L"PointLightShadowDepth", PL_SM_SIZE, PL_SM_SIZE, DXGI_FORMAT_R24G8_TYPELESS, static_cast<D3D11_BIND_FLAG>(D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE), 6, MAX_POINT_LIGHT);
+    CreateTexture(L"PointLightShadowDepth", PL_SM_SIZE, PL_SM_SIZE, DXGI_FORMAT_R24G8_TYPELESS, static_cast<D3D11_BIND_FLAG>(D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE),false, 6, MAX_POINT_LIGHT);
 }
 
 void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode* node, yunuGI::FBXData* fbxData, bool isPreLoad)
