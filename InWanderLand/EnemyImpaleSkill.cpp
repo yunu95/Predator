@@ -18,7 +18,7 @@ const std::vector<Spear> SpearsInfo()
     std::vector<Spear> spears;
     // 타원에 빽뺵하게 창을 생성
     // y는 캐릭터 기준 전방방향, x는 우측방향
-    float ovalHeight = (EnemyImpaleSkill::pod.impaleSkillRange - EnemyImpaleSkill::pod.impaleSkillFirstSpearOffset) * 0.5f;
+    float ovalHeight = EnemyImpaleSkill::pod.impaleSkillRange * 0.5f;
     float ovalWidth = EnemyImpaleSkill::pod.impaleSkillWidth * 0.5;
     float ovalHeightSqr = ovalHeight * ovalHeight;
     float ovalWidthSqr = ovalWidth * ovalWidth;
@@ -47,7 +47,7 @@ const std::vector<Spear> SpearsInfo()
             }
         }
     }
-    std::for_each(spears.begin(), spears.end(), [=](Spear& a) { a.position.y += EnemyImpaleSkill::pod.impaleSkillFirstSpearOffset + ovalHeight; });
+    std::for_each(spears.begin(), spears.end(), [=](Spear& a) { a.position.y += EnemyImpaleSkill::pod.impaleSkillRange * 0.5f; });
     std::sort(spears.begin(), spears.end(), [](const Spear& a, const Spear& b) { return a.timeOffset < b.timeOffset; });
     return spears;
 }
@@ -200,7 +200,7 @@ coroutine::Coroutine EnemyImpaleSkill::SpearArise(std::weak_ptr<EnemyImpaleSkill
     knockbackColliderQueue.push(collider);
     auto forward = owner.lock()->GetTransform()->GetWorldRotation().Forward();
     auto right = owner.lock()->GetTransform()->GetWorldRotation().Right();
-    auto worldPos = owner.lock()->GetTransform()->GetWorldPosition() + forward * pos.y + right * pos.x;
+    auto worldPos = owner.lock()->GetTransform()->GetWorldPosition() + forward * (pos.y + EnemyImpaleSkill::pod.impaleSkillFirstSpearOffset) + right * pos.x;
     fbx.lock()->GetTransform()->SetWorldPosition(worldPos);
     collider.lock()->SetRadius(0.01);
     collider.lock()->GetTransform()->SetWorldPosition(worldPos);
@@ -273,7 +273,7 @@ coroutine::Coroutine EnemyImpaleSkill::SpawningSkillffect(std::weak_ptr<EnemyImp
 
     previewEffect = FBXPool::Instance().Borrow("VFX_Monster2_Skill_Preview");
 
-    previewEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos + owner.lock()->GetTransform()->GetWorldRotation().Forward() * pod.impaleSkillRange / 2 + owner.lock()->GetTransform()->GetWorldRotation().Forward() * pod.impaleSkillFirstSpearOffset);
+    previewEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos + owner.lock()->GetTransform()->GetWorldRotation().Forward() * pod.impaleSkillRange / 2  + owner.lock()->GetTransform()->GetWorldRotation().Forward() * pod.impaleSkillFirstSpearOffset);
     previewEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(owner.lock()->GetTransform()->GetWorldRotation());
     previewEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(pod.impaleSkillWidth / colliderEffectRatio,
         1,
