@@ -23,10 +23,6 @@ struct POD_BossImpaleSkill
 	float impaleSkillKnockbackDistance = 2.0f;
 	float impaleSkillKnockbackDuration = 2.0f;
 
-	float impaleSpeed = 2.0f;
-
-	float impaleStartDelay = 1.5f;
-
 	TO_JSON(POD_BossImpaleSkill)
 	FROM_JSON(POD_BossImpaleSkill)
 };

@@ -43,7 +43,7 @@ enum
 	UP2X2_1_COUNT = 1,
 	UP2X2_2_COUNT = 1,
     FINAL_COUNT = 1,
-    DECAL_COUNT = 1
+    BACKBUFFER_COUNT = 1
 };
 
 enum
@@ -70,7 +70,7 @@ enum
     UP2X2_1 = 0,
     UP2X2_2 = 0,
     FINAL = 0,
-    DECAL=0,
+    BACKBUFFER=0,
     GBUFFER_COUNT
 };
 
@@ -89,6 +89,6 @@ enum class RENDER_TARGET_TYPE
     UP2X2_1,
     UP2X2_2,
     FINAL,
-    DECAL,
+    BACKBUFFER,
     END
 };

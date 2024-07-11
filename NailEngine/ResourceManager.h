@@ -41,7 +41,7 @@ public:
     yunuGI::IMaterial* CloneMaterial(std::wstring materialName, yunuGI::IMaterial* material);
     void CreateTexture(const std::wstring& texturePath);
     void CreateTextures(const std::vector<std::wstring>& texturePaths);
-    std::shared_ptr<yunuGI::ITexture>& CreateTexture(const std::wstring& texturePath, unsigned int width, unsigned int height, DXGI_FORMAT format, D3D11_BIND_FLAG bindFlag, int arraySize = 1, int sliceCount = 1);
+    std::shared_ptr<yunuGI::ITexture>& CreateTexture(const std::wstring& texturePath, unsigned int width, unsigned int height, DXGI_FORMAT format, D3D11_BIND_FLAG bindFlag,bool isMSAA = false, int arraySize = 1, int sliceCount = 1);
     std::shared_ptr<Texture>& CreateTextureFromResource(const std::wstring& texturePath, Microsoft::WRL::ComPtr<ID3D11Texture2D> tex2D);
 
     void LoadVFXFrameInfo(const std::wstring& vfxPath);

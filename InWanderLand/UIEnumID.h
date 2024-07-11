@@ -41,6 +41,10 @@ enum class UIEnumID
     ManaBar1,
     // 전술 모드 마나 게이지
     ManaBar2,
+    // 화면 하단 마나 게이지 중 사용 대상이 되는 마나 오버레이
+    ManaBarSpendOverlay1,
+    // 전술 모드 마나 게이지 중 사용 대상이 되는 마나 오버레이
+    ManaBarSpendOverlay2,
     // 현재 마나량을 나타내는 텍스트
     Mana_Text_CurrentMP,
     Mana_Text_CurrentMP_Tactic,
@@ -171,6 +175,8 @@ enum class UIEnumID
     BeaconOutside_ArrowLeft,
     // 일반 잡졸들에 적용되는 데미지 표시기
     DamageIndicator_Default,
+    DamageIndicator_Critical,
+    DamageIndicator_Missed,
     DamageIndicator_Number,
 };
 
@@ -183,7 +189,7 @@ const std::unordered_map<int, std::string>& application::POD_Enum<UIEnumID>::Get
     static std::unordered_map<int, std::string> enumNameMap
     {
         // 아무것도 아님.
-        { static_cast<int>((int)UIEnumID::None), "None" } ,
+        { static_cast<int>((int)UIEnumID::None), "None" },
         // 로빈, 우르술라, 헨젤의 초상화, 초상화 위의 이름 태그, 초상화를 가리는 적색 부상 오버레이, 체력바, 체력을 표시하는 텍스트 UI
         { static_cast<int>((int)UIEnumID::CharInfo_Robin), "CharInfo_Robin" },
         { static_cast<int>((int)UIEnumID::CharInfo_Ursula), "CharInfo_Ursula" },
@@ -220,6 +226,10 @@ const std::unordered_map<int, std::string>& application::POD_Enum<UIEnumID>::Get
         { static_cast<int>((int)UIEnumID::ManaBar1), "ManaBar1" },
         // 전술 모드 마나 게이지
         { static_cast<int>((int)UIEnumID::ManaBar2), "ManaBar2" },
+        // 화면 하단 마나 게이지 중 사용 대상이 되는 마나 오버레이
+        { static_cast<int>((int)UIEnumID::ManaBarSpendOverlay1), "ManaBarSpendOverlay1" },
+        // 전술 모드 마나 게이지 중 사용 대상이 되는 마나 오버레이
+        { static_cast<int>((int)UIEnumID::ManaBarSpendOverlay2), "ManaBarSpendOverlay2" },
         // 현재 마나량을 나타내는 텍스트
         { static_cast<int>((int)UIEnumID::Mana_Text_CurrentMP), "Mana_Text_CurrentMP" },
         { static_cast<int>((int)UIEnumID::Mana_Text_CurrentMP_Tactic), "Mana_Text_CurrentMP_Tactic" },
@@ -350,6 +360,8 @@ const std::unordered_map<int, std::string>& application::POD_Enum<UIEnumID>::Get
         { static_cast<int>((int)UIEnumID::BeaconOutside_ArrowLeft), "BeaconOutside_ArrowLeft" },
         // 일반 잡졸들에 적용되는 데미지 표시기
         { static_cast<int>((int)UIEnumID::DamageIndicator_Default), "DamageIndicator_Default" },
+        { static_cast<int>((int)UIEnumID::DamageIndicator_Critical), "DamageIndicator_Critical" },
+        { static_cast<int>((int)UIEnumID::DamageIndicator_Missed), "DamageIndicator_Missed" },
         { static_cast<int>((int)UIEnumID::DamageIndicator_Number), "DamageIndicator_Number" },
     };
     return enumNameMap;

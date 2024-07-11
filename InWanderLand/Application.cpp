@@ -263,8 +263,8 @@ namespace application
         ::RegisterClassEx(&wc);
 
         appSpecification.appName = wc.lpszClassName;
-        appSpecification.windowWidth = 1920;
-        appSpecification.windowHeight = 1080;
+		appSpecification.windowWidth = 1920;
+		appSpecification.windowHeight = 1080;
 
         monitorResolution.width = GetSystemMetrics(SM_CXSCREEN);
         monitorResolution.height = GetSystemMetrics(SM_CYSCREEN);

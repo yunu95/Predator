@@ -17,6 +17,7 @@ void Projectile::Update()
             {
                 fbxObject->SetSelfActive(true);
                 ProjectilePool::SingleInstance().Return(GetWeakPtr<Projectile>());
+                owner.lock()->ShowMissedUI();
             }
             else
             {
@@ -121,11 +122,11 @@ coroutine::Coroutine Projectile::ProjectileEffectCoroutine(std::weak_ptr<Unit> o
     vfxAnimator.lock()->Play();
     //direction *= -1;
     //damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos + direction * 2);
-    
+
     if (GetTransform()->GetWorldPosition().y < 0)
     {
         damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldPosition(Vector3d(GetTransform()->GetWorldPosition().x, 0.0f, GetTransform()->GetWorldPosition().z));
-        damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion{Vector3d(90, 0, 0)});
+        damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion{ Vector3d(90, 0, 0) });
     }
     else
     {

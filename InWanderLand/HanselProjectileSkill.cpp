@@ -36,10 +36,12 @@ coroutine::Coroutine HanselProjectileSkill::ThrowingPie(std::weak_ptr<HanselProj
     //pieObject->GetTransform()->SetWorldRotation(pieObject->GetTransform()->GetWorldRotation().Up() * -1);
     float rotatePerFrame = 0.0f;
 
-    while (forSeconds.Tick())
+    float localMaxCollideCount = GetMaxApplicableCount();
+
+    while (forSeconds.Tick() && localMaxCollideCount > 0)
     {
         currentPos += direction * pod.projectileSpeed * Time::GetDeltaTime();
-        pieCollider.lock()->GetTransform()->SetWorldPosition(currentPos + direction * pod.pieOffsetX + Vector3d(0, pod.pieOffsetY, 0));
+         pieCollider.lock()->GetTransform()->SetWorldPosition(currentPos + direction * pod.pieOffsetX + Vector3d(0, pod.pieOffsetY, 0));
         pieObject.lock()->GetTransform()->SetWorldPosition(currentPos + direction * pod.pieOffsetX + Vector3d(0, pod.pieOffsetY, 0));
 
         rotatePerFrame += pod.pieRotateSpeed * Time::GetDeltaTime();
@@ -59,6 +61,7 @@ coroutine::Coroutine HanselProjectileSkill::ThrowingPie(std::weak_ptr<HanselProj
                 onceCollidedUnits.insert(each);
                 //each->StartCoroutine(SpawningSkillffect(each->GetWeakPtr<Unit>()));
                 each->ApplyBuff(UnitBuffHanselDebuff{});
+                localMaxCollideCount--;
             }
         }
 
@@ -70,7 +73,7 @@ coroutine::Coroutine HanselProjectileSkill::ThrowingPie(std::weak_ptr<HanselProj
                 onceCollidedUnits.insert(each);
                 each->ApplyBuff(UnitBuffHanselBuff{});
                 each->Heal(pod.healPoint);
-
+                localMaxCollideCount--;
             }
         }
     }
@@ -160,7 +163,7 @@ float HanselProjectileSkill::GetMaxRange()
     return PlayerController::Instance().IsSkillUpgraded(SkillUpgradeType::HANSEL_W_RANGE) ? pod.maxRangeUpgraded : pod.maxRange;
 }
 
-int HanselProjectileSkill::GetHitCount()
+int HanselProjectileSkill::GetMaxApplicableCount()
 {
-    return PlayerController::Instance().IsSkillUpgraded(SkillUpgradeType::HANSEL_W_MORE_HITS) ? pod.hitCountUpgraded : pod.hitCount;
+    return PlayerController::Instance().IsSkillUpgraded(SkillUpgradeType::HANSEL_W_MORE_HITS) ? pod.maxApplicableUnitCount : pod.maxApplicableUnitCountUpgraded;
 }

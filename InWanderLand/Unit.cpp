@@ -269,7 +269,7 @@ template<>
 void Unit::OnStateEngage<UnitBehaviourTree::Attack>()
 {
     onStateEngage[UnitBehaviourTree::Attack]();
-    PlayAnimation(UnitAnimType::Idle);
+    PlayAnimation(UnitAnimType::Idle, Animation::PlayFlag_::Blending | Animation::PlayFlag_::NonRedundant);
     defaultAnimationType = UnitAnimType::Idle;
     enableNavObstacleByState = referenceEnableNavObstacle.Acquire();
     disableNavAgentByState = referenceDisableNavAgent.Acquire();
@@ -327,11 +327,6 @@ template<>
 void Unit::OnStateExit<UnitBehaviourTree::Move>()
 {
     onStateExit[UnitBehaviourTree::Move]();
-    if (pendingOrderType == UnitOrderType::None)
-    {
-        OrderHold();
-        unitBehaviourTree.reAssessFlag = true;
-    }
 }
 template<>
 void Unit::OnStateUpdate<UnitBehaviourTree::Move>()
@@ -568,12 +563,13 @@ void Unit::Damaged(std::weak_ptr<Unit> opponentUnit, float opponentDmg, DamageTy
         {
             // 공격 빗나감
             opponentDmg = 0;
+            ShowMissedUI();
             return;
         }
 
         if (damageType == DamageType::AttackCrit)
         {
-            opponentDmg *= 1 - GetCritResistance();
+            opponentDmg *= (1 - GetCritResistance())*opponentUnit.lock()->GetCritMultiplier();
         }
         opponentDmg *= 1 - GetArmor() * 0.01f;
         opponentUnit.lock()->onAttackHit(GetWeakPtr<Unit>());
@@ -586,7 +582,14 @@ void Unit::Damaged(std::weak_ptr<Unit> opponentUnit, float opponentDmg, DamageTy
 
     if (opponentDmg > gc.dmgIndicatorMinDamage)
     {
-        ContentsCoroutine::Instance().StartCoroutine(DmgIndicatorCoroutine(opponentDmg));
+        if (damageType == DamageType::AttackCrit)
+        {
+            ContentsCoroutine::Instance().StartCoroutine(DmgIndicatorCoroutine(opponentDmg, UIEnumID::DamageIndicator_Critical));
+        }
+        else
+        {
+            ContentsCoroutine::Instance().StartCoroutine(DmgIndicatorCoroutine(opponentDmg, UIEnumID::DamageIndicator_Default));
+        }
     }
 
     onDamagedFromUnit(opponentUnit);
@@ -1641,6 +1644,11 @@ void Unit::InitBehaviorTree()
     unitBehaviourTree[UnitBehaviourTree::Chasing][UnitBehaviourTree::Move].onExit = [this]()
         {
             OnStateExit<UnitBehaviourTree::Move>();
+            if (pendingOrderType == UnitOrderType::None)
+            {
+                OrderHold();
+                unitBehaviourTree.reAssessFlag = true;
+            }
         };
     unitBehaviourTree[UnitBehaviourTree::Chasing][UnitBehaviourTree::Move].onUpdate = [this]()
         {
@@ -1918,6 +1926,10 @@ yunutyEngine::coroutine::Coroutine Unit::AttackCoroutine(std::weak_ptr<Unit> opp
         {
             opponent.lock()->Damaged(GetWeakPtr<Unit>(), dmg, damageType);
         }
+        else
+        {
+            ShowMissedUI();
+        }
         if (!coroutineAttackEffect.expired())
         {
             attackVFX.lock()->GetGameObject()->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
@@ -1968,13 +1980,13 @@ yunutyEngine::coroutine::Coroutine Unit::MeleeAttackEffectCoroutine(std::weak_pt
 
     co_return;
 }
-yunutyEngine::coroutine::Coroutine Unit::DmgIndicatorCoroutine(float dmg)
+yunutyEngine::coroutine::Coroutine Unit::DmgIndicatorCoroutine(float dmg, UIEnumID uiId)
 {
     const auto& gc = GlobalConstant::GetSingletonInstance().pod;
     auto dmgIndicator{ dmgIndicators.at(dmgIndicatorIdx = (dmgIndicatorIdx + 1) % gc.maxDmgIndicatorCount) };
     if (dmgIndicator.expired() || dmgIndicator.lock()->GetActive() == false)
     {
-        dmgIndicator = dmgIndicators[dmgIndicatorIdx] = DuplicatedUIPool::Instance().Borrow(UIEnumID::DamageIndicator_Default);
+        dmgIndicator = dmgIndicators[dmgIndicatorIdx] = DuplicatedUIPool::Instance().Borrow(uiId);
     }
     Vector3d dmgIndicatorPosition = GetTransform()->GetWorldPosition();
     auto element = dmgIndicator.lock()->GetUIElement();
@@ -2006,6 +2018,12 @@ yunutyEngine::coroutine::Coroutine Unit::DmgIndicatorCoroutine(float dmg)
         co_await std::suspend_always{};
     }
     co_return;
+}
+void Unit::ShowMissedUI()
+{
+    auto missedIndicator = DuplicatedUIPool::Instance().Borrow(UIEnumID::DamageIndicator_Missed);
+    auto uiPos = UIManager::Instance().GetUIPosFromWorld(GetTransform()->GetWorldPosition());
+    missedIndicator.lock()->GetTransform()->SetWorldPosition(uiPos);
 }
 void Unit::UpdateAttackTargetWithinRange()
 {
