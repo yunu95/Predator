@@ -234,6 +234,7 @@ void PlayerController::Update()
         text_State->GetGI().SetText(wsstream.str());
     }
     text_State->SetActive(Unit::debuggingUnit && DebugGraphic::AreDebugGraphicsEnabled());
+    SoundSystem::Set3DRolloffScale(GlobalConstant::GetSingletonInstance().pod.soundRolloffScale);
 }
 
 void PlayerController::HandleByState()

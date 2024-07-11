@@ -10,15 +10,41 @@ using namespace FMOD;
 SoundSystem* SoundSystem::soundInstance = nullptr;
 void yunutyEngine::SoundSystem::Update()
 {
-    SingleInstance()->fmodSystem->update();
+    FMOD_VECTOR listenerPos = { 0.0f, 0.0f, 0.0f };
+    FMOD_VECTOR listenerVel = { 0.0f, 0.0f, 0.0f };
+    FMOD_VECTOR listenerForward = { 0.0f, 0.0f, 1.0f };
+    FMOD_VECTOR listenerUp = { 0.0f, 1.0f, 0.0f };
+
+    if (graphics::Camera::GetMainCamera())
+    {
+        auto camTransform = graphics::Camera::GetMainCamera()->GetTransform();
+        auto worldPos = camTransform->GetWorldPosition();
+        auto camForward = camTransform->GetWorldRotation().Forward();
+        auto camUp = camTransform->GetWorldRotation().Up();
+        
+        listenerPos.x = worldPos.x;
+        listenerPos.y = worldPos.y;
+        listenerPos.z = worldPos.z;
+        listenerForward.x = camForward.x;
+        listenerForward.y = camForward.y;
+        listenerForward.z = camForward.z;
+        listenerUp.x = camUp.x;
+        listenerUp.y = camUp.y;
+        listenerUp.z = camUp.z;
+    }
+
+    auto soundSystemInstance = SingleInstance();
+    soundSystemInstance->fmodSystem->set3DListenerAttributes(0, &listenerPos, &listenerVel, &listenerForward, &listenerUp);
+    soundSystemInstance->fmodSystem->set3DSettings(1.0f, 1.0f, soundSystemInstance->rolloffScale);
+    soundSystemInstance->fmodSystem->update();
 }
 SoundChannel yunutyEngine::SoundSystem::PlaySoundfile(string soundPath)
 {
     return SingleInstance()->mPlaySound(soundPath);
 }
-SoundChannel yunutyEngine::SoundSystem::PlaySoundfile3D(string soundPath, Vector3d worldPosition)
+SoundChannel yunutyEngine::SoundSystem::PlaySoundfile3D(string soundPath, Vector3d worldPosition, float maxDistance)
 {
-    return SingleInstance()->mPlay3DSound(soundPath, worldPosition);
+    return SingleInstance()->mPlay3DSound(soundPath, worldPosition, maxDistance);
 }
 void yunutyEngine::SoundSystem::StopSound(double fadeLength)
 {
@@ -48,9 +74,13 @@ SoundChannel yunutyEngine::SoundSystem::mPlaySound(string soundPath)
     }
     for (int i = 0; i < 128; i++)
     {
-        bool isPlaying;
+        bool isPlaying = false;
         lastChannelIndex = (lastChannelIndex + 1) % 128;
-        channels[lastChannelIndex]->isPlaying(&isPlaying);
+        if (channels[lastChannelIndex])
+        {
+            channels[lastChannelIndex]->isPlaying(&isPlaying);
+        }
+
         if (!isPlaying)
         {
             fmodSystem->playSound(sounds[soundPath], 0, false, &channels[lastChannelIndex]);
@@ -61,28 +91,29 @@ SoundChannel yunutyEngine::SoundSystem::mPlaySound(string soundPath)
     }
     return SoundChannel(channels[lastChannelIndex]);
 }
-SoundChannel yunutyEngine::SoundSystem::mPlay3DSound(string soundPath, Vector3d worldPosition)
+SoundChannel yunutyEngine::SoundSystem::mPlay3DSound(string soundPath, Vector3d worldPosition, float maxDistance)
 {
-    // 월드포지션을 뷰 포지션으로 바꾸는 코드
-    auto viewPos = graphics::Camera::GetMainCamera()->GetGI().GetViewPos(worldPosition);
     if (!mIs3DSoundLoaded(soundPath))
     {
         mLoad3DSound(soundPath);
     }
     for (int i = 0; i < 128; i++)
     {
-        bool isPlaying;
+        bool isPlaying = false;
         lastChannelIndex = (lastChannelIndex + 1) % 128;
-        channels[lastChannelIndex]->isPlaying(&isPlaying);
+        if (channels[lastChannelIndex])
+        {
+            channels[lastChannelIndex]->isPlaying(&isPlaying);
+        }
 
         if (!isPlaying)
         {
-            FMOD_VECTOR position = { viewPos.x, viewPos.y, viewPos.z };
+            FMOD_VECTOR position = { worldPosition.x, worldPosition.y, worldPosition.z };
             FMOD_VECTOR velocity = { 0,0,0 };
 
             fmodSystem->playSound(sounds3D[soundPath], 0, false, &channels[lastChannelIndex]);
             channels[lastChannelIndex]->set3DAttributes(&position, &velocity);
-            channels[lastChannelIndex]->set3DMinMaxDistance(0, 50);
+            channels[lastChannelIndex]->set3DMinMaxDistance(1, maxDistance);
             channels[lastChannelIndex]->setPriority(soundPriorityMap[sounds3D[soundPath]]);
             SetSFXVolume(sfxVolume);
             break;
@@ -387,6 +418,14 @@ yunutyEngine::SoundSystem::SOUNDGROUP_BEHAVIOR yunutyEngine::SoundSystem::GetSou
         soundGroup->getMaxAudibleBehavior(&finalBehavior);
     }
     return (yunutyEngine::SoundSystem::SOUNDGROUP_BEHAVIOR)finalBehavior;
+}
+void yunutyEngine::SoundSystem::Set3DRolloffScale(float rolloffScale)
+{
+    SingleInstance()->rolloffScale = rolloffScale;
+}
+float yunutyEngine::SoundSystem::Get3DRolloffScale()
+{
+    return SingleInstance()->rolloffScale;
 }
 void yunutyEngine::SoundSystem::mPlayMusic(string soundPath)
 {
