@@ -133,10 +133,10 @@ private:
     DirectX::SimpleMath::Vector3 mainCamPos;
 
     const float backOffset = 150;
-    const float smWidth = 163.38;
-    const float smHeight = 163.38;
+    const float smWidth = 200;
+    const float smHeight = 200;
     const float camNear = 1;
-    const float camFar = 300;
+    const float camFar = 400;
 };
 
 

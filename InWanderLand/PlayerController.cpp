@@ -195,6 +195,7 @@ void PlayerController::Update()
     HandleMouseHover();
     HandleUnitPickingCollider();
     HandleComboState();
+    HandlePlayerConstrainingRegion();
     static yunutyEngine::graphics::UIText* text_State{ nullptr };
     if (text_State == nullptr)
     {
@@ -683,6 +684,23 @@ void PlayerController::HandleComboState()
         if (elapsedTimeSinceLastCombo > GlobalConstant::GetSingletonInstance().pod.comboTimeLimit)
         {
             ResetCombo();
+        }
+    }
+}
+
+void PlayerController::HandlePlayerConstrainingRegion()
+{
+    if (auto constrainingRegion = PlaytimeRegion::GetPlayerConstrainingRegion().lock())
+    {
+        for (auto eachUnit : characters)
+        {
+            if (auto unit = eachUnit.lock())
+            {
+                if (!constrainingRegion->IsUnitInside(unit->GetUnitCollider().lock().get()))
+                {
+                    unit->OrderMove(constrainingRegion->GetTransform()->GetWorldPosition());
+                }
+            }
         }
     }
 }

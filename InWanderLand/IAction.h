@@ -72,6 +72,8 @@ namespace application
         UnitPlayAnimation,
         PullScriptTrigger,
         SetTacticCamera,
+        SetRegionAsNavObstacle,
+        SetPlayerConstrainingRegion,
     };
 
     struct IAction

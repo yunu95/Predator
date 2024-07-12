@@ -130,6 +130,12 @@ enum class UIEnumID
     StatusBar_Hero_Robin,
     StatusBar_Hero_Ursula,
     StatusBar_Hero_Hansel,
+    StatusBar_Boss,
+    StatusBar_LeftDoor,
+    StatusBar_RightDoor,
+    StatusBar_Boss_Tactic,
+    StatusBar_LeftDoor_Tactic,
+    StatusBar_RightDoor_Tactic,
     StatusBar_HP_Number_Current,
     StatusBar_HP_Number_Max,
     StatusBar_HP_Cells,
@@ -178,6 +184,9 @@ enum class UIEnumID
     DamageIndicator_Critical,
     DamageIndicator_Missed,
     DamageIndicator_Number,
+    // 보스전때에만 출력되는 UI들
+    BossUI_Default,
+    BossUI_Tactic,
 };
 
 template<>
@@ -315,6 +324,12 @@ const std::unordered_map<int, std::string>& application::POD_Enum<UIEnumID>::Get
         { static_cast<int>((int)UIEnumID::StatusBar_Hero_Robin), "StatusBar_Hero_Robin" },
         { static_cast<int>((int)UIEnumID::StatusBar_Hero_Ursula), "StatusBar_Hero_Ursula" },
         { static_cast<int>((int)UIEnumID::StatusBar_Hero_Hansel), "StatusBar_Hero_Hansel" },
+        { static_cast<int>((int)UIEnumID::StatusBar_Boss), "StatusBar_Boss" },
+        { static_cast<int>((int)UIEnumID::StatusBar_LeftDoor), "StatusBar_LeftDoor" },
+        { static_cast<int>((int)UIEnumID::StatusBar_RightDoor), "StatusBar_RightDoor" },
+        { static_cast<int>((int)UIEnumID::StatusBar_Boss_Tactic), "StatusBar_Boss_Tactic" },
+        { static_cast<int>((int)UIEnumID::StatusBar_LeftDoor_Tactic), "StatusBar_LeftDoor_Tactic" },
+        { static_cast<int>((int)UIEnumID::StatusBar_RightDoor_Tactic), "StatusBar_RightDoor_Tactic" },
         { static_cast<int>((int)UIEnumID::StatusBar_HP_Number_Current), "StatusBar_HP_Number_Current" },
         { static_cast<int>((int)UIEnumID::StatusBar_HP_Number_Max), "StatusBar_HP_Number_Max" },
         { static_cast<int>((int)UIEnumID::StatusBar_HP_Cells), "StatusBar_HP_Cells" },
@@ -363,6 +378,9 @@ const std::unordered_map<int, std::string>& application::POD_Enum<UIEnumID>::Get
         { static_cast<int>((int)UIEnumID::DamageIndicator_Critical), "DamageIndicator_Critical" },
         { static_cast<int>((int)UIEnumID::DamageIndicator_Missed), "DamageIndicator_Missed" },
         { static_cast<int>((int)UIEnumID::DamageIndicator_Number), "DamageIndicator_Number" },
+        // 보스전때에만 출력되는 UI들
+        { static_cast<int>((int)UIEnumID::BossUI_Default), "BossUI_Default" },
+        { static_cast<int>((int)UIEnumID::BossUI_Tactic), "BossUI_Tactic" },
     };
     return enumNameMap;
 }

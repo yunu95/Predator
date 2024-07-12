@@ -336,6 +336,7 @@ namespace application
 
 	CoroutineObject<void> Action_OrnamentShow::DoAction()
 	{
+		/// 성찬아 여기봐
 		targetOrnament->tookAction = true;
 
 		targetOrnament->GetPaletteInstance()->GetGameObject()->SetSelfActive(true);
@@ -357,12 +358,23 @@ namespace application
 			targetObj = each;
 		}
 
-		auto renderer = targetObj->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+		yunutyEngine::graphics::StaticMeshRenderer* renderer = nullptr;
+		for (auto each : targetObj->GetChildren())
+		{
+			renderer = each->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+			if (renderer)
+			{
+				break;
+			}
+		}
 
 		if (renderer)
 		{
 			float localTimer = 0;
 			float ratio = 0;
+			bool isFirst = false;
+			bool isDeferred = (renderer->GetGI().GetMaterial()->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred);
+			
 			while (ratio < 1)
 			{
 				localTimer += yunutyEngine::Time::GetDeltaTime();
@@ -376,12 +388,27 @@ namespace application
 				for (int i = 0; i < renderer->GetGI().GetMaterialCount(); ++i)
 				{
 					/// 추후 셰이더 교체까지 해줘야 함
+					auto shaderName = renderer->GetGI().GetMaterial(i)->GetPixelShader()->GetName();
+
+					size_t pos = shaderName.find(L"PS");
+					if (pos != std::wstring::npos && !isFirst && isDeferred)
+					{
+						isFirst = true;
+						const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+						shaderName = shaderName.substr(0, pos);
+						shaderName += L"_AlphaPS.cso";
+						renderer->GetGI().GetMaterial(i)->SetPixelShader(_resourceManager->GetShader(shaderName));
+					}
 					renderer->GetGI().GetMaterial(i)->SetColor(yunuGI::Color{ 1,1,1, ratio });
 				}
 				co_await std::suspend_always();
 			}
 		}
-
+		static const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+		for (int i = 0; i < renderer->GetGI().GetMaterialCount(); ++i)
+		{
+			renderer->GetGI().SetMaterial(i, resourceManager->GetMaterial(renderer->GetGI().GetMaterial(i)->GetName(true)), true);
+		}
 		co_return;
 	}
 
@@ -562,12 +589,24 @@ namespace application
 			targetObj = each;
 		}
 
-		auto renderer = targetObj->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+		yunutyEngine::graphics::StaticMeshRenderer* renderer = nullptr;
+		for (auto each : targetObj->GetChildren())
+		{
+			renderer = each->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+			if (renderer)
+			{
+				break;
+			}
+		}
 
 		if (renderer)
 		{
 			float localTimer = 0;
 			float ratio = 0;
+			bool isFirst = false;
+
+			bool isDeferred = (renderer->GetGI().GetMaterial()->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred);
+
 			while (ratio < 1)
 			{
 				localTimer += yunutyEngine::Time::GetDeltaTime();
@@ -581,12 +620,28 @@ namespace application
 				for (int i = 0; i < renderer->GetGI().GetMaterialCount(); ++i)
 				{
 					/// 추후 셰이더 교체까지 해줘야 함
+					auto shaderName = renderer->GetGI().GetMaterial(i)->GetPixelShader()->GetName();
+
+					size_t pos = shaderName.find(L"PS");
+					if (pos != std::wstring::npos && !isFirst && isDeferred)
+					{
+						isFirst = true;
+						const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+						shaderName = shaderName.substr(0, pos);
+						shaderName += L"_AlphaPS.cso";
+						renderer->GetGI().GetMaterial(i)->SetPixelShader(_resourceManager->GetShader(shaderName));
+					}
 					renderer->GetGI().GetMaterial(i)->SetColor(yunuGI::Color{ 1,1,1, 1 - ratio });
 				}
 				co_await std::suspend_always();
 			}
 		}
-
+		static const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+		for (int i = 0; i < renderer->GetGI().GetMaterialCount(); ++i)
+		{
+			renderer->GetGI().SetMaterial(i, resourceManager->GetMaterial(renderer->GetGI().GetMaterial(i)->GetName(true)), true);
+		}
+		targetOrnament->GetPaletteInstance()->GetGameObject()->SetSelfActive(false);
 		co_return;
 	}
 

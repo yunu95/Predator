@@ -87,6 +87,11 @@ yunuGI::IMaterial* Material::GetMaterial()
 	return this;
 }
 
+yunuGI::Color& Material::GetColor()
+{
+	return this->color;
+}
+
 Material::~Material()
 {
 }

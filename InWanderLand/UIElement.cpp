@@ -13,6 +13,13 @@ void UIElement::Start()
         each->DisableElementInstant();
     }*/
     //}
+}
+void UIElement::Update()
+{
+    if (worldParent)
+    {
+        worldParent->GetTransform()->SetWorldPosition(UIManager::Instance().GetUIPosFromWorld(worldParentOrigin));
+    }
 };
 void UIElement::EnableElement()
 {
@@ -115,7 +122,10 @@ void UIElement::EnableElement()
     for (auto each : enablePropagationTargets)
     {
         //each->enabled = false;
-        each->EnableElement();
+        if (!reallyDisabled)
+        {
+            each->EnableElement();
+        }
     }
     for (auto each : exclusiveEnableGroup)
     {
@@ -261,6 +271,24 @@ void UIElement::SetNumber(float number)
             digits[0]->DisableElement();
             digits[0]->imageComponent.lock()->GetGI().SetImage((*digitFont)[0]);
         }
+    }
+}
+void UIElement::SetAsWorldSpaceUI(const Vector3d& origin)
+{
+    if (!worldParent)
+    {
+        worldParent = Scene::getCurrentScene()->AddGameObject()->GetTransform();
+    }
+    worldParentOrigin = origin;
+    worldParent->SetWorldPosition(UIManager::Instance().GetUIPosFromWorld(worldParentOrigin));
+    GetGameObject()->SetParent(worldParent->GetGameObject());
+}
+void UIElement::SetAsScreenSpaceUI()
+{
+    if (worldParent)
+    {
+        Scene::getCurrentScene()->DestroyGameObject(worldParent->GetGameObject());
+        worldParent = nullptr;
     }
 }
 void UIElement::DisableElementInstant()

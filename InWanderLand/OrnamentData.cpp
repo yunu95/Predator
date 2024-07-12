@@ -17,6 +17,7 @@ namespace application
         OrnamentData::DisablingReference::DisablingReference(application::editor::OrnamentData* ornament)
         {
             ornamentTransform = ornament->GetPaletteInstance()->GetGameObject()->GetComponentWeakPtr<Transform>();
+
             ornamentTransform.lock()->GetGameObject()->SetSelfActive(false);
         };
         OrnamentData::DisablingReference::~DisablingReference()
@@ -114,6 +115,7 @@ namespace application
 
         void OrnamentData::ApplyAsPlaytimeObject()
         {
+            /// 성찬아 여기봐 
             ApplyAsPaletteInstance();
             if (!pod.isGuide)
             {
@@ -133,14 +135,22 @@ namespace application
                         targetObj = each;
                     }
 
-                    auto renderer = targetObj->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+					yunutyEngine::graphics::StaticMeshRenderer* renderer = nullptr;
+					for (auto each : targetObj->GetChildren())
+					{
+						renderer = each->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+						if (renderer)
+						{
+							break;
+						}
+					}
 
                     if (renderer)
                     {
                         for (int i = 0; i < renderer->GetGI().GetMaterialCount(); ++i)
                         {
                             static const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-                            renderer->GetGI().SetMaterial(i, resourceManager->GetMaterial(renderer->GetGI().GetMaterial(i)->GetName()));
+                            renderer->GetGI().SetMaterial(i, resourceManager->GetMaterial(renderer->GetGI().GetMaterial(i)->GetName(true)), true);
                         }
                     }
 

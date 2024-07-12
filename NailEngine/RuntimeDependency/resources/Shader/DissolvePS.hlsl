@@ -116,7 +116,7 @@ PS_OUT main(PixelIn input)
 // ShaderInfo
 // ShaderType : Deferred
 // RasterType : Solid
-// CullType : CullBack
+// CullType : CullNone
 // DepthType : Less
 // BlendType : Default
 // Sampler : Default

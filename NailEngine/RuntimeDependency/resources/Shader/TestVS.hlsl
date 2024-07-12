@@ -25,7 +25,7 @@ VS_OUT main(VS_IN input)
 
     output.pos = mul(float4(input.pos, 1.f), input.world);
     output.pos = mul(output.pos, mul(VTM, PTM));
-    output.pos.z += depthBias;
+    ///output.pos.z += depthBias;
     output.clipPos = output.pos;
     output.uv = input.uv;
     

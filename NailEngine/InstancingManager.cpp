@@ -461,6 +461,7 @@ void InstancingManager::RenderStaticForward()
 		const InstanceID& instanceID = pair.first;
 
 		{
+			int index = 0;
 			for (auto& i : renderInfoVec)
 			{
 				if (i->mesh == nullptr) continue;
@@ -478,8 +479,19 @@ void InstancingManager::RenderStaticForward()
 				InstancingData data;
 				data.wtm = renderInfo->wtm;
 				AddData(instanceID, data);
-			}
 
+				lightMapUVBuffer->lightMapUV[index].lightMapIndex = renderInfo->lightMapIndex;
+				lightMapUVBuffer->lightMapUV[index].scaling = renderInfo->uvScaling;
+				lightMapUVBuffer->lightMapUV[index].uvOffset = renderInfo->uvOffset;
+				lightMapUVBuffer->lightMapUV[index].outlineInfo = renderInfo->outlineInfo;
+				lightMapUVBuffer->lightMapUV[index].isOutLine = renderInfo->isOutLine;
+				lightMapUVBuffer->castDecal = i->mesh->GetCastDecal();
+
+				index++;
+			}
+			NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::LIGHTMAP_UV))->PushGraphicsData(lightMapUVBuffer.get(),
+				sizeof(LightMapUVBuffer),
+				static_cast<int>(CB_TYPE::LIGHTMAP_UV), false);
 			if (renderInfoVec.size() != 0)
 			{
 				if ((*renderInfoVec.begin())->mesh == nullptr) continue;

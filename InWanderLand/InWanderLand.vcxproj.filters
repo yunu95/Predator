@@ -910,6 +910,12 @@
     <Filter Include="Contents_Refactored\DuplicatedUIPool">
       <UniqueIdentifier>{9e3ccf9e-51a1-4ca9-898d-eb2f025aae10}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor\ScriptSystem\2_Action\List\Action_SetPlayerConstrainingRegion">
+      <UniqueIdentifier>{3f15d7a0-c404-4b7e-9d1f-0f63b0580ec6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\ScriptSystem\2_Action\List\Action_SetRegionAsNavObstacle">
+      <UniqueIdentifier>{1b8c1f06-b720-421e-904d-cc895f8f92fe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -2230,6 +2236,12 @@
     <ClInclude Include="Module_SoundEditor.h">
       <Filter>Editor\Panel\List\Module\List</Filter>
     </ClInclude>
+    <ClInclude Include="Action_SetPlayerConstrainingRegion.h">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_SetPlayerConstrainingRegion</Filter>
+    </ClInclude>
+    <ClInclude Include="Action_SetRegionAsNavObstacle.h">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_SetRegionAsNavObstacle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -3348,6 +3360,12 @@
     </ClCompile>
     <ClCompile Include="Module_SoundEditor.cpp">
       <Filter>Editor\Panel\List\Module\List</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_SetPlayerConstrainingRegion.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_SetPlayerConstrainingRegion</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_SetRegionAsNavObstacle.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_SetRegionAsNavObstacle</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
