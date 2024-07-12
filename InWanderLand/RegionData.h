@@ -11,7 +11,6 @@
 #include "StaticInstanceRegistry.h"
 #include "RegionPalette.h"
 #include "GlobalConstant.h"
-#include "InstanceManager.h"
 
 namespace application
 {

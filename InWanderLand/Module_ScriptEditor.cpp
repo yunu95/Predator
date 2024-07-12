@@ -2190,6 +2190,16 @@ namespace application
                                 selectedScript->AddAction<Action_SetTacticCamera>();
                                 break;
                             }
+                            case application::ActionType::SetRegionAsNavObstacle:
+                            {
+                                selectedScript->AddAction<Action_SetRegionAsNavObstacle>();
+                                break;
+                            }
+                            case application::ActionType::SetPlayerConstrainingRegion:
+                            {
+                                selectedScript->AddAction<Action_SetPlayerConstrainingRegion>();
+                                break;
+                            }
                             default:
                                 break;
                             }

@@ -569,7 +569,7 @@ void Unit::Damaged(std::weak_ptr<Unit> opponentUnit, float opponentDmg, DamageTy
 
         if (damageType == DamageType::AttackCrit)
         {
-            opponentDmg *= (1 - GetCritResistance())*opponentUnit.lock()->GetCritMultiplier();
+            opponentDmg *= (1 - GetCritResistance()) * opponentUnit.lock()->GetCritMultiplier();
         }
         opponentDmg *= 1 - GetArmor() * 0.01f;
         opponentUnit.lock()->onAttackHit(GetWeakPtr<Unit>());
@@ -1644,11 +1644,6 @@ void Unit::InitBehaviorTree()
     unitBehaviourTree[UnitBehaviourTree::Chasing][UnitBehaviourTree::Move].onExit = [this]()
         {
             OnStateExit<UnitBehaviourTree::Move>();
-            if (pendingOrderType == UnitOrderType::None)
-            {
-                OrderHold();
-                unitBehaviourTree.reAssessFlag = true;
-            }
         };
     unitBehaviourTree[UnitBehaviourTree::Chasing][UnitBehaviourTree::Move].onUpdate = [this]()
         {
@@ -1711,6 +1706,11 @@ void Unit::InitBehaviorTree()
     unitBehaviourTree[UnitBehaviourTree::Move].onExit = [this]()
         {
             OnStateExit<UnitBehaviourTree::Move>();
+            if (pendingOrderType == UnitOrderType::None)
+            {
+                OrderHold();
+                unitBehaviourTree.reAssessFlag = true;
+            }
         };
     unitBehaviourTree[UnitBehaviourTree::Move].onUpdate = [this]()
         {
@@ -2022,8 +2022,7 @@ yunutyEngine::coroutine::Coroutine Unit::DmgIndicatorCoroutine(float dmg, UIEnum
 void Unit::ShowMissedUI()
 {
     auto missedIndicator = DuplicatedUIPool::Instance().Borrow(UIEnumID::DamageIndicator_Missed);
-    auto uiPos = UIManager::Instance().GetUIPosFromWorld(GetTransform()->GetWorldPosition());
-    missedIndicator.lock()->GetTransform()->SetWorldPosition(uiPos);
+    missedIndicator.lock()->GetUIElement()->SetAsWorldSpaceUI(GetTransform()->GetWorldPosition());
 }
 void Unit::UpdateAttackTargetWithinRange()
 {

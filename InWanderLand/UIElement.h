@@ -35,6 +35,7 @@ private:
 public:
     bool GetUIEnabled() { return enabled; }
     virtual void Start() override;
+    virtual void Update() override;
     vector<UIElement*> disablePropagationTargets;
     vector<UIElement*> enablePropagationTargets;
     int duplicatePriorityOffset = 0;
@@ -64,6 +65,8 @@ public:
     LinearClippingTimer* linearClippingTimerOnDisable{ nullptr };
     vector<UIElement*> children;
     vector<UIElement*> exclusiveEnableGroup;
+    // PropagateEnable을 막기 위한  똥꼬쇼 변수
+    bool reallyDisabled{ false };
     void EnableElement();
     void DisableElement();
     void DisableElementInstant();
@@ -75,6 +78,9 @@ public:
     FloatFollower* adjuster{ nullptr };
     UIEnumID GetDuplicateParentEnumID() { return duplicateParentEnumID; }
 
+    void SetAsWorldSpaceUI(const Vector3d& origin);
+    void SetAsScreenSpaceUI();
+
     //virtual void PlayFunction() override;
     //virtual void StopFunction() override;
 
@@ -85,5 +91,7 @@ private:
     array<yunuGI::ITexture*, 10>* digitFont{ };
     // 10^i 자리에 속하는 숫자의 이미지를 저장하는 배열
     std::vector<UIElement*> digits{ };
+    Transform* worldParent{ nullptr };
+    Vector3d worldParentOrigin;
     friend class UIManager;
 };

@@ -128,6 +128,7 @@ private:
     void HandleMouseHover();
     void HandleUnitPickingCollider();
     void HandleComboState();
+    void HandlePlayerConstrainingRegion();
     void OnPlayerChracterDead(std::weak_ptr<Unit> unit);
     void OnPlayerChracterAllDead();
     // character가 NONE일 경우 알아서 현재 선택된 스킬로 귀결된다.
