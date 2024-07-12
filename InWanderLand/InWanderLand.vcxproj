@@ -2031,6 +2031,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="UnitMoveCommand.h" />
     <ClInclude Include="UnitPool.h" />
     <ClInclude Include="UnitSkillCommand.h" />
+    <ClInclude Include="UnitStatusBarFlag.h" />
     <ClInclude Include="UnitStatusBarType.h" />
     <ClInclude Include="Unit_TemplateData.h" />
     <ClInclude Include="UrsulaBlindSkill.h" />

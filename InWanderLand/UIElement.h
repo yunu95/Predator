@@ -65,6 +65,7 @@ public:
     LinearClippingTimer* linearClippingTimerOnDisable{ nullptr };
     vector<UIElement*> children;
     vector<UIElement*> exclusiveEnableGroup;
+    unsigned int runtimeFlags{ 0 };
     // PropagateEnable을 막기 위한  똥꼬쇼 변수
     bool reallyDisabled{ false };
     void EnableElement();

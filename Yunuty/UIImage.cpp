@@ -6,6 +6,15 @@ using namespace yunutyEngine::graphics;
 yunutyEngine::graphics::UIImage::UIImage() :
     Renderable<yunuGI::IUIImage>(_YunuGIObjects::SingleInstance().factory->CreateUIImage({}))
 {
+    GetGI().SetActive(GetActive());
+}
+void yunutyEngine::graphics::UIImage::OnEnable()
+{
+    GetGI().SetActive(true);
+}
+void yunutyEngine::graphics::UIImage::OnDisable()
+{
+    GetGI().SetActive(false);
 }
 void yunutyEngine::graphics::UIImage::OnTransformUpdate()
 {
