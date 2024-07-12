@@ -88,6 +88,8 @@ namespace application
         actionList.push_back({ ActionType::UnitPlayAnimation,"UnitPlayAnimation" });
         actionList.push_back({ ActionType::PullScriptTrigger,"PullScriptTrigger" });
         actionList.push_back({ ActionType::SetTacticCamera,"SetTacticCamera" });
+        actionList.push_back({ ActionType::SetRegionAsNavObstacle,"SetRegionAsNavObstacle" });
+        actionList.push_back({ ActionType::SetPlayerConstrainingRegion,"SetPlayerConstrainingRegion" });
 
         std::sort(triggerList.begin(), triggerList.end(), [](const std::pair<TriggerType, std::string>& a, const std::pair<TriggerType, std::string>& b) { return a.second < b.second; });
         std::sort(conditionList.begin(), conditionList.end(), [](const std::pair<ConditionType, std::string>& a, const std::pair<ConditionType, std::string>& b) { return a.second < b.second; });

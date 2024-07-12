@@ -466,6 +466,16 @@ namespace application
                         Action_SetTacticCamera::ImGui_DrawDataPopup(static_cast<Action_SetTacticCamera*>(data));
                         break;
                     }
+                    case application::ActionType::SetRegionAsNavObstacle:
+                    {
+                        Action_SetRegionAsNavObstacle::ImGui_DrawDataPopup(static_cast<Action_SetRegionAsNavObstacle*>(data));
+                        break;
+                    }
+                    case application::ActionType::SetPlayerConstrainingRegion:
+                    {
+                        Action_SetPlayerConstrainingRegion::ImGui_DrawDataPopup(static_cast<Action_SetPlayerConstrainingRegion*>(data));
+                        break;
+                    }
                     default:
                         break;
                     }

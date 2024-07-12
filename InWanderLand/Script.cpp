@@ -28,7 +28,7 @@ namespace application
             each->Clear();
             each->AddFunction([=]()
                 {
-                    Script::PullScriptTrigger(); 
+                    Script::PullScriptTrigger();
                 });
             each->LinkCallback();
         }
@@ -652,6 +652,16 @@ namespace application
                     case application::ActionType::SetTacticCamera:
                     {
                         action = AddAction<Action_SetTacticCamera>();
+                        break;
+                    }
+                    case application::ActionType::SetRegionAsNavObstacle:
+                    {
+                        action = AddAction<Action_SetRegionAsNavObstacle>();
+                        break;
+                    }
+                    case application::ActionType::SetPlayerConstrainingRegion:
+                    {
+                        action = AddAction<Action_SetPlayerConstrainingRegion>();
                         break;
                     }
                     default:
