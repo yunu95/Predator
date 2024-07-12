@@ -225,12 +225,19 @@ float yunutyEngine::SoundSystem::GetMusicVolume()
 }
 void yunutyEngine::SoundSystem::SetSFXVolume(float volume)
 {
+    /// channel 의 Priority 는 SoundGroup 에서 영향을 주지 않아,
+    /// Priority 로 Volume 을 미세하게 조작하여 SoundGroup 로직에 반영할 수 있도록 합니다.
+    
     SingleInstance()->sfxVolume = volume;
     for (int i = 0; i < 128; i++)
     {
         if (soundInstance->channels[i])
         {
-            soundInstance->channels[i]->setVolume(volume);
+            float instanceVolume = volume;
+            int priority = 0;
+            soundInstance->channels[i]->getPriority(&priority);
+            instanceVolume -= (priority * 0.0000001f);
+            soundInstance->channels[i]->setVolume(instanceVolume);
         }
     }
 }

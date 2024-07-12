@@ -9,6 +9,7 @@
 
 #include <vector>
 #include <string>
+#include <map>
 
 namespace FMOD
 {
@@ -37,6 +38,9 @@ public:
 	static int GetSFXGroupMaxAudible(unsigned long long groupIndex);
 	static void SetSFXGroupMaxAudibleBehavior(unsigned long long groupIndex, SoundSystem::SOUNDGROUP_BEHAVIOR behavior);
 	static SoundSystem::SOUNDGROUP_BEHAVIOR GetSFXGroupMaxAudibleBehavior(unsigned long long groupIndex);
+	//static void SetSFXGroupPriority(unsigned long long groupIndex, int priority);
+	//static int GetSFXGroupPriority(unsigned long long groupIndex);
+	//static void 
 
 	virtual void OnGameStart() override;
 	virtual void OnGameStop() override;
@@ -58,4 +62,8 @@ private:
 	int initSoundGroupCount = 11;
 	
 	std::vector<std::string> soundGroupNames = std::vector<std::string>();
+	std::map<unsigned long long, int> soundGroupPriorityMap = std::map<unsigned long long, int>();
+	std::map<unsigned long long, bool> soundGroupPriorityFlagMap = std::map<unsigned long long, bool>();
+	std::map<unsigned long long, float> soundGroupPriorityFadeRatioMap = std::map<unsigned long long, float>();
+	std::map<unsigned long long, float> soundGroupPriorityFadeTimeMap = std::map<unsigned long long, float>();
 };
