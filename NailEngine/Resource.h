@@ -17,7 +17,7 @@ protected:
 
 public:
 	// IResource을(를) 통해 상속됨
-	virtual const std::wstring& GetName() const override;
+	virtual const std::wstring& GetName(bool isForceOrgin = false) const override;
 
 	virtual void SetName(const std::wstring& name) override;
 

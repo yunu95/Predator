@@ -33,7 +33,8 @@ namespace yunutyEngine
             FAIL,              
             MUTE,              
             STEALLOWEST,       
-            MAX, 
+            MAX,
+            BEHAVIOR_FORCEINT = 65536
         };
 
         static void Update();

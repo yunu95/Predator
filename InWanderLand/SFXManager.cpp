@@ -3,9 +3,17 @@
 SFXManager::SFXManager()
 {
 	soundGroupNames.push_back("Default");
+	soundGroupPriorityMap[0] = 128;
+	soundGroupPriorityFlagMap[0] = false;
+	soundGroupPriorityFadeRatioMap[0] = 0.5f;
+	soundGroupPriorityFadeTimeMap[0] = 1.0f;
 	for (int i = 1; i < initSoundGroupCount; i++)
 	{
 		soundGroupNames.push_back("None");
+		soundGroupPriorityMap[i] = 128;
+		soundGroupPriorityFlagMap[i] = false;
+		soundGroupPriorityFadeRatioMap[i] = 0.5f;
+		soundGroupPriorityFadeTimeMap[i] = 1.0f;
 		if (!SoundSystem::GetSoundGroup(i))
 		{
 			SoundSystem::CreateSoundGroup(i);
@@ -164,6 +172,11 @@ bool SFXManager::PreDecoding(const json& data)
 
 	for (auto& soundPath : GetLoadedSFXList())
 	{
+		if (!data["SoundList"].contains(soundPath))
+		{
+			continue;
+		}
+
 		SetSFXPriority(soundPath, data["SoundList"][soundPath]["Priority"]);
 		SettingSFXGroup(soundPath, data["SoundList"][soundPath]["SoundGroupIndex"]);
 	}
@@ -173,7 +186,13 @@ bool SFXManager::PreDecoding(const json& data)
 		SetSFXGroupVolume(i, data["SoundGroupList"][i]["Volume"]);
 		SetSFXGroupMaxAudible(i, data["SoundGroupList"][i]["MaxAudible"]);
 		SetSFXGroupMaxAudibleBehavior(i, (SoundSystem::SOUNDGROUP_BEHAVIOR)data["SoundGroupList"][i]["Behavior"]);
-		soundGroupNames[i] = data["SoundGroupList"][i]["Name"];
+		
+		/// 추후 업데이트 된 내용이라 충돌을 방지하고자 검토합니다.
+		if (data["SoundGroupList"][i].contains("Name"))
+		{
+			soundGroupNames[i] = data["SoundGroupList"][i]["Name"];
+
+		}
 	}
 
 	return true;

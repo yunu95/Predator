@@ -266,10 +266,6 @@ void ResourceManager::PushFBXNode(const std::wstring fbxName, FBXNode* fbxNode)
 
 yunuGI::IMaterial* ResourceManager::CrateMaterial(std::wstring materialName)
 {
-    if (materialName == L"Material")
-    {
-        int a = 1;
-    }
     std::shared_ptr<Material> material = std::make_shared<Material>();
 
     if (materialName.empty())
@@ -1101,6 +1097,7 @@ void ResourceManager::CreateDefaultShader()
 
 #pragma region PS
     CreateShader(L"DefaultPS.cso");
+    CreateShader(L"SkinnedPS.cso");
     CreateShader(L"Default_CullFrontPS.cso");
     CreateShader(L"DebugPS.cso");
     CreateShader(L"Debug_AlphaPS.cso");
@@ -1130,6 +1127,7 @@ void ResourceManager::CreateDefaultShader()
 	CreateShader(L"TestDecalPS.cso");
 	CreateShader(L"TestDecalMaskPS.cso");
 	CreateShader(L"AAPassPS.cso");
+	CreateShader(L"Default_AlphaPS.cso");
 #pragma endregion
 
 #pragma region GS
@@ -1176,6 +1174,7 @@ void ResourceManager::CreateDefaultMaterial()
         std::wstring name{ L"SkinnedDefaultMaterial" };
         auto material = CrateMaterial(name);
         material->SetVertexShader(this->GetShader(L"SkinnedVS.cso").get());
+        material->SetPixelShader(this->GetShader(L"SkinnedPS.cso").get());
     }
 
     auto& renderTargetGroupVec = NailEngine::Instance.Get().GetRenderTargetGroup();

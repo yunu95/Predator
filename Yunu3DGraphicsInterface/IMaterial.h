@@ -37,6 +37,7 @@ namespace yunuGI
 		virtual void SetPixelShader(const yunuGI::IShader* shader) = 0;
 		virtual void SetTexture(Texture_Type textureType, const yunuGI::ITexture* texture) = 0;
 		virtual void SetColor(const yunuGI::Color& color) = 0;
+		virtual yunuGI::Color& GetColor() = 0;
 		virtual void SetInt(int index, int val) = 0;
 		virtual void SetFloat(int index, float val) = 0;
 		virtual yunuGI::ITexture* GetTexture(Texture_Type textureType) = 0;
