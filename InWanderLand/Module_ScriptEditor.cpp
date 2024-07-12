@@ -1463,6 +1463,74 @@ namespace application
                             epm.Return();
                         }
                     }
+
+                    if (epm.GetReturnPopupName() == "SetTargetRegion(SetAsNavObstacle)")
+                    {
+                        ImGui::Begin("Nav Obstacle Region Popup", &pop, flag);
+                        auto rect = ImGui::GetContentRegionAvail();
+                        auto size = ImGui::CalcTextSize("Please Setting Region");
+                        imgui::ShiftCursorX((rect.x - size.x) / 2);
+                        imgui::ShiftCursorY((rect.y - size.y) / 2);
+                        ImGui::Text("Please Setting Region");
+                        ImGui::BringWindowToFocusFront(ImGui::GetCurrentWindow());
+                        ImGui::End();
+
+                        pp.ChangeTab("Region");
+
+                        auto data = epm.GetReturnPopupData<Action_SetRegionAsNavObstacle>();
+                        if (data->isEditing == false && pm.GetCurrentPalette() == &rp)
+                        {
+                            data->isEditing = true;
+                            rp.Reset();
+                        }
+
+                        if (data->isEditing == true && rp.GetSelections().size() == 1)
+                        {
+                            data->SetTargetRegion(static_cast<RegionData*>(*rp.GetSelections().begin()));
+                            data->isEditing = false;
+                            epm.Return();
+                        }
+
+                        if (!pop)
+                        {
+                            data->isEditing = false;
+                            epm.Return();
+                        }
+                    }
+
+                    if (epm.GetReturnPopupName() == "SSetTargetRegion(PlayerConstraining)")
+                    {
+                        ImGui::Begin("Player Constraining Region Popup", &pop, flag);
+                        auto rect = ImGui::GetContentRegionAvail();
+                        auto size = ImGui::CalcTextSize("Please Setting Region");
+                        imgui::ShiftCursorX((rect.x - size.x) / 2);
+                        imgui::ShiftCursorY((rect.y - size.y) / 2);
+                        ImGui::Text("Please Setting Region");
+                        ImGui::BringWindowToFocusFront(ImGui::GetCurrentWindow());
+                        ImGui::End();
+
+                        pp.ChangeTab("Region");
+
+                        auto data = epm.GetReturnPopupData<Action_SetPlayerConstrainingRegion>();
+                        if (data->isEditing == false && pm.GetCurrentPalette() == &rp)
+                        {
+                            data->isEditing = true;
+                            rp.Reset();
+                        }
+
+                        if (data->isEditing == true && rp.GetSelections().size() == 1)
+                        {
+                            data->SetTargetRegion(static_cast<RegionData*>(*rp.GetSelections().begin()));
+                            data->isEditing = false;
+                            epm.Return();
+                        }
+
+                        if (!pop)
+                        {
+                            data->isEditing = false;
+                            epm.Return();
+                        }
+                    }
                 }
             }
             ImGui::End();

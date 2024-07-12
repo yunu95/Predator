@@ -106,7 +106,7 @@ namespace application
                         ImGui::CloseCurrentPopup();
                         editor::imgui::CloseMessageBox("SetTargetRegion(SetAsNavObstacle)");
                         editor::EditorLayer::SetInputControl(true);
-                        editor::EditorPopupManager::GetSingletonInstance().PushReturnPopup<Action_SetRegionAsNavObstacle>("SetTargetRegion", data);
+                        editor::EditorPopupManager::GetSingletonInstance().PushReturnPopup<Action_SetRegionAsNavObstacle>("SetTargetRegion(SetAsNavObstacle)", data);
                     }
                     ImGui::SameLine();
 
