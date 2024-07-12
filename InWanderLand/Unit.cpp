@@ -1060,8 +1060,8 @@ void Unit::Init(const application::editor::Unit_TemplateData* unitTemplateData)
     //debugMesh->GetTransform()->SetLocalScale(Vector3d(unitTemplateData->pod.collisionSize * 2, unitTemplateData->pod.collisionHeight, unitTemplateData->pod.collisionSize * 2));
     //debugMesh->GetTransform()->SetLocalPosition(Vector3d::up * unitTemplateData->pod.collisionHeight * 0.5f);
 
-    auto debugMesh = AttachDebugMesh(unitCollider.lock()->GetGameObject()->AddGameObject(), DebugMeshType::Capsule);
-    debugMesh->GetTransform()->SetLocalScale(Vector3d(unitTemplateData->pod.collisionSize * 2, unitTemplateData->pod.collisionHeight, unitTemplateData->pod.collisionSize * 2));
+    auto debugMesh = AttachDebugMesh(unitCollider.lock()->GetGameObject()->AddGameObject(), DebugMeshType::Capsule, yunuGI::Color::pink());
+    debugMesh->GetTransform()->SetLocalScale(Vector3d(unitTemplateData->pod.collisionSize, unitTemplateData->pod.collisionHeight, unitTemplateData->pod.collisionSize));
     debugMesh->GetTransform()->SetLocalRotation(Vector3d{ {0,0,90} });
 
     /// Particle Setting
@@ -1342,7 +1342,7 @@ void Unit::Summon(application::editor::Unit_TemplateData* templateData)
 
     unitCollider.lock()->SetRadius(unitTemplateData->pod.collisionSize);
     unitCollider.lock()->SetHalfHeight(unitTemplateData->pod.collisionHeight * 0.5f);
-    unitCollider.lock()->GetTransform()->SetLocalPosition(Vector3d::up * unitTemplateData->pod.collisionHeight * 0.5f);
+    unitCollider.lock()->GetTransform()->SetLocalPosition(Vector3d::up * unitTemplateData->pod.collisionHeight * 0.5f * 1.5f);
 
     attackRange.lock()->SetRadius(unitTemplateData->pod.m_atkRadius);
     attackRange.lock()->SetColor(yunuGI::Color::red());

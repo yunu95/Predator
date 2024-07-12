@@ -23,18 +23,7 @@ void UnitBuff::Init(std::weak_ptr<Unit> owner)
     if (!buffIcon3.expired())
         buffIcon3.lock()->EnableElement();
 
-    if (owner.lock()->GetUnitTemplateData().pod.unitControllerType.enumValue == UnitControllerType::Enum::HEART_QUEEN)
-    {
-        ownerUnitActualScale *= 1.5f;
-    }
-    else if (owner.lock()->GetUnitTemplateData().pod.unitControllerType.enumValue == UnitControllerType::Enum::MELEE_ELITE)
-    {
-        ownerUnitActualScale *= 1.5f;
-    }
-    else if (owner.lock()->GetUnitTemplateData().pod.unitControllerType.enumValue == UnitControllerType::Enum::RANGED_ELITE)
-    {
-        ownerUnitActualScale *= 1.5f;
-    }
+    ownerUnitActualScale = Vector3d::one * owner.lock()->GetUnitTemplateData().pod.unit_scale;
 }
 
 UnitBuff::~UnitBuff()
