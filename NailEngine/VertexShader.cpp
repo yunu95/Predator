@@ -55,13 +55,13 @@ void VertexShader::CreateShader(const std::wstring& shaderPath)
 	CreateInputLayout();
 }
 
-void VertexShader::Bind()
+void VertexShader::Bind() const 
 {
 	ResourceBuilder::Instance.Get().device->GetDeviceContext()->IASetInputLayout(this->inputLayout.Get());
 	ResourceBuilder::Instance.Get().device->GetDeviceContext()->VSSetShader(vs.Get(), nullptr, 0);
 }
 
-void VertexShader::UnBind()
+void VertexShader::UnBind() const
 {
 	ResourceBuilder::Instance.Get().device->GetDeviceContext()->IASetInputLayout(nullptr);
 	ResourceBuilder::Instance.Get().device->GetDeviceContext()->VSSetShader(nullptr, nullptr, 0);

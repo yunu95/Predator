@@ -18,8 +18,8 @@ class Shader : public yunuGI::IShader, public Resource
 {
 public:
 	virtual void CreateShader(const std::wstring& shaderPath) = 0;
-	virtual void Bind() = 0;
-	virtual void UnBind() = 0;
+	virtual void Bind() const override {};
+	virtual void UnBind() const override {};
 	virtual const yunuGI::ShaderInfo& GetShaderInfo() const { return this->shaderInfo; }
 	
 
