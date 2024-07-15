@@ -970,7 +970,7 @@ void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
         switch (skillType)
         {
         case SkillType::ROBIN_Q:
-            selectedCharacter.lock()->OrderSkill(RobinChargeSkill{  }, pos);
+            selectedCharacter.lock()->OrderSkill(EnemyImpaleSkill{  }, pos);
             break;
         case SkillType::ROBIN_W:
             selectedCharacter.lock()->OrderSkill(RobinTauntSkill{  }, pos);
@@ -1438,6 +1438,8 @@ Vector3d PlayerController::GetCamPivotPoint()
 void PlayerController::SetCooltime(SkillType::Enum skillType, float cooltime)
 {
     if (TacticModeSystem::Instance().IsExecuting())
+        return;
+    if (skillType == SkillType::EnemyImpale)
         return;
     skillCooltimeLeft[skillType] = std::fmax(0.0f, cooltime);
     PlayerPortraitUIs::ReflectCooltime(skillType, cooltime, GetCooltimeForSkill(skillType));

@@ -81,10 +81,10 @@ namespace application
 
     void Action_SetPlayerConstrainingRegion::ImGui_DrawDataPopup(Action_SetPlayerConstrainingRegion* data)
     {
-        if (ImGui::MenuItem("SetTargetRegion(SetAsNavObstacle)"))
+        if (ImGui::MenuItem("SetTargetRegion(PlayerConstraining)"))
         {
             editor::EditorLayer::SetInputControl(false);
-            editor::imgui::ShowMessageBox("SetTargetRegion(SetAsNavObstacle)", [data]()
+            editor::imgui::ShowMessageBox("SetTargetRegion(PlayerConstraining)", [data]()
                 {
                     auto& pp = editor::PalettePanel::GetSingletonInstance();
                     auto& rp = editor::palette::RegionPalette::SingleInstance();
@@ -111,16 +111,16 @@ namespace application
                     if (ImGui::Button("Edit"))
                     {
                         ImGui::CloseCurrentPopup();
-                        editor::imgui::CloseMessageBox("SetTargetRegion(SetAsNavObstacle)");
+                        editor::imgui::CloseMessageBox("SetTargetRegion(PlayerConstraining)");
                         editor::EditorLayer::SetInputControl(true);
-                        editor::EditorPopupManager::GetSingletonInstance().PushReturnPopup<Action_SetPlayerConstrainingRegion>("SetTargetRegion", data);
+                        editor::EditorPopupManager::GetSingletonInstance().PushReturnPopup<Action_SetPlayerConstrainingRegion>("SetTargetRegion(PlayerConstraining)", data);
                     }
                     ImGui::SameLine();
 
                     if (ImGui::Button("Cancel"))
                     {
                         ImGui::CloseCurrentPopup();
-                        editor::imgui::CloseMessageBox("SetTargetRegion(SetAsNavObstacle)");
+                        editor::imgui::CloseMessageBox("SetTargetRegion(PlayerConstraining)");
                         editor::EditorLayer::SetInputControl(true);
                     }
                 }, 300);

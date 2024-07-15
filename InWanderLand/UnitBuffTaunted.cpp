@@ -39,6 +39,7 @@ void UnitBuffTaunted::OnUpdate()
     {
         buffEffect.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
         buffEffect.lock()->GetTransform()->SetWorldRotation(RTSCam::Instance().GetTransform()->GetWorldRotation());
+        buffEffect.lock()->GetTransform()->SetWorldScale(ownerUnitActualScale);
     }
 }
 
