@@ -37,6 +37,10 @@ namespace application
                 const application::editor::OrnamentData* GetOrnamentData();
 
                 void ChangeGuideInstance();
+                void SetVisibleWithFading(bool visible);
+                bool fadeVisible = true;
+                coroutine::Coroutine Fade(bool& visible);
+                std::weak_ptr<coroutine::Coroutine> fadeCoroutine;
 
             protected:
                 virtual void OnHover() { PaletteInstance::OnHover(); }

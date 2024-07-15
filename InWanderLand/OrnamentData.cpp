@@ -17,14 +17,17 @@ namespace application
         OrnamentData::DisablingReference::DisablingReference(application::editor::OrnamentData* ornament)
         {
             ornamentTransform = ornament->GetPaletteInstance()->GetGameObject()->GetComponentWeakPtr<Transform>();
+            ornamentData = ornament;
 
-            ornamentTransform.lock()->GetGameObject()->SetSelfActive(false);
+            //ornamentTransform.lock()->GetGameObject()->SetSelfActive(false);
+            ornament->ornamentInstance->SetVisibleWithFading(false);
         };
         OrnamentData::DisablingReference::~DisablingReference()
         {
             if (!ornamentTransform.expired())
             {
-                ornamentTransform.lock()->GetGameObject()->SetSelfActive(true);
+                //ornamentTransform.lock()->GetGameObject()->SetSelfActive(true);
+                ornamentData->ornamentInstance->SetVisibleWithFading(true);
             }
         };
         bool OrnamentData::EnterDataFromTemplate()
@@ -135,15 +138,15 @@ namespace application
                         targetObj = each;
                     }
 
-					yunutyEngine::graphics::StaticMeshRenderer* renderer = nullptr;
-					for (auto each : targetObj->GetChildren())
-					{
-						renderer = each->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
-						if (renderer)
-						{
-							break;
-						}
-					}
+                    yunutyEngine::graphics::StaticMeshRenderer* renderer = nullptr;
+                    for (auto each : targetObj->GetChildren())
+                    {
+                        renderer = each->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+                        if (renderer)
+                        {
+                            break;
+                        }
+                    }
 
                     if (renderer)
                     {
