@@ -1129,6 +1129,7 @@ void ResourceManager::CreateDefaultShader()
 	CreateShader(L"AAPassPS.cso");
 	CreateShader(L"Default_AlphaPS.cso");
 	CreateShader(L"SilhouettePS.cso");
+	CreateShader(L"DissolveShadowPS.cso");
 #pragma endregion
 
 #pragma region GS

@@ -16,6 +16,7 @@
 #include "ParticleSystem.h"
 #include "FrustumCullingManager.h"
 #include "RenderTargetGroup.h"
+#include "PixelShader.h"
 
 #include <cmath>
 #include <algorithm>
@@ -773,44 +774,57 @@ void InstancingManager::RenderSkinnedShadow()
 
 				if (buffer->GetCount() > 0)
 				{
-					auto opacityMap = (*renderInfoVec.begin())->renderInfo.material->GetTexture(yunuGI::Texture_Type::OPACITY);
-					if (opacityMap)
+					
+
+					//auto opacityMap = (*renderInfoVec.begin())->renderInfo.material->GetTexture(yunuGI::Texture_Type::OPACITY);
+					//if (opacityMap)
+					//{
+					//	static_cast<Texture*>(opacityMap)->Bind(static_cast<unsigned int>(yunuGI::Texture_Type::OPACITY));
+					//	MaterialBuffer materialBuffer;
+					//	materialBuffer.useTexture[static_cast<unsigned int>(yunuGI::Texture_Type::OPACITY)] = 1;
+					//	NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATERIAL))->PushGraphicsData(&materialBuffer, sizeof(MaterialBuffer), static_cast<int>(CB_TYPE::MATERIAL));
+					//}
+					//else
+					//{
+					//	MaterialBuffer materialBuffer;
+					//	materialBuffer.useTexture[static_cast<unsigned int>(yunuGI::Texture_Type::OPACITY)] = 0;
+					//	NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATERIAL))->PushGraphicsData(&materialBuffer, sizeof(MaterialBuffer), static_cast<int>(CB_TYPE::MATERIAL));
+					//}
+					(*renderInfoVec.begin())->renderInfo.material->PushGraphicsData();
+
+					ResourceManager::Instance.Get().GetShader(L"SkinnedShadowVS.cso")->Bind();
+					if ((*renderInfoVec.begin())->renderInfo.material->GetPixelShader()->GetName() == L"DissolvePS.cso")
 					{
-						static_cast<Texture*>(opacityMap)->Bind(static_cast<unsigned int>(yunuGI::Texture_Type::OPACITY));
-						MaterialBuffer materialBuffer;
-						materialBuffer.useTexture[static_cast<unsigned int>(yunuGI::Texture_Type::OPACITY)] = 1;
-						NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATERIAL))->PushGraphicsData(&materialBuffer, sizeof(MaterialBuffer), static_cast<int>(CB_TYPE::MATERIAL));
+						ResourceManager::Instance.Get().GetShader(L"DissolveShadowPS.cso")->Bind();
 					}
 					else
 					{
-						MaterialBuffer materialBuffer;
-						materialBuffer.useTexture[static_cast<unsigned int>(yunuGI::Texture_Type::OPACITY)] = 0;
-						NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::MATERIAL))->PushGraphicsData(&materialBuffer, sizeof(MaterialBuffer), static_cast<int>(CB_TYPE::MATERIAL));
+						ResourceManager::Instance.Get().GetShader(L"TestPS.cso")->Bind();
 					}
 
 
-					ExposureBuffer useBias;
+					//ExposureBuffer useBias;
 
-					auto name = (*renderInfoVec.begin())->renderInfo.material->GetMaterial()->GetName();
-					size_t pos = name.find(L"_instance");
-					if (pos != std::wstring::npos)
-					{
-						name = name.substr(0, pos);
-					}
-					if (name == L"T_Robin_Cloak")
-					{
-						//useBias.depthBias = 0.005;
-						useBias.depthBias = (*renderInfoVec.begin())->renderInfo.depthBias;
-					}
-					else
-					{
-						useBias.depthBias = 0.002;
-						//useBias.depthBias = (*renderInfoVec.begin())->renderInfo.depthBias;
-					}
+					//auto name = (*renderInfoVec.begin())->renderInfo.material->GetMaterial()->GetName();
+					//size_t pos = name.find(L"_instance");
+					//if (pos != std::wstring::npos)
+					//{
+					//	name = name.substr(0, pos);
+					//}
+					//if (name == L"T_Robin_Cloak")
+					//{
+					//	//useBias.depthBias = 0.005;
+					//	useBias.depthBias = (*renderInfoVec.begin())->renderInfo.depthBias;
+					//}
+					//else
+					//{
+					//	useBias.depthBias = 0.002;
+					//	//useBias.depthBias = (*renderInfoVec.begin())->renderInfo.depthBias;
+					//}
 
-					NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::EXPOSURE))->PushGraphicsData(&useBias,
-						sizeof(ExposureBuffer),
-						static_cast<int>(CB_TYPE::EXPOSURE), false);
+					//NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::EXPOSURE))->PushGraphicsData(&useBias,
+					//	sizeof(ExposureBuffer),
+					//	static_cast<int>(CB_TYPE::EXPOSURE), false);
 
 					buffer->PushData();
 					(*renderInfoVec.begin())->renderInfo.mesh->Render((*renderInfoVec.begin())->renderInfo.materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, true, buffer->GetCount(), buffer);

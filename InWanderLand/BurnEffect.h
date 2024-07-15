@@ -10,10 +10,13 @@ public:
 	void SetEdgeThickness(float edgeThickness);
 	void SetDuration(float duration);
 
+	void Init();
 	void Disappear();
 	void Appear();
 	bool IsDone();
 
+	void OnEnable() override;
+	void OnDisable() override;
 	void Start() override;
 	void Update() override;
 

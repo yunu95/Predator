@@ -1038,6 +1038,7 @@ void Unit::Init(const application::editor::Unit_TemplateData* unitTemplateData)
     teamIndex = unitTemplateData->pod.playerUnitType.enumValue == PlayerCharacterType::None ? 2 : PlayerController::playerTeamIndex;
     skinnedMeshGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(unitTemplateData->pod.skinnedFBXName);
     burnEffect = skinnedMeshGameObject->AddComponentAsWeakPtr<BurnEffect>();
+    burnEffect.lock()->Init();
     animatorComponent = skinnedMeshGameObject->GetComponentWeakPtr<graphics::Animator>();
     SetSkinnedMeshRenderer(skinnedMeshGameObject);
     skinnedMeshGameObject->SetParent(GetGameObject());

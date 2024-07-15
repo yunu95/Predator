@@ -40,7 +40,7 @@ void PixelShader::CreateShader(const std::wstring& shaderPath)
 	CreateShaderState(hlslPath);
 }
 
-void PixelShader::Bind()
+void PixelShader::Bind() const
 {
 	ResourceBuilder::Instance.Get().device->GetDeviceContext()->PSSetSamplers(this->samplerSlot, 1, this->samplerState.GetAddressOf());
 
@@ -53,7 +53,7 @@ void PixelShader::Bind()
 	ResourceBuilder::Instance.Get().device->GetDeviceContext()->OMSetBlendState(this->blendState.Get(), nullptr, 0xFFFFFFFF);
 }
 
-void PixelShader::UnBind()
+void PixelShader::UnBind() const
 {
 	ResourceBuilder::Instance.Get().device->GetDeviceContext()->PSSetShader(nullptr, nullptr, 0);
 }

@@ -24,12 +24,12 @@ void GeometryShader::CreateShader(const std::wstring& shaderPath)
 	}
 }
 
-void GeometryShader::Bind()
+void GeometryShader::Bind() const 
 {
 	ResourceBuilder::Instance.Get().device->GetDeviceContext()->GSSetShader(gs.Get(), nullptr, 0);
 }
 
-void GeometryShader::UnBind()
+void GeometryShader::UnBind() const
 {
 	ResourceBuilder::Instance.Get().device->GetDeviceContext()->GSSetShader(nullptr, nullptr, 0);
 }
