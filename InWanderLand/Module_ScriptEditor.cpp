@@ -1498,7 +1498,7 @@ namespace application
                         }
                     }
 
-                    if (epm.GetReturnPopupName() == "SSetTargetRegion(PlayerConstraining)")
+                    if (epm.GetReturnPopupName() == "SetTargetRegion(PlayerConstraining)")
                     {
                         ImGui::Begin("Player Constraining Region Popup", &pop, flag);
                         auto rect = ImGui::GetContentRegionAvail();
