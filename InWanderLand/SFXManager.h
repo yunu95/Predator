@@ -38,9 +38,24 @@ public:
 	static int GetSFXGroupMaxAudible(unsigned long long groupIndex);
 	static void SetSFXGroupMaxAudibleBehavior(unsigned long long groupIndex, SoundSystem::SOUNDGROUP_BEHAVIOR behavior);
 	static SoundSystem::SOUNDGROUP_BEHAVIOR GetSFXGroupMaxAudibleBehavior(unsigned long long groupIndex);
-	//static void SetSFXGroupPriority(unsigned long long groupIndex, int priority);
-	//static int GetSFXGroupPriority(unsigned long long groupIndex);
-	//static void 
+	static void SetSFXGroupPriority(unsigned long long groupIndex, int priority);
+	static int GetSFXGroupPriority(unsigned long long groupIndex);
+	static void SetSFXGroupPriorityFlag(unsigned long long groupIndex, bool flag);
+	static bool GetSFXGroupPriorityFlag(unsigned long long groupIndex);
+	static void SetSFXGroupPriorityFadeRatio(unsigned long long groupIndex, float ratio);
+	static float GetSFXGroupPriorityFadeRatio(unsigned long long groupIndex);
+	static void SetSFXGroupPriorityFadeOutTime(unsigned long long groupIndex, float time);
+	static float GetSFXGroupPriorityFadeOutTime(unsigned long long groupIndex);
+	static void SetSFXGroupPriorityFadeInTime(unsigned long long groupIndex, float time);
+	static float GetSFXGroupPriorityFadeInTime(unsigned long long groupIndex);
+
+	static void SetSFXRandomFlag(string soundPath, bool flag);
+	static bool GetSFXRandomFlag(string soundPath);
+	static void SetSFXRandomSize(string soundPath, int size);
+	static int GetSFXRandomSize(string soundPath);
+	static void AddSFXRandomResorce(string soundPath, string additionalPath);
+	static void ChangeSFXRandomResorce(string soundPath, int index, string changePath);
+	static std::vector<string>& GetSFXRandomResorces(string soundPath);
 
 	virtual void OnGameStart() override;
 	virtual void OnGameStop() override;
@@ -60,10 +75,13 @@ private:
 
 	/// default 를 포함한 Group 개수입니다.
 	int initSoundGroupCount = 11;
+	int defaultSGPriority = 128;
+	bool defaultSGFlag = false;
+	float defaultSGFadeRatio = 0.5f;
+	float defaultSGFadeOutTime = 1.0f;
+	float defaultSGFadeInTime = 1.0f;
 	
 	std::vector<std::string> soundGroupNames = std::vector<std::string>();
-	std::map<unsigned long long, int> soundGroupPriorityMap = std::map<unsigned long long, int>();
-	std::map<unsigned long long, bool> soundGroupPriorityFlagMap = std::map<unsigned long long, bool>();
-	std::map<unsigned long long, float> soundGroupPriorityFadeRatioMap = std::map<unsigned long long, float>();
-	std::map<unsigned long long, float> soundGroupPriorityFadeTimeMap = std::map<unsigned long long, float>();
+	std::unordered_map<std::string, bool> soundRandomFlagMap = std::unordered_map<std::string, bool>();
+	std::unordered_map<std::string, std::vector<std::string>> soundRandomResourceMap = std::unordered_map<std::string, std::vector<std::string>>();
 };
