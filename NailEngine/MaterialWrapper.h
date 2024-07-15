@@ -4,6 +4,9 @@
 #include "Resource.h"
 
 #include "ResourceManager.h"
+#include "InstancingManager.h"
+#include "StaticMesh.h"
+#include "SkinnedMesh.h"
 #include "Material.h"
 
 class MaterialWrapper : public yunuGI::IMaterial, public Resource
@@ -132,12 +135,19 @@ public:
 		GetVariation()->SetColor(color);
 	}
 
-	virtual const std::wstring& GetName()const override
+	virtual const std::wstring& GetName(bool isForceOrigin)const override
 	{
-		if (usingOriginal)
+		if (isForceOrigin)
+		{
 			return original->GetName();
+		}
 		else
-			return variation->GetName();
+		{
+			if (usingOriginal)
+				return original->GetName();
+			else
+				return variation->GetName();
+		}
 	}
 
 	virtual const yunuGI::IShader* GetPixelShader() const override
@@ -162,6 +172,14 @@ public:
 			return original;
 		else
 			return variation;
+	}
+
+	virtual yunuGI::Color& GetColor() override
+	{
+		if (usingOriginal)
+			return original->GetColor();
+		else
+			return variation->GetColor();
 	}
 
 	bool IsOrigin()

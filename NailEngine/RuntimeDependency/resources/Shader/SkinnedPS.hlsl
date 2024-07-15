@@ -26,33 +26,12 @@ struct PS_OUT
     float4 outlineInfo : SV_Target7;
 };
 
-// Temp0Map : Dissolve Texture
-// float0 : Amount
-// float1 : Edge Thickness
-
 PS_OUT main(PixelIn input)
 {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     PS_OUT output = (PS_OUT) 0;
     
     float4 color = float4(1.f, 1.f, 1.f, 1.f);
-    
-    if (UseTexture(useAlbedo) == 1)
-    {
-        color = AlbedoMap.Sample(sam, input.uv);
-    }
-    
-    color = pow(color, 2.2f);
-    
-    
-    float4 materialTemp = materialColor;
-    
-    half dissolve_value = Temp0Map.Sample(sam, input.uv).r;
-    clip(dissolve_value - temp_float0);
-    //dissolve_value = 1 - dissolve_value;
-    // 음수면 페이즈2 용 이미지 출력
-    color = color + materialTemp * step(dissolve_value - temp_float0, temp_float1);
-    output.color = color;
     
     if (UseTexture(useOpacity) == 1)
     {
@@ -63,7 +42,28 @@ PS_OUT main(PixelIn input)
         }
     }
     
+    if (UseTexture(useAlbedo) == 1)
+    {
+        color = AlbedoMap.Sample(sam, input.uv);
+        color = pow(color, 2.2f);
+    }
 
+    if ((lightMapUV[input.id].lightMapIndex != -1) && useLightMap)
+    {
+        float4 lightColor = float4(0, 0, 0, 1.f);
+        lightColor = UnityLightMap.Sample(sam, float3(input.lightUV, lightMapUV[input.id].lightMapIndex));
+        lightColor *= color;
+        float3 x = max(0, lightColor.xyz - 0.004);
+        lightColor.xyz = (x * (6.2 * x + 0.5)) / (x * (6.2 * x + 1.7) + 0.06);
+    
+        output.color = lightColor * materialColor;
+    }
+    else
+    {
+        //color = pow(color, 2.2f);
+        output.color = color * materialColor;
+    }
+    
     
     float3 viewNormal = input.normalV;
     if (UseTexture(useNormal) == 1)
@@ -94,7 +94,7 @@ PS_OUT main(PixelIn input)
     }
     
     output.position = input.posV;
-    if(castDecal == 1)
+    if (castDecal == 1)
     {
         output.viewPosDecal = input.posV;
     }

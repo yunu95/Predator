@@ -66,7 +66,8 @@ void AddGameObjectFromFBXNode(GameObject* parentObject, yunuGI::FBXData* fbxNode
     else
     {
         if (fbxNode->materialVec.size() != 0)
-        {            auto renderer = gameObjectChild->AddComponent<yunutyEngine::graphics::SkinnedMesh>();
+        {            
+            auto renderer = gameObjectChild->AddComponent<yunutyEngine::graphics::SkinnedMesh>();
             auto mesh = graphics::Renderer::SingleInstance().GetResourceManager()->GetMesh(fbxNode->meshName);
             renderer->GetGI().SetMesh(mesh);
             renderer->GetGI().SetBone(std::wstring{ fbxName.begin(), fbxName.end() });
@@ -89,22 +90,29 @@ void AddGameObjectFromFBXNode(GameObject* parentObject, yunuGI::FBXData* fbxNode
             auto animatorIndex = animator->GetGI().GetID();
             renderer->GetGI().SetAnimatorIndex(animatorIndex);
 
-            yunuGI::IShader* shader = nullptr;
+            yunuGI::IShader* skinnedVS = nullptr;
+            yunuGI::IShader* skinnedPS = nullptr;
             auto& shaderList = graphics::Renderer::SingleInstance().GetResourceManager()->GetShaderList();
 
             for (auto& i : shaderList)
             {
                 if (i->GetName() == L"SkinnedVS.cso")
                 {
-                    shader = i;
+                    skinnedVS = i;
                 }
+
+				if (i->GetName() == L"SkinnedPS.cso")
+				{
+                    skinnedPS = i;
+				}
             }
 
             // Material Data Set
             for (int j = 0; j < fbxNode->materialVec.size(); ++j)
             {
                 auto material = graphics::Renderer::SingleInstance().GetResourceManager()->GetMaterial(fbxNode->materialVec[j].materialName);
-                material->SetVertexShader(shader);
+                material->SetVertexShader(skinnedVS);
+                material->SetPixelShader(skinnedPS);
                 renderer->GetGI().SetMaterial
                 (
                     j, material

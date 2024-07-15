@@ -107,8 +107,6 @@ namespace yunuGIAdapter
 						renderable->SetMaterial(index, material);
 						this->materialVec.back()->variation = reinterpret_cast<Material*>(material);
 					}
-
-					
 				}
 			}
 			else

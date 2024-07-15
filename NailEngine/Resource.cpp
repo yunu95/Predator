@@ -7,10 +7,10 @@ Resource::Resource()
 
 unsigned int Resource::staticID = 0;
 
-const std::wstring& Resource::GetName() const
+const std::wstring& Resource::GetName(bool isForceOrgin /*= false*/) const
 {
 	return this->name;
-};
+}
 
 void Resource::SetName(const std::wstring& name)
 {
