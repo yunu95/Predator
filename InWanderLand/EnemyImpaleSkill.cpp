@@ -100,11 +100,11 @@ coroutine::Coroutine EnemyImpaleSkill::operator()()
 
     for (auto& each : spearVec)
     {
-        //while (each.timeOffset > waitImpaleDuration.Elapsed())
-        //{
-        //    waitImpaleDuration.Tick();
-        //    co_await std::suspend_always{};
-        //}
+        while (each.timeOffset > waitImpaleDuration.Elapsed())
+        {
+            waitImpaleDuration.Tick();
+            co_await std::suspend_always{};
+        }
 
         auto spearAriseCoroutine = ContentsCoroutine::StartRoutine(SpearArise(std::dynamic_pointer_cast<EnemyImpaleSkill>(selfWeakPtr.lock()), each.position));
         spearAriseCoroutine.lock()->PushDestroyCallBack([this]()

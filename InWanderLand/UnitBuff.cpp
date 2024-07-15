@@ -23,6 +23,8 @@ void UnitBuff::Init(std::weak_ptr<Unit> owner)
         buffIcon2.lock()->EnableElement();
     if (!buffIcon3.expired())
         buffIcon3.lock()->EnableElement();
+
+    ownerUnitActualScale = Vector3d::one * owner.lock()->GetUnitTemplateData().pod.unit_scale;
 }
 
 UnitBuff::~UnitBuff()

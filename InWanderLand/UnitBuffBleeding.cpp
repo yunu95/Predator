@@ -26,6 +26,7 @@ void UnitBuffBleeding::OnUpdate()
     {
         buffEffect.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
         buffEffect.lock()->GetTransform()->SetWorldRotation(owner.lock()->GetTransform()->GetWorldRotation());
+        buffEffect.lock()->GetTransform()->SetWorldScale(ownerUnitActualScale);
     }
 }
 
