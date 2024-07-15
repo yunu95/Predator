@@ -94,6 +94,7 @@ void InitAnimMap()
     animMap["SKM_HeartQueen"][UnitAnimType::BattleMove] = localAnimMap[L"Ani_HeartQueen_Walk"];
     animMap["SKM_HeartQueen"][UnitAnimType::Move] = localAnimMap[L"Ani_HeartQueen_Walk"];
     animMap["SKM_HeartQueen"][UnitAnimType::Birth] = localAnimMap[L"Ani_HeartQueen_Appear"];
+    animMap["SKM_HeartQueen"][UnitAnimType::AttackToIdle] = localAnimMap[L"Ani_HeartQueen_AttackToIdle"];
 
     animMap["SKM_Frame1"][UnitAnimType::Birth] = localAnimMap[L"Ani_Frame1_Appear"];
     animMap["SKM_Frame1"][UnitAnimType::Idle] = localAnimMap[L"Ani_Frame1_Idle"];

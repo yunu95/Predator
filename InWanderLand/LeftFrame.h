@@ -18,6 +18,7 @@ namespace application
 
 class Unit;
 class BossSummonMobSkill;
+class UnitControllerType;
 namespace BossSummon
 {
 	class LeftFrame
@@ -53,6 +54,8 @@ namespace BossSummon
 		coroutine::Coroutine OnAppear();
 		coroutine::Coroutine SummonMoldUnit();
 
+
+
 		struct CustomCompUnit
 		{
 			bool operator()(const std::weak_ptr<Unit>& lp, const std::weak_ptr<Unit>& rp) const
@@ -70,8 +73,10 @@ namespace BossSummon
 		application::editor::UnitData* frameData = nullptr;
 		std::weak_ptr<Unit> unitFrame = std::weak_ptr<Unit>();
 		std::set<std::weak_ptr<Unit>, CustomCompUnit> summonUnit = std::set<std::weak_ptr<Unit>, CustomCompUnit>();
-		static application::editor::Unit_TemplateData* meleeUnitMold;
-		static application::editor::Unit_TemplateData* projectileUnitMold;
+
+
+
+
 		bool isPause = false;
 	};
 

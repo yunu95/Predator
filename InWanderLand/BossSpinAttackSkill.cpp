@@ -136,9 +136,7 @@ coroutine::Coroutine BossSpinAttackSkill::SpawningSkillffect(std::weak_ptr<BossS
 	chargeEffect = FBXPool::Instance().Borrow("VFX_HeartQueen_Skill1");
     chargeEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos);
     chargeEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(owner.lock()->GetTransform()->GetWorldRotation());
-    chargeEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(actualCollideRange * owner.lock()->GetTransform()->GetWorldScale().x,
-        actualCollideRange * owner.lock()->GetTransform()->GetWorldScale().y,
-        actualCollideRange * owner.lock()->GetTransform()->GetWorldScale().z));
+    chargeEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d::one * owner.lock()->GetUnitTemplateData().pod.unit_scale);
     chargeEffectAnimator = chargeEffect.lock()->AcquireVFXAnimator();
     chargeEffectAnimator.lock()->SetAutoActiveFalse();
     chargeEffectAnimator.lock()->Init();

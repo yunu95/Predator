@@ -17,14 +17,30 @@ namespace BossSummon
 	std::weak_ptr<ManagedFBX> RightFrame::summonEffect = std::weak_ptr<ManagedFBX>();
 	std::weak_ptr<ManagedFBX> RightFrame::summoningEffect = std::weak_ptr<ManagedFBX>();
 	application::editor::Unit_TemplateData* RightFrame::meleeUnitMold = nullptr;
+	application::editor::Unit_TemplateData* RightFrame::weakMeleeUnitMold = nullptr;
+	application::editor::Unit_TemplateData* RightFrame::eliteMeleeUnitMold = nullptr;
+
 	application::editor::Unit_TemplateData* RightFrame::projectileUnitMold = nullptr;
+	application::editor::Unit_TemplateData* RightFrame::weakProjectileUnitMold = nullptr;
+	application::editor::Unit_TemplateData* RightFrame::weakApproachProjectileUnitMold = nullptr;
+	application::editor::Unit_TemplateData* RightFrame::kitingProjectileUnitMold = nullptr;
+	application::editor::Unit_TemplateData* RightFrame::siegeProjectileUnitMold = nullptr;
+	application::editor::Unit_TemplateData* RightFrame::eliteProjectileUnitMold = nullptr;
 
 	RightFrame::~RightFrame()
 	{
 		summonEffect = std::weak_ptr<ManagedFBX>();
 		summoningEffect = std::weak_ptr<ManagedFBX>();
 		meleeUnitMold = nullptr;
+		weakMeleeUnitMold = nullptr;
+		eliteMeleeUnitMold = nullptr;
+
 		projectileUnitMold = nullptr;
+		weakProjectileUnitMold = nullptr;
+		weakApproachProjectileUnitMold = nullptr;
+		kitingProjectileUnitMold = nullptr;
+		siegeProjectileUnitMold = nullptr;
+		eliteProjectileUnitMold = nullptr;
 		BossSummonMobSkill::SetRightFrame(nullptr);
 	}
 
@@ -48,13 +64,56 @@ namespace BossSummon
 		for (auto each : application::editor::TemplateDataManager::GetSingletonInstance().GetDataList(application::editor::DataType::UnitData))
 		{
 			auto td = static_cast<application::editor::Unit_TemplateData*>(each);
-			if (td->pod.skinnedFBXName == "SKM_Monster1" && td->pod.unitControllerType.enumValue != UnitControllerType::MELEE_ELITE)
+
+			if (td->pod.skinnedFBXName == "SKM_Monster1")
 			{
-				meleeUnitMold = td;
+				if (td->pod.unit_scale < 1.0f)
+				{
+					weakMeleeUnitMold = td;
+				}
+				else if (td->pod.unitControllerType.enumValue == UnitControllerType::ANGRY_MOB)
+				{
+					meleeUnitMold = td;
+				}
+				else if (td->pod.unitControllerType.enumValue == UnitControllerType::MELEE_ELITE)
+				{
+					eliteMeleeUnitMold = td;
+				}
+				else
+				{
+					meleeUnitMold = td;
+				}
 			}
-			else if (td->pod.skinnedFBXName == "SKM_Monster2" && td->pod.unitControllerType.enumValue != UnitControllerType::RANGED_ELITE)
+			else if (td->pod.skinnedFBXName == "SKM_Monster2")
 			{
-				projectileUnitMold = td;
+				if (td->pod.unit_scale < 1.0f && td->pod.unitControllerType.enumValue == UnitControllerType::RANGED_APPROACHING)
+				{
+					weakApproachProjectileUnitMold = td;
+				}
+				else if (td->pod.unit_scale < 1.0f && td->pod.unitControllerType.enumValue != UnitControllerType::RANGED_APPROACHING)
+				{
+					weakProjectileUnitMold = td;
+				}
+				else if (td->pod.unitControllerType.enumValue == UnitControllerType::ANGRY_MOB)
+				{
+					projectileUnitMold = td;
+				}
+				else if (td->pod.unitControllerType.enumValue == UnitControllerType::RANGED_KITING)
+				{
+					kitingProjectileUnitMold = td;
+				}
+				else if (td->pod.unitControllerType.enumValue == UnitControllerType::HOLDER)
+				{
+					siegeProjectileUnitMold = td;
+				}
+				else if (td->pod.unitControllerType.enumValue == UnitControllerType::RANGED_ELITE)
+				{
+					eliteProjectileUnitMold = td;
+				}
+				else
+				{
+					projectileUnitMold = td;
+				}
 			}
 		}
 		StartCoroutine(OnAppear());
@@ -288,15 +347,38 @@ namespace BossSummon
 
 		int meleeSummonCount = 0;
 		int projectileSummonCount = 0;
+
+		int totalMeleeCount = BossSummonMobSkill::pod.leftNormalMeleeEnemyCount + BossSummonMobSkill::pod.leftWeakMeleeEnemyCount + BossSummonMobSkill::pod.leftEliteMeleeEnemyCount;
+		int totalRangedCount = BossSummonMobSkill::pod.leftNormalRangedCount + BossSummonMobSkill::pod.leftWeakRangedCount + BossSummonMobSkill::pod.leftWeakApproachRangedCount + BossSummonMobSkill::pod.leftKitingRangedCount +
+			BossSummonMobSkill::pod.leftSiegeRangedCount + BossSummonMobSkill::pod.leftEliteRangedEnemyCount;
+		int totalCount = totalMeleeCount + totalRangedCount;
+
+		std::set <std::pair< application::editor::Unit_TemplateData*, int >> meleeCountList = std::set <std::pair< application::editor::Unit_TemplateData*, int >>();
+		meleeCountList.insert({ meleeUnitMold, BossSummonMobSkill::pod.leftNormalMeleeEnemyCount });
+		meleeCountList.insert({ weakMeleeUnitMold, BossSummonMobSkill::pod.leftWeakMeleeEnemyCount });
+		meleeCountList.insert({ eliteMeleeUnitMold, BossSummonMobSkill::pod.leftEliteMeleeEnemyCount });
+
+		std::set <std::pair< application::editor::Unit_TemplateData*, int >> rangedCountList = std::set <std::pair< application::editor::Unit_TemplateData*, int >>();
+		rangedCountList.insert({ projectileUnitMold, BossSummonMobSkill::pod.leftNormalRangedCount });
+		rangedCountList.insert({ weakProjectileUnitMold, BossSummonMobSkill::pod.leftWeakRangedCount });
+		rangedCountList.insert({ weakApproachProjectileUnitMold, BossSummonMobSkill::pod.leftWeakApproachRangedCount });
+		rangedCountList.insert({ kitingProjectileUnitMold, BossSummonMobSkill::pod.leftKitingRangedCount });
+		rangedCountList.insert({ siegeProjectileUnitMold, BossSummonMobSkill::pod.leftSiegeRangedCount });
+		rangedCountList.insert({ eliteProjectileUnitMold, BossSummonMobSkill::pod.leftEliteRangedEnemyCount });
+
+		int currentSummonMeleeUnitCount = 0;
+		int currentSummonRangedUnitCount = 0;
+
 		while (forSeconds.Tick())
 		{
-			if(forSeconds.ElapsedNormalized() < (float)(meleeSummonCount + projectileSummonCount) / (float)(BossSummonMobSkill::pod.rightMeleeCount + BossSummonMobSkill::pod.rightProjectileCount))
+
+			if (forSeconds.ElapsedNormalized() < (float)(meleeSummonCount + projectileSummonCount) / (float)(totalCount))
 			{
 				co_await std::suspend_always();
 				continue;
 			}
 
-			if (meleeSummonCount + projectileSummonCount == BossSummonMobSkill::pod.rightMeleeCount + BossSummonMobSkill::pod.rightProjectileCount)
+			if (meleeSummonCount + projectileSummonCount == totalCount)
 			{
 				continue;
 			}
@@ -309,19 +391,26 @@ namespace BossSummon
 				{
 					case 0:
 					{
-						if (meleeSummonCount < BossSummonMobSkill::pod.rightMeleeCount)
+						if (meleeSummonCount < totalMeleeCount && !meleeCountList.empty())
 						{
 							Vector3d finalPos = Vector3d();
-							finalPos.x = math::Random::GetRandomFloat(pivotPos.x - BossSummonMobSkill::pod.rightNoiseRadius, (pivotPos - BossSummonMobSkill::pod.rightNoiseRadius * summonRot.Right().Normalized()).x);
-							finalPos.z = math::Random::GetRandomFloat(pivotPos.z - BossSummonMobSkill::pod.rightNoiseRadius, (pivotPos + BossSummonMobSkill::pod.rightNoiseRadius * summonRot.Right().Normalized()).z);
-							auto sUnit = UnitPool::SingleInstance().Borrow(meleeUnitMold, finalPos, summonRot);
+							finalPos.x = math::Random::GetRandomFloat((pivotPos + BossSummonMobSkill::pod.rightNoiseRadius * summonRot.Right().Normalized()).x, pivotPos.x + BossSummonMobSkill::pod.rightNoiseRadius);
+							finalPos.z = math::Random::GetRandomFloat(pivotPos.z - BossSummonMobSkill::pod.rightNoiseRadius, (pivotPos - BossSummonMobSkill::pod.rightNoiseRadius * summonRot.Right().Normalized()).z);
+
+							auto sUnit = UnitPool::SingleInstance().Borrow(meleeCountList.begin()->first, finalPos, summonRot);
 							summonUnit.insert(sUnit);
+							currentSummonMeleeUnitCount++;
+							if (currentSummonMeleeUnitCount >= meleeCountList.begin()->second)
+							{
+								currentSummonMeleeUnitCount = 0;
+								meleeCountList.erase(meleeCountList.begin());
+							}
 
 							/// 소환 사운드
 							// SFXManager::PlaySoundfile3D("sounds/", finalPos);
 
 							co_await std::suspend_always{};
-							
+
 							int findCount = 0;
 							while (findCount < PlayerCharacterType::Num)
 							{
@@ -335,7 +424,7 @@ namespace BossSummon
 								findCount++;
 							}
 
-							//sUnit.lock()->OrderMove(finalPos - summonRot.Forward().Normalized() * std::sqrt(BossSummonMobSkill::pod.rightSummonOffset_x * BossSummonMobSkill::pod.rightSummonOffset_x + BossSummonMobSkill::pod.rightSummonOffset_z * BossSummonMobSkill::pod.rightSummonOffset_z));
+							//sUnit.lock()->OrderMove(finalPos - summonRot.Forward().Normalized() * std::sqrt(BossSummonMobSkill::pod.leftSummonOffset_x * BossSummonMobSkill::pod.leftSummonOffset_x + BossSummonMobSkill::pod.leftSummonOffset_z * BossSummonMobSkill::pod.leftSummonOffset_z));
 							meleeSummonCount++;
 							unitSummon = true;
 						}
@@ -343,13 +432,19 @@ namespace BossSummon
 					}
 					case 1:
 					{
-						if (projectileSummonCount < BossSummonMobSkill::pod.rightProjectileCount)
+						if (projectileSummonCount < totalRangedCount && !rangedCountList.empty())
 						{
 							Vector3d finalPos = Vector3d();
-							finalPos.x = math::Random::GetRandomFloat(pivotPos.x - BossSummonMobSkill::pod.rightNoiseRadius, (pivotPos - BossSummonMobSkill::pod.rightNoiseRadius * summonRot.Right().Normalized()).x);
-							finalPos.z = math::Random::GetRandomFloat(pivotPos.z - BossSummonMobSkill::pod.rightNoiseRadius, (pivotPos + BossSummonMobSkill::pod.rightNoiseRadius * summonRot.Right().Normalized()).z);
-							auto sUnit = UnitPool::SingleInstance().Borrow(projectileUnitMold, finalPos, summonRot);
+							finalPos.x = math::Random::GetRandomFloat((pivotPos + BossSummonMobSkill::pod.rightNoiseRadius * summonRot.Right().Normalized()).x, pivotPos.x + BossSummonMobSkill::pod.rightNoiseRadius);
+							finalPos.z = math::Random::GetRandomFloat(pivotPos.z - BossSummonMobSkill::pod.rightNoiseRadius, (pivotPos - BossSummonMobSkill::pod.rightNoiseRadius * summonRot.Right().Normalized()).z);
+							auto sUnit = UnitPool::SingleInstance().Borrow(rangedCountList.begin()->first, finalPos, summonRot);
 							summonUnit.insert(sUnit);
+							currentSummonRangedUnitCount++;
+							if (currentSummonRangedUnitCount >= rangedCountList.begin()->second)
+							{
+								currentSummonRangedUnitCount = 0;
+								rangedCountList.erase(rangedCountList.begin());
+							}
 							/// 소환 사운드
 							// SFXManager::PlaySoundfile3D("sounds/", finalPos);
 
@@ -368,7 +463,7 @@ namespace BossSummon
 								findCount++;
 							}
 
-							//sUnit.lock()->OrderMove(finalPos - summonRot.Forward().Normalized() * std::sqrt(BossSummonMobSkill::pod.rightSummonOffset_x * BossSummonMobSkill::pod.rightSummonOffset_x + BossSummonMobSkill::pod.rightSummonOffset_z * BossSummonMobSkill::pod.rightSummonOffset_z));
+							//sUnit.lock()->OrderMove(finalPos - summonRot.Forward().Normalized() * std::sqrt(BossSummonMobSkill::pod.leftSummonOffset_x * BossSummonMobSkill::pod.leftSummonOffset_x + BossSummonMobSkill::pod.leftSummonOffset_z * BossSummonMobSkill::pod.leftSummonOffset_z));
 							projectileSummonCount++;
 							unitSummon = true;
 						}
@@ -378,7 +473,7 @@ namespace BossSummon
 						break;
 				}
 			}
-			co_await std::suspend_always();
+			co_await std::suspend_always{};
 		}
 
 		FBXPool::Instance().Return(summonEffect);
