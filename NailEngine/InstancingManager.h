@@ -55,6 +55,7 @@ public:
 	void RegisterParticleRenderInfo(ParticleSystem* particleSystem, std::list<yunuGI::ParticleRenderInfo>* particleInfoList);
 
 	void RenderSkinnedDeferred();
+	void RenderSkinnedSilhouette();
 	void RenderSkinnedForward();
 	void ClearData();
 

@@ -586,4 +586,21 @@ void NailEngine::CreateRenderTargetGroup()
 		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::BACKBUFFER)]->SetRenderTargetVec(rtVec);
 	}
 
+	// silhouette buffer
+	{
+		std::vector<RenderTarget> rtVec(SILHOUETTE_COUNT);
+		rtVec[0].texture = std::static_pointer_cast<Texture>(ResourceManager::Instance.Get().CreateTexture(
+			L"SilhouetteTarget",
+			((this->windowInfo.width)),
+			((this->windowInfo.height)),
+			DXGI_FORMAT_R32G32B32A32_FLOAT,
+			static_cast<D3D11_BIND_FLAG>(D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE)
+		));
+		rtVec[0].clearColor[0] = 1.f;
+		rtVec[0].clearColor[1] = 1.f;
+		rtVec[0].clearColor[2] = 1.f;
+		rtVec[0].clearColor[3] = 1.f;
+		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::SILHOUETTE)] = std::make_shared<RenderTargetGroup>();
+		this->renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::SILHOUETTE)]->SetRenderTargetVec(rtVec);
+	}
 }
