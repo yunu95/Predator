@@ -352,18 +352,18 @@ namespace BossSummon
 		int meleeSummonCount = 0;
 		int projectileSummonCount = 0;
 
-		int totalMeleeCount = BossSummonMobSkill::pod.leftNormalMeleeEnemyCount + BossSummonMobSkill::pod.leftWeakMeleeEnemyCount + BossSummonMobSkill::pod.leftEliteMeleeEnemyCount;
-		int totalRangedCount = BossSummonMobSkill::pod.leftNormalRangedCount + BossSummonMobSkill::pod.leftWeakRangedCount + BossSummonMobSkill::pod.leftWeakApproachRangedCount + BossSummonMobSkill::pod.leftKitingRangedCount +
+		int totalMeleeCount = BossSummonMobSkill::pod.leftMeleeCount + BossSummonMobSkill::pod.leftWeakMeleeEnemyCount + BossSummonMobSkill::pod.leftEliteMeleeEnemyCount;
+		int totalRangedCount = BossSummonMobSkill::pod.leftProjectileCount + BossSummonMobSkill::pod.leftWeakRangedCount + BossSummonMobSkill::pod.leftWeakApproachRangedCount + BossSummonMobSkill::pod.leftKitingRangedCount +
 			BossSummonMobSkill::pod.leftSiegeRangedCount + BossSummonMobSkill::pod.leftEliteRangedEnemyCount;
 		int totalCount = totalMeleeCount + totalRangedCount;	
 
 		std::set <std::pair< application::editor::Unit_TemplateData*, int >> meleeCountList = std::set <std::pair< application::editor::Unit_TemplateData*, int >>();
-		meleeCountList.insert({ meleeUnitMold, BossSummonMobSkill::pod.leftNormalMeleeEnemyCount });
+		meleeCountList.insert({ meleeUnitMold, BossSummonMobSkill::pod.leftMeleeCount });
 		meleeCountList.insert({ weakMeleeUnitMold, BossSummonMobSkill::pod.leftWeakMeleeEnemyCount });
 		meleeCountList.insert({ eliteMeleeUnitMold, BossSummonMobSkill::pod.leftEliteMeleeEnemyCount });
 
 		std::set <std::pair< application::editor::Unit_TemplateData*, int >> rangedCountList = std::set <std::pair< application::editor::Unit_TemplateData*, int >>();
-		rangedCountList.insert({ projectileUnitMold, BossSummonMobSkill::pod.leftNormalRangedCount });
+		rangedCountList.insert({ projectileUnitMold, BossSummonMobSkill::pod.leftProjectileCount });
 		rangedCountList.insert({ weakProjectileUnitMold, BossSummonMobSkill::pod.leftWeakRangedCount });
 		rangedCountList.insert({ weakApproachProjectileUnitMold, BossSummonMobSkill::pod.leftWeakApproachRangedCount });
 		rangedCountList.insert({ kitingProjectileUnitMold, BossSummonMobSkill::pod.leftKitingRangedCount });

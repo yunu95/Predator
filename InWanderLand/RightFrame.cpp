@@ -348,23 +348,23 @@ namespace BossSummon
 		int meleeSummonCount = 0;
 		int projectileSummonCount = 0;
 
-		int totalMeleeCount = BossSummonMobSkill::pod.leftNormalMeleeEnemyCount + BossSummonMobSkill::pod.leftWeakMeleeEnemyCount + BossSummonMobSkill::pod.leftEliteMeleeEnemyCount;
-		int totalRangedCount = BossSummonMobSkill::pod.leftNormalRangedCount + BossSummonMobSkill::pod.leftWeakRangedCount + BossSummonMobSkill::pod.leftWeakApproachRangedCount + BossSummonMobSkill::pod.leftKitingRangedCount +
-			BossSummonMobSkill::pod.leftSiegeRangedCount + BossSummonMobSkill::pod.leftEliteRangedEnemyCount;
+		int totalMeleeCount = BossSummonMobSkill::pod.rightMeleeCount + BossSummonMobSkill::pod.rightWeakMeleeEnemyCount + BossSummonMobSkill::pod.rightEliteMeleeEnemyCount;
+		int totalRangedCount = BossSummonMobSkill::pod.rightProjectileCount + BossSummonMobSkill::pod.rightWeakRangedCount + BossSummonMobSkill::pod.rightWeakApproachRangedCount + BossSummonMobSkill::pod.rightKitingRangedCount +
+			BossSummonMobSkill::pod.rightSiegeRangedCount + BossSummonMobSkill::pod.rightEliteRangedEnemyCount;
 		int totalCount = totalMeleeCount + totalRangedCount;
 
 		std::set <std::pair< application::editor::Unit_TemplateData*, int >> meleeCountList = std::set <std::pair< application::editor::Unit_TemplateData*, int >>();
-		meleeCountList.insert({ meleeUnitMold, BossSummonMobSkill::pod.leftNormalMeleeEnemyCount });
-		meleeCountList.insert({ weakMeleeUnitMold, BossSummonMobSkill::pod.leftWeakMeleeEnemyCount });
-		meleeCountList.insert({ eliteMeleeUnitMold, BossSummonMobSkill::pod.leftEliteMeleeEnemyCount });
+		meleeCountList.insert({ meleeUnitMold, BossSummonMobSkill::pod.rightMeleeCount });
+		meleeCountList.insert({ weakMeleeUnitMold, BossSummonMobSkill::pod.rightWeakMeleeEnemyCount });
+		meleeCountList.insert({ eliteMeleeUnitMold, BossSummonMobSkill::pod.rightEliteMeleeEnemyCount });
 
 		std::set <std::pair< application::editor::Unit_TemplateData*, int >> rangedCountList = std::set <std::pair< application::editor::Unit_TemplateData*, int >>();
-		rangedCountList.insert({ projectileUnitMold, BossSummonMobSkill::pod.leftNormalRangedCount });
-		rangedCountList.insert({ weakProjectileUnitMold, BossSummonMobSkill::pod.leftWeakRangedCount });
-		rangedCountList.insert({ weakApproachProjectileUnitMold, BossSummonMobSkill::pod.leftWeakApproachRangedCount });
-		rangedCountList.insert({ kitingProjectileUnitMold, BossSummonMobSkill::pod.leftKitingRangedCount });
-		rangedCountList.insert({ siegeProjectileUnitMold, BossSummonMobSkill::pod.leftSiegeRangedCount });
-		rangedCountList.insert({ eliteProjectileUnitMold, BossSummonMobSkill::pod.leftEliteRangedEnemyCount });
+		rangedCountList.insert({ projectileUnitMold, BossSummonMobSkill::pod.rightProjectileCount });
+		rangedCountList.insert({ weakProjectileUnitMold, BossSummonMobSkill::pod.rightWeakRangedCount });
+		rangedCountList.insert({ weakApproachProjectileUnitMold, BossSummonMobSkill::pod.rightWeakApproachRangedCount });
+		rangedCountList.insert({ kitingProjectileUnitMold, BossSummonMobSkill::pod.rightKitingRangedCount });
+		rangedCountList.insert({ siegeProjectileUnitMold, BossSummonMobSkill::pod.rightSiegeRangedCount });
+		rangedCountList.insert({ eliteProjectileUnitMold, BossSummonMobSkill::pod.rightEliteRangedEnemyCount });
 
 		int currentSummonMeleeUnitCount = 0;
 		int currentSummonRangedUnitCount = 0;
@@ -424,7 +424,7 @@ namespace BossSummon
 								findCount++;
 							}
 
-							//sUnit.lock()->OrderMove(finalPos - summonRot.Forward().Normalized() * std::sqrt(BossSummonMobSkill::pod.leftSummonOffset_x * BossSummonMobSkill::pod.leftSummonOffset_x + BossSummonMobSkill::pod.leftSummonOffset_z * BossSummonMobSkill::pod.leftSummonOffset_z));
+							//sUnit.lock()->OrderMove(finalPos - summonRot.Forward().Normalized() * std::sqrt(BossSummonMobSkill::pod.rightSummonOffset_x * BossSummonMobSkill::pod.rightSummonOffset_x + BossSummonMobSkill::pod.rightSummonOffset_z * BossSummonMobSkill::pod.rightSummonOffset_z));
 							meleeSummonCount++;
 							unitSummon = true;
 						}
@@ -463,7 +463,7 @@ namespace BossSummon
 								findCount++;
 							}
 
-							//sUnit.lock()->OrderMove(finalPos - summonRot.Forward().Normalized() * std::sqrt(BossSummonMobSkill::pod.leftSummonOffset_x * BossSummonMobSkill::pod.leftSummonOffset_x + BossSummonMobSkill::pod.leftSummonOffset_z * BossSummonMobSkill::pod.leftSummonOffset_z));
+							//sUnit.lock()->OrderMove(finalPos - summonRot.Forward().Normalized() * std::sqrt(BossSummonMobSkill::pod.rightSummonOffset_x * BossSummonMobSkill::pod.rightSummonOffset_x + BossSummonMobSkill::pod.rightSummonOffset_z * BossSummonMobSkill::pod.rightSummonOffset_z));
 							projectileSummonCount++;
 							unitSummon = true;
 						}
