@@ -12,6 +12,8 @@ coroutine::Coroutine RobinTauntSkill::operator()()
     auto blockFollowingNavigation = owner.lock()->referenceBlockFollowingNavAgent.Acquire();
     auto blockAnimLoop = owner.lock()->referenceBlockAnimLoop.Acquire();
     auto enableNavObstacle = owner.lock()->referenceEnableNavObstacle.Acquire();
+    auto blockRot = owner.lock()->referenceBlockRotation.Acquire();
+
     animator = owner.lock()->GetAnimator();
     tauntAnim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Taunt);
     tauntAnim->SetLoop(false);
@@ -122,7 +124,7 @@ coroutine::Coroutine RobinTauntSkill::SpawningSkillffect(std::weak_ptr<RobinTaun
     tauntEffect = FBXPool::Instance().Borrow("VFX_Robin_Skill2");
     tauntEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos);
     tauntEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(actualCollideRange, actualCollideRange, actualCollideRange));
-    tauntEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
+    tauntEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(RTSCam::Instance().GetTransform()->GetWorldRotation());
     chargeEffectAnimator = tauntEffect.lock()->AcquireVFXAnimator();
     chargeEffectAnimator.lock()->SetAutoActiveFalse();
     chargeEffectAnimator.lock()->Init();

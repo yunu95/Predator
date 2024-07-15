@@ -133,10 +133,7 @@ coroutine::Coroutine Projectile::ProjectileEffectCoroutine(std::weak_ptr<Unit> o
     }
     else
     {
-        if (owner.lock()->GetUnitTemplateData().pod.skinnedFBXName == "SKM_Ursula")
-            damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition() + GetTransform()->GetLocalRotation().Up() * 3.75f);
-        else
-            damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
+        damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
         auto temp = GetTransform()->GetLocalRotation();
         auto euler = temp.Euler();
         euler.x += 180;
