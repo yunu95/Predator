@@ -543,6 +543,7 @@ bool yunutyEngine::SoundSystem::SetSoundGroupVolume(unsigned long long groupInde
     if (auto soundGroup = GetSoundGroup(groupIndex))
     {
         soundSystem->soundGroupVolumes[groupIndex] = volume;
+        soundGroup->setVolume(volume);
         return true;
     }
     return false;
