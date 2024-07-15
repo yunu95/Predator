@@ -916,6 +916,9 @@
     <Filter Include="Editor\ScriptSystem\2_Action\List\Action_SetRegionAsNavObstacle">
       <UniqueIdentifier>{1b8c1f06-b720-421e-904d-cc895f8f92fe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents_Refactored\Unit\UnitStatusBarFlag">
+      <UniqueIdentifier>{70c53853-9a1f-40f1-a0e6-dd9eb48bd6a4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -2241,6 +2244,9 @@
     </ClInclude>
     <ClInclude Include="Action_SetRegionAsNavObstacle.h">
       <Filter>Editor\ScriptSystem\2_Action\List\Action_SetRegionAsNavObstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitStatusBarFlag.h">
+      <Filter>Contents_Refactored\Unit\UnitStatusBarFlag</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

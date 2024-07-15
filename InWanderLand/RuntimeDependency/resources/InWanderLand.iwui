@@ -16758,7 +16758,7 @@
                 0.0,
                 0.0,
                 0.0,
-                0.30000001192092898,
+                0.0,
                 0.0,
                 0.0,
                 0.0,
@@ -16831,11 +16831,14 @@
             "colorTintOnDisableEnd": [],
             "colorTintOnDisableCurveType": 0,
             "barCells_CellNumber": 0,
-            "disableOnStartEdtior": true,
-            "disableOnStartExe": true,
+            "disableOnStartEdtior": false,
+            "disableOnStartExe": false,
             "musicPlayOnEnable_musicClip": "",
             "musicPlayOnDisable_musicClip": "",
-            "exclusiveEnableGroup": [],
+            "exclusiveEnableGroup": [
+                129,
+                403
+            ],
             "animatedSpriteFolderPath": "",
             "animatedSpriteIsRepeat": false,
             "duplicate_poolable": false,
@@ -16844,7 +16847,7 @@
             "videoUnscaledDeltaTime": false,
             "centerAlign": false,
             "customFlags": 2304,
-            "customFlags2": 12583424,
+            "customFlags2": 12583936,
             "enumID": 159,
             "soundEnumID": 0
         },
@@ -16961,8 +16964,8 @@
             "colorTintOnDisableEnd": [],
             "colorTintOnDisableCurveType": 0,
             "barCells_CellNumber": 0,
-            "disableOnStartEdtior": false,
-            "disableOnStartExe": false,
+            "disableOnStartEdtior": true,
+            "disableOnStartExe": true,
             "musicPlayOnEnable_musicClip": "",
             "musicPlayOnDisable_musicClip": "",
             "exclusiveEnableGroup": [],
@@ -16973,8 +16976,8 @@
             "videoPath2": "",
             "videoUnscaledDeltaTime": false,
             "centerAlign": false,
-            "customFlags": 3072,
-            "customFlags2": 16384,
+            "customFlags": 3328,
+            "customFlags2": 16388,
             "enumID": 106,
             "soundEnumID": 0
         },
@@ -19293,8 +19296,8 @@
             "colorTintOnDisableEnd": [],
             "colorTintOnDisableCurveType": 0,
             "barCells_CellNumber": 0,
-            "disableOnStartEdtior": false,
-            "disableOnStartExe": false,
+            "disableOnStartEdtior": true,
+            "disableOnStartExe": true,
             "musicPlayOnEnable_musicClip": "",
             "musicPlayOnDisable_musicClip": "",
             "exclusiveEnableGroup": [],
@@ -19305,8 +19308,8 @@
             "videoPath2": "",
             "videoUnscaledDeltaTime": false,
             "centerAlign": false,
-            "customFlags": 3072,
-            "customFlags2": 16384,
+            "customFlags": 3328,
+            "customFlags2": 16388,
             "enumID": 107,
             "soundEnumID": 0
         },
@@ -19378,7 +19381,7 @@
                 1.0
             ],
             "pivot": [
-                0.0,
+                0.5,
                 0.5
             ],
             "anchor": [
@@ -19386,8 +19389,8 @@
                 0.5
             ],
             "anchoredPosition": [
-                0.0,
-                -34.0
+                0.00006103515625,
+                -158.99996948242188
             ],
             "enableOffset": [],
             "disableOffset": [],
@@ -19435,7 +19438,7 @@
             "videoUnscaledDeltaTime": false,
             "centerAlign": false,
             "customFlags": 131072,
-            "customFlags2": 16777232,
+            "customFlags2": 16,
             "enumID": 115,
             "soundEnumID": 0
         },
@@ -19507,7 +19510,7 @@
                 1.0
             ],
             "pivot": [
-                0.0,
+                0.5,
                 0.5
             ],
             "anchor": [
@@ -19515,8 +19518,8 @@
                 0.5
             ],
             "anchoredPosition": [
-                0.0,
-                -34.0
+                0.00006103515625,
+                -158.99996948242188
             ],
             "enableOffset": [],
             "disableOffset": [],
@@ -19810,8 +19813,8 @@
             "colorTintOnDisableEnd": [],
             "colorTintOnDisableCurveType": 0,
             "barCells_CellNumber": 0,
-            "disableOnStartEdtior": false,
-            "disableOnStartExe": false,
+            "disableOnStartEdtior": true,
+            "disableOnStartExe": true,
             "musicPlayOnEnable_musicClip": "",
             "musicPlayOnDisable_musicClip": "",
             "exclusiveEnableGroup": [],
@@ -19822,8 +19825,8 @@
             "videoPath2": "",
             "videoUnscaledDeltaTime": false,
             "centerAlign": false,
-            "customFlags": 3072,
-            "customFlags2": 16384,
+            "customFlags": 3328,
+            "customFlags2": 16388,
             "enumID": 108,
             "soundEnumID": 0
         },
@@ -19895,7 +19898,7 @@
                 1.0
             ],
             "pivot": [
-                0.0,
+                0.5,
                 0.5
             ],
             "anchor": [
@@ -19903,8 +19906,8 @@
                 0.5
             ],
             "anchoredPosition": [
-                0.0,
-                -34.0
+                -0.00006103515625,
+                -158.99996948242188
             ],
             "enableOffset": [],
             "disableOffset": [],
@@ -19952,7 +19955,7 @@
             "videoUnscaledDeltaTime": false,
             "centerAlign": false,
             "customFlags": 131072,
-            "customFlags2": 16777232,
+            "customFlags2": 16,
             "enumID": 115,
             "soundEnumID": 0
         },
@@ -20024,7 +20027,7 @@
                 1.0
             ],
             "pivot": [
-                0.0,
+                0.5,
                 0.5
             ],
             "anchor": [
@@ -20032,8 +20035,8 @@
                 0.5
             ],
             "anchoredPosition": [
-                0.0,
-                -34.0
+                -0.00006103515625,
+                -158.99996948242188
             ],
             "enableOffset": [],
             "disableOffset": [],
@@ -52449,7 +52452,7 @@
                 0.0,
                 0.0,
                 0.0,
-                0.30000001192092898,
+                0.0,
                 0.0,
                 0.0,
                 0.0,
@@ -52526,7 +52529,10 @@
             "disableOnStartExe": true,
             "musicPlayOnEnable_musicClip": "",
             "musicPlayOnDisable_musicClip": "",
-            "exclusiveEnableGroup": [],
+            "exclusiveEnableGroup": [
+                129,
+                403
+            ],
             "animatedSpriteFolderPath": "",
             "animatedSpriteIsRepeat": false,
             "duplicate_poolable": false,
@@ -52535,12 +52541,12 @@
             "videoUnscaledDeltaTime": false,
             "centerAlign": false,
             "customFlags": 2304,
-            "customFlags2": 12583424,
+            "customFlags2": 12583936,
             "enumID": 160,
             "soundEnumID": 0
         },
         {
-            "uiName": "UiEnum:StatusBar_Boss",
+            "uiName": "UiEnum:StatusBar_Boss_Tactic",
             "floats": [
                 0.0,
                 0.0,
@@ -52652,8 +52658,8 @@
             "colorTintOnDisableEnd": [],
             "colorTintOnDisableCurveType": 0,
             "barCells_CellNumber": 0,
-            "disableOnStartEdtior": false,
-            "disableOnStartExe": false,
+            "disableOnStartEdtior": true,
+            "disableOnStartExe": true,
             "musicPlayOnEnable_musicClip": "",
             "musicPlayOnDisable_musicClip": "",
             "exclusiveEnableGroup": [],
@@ -52664,9 +52670,9 @@
             "videoPath2": "",
             "videoUnscaledDeltaTime": false,
             "centerAlign": false,
-            "customFlags": 3072,
-            "customFlags2": 16384,
-            "enumID": 106,
+            "customFlags": 3328,
+            "customFlags2": 16388,
+            "enumID": 109,
             "soundEnumID": 0
         },
         {
@@ -54872,7 +54878,7 @@
             "soundEnumID": 0
         },
         {
-            "uiName": "UiEnum:StatusBar_LeftDoor",
+            "uiName": "UiEnum:StatusBar_LeftDoor_Tactic",
             "floats": [
                 0.0,
                 0.0,
@@ -54984,8 +54990,8 @@
             "colorTintOnDisableEnd": [],
             "colorTintOnDisableCurveType": 0,
             "barCells_CellNumber": 0,
-            "disableOnStartEdtior": false,
-            "disableOnStartExe": false,
+            "disableOnStartEdtior": true,
+            "disableOnStartExe": true,
             "musicPlayOnEnable_musicClip": "",
             "musicPlayOnDisable_musicClip": "",
             "exclusiveEnableGroup": [],
@@ -54996,9 +55002,9 @@
             "videoPath2": "",
             "videoUnscaledDeltaTime": false,
             "centerAlign": false,
-            "customFlags": 3072,
-            "customFlags2": 16384,
-            "enumID": 107,
+            "customFlags": 3328,
+            "customFlags2": 16388,
+            "enumID": 110,
             "soundEnumID": 0
         },
         {
@@ -55069,7 +55075,7 @@
                 1.0
             ],
             "pivot": [
-                0.0,
+                0.5,
                 0.5
             ],
             "anchor": [
@@ -55126,7 +55132,7 @@
             "videoUnscaledDeltaTime": false,
             "centerAlign": false,
             "customFlags": 131072,
-            "customFlags2": 16777232,
+            "customFlags2": 16,
             "enumID": 115,
             "soundEnumID": 0
         },
@@ -55198,7 +55204,7 @@
                 1.0
             ],
             "pivot": [
-                0.0,
+                0.5,
                 0.5
             ],
             "anchor": [
@@ -55389,7 +55395,7 @@
             "soundEnumID": 0
         },
         {
-            "uiName": "UiEnum:StatusBar_RightDoor",
+            "uiName": "UiEnum:StatusBar_RightDoor_Tactic",
             "floats": [
                 0.0,
                 0.0,
@@ -55501,8 +55507,8 @@
             "colorTintOnDisableEnd": [],
             "colorTintOnDisableCurveType": 0,
             "barCells_CellNumber": 0,
-            "disableOnStartEdtior": false,
-            "disableOnStartExe": false,
+            "disableOnStartEdtior": true,
+            "disableOnStartExe": true,
             "musicPlayOnEnable_musicClip": "",
             "musicPlayOnDisable_musicClip": "",
             "exclusiveEnableGroup": [],
@@ -55513,9 +55519,9 @@
             "videoPath2": "",
             "videoUnscaledDeltaTime": false,
             "centerAlign": false,
-            "customFlags": 3072,
-            "customFlags2": 16384,
-            "enumID": 108,
+            "customFlags": 3328,
+            "customFlags2": 16388,
+            "enumID": 111,
             "soundEnumID": 0
         },
         {
@@ -55586,7 +55592,7 @@
                 1.0
             ],
             "pivot": [
-                0.0,
+                0.5,
                 0.5
             ],
             "anchor": [
@@ -55643,7 +55649,7 @@
             "videoUnscaledDeltaTime": false,
             "centerAlign": false,
             "customFlags": 131072,
-            "customFlags2": 16777232,
+            "customFlags2": 16,
             "enumID": 115,
             "soundEnumID": 0
         },
@@ -55715,7 +55721,7 @@
                 1.0
             ],
             "pivot": [
-                0.0,
+                0.5,
                 0.5
             ],
             "anchor": [

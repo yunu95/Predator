@@ -44,7 +44,7 @@ namespace application
 
     private:
         editor::RegionData* targetRegion = nullptr;
-        bool setAsObstacle = false;
+        bool setAsObstacle = true;
         bool isEditing = false;
     };
 }

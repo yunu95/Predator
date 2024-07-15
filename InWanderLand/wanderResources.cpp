@@ -94,6 +94,7 @@ void InitAnimMap()
     animMap["SKM_HeartQueen"][UnitAnimType::BattleMove] = localAnimMap[L"Ani_HeartQueen_Walk"];
     animMap["SKM_HeartQueen"][UnitAnimType::Move] = localAnimMap[L"Ani_HeartQueen_Walk"];
     animMap["SKM_HeartQueen"][UnitAnimType::Birth] = localAnimMap[L"Ani_HeartQueen_Appear"];
+    animMap["SKM_HeartQueen"][UnitAnimType::AttackToIdle] = localAnimMap[L"Ani_HeartQueen_AttackToIdle"];
 
     animMap["SKM_Frame1"][UnitAnimType::Birth] = localAnimMap[L"Ani_Frame1_Appear"];
     animMap["SKM_Frame1"][UnitAnimType::Idle] = localAnimMap[L"Ani_Frame1_Idle"];
@@ -208,6 +209,9 @@ std::weak_ptr<ManagedFBX> wanderResources::GetVFX(const std::string& fbx, UnitAn
 
 bool wanderResources::FindVFXMap(const std::string& fbx, UnitAnimType animType)
 {
+    if (fbxMap.empty())
+        InitFBXMap();
+
     auto itr = fbxMap.find(fbx);
 
     if (itr == fbxMap.end() || itr->second.find(animType) == itr->second.end())

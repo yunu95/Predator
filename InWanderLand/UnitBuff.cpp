@@ -9,8 +9,9 @@ void UnitBuff::Init(std::weak_ptr<Unit> owner)
     auto id = GetUIEnumID();
     if (id != UIEnumID::None)
     {
-        if (auto ui = owner.lock()->unitStatusUI; !ui.expired() && ui.lock()->GetLocalUIsByEnumID().contains(id))
-            this->buffIcon1 = ui.lock()->GetLocalUIsByEnumID().at(id)->GetWeakPtr<UIElement>();
+        for (auto ui : owner.lock()->unitStatusUIs)
+            if (!ui.expired() && ui.lock()->GetLocalUIsByEnumID().contains(id))
+                this->buffIcon1 = ui.lock()->GetLocalUIsByEnumID().at(id)->GetWeakPtr<UIElement>();
         if (auto ui = owner.lock()->unitStatusPortraitUI; !ui.expired() && ui.lock()->GetLocalUIsByEnumID().contains(id))
             this->buffIcon2 = ui.lock()->GetLocalUIsByEnumID().at(id)->GetWeakPtr<UIElement>();
         if (auto ui = owner.lock()->unitStatusPortraitUI2; !ui.expired() && ui.lock()->GetLocalUIsByEnumID().contains(id))
@@ -22,6 +23,8 @@ void UnitBuff::Init(std::weak_ptr<Unit> owner)
         buffIcon2.lock()->EnableElement();
     if (!buffIcon3.expired())
         buffIcon3.lock()->EnableElement();
+
+    ownerUnitActualScale = Vector3d::one * owner.lock()->GetUnitTemplateData().pod.unit_scale;
 }
 
 UnitBuff::~UnitBuff()

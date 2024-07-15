@@ -24,6 +24,7 @@ enum class UnitAnimType
     BattleEnd,   // 전투 끝
     Damaged,
     Airborne, // 공중에 떠있는 동작
+    AttackToIdle,
     End
 };
 

@@ -27,6 +27,11 @@ void UIElement::EnableElement()
     {
         return;
     }
+    if (importedUIData.enumID == (int)UIEnumID::StatusBar_Boss_Tactic)
+    {
+        auto parent = GetGameObject()->GetParentGameObject();
+        auto parent2 = GetGameObject()->GetParentGameObject();
+    }
     enabled = true;
     GetGameObject()->SetSelfActive(true);
     if (colorTintOnDisable)
@@ -122,7 +127,7 @@ void UIElement::EnableElement()
     for (auto each : enablePropagationTargets)
     {
         //each->enabled = false;
-        if (!reallyDisabled)
+        if (!each->reallyDisabled)
         {
             each->EnableElement();
         }

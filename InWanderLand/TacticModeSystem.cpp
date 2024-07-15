@@ -37,7 +37,7 @@ void TacticModeSystem::OnEnable()
 void TacticModeSystem::Start()
 {
     // 나중에는 글로벌 컨스탄트에서 데이터 받아오기
-    this->coolTime = 3.f;
+    this->coolTime = GlobalConstant::GetSingletonInstance().pod.tacticCoolTime;
 
 }
 

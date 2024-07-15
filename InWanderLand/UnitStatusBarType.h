@@ -11,7 +11,8 @@ struct UnitStatusBarType
         ENEMY,
         ELITE,
         BOSS,
-        BOSS_FRAME
+        BOSS_FRAME_LEFT,
+        BOSS_FRAME_RIGHT,
     };
 };
 
@@ -27,7 +28,8 @@ const std::unordered_map<int, std::string>& application::POD_Enum<UnitStatusBarT
         {static_cast<int>(UnitStatusBarType::ENEMY), "ENEMY"},
         {static_cast<int>(UnitStatusBarType::ELITE), "ELITE"},
         {static_cast<int>(UnitStatusBarType::BOSS), "BOSS"},
-        {static_cast<int>(UnitStatusBarType::BOSS_FRAME), "BOSS_FRAME"},
+        {static_cast<int>(UnitStatusBarType::BOSS_FRAME_LEFT), "BOSS_FRAME_LEFT"},
+        {static_cast<int>(UnitStatusBarType::BOSS_FRAME_RIGHT), "BOSS_FRAME_RIGHT"},
     };
     return enumNameMap;
 }

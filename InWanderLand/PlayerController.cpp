@@ -719,7 +719,10 @@ void PlayerController::SelectPlayerUnit(PlayerCharacterType::Enum charType)
     // 이전 유닛의 선택 UI 비활성화시키기
     if (auto previous = selectedCharacter.lock())
     {
-        previous->unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::StatusBar_SelectionName)->DisableElement();
+        for (auto ui : previous->unitStatusUIs)
+        {
+            ui.lock()->GetLocalUIsByEnumID().at(UIEnumID::StatusBar_SelectionName)->DisableElement();
+        }
         unitSelectOutlineGuard.reset();
     }
     if (charType == PlayerCharacterType::None)
@@ -732,7 +735,10 @@ void PlayerController::SelectPlayerUnit(PlayerCharacterType::Enum charType)
         unitSelectOutlineGuard = selectedCharacter.lock()->referenceSelectOutline.Acquire();
         ApplySelectEffect(characters[charType]);
         // 체력바의 선택 UI 활성화시키기
-        characters[charType].lock()->unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::StatusBar_SelectionName)->EnableElement();
+        for (auto ui : characters[charType].lock()->unitStatusUIs)
+        {
+            ui.lock()->GetLocalUIsByEnumID().at(UIEnumID::StatusBar_SelectionName)->EnableElement();
+        }
     }
 
     switch (selectedCharacterType)
@@ -1114,6 +1120,7 @@ void PlayerController::SetState(State::Enum newState)
     switch (state)
     {
     case PlayerController::State::Tactic:
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::BossUI_Default)->EnableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::TacticModeIngameUI)->DisableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Vinetting)->EnableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_MenuButton)->EnableElement();
@@ -1158,6 +1165,7 @@ void PlayerController::SetState(State::Enum newState)
         break;
     case State::Tactic:
     {
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::BossUI_Tactic)->EnableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::TacticModeIngameUI)->EnableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Vinetting)->DisableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_MenuButton)->DisableElement();
@@ -1438,6 +1446,8 @@ Vector3d PlayerController::GetCamPivotPoint()
 void PlayerController::SetCooltime(SkillType::Enum skillType, float cooltime)
 {
     if (TacticModeSystem::Instance().IsExecuting())
+        return;
+    if (skillType == SkillType::EnemyImpale)
         return;
     skillCooltimeLeft[skillType] = std::fmax(0.0f, cooltime);
     PlayerPortraitUIs::ReflectCooltime(skillType, cooltime, GetCooltimeForSkill(skillType));

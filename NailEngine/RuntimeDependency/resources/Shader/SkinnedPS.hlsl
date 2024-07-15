@@ -120,3 +120,4 @@ PS_OUT main(PixelIn input)
 // DepthType : Less
 // BlendType : Default
 // Sampler : Default
+// StencilType : Character

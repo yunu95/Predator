@@ -52,9 +52,12 @@ void UnitPool::Return(std::weak_ptr<Unit> unit)
     {
         each->UnRegisterUnit(unit);
     }
-    if (!unit.lock()->unitStatusUI.expired())
+    for (auto unitStatusUI : unit.lock()->unitStatusUIs)
     {
-        unit.lock()->unitStatusUI.lock()->DisableElement();
+        if (!unitStatusUI.expired())
+        {
+            unitStatusUI.lock()->DisableElement();
+        }
     }
     poolsByTemplate[&unit.lock()->GetUnitTemplateData()]->Return(unit);
 }
@@ -69,5 +72,5 @@ void UnitPool::PoolByTemplate::ObjectInitializer(std::weak_ptr<Unit> unit)
 
 void UnitPool::PoolByTemplate::OnBorrow(std::weak_ptr<Unit> unit)
 {
-    
+
 }

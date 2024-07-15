@@ -57,12 +57,12 @@ namespace application
         GC<float> peaceFollowingZOffest = 2.0f;
         GC<float> comboTimeLimit{ 5.0 };
 
+        GC<float> tacticCoolTime = 3.f;
         GC<float> tacticSkillCost = 10.0f;
         GC<float> tacticMoveCost = 10.0f;
         GC<float> tacticAttackCost = 10.0f;
         GC<float> tacticCameraLerpTime = 2.0f;
 
-        GC<float> tacticGaugeRecoveryPerSecond = 2.0f;
         GC<float> battleZoomMultiplier = 0.95f;
         GC<float> tacticZoomMultiplier = 1.05f;
 

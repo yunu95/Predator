@@ -180,5 +180,79 @@ namespace application::editor::palette
 
         isGuide = true;
     }
+    void OrnamentEditorInstance::SetVisibleWithFading(bool visible)
+    {
+        if (fadeVisible == visible)
+            return;
+        fadeVisible = visible;
+        if (fadeCoroutine.expired())
+        {
+            fadeCoroutine = ContentsCoroutine::Instance().StartCoroutine(Fade(fadeVisible));
+        }
+    }
+    coroutine::Coroutine OrnamentEditorInstance::Fade(bool& visible)
+    {
+        static constexpr float fadeSpeed = 2.5f;
+        GameObject* targetObj = nullptr;
+        for (auto each : GetGameObject()->GetChildren())
+        {
+            if (each->getName() != ornamentData->pod.templateData->pod.staticFBXName)
+            {
+                continue;
+            }
+            targetObj = each;
+        }
+
+        yunutyEngine::graphics::StaticMeshRenderer* renderer = nullptr;
+        for (auto each : targetObj->GetChildren())
+        {
+            renderer = each->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+            if (renderer)
+            {
+                break;
+            }
+        }
+
+        if (renderer)
+        {
+            float localTimer = 0;
+            float ratio = visible ? 0.00001 : 0.99999;
+            bool isFirst = false;
+            bool isDeferred = (renderer->GetGI().GetMaterial()->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred);
+
+            while (0 < ratio && ratio < 1)
+            {
+                ratio += (visible ? 1 : -1) * fadeSpeed * yunutyEngine::Time::GetDeltaTimeUnscaled();
+                ratio = std::clamp(ratio, 0.0f, 1.0f);
+
+                for (int i = 0; i < renderer->GetGI().GetMaterialCount(); ++i)
+                {
+                    /// 추후 셰이더 교체까지 해줘야 함
+                    auto shaderName = renderer->GetGI().GetMaterial(i)->GetPixelShader()->GetName();
+
+                    size_t pos = shaderName.find(L"PS");
+                    if (pos != std::wstring::npos && !isFirst && isDeferred)
+                    {
+                        isFirst = true;
+                        const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+                        shaderName = shaderName.substr(0, pos);
+                        shaderName += L"_AlphaPS.cso";
+                        renderer->GetGI().GetMaterial(i)->SetPixelShader(_resourceManager->GetShader(shaderName));
+                    }
+                    renderer->GetGI().GetMaterial(i)->SetColor(yunuGI::Color{ 1,1,1, ratio });
+                }
+                co_await std::suspend_always();
+            }
+        }
+        static const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+        if (visible)
+        {
+            for (int i = 0; i < renderer->GetGI().GetMaterialCount(); ++i)
+            {
+                renderer->GetGI().SetMaterial(i, resourceManager->GetMaterial(renderer->GetGI().GetMaterial(i)->GetName(true)), true);
+            }
+        }
+        co_return;
+    }
 }
 

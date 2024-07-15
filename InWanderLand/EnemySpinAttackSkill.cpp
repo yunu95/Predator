@@ -125,7 +125,7 @@ coroutine::Coroutine EnemySpinAttackSkill::SpawningSkillffect(std::weak_ptr<Enem
     previewEffect = FBXPool::Instance().Borrow("VFX_Monster1_Skill_Preview");
     previewEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos);
     previewEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(owner.lock()->GetTransform()->GetWorldRotation());
-    previewEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(actualCollideRange * owner.lock()->GetTransform()->GetWorldScale().x,
+    previewEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(actualCollideRange,
         actualCollideRange * owner.lock()->GetTransform()->GetWorldScale().y,
         actualCollideRange * owner.lock()->GetTransform()->GetWorldScale().z));
     previewEffectAnimator = previewEffect.lock()->AcquireVFXAnimator();
@@ -137,9 +137,8 @@ coroutine::Coroutine EnemySpinAttackSkill::SpawningSkillffect(std::weak_ptr<Enem
     chargeEffect = FBXPool::Instance().Borrow("VFX_Monster1_Skill");
     chargeEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos);
     chargeEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
-    chargeEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(actualCollideRange * owner.lock()->GetTransform()->GetWorldScale().x,
-        actualCollideRange * owner.lock()->GetTransform()->GetWorldScale().y,
-        actualCollideRange * owner.lock()->GetTransform()->GetWorldScale().z));
+    chargeEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d::one * owner.lock()->GetUnitTemplateData().pod.unit_scale);
+
     chargeEffectAnimator = chargeEffect.lock()->AcquireVFXAnimator();
     chargeEffectAnimator.lock()->SetAutoActiveFalse();
     chargeEffectAnimator.lock()->Init();

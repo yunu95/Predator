@@ -100,11 +100,11 @@ coroutine::Coroutine EnemyImpaleSkill::operator()()
 
     for (auto& each : spearVec)
     {
-        //while (each.timeOffset > waitImpaleDuration.Elapsed())
-        //{
-        //    waitImpaleDuration.Tick();
-        //    co_await std::suspend_always{};
-        //}
+        while (each.timeOffset > waitImpaleDuration.Elapsed())
+        {
+            waitImpaleDuration.Tick();
+            co_await std::suspend_always{};
+        }
 
         auto spearAriseCoroutine = ContentsCoroutine::StartRoutine(SpearArise(std::dynamic_pointer_cast<EnemyImpaleSkill>(selfWeakPtr.lock()), each.position));
         spearAriseCoroutine.lock()->PushDestroyCallBack([this]()
@@ -288,7 +288,7 @@ coroutine::Coroutine EnemyImpaleSkill::SpawningSkillffect(std::weak_ptr<EnemyImp
 
     impaleEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos);
     impaleEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(owner.lock()->GetTransform()->GetWorldRotation());
-    impaleEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(owner.lock()->GetTransform()->GetWorldScale());
+    impaleEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d::one * owner.lock()->GetUnitTemplateData().pod.unit_scale);
 
     impaleEffectAnimator = impaleEffect.lock()->AcquireVFXAnimator();
     impaleEffectAnimator.lock()->SetAutoActiveFalse();

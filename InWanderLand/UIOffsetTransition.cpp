@@ -28,8 +28,8 @@ void UIOffsetTransition::Init(const JsonUIData& jsonData, bool isEnableEffect)
             if (startPosition != endPosition)
             {
                 GetTransform()->SetLocalPosition(endPosition);
-                GetGameObject()->SetSelfActive(isEnableEffect);
             }
+            GetGameObject()->SetSelfActive(isEnableEffect);
         };
     onUpdate = [=](float t)
         {
@@ -44,7 +44,7 @@ void UIOffsetTransition::Init(const JsonUIData& jsonData, bool isEnableEffect)
             if (startPosition != endPosition)
             {
                 GetTransform()->SetLocalPosition(startPosition);
-                GetGameObject()->SetSelfActive(true);
             }
+            GetGameObject()->SetSelfActive(true);
         };
 };
