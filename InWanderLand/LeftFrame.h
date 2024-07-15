@@ -73,10 +73,16 @@ namespace BossSummon
 		application::editor::UnitData* frameData = nullptr;
 		std::weak_ptr<Unit> unitFrame = std::weak_ptr<Unit>();
 		std::set<std::weak_ptr<Unit>, CustomCompUnit> summonUnit = std::set<std::weak_ptr<Unit>, CustomCompUnit>();
+		static application::editor::Unit_TemplateData* meleeUnitMold;
+		static application::editor::Unit_TemplateData* weakMeleeUnitMold;
+		static application::editor::Unit_TemplateData* eliteMeleeUnitMold;
 
-
-
-
+		static application::editor::Unit_TemplateData* projectileUnitMold;
+		static application::editor::Unit_TemplateData* weakProjectileUnitMold;
+		static application::editor::Unit_TemplateData* weakApproachProjectileUnitMold;
+		static application::editor::Unit_TemplateData* kitingProjectileUnitMold;
+		static application::editor::Unit_TemplateData* siegeProjectileUnitMold;
+		static application::editor::Unit_TemplateData* eliteProjectileUnitMold;
 		bool isPause = false;
 	};
 

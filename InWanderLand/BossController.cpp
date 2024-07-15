@@ -139,6 +139,8 @@ coroutine::Coroutine BossController::BossAppearCoroutine()
 
     BossSummonMobSkill::OnBossAppear();
 
+    wanderUtils::UnitCoroutine::ForSecondsFromUnit preAppear{ boss, gc.bossAppearTime };
+
 	auto initVel = wanderUtils::GetInitSpeedOfFreeFall(gc.bossAppearTime, Vector3d(0, gc.bossAppearHeight, 0), Vector3d(0, 0.5, 0));
 	while (preAppear.Tick())
 	{		initVel += Vector3d::down * gc.gravitySpeed * Time::GetDeltaTime();
@@ -152,21 +154,6 @@ coroutine::Coroutine BossController::BossAppearCoroutine()
 		}
 		co_await std::suspend_always();
 	}
-
-    auto initVel = wanderUtils::GetInitSpeedOfFreeFall(gc.bossAppearTime, Vector3d(0, gc.bossAppearHeight, 0), Vector3d(0, 0.5, 0));
-    while (preAppear.Tick())
-    {
-        initVel += Vector3d::down * gc.gravitySpeed * Time::GetDeltaTime();
-        boss.lock()->GetTransform()->SetWorldPosition(boss.lock()->GetTransform()->GetWorldPosition() + initVel * Time::GetDeltaTime());
-        auto curPos = boss.lock()->GetTransform()->GetWorldPosition();
-        if (curPos.y < 0.5)
-        {
-            curPos.y = 0.5;
-            boss.lock()->GetTransform()->SetWorldPosition(curPos);
-            break;
-        }
-        co_await std::suspend_always();
-    }
 
     boss.lock()->GetTransform()->SetWorldPosition(boss.lock()->GetTransform()->GetWorldPosition() - Vector3d(0, 0.5, 0));
     boss.lock()->PlayAnimation(UnitAnimType::Birth, Animation::PlayFlag_::None);
