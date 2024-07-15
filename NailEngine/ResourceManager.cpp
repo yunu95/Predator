@@ -1128,6 +1128,8 @@ void ResourceManager::CreateDefaultShader()
 	CreateShader(L"TestDecalMaskPS.cso");
 	CreateShader(L"AAPassPS.cso");
 	CreateShader(L"Default_AlphaPS.cso");
+	CreateShader(L"SilhouettePS.cso");
+	CreateShader(L"DissolveShadowPS.cso");
 #pragma endregion
 
 #pragma region GS
@@ -1238,9 +1240,10 @@ void ResourceManager::CreateDefaultMaterial()
             renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(UTIL)).get());
         material->SetTexture(yunuGI::Texture_Type::Temp5,
             renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->GetRTTexture(static_cast<int>(AMBIENT)).get());
-
 		material->SetTexture(yunuGI::Texture_Type::Temp6,
 			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->GetRTTexture(static_cast<int>(SPECULAR_LIGHT)).get());
+		material->SetTexture(yunuGI::Texture_Type::Temp7,
+			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::SILHOUETTE)]->GetRTTexture(static_cast<int>(SILHOUETTE)).get());
     }
 
     // BackBuffer
@@ -1266,6 +1269,14 @@ void ResourceManager::CreateDefaultMaterial()
 		material->SetTexture(yunuGI::Texture_Type::Temp0,
 			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::BACKBUFFER)]->GetRTTexture(static_cast<int>(BACKBUFFER)).get());
     }
+
+    // silhouette material
+	{
+		yunuGI::IMaterial* material = CrateMaterial(L"SilhouetteMaterial");
+		material->SetVertexShader(GetShader(L"SkinnedVS.cso").get());
+		material->SetPixelShader(GetShader(L"SilhouettePS.cso").get());
+	}
+
     // 파티클 전용 머터리얼
     {
         yunuGI::IMaterial* material = CrateMaterial(L"ParticleMaterial");

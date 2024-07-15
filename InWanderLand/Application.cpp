@@ -145,6 +145,13 @@ namespace application
         //float desiredRatio = 1920.0f / 1080.0f;
 
         SetWindowPos(hWND, NULL, 0, 0, newWidth, newHeight, SWP_NOMOVE | SWP_NOZORDER);
+
+        yunutyEngine::YunutyCycle::SingleInstance().preThreadAction = [&, this]()
+            {
+                GetDeviceAndDeviceContext();
+                erm.Initialize(g_pD3dDevice);
+                erm.LateInitialize();
+            };
 #ifndef EDITOR
         LONG_PTR style = GetWindowLongPtr(hWND, GWL_STYLE);
         style &= ~(WS_CAPTION | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_SYSMENU);
@@ -170,7 +177,6 @@ namespace application
 
                 GetDeviceAndDeviceContext();
                 erm.Initialize(g_pD3dDevice);
-
                 // Initialize Direct3D
                 if (!CreateSwapChain())
                 {
@@ -253,7 +259,7 @@ namespace application
         yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"NailEngine.dll");
         yunutyEngine::graphics::Renderer::SingleInstance().SetResolution(appSpecification.windowWidth, appSpecification.windowHeight);
         yunutyEngine::graphics::Renderer::SingleInstance().SetOutputWindow(hWND);
-    }
+            }
 
     Application::Application(int* hInstance)
     {
@@ -263,8 +269,8 @@ namespace application
         ::RegisterClassEx(&wc);
 
         appSpecification.appName = wc.lpszClassName;
-		appSpecification.windowWidth = 1920;
-		appSpecification.windowHeight = 1080;
+        appSpecification.windowWidth = 1920;
+        appSpecification.windowHeight = 1080;
 
         monitorResolution.width = GetSystemMetrics(SM_CXSCREEN);
         monitorResolution.height = GetSystemMetrics(SM_CYSCREEN);
@@ -284,6 +290,13 @@ namespace application
         //float desiredRatio = 1920.0f / 1080.0f;
 
         SetWindowPos(hWND, NULL, 0, 0, newWidth, newHeight, SWP_NOMOVE | SWP_NOZORDER);
+
+        yunutyEngine::YunutyCycle::SingleInstance().preThreadAction = [&, this]()
+            {
+                GetDeviceAndDeviceContext();
+                erm.Initialize(g_pD3dDevice);
+                erm.LateInitialize();
+            };
 #ifndef EDITOR
         LONG_PTR style = GetWindowLongPtr(hWND, GWL_STYLE);
         style &= ~(WS_CAPTION | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_SYSMENU);
@@ -391,7 +404,7 @@ namespace application
         yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"NailEngine.dll");
         yunutyEngine::graphics::Renderer::SingleInstance().SetResolution(appSpecification.windowWidth, appSpecification.windowHeight);
         yunutyEngine::graphics::Renderer::SingleInstance().SetOutputWindow(hWND);
-    }
+            }
 
     void Application::Initialize()
     {
@@ -805,9 +818,9 @@ namespace application
         return layers[(int)LayerList::ContentsLayer];
     }
 
-}
+    }
 
-#ifdef EDITOR
+//#ifdef EDITOR
 // Helper functions
 void GetDeviceAndDeviceContext()
 {
@@ -817,10 +830,12 @@ void GetDeviceAndDeviceContext()
 
 void CreateRenderTarget()
 {
+#ifdef EDITOR
     ID3D11Texture2D* pBackBuffer;
     g_EditorpSwapChain->GetBuffer(0, IID_PPV_ARGS(&pBackBuffer));
     g_pD3dDevice->CreateRenderTargetView(pBackBuffer, nullptr, &g_EditormainRenderTargetView);
     pBackBuffer->Release();
+#endif
 }
 
 bool CreateSwapChain()
@@ -849,8 +864,10 @@ bool CreateSwapChain()
     auto result3 = dxgiAdapter->GetParent(IID_PPV_ARGS(&dxgiFactory));
     dxgiAdapter->Release();
 
+#ifdef EDITOR
     auto result4 = dxgiFactory->CreateSwapChainForHwnd(g_pD3dDevice, editorHWND, &sd, nullptr, nullptr, &g_EditorpSwapChain);
     dxgiFactory->Release();
+#endif
 
     CreateRenderTarget();
 
@@ -859,22 +876,28 @@ bool CreateSwapChain()
 
 void CleanupRenderTarget()
 {
+#ifdef EDITOR
     if (g_EditormainRenderTargetView) { g_EditormainRenderTargetView->Release(); g_EditormainRenderTargetView = nullptr; }
+#endif
 }
 
 void CleanupSwapChain()
 {
     CleanupRenderTarget();
+#ifdef EDITOR
     if (g_EditorpSwapChain) { g_EditorpSwapChain->Release(); g_EditorpSwapChain = nullptr; }
+#endif
 }
 
 void ResizeBuffers()
 {
+#ifdef EDITOR
     g_EditormainRenderTargetView->Release();
     g_EditorpSwapChain->ResizeBuffers(0, dockspaceArea.x, dockspaceArea.y, DXGI_FORMAT_UNKNOWN, 0);
+#endif
     CreateRenderTarget();
 }
-#endif
+//#endif
 
 #ifndef WM_DPICHANGED
 #define WM_DPICHANGED 0x02E0 // From Windows SDK 8.1+ headers

@@ -201,6 +201,7 @@ void RenderSystem::Render()
 
     // 스킨드 오브젝트 렌더
     RenderSkinnedDeferred();
+    RenderSilhouette();
 
     // 그림자 맵 생성
     RenderShadow();
@@ -212,6 +213,8 @@ void RenderSystem::Render()
     RenderLight();
 
     BloomPass::Instance.Get().Bloom();
+
+    
 
     // Final 출력
     RenderFinal();
@@ -504,6 +507,14 @@ void RenderSystem::RenderLight()
     }
 }
 
+void RenderSystem::RenderSilhouette()
+{
+	auto& renderTargetGroup = NailEngine::Instance.Get().GetRenderTargetGroup();
+	renderTargetGroup[static_cast<int>(RENDER_TARGET_TYPE::SILHOUETTE)]->OMSetRenderTarget();
+
+    InstancingManager::Instance.Get().RenderSkinnedSilhouette();
+}
+
 void RenderSystem::RenderFinal()
 {
     auto& renderTargetGroup = NailEngine::Instance.Get().GetRenderTargetGroup();
@@ -534,6 +545,7 @@ void RenderSystem::AAPass()
 	static auto backBufferMaterial = ResourceManager::Instance.Get().GetMaterial(L"AAMaterial");
 	std::static_pointer_cast<Material>(backBufferMaterial)->PushGraphicsData();
 	static auto rectangleMesh = ResourceManager::Instance.Get().GetMesh(L"Rectangle");
+
 	rectangleMesh->Render();
 }
 

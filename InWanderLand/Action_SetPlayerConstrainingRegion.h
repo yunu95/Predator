@@ -44,7 +44,7 @@ namespace application
 
     private:
         editor::RegionData* targetRegion = nullptr;
-        bool doesConstrain = false;
+        bool doesConstrain = true;
         bool isEditing = false;
     };
 }

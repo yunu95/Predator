@@ -114,10 +114,13 @@ void Unit::Update()
         UpdateRotation();
     // UI가 유닛을 따라다니게 만듬
     auto& offset = unitTemplateData->pod.statusBarOffset;
-    if (!unitStatusUI.expired())
+    for (auto unitStatusUI : unitStatusUIs)
     {
-        unitStatusUI.lock()->GetTransform()->SetWorldPosition(Vector3d{ offset.x,offset.y,0 }
-        + UIManager::Instance().GetUIPosFromWorld(GetTransform()->GetWorldPosition()));
+        if (!unitStatusUI.expired() && (unitStatusUI.lock()->runtimeFlags & UnitStatusBarFlag::FollowUnit))
+        {
+            unitStatusUI.lock()->GetTransform()->SetWorldPosition(Vector3d{ offset.x,offset.y,0 }
+            + UIManager::Instance().GetUIPosFromWorld(GetTransform()->GetWorldPosition()));
+        }
     }
     // 버프 효과 적용
     for (auto& [buffID, buff] : buffs)
@@ -162,8 +165,11 @@ void Unit::Update()
 
 void Unit::OnDestroy()
 {
-    if (!unitStatusUI.expired())
-        Scene::getCurrentScene()->DestroyGameObject(unitStatusUI.lock()->GetGameObject());
+    for (auto unitStatusUI : unitStatusUIs)
+    {
+        if (!unitStatusUI.expired() && (unitStatusUI.lock()->runtimeFlags & UnitStatusBarFlag::DestroyOnDeath))
+            Scene::getCurrentScene()->DestroyGameObject(unitStatusUI.lock()->GetGameObject());
+    }
     if (!navAgentComponent.expired())
         Scene::getCurrentScene()->DestroyGameObject(navAgentComponent.lock()->GetGameObject());
 }
@@ -420,9 +426,12 @@ void Unit::OnStateExit<UnitBehaviourTree::Stop>()
 
 Unit::~Unit()
 {
-    if (!unitStatusUI.expired())
+    for (auto unitStatusUI : unitStatusUIs)
     {
-        Scene::getCurrentScene()->DestroyGameObject(unitStatusUI.lock()->GetGameObject());
+        if (!unitStatusUI.expired() && (unitStatusUI.lock()->runtimeFlags & UnitStatusBarFlag::DestroyOnDeath))
+        {
+            Scene::getCurrentScene()->DestroyGameObject(unitStatusUI.lock()->GetGameObject());
+        }
     }
     if (!navAgentComponent.expired())
     {
@@ -646,16 +655,19 @@ void Unit::SetCurrentHp(float p_newHp)
         liveCountLeft--;
         SetIsAlive(false);
     }
-    if (!unitStatusUI.expired())
+    for (auto unitStatusUI : unitStatusUIs)
     {
-        if (isAlive && !unitStatusUI.lock()->GetUIEnabled() && currentHitPoint != unitTemplateData->pod.max_Health)
+        if (!unitStatusUI.expired())
         {
-            unitStatusUI.lock()->EnableElement();
-        }
-        unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::StatusBar_HP_Fill)->adjuster->SetTargetFloat(1 - currentHitPoint / unitTemplateData->pod.max_Health);
-        if (unitStatusUI.lock()->GetLocalUIsByEnumID().contains(UIEnumID::StatusBar_HP_Number_Current))
-        {
-            unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::StatusBar_HP_Number_Current)->SetNumber(currentHitPoint);
+            if (isAlive && !unitStatusUI.lock()->GetUIEnabled() && currentHitPoint != unitTemplateData->pod.max_Health && (unitStatusUI.lock()->runtimeFlags & UnitStatusBarFlag::EnableAfterDamaged))
+            {
+                unitStatusUI.lock()->EnableElement();
+            }
+            unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::StatusBar_HP_Fill)->adjuster->SetTargetFloat(1 - currentHitPoint / unitTemplateData->pod.max_Health);
+            if (unitStatusUI.lock()->GetLocalUIsByEnumID().contains(UIEnumID::StatusBar_HP_Number_Current))
+            {
+                unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::StatusBar_HP_Number_Current)->SetNumber(currentHitPoint);
+            }
         }
     }
     if (!unitStatusPortraitUI.expired())
@@ -1038,6 +1050,7 @@ void Unit::Init(const application::editor::Unit_TemplateData* unitTemplateData)
     teamIndex = unitTemplateData->pod.playerUnitType.enumValue == PlayerCharacterType::None ? 2 : PlayerController::playerTeamIndex;
     skinnedMeshGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObjectFromFBX(unitTemplateData->pod.skinnedFBXName);
     burnEffect = skinnedMeshGameObject->AddComponentAsWeakPtr<BurnEffect>();
+    burnEffect.lock()->Init();
     animatorComponent = skinnedMeshGameObject->GetComponentWeakPtr<graphics::Animator>();
     SetSkinnedMeshRenderer(skinnedMeshGameObject);
     skinnedMeshGameObject->SetParent(GetGameObject());
@@ -1316,28 +1329,87 @@ void Unit::Summon(application::editor::Unit_TemplateData* templateData)
     default:
         break;
     }
+    unitStatusUIs.clear();
     switch (unitTemplateData->pod.unitStatusBar.enumValue)
     {
     case UnitStatusBarType::PLAYER_ROBIN:
-        unitStatusUI = UIManager::Instance().DuplicateUIElement(UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_Hero_Robin));
+    {
+        auto unitStatusUI = UIManager::Instance().DuplicateUIElement(UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_Hero_Robin));
+        unitStatusUIs.push_back(unitStatusUI);
+        unitStatusUI.lock()->runtimeFlags = UnitStatusBarFlag::DestroyOnDeath | UnitStatusBarFlag::FollowUnit;
         break;
+    }
+    break;
     case UnitStatusBarType::PLAYER_URSULA:
-        unitStatusUI = UIManager::Instance().DuplicateUIElement(UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_Hero_Ursula));
+    {
+        auto unitStatusUI = UIManager::Instance().DuplicateUIElement(UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_Hero_Ursula));
+        unitStatusUIs.push_back(unitStatusUI);
+        unitStatusUI.lock()->runtimeFlags = UnitStatusBarFlag::DestroyOnDeath | UnitStatusBarFlag::FollowUnit;
         break;
+    }
+    break;
     case UnitStatusBarType::PLAYER_HANSEL:
-        unitStatusUI = UIManager::Instance().DuplicateUIElement(UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_Hero_Hansel));
+    {
+        auto unitStatusUI = UIManager::Instance().DuplicateUIElement(UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_Hero_Hansel));
+        unitStatusUIs.push_back(unitStatusUI);
+        unitStatusUI.lock()->runtimeFlags = UnitStatusBarFlag::DestroyOnDeath | UnitStatusBarFlag::FollowUnit;
         break;
+    }
+    break;
     case UnitStatusBarType::ENEMY:
-        unitStatusUI = UIManager::Instance().DuplicateUIElement(UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_MeleeEnemy));
+    {
+        auto unitStatusUI = UIManager::Instance().DuplicateUIElement(UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_MeleeEnemy));
+        unitStatusUIs.push_back(unitStatusUI);
         unitStatusUI.lock()->DisableElement();
+        unitStatusUI.lock()->runtimeFlags = UnitStatusBarFlag::DestroyOnDeath | UnitStatusBarFlag::FollowUnit | UnitStatusBarFlag::EnableAfterDamaged;
         break;
+    }
     case UnitStatusBarType::ELITE:
-        unitStatusUI = UIManager::Instance().DuplicateUIElement(UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_Elite));
+    {
+        auto unitStatusUI = UIManager::Instance().DuplicateUIElement(UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_Elite));
+        unitStatusUIs.push_back(unitStatusUI);
         unitStatusUI.lock()->DisableElement();
+        unitStatusUI.lock()->runtimeFlags = UnitStatusBarFlag::DestroyOnDeath | UnitStatusBarFlag::FollowUnit | UnitStatusBarFlag::EnableAfterDamaged;
         break;
+    }
     case UnitStatusBarType::BOSS:
-        /// 현재 Boss 관련 UI 가 없음
+    {
+        auto unitStatusUI1 = UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_Boss);
+        auto unitStatusUI2 = UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_Boss_Tactic);
+        unitStatusUIs.push_back(unitStatusUI1->GetWeakPtr<UIElement>());
+        unitStatusUIs.push_back(unitStatusUI2->GetWeakPtr<UIElement>());
+        unitStatusUI1->runtimeFlags = UnitStatusBarFlag::ControlWithReallyDisabled;
+        unitStatusUI2->runtimeFlags = UnitStatusBarFlag::ControlWithReallyDisabled;
         break;
+    }
+    case UnitStatusBarType::BOSS_FRAME_LEFT:
+    {
+        auto unitStatusUI1 = UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_LeftDoor);
+        auto unitStatusUI2 = UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_LeftDoor_Tactic);
+        unitStatusUIs.push_back(unitStatusUI1->GetWeakPtr<UIElement>());
+        unitStatusUIs.push_back(unitStatusUI2->GetWeakPtr<UIElement>());
+        unitStatusUI1->reallyDisabled = false;
+        unitStatusUI2->reallyDisabled = false;
+        unitStatusUI1->runtimeFlags = UnitStatusBarFlag::ControlWithReallyDisabled;
+        unitStatusUI2->runtimeFlags = UnitStatusBarFlag::ControlWithReallyDisabled;
+        unitStatusUI1->EnableElement();
+        unitStatusUI2->EnableElement();
+        break;
+    }
+    case UnitStatusBarType::BOSS_FRAME_RIGHT:
+    {
+        auto unitStatusUI1 = UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_RightDoor);
+        auto unitStatusUI2 = UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_RightDoor_Tactic);
+        unitStatusUIs.push_back(unitStatusUI1->GetWeakPtr<UIElement>());
+        unitStatusUIs.push_back(unitStatusUI2->GetWeakPtr<UIElement>());
+        unitStatusUI1->reallyDisabled = false;
+        unitStatusUI2->reallyDisabled = false;
+        unitStatusUI1->runtimeFlags = UnitStatusBarFlag::ControlWithReallyDisabled;
+        unitStatusUI2->runtimeFlags = UnitStatusBarFlag::ControlWithReallyDisabled;
+        unitStatusUI1->EnableElement();
+        unitStatusUI2->EnableElement();
+        break;
+    }
     }
 
     unitCollider.lock()->SetRadius(unitTemplateData->pod.collisionSize);
@@ -1876,9 +1948,16 @@ yunutyEngine::coroutine::Coroutine Unit::DeathCoroutine()
         burnEffect.lock()->SetEdgeThickness(unitTemplateData->pod.deathBurnEdgeThickness);
         burnEffect.lock()->Disappear();
     }
-    if (auto status = unitStatusUI.lock())
+    for (auto unitStatusUI : unitStatusUIs)
     {
-        status->DisableElement();
+        if (auto status = unitStatusUI.lock())
+        {
+            status->DisableElement();
+        }
+        if (unitStatusUI.lock()->runtimeFlags & UnitStatusBarFlag::ControlWithReallyDisabled)
+        {
+            unitStatusUI.lock()->reallyDisabled = true;
+        }
     }
     co_yield coroutine::WaitForSeconds(unitTemplateData->pod.deathBurnTime);
     //animatorComponent.lock()->GetGI().SetPlaySpeed(1);
@@ -2067,11 +2146,15 @@ float Unit::DistanceTo(const Vector3d& target)
 }
 void Unit::ReturnToPool()
 {
-    if (!unitStatusUI.expired())
+    for (auto unitStatusUI : unitStatusUIs)
     {
-        Scene::getCurrentScene()->DestroyGameObject(unitStatusUI.lock()->GetGameObject());
-        unitStatusUI.reset();
+        if (!unitStatusUI.expired() && (unitStatusUI.lock()->runtimeFlags & UnitStatusBarFlag::DestroyOnDeath))
+        {
+            Scene::getCurrentScene()->DestroyGameObject(unitStatusUI.lock()->GetGameObject());
+            unitStatusUI.reset();
+        }
     }
+    unitStatusUIs.clear();
     navAgentComponent.lock()->SetActive(false);
     navObstacle.lock()->SetActive(false);
     unitStatusPortraitUI.reset();

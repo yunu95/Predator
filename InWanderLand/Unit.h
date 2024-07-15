@@ -21,6 +21,7 @@
 #include "DamageType.h"
 #include "ITacticObject.h"
 #include "UnitCollider.h"
+#include "UnitStatusBarFlag.h"
 
 class ManagedFBX;
 class ManagedDuplicatedUI;
@@ -304,7 +305,7 @@ private:
     float desiredRotation{ 270 };
     bool isAlive{ false };
     // 개별 유닛의 상태를 나타내는 UI, 보통 체력바라고 보면 된다.
-    weak_ptr<UIElement> unitStatusUI;
+    std::vector<weak_ptr<UIElement>> unitStatusUIs;
     // 초상화까지 있는 플레이어측 캐릭터 UI
     std::weak_ptr<UIElement> unitStatusPortraitUI;
     std::weak_ptr<UIElement> unitStatusPortraitUI2;

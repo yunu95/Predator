@@ -8,8 +8,8 @@ class PixelShader : public Shader
 {
 public:
 	virtual void CreateShader(const std::wstring& shaderPath) override;
-	virtual void Bind() override;
-	virtual void UnBind() override;
+	virtual void Bind() const override;
+	virtual void UnBind() const override;
 
 	Microsoft::WRL::ComPtr<ID3D11BlendState> GetBlendState() {return blendState; }
 
@@ -32,6 +32,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11BlendState> blendState;
 
 	unsigned int samplerSlot = 0;
+	unsigned int stencilRef = 1;
 	friend class RenderSystem;
 };
 

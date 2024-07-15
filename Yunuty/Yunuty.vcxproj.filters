@@ -271,9 +271,6 @@
     <Filter Include="yunutyEngine\physics\MaterialInfo">
       <UniqueIdentifier>{68b7dad7-fea8-45dd-8f9d-8bebf8680e73}</UniqueIdentifier>
     </Filter>
-    <Filter Include="yunutyEngine\physics\_PhysxGlobal">
-      <UniqueIdentifier>{d85722fb-85c9-4cc5-b50c-564ae0ca2d3b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="yunutyEngine\physics\_PhysxContactCallback">
       <UniqueIdentifier>{821098fc-ea7f-46b4-b138-df8bf63ae2a7}</UniqueIdentifier>
     </Filter>
@@ -357,6 +354,9 @@
     </Filter>
     <Filter Include="yunutyEngine\NavigationSystem\NavigationFilterType">
       <UniqueIdentifier>{1ab6833d-7a05-4a1c-b415-71c3a623f1f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="yunutyEngine\physics\_PhysxGlobal">
+      <UniqueIdentifier>{d85722fb-85c9-4cc5-b50c-564ae0ca2d3b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

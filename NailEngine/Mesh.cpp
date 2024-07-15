@@ -106,15 +106,6 @@ void Mesh::Render(unsigned int materialIndex, D3D_PRIMITIVE_TOPOLOGY topology, b
 		ResourceBuilder::Instance.Get().device->GetDeviceContext()->IASetIndexBuffer(this->indexBufferVec[materialIndex].indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 		ResourceBuilder::Instance.Get().device->GetDeviceContext()->IASetPrimitiveTopology(topology);
 
-		//if (this->name == L"SM_Bush_001" || this->name == L"SM_Bush_002")
-		//{
-		//	ResourceBuilder::Instance.Get().device->GetDeviceContext()->DrawIndexedInstanced(this->indexBufferVec[materialIndex].indexCount, buffer->GetCount()/3.f, 0, 0, 0);
-		//}
-		//else
-		//{
-		//	ResourceBuilder::Instance.Get().device->GetDeviceContext()->DrawIndexedInstanced(this->indexBufferVec[materialIndex].indexCount, buffer->GetCount(), 0, 0, 0);
-		//}
-
 		ResourceBuilder::Instance.Get().device->GetDeviceContext()->DrawIndexedInstanced(this->indexBufferVec[materialIndex].indexCount, buffer->GetCount(), 0, 0, 0);
 	}
 	else if (buffer == nullptr && isInstancing == true)

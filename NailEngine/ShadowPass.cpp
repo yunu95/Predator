@@ -39,8 +39,8 @@ void ShadowPass::Bind()
 
 void ShadowPass::SkinnedBind()
 {
-    this->skinnedVS->Bind();
-    this->ps->Bind();
+    //this->skinnedVS->Bind();
+    //this->ps->Bind();
 }
 void ShadowPass::SetTempRTV(Texture* texture)
 {

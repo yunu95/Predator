@@ -40,20 +40,20 @@ void PixelShader::CreateShader(const std::wstring& shaderPath)
 	CreateShaderState(hlslPath);
 }
 
-void PixelShader::Bind()
+void PixelShader::Bind() const
 {
 	ResourceBuilder::Instance.Get().device->GetDeviceContext()->PSSetSamplers(this->samplerSlot, 1, this->samplerState.GetAddressOf());
 
 	ResourceBuilder::Instance.Get().device->GetDeviceContext()->RSSetState(this->rasterizerState.Get());
 
-	ResourceBuilder::Instance.Get().device->GetDeviceContext()->OMSetDepthStencilState(this->depthStencilState.Get(), 1);
+	ResourceBuilder::Instance.Get().device->GetDeviceContext()->OMSetDepthStencilState(this->depthStencilState.Get(), stencilRef);
 
 	ResourceBuilder::Instance.Get().device->GetDeviceContext()->PSSetShader(ps.Get(), nullptr, 0);
 
 	ResourceBuilder::Instance.Get().device->GetDeviceContext()->OMSetBlendState(this->blendState.Get(), nullptr, 0xFFFFFFFF);
 }
 
-void PixelShader::UnBind()
+void PixelShader::UnBind() const
 {
 	ResourceBuilder::Instance.Get().device->GetDeviceContext()->PSSetShader(nullptr, nullptr, 0);
 }
@@ -221,16 +221,16 @@ void PixelShader::CreateDepthStencilState(const std::string& fileContent)
 	depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS; // 깊이 값을 비교하는 함수
 	depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL; // 깊이 값을 쓰는지 여부
 
-	depthStencilDesc.StencilEnable = false; // 스텐실 버퍼 사용 여부
+	depthStencilDesc.StencilEnable = true; // 스텐실 버퍼 사용 여부
 	depthStencilDesc.StencilReadMask = D3D11_DEFAULT_STENCIL_READ_MASK; // 스텐실 값을 읽을 때의 마스크
 	depthStencilDesc.StencilWriteMask = D3D11_DEFAULT_STENCIL_WRITE_MASK; // 스텐실 값을 쓸 때의 마스크
 
 	depthStencilDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP; // 스텐실 테스트에 실패하면 수행할 동작
 	depthStencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP; // 스텐실 테스트는 성공했으나 깊이 테스트는 실패한 경우에 수행할 동작
-	depthStencilDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP; // 스텐실 테스트와 깊이 테스트 모두 성공한 경우에 수행할 동작
+	depthStencilDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_REPLACE; // 스텐실 테스트와 깊이 테스트 모두 성공한 경우에 수행할 동작
 	depthStencilDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS; // 스텐실 테스트에 사용할 함수
 
-	depthStencilDesc.BackFace = depthStencilDesc.FrontFace; // 양면 스텐실을 
+	
 
 	std::regex commentRegex("// DepthType : (\\w+)");
 	std::smatch matches;
@@ -243,7 +243,6 @@ void PixelShader::CreateDepthStencilState(const std::string& fileContent)
 			{
 				depthStencilDesc.DepthEnable = true; 
 				depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS; 
-				
 			}
 			else if (shaderType == "LessEqual")
 			{
@@ -288,6 +287,36 @@ void PixelShader::CreateDepthStencilState(const std::string& fileContent)
 			assert(FALSE);
 		}
 	}
+
+	commentRegex = std::regex("// StencilType : (\\w+)");
+	if (std::regex_search(fileContent, matches, commentRegex))
+	{
+		if (matches.size() >= 2)
+		{
+			std::string shaderType = matches[1].str();
+			if (shaderType == "Character")
+			{
+				this->stencilRef = 2;
+				//depthStencilDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP; // 스텐실 테스트에 실패하면 수행할 동작
+				//depthStencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR; // 스텐실 테스트는 성공했으나 깊이 테스트는 실패한 경우에 수행할 동작
+				//depthStencilDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP; // 스텐실 테스트와 깊이 테스트 모두 성공한 경우에 수행할 동작
+				//depthStencilDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS; // 스텐실 테스트에 사용할 함수
+			}
+			else if (shaderType == "Silhouette")
+			{
+				this->stencilRef = 1;
+				depthStencilDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP; // 스텐실 테스트에 실패하면 수행할 동작
+				depthStencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP; // 스텐실 테스트는 성공했으나 깊이 테스트는 실패한 경우에 수행할 동작
+				depthStencilDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP; // 스텐실 테스트와 깊이 테스트 모두 성공한 경우에 수행할 동작
+				depthStencilDesc.FrontFace.StencilFunc = D3D11_COMPARISON_EQUAL; // 스텐실 테스트에 사용할 함수
+			}
+		}
+		else
+		{
+			//assert(FALSE);
+		}
+	}
+	depthStencilDesc.BackFace = depthStencilDesc.FrontFace; // 양면 스텐실을 
 
 	ResourceBuilder::Instance.Get().device->GetDevice()->CreateDepthStencilState(&depthStencilDesc, this->depthStencilState.GetAddressOf());
 }

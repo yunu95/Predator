@@ -55,6 +55,7 @@ namespace application
             class DisablingReference
             {
             private:
+                OrnamentData* ornamentData;
                 std::weak_ptr<Transform> ornamentTransform;
             public:
                 DisablingReference(application::editor::OrnamentData*);

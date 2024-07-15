@@ -14,6 +14,7 @@ struct PixelIn
 // Temp4Map : Util
 // Temp5Map : Ambient Light
 // Temp6Map : Specular Light
+// Temp7Map : Silhouette
 
 float4 main(PixelIn input) : SV_Target
 {
@@ -54,7 +55,7 @@ float4 main(PixelIn input) : SV_Target
     output.w = 1.f;
     
     //output = Temp0Map.Sample(sam, input.uv);
-    
+    output.xyz *= Temp7Map.Sample(sam, input.uv);
     return output;
 }
 

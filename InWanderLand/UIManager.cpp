@@ -447,6 +447,16 @@ coroutine::Coroutine UIManager::ReturnToTitleAfterFadeOutCoro()
     GetUIElementByEnum(UIEnumID::TitleRoot)->EnableElement();
     co_return;
 }
+void UIManager::OnContentsPlay()
+{
+    PermanentObservee::OnContentsPlay();
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_Boss)->reallyDisabled = true;
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_Boss_Tactic)->reallyDisabled = true;
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_LeftDoor)->reallyDisabled = true;
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_LeftDoor_Tactic)->reallyDisabled = true;
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_RightDoor)->reallyDisabled = true;
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_RightDoor_Tactic)->reallyDisabled = true;
+}
 void UIManager::Update()
 {
     // 마우스 커서 조작
