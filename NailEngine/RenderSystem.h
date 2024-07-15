@@ -62,6 +62,7 @@ public:
     void RenderShadow();
     void RenderPointLightShadow();
     void RenderLight();
+    void RenderSilhouette();
     void RenderFinal();
     void RenderDecal();
     void AAPass();

@@ -32,6 +32,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11BlendState> blendState;
 
 	unsigned int samplerSlot = 0;
+	unsigned int stencilRef = 1;
 	friend class RenderSystem;
 };
 
