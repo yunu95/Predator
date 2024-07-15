@@ -1017,7 +1017,7 @@ void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
         switch (skillType)
         {
         case SkillType::ROBIN_Q:
-            selectedCharacter.lock()->OrderSkill(EnemyImpaleSkill{  }, pos);
+            selectedCharacter.lock()->OrderSkill(RobinChargeSkill{  }, pos);
             break;
         case SkillType::ROBIN_W:
             selectedCharacter.lock()->OrderSkill(RobinTauntSkill{  }, pos);

@@ -12,6 +12,7 @@
 #include "IAnimation.h"
 #include "VFXAnimator.h"
 #include "SkillPreviewSystem.h"
+#include "SFXManager.h"
 
 #include "BurnEffect.h"
 #include "DebuggingMeshPool.h"
@@ -1205,7 +1206,7 @@ void Unit::Init(const application::editor::Unit_TemplateData* unitTemplateData)
                 auto ptr = static_cast<Sound_PlayOnceEvent*>(event.get());
                 animatorComponent.lock()->PushAnimationWithFunc(each, event->frame, [=]()
                     {
-                        yunutyEngine::SoundSystem::PlaySoundfile3D(ptr->rscPath, animatorComponent.lock()->GetGameObject()->GetTransform()->GetWorldPosition());
+                        SFXManager::PlaySoundfile3D(ptr->rscPath, animatorComponent.lock()->GetGameObject()->GetTransform()->GetWorldPosition());
                     });
                 break;
             }
@@ -2038,11 +2039,20 @@ yunutyEngine::coroutine::Coroutine Unit::AttackCoroutine(std::weak_ptr<Unit> opp
         break;
     }
     }
+         
     StartCoroutine(referenceBlockAttack.AcquireForSecondsCoroutine(finalAttackCooltime
         + math::Random::GetRandomFloat(GetUnitTemplateData().pod.m_atkRandomDelayMin, GetUnitTemplateData().pod.m_atkRandomDelayMax)
         - unitTemplateData->pod.m_attackPreDelay * attackDelayMultiplier));
     auto blockCommand = referenceBlockPendingOrder.Acquire();
-    co_yield coroutine::WaitForSeconds(unitTemplateData->pod.m_attackPostDelay * attackDelayMultiplier);
+    if (unitTemplateData->pod.skinnedFBXName == "SKM_HeartQueen")
+    {
+        PlayAnimation(UnitAnimType::AttackToIdle, Animation::PlayFlag_::None);
+        co_yield coroutine::WaitForSeconds(wanderResources::GetAnimation(unitTemplateData->pod.skinnedFBXName, UnitAnimType::AttackToIdle)->GetDuration());
+    }
+    else
+    {
+        co_yield coroutine::WaitForSeconds(unitTemplateData->pod.m_attackPostDelay * attackDelayMultiplier);
+    }
     playSpeed = animatorComponent.lock()->GetGI().GetPlaySpeed();
     blockCommand.reset();
     co_return;
@@ -2063,7 +2073,7 @@ yunutyEngine::coroutine::Coroutine Unit::MeleeAttackEffectCoroutine(std::weak_pt
     Vector3d direction = deltaPos.Normalized();
     attackVFX.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos);
     attackVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(GetTransform()->GetWorldRotation());
-    attackVFX.lock()->GetGameObject()->GetTransform()->SetWorldScale(GetTransform()->GetWorldScale());
+    attackVFX.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d::one * unitTemplateData->pod.unit_scale);
 
     while (!vfxAnimator.lock()->IsDone())
     {
