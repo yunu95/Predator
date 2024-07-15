@@ -15,6 +15,10 @@ PlaytimeRegion::~PlaytimeRegion()
     {
         regionData->playtimeRegion = nullptr;
     }
+    if (playerConstrainingRegion.lock().get() == this)
+    {
+        playerConstrainingRegion.reset();
+    }
     for (auto each : regionData->GetDisablingOrnaments())
     {
         if (auto instance = each->GetPaletteInstance())
