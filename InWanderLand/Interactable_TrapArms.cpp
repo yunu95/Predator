@@ -114,7 +114,6 @@ void Interactable_TrapArms::OnTriggerEnter(physics::Collider* collider)
 {
 	if (Unit* colliderUnitComponent = UnitCollider::AcquireUnit(collider);
 		colliderUnitComponent != nullptr &&
-		colliderUnitComponent->IsPlayerUnit() &&
 		colliderUnitComponent->IsAlive())
 	{
 		triggerStay.insert(colliderUnitComponent);
@@ -124,8 +123,7 @@ void Interactable_TrapArms::OnTriggerEnter(physics::Collider* collider)
 void Interactable_TrapArms::OnTriggerExit(physics::Collider* collider)
 {
 	if (Unit* colliderUnitComponent = UnitCollider::AcquireUnit(collider);
-		colliderUnitComponent != nullptr &&
-		colliderUnitComponent->IsPlayerUnit())
+		colliderUnitComponent != nullptr)
 	{
 		triggerStay.erase(colliderUnitComponent);
 	}
