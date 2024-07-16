@@ -15,7 +15,7 @@
 /// </summary>
 class SpriteAnimation;
 class UIElement;
-class UIManager : public Component, public SingletonComponent<UIManager>
+class UIManager : public Component, public SingletonComponent<UIManager>, public PermanentObservee
 {
 private:
     void ClearDialogueInfos();
@@ -34,6 +34,9 @@ private:
     void SetUIDataWithIndex(int index, const JsonUIData& uiData);
     coroutine::Coroutine StartGameAfterFadeOutCoro();
     coroutine::Coroutine ReturnToTitleAfterFadeOutCoro();
+    virtual Component* GetComponent() { return this; };
+    virtual void OnContentsStop();
+    virtual void OnContentsPlay();
 
     SpriteAnimation* moveToSpriteAnim{ nullptr };
     int uiImportingPriority{ 0 };

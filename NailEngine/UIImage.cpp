@@ -170,7 +170,7 @@ void UIImage::SetVideo(const std::wstring& resourcePath)
 }
 bool UIImage::IsUsingProcessedTexture()
 {
-    return isRadialFillMode || isLinearClippingMode;
+    return isRadialFillMode || isLinearClippingMode || isCapsuleClippingMode;
 }
 int UIImage::GetLayer()
 {

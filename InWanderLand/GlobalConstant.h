@@ -57,12 +57,12 @@ namespace application
         GC<float> peaceFollowingZOffest = 2.0f;
         GC<float> comboTimeLimit{ 5.0 };
 
+        GC<float> tacticCoolTime = 3.f;
         GC<float> tacticSkillCost = 10.0f;
         GC<float> tacticMoveCost = 10.0f;
         GC<float> tacticAttackCost = 10.0f;
         GC<float> tacticCameraLerpTime = 2.0f;
 
-        GC<float> tacticGaugeRecoveryPerSecond = 2.0f;
         GC<float> battleZoomMultiplier = 0.95f;
         GC<float> tacticZoomMultiplier = 1.05f;
 
@@ -79,6 +79,16 @@ namespace application
         GC<float> bossSkillPeriod_4 = 8.f;
 
         GC<float> soundRolloffScale = 0.01f;
+
+        GC<float> camOutsideUIMinX = 150.0f;
+        GC<float> camOutsideUIMinY = 150.0f;
+        GC<float> camOutsideUIMaxX = 1920.0f - 150.0f;
+        GC<float> camOutsideUIMaxY = 1080.0f - 400.0f;
+       
+        GC<float> waveEndZoomFactor = 0.8f;
+        GC<float> waveEndSpeedMultiplier = 0.1f;
+        GC<float> waveEndSlowTime = 3.0f;
+        GC<float> waveEndSlowStartTime = 1.0f;
 
         TO_JSON(POD_GlobalConstant)
             FROM_JSON(POD_GlobalConstant)

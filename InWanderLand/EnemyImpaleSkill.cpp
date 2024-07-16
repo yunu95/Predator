@@ -288,7 +288,7 @@ coroutine::Coroutine EnemyImpaleSkill::SpawningSkillffect(std::weak_ptr<EnemyImp
 
     impaleEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos);
     impaleEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(owner.lock()->GetTransform()->GetWorldRotation());
-    impaleEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(owner.lock()->GetTransform()->GetWorldScale());
+    impaleEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d::one * owner.lock()->GetUnitTemplateData().pod.unit_scale);
 
     impaleEffectAnimator = impaleEffect.lock()->AcquireVFXAnimator();
     impaleEffectAnimator.lock()->SetAutoActiveFalse();

@@ -10,8 +10,17 @@ namespace BossSummon
 struct POD_BossSummonMobSkill
 {
 	float skillDuration = -1.0f;
+
 	int leftMeleeCount = 2;
+	int leftWeakMeleeEnemyCount = 0;
+	int leftEliteMeleeEnemyCount = 0;
+	
 	int leftProjectileCount = 2;
+	int leftWeakRangedCount = 0;
+	int leftWeakApproachRangedCount = 0;
+	int leftKitingRangedCount = 0;
+	int leftSiegeRangedCount = 0;
+	int leftEliteRangedEnemyCount = 0;
 	/// LeftFrame 기준 소환 위치의 offset 입니다.
 	/// -x, +z
 	float leftSummonOffset_x = 10.0f;
@@ -19,7 +28,16 @@ struct POD_BossSummonMobSkill
 	float leftNoiseRadius = 5.0f;
 
 	int rightMeleeCount = 1;
+	int rightWeakMeleeEnemyCount = 0;
+	int rightEliteMeleeEnemyCount = 0;
+
 	int rightProjectileCount = 1;
+	int rightWeakRangedCount = 0;
+	int rightWeakApproachRangedCount = 0;
+	int rightKitingRangedCount = 0;
+	int rightSiegeRangedCount = 0;
+	int rightEliteRangedEnemyCount = 0;
+
 	/// RightFrame 기준 소환 위치의 offset 입니다.
 	/// +x, +z
 	float rightSummonOffset_x = 10.0f;

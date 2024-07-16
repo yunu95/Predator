@@ -129,6 +129,7 @@ private:
     void HandleUnitPickingCollider();
     void HandleComboState();
     void HandlePlayerConstrainingRegion();
+    void HandlePlayerOutOfCamUI();
     void OnPlayerChracterDead(std::weak_ptr<Unit> unit);
     void OnPlayerChracterAllDead();
     // character가 NONE일 경우 알아서 현재 선택된 스킬로 귀결된다.
@@ -189,6 +190,7 @@ private:
     PlayerCharacterType::Enum selectedCharacterType = PlayerCharacterType::None;
     std::weak_ptr<UnitAcquisitionBoxCollider> cursorUnitDetector;
     std::array<std::weak_ptr<Unit>, (int)PlayerCharacterType::Num> characters;
+    std::array<UIElement*, (int)PlayerCharacterType::Num> charactersOutOfCamUI;
     std::weak_ptr<Unit> selectedCharacter;
     std::weak_ptr<Unit> selectedDebugCharacter;
     const application::editor::RegionData* camLockRegion{ nullptr };
@@ -227,6 +229,7 @@ private:
     State::Enum stateRequestedByAction = State::None;
     bool isStateAction = false;
     float elapsedTimeSinceLastCombo{ 0 };
+    int localTimeScale{ 1 };
     friend application::Action_BlockSkillCancel;
     friend application::Action_BlockSkillSelection;
     friend application::Action_BlockPlayerSwitch;

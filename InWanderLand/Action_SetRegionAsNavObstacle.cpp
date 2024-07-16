@@ -118,6 +118,38 @@ namespace application
                     }
                 }, 300);
         }
+        if (ImGui::MenuItem("SetAsObstacle(SetRegionAsNavObstacle)"))
+        {
+            static bool setAsObstacle;
+            setAsObstacle = data->setAsObstacle;
+            editor::imgui::ShowMessageBox("SetAsObstacle(SetRegionAsNavObstacle)", [data]()
+                {
+                    editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
+
+                    ImGui::Separator();
+
+                    ImGui::SetNextItemWidth(-1);
+                    ImGui::Checkbox("SetAsObstacle##", &setAsObstacle);
+
+                    ImGui::Separator();
+
+                    if (ImGui::Button("OK"))
+                    {
+                        data->setAsObstacle = setAsObstacle;
+                        ImGui::CloseCurrentPopup();
+                        editor::imgui::CloseMessageBox("SetAsObstacle(SetRegionAsNavObstacle)");
+                        editor::EditorLayer::SetInputControl(true);
+                    }
+                    ImGui::SameLine();
+
+                    if (ImGui::Button("Cancel"))
+                    {
+                        ImGui::CloseCurrentPopup();
+                        editor::imgui::CloseMessageBox("SetAsObstacle(SetRegionAsNavObstacle)");
+                        editor::EditorLayer::SetInputControl(true);
+                    }
+                }, 300);
+        }
     }
 
     bool Action_SetRegionAsNavObstacle::PreEncoding(json& data) const

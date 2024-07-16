@@ -175,10 +175,7 @@ enum class UIEnumID
     BeaconOutside_Robin,
     BeaconOutside_Ursula,
     BeaconOutside_Hansel,
-    BeaconOutside_ArrowTop,
-    BeaconOutside_ArrowBottom,
-    BeaconOutside_ArrowRight,
-    BeaconOutside_ArrowLeft,
+    BeaconOutside_Arrow,
     // 일반 잡졸들에 적용되는 데미지 표시기
     DamageIndicator_Default,
     DamageIndicator_Critical,
@@ -369,10 +366,7 @@ const std::unordered_map<int, std::string>& application::POD_Enum<UIEnumID>::Get
         { static_cast<int>((int)UIEnumID::BeaconOutside_Robin), "BeaconOutside_Robin" },
         { static_cast<int>((int)UIEnumID::BeaconOutside_Ursula), "BeaconOutside_Ursula" },
         { static_cast<int>((int)UIEnumID::BeaconOutside_Hansel), "BeaconOutside_Hansel" },
-        { static_cast<int>((int)UIEnumID::BeaconOutside_ArrowTop), "BeaconOutside_ArrowTop" },
-        { static_cast<int>((int)UIEnumID::BeaconOutside_ArrowBottom), "BeaconOutside_ArrowBottom" },
-        { static_cast<int>((int)UIEnumID::BeaconOutside_ArrowRight), "BeaconOutside_ArrowRight" },
-        { static_cast<int>((int)UIEnumID::BeaconOutside_ArrowLeft), "BeaconOutside_ArrowLeft" },
+        { static_cast<int>((int)UIEnumID::BeaconOutside_Arrow), "BeaconOutside_Arrow" },
         // 일반 잡졸들에 적용되는 데미지 표시기
         { static_cast<int>((int)UIEnumID::DamageIndicator_Default), "DamageIndicator_Default" },
         { static_cast<int>((int)UIEnumID::DamageIndicator_Critical), "DamageIndicator_Critical" },

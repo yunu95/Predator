@@ -18,6 +18,8 @@ namespace yunutyEngine::graphics
     class YUNUTY_API UIImage : public Renderable<yunuGI::IUIImage>
     {
     private:
+        virtual void OnEnable();
+        virtual void OnDisable();
     protected:
         //virtual void Update() { OnTransformUpdate(); };
         virtual void OnTransformUpdate() override;

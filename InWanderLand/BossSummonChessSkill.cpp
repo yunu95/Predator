@@ -129,7 +129,7 @@ coroutine::Coroutine BossSummonChessSkill::SpawningFieldEffect(std::weak_ptr<Bos
 	stepEffect = FBXPool::Instance().Borrow("VFX_HeartQueen_Skill3_1");
 	stepEffect.lock()->GetGameObject()->GetTransform()->SetWorldPosition(startPos);
 	stepEffect.lock()->GetGameObject()->GetTransform()->SetWorldRotation(owner.lock()->GetTransform()->GetWorldRotation());
-	stepEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(owner.lock()->GetTransform()->GetWorldScale());
+	stepEffect.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d::one * owner.lock()->GetUnitTemplateData().pod.unit_scale);
 
 	stepEffectAnimator = stepEffect.lock()->AcquireVFXAnimator();
 	stepEffectAnimator.lock()->SetAutoActiveFalse();

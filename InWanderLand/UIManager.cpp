@@ -212,7 +212,7 @@ void UIManager::SummonMoveToFeedback(const Vector3d& worldPos)
 Vector3d UIManager::GetUIPosFromWorld(Vector3d worldPosition)
 {
     if (Vector3d::Dot(worldPosition - graphics::Camera::GetMainCamera()->GetTransform()->GetWorldPosition(),
-        graphics::Camera::GetMainCamera()->GetTransform()->GetWorldRotation().Forward()) < 0)
+        graphics::Camera::GetMainCamera()->GetTransform()->GetWorldRotation().Forward()) < -0.5f)
     {
         return Vector3d{ -9000, -9000, 0 };
     }
@@ -424,7 +424,7 @@ coroutine::Coroutine UIManager::ReturnToTitleAfterFadeOutCoro()
     co_yield coroutine::WaitForSeconds{ 1.2f, true };
     for (auto& each : uisByIndex)
     {
-        if (each.second->importedUIData.disableOnStartExe)
+        if (each.second->importedUIData.disableOnStartExe && !(each.second->importedUIData.customFlags2 & (int)UIExportFlag2::DisableOnlyOnImport))
         {
             each.second->DisableElementInstant();
         }
@@ -446,6 +446,19 @@ coroutine::Coroutine UIManager::ReturnToTitleAfterFadeOutCoro()
     application::Application::GetInstance().StopContents(ContentsStopFlag::None);
     GetUIElementByEnum(UIEnumID::TitleRoot)->EnableElement();
     co_return;
+}
+void UIManager::OnContentsStop()
+{
+}
+void UIManager::OnContentsPlay()
+{
+    PermanentObservee::OnContentsPlay();
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_Boss)->reallyDisabled = true;
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_Boss_Tactic)->reallyDisabled = true;
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_LeftDoor)->reallyDisabled = true;
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_LeftDoor_Tactic)->reallyDisabled = true;
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_RightDoor)->reallyDisabled = true;
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_RightDoor_Tactic)->reallyDisabled = true;
 }
 void UIManager::Update()
 {
