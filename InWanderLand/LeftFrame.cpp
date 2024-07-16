@@ -396,11 +396,18 @@ namespace BossSummon
 					{
 						if (meleeSummonCount < totalMeleeCount && !meleeCountList.empty())
 						{
+							if (meleeCountList.begin()->first == nullptr)
+							{
+								meleeCountList.erase(meleeCountList.begin());
+								break;
+							}
+
 							Vector3d finalPos = Vector3d();
 							finalPos.x = math::Random::GetRandomFloat((pivotPos + BossSummonMobSkill::pod.leftNoiseRadius * summonRot.Right().Normalized()).x, pivotPos.x + BossSummonMobSkill::pod.leftNoiseRadius);
 							finalPos.z = math::Random::GetRandomFloat(pivotPos.z - BossSummonMobSkill::pod.leftNoiseRadius, (pivotPos - BossSummonMobSkill::pod.leftNoiseRadius * summonRot.Right().Normalized()).z);
 							
 							auto sUnit = UnitPool::SingleInstance().Borrow(meleeCountList.begin()->first, finalPos, summonRot);
+
 							summonUnit.insert(sUnit);
 							currentSummonMeleeUnitCount++;
 							if (currentSummonMeleeUnitCount >= meleeCountList.begin()->second)
@@ -437,6 +444,13 @@ namespace BossSummon
 					{
 						if (projectileSummonCount < totalRangedCount && !rangedCountList.empty())
 						{
+
+							if (rangedCountList.begin()->first == nullptr)
+							{
+								rangedCountList.erase(rangedCountList.begin());
+								break;
+							}
+
 							Vector3d finalPos = Vector3d();
 							finalPos.x = math::Random::GetRandomFloat((pivotPos + BossSummonMobSkill::pod.leftNoiseRadius * summonRot.Right().Normalized()).x, pivotPos.x + BossSummonMobSkill::pod.leftNoiseRadius);
 							finalPos.z = math::Random::GetRandomFloat(pivotPos.z - BossSummonMobSkill::pod.leftNoiseRadius, (pivotPos - BossSummonMobSkill::pod.leftNoiseRadius * summonRot.Right().Normalized()).z);
