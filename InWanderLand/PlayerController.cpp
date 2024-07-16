@@ -720,7 +720,7 @@ void PlayerController::HandlePlayerOutOfCamUI()
         const Vector2d uiClampMin{ gc.camOutsideUIMinX, gc.camOutsideUIMinY };
         const Vector2d uiClampMax{ gc.camOutsideUIMaxX, gc.camOutsideUIMaxY };
         auto uiPos = UIManager::Instance().GetUIPosFromWorld(unit->GetTransform()->GetWorldPosition());
-        if (unit && unit->IsAlive() && (uiPos.x < 0 || uiPos.x>1920 || uiPos.y < 0 || uiPos.y>1080))
+        if (unit && unit->IsAlive() && state != State::Cinematic && (uiPos.x < 0 || uiPos.x>1920 || uiPos.y < 0 || uiPos.y>1080))
         {
             //auto uiClampedPos = uiPos;
             uiPos.x -= 960;

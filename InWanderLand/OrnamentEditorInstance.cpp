@@ -220,6 +220,7 @@ namespace application::editor::palette
             bool isFirst = false;
             bool isDeferred = (renderer->GetGI().GetMaterial()->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred);
 
+            renderer->GetGameObject()->SetSelfActive(true);
             while (0 < ratio && ratio < 1)
             {
                 ratio += (visible ? 1 : -1) * fadeSpeed * yunutyEngine::Time::GetDeltaTimeUnscaled();
@@ -237,19 +238,27 @@ namespace application::editor::palette
                         const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
                         shaderName = shaderName.substr(0, pos);
                         shaderName += L"_AlphaPS.cso";
-                        renderer->GetGI().GetMaterial(i)->SetPixelShader(_resourceManager->GetShader(shaderName));
+                        auto shader = _resourceManager->GetShader(shaderName);
+                        if (shader == nullptr)
+                        {
+                            ratio = visible ? 1 : 0;
+                            break;
+                        }
+                        renderer->GetGI().GetMaterial(i)->SetPixelShader(shader);
                     }
                     renderer->GetGI().GetMaterial(i)->SetColor(yunuGI::Color{ 1,1,1, ratio });
                 }
                 co_await std::suspend_always();
             }
-        }
-        static const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
-        if (visible)
-        {
-            for (int i = 0; i < renderer->GetGI().GetMaterialCount(); ++i)
+            renderer->GetGameObject()->SetSelfActive(visible);
+
+            static const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+            if (visible)
             {
-                renderer->GetGI().SetMaterial(i, resourceManager->GetMaterial(renderer->GetGI().GetMaterial(i)->GetName(true)), true);
+                for (int i = 0; i < renderer->GetGI().GetMaterialCount(); ++i)
+                {
+                    renderer->GetGI().SetMaterial(i, resourceManager->GetMaterial(renderer->GetGI().GetMaterial(i)->GetName(true)), true);
+                }
             }
         }
         co_return;
