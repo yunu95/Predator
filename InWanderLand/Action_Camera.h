@@ -11,146 +11,147 @@
 
 namespace application
 {
-	namespace editor
-	{
-		class Module_ScriptEditor;
-		class CameraData;
-	}
+    namespace editor
+    {
+        class Module_ScriptEditor;
+        class CameraData;
+    }
 
-	/// 특정 카메라 View 로 변경하는 Action 입니다.
-	class Action_CameraChangeView
-		: public IAction
-	{
-		friend class editor::Module_ScriptEditor;
+    /// 특정 카메라 View 로 변경하는 Action 입니다.
+    class Action_CameraChangeView
+        : public IAction
+    {
+        friend class editor::Module_ScriptEditor;
 
-	public:
-		DEFINE_ACTION(CameraChangeView)
+    public:
+        DEFINE_ACTION(CameraChangeView)
 
-		virtual ~Action_CameraChangeView();
+            virtual ~Action_CameraChangeView();
 
-		virtual CoroutineObject<void> DoAction() override;
+        virtual CoroutineObject<void> DoAction() override;
 
-		virtual bool IsValid() override;
+        virtual bool IsValid() override;
 
-		void SetCamera(editor::CameraData* cam);
-		void SetLerpTime(float lerpTime);
+        void SetCamera(editor::CameraData* cam);
+        void SetLerpTime(float lerpTime);
 
-		virtual void ProcessObervationEvent(ObservationTarget* target, ObservationEvent event) override;
+        virtual void ProcessObervationEvent(ObservationTarget* target, ObservationEvent event) override;
 
-		virtual bool PreEncoding(json& data) const override;
-		virtual bool PostEncoding(json& data) const override;
-		virtual bool PreDecoding(const json& data) override;
-		virtual bool PostDecoding(const json& data) override;
+        virtual bool PreEncoding(json& data) const override;
+        virtual bool PostEncoding(json& data) const override;
+        virtual bool PreDecoding(const json& data) override;
+        virtual bool PostDecoding(const json& data) override;
 
-	private:
-		editor::CameraData* targetCam = nullptr;
-		bool isEditing = false;
-		float lerpTime = 0;
-	};
+    private:
+        editor::CameraData* targetCam = nullptr;
+        bool isEditing = false;
+        float lerpTime = 0;
+    };
 
-	class Action_CameraLoadView;
+    class Action_CameraLoadView;
 
-	/// 현재 시점의 MainCamera 의 View 를 저장합니다.
-	class Action_CameraSaveView
-		: public IAction
-	{
-		friend class editor::Module_ScriptEditor;
-		friend class Action_CameraLoadView;
+    /// 현재 시점의 MainCamera 의 View 를 저장합니다.
+    class Action_CameraSaveView
+        : public IAction
+    {
+        friend class editor::Module_ScriptEditor;
+        friend class Action_CameraLoadView;
 
-	public:
-		DEFINE_ACTION(CameraSaveView)
+    public:
+        DEFINE_ACTION(CameraSaveView)
 
-		virtual CoroutineObject<void> DoAction() override;
+            virtual CoroutineObject<void> DoAction() override;
 
-		virtual bool PreEncoding(json& data) const override;
-		virtual bool PostEncoding(json& data) const override;
-		virtual bool PreDecoding(const json& data) override;
-		virtual bool PostDecoding(const json& data) override;
+        virtual bool PreEncoding(json& data) const override;
+        virtual bool PostEncoding(json& data) const override;
+        virtual bool PreDecoding(const json& data) override;
+        virtual bool PostDecoding(const json& data) override;
 
-		static void Clear();
+        static void Clear();
 
-	private:
-		static float savedFov;
-		static float savedCameraNear;
-		static float savedCameraFar;
-		static float savedWidth;
-		static float savedHeight;
-		static yunuGI::Vector3 savedPosition;
-		static yunuGI::Quaternion savedRotation;
-		static yunuGI::Vector3 savedScale;
-	};
+    private:
+        static float savedFov;
+        static float savedCameraNear;
+        static float savedCameraFar;
+        static float savedWidth;
+        static float savedHeight;
+        static yunuGI::Vector3 savedPosition;
+        static yunuGI::Quaternion savedRotation;
+        static yunuGI::Vector3 savedScale;
+    };
 
-	/// 저장된 MainCamera 의 View 를 적용합니다.
-	/// 저장된 MainCamera 의 View 가 없을 경우, 아무 일도 일어나지 않습니다.
-	class Action_CameraLoadView
-		: public IAction
-	{
-		friend class editor::Module_ScriptEditor;
+    /// 저장된 MainCamera 의 View 를 적용합니다.
+    /// 저장된 MainCamera 의 View 가 없을 경우, 아무 일도 일어나지 않습니다.
+    class Action_CameraLoadView
+        : public IAction
+    {
+        friend class editor::Module_ScriptEditor;
 
-	public:
-		DEFINE_ACTION(CameraLoadView)
+    public:
+        DEFINE_ACTION(CameraLoadView)
 
-		virtual CoroutineObject<void> DoAction() override;
+            virtual CoroutineObject<void> DoAction() override;
 
-		void SetLerpTime(float lerpTime);
+        void SetLerpTime(float lerpTime);
 
-		virtual bool PreEncoding(json& data) const override;
-		virtual bool PostEncoding(json& data) const override;
-		virtual bool PreDecoding(const json& data) override;
-		virtual bool PostDecoding(const json& data) override;
+        virtual bool PreEncoding(json& data) const override;
+        virtual bool PostEncoding(json& data) const override;
+        virtual bool PreDecoding(const json& data) override;
+        virtual bool PostDecoding(const json& data) override;
 
-	private:
-		float lerpTime = 0;
-	};
+    private:
+        float lerpTime = 0;
+    };
 
-	/// 초기 상태의 게임 카메라 위치로 되돌립니다.
-	class Action_CameraRevert
-		: public IAction
-	{
-		friend class editor::Module_ScriptEditor;
+    /// 초기 상태의 게임 카메라 위치로 되돌립니다.
+    class Action_CameraRevert
+        : public IAction
+    {
+        friend class editor::Module_ScriptEditor;
 
-	public:
-		DEFINE_ACTION(CameraRevert)
+    public:
+        DEFINE_ACTION(CameraRevert)
 
-		virtual CoroutineObject<void> DoAction() override;
+            virtual CoroutineObject<void> DoAction() override;
 
-		void SetLerpTime(float lerpTime);
+        void SetLerpTime(float lerpTime);
 
-		virtual bool PreEncoding(json& data) const override;
-		virtual bool PostEncoding(json& data) const override;
-		virtual bool PreDecoding(const json& data) override;
-		virtual bool PostDecoding(const json& data) override;
+        virtual bool PreEncoding(json& data) const override;
+        virtual bool PostEncoding(json& data) const override;
+        virtual bool PreDecoding(const json& data) override;
+        virtual bool PostDecoding(const json& data) override;
 
-	private:
-		float lerpTime = 0;
-	};
+    private:
+        float lerpTime = 0;
+    };
 
-	/// 전술모드에서 사용할 카메라를 세팅합니다.
-	class Action_SetTacticCamera
-		: public IAction
-	{
-		friend class editor::Module_ScriptEditor;
+    /// 전술모드에서 사용할 카메라를 세팅합니다.
+    class Action_SetTacticCamera
+        : public IAction
+    {
+        friend class editor::Module_ScriptEditor;
 
-	public:
-		DEFINE_ACTION(SetTacticCamera)
+    public:
+        DEFINE_ACTION(SetTacticCamera)
 
-		virtual ~Action_SetTacticCamera();
+            virtual ~Action_SetTacticCamera();
 
-		virtual CoroutineObject<void> DoAction() override;
+        virtual CoroutineObject<void> DoAction() override;
 
-		virtual bool IsValid() override;
+        virtual bool IsValid() override;
 
-		void SetCamera(editor::CameraData* cam);
+        void SetCamera(editor::CameraData* cam);
 
-		virtual void ProcessObervationEvent(ObservationTarget* target, ObservationEvent event) override;
+        virtual void ProcessObervationEvent(ObservationTarget* target, ObservationEvent event) override;
 
-		virtual bool PreEncoding(json& data) const override;
-		virtual bool PostEncoding(json& data) const override;
-		virtual bool PreDecoding(const json& data) override;
-		virtual bool PostDecoding(const json& data) override;
+        virtual bool PreEncoding(json& data) const override;
+        virtual bool PostEncoding(json& data) const override;
+        virtual bool PreDecoding(const json& data) override;
+        virtual bool PostDecoding(const json& data) override;
 
-	private:
-		editor::CameraData* targetCam = nullptr;
-		bool isEditing = false;
-	};
+    private:
+        static std::unordered_map<editor::CameraData*, GameObject*> camObjMap;
+        editor::CameraData* targetCam = nullptr;
+        bool isEditing = false;
+    };
 }

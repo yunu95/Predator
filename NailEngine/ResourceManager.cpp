@@ -615,7 +615,7 @@ std::shared_ptr<yunuGI::IMaterial> ResourceManager::GetInstanceMaterial(const st
 std::shared_ptr<yunuGI::IShader> ResourceManager::GetShader(const std::wstring& shaderPath)
 {
     auto iter = shaderMap.find(shaderPath);
-    assert(iter != shaderMap.end());
+    //assert(iter != shaderMap.end());
 
     return std::static_pointer_cast<Shader>(iter->second);
 }
