@@ -80,6 +80,11 @@ namespace application
 
         GC<float> soundRolloffScale = 0.01f;
 
+        GC<float> camOutsideUIMinX = 150.0f;
+        GC<float> camOutsideUIMinY = 150.0f;
+        GC<float> camOutsideUIMaxX = 1920.0f - 150.0f;
+        GC<float> camOutsideUIMaxY = 1080.0f - 400.0f;
+
         TO_JSON(POD_GlobalConstant)
             FROM_JSON(POD_GlobalConstant)
     };

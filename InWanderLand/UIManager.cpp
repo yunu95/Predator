@@ -212,7 +212,7 @@ void UIManager::SummonMoveToFeedback(const Vector3d& worldPos)
 Vector3d UIManager::GetUIPosFromWorld(Vector3d worldPosition)
 {
     if (Vector3d::Dot(worldPosition - graphics::Camera::GetMainCamera()->GetTransform()->GetWorldPosition(),
-        graphics::Camera::GetMainCamera()->GetTransform()->GetWorldRotation().Forward()) < 0)
+        graphics::Camera::GetMainCamera()->GetTransform()->GetWorldRotation().Forward()) < -0.5f)
     {
         return Vector3d{ -9000, -9000, 0 };
     }
@@ -446,6 +446,9 @@ coroutine::Coroutine UIManager::ReturnToTitleAfterFadeOutCoro()
     application::Application::GetInstance().StopContents(ContentsStopFlag::None);
     GetUIElementByEnum(UIEnumID::TitleRoot)->EnableElement();
     co_return;
+}
+void UIManager::OnContentsStop()
+{
 }
 void UIManager::OnContentsPlay()
 {

@@ -35,6 +35,7 @@ private:
     coroutine::Coroutine StartGameAfterFadeOutCoro();
     coroutine::Coroutine ReturnToTitleAfterFadeOutCoro();
     virtual Component* GetComponent() { return this; };
+    virtual void OnContentsStop();
     virtual void OnContentsPlay();
 
     SpriteAnimation* moveToSpriteAnim{ nullptr };

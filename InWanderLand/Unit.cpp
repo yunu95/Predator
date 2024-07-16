@@ -12,6 +12,7 @@
 #include "IAnimation.h"
 #include "VFXAnimator.h"
 #include "SkillPreviewSystem.h"
+#include "SFXManager.h"
 
 #include "BurnEffect.h"
 #include "DebuggingMeshPool.h"
@@ -1205,7 +1206,7 @@ void Unit::Init(const application::editor::Unit_TemplateData* unitTemplateData)
                 auto ptr = static_cast<Sound_PlayOnceEvent*>(event.get());
                 animatorComponent.lock()->PushAnimationWithFunc(each, event->frame, [=]()
                     {
-                        yunutyEngine::SoundSystem::PlaySoundfile3D(ptr->rscPath, animatorComponent.lock()->GetGameObject()->GetTransform()->GetWorldPosition());
+                        SFXManager::PlaySoundfile3D(ptr->rscPath, animatorComponent.lock()->GetGameObject()->GetTransform()->GetWorldPosition());
                     });
                 break;
             }

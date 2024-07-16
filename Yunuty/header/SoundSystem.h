@@ -76,6 +76,16 @@ namespace yunutyEngine
         static SOUNDGROUP_BEHAVIOR GetSoundGroupMaxAudibleBehavior(unsigned long long groupIndex);
         static void Set3DRolloffScale(float rolloffScale);
         static float Get3DRolloffScale();
+        static void SetSoundGroupPriority(unsigned long long groupIndex, int priority);
+        static int GetSoundGroupPriority(unsigned long long groupIndex);
+        static void SetSoundGroupPriorityFlag(unsigned long long groupIndex, bool flag);
+        static bool GetSoundGroupPriorityFlag(unsigned long long groupIndex);
+        static void SetSoundGroupPriorityFadeRatio(unsigned long long groupIndex, float ratio);
+        static float GetSoundGroupPriorityFadeRatio(unsigned long long groupIndex);
+        static void SetSoundGroupPriorityFadeOutTime(unsigned long long groupIndex, float time);
+        static float GetSoundGroupPriorityFadeOutTime(unsigned long long groupIndex);
+        static void SetSoundGroupPriorityFadeInTime(unsigned long long groupIndex, float time);
+        static float GetSoundGroupPriorityFadeInTime(unsigned long long groupIndex);
     private:
         static SoundSystem* soundInstance;
         static SoundSystem* SingleInstance();
@@ -102,6 +112,12 @@ namespace yunutyEngine
         FMOD::System* fmodSystem = nullptr;
         // 0번 Index 는 masterSoundGroup 으로 사용하며, 기본적으로 생성합니다.
         unordered_map<unsigned long long, FMOD::SoundGroup*> soundGroups;
+        unordered_map<unsigned long long, float> soundGroupVolumes;
+        unordered_map<unsigned long long, int> soundGroupPriorityMap;
+        unordered_map<unsigned long long, bool> soundGroupPriorityFlagMap;
+        unordered_map<unsigned long long, float> soundGroupPriorityFadeRatioMap;
+        unordered_map<unsigned long long, float> soundGroupPriorityFadeOutTimeMap;
+        unordered_map<unsigned long long, float> soundGroupPriorityFadeInTimeMap;
         int lastChannelIndex{ 0 };
         float musicVolume = 1.0f;
         float sfxVolume = 1.0f;

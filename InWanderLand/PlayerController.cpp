@@ -165,6 +165,9 @@ void PlayerController::OnContentsPlay()
     SetManaFull();
     SetState(State::Peace);
     InitUnitMouseInteractionEffects();
+    charactersOutOfCamUI[PlayerCharacterType::Robin] = UIManager::Instance().GetUIElementByEnum(UIEnumID::BeaconOutside_Robin);
+    charactersOutOfCamUI[PlayerCharacterType::Ursula] = UIManager::Instance().GetUIElementByEnum(UIEnumID::BeaconOutside_Ursula);
+    charactersOutOfCamUI[PlayerCharacterType::Hansel] = UIManager::Instance().GetUIElementByEnum(UIEnumID::BeaconOutside_Hansel);
 
     SetCameraOffset();
     SelectPlayerUnit(PlayerCharacterType::Robin);
@@ -196,6 +199,7 @@ void PlayerController::Update()
     HandleUnitPickingCollider();
     HandleComboState();
     HandlePlayerConstrainingRegion();
+    HandlePlayerOutOfCamUI();
     static yunutyEngine::graphics::UIText* text_State{ nullptr };
     if (text_State == nullptr)
     {
@@ -705,6 +709,43 @@ void PlayerController::HandlePlayerConstrainingRegion()
     }
 }
 
+void PlayerController::HandlePlayerOutOfCamUI()
+{
+    for (auto& each : characters)
+    {
+        auto unit = each.lock();
+        auto ui = charactersOutOfCamUI[unit->GetUnitTemplateData().pod.playerUnitType.enumValue];
+        auto& gc = GlobalConstant::GetSingletonInstance().pod;
+        const Vector2d uiClampMin{ gc.camOutsideUIMinX, gc.camOutsideUIMinY };
+        const Vector2d uiClampMax{ gc.camOutsideUIMaxX, gc.camOutsideUIMaxY };
+        auto uiPos = UIManager::Instance().GetUIPosFromWorld(unit->GetTransform()->GetWorldPosition());
+        if (unit && unit->IsAlive() && (uiPos.x < 0 || uiPos.x>1920 || uiPos.y < 0 || uiPos.y>1080))
+        {
+            //auto uiClampedPos = uiPos;
+            uiPos.x -= 960;
+            uiPos.y -= 540;
+            float dx = uiPos.x < 0 ? 960.0f - uiClampMin.x : uiClampMax.x - 960.0f;
+            float dy = uiPos.y < 0 ? 540 - uiClampMin.y : uiClampMax.y - 540;
+            float xRatio = dx / std::abs(uiPos.x);
+            float yRatio = dy / std::abs(uiPos.y);
+            float ratio = std::min(xRatio, yRatio);
+            uiPos *= ratio;
+            //uiClampedPos.y = std::clamp(uiClampedPos.y, uiClampMin.y, uiClampMax.y);
+
+            ui->EnableElement();
+            ui->GetTransform()->SetWorldPosition(uiPos + Vector2d{ 960,540 });
+            auto atn = std::atan2f(-(uiPos.y), (uiPos.x));
+            auto angle = atn * 180 / math::PI;
+            ui->GetLocalUIsByEnumID().at(UIEnumID::BeaconOutside_Arrow)->GetTransform()->SetWorldRotation(Vector3d{ 0,0,-std::atan2f(-uiPos.y,uiPos.x) * 180 / math::PI });
+            //ui->GetLocalUIsByEnumID().at(UIEnumID::BeaconOutside_Arrow)->GetTransform()->SetWorldRotation(Vector3d{ 0,0,90 });
+        }
+        else
+        {
+            ui->DisableElement();
+        }
+    }
+}
+
 void PlayerController::SelectPlayerUnit(PlayerCharacterType::Enum charType)
 {
     UnSelectSkill();
@@ -1119,6 +1160,15 @@ void PlayerController::SetState(State::Enum newState)
         return;
     switch (state)
     {
+    case PlayerController::State::Cinematic:
+        for (auto& each : characters)
+        {
+            for (auto& eachStatusBar : each.lock()->unitStatusUIs)
+            {
+                eachStatusBar.lock()->EnableElement();
+            }
+        }
+        break;
     case PlayerController::State::Tactic:
         UIManager::Instance().GetUIElementByEnum(UIEnumID::BossUI_Default)->EnableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::TacticModeIngameUI)->DisableElement();
@@ -1153,6 +1203,10 @@ void PlayerController::SetState(State::Enum newState)
         for (auto& each : characters)
         {
             each.lock()->playingBattleAnim = false;
+            for (auto& eachStatusBar : each.lock()->unitStatusUIs)
+            {
+                eachStatusBar.lock()->DisableElement();
+            }
         }
         break;
     case State::Battle:
