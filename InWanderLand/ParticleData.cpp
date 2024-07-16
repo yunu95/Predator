@@ -91,6 +91,7 @@ namespace application
         void ParticleData::ApplyAsPlaytimeObject()
         {
             ApplyAsPaletteInstance();
+            particleInstance->GetGameObject()->SetSelfActive(false);
             if (!pod.isGuide && tookAction)
             {
                 particleInstance->ShowParticleObject();
