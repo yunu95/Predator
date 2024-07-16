@@ -182,6 +182,7 @@ void Unit::OnStateEngage<UnitBehaviourTree::Death>()
     enableNavObstacleByState.reset();
     disableNavAgentByState = referenceDisableNavAgent.Acquire();
     defaultAnimationType = UnitAnimType::None;
+    belongingWave->ReportUnitDeath(this);
     coroutineDeath = StartCoroutine(DeathCoroutine());
     for (auto& [buffID, buff] : buffs)
     {
