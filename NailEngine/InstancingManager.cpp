@@ -792,7 +792,18 @@ void InstancingManager::RenderSkinnedShadow()
 					//}
 					(*renderInfoVec.begin())->renderInfo.material->PushGraphicsData();
 
-					ResourceManager::Instance.Get().GetShader(L"SkinnedShadowVS.cso")->Bind();
+					
+
+					if ((*renderInfoVec.begin())->renderInfo.material->GetVertexShader()->GetName() == L"DissolveVS.cso")
+					{
+						ResourceManager::Instance.Get().GetShader(L"DissolveShadowVS.cso")->Bind();
+					}
+					else
+					{
+						ResourceManager::Instance.Get().GetShader(L"SkinnedShadowVS.cso")->Bind();
+					}
+
+
 					if ((*renderInfoVec.begin())->renderInfo.material->GetPixelShader()->GetName() == L"DissolvePS.cso")
 					{
 						ResourceManager::Instance.Get().GetShader(L"DissolveShadowPS.cso")->Bind();

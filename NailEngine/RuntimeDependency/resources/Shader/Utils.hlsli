@@ -734,6 +734,17 @@ void CalculateLight(int lightIndex, float3 normal, float3 pos, out float4 diffus
     }
 }
 
+float3 BlendHardLight(float3 backdrop, float3 source)
+{
+    float maxRGB = max(source.r, source.g);
+    maxRGB = max(maxRGB, source.b);
 
+    float blend = smoothstep(0.2, 0.8, maxRGB);
+
+    float3 multiply = backdrop * (2.0 * source);
+    float3 screen = backdrop - (1.0 - 2.0 * source) - (backdrop * (1.0 - 2.0 * source));
+
+    return lerp(multiply, screen, blend);
+}
 
 #endif
