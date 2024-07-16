@@ -70,9 +70,6 @@ public:
 	virtual bool PostDecoding(const json& data) override;
 
 private:
-	float localSFXVolume = 1.0f;
-	float ratio = 1.f;
-
 	/// default 를 포함한 Group 개수입니다.
 	int initSoundGroupCount = 11;
 	int defaultSGPriority = 128;
