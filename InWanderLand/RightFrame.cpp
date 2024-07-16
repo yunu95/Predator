@@ -393,6 +393,12 @@ namespace BossSummon
 					{
 						if (meleeSummonCount < totalMeleeCount && !meleeCountList.empty())
 						{
+							if (meleeCountList.begin()->first == nullptr)
+							{
+								meleeCountList.erase(meleeCountList.begin());
+								break;
+							}
+
 							Vector3d finalPos = Vector3d();
 							finalPos.x = math::Random::GetRandomFloat((pivotPos + BossSummonMobSkill::pod.rightNoiseRadius * summonRot.Right().Normalized()).x, pivotPos.x + BossSummonMobSkill::pod.rightNoiseRadius);
 							finalPos.z = math::Random::GetRandomFloat(pivotPos.z - BossSummonMobSkill::pod.rightNoiseRadius, (pivotPos - BossSummonMobSkill::pod.rightNoiseRadius * summonRot.Right().Normalized()).z);
@@ -434,6 +440,11 @@ namespace BossSummon
 					{
 						if (projectileSummonCount < totalRangedCount && !rangedCountList.empty())
 						{
+							if (rangedCountList.begin()->first == nullptr)
+							{
+								rangedCountList.erase(rangedCountList.begin());
+								break;
+							}
 							Vector3d finalPos = Vector3d();
 							finalPos.x = math::Random::GetRandomFloat((pivotPos + BossSummonMobSkill::pod.rightNoiseRadius * summonRot.Right().Normalized()).x, pivotPos.x + BossSummonMobSkill::pod.rightNoiseRadius);
 							finalPos.z = math::Random::GetRandomFloat(pivotPos.z - BossSummonMobSkill::pod.rightNoiseRadius, (pivotPos - BossSummonMobSkill::pod.rightNoiseRadius * summonRot.Right().Normalized()).z);
