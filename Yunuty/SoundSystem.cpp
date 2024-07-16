@@ -41,8 +41,13 @@ void yunutyEngine::SoundSystem::Update()
     static std::vector<unsigned long long> sortedSoundGroups;
     static std::unordered_map<unsigned long long, bool> flagsMap;
 
-    /// pair[FadingOut / FadingIn]
-    static std::unordered_map<unsigned long long, std::pair<bool, bool>> fadingMap;
+    enum class FadeDir
+    {
+        Down,
+        Up
+    };
+
+    static std::unordered_map<unsigned long long, std::unordered_map<FadeDir, bool>> fadingMap;
     sortedSoundGroups.clear();
     sortedSoundGroups.reserve(16);
     for (auto& [idx, soundGroup] : soundSystemInstance->soundGroups)
@@ -54,7 +59,8 @@ void yunutyEngine::SoundSystem::Update()
         }
         if (!fadingMap.contains(idx))
         {
-            fadingMap[idx] = std::make_pair(false, false);
+            fadingMap[idx][FadeDir::Down] = false;
+            fadingMap[idx][FadeDir::Up] = false;
         }
     }
 
@@ -66,18 +72,22 @@ void yunutyEngine::SoundSystem::Update()
     static auto soundDown = [=](const unsigned long long idxDown)
         {
             static double localTimer = 0;
+            static float initVolume = 1.0f;
             float volume = 1.0f;
             GetSoundGroup(idxDown)->getVolume(&volume);
 
             if (volume <= GetSoundGroupVolume(idxDown) * GetSoundGroupPriorityFadeRatio(idxDown) + 0.0000001f)
             {
                 GetSoundGroup(idxDown)->setVolume(GetSoundGroupVolume(idxDown) * GetSoundGroupPriorityFadeRatio(idxDown));
-                fadingMap[idxDown].first = false;
+                fadingMap[idxDown][FadeDir::Down] = false;
                 return;
             }
-            else if (volume == GetSoundGroupVolume(idxDown))
+            else if (volume == GetSoundGroupVolume(idxDown) || fadingMap[idxDown][FadeDir::Up])
             {
+                fadingMap[idxDown][FadeDir::Up] = false;
+                fadingMap[idxDown][FadeDir::Down] = true;
                 localTimer = 0;
+                GetSoundGroup(idxDown)->getVolume(&initVolume);
             }
 
             if (GetSoundGroupPriorityFadeOutTime(idxDown) == 0)
@@ -91,7 +101,7 @@ void yunutyEngine::SoundSystem::Update()
                 {
                     localTimer = 1;
                 }
-                GetSoundGroup(idxDown)->setVolume(math::LerpF(GetSoundGroupVolume(idxDown), GetSoundGroupVolume(idxDown) * GetSoundGroupPriorityFadeRatio(idxDown), localTimer));
+                GetSoundGroup(idxDown)->setVolume(math::LerpF(initVolume, GetSoundGroupVolume(idxDown) * GetSoundGroupPriorityFadeRatio(idxDown), localTimer));
             }
             return;
         };
@@ -99,17 +109,20 @@ void yunutyEngine::SoundSystem::Update()
     static auto soundUp = [=](const unsigned long long idxUp)
         {
             static double localTimer = 0;
+            static float initVolume = 1.0f;
             float volume = 1.0f;
             GetSoundGroup(idxUp)->getVolume(&volume);
 
             if (volume >= GetSoundGroupVolume(idxUp) - 0.0000001f)
             {
                 GetSoundGroup(idxUp)->setVolume(GetSoundGroupVolume(idxUp));
-                fadingMap[idxUp].second = false;
+                fadingMap[idxUp][FadeDir::Up] = false;
                 return;
             }
-            else if (volume <= GetSoundGroupVolume(idxUp) * GetSoundGroupPriorityFadeRatio(idxUp) + 0.0000001f)
+            else if (volume <= GetSoundGroupVolume(idxUp) * GetSoundGroupPriorityFadeRatio(idxUp) + 0.0000001f || fadingMap[idxUp][FadeDir::Down])
             {
+                fadingMap[idxUp][FadeDir::Down] = false;
+                fadingMap[idxUp][FadeDir::Up] = true;
                 localTimer = 0;
             }
 
@@ -134,10 +147,7 @@ void yunutyEngine::SoundSystem::Update()
     {
         auto& flag = flagsMap[sortedSoundGroups[currentItr]];
         flag = false;
-        int numPlaying = 0;
         int priority = GetSoundGroupPriority(sIdx);
-        GetSoundGroup(sIdx)->getNumPlaying(&numPlaying);
-        flag |= numPlaying;
 
         int itr = 0;
         while (true)
@@ -165,32 +175,23 @@ void yunutyEngine::SoundSystem::Update()
 
         if (currentItr != 0)
         {
-            float volume = 1.0f;
-            GetSoundGroup(sIdx)->getVolume(&volume);
             if (flag)
-            {
-                if (!fadingMap[sIdx].second && volume == GetSoundGroupVolume(sIdx))
-                {
-                    fadingMap[sIdx].first = true;
-                }
-            }
-            else
-            {
-                if (!fadingMap[sIdx].first &&volume <= GetSoundGroupVolume(sIdx) * GetSoundGroupPriorityFadeRatio(sIdx) + 0.0000001f)
-                {
-                    fadingMap[sIdx].second = true;
-                }
-            }
-
-            if (fadingMap[sIdx].first)
             {
                 soundDown(sIdx);
             }
-            else if (fadingMap[sIdx].second)
+            else
             {
                 soundUp(sIdx);
             }
         }
+        else
+        {
+            soundUp(sIdx);
+        }
+
+        int numPlaying = 0;
+        GetSoundGroup(sIdx)->getNumPlaying(&numPlaying);
+        flag |= numPlaying;
 
         currentItr++;
     }
@@ -229,6 +230,22 @@ SoundSystem::SoundSystem()
 }
 SoundSystem::~SoundSystem()
 {
+    for (auto& [soundStr, soundPtr] : sounds)
+    {
+        soundPtr->release();
+    }
+
+    for (auto& [sound3DStr, sound3DPtr] : sounds3D)
+    {
+        sound3DPtr->release();
+    }
+
+    for (auto& [idx, soundGroup] : soundGroups)
+    {
+        soundGroup->release();
+    }
+
+    fmodSystem->close();
     fmodSystem->release();
 }
 SoundChannel yunutyEngine::SoundSystem::mPlaySound(string soundPath)
