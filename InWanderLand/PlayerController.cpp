@@ -182,6 +182,7 @@ void PlayerController::OnContentsStop()
     Unit::SetPauseAll(false);
     Scene::getCurrentScene()->DestroyGameObject(cursorUnitDetector.lock()->GetGameObject());
     currentCombo = 0;
+    localTimeScale = 1;
     isConstraingCamUpdateDirection = false;
 }
 
@@ -684,7 +685,7 @@ void PlayerController::HandleComboState()
 {
     if (currentCombo > 0)
     {
-        elapsedTimeSinceLastCombo += Time::GetDeltaTime();
+        elapsedTimeSinceLastCombo += Time::GetDeltaTime() * localTimeScale;
         if (elapsedTimeSinceLastCombo > GlobalConstant::GetSingletonInstance().pod.comboTimeLimit)
         {
             ResetCombo();
@@ -1460,11 +1461,12 @@ Unit* PlayerController::GetUnitOnCursor()
 
 void PlayerController::OnPause()
 {
-
+    localTimeScale = 0;
 }
 
 void PlayerController::OnResume()
 {
+    localTimeScale = 1;
 }
 
 void PlayerController::RequestStateFromAction(State::Enum newState)

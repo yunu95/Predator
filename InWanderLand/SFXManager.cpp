@@ -33,7 +33,6 @@ SFXManager::SFXManager()
 void SFXManager::PlaySoundfile(string soundPath)
 {
 	auto& sfxManager = SingleInstance();
-	SetSFXVolume(sfxManager.localSFXVolume);
 	if (sfxManager.soundRandomFlagMap[soundPath] && GetSFXRandomSize(soundPath) != 0)
 	{
 		auto randomIdx = math::Random::GetRandomInt(0, GetSFXRandomSize(soundPath));
@@ -46,13 +45,12 @@ void SFXManager::PlaySoundfile(string soundPath)
 			}
 		}
 	}
-	SoundSystem::PlaySoundfile(soundPath).SetVolume(sfxManager.localSFXVolume);
+	SoundSystem::PlaySoundfile(soundPath);
 }
 
 void SFXManager::PlaySoundfile3D(string soundPath, Vector3d worldPosition)
 {
 	auto& sfxManager = SingleInstance();
-	SetSFXVolume(sfxManager.localSFXVolume);
 	if (sfxManager.soundRandomFlagMap[soundPath] && GetSFXRandomSize(soundPath) != 0)
 	{
 		auto randomIdx = math::Random::GetRandomInt(0, GetSFXRandomSize(soundPath));
@@ -65,19 +63,17 @@ void SFXManager::PlaySoundfile3D(string soundPath, Vector3d worldPosition)
 			}
 		}
 	}
-	SoundSystem::PlaySoundfile3D(soundPath, worldPosition).SetVolume(sfxManager.localSFXVolume);
+	SoundSystem::PlaySoundfile3D(soundPath, worldPosition);
 }
 
 void SFXManager::SetSFXVolume(float volume)
 {
-	SingleInstance().localSFXVolume = volume;
-	assert(SingleInstance().ratio != 0);
-	SoundSystem::SetSFXVolume(volume / SingleInstance().ratio);
+	SoundSystem::SetSFXVolume(volume);
 }
 
 float SFXManager::GetSFXVolume()
 {
-	return SingleInstance().localSFXVolume;
+	return SoundSystem::GetSFXVolume();
 }
 
 const unordered_set<string>& SFXManager::GetLoadedSFXList()
