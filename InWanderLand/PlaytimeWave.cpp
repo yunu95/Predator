@@ -73,7 +73,7 @@ void PlaytimeWave::DeActivateWave()
 
 void PlaytimeWave::ReportUnitDeath(Unit* unit)
 {
-    if (unit->IsPlayerUnit())
+    if (unit->IsPlayerUnit() /*|| unit->GetUnitTemplateData().pod.skinnedFBXName == "SKM_HeartQueen"*/)
         return;
 
     if (nextSummonUnitIndex >= waveData->pod.waveSizes[currentSequenceIndex] && m_currentWaveUnits.size() == 1 && currentSequenceIndex + 1 >= waveData->pod.waveSizes.size())
@@ -102,6 +102,9 @@ coroutine::Coroutine PlaytimeWave::WaveEndCoroutine(Unit* lastStandingUnit)
     float dur = gc.waveEndSlowStartTime;
     
     float realElapsedTime = dur * 2 / (b + a);
+
+    if (dur <= 0)
+        dur = 1;
 
     //PlayerController::Instance().SetZoomFactor(beforeZoomFactor * gc.waveEndZoomFactor);
 
