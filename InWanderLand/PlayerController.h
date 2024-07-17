@@ -90,6 +90,8 @@ public:
     virtual void OnPause() override;
     virtual void OnResume() override;
 
+    Vector3d GetCamOffsetNorm() const;
+
     static constexpr int playerTeamIndex = 1;
     static const std::unordered_map<UIEnumID, SkillUpgradeType::Enum> skillUpgradeByUI;
     DelegateCallback<void> onSkillSelect[(int)SkillType::SKILL_NUM];

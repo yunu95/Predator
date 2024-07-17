@@ -22,6 +22,7 @@
 #include "ITacticObject.h"
 #include "UnitCollider.h"
 #include "UnitStatusBarFlag.h"
+#include "PlaytimeWave.h"
 
 class ManagedFBX;
 class ManagedDuplicatedUI;
@@ -214,6 +215,7 @@ public:
     bool pauseRequested{ false };
     bool unpauseRequested{ false };
 
+    PlaytimeWave* belongingWave;
     std::weak_ptr<yunutyEngine::graphics::Animator> GetAnimator() { return animatorComponent; }
 private:
     static bool pauseAll;

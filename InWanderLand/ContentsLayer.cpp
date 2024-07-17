@@ -92,23 +92,23 @@ public:
 class TestComponent4 : public yunutyEngine::Component
 {
 public:
-	yunutyEngine::graphics::SkinnedMesh* renderer;
+	BurnEffect* effect;
 	virtual void Update() override
 	{
-		if (Input::isKeyDown(yunutyEngine::KeyCode::LeftArrow))
+		if (Input::isKeyPushed(yunutyEngine::KeyCode::LeftArrow))
 		{
-			renderer->GetGI().SetOutLineInfo(false, yunuGI::Color(0, 0, 0, 1));
+			effect->Init();
+			//effect->Appear();
 		}
-		if (Input::isKeyDown(yunutyEngine::KeyCode::UpArrow))
+
+		if (Input::isKeyPushed(yunutyEngine::KeyCode::RightArrow))
 		{
-			renderer->GetGI().SetOutLineInfo(true, yunuGI::Color(1, 0, 0, 1));
+			effect->Appear();
 		}
-		if (Input::isKeyDown(yunutyEngine::KeyCode::RightArrow))
+
+		if (Input::isKeyPushed(yunutyEngine::KeyCode::UpArrow))
 		{
-		}
-		if (Input::isKeyDown(yunutyEngine::KeyCode::DownArrow))
-		{
-			
+			effect->Pause();
 		}
 	}
 };
@@ -120,8 +120,8 @@ void GraphicsTest()
 	camObj->AddComponent<tests::GraphicsTestCam>();
 	camObj->GetComponent<tests::GraphicsTestCam>()->GetGI().SetAsMain();
 
-	camObj->GetTransform()->SetLocalPosition(Vector3d{ 0,10,-20 });
-	camObj->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{ 90,0,0 } });
+	camObj->GetTransform()->SetLocalPosition(Vector3d{ 0,0,-5 });
+	//camObj->GetTransform()->SetLocalRotation(Quaternion{ Vector3d{ 0,0,0 } });
 
 	auto skillPreviewSystem = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
 	auto systemComponent = skillPreviewSystem->AddComponent<SkillPreviewSystem>();
@@ -137,9 +137,10 @@ void GraphicsTest()
 
 	for (auto& i : animationList)
 	{
-		if (i->GetName() == L"Rig_Robin|Ani_Hansel_Airborne")
+		if (i->GetName() == L"Ani_Monster2_Idle")
 		{
 			animation = i;
+			animation->SetLoop(true);
 		}
 
 		if (i->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleIdle")
@@ -154,7 +155,19 @@ void GraphicsTest()
 	}
 
 	{
-		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("VFX_CandleLight");
+		auto obj2 = Scene::getCurrentScene()->AddGameObject();
+		auto test = obj2->AddComponent<TestComponent4>();
+
+		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Monster2");
+		auto anim = obj->GetComponent<yunutyEngine::graphics::Animator>();
+		anim->PushAnimation(animation);
+		anim->Play(animation);
+		//anim->Pause();
+		auto effect = obj->AddComponent<BurnEffect>();
+		//effect->Init();
+		effect->SetDuration(2);
+
+		test->effect = effect;
 	}
 
 	/*{
@@ -288,12 +301,12 @@ class ContentsInitializer : public yunutyEngine::Component
 		SkillPreviewSystem::Instance().Init();
 		Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
 		co_return;
-	}
+		}
 	virtual void Start() override
 	{
 		StartCoroutine(Initialize());
 	}
-};
+	};
 void application::contents::ContentsLayer::Initialize()
 {
 	if (ContentsLayer::testInitializer)

@@ -34,12 +34,12 @@ private:
     std::vector<UnitProductor*> productorSelector;
 
     bool isStoppedByTacticMode{ false };
-    bool isAllUnitTerminated = false;
+    //bool isAllUnitTerminated = false;
 
 public:
     static std::weak_ptr<PlaytimeWave> GetCurrentOperatingWave();
 	static std::weak_ptr<PlaytimeWave> currentOperativeWave;
-	std::vector<Unit*> m_currentWaveUnitVector;
+	std::set<Unit*> m_currentWaveUnits;
     Unit* inGameUnit;
     virtual ~PlaytimeWave();
 
@@ -47,6 +47,10 @@ public:
 
     void ActivateWave();
     void DeActivateWave();
+
+    void ReportUnitDeath(Unit* unit);
+
+    coroutine::Coroutine WaveEndCoroutine(Unit* lastStandingUnit);
 
     virtual void Start() override;
     virtual void Update() override;

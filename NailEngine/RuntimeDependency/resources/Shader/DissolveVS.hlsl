@@ -20,6 +20,7 @@ struct VertexOut
 {
     float4 posH : SV_Position;
     float4 posV : POSITION;
+    float4 posW : POSITION2;
     float4 color : COLOR;
     float2 uv : TEXCOORD0;
     float3 normalV : NORMAL;
@@ -100,12 +101,15 @@ row_major matrix GetAnimationMatrix(VertexIn input)
     return transform;
 }
 
+
+// temp_float0 : Add
+// temp_float1 : uv animation 
+
 VertexOut main(VertexIn input)
 {
     VertexOut output = (VertexOut) 0;
     row_major matrix _WV = mul(input.world, VTM);
     row_major matrix _WVP = mul(_WV, PTM);
-    row_major matrix _VP = mul(VTM, PTM);
     
     if (transitionDesc[input.instanceID].curr.animIndex == -1)
     {
@@ -118,10 +122,46 @@ VertexOut main(VertexIn input)
     else
     {
         row_major matrix boneMat = GetAnimationMatrix(input);
+        
         output.posH = mul(float4(input.pos, 1.f), boneMat);
         output.posH = output.posH / output.posH.w;
+        
         output.posH = mul(output.posH, input.world);
-        output.posH = mul(output.posH, _VP);
+        output.posW = output.posH;
+        float4 vertexWorldPos = output.posH;
+        vertexWorldPos.y /= 2;
+        vertexWorldPos.y += temp_float0;
+        vertexWorldPos.y = saturate(vertexWorldPos.y);
+        
+        //float2 tempUV = (input.uv * 2048) + float2(temp_float1, temp_float1);
+        float2 tempUV = (input.uv + float2(temp_float1, temp_float1)) * 2048;
+        if (tempUV.x > 2048)
+            tempUV.x = tempUV.x - 2048;
+        if (tempUV.y > 2048)
+            tempUV.y = tempUV.y - 2048;
+        
+        float noise = Temp0Map.Load(float3(tempUV, 0)).r;
+        
+        //float3 result = abs(BlendHardLight(float3(noise, 0, 0), float3(vertexWorldPos.y, 0, 0)));
+        float3 result = BlendHardLight(float3(noise, noise, noise), float3(vertexWorldPos.y, vertexWorldPos.y, vertexWorldPos.y));
+        
+        float4 vertexNormalWS = normalize(mul(float4(input.normal, 0.f), boneMat));
+        vertexNormalWS = normalize(mul(vertexNormalWS, input.world));
+        
+        float3 vertexOffset = mul(result, vertexNormalWS.xyz);
+        vertexOffset *= 0.01;
+        float3 axis = float3(0,0.5,0.5);
+        //axis *= 1.5;
+        axis *= 4;
+        
+        vertexOffset += lerp(float3(0, 0, 0), axis, result);
+        //output.posH.xyz += (axis * result);
+        //output.posH.xyz += (axis);
+        //output.posH.xyz += (axis * result);
+        output.posH.xyz += vertexOffset;
+        output.posH = mul(output.posH, mul(VTM,PTM));
+        
+        
     
         output.posV = mul(float4(input.pos, 1.f), boneMat);
         output.posV = mul(output.posV, _WV);

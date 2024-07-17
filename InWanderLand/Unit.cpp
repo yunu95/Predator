@@ -182,6 +182,8 @@ void Unit::OnStateEngage<UnitBehaviourTree::Death>()
     enableNavObstacleByState.reset();
     disableNavAgentByState = referenceDisableNavAgent.Acquire();
     defaultAnimationType = UnitAnimType::None;
+    if (belongingWave)
+        belongingWave->ReportUnitDeath(this);
     coroutineDeath = StartCoroutine(DeathCoroutine());
     for (auto& [buffID, buff] : buffs)
     {
@@ -1911,8 +1913,6 @@ yunutyEngine::coroutine::Coroutine Unit::BirthCoroutine()
     animatorComponent.lock()->GetGI().SetPlaySpeed(animSpeed);
     PlayAnimation(UnitAnimType::Birth, Animation::PlayFlag_::None);
     burnEffect.lock()->SetDuration(unitTemplateData->pod.birthTime);
-    burnEffect.lock()->SetEdgeColor({ unitTemplateData->pod.birthBurnEdgeColor.x,unitTemplateData->pod.birthBurnEdgeColor.y,unitTemplateData->pod.birthBurnEdgeColor.z });
-    burnEffect.lock()->SetEdgeThickness(unitTemplateData->pod.birthBurnEdgeThickness);
     burnEffect.lock()->Appear();
 
     wanderUtils::UnitCoroutine::ForSecondsFromUnit forSeconds{ GetWeakPtr<Unit>(), unitTemplateData->pod.birthTime };
@@ -1944,8 +1944,6 @@ yunutyEngine::coroutine::Coroutine Unit::DeathCoroutine()
     if (!GetUnitTemplateData().pod.lingeringCorpse)
     {
         burnEffect.lock()->SetDuration(unitTemplateData->pod.deathBurnTime);
-        burnEffect.lock()->SetEdgeColor({ unitTemplateData->pod.deathBurnEdgeColor.x,unitTemplateData->pod.deathBurnEdgeColor.y,unitTemplateData->pod.deathBurnEdgeColor.z });
-        burnEffect.lock()->SetEdgeThickness(unitTemplateData->pod.deathBurnEdgeThickness);
         burnEffect.lock()->Disappear();
     }
     for (auto unitStatusUI : unitStatusUIs)

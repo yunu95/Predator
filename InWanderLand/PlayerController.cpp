@@ -1524,6 +1524,11 @@ void PlayerController::OnResume()
     localTimeScale = 1;
 }
 
+Vector3d PlayerController::GetCamOffsetNorm() const
+{
+    return camOffsetNorm;
+}
+
 void PlayerController::RequestStateFromAction(State::Enum newState)
 {
     this->stateRequestedByAction = newState;

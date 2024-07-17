@@ -5,6 +5,7 @@ struct PixelIn
 {
     float4 posH : SV_Position;
     float4 posV : POSITION;
+    float4 posW : POSITION2;
     float4 color : COLOR;
     float2 uv : TEXCOORD0;
     float3 normalV : NORMAL;
@@ -36,23 +37,52 @@ PS_OUT main(PixelIn input)
     PS_OUT output = (PS_OUT) 0;
     
     float4 color = float4(1.f, 1.f, 1.f, 1.f);
-    
-    if (UseTexture(useAlbedo) == 1)
-    {
-        color = AlbedoMap.Sample(sam, input.uv);
-    }
-    
+    color = AlbedoMap.Sample(sam, input.uv);
     color = pow(color, 2.2f);
+    float4 vertexWorldPos = input.posW;
+    vertexWorldPos.y /= 2;
+    vertexWorldPos.y += temp_float0;
+    vertexWorldPos.y = saturate(vertexWorldPos.y);
+    
+    float2 tempUV = (input.uv + float2(temp_float1, temp_float1)) * 2048;
+    if (tempUV.x > 2048)
+        tempUV.x = tempUV.x - 2048;
+    if (tempUV.y > 2048)
+        tempUV.y = tempUV.y - 2048;
+    //float noise = Temp0Map.Load(float3(tempUV, 0)).r;
+    float tempUV2 = (input.uv * 2) + float2(temp_float1, temp_float1);
+    float noise = Temp0Map.Sample(sam, tempUV2).r;
+        
+    //float3 result = abs(BlendHardLight(float3(noise, 0, 0), float3(vertexWorldPos.y, 0, 0)));
+    float3 result = BlendHardLight(float3(noise, noise, noise), float3(vertexWorldPos.y, vertexWorldPos.y, vertexWorldPos.y));
+    
+    float clipVal = 1 - result.x;
+    clipVal *= color.a;
+    float maxValue = max(noise, vertexWorldPos.y);
+    
+    clip(clipVal - 0.3333);
+  
+    vertexWorldPos.y *= 8;
+    vertexWorldPos.y = saturate(vertexWorldPos.y);
+    
+    color.x = lerp(color.x, 0, vertexWorldPos.y);
+    color.y = lerp(color.y, 0, vertexWorldPos.y);
+    color.z = lerp(color.z, 0, vertexWorldPos.y);
+   
     
     
-    float4 materialTemp = materialColor;
     
-    half dissolve_value = Temp0Map.Sample(sam, input.uv).r;
-    clip(dissolve_value - temp_float0);
-    //dissolve_value = 1 - dissolve_value;
-    // 음수면 페이즈2 용 이미지 출력
-    color = color + materialTemp * step(dissolve_value - temp_float0, temp_float1);
-    output.color = color;
+    float3 orange = float3(1, 0.25, 0);
+    orange = lerp(float3(0, 0, 0), orange, result.x);
+    result.x = result.x - 0.25;
+    result.x = saturate(result.x);
+    result.x *= 3;
+    float3 red = float3(1, 0, 0);
+    
+    //output.emissive = float4(lerp(orange, red, float3(result.x, 0.f, 0.f)), 1);
+    
+    //output.color = color + output.emissive;
+    output.color = color + float4(lerp(orange, red, float3(result.x, 0.f, 0.f)), 1);
     
     if (UseTexture(useOpacity) == 1)
     {
@@ -62,8 +92,6 @@ PS_OUT main(PixelIn input)
             clip(-1);
         }
     }
-    
-
     
     float3 viewNormal = input.normalV;
     if (UseTexture(useNormal) == 1)
@@ -99,9 +127,6 @@ PS_OUT main(PixelIn input)
         output.viewPosDecal = input.posV;
     }
     output.normal = float4(viewNormal.xyz, 1.f);
-    
-    /////output.color = color * materialColor;
-   
     
     if (UseTexture(useEmission))
     {
