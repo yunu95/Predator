@@ -1093,6 +1093,7 @@ void ResourceManager::CreateDefaultShader()
     CreateShader(L"TextureAnimVS.cso");
     CreateShader(L"SkinnedVFX_VS.cso");
     CreateShader(L"TestDecalVS.cso");
+    CreateShader(L"DissolveVS.cso");
 #pragma endregion
 
 #pragma region PS

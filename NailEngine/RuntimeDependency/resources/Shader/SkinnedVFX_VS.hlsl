@@ -107,6 +107,7 @@ VertexOut main(VertexIn input)
         row_major matrix boneMat = GetAnimationMatrix(input);
         
         output.posH = mul(float4(input.pos, 1.f), boneMat);
+        output.posH = output.posH / output.posH.w;
         output.posH = mul(output.posH, _WVP);
     
         output.posV = mul(float4(input.pos, 1.f), boneMat);

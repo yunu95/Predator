@@ -1,15 +1,6 @@
 #include "InWanderLand.h"
 #include "BurnEffect.h"
 
-void BurnEffect::SetEdgeColor(yunuGI::Color color)
-{
-	this->edgeColor = color;
-}
-
-void BurnEffect::SetEdgeThickness(float edgeThickness)
-{
-	this->edgeThickness = edgeThickness;
-}
 
 void BurnEffect::SetDuration(float duration)
 {
@@ -20,7 +11,7 @@ void BurnEffect::Init()
 {
 	// Init은 데이터 셋팅용 함수
 	// 여기서 Apear를 켜준다.
-	this->Appear();
+	//this->Appear();
 
 	const yunuGI::IResourceManager* _resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
@@ -47,6 +38,7 @@ void BurnEffect::Init()
 				auto burnMaterial = _resourceManager->CloneMaterial(burnMaterialName, material);
 				burnMaterial->SetTexture(yunuGI::Texture_Type::Temp0, _resourceManager->GetTexture(L"Texture/Dissolve.jpg"));
 				burnMaterial->SetPixelShader(_resourceManager->GetShader(L"DissolvePS.cso"));
+				burnMaterial->SetVertexShader(_resourceManager->GetShader(L"DissolveVS.cso"));
 
 				this->burnMaterialVec.push_back(burnMaterial);
 			}
@@ -56,20 +48,18 @@ void BurnEffect::Init()
 	// 이 부분이 실제로 적용되는 부분 처음에는 나타날 것이기 때문에 amount를 1로 설정
 	if (isFirst)
 	{
-		this->amount = 1.f;
 		isFirst = false;
 
 		for (int i = 0; i < originMaterialVec.size(); ++i)
 		{
 			renderer->GetGI().SetMaterial(i, burnMaterialVec[i]);
-			renderer->GetGI().GetMaterial(i)->SetColor(edgeColor);
-			renderer->GetGI().GetMaterial(i)->SetFloat(1, this->edgeThickness);
 		}
 	}
 
 	for (int i = 0; i < originMaterialVec.size(); ++i)
 	{
-		renderer->GetGI().GetMaterial(i)->SetFloat(0, amount);
+		renderer->GetGI().GetMaterial(i)->SetFloat(0, defaultStart * GetGameObject()->GetTransform()->GetWorldScale().x);
+		renderer->GetGI().GetMaterial(i)->SetFloat(1, 0);
 	}
 }
 
@@ -79,23 +69,23 @@ void BurnEffect::Disappear()
 	isAppear = false;
 	isDone = false;
 	isFirst = true;
-
+	amount = 0.f;
+	uv = 0.f;
+	accTime = 0.f;
 	if (isFirst)
 	{
-		this->amount = 0;
 		isFirst = false;
 
 		for (int i = 0; i < originMaterialVec.size(); ++i)
 		{
 			renderer->GetGI().SetMaterial(i, burnMaterialVec[i]);
-			renderer->GetGI().GetMaterial(i)->SetColor(edgeColor);
-			renderer->GetGI().GetMaterial(i)->SetFloat(1, this->edgeThickness);
 		}
 	}
 
 	for (int i = 0; i < originMaterialVec.size(); ++i)
 	{
-		renderer->GetGI().GetMaterial(i)->SetFloat(0, amount);
+		renderer->GetGI().GetMaterial(i)->SetFloat(0, defaultEnd * GetGameObject()->GetTransform()->GetWorldScale().x);
+		renderer->GetGI().GetMaterial(i)->SetFloat(1, 0);
 	}
 }
 
@@ -105,6 +95,10 @@ void BurnEffect::Appear()
 	isAppear = true;
 	isDone = false;
 	isFirst = true;
+
+	this->accTime = 0.f;
+	this->amount = 0.f;
+	this->uv = 0.f;
 }
 
 bool BurnEffect::IsDone()
@@ -135,24 +129,20 @@ void BurnEffect::OnEnable()
 
 void BurnEffect::OnDisable()
 {
-	// 오브젝트가 비활성화 될 땐 다음에 다시 켜지는것을 기대하고 amount를 1로 돌리고 셋팅한다.
-
 	if (isFirst)
 	{
-		this->amount = 1.f;
 		isFirst = false;
 
 		for (int i = 0; i < originMaterialVec.size(); ++i)
 		{
 			renderer->GetGI().SetMaterial(i, burnMaterialVec[i]);
-			renderer->GetGI().GetMaterial(i)->SetColor(edgeColor);
-			renderer->GetGI().GetMaterial(i)->SetFloat(1, this->edgeThickness);
 		}
 	}
 
 	for (int i = 0; i < originMaterialVec.size(); ++i)
 	{
-		renderer->GetGI().GetMaterial(i)->SetFloat(0, amount);
+		renderer->GetGI().GetMaterial(i)->SetFloat(0, this->defaultStart * GetGameObject()->GetTransform()->GetWorldScale().x);
+		renderer->GetGI().GetMaterial(i)->SetFloat(1, 0);
 	}
 }
 
@@ -163,6 +153,8 @@ void BurnEffect::Start()
 
 void BurnEffect::Update()
 {
+	if (this->isPause) return;
+
 	if (isAppear && !isDone)
 	{
 		if (duration == 0)
@@ -174,27 +166,37 @@ void BurnEffect::Update()
 			isDone = true;
 			return;
 		}
+		
+		// 1 ~ threshold : 나타남
+		float scale = GetGameObject()->GetTransform()->GetWorldScale().x;
 
-		// 1 ~ 0 -> 나타남
-		amount -= (1 / duration * Time::GetDeltaTime());
+		accTime += Time::GetDeltaTime();
+		uv += 0.2 * Time::GetDeltaTime();
+		float t = accTime / duration;
+		
+		amount = yunutyEngine::math::LerpF(this->defaultStart * scale, this->defaultEnd * scale,t);
 
+		
 		for (int i = 0; i < originMaterialVec.size(); ++i)
 		{
 			renderer->GetGI().GetMaterial(i)->SetFloat(0, amount);
+			renderer->GetGI().GetMaterial(i)->SetFloat(1, uv);
 		}
 
 
-		if (amount <= 0)
+		if (t >= 1.f)
 		{
 			amount = 0;
+			uv = 0;
 			isDone = true;
+			// 나타나는 연출이 다 끝나면 원래 머터리얼로 돌려줌
 			for (int i = 0; i < originMaterialVec.size(); ++i)
 			{
 				renderer->GetGI().SetMaterial(i, originMaterialVec[i], true);
 			}
 		}
 	}
-	else if(isDisAppear && !isDone)
+	else if (isDisAppear && !isDone)
 	{
 		if (duration == 0)
 		{
@@ -206,22 +208,26 @@ void BurnEffect::Update()
 			return;
 		}
 
-		// 0 ~ 1 -> 사라짐
-		amount += (1 / duration * Time::GetDeltaTime());
+		// threshold ~ 1 : 사라짐
+		float scale = GetGameObject()->GetTransform()->GetWorldScale().x;
 
-		if (amount >= 1)
-		{
-			//amount = 1;
-			isDone = true;
-			//for (int i = 0; i < originMaterialVec.size(); ++i)
-			//{
-			//	renderer->GetGI().SetMaterial(i, originMaterialVec[i], true);
-			//}
-		}
+		accTime += Time::GetDeltaTime();
+		uv += 0.2 * Time::GetDeltaTime();
+		float t = accTime / duration;
+
+		amount = yunutyEngine::math::LerpF(this->defaultEnd * scale, this->defaultStart * scale, t);
 
 		for (int i = 0; i < originMaterialVec.size(); ++i)
 		{
 			renderer->GetGI().GetMaterial(i)->SetFloat(0, amount);
+			renderer->GetGI().GetMaterial(i)->SetFloat(1, uv);
+		}
+
+		if (amount >= 1)
+		{
+			amount = 0;
+			uv = 0;
+			isDone = true;
 		}
 	}
 }
@@ -240,4 +246,14 @@ void BurnEffect::Reset()
 	//{
 	//	renderer->GetGI().SetMaterial(i, originMaterialVec[i], true);
 	//}
+}
+
+void BurnEffect::Pause()
+{
+	this->isPause = true;
+}
+
+void BurnEffect::Resume()
+{
+	this->isPause = false;
 }
