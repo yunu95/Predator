@@ -179,6 +179,12 @@ enum class UIEnumID
     // 일반 잡졸들에 적용되는 데미지 표시기
     DamageIndicator_Default,
     DamageIndicator_Critical,
+    DamageIndicator_Default_RedFont,
+    DamageIndicator_Critical_RedFont,
+    DamageIndicator_Default_BlueFont,
+    DamageIndicator_Critical_BlueFont,
+    DamageIndicator_Default_BlackWhiteFont,
+    DamageIndicator_Critical_BlackWhiteFont,
     DamageIndicator_Missed,
     DamageIndicator_Number,
     // 보스전때에만 출력되는 UI들
@@ -369,6 +375,12 @@ const std::unordered_map<int, std::string>& application::POD_Enum<UIEnumID>::Get
         // 일반 잡졸들에 적용되는 데미지 표시기
         { static_cast<int>((int)UIEnumID::DamageIndicator_Default), "DamageIndicator_Default" },
         { static_cast<int>((int)UIEnumID::DamageIndicator_Critical), "DamageIndicator_Critical" },
+        { static_cast<int>((int)UIEnumID::DamageIndicator_Default_RedFont), "DamageIndicator_Default_RedFont" },
+        { static_cast<int>((int)UIEnumID::DamageIndicator_Critical_RedFont), "DamageIndicator_Critical_RedFont" },
+        { static_cast<int>((int)UIEnumID::DamageIndicator_Default_BlueFont), "DamageIndicator_Default_BlueFont" },
+        { static_cast<int>((int)UIEnumID::DamageIndicator_Critical_BlueFont), "DamageIndicator_Critical_BlueFont" },
+        { static_cast<int>((int)UIEnumID::DamageIndicator_Default_BlackWhiteFont), "DamageIndicator_Default_BlackWhiteFont" },
+        { static_cast<int>((int)UIEnumID::DamageIndicator_Critical_BlackWhiteFont), "DamageIndicator_Critical_BlackWhiteFont" },
         { static_cast<int>((int)UIEnumID::DamageIndicator_Missed), "DamageIndicator_Missed" },
         { static_cast<int>((int)UIEnumID::DamageIndicator_Number), "DamageIndicator_Number" },
         // 보스전때에만 출력되는 UI들

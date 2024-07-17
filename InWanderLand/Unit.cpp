@@ -595,11 +595,11 @@ void Unit::Damaged(std::weak_ptr<Unit> opponentUnit, float opponentDmg, DamageTy
     {
         if (damageType == DamageType::AttackCrit)
         {
-            ContentsCoroutine::Instance().StartCoroutine(DmgIndicatorCoroutine(opponentDmg, UIEnumID::DamageIndicator_Critical));
+            ContentsCoroutine::Instance().StartCoroutine(DmgIndicatorCoroutine(opponentDmg, dmgCriticalUIID));
         }
         else
         {
-            ContentsCoroutine::Instance().StartCoroutine(DmgIndicatorCoroutine(opponentDmg, UIEnumID::DamageIndicator_Default));
+            ContentsCoroutine::Instance().StartCoroutine(DmgIndicatorCoroutine(opponentDmg, dmgDefaultUIID));
         }
     }
 
@@ -669,6 +669,7 @@ void Unit::SetCurrentHp(float p_newHp)
             if (unitStatusUI.lock()->GetLocalUIsByEnumID().contains(UIEnumID::StatusBar_HP_Number_Current))
             {
                 unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::StatusBar_HP_Number_Current)->SetNumber(currentHitPoint);
+                unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::StatusBar_HP_Number_Current)->SetNumber(unitTemplateData->pod.max_Health);
             }
         }
     }
@@ -1486,6 +1487,23 @@ void Unit::Summon(application::editor::Unit_TemplateData* templateData)
         break;
     }
     }
+    // 피해량 수치 폰트 설정
+    switch (templateData->pod.dmgIndicatorFont.enumValue)
+    {
+    case UnitDamageFontType::Red:
+        dmgDefaultUIID = UIEnumID::DamageIndicator_Default_RedFont;
+        dmgCriticalUIID = UIEnumID::DamageIndicator_Critical_RedFont;
+        break;
+    case UnitDamageFontType::Blue:
+        dmgDefaultUIID = UIEnumID::DamageIndicator_Default_BlueFont;
+        dmgCriticalUIID = UIEnumID::DamageIndicator_Critical_BlueFont;
+        break;
+    case UnitDamageFontType::BlackAndWhite:
+        dmgDefaultUIID = UIEnumID::DamageIndicator_Default_BlackWhiteFont;
+        dmgCriticalUIID = UIEnumID::DamageIndicator_Critical_BlackWhiteFont;
+        break;
+
+    }
     currentRotationSpeed = unitTemplateData->pod.rotationSpeed;
     navAgentComponent.lock()->SetRadius(unitTemplateData->pod.collisionSize);
     navAgentComponent.lock()->SetSpeed(unitTemplateData->pod.m_unitSpeed);
@@ -2036,7 +2054,7 @@ yunutyEngine::coroutine::Coroutine Unit::AttackCoroutine(std::weak_ptr<Unit> opp
         break;
     }
     }
-         
+
     StartCoroutine(referenceBlockAttack.AcquireForSecondsCoroutine(finalAttackCooltime
         + math::Random::GetRandomFloat(GetUnitTemplateData().pod.m_atkRandomDelayMin, GetUnitTemplateData().pod.m_atkRandomDelayMax)
         - unitTemplateData->pod.m_attackPreDelay * attackDelayMultiplier));
