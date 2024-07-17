@@ -1,4 +1,5 @@
 #pragma once
+#pragma once
 #include "YunutyEngine.h"
 #include "SkillUpgradeType.h"
 #include <map>
@@ -125,7 +126,7 @@ private:
     void HandleSkillPreview();
     void HandleSkillCooltime();
     void HandleManaRegen();
-    void HandleMouseHover();
+    void HandleMouseCursorAndHover();
     void HandleUnitPickingCollider();
     void HandleComboState();
     void HandlePlayerConstrainingRegion();
