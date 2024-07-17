@@ -796,6 +796,8 @@ yunutyEngine::coroutine::Coroutine Unit::KnockbackCoroutine(std::shared_ptr<Refe
         targetPosition = startPos + targetPosition;
     }
 
+    targetPosition = SingleNavigationField::Instance().GetClosestPointOnField(targetPosition);
+
     navAgentComponent.lock()->Relocate(targetPosition);
 
     while (forSeconds.Tick())
