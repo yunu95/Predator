@@ -87,8 +87,9 @@ namespace application
        
         GC<float> waveEndZoomFactor = 0.8f;
         GC<float> waveEndSpeedMultiplier = 0.1f;
-        GC<float> waveEndSlowTime = 3.0f;
+        GC<float> waveEndActionTime = 3.0f;
         GC<float> waveEndSlowStartTime = 1.0f;
+        GC<float> waveEndCameraMoveDuration = 1.0f;
 
         TO_JSON(POD_GlobalConstant)
             FROM_JSON(POD_GlobalConstant)
