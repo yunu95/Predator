@@ -2014,6 +2014,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="UnitCommand.h" />
     <ClInclude Include="UnitController.h" />
     <ClInclude Include="UnitControllerType.h" />
+    <ClInclude Include="UnitDamageFontType.h" />
     <ClInclude Include="UnitData.h" />
     <ClInclude Include="DebuggingMeshPool.h" />
     <ClInclude Include="StatusEffect.h">

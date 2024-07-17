@@ -191,7 +191,6 @@ const std::unordered_map<int, std::string>& application::POD_Enum<UIEnumID>::Get
 {
     // vim command
     // '<,'>g!/\/\//s/\w\+/{ static_cast<int>((int)UIEnumID::&), "&" }
-    //{ static_cast<int>((int)UIEnumID::None), "None" },
     static std::unordered_map<int, std::string> enumNameMap
     {
         // 아무것도 아님.
