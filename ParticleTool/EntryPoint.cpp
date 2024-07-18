@@ -1719,8 +1719,16 @@ void ShowParticleEditor()
 			DragFloat_2Col("Duration", particleData->duration);
 			DragFloat_2Col("Life Time", particleData->lifeTime);
 			DragFloat_2Col("Speed", particleData->speed);
+
 			DragFloat_2Col("Start Scale", particleData->startScale);
 			DragFloat_2Col("End Scale", particleData->endScale);
+			Checkbox_2Col("Is Random Scale", particleData->isRandomScale);
+
+			DragFloat_2Col("Start Angle", particleData->startAngle);
+			DragFloat_2Col("End Angle", particleData->endAngle);
+			Checkbox_2Col("Is Random Angle", particleData->isRandomAngle);
+
+			Checkbox_2Col("Is Alpha Diminish", particleData->isAlphaDiminish);
 
 			int maxParticle = particleData->maxParticle;
 			if (DragInt_2Col("Max Particle", maxParticle, true, 1.f, 1, 500))
@@ -1822,8 +1830,16 @@ void ShowParticleInstanceEditor()
 			DragFloat_2Col("Duration", particleData.duration);
 			DragFloat_2Col("Life Time", particleData.lifeTime);
 			DragFloat_2Col("Speed", particleData.speed);
+
 			DragFloat_2Col("Start Scale", particleData.startScale);
 			DragFloat_2Col("End Scale", particleData.endScale);
+			Checkbox_2Col("Is Random Scale", particleData.isRandomScale);
+
+			DragFloat_2Col("Start Angle", particleData.startAngle);
+			DragFloat_2Col("End Angle", particleData.endAngle);
+			Checkbox_2Col("Is Random Angle", particleData.isRandomAngle);
+
+			Checkbox_2Col("Is Alpha Diminish", particleData.isAlphaDiminish);
 
 			int maxParticle = particleData.maxParticle;
 			if (DragInt_2Col("Max Particle", maxParticle, true, 1.f, 1, 500))

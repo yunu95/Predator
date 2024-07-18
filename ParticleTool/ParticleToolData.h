@@ -146,6 +146,14 @@ namespace application
             int burstsCount = 30;
             float interval = 5.f;
 
+			/// new 24.07.18
+			float startAngle = 0.f;
+			float endAngle = 0.f;
+			bool isRandomScale = false;
+			bool isRandomAngle = false;
+			bool isAlphaDiminish = false;
+			///
+
 			TO_JSON(ParticleToolData)
 			FROM_JSON(ParticleToolData)
         };
