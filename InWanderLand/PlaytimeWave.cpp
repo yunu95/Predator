@@ -27,6 +27,22 @@ bool PlaytimeWave::IsRemainEnemyAndWave()
 {
     return !m_currentWaveUnits.empty() && (currentSequenceIndex < waveData->pod.waveSizes.size());
 }
+void PlaytimeWave::Reset()
+{
+    currentSequenceIndex = 0;
+    nextSummonUnitIndex = 0;
+    waveDataIndex = 0;
+    m_elapsed = 0.0f;
+    isStoppedByTacticMode = false;
+    isWaveActivated = false;
+    isWaveFinished = false;
+    m_currentWaveUnits.clear();
+    SetActive(true);
+    if (currentOperativeWave.lock().get() == this)
+    {
+        currentOperativeWave.reset();
+    }
+}
 std::weak_ptr<PlaytimeWave> PlaytimeWave::GetCurrentOperatingWave()
 {
     return currentOperativeWave;
@@ -34,10 +50,13 @@ std::weak_ptr<PlaytimeWave> PlaytimeWave::GetCurrentOperatingWave()
 std::weak_ptr<PlaytimeWave> PlaytimeWave::currentOperativeWave;
 void PlaytimeWave::ActivateWave()
 {
+    if (isWaveFinished)
+        return;
     isWaveActivated = true;
     currentOperativeWave = GetGameObject()->GetComponentWeakPtr<PlaytimeWave>();
     array<int, 3> comboObjectives = { waveData->pod.comboObjective1, waveData->pod.comboObjective2, waveData->pod.comboObjective3 };
     PlayerController::Instance().SetComboObjectives(comboObjectives);
+    PlayerController::Instance().triggeredWaves.insert(this);
     UIManager::Instance().ShowComboObjectives();
     //TacticModeSystem::Instance().RegisterCurrentWave(this);
 
@@ -61,8 +80,11 @@ void PlaytimeWave::DeActivateWave()
 
     currentOperativeWave.reset();
     waveDataIndex = 0;
+    isWaveFinished = true;
+    isWaveActivated = false;
     UIManager::Instance().HideComboObjectvies();
     this->SetActive(false);
+    PlayerController::Instance().finishedWaves.insert(this);
     // 카메라 가동범위 제한
     if (auto rtsCam = dynamic_cast<RTSCam*>(graphics::Camera::GetMainCamera()))
     {
@@ -100,7 +122,7 @@ coroutine::Coroutine PlaytimeWave::WaveEndCoroutine(Unit* lastStandingUnit)
     float a = Time::GetTimeScale();
     float b = gc.waveEndSpeedMultiplier;
     float dur = gc.waveEndSlowStartTime;
-    
+
     float realElapsedTime = dur * 2 / (b + a);
 
     if (dur <= 0)
@@ -204,7 +226,7 @@ void PlaytimeWave::Update()
     }
     // 현재 웨이브에서 소환 대상이 되는 유닛들이 다 소환된 경우
     else
-    {        
+    {
         //for (auto& e : m_currentWaveUnits)
         //{
         //    // 한 유닛이라도 살아 있다면 bool값을 false로

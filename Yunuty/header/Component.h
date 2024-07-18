@@ -28,11 +28,16 @@ namespace yunutyEngine
     class Transform;
     class Collision2D;
     class Collider2D;
+    
+    
     namespace physics
     {
         class Collision;
         class Collider;
     }
+
+
+
     /// <summary>
     /// Component는 게임 오브젝트들에게 배치될 수 있는 객체입니다.
     /// 게임 오브젝트는 해당 게임 오브젝트에 어떤 Component들이 배치되어 있느냐에 따라 그 성질이 정의된다고 볼 수 있습니다.
@@ -49,6 +54,7 @@ namespace yunutyEngine
             UuidFromStringA((RPC_CSTR)(guid), &uuid);
             return LoadReferenceByGUID<ComponentType>(uuid);
         }
+
         template<typename ComponentType>
         static ComponentType* LoadReferenceByGUID(const WCHAR* guid)
         {
@@ -56,6 +62,8 @@ namespace yunutyEngine
             CLSIDFromString(guid, &uuid);
             return LoadReferenceByGUID<ComponentType>(uuid);
         }
+
+
         template<typename ComponentType>
         static ComponentType* LoadReferenceByGUID(GUID guid)
         {
