@@ -71,7 +71,7 @@ public:
 
 private:
 	/// default 를 포함한 Group 개수입니다.
-	int initSoundGroupCount = 11;
+	int initSoundGroupCount = 31;
 	int defaultSGPriority = 128;
 	bool defaultSGFlag = false;
 	float defaultSGFadeRatio = 0.5f;

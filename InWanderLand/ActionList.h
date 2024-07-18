@@ -42,3 +42,4 @@
 #include "Action_SetRegionAsNavObstacle.h"
 #include "Action_SetPlayerConstrainingRegion.h"
 #include "Action_Script.h"
+#include "Action_Progress.h"

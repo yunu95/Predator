@@ -74,6 +74,8 @@ namespace application
         SetTacticCamera,
         SetRegionAsNavObstacle,
         SetPlayerConstrainingRegion,
+        ProgressSave,
+        ProgressLoad
     };
 
     struct IAction

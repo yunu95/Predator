@@ -1,0 +1,13 @@
+/// 2024. 07. 17 김상준
+/// ProgressTracker 를 사용하여 Game 진행 도중에 Progress 관리로 Save / Load 가 되어야 하는
+/// 대상들을 목록화한 txt 파일입니다.
+
+
+1. InteractableData
+2. OrnamentData (Action 으로 인해 관리 필요)
+3. ParticleData (Action 으로 인해 관리 필요)
+4. RegionData
+   (WaveData 관리까지 가능할 것으로 보입니다.)
+5. UnitData
+   (CameraData 관리까지 가능할 것으로 보입니다. (Ideal))
+   (Skill 등 연계된 pod 까지 관리해야 할 것으로 보입니다.)

@@ -794,6 +794,18 @@ namespace application
 
                     ImGui::TableNextRow();
                     ImGui::TableSetColumnIndex(0);
+                    ImGui::Text("Only Once(Enter)");
+                    ImGui::TableNextColumn();
+                    ImGui::Checkbox("##RegionOnceEnter", &palette::RegionPalette::SingleInstance().GetSingleSelectedRegion()->pod.onceEnter);
+
+                    ImGui::TableNextRow();
+                    ImGui::TableSetColumnIndex(0);
+                    ImGui::Text("Only Once(Leave)");
+                    ImGui::TableNextColumn();
+                    ImGui::Checkbox("##RegionOnceLeave", &palette::RegionPalette::SingleInstance().GetSingleSelectedRegion()->pod.onceLeave);
+
+                    ImGui::TableNextRow();
+                    ImGui::TableSetColumnIndex(0);
                     if (!palette::RegionPalette::SingleInstance().GetIsSelectingDisablingOrnaments())
                     {
                         if (ImGui::Button("Select disabling ornaments"))

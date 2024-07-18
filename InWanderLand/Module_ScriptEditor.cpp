@@ -2268,6 +2268,16 @@ namespace application
                                 selectedScript->AddAction<Action_SetPlayerConstrainingRegion>();
                                 break;
                             }
+                            case application::ActionType::ProgressSave:
+                            {
+                                selectedScript->AddAction<Action_ProgressSave>();
+                                break;
+                            }
+                            case application::ActionType::ProgressLoad:
+                            {
+                                selectedScript->AddAction<Action_ProgressLoad>();
+                                break;
+                            }
                             default:
                                 break;
                             }

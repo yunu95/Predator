@@ -416,6 +416,18 @@ namespace application
             }
         }
 
+        void InteractableData::ProgressInitialize()
+        {
+        }
+
+        void InteractableData::CurrentProgressSave()
+        {
+        }
+
+        void InteractableData::Recovery()
+        {
+        }
+
         bool InteractableData::PreEncoding(json& data) const
         {
             FieldPreEncoding<boost::pfr::tuple_size_v<POD_Interactable>>(pod, data["POD"]);
