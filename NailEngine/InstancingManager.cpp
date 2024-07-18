@@ -1402,6 +1402,8 @@ void InstancingManager::RenderParticle()
 		{
 			this->particleBuffer->particleDesc[index].pos = reinterpret_cast<DirectX::SimpleMath::Vector3&>(each2.position);
 			this->particleBuffer->particleDesc[index].scale = each2.curScale;
+			this->particleBuffer->particleDesc[index].particleAngle = each2.particleAngle;
+			this->particleBuffer->particleDesc[index].alpha = each2.alpha;
 			index++;
 		}
 

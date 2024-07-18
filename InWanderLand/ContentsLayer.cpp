@@ -155,19 +155,17 @@ void GraphicsTest()
 	}
 
 	{
-		auto obj2 = Scene::getCurrentScene()->AddGameObject();
-		auto test = obj2->AddComponent<TestComponent4>();
-
-		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Monster2");
-		auto anim = obj->GetComponent<yunutyEngine::graphics::Animator>();
-		anim->PushAnimation(animation);
-		anim->Play(animation);
-		//anim->Pause();
-		auto effect = obj->AddComponent<BurnEffect>();
-		//effect->Init();
-		effect->SetDuration(2);
-
-		test->effect = effect;
+		auto obj = Scene::getCurrentScene()->AddGameObject();
+		auto particle = obj->AddComponent<yunutyEngine::graphics::ParticleRenderer>();
+		particle->SetTexture(_resourceManager->GetTexture(L"Texture/zoro.jpg"));
+		particle->SetIsAlphaDiminish(true);
+		particle->SetIsRandomScale(true);
+		particle->SetIsRandomAngle(true);
+		particle->SetEndScale(5);
+		particle->SetStartAngle(0);
+		particle->SetEndAngle(360);
+		particle->SetLoop(true);
+		particle->Play();
 	}
 
 	/*{

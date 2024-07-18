@@ -9,7 +9,9 @@ struct GS_OUT
 
 float4 main(GS_OUT input) : SV_TARGET
 {
-    return AlbedoMap.Sample(sam, input.uv);
+    float4 color = AlbedoMap.Sample(sam, input.uv);
+    color.a *= particleDesc[input.id].alpha;
+    return color;
 }
 
 // ShaderInfo
