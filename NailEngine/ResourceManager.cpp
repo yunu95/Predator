@@ -386,7 +386,6 @@ void ResourceManager::CreateTextures(const std::vector<std::wstring>& texturePat
     }
 }
 
-std::shared_ptr<yunuGI::ITexture>& ResourceManager::CreateTexture(const std::wstring& texturePath, unsigned int width, unsigned int height, DXGI_FORMAT format, D3D11_BIND_FLAG bindFlag,bool isMSAA, int arraySize, int sliceCount)
 std::shared_ptr<yunuGI::ITexture>& ResourceManager::CreateTexture(const std::wstring& texturePath, unsigned int width, unsigned int height, DXGI_FORMAT format, D3D11_BIND_FLAG bindFlag, bool isMSAA, int arraySize, int sliceCount)
 {
     auto iter = this->deferredTextureMap.find(texturePath);
