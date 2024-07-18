@@ -92,23 +92,29 @@ public:
 class TestComponent4 : public yunutyEngine::Component
 {
 public:
-	BurnEffect* effect;
+	yunutyEngine::graphics::Animator* anim;
+	yunuGI::IAnimation* idle;
+	yunuGI::IAnimation* walk;
 	virtual void Update() override
 	{
 		if (Input::isKeyPushed(yunutyEngine::KeyCode::LeftArrow))
 		{
-			effect->Init();
-			//effect->Appear();
+			anim->ChangeAnimation(walk, 1, 1);
 		}
 
 		if (Input::isKeyPushed(yunutyEngine::KeyCode::RightArrow))
 		{
-			effect->Appear();
+			anim->ChangeAnimation(idle, 1, 1);
 		}
 
 		if (Input::isKeyPushed(yunutyEngine::KeyCode::UpArrow))
 		{
-			effect->Pause();
+			Time::SetTimeScale(0.01);
+		}
+
+		if (Input::isKeyPushed(yunutyEngine::KeyCode::UpArrow))
+		{
+			Time::SetTimeScale(1);
 		}
 	}
 };
@@ -137,16 +143,16 @@ void GraphicsTest()
 
 	for (auto& i : animationList)
 	{
-		if (i->GetName() == L"Ani_Monster2_Idle")
+		if (i->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Idle")
 		{
 			animation = i;
 			animation->SetLoop(true);
 		}
 
-		if (i->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleIdle")
+		if (i->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Walk")
 		{
-			i->SetPlaySpeed(0.01);
 			animation2 = i;
+			animation2->SetLoop(true);
 		}
 		if (i->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Skill1")
 		{
@@ -155,17 +161,17 @@ void GraphicsTest()
 	}
 
 	{
-		auto obj = Scene::getCurrentScene()->AddGameObject();
-		auto particle = obj->AddComponent<yunutyEngine::graphics::ParticleRenderer>();
-		particle->SetTexture(_resourceManager->GetTexture(L"Texture/Particle/default.png"));
-		particle->SetIsAlphaDiminish(true);
-		particle->SetIsRandomScale(true);
-		particle->SetIsRandomAngle(true);
-		particle->SetEndScale(5);
-		particle->SetStartAngle(0);
-		particle->SetEndAngle(360);
-		particle->SetLoop(true);
-		particle->Play();
+		auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
+		auto anim = obj->GetComponent<yunutyEngine::graphics::Animator>();
+		anim->PushAnimation(animation);
+		anim->PushAnimation(animation2);
+		anim->Play(animation);
+
+		auto obj2 = Scene::getCurrentScene()->AddGameObject();
+		auto test = obj2->AddComponent<TestComponent4>();
+		test->idle = animation;
+		test->walk = animation2;
+		test->anim = anim;
 	}
 
 	/*{
