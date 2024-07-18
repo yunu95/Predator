@@ -1982,7 +1982,7 @@ namespace application
                     static ActionType actionType = ActionType::None;
 
                     ImGui::SetNextItemWidth(-1);
-                    if (ImGui::BeginCombo("##ActionListCombo", actionName.c_str()), ImGuiComboFlags_HeightLargest)
+                    if (ImGui::BeginCombo("##ActionListCombo", actionName.c_str(), ImGuiComboFlags_HeightLargest))
                     {
                         for (auto& [type, str] : ScriptSystem::actionList)
                         {
@@ -2420,6 +2420,8 @@ namespace application
             }
             ImGui::PopID();
 
+            bool rightClick = ImGui::IsItemClicked(ImGuiMouseButton_Right);
+
             ImGui::SameLine();
             imgui::ShiftCursorX(ImGui::GetContentRegionAvail().x - 20);
             ImGui::SetNextItemWidth(18);
@@ -2432,7 +2434,7 @@ namespace application
                 ImGui::PopStyleColor();
             }
 
-            if ((selectedAction == data) && ImGui::IsItemClicked(ImGuiMouseButton_Right))
+            if ((selectedAction == data) && rightClick)
             {
                 ImGui::OpenPopup(data->GetTypeName().c_str());
             }

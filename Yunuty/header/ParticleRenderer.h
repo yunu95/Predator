@@ -18,6 +18,12 @@
 #define YUNUTY_API __declspec(dllimport)
 #endif
 
+/// <summary>
+/// 만일 Scale을 Random값으로 하겠다고 하면 startScale과 endScale 값 사이 중 랜덤한 값으로 렌더링됨.
+/// 만일 Angle을 Random값으로 하겠다고 하면 startAngle과 endAngle 값 사이 중 랜덤한 값으로 렌더링됨.
+/// 만일 AlphaDiminish가 true면 생명주기가 끝나갈수록 알파값이 빠짐.
+/// </summary>
+ 
 namespace yunutyEngine::graphics
 {
 	enum class ParticleShape
@@ -89,6 +95,16 @@ namespace yunutyEngine::graphics
 		void SetStartScale(float scale);
 		void SetEndScale(float scale);
 
+		/// 새로 추가된 함수들
+		void SetStartAngle(float angle);
+		void SetEndAngle(float angle);
+
+		void SetIsRandomScale(bool val);
+		void SetIsRandomAngle(bool val);
+
+		void SetIsAlphaDiminish(bool val);
+		/// 
+
 		void SetInterval(float interval);
 		void SetBurstsCount(int count);
 
@@ -119,6 +135,10 @@ namespace yunutyEngine::graphics
 		float curScale = 0.f;
 		float endScale = 1.f;
 
+		float startAngle = 0.f;
+		float curAngle = 0.f;
+		float endAngle = 0.f;
+
 		unsigned int maxParticle = 500;
 
 		float interval = 5.f;
@@ -126,6 +146,9 @@ namespace yunutyEngine::graphics
 		float burstsAngle = 12 * (3.14159265358979323846 / 180.f);
 		bool playAwake = true;
 		bool originPlayAwake = true;
+		bool isRandomScale = false;
+		bool isRandomAngle = false;
+		bool isAlphaDiminish = false;
 
 		std::deque<yunuGI::ParticleRenderInfo> disableParticles;
 		std::list<yunuGI::ParticleRenderInfo> ableParticles;

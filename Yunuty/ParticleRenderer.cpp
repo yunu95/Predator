@@ -120,8 +120,22 @@ void ParticleRenderer::ParticleUpdate()
 		each.lifeTime = this->lifeTime;
 
 		float ratio = each.curLifeTime / each.lifeTime;
-		float curScale = yunutyEngine::math::LerpF(this->startScale, this->endScale, ratio);
-		each.curScale = curScale;
+		if (!this->isRandomScale)
+		{
+			float curScale = yunutyEngine::math::LerpF(this->startScale, this->endScale, ratio);
+			each.curScale = curScale;
+		}
+		
+		if (!this->isRandomAngle)
+		{
+			float curAngle = yunutyEngine::math::LerpF(this->startAngle, this->endAngle, ratio);
+			each.particleAngle = curAngle;
+		}
+		
+		if (this->isAlphaDiminish)
+		{
+			each.alpha = yunutyEngine::math::LerpF(1, 0, ratio);
+		}
 
 		// 생성된 입자의 생명주기가 다하면 다시 비활성
 		if (each.curLifeTime >= each.lifeTime)
@@ -165,6 +179,31 @@ void yunutyEngine::graphics::ParticleRenderer::SetDuration(float duration)
 float yunutyEngine::graphics::ParticleRenderer::GetDuration()
 {
 	return GetGI().GetDuration();
+}
+
+void ParticleRenderer::SetIsAlphaDiminish(bool val)
+{
+	this->isAlphaDiminish = val;
+}
+
+void ParticleRenderer::SetIsRandomAngle(bool val)
+{
+	this->isRandomAngle = val;
+}
+
+void ParticleRenderer::SetIsRandomScale(bool val)
+{
+	this->isRandomScale = val;
+}
+
+void ParticleRenderer::SetEndAngle(float angle)
+{
+	this->endAngle = angle;
+}
+
+void ParticleRenderer::SetStartAngle(float angle)
+{
+	this->startAngle = angle;
 }
 
 void ParticleRenderer::Resume()
@@ -351,6 +390,14 @@ void ParticleRenderer::Update()
 				if (!disableParticles.empty())
 				{
 					auto& particle = this->disableParticles.front();
+					if (this->isRandomScale)
+					{
+						particle.curScale = yunutyEngine::math::Random::GetRandomFloat(this->startScale, this->endScale);
+					}
+					if (this->isRandomAngle)
+					{
+						particle.particleAngle = yunutyEngine::math::Random::GetRandomFloat(this->startAngle, this->endAngle);
+					}
 
 					if (this->particleType == ParticleShape::Cone)
 					{
@@ -414,6 +461,14 @@ void ParticleRenderer::Update()
 						if (!this->disableParticles.empty())
 						{
 							auto& particle = this->disableParticles.front();
+							if (this->isRandomScale)
+							{
+								particle.curScale = yunutyEngine::math::Random::GetRandomFloat(this->startScale, this->endScale);
+							}
+							if (this->isRandomAngle)
+							{
+								particle.particleAngle = yunutyEngine::math::Random::GetRandomFloat(this->startAngle, this->endAngle);
+							}
 
 							if (this->particleType == ParticleShape::Cone)
 							{

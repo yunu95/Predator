@@ -235,6 +235,9 @@ struct ParticleDesc
 {
     DirectX::SimpleMath::Vector3 pos;
     float scale;
+    float particleAngle;
+    float alpha;
+    DirectX::SimpleMath::Vector2 pad;
 };
 
 struct ParticleBuffer
