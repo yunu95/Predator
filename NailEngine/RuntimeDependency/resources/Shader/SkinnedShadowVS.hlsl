@@ -107,6 +107,7 @@ VertexOut main(VertexIn input)
         row_major matrix boneMat = GetAnimationMatrix(input);
         
         output.pos = mul(float4(input.pos, 1.f), boneMat);
+        output.pos = output.pos / output.pos.w;
         output.pos = mul(output.pos, _WVP);
         ///output.pos.z += depthBias;
         output.clipPos = output.pos;

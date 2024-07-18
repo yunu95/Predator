@@ -11,6 +11,7 @@
 #include "UnitAttackType.h"
 #include "UnitControllerType.h"
 #include "ProjectileType.h"
+#include "UnitDamageFontType.h"
 
 #include <string>
 
@@ -87,6 +88,7 @@ namespace application
             float m_attackPreDelay = 0.5f;
             float m_attackPostDelay = 0.5f;
             bool showDmgIndicator{ false };
+            POD_Enum<UnitDamageFontType::Enum> dmgIndicatorFont;
             POD_Vector2<float> dmgIndicator_offset;
             float dmgIndicator_offsetNoiseMin = 2.5f;
             float dmgIndicator_offsetNoiseMax = 20.0f;

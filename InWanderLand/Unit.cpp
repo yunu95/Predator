@@ -182,6 +182,8 @@ void Unit::OnStateEngage<UnitBehaviourTree::Death>()
     enableNavObstacleByState.reset();
     disableNavAgentByState = referenceDisableNavAgent.Acquire();
     defaultAnimationType = UnitAnimType::None;
+    if (belongingWave)
+        belongingWave->ReportUnitDeath(this);
     coroutineDeath = StartCoroutine(DeathCoroutine());
     for (auto& [buffID, buff] : buffs)
     {
@@ -593,11 +595,11 @@ void Unit::Damaged(std::weak_ptr<Unit> opponentUnit, float opponentDmg, DamageTy
     {
         if (damageType == DamageType::AttackCrit)
         {
-            ContentsCoroutine::Instance().StartCoroutine(DmgIndicatorCoroutine(opponentDmg, UIEnumID::DamageIndicator_Critical));
+            ContentsCoroutine::Instance().StartCoroutine(DmgIndicatorCoroutine(opponentDmg, dmgCriticalUIID));
         }
         else
         {
-            ContentsCoroutine::Instance().StartCoroutine(DmgIndicatorCoroutine(opponentDmg, UIEnumID::DamageIndicator_Default));
+            ContentsCoroutine::Instance().StartCoroutine(DmgIndicatorCoroutine(opponentDmg, dmgDefaultUIID));
         }
     }
 
@@ -667,6 +669,7 @@ void Unit::SetCurrentHp(float p_newHp)
             if (unitStatusUI.lock()->GetLocalUIsByEnumID().contains(UIEnumID::StatusBar_HP_Number_Current))
             {
                 unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::StatusBar_HP_Number_Current)->SetNumber(currentHitPoint);
+                unitStatusUI.lock()->GetLocalUIsByEnumID().at(UIEnumID::StatusBar_HP_Number_Current)->SetNumber(unitTemplateData->pod.max_Health);
             }
         }
     }
@@ -792,6 +795,8 @@ yunutyEngine::coroutine::Coroutine Unit::KnockbackCoroutine(std::shared_ptr<Refe
     {
         targetPosition = startPos + targetPosition;
     }
+
+    targetPosition = SingleNavigationField::Instance().GetClosestPointOnField(targetPosition);
 
     navAgentComponent.lock()->Relocate(targetPosition);
 
@@ -1484,6 +1489,23 @@ void Unit::Summon(application::editor::Unit_TemplateData* templateData)
         break;
     }
     }
+    // 피해량 수치 폰트 설정
+    switch (templateData->pod.dmgIndicatorFont.enumValue)
+    {
+    case UnitDamageFontType::Red:
+        dmgDefaultUIID = UIEnumID::DamageIndicator_Default_RedFont;
+        dmgCriticalUIID = UIEnumID::DamageIndicator_Critical_RedFont;
+        break;
+    case UnitDamageFontType::Blue:
+        dmgDefaultUIID = UIEnumID::DamageIndicator_Default_BlueFont;
+        dmgCriticalUIID = UIEnumID::DamageIndicator_Critical_BlueFont;
+        break;
+    case UnitDamageFontType::BlackAndWhite:
+        dmgDefaultUIID = UIEnumID::DamageIndicator_Default_BlackWhiteFont;
+        dmgCriticalUIID = UIEnumID::DamageIndicator_Critical_BlackWhiteFont;
+        break;
+
+    }
     currentRotationSpeed = unitTemplateData->pod.rotationSpeed;
     navAgentComponent.lock()->SetRadius(unitTemplateData->pod.collisionSize);
     navAgentComponent.lock()->SetSpeed(unitTemplateData->pod.m_unitSpeed);
@@ -1911,8 +1933,6 @@ yunutyEngine::coroutine::Coroutine Unit::BirthCoroutine()
     animatorComponent.lock()->GetGI().SetPlaySpeed(animSpeed);
     PlayAnimation(UnitAnimType::Birth, Animation::PlayFlag_::None);
     burnEffect.lock()->SetDuration(unitTemplateData->pod.birthTime);
-    burnEffect.lock()->SetEdgeColor({ unitTemplateData->pod.birthBurnEdgeColor.x,unitTemplateData->pod.birthBurnEdgeColor.y,unitTemplateData->pod.birthBurnEdgeColor.z });
-    burnEffect.lock()->SetEdgeThickness(unitTemplateData->pod.birthBurnEdgeThickness);
     burnEffect.lock()->Appear();
 
     wanderUtils::UnitCoroutine::ForSecondsFromUnit forSeconds{ GetWeakPtr<Unit>(), unitTemplateData->pod.birthTime };
@@ -1944,8 +1964,6 @@ yunutyEngine::coroutine::Coroutine Unit::DeathCoroutine()
     if (!GetUnitTemplateData().pod.lingeringCorpse)
     {
         burnEffect.lock()->SetDuration(unitTemplateData->pod.deathBurnTime);
-        burnEffect.lock()->SetEdgeColor({ unitTemplateData->pod.deathBurnEdgeColor.x,unitTemplateData->pod.deathBurnEdgeColor.y,unitTemplateData->pod.deathBurnEdgeColor.z });
-        burnEffect.lock()->SetEdgeThickness(unitTemplateData->pod.deathBurnEdgeThickness);
         burnEffect.lock()->Disappear();
     }
     for (auto unitStatusUI : unitStatusUIs)
@@ -2038,7 +2056,7 @@ yunutyEngine::coroutine::Coroutine Unit::AttackCoroutine(std::weak_ptr<Unit> opp
         break;
     }
     }
-         
+
     StartCoroutine(referenceBlockAttack.AcquireForSecondsCoroutine(finalAttackCooltime
         + math::Random::GetRandomFloat(GetUnitTemplateData().pod.m_atkRandomDelayMin, GetUnitTemplateData().pod.m_atkRandomDelayMax)
         - unitTemplateData->pod.m_attackPreDelay * attackDelayMultiplier));

@@ -424,7 +424,7 @@ coroutine::Coroutine UIManager::ReturnToTitleAfterFadeOutCoro()
     co_yield coroutine::WaitForSeconds{ 1.2f, true };
     for (auto& each : uisByIndex)
     {
-        if (each.second->importedUIData.disableOnStartExe)
+        if (each.second->importedUIData.disableOnStartExe && !(each.second->importedUIData.customFlags2 & (int)UIExportFlag2::DisableOnlyOnImport))
         {
             each.second->DisableElementInstant();
         }
@@ -1275,6 +1275,7 @@ bool UIManager::ImportDealWithSpecialCases_Post(const JsonUIData& uiData, UIElem
         }
         break;
     case UIEnumID::TacticModeRevertButton_Active:
+        ImportDefaultAction_Post(uiData, GetUIElementWithIndex(uiData.uiIndex));
         element->button->AddExternalButtonClickFunction([=]()
             {
                 TacticModeSystem::Instance().PopCommand();

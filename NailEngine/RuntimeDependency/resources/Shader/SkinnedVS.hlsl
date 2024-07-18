@@ -105,6 +105,7 @@ VertexOut main(VertexIn input)
     VertexOut output = (VertexOut) 0;
     row_major matrix _WV = mul(input.world, VTM);
     row_major matrix _WVP = mul(_WV, PTM);
+    row_major matrix _VP = mul(VTM, PTM);
     
     if (transitionDesc[input.instanceID].curr.animIndex == -1)
     {
@@ -117,9 +118,10 @@ VertexOut main(VertexIn input)
     else
     {
         row_major matrix boneMat = GetAnimationMatrix(input);
-        
         output.posH = mul(float4(input.pos, 1.f), boneMat);
-        output.posH = mul(output.posH, _WVP);
+        output.posH = output.posH / output.posH.w;
+        output.posH = mul(output.posH, input.world);
+        output.posH = mul(output.posH, _VP);
     
         output.posV = mul(float4(input.pos, 1.f), boneMat);
         output.posV = mul(output.posV, _WV);

@@ -196,7 +196,7 @@ void PlayerController::Update()
     HandleByState();
     HandleSkillCooltime();
     HandleManaRegen();
-    HandleMouseHover();
+    HandleMouseCursorAndHover();
     HandleUnitPickingCollider();
     HandleComboState();
     HandlePlayerConstrainingRegion();
@@ -326,7 +326,7 @@ void PlayerController::HandleInput()
         }
         if (Input::isKeyPushed(KeyCode::A))
         {
-            OrderAttackMove(GetWorldCursorPosition());
+            SetAttackMoveMode(true);
         }
         if (Input::isKeyPushed(KeyCode::MouseLeftClick) && !UIManager::Instance().IsMouseOnButton())
         {
@@ -628,31 +628,69 @@ void PlayerController::HandleManaRegen()
     }
 }
 
-void PlayerController::HandleMouseHover()
+void PlayerController::HandleMouseCursorAndHover()
 {
-    if (auto unit = GetUnitOnCursor(); unit && state != State::Cinematic)
+    if (state != State::Cinematic && RTSCam::Instance().GetUpdateability())
     {
-        ApplyHoverEffect(unit->GetWeakPtr<Unit>());
+        // 마우스 커서의 생김새를 먼저 결정
         if (auto btn = UIManager::Instance().GetHighlightedButton(); btn && btn->IsFunctioningButton())
         {
             UIManager::Instance().GetUIElementByEnum(UIEnumID::MouseCursor_OnButton)->EnableElement();
         }
-        else if (!UIManager::Instance().IsMouseOnButton())
+        else if (selectedSkill != SkillType::NONE)
         {
-            if (unit->GetTeamIndex() == playerTeamIndex)
+            UIManager::Instance().GetUIElementByEnum(UIEnumID::MouseCursor_Skill)->EnableElement();
+        }
+        else if (attackMoveMode)
+        {
+            UIManager::Instance().GetUIElementByEnum(UIEnumID::MouseCursor_AttackMove)->EnableElement();
+        }
+        else if (auto unit = GetUnitOnCursor(); unit)
+        {
+            if (!UIManager::Instance().IsMouseOnButton())
             {
-                UIManager::Instance().GetUIElementByEnum(UIEnumID::MouseCursor_OnAlly)->EnableElement();
+                if (unit->GetTeamIndex() == playerTeamIndex)
+                {
+                    UIManager::Instance().GetUIElementByEnum(UIEnumID::MouseCursor_OnAlly)->EnableElement();
+                }
+                else
+                {
+                    UIManager::Instance().GetUIElementByEnum(UIEnumID::MouseCursor_OnEnemy)->EnableElement();
+                }
+            }
+        }
+        else if (auto btn = UIManager::Instance().GetHighlightedButton(); btn && btn->IsFunctioningButton())
+        {
+            UIManager::Instance().GetUIElementByEnum(UIEnumID::MouseCursor_OnButton)->EnableElement();
+        }
+        else
+        {
+            UIManager::Instance().GetUIElementByEnum(UIEnumID::MouseCursor_Free)->EnableElement();
+        }
+        // 유닛의 주위에 뜨는 원형 표시를 띄움
+        if (auto unit = GetUnitOnCursor(); unit)
+        {
+            if (!UIManager::Instance().IsMouseOnButton())
+            {
+                ApplyHoverEffect(unit->GetWeakPtr<Unit>());
+                unitHoverOutlineGuard = unit->referenceHoverOutline.Acquire();
             }
             else
             {
-                UIManager::Instance().GetUIElementByEnum(UIEnumID::MouseCursor_OnEnemy)->EnableElement();
+                DisableHoverEffect();
+                unitHoverOutlineGuard.reset();
             }
         }
-        unitHoverOutlineGuard = unit->referenceHoverOutline.Acquire();
+        else
+        {
+            DisableHoverEffect();
+            unitHoverOutlineGuard.reset();
+        }
     }
     else
     {
         DisableHoverEffect();
+        unitHoverOutlineGuard.reset();
         if (auto btn = UIManager::Instance().GetHighlightedButton(); btn && btn->IsFunctioningButton())
         {
             UIManager::Instance().GetUIElementByEnum(UIEnumID::MouseCursor_OnButton)->EnableElement();
@@ -661,7 +699,6 @@ void PlayerController::HandleMouseHover()
         {
             UIManager::Instance().GetUIElementByEnum(UIEnumID::MouseCursor_Free)->EnableElement();
         }
-        unitHoverOutlineGuard.reset();
     }
 }
 // 카메라의 near plane으로부터 far plane까지 뻗는 직선의 형태로
@@ -817,7 +854,19 @@ void PlayerController::OnLeftClick()
 {
     if (selectedSkill == SkillType::NONE)
     {
-        if (!cursorUnitDetector.lock()->GetUnits().empty())
+        if (attackMoveMode)
+        {
+            if (auto cursorUnit = GetUnitOnCursor(); cursorUnit && cursorUnit->teamIndex != playerTeamIndex)
+            {
+                OrderAttack(cursorUnit->GetWeakPtr<Unit>());
+            }
+            else
+            {
+                OrderAttackMove(GetWorldCursorPosition());
+            }
+            SetAttackMoveMode(false);
+        }
+        else if (!cursorUnitDetector.lock()->GetUnits().empty())
         {
             SelectUnit(GetUnitOnCursor()->GetWeakPtr<Unit>());
         }
@@ -856,7 +905,8 @@ void PlayerController::OnPlayerChracterAllDead()
 
 void PlayerController::OnRightClick()
 {
-    if (selectedSkill == SkillType::NONE)
+    // 우클릭을 스마트하게 해석해야 하는 경우
+    if (selectedSkill == SkillType::NONE && !attackMoveMode)
     {
         if (selectedCharacter.expired()) return;
         if (state != State::Tactic)
@@ -937,10 +987,13 @@ void PlayerController::OnRightClick()
             EnableErrorUI(errorType);
         }
     }
-    else if (selectedSkill != SkillType::NONE)
+    // 우클릭을 공격이나 스킬 시전의 취소로 해석해야 하는 경우
+    else
     {
         UnSelectSkill();
+        SetAttackMoveMode(false);
     }
+
 }
 
 void PlayerController::UnselectUnit()
@@ -1100,6 +1153,7 @@ void PlayerController::ActivateSkill(SkillType::Enum skillType, Vector3d pos)
 
 void PlayerController::SelectSkill(SkillType::Enum skillType)
 {
+    SetAttackMoveMode(false);
     if ((TacticModeSystem::Instance().CanSelectSkill(skillType) == false) && (TacticModeSystem::Instance().IsOperation()))
     {
         return;
@@ -1201,6 +1255,7 @@ void PlayerController::SetState(State::Enum newState)
     case State::Cinematic:
         UnselectUnit();
         UnSelectSkill();
+        SetAttackMoveMode(false);
         for (auto& each : characters)
         {
             each.lock()->playingBattleAnim = false;
@@ -1467,6 +1522,11 @@ void PlayerController::OnPause()
 void PlayerController::OnResume()
 {
     localTimeScale = 1;
+}
+
+Vector3d PlayerController::GetCamOffsetNorm() const
+{
+    return camOffsetNorm;
 }
 
 void PlayerController::RequestStateFromAction(State::Enum newState)
@@ -1786,5 +1846,9 @@ std::vector<yunutyEngine::Vector3d>& PlayerController::ModifyPathForSkill(std::v
 
 void PlayerController::SetAttackMoveMode(bool attackMoveMode)
 {
+    if (selectedSkill != SkillType::NONE)
+    {
+        UnSelectSkill();
+    }
     this->attackMoveMode = attackMoveMode;
 }

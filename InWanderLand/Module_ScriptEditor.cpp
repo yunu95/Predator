@@ -1739,7 +1739,7 @@ namespace application
                     static TriggerType triggerType = TriggerType::None;
 
                     ImGui::SetNextItemWidth(-1);
-                    if (ImGui::BeginCombo("##TriggerListCombo", triggerName.c_str()))
+                    if (ImGui::BeginCombo("##TriggerListCombo", triggerName.c_str(), ImGuiComboFlags_HeightLargest))
                     {
                         for (auto& [type, str] : ScriptSystem::triggerList)
                         {
@@ -1863,7 +1863,7 @@ namespace application
                     static ConditionType conditionType = ConditionType::None;
 
                     ImGui::SetNextItemWidth(-1);
-                    if (ImGui::BeginCombo("##ConditionListCombo", conditionName.c_str()))
+                    if (ImGui::BeginCombo("##ConditionListCombo", conditionName.c_str(), ImGuiComboFlags_HeightLargest))
                     {
                         for (auto& [type, str] : ScriptSystem::conditionList)
                         {
@@ -1977,7 +1977,7 @@ namespace application
                     static ActionType actionType = ActionType::None;
 
                     ImGui::SetNextItemWidth(-1);
-                    if (ImGui::BeginCombo("##ActionListCombo", actionName.c_str()))
+                    if (ImGui::BeginCombo("##ActionListCombo", actionName.c_str()), ImGuiComboFlags_HeightLargest)
                     {
                         for (auto& [type, str] : ScriptSystem::actionList)
                         {

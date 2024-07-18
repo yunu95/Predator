@@ -931,6 +931,9 @@
     <Filter Include="Editor\ScriptSystem\2_Action\List\Action_Progress">
       <UniqueIdentifier>{5faf8b61-1b34-4e1e-a8ed-6366444b50c8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Contents_Refactored\Unit\UnitDamageFontType">
+      <UniqueIdentifier>{b9f405a1-c9a7-4770-a1de-bdb2e4d0532d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -2268,6 +2271,9 @@
     </ClInclude>
     <ClInclude Include="Action_Progress.h">
       <Filter>Editor\ScriptSystem\2_Action\List\Action_Progress</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitDamageFontType.h">
+      <Filter>Contents_Refactored\Unit\UnitDamageFontType</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

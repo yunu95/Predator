@@ -213,17 +213,6 @@ coroutine::Coroutine EnemyImpaleSkill::SpearArise(std::weak_ptr<EnemyImpaleSkill
 
     fbx.lock()->GetTransform()->SetWorldScale(Vector3d::one * randScale);
     co_await std::suspend_always{};
-    for (auto& each : collider.lock()->GetEnemies())
-    {
-        if (persistance->damagedUnits.contains(each))
-        {
-            continue;
-        }
-        persistance->damagedUnits.insert(each);
-        each->Damaged(persistance->owner, pod.impaleSkillDamage);
-        Vector3d knockBackDest = each->GetTransform()->GetWorldPosition() + (each->GetTransform()->GetWorldPosition() - worldPos).Normalized() * pod.impaleSkillKnockbackDistance;
-        each->KnockBack(knockBackDest, pod.impaleSkillKnockbackDuration);
-    }
 
     wanderUtils::UnitCoroutine::ForSecondsFromUnit waitPerSpear{ persistance->owner, pod.impaleSkillDurationPerSpear};
 
@@ -255,6 +244,19 @@ coroutine::Coroutine EnemyImpaleSkill::SpearArise(std::weak_ptr<EnemyImpaleSkill
         float yDelta = math::LerpF(pod.impaleSkillMinHeightPerSpear, pod.impaleSkillMaxHeightPerSpear, heightAlpha);
         fbx.lock()->GetTransform()->SetWorldPosition(worldPos + Vector3d::up * yDelta);
         fbx.lock()->GetTransform()->SetWorldPosition(worldPos + fbx.lock()->GetTransform()->GetWorldRotation().Up() * yDelta * randScale);
+        
+        for (auto& each : collider.lock()->GetEnemies())
+        {
+            if (persistance->damagedUnits.contains(each))
+            {
+                continue;
+            }
+            persistance->damagedUnits.insert(each);
+            each->Damaged(persistance->owner, pod.impaleSkillDamage);
+            Vector3d knockBackDest = each->GetTransform()->GetWorldPosition() + (each->GetTransform()->GetWorldPosition() - worldPos).Normalized() * pod.impaleSkillKnockbackDistance;
+            each->KnockBack(knockBackDest, pod.impaleSkillKnockbackDuration);
+        }
+
         co_await std::suspend_always{};
     }
 
