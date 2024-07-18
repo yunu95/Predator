@@ -146,25 +146,25 @@ void Animator::Update()
     {
         // 현재 애니메이션 업데이트
         {
-            auto currentAnimation = gi.GetCurrentAnimation();
-            float duration = currentAnimation->GetDuration();
-            int totalFrame = currentAnimation->GetTotalFrame();
-            desc.curr.speed = currentAnimation->GetPlaySpeed();
-            __int32 ratio = static_cast<__int32>(totalFrame / duration);
+			auto currentAnimation = gi.GetCurrentAnimation();
+			float duration = currentAnimation->GetDuration();
+			int totalFrame = currentAnimation->GetTotalFrame();
+			desc.curr.speed = currentAnimation->GetPlaySpeed();
+			float frameDuration = duration / totalFrame; // 각 프레임의 시간 길이
+			desc.curr.sumTime += (gi.GetPlaySpeed() * desc.curr.speed * Time::GetDeltaTime());
 
-            desc.curr.sumTime += (gi.GetPlaySpeed() * desc.curr.speed * Time::GetDeltaTime());
-            if (desc.curr.sumTime >= currentAnimation->GetDuration())
-            {
-                if (currentAnimation->GetLoop())
-                {
-                    desc.curr.sumTime -= currentAnimation->GetDuration();
-                }
-            }
+			if (desc.curr.sumTime >= currentAnimation->GetDuration())
+			{
+				if (currentAnimation->GetLoop())
+				{
+					desc.curr.sumTime -= currentAnimation->GetDuration();
+				}
+			}
 
-            desc.curr.currFrame = static_cast<__int32>(desc.curr.sumTime * ratio);
-            desc.curr.currFrame = min(static_cast<int>(desc.curr.currFrame), totalFrame - 1);
-            desc.curr.nextFrame = min(static_cast<int>(desc.curr.currFrame + 1), totalFrame - 1);
-            desc.curr.ratio = static_cast<float>(desc.curr.sumTime - static_cast<float>(desc.curr.currFrame) / ratio);
+			desc.curr.currFrame = static_cast<__int32>(desc.curr.sumTime / frameDuration);
+			desc.curr.currFrame = min(static_cast<int>(desc.curr.currFrame), totalFrame - 1);
+			desc.curr.nextFrame = min(static_cast<int>(desc.curr.currFrame + 1), totalFrame - 1);
+			desc.curr.ratio = (desc.curr.sumTime - (desc.curr.currFrame * frameDuration)) / frameDuration;
         }
 
         for (auto& each : this->animationEventMap)
@@ -194,36 +194,38 @@ void Animator::Update()
         // 다음 애니메이션이 있다면
         if (nextAnimation)
         {
-            float duration = nextAnimation->GetDuration();
-            int totalFrame = nextAnimation->GetTotalFrame();
-            __int32 ratio = static_cast<__int32>(totalFrame / duration);
+			float duration = nextAnimation->GetDuration();
+			int totalFrame = nextAnimation->GetTotalFrame();
+			totalFrame = totalFrame + 1;
+			float frameDuration = duration / totalFrame; // 각 프레임의 시간 길이
+			desc.transitionTotalTime += (Time::GetDeltaTime() * desc.transitionSpeed);
+			desc.transitionRatio = desc.transitionTotalTime / desc.transitionDuration;
 
-            desc.transitionTotalTime += (Time::GetDeltaTime() * desc.transitionSpeed);
-            desc.transitionRatio = desc.transitionTotalTime / desc.transitionDuration;
-            // 애니메이션 블렌딩이 끝난다면
-            if (desc.transitionRatio >= 1.f)
-            {
-                // 애니메이션 블렌딩이 끝난다면 블렌딩에 쓰인 애니메이션을 클리어해준다.
-                ClearAnimationEvent(gi.GetNextAnimation());
+			// 애니메이션 블렌딩이 끝난다면
+			if (desc.transitionRatio >= 1.f)
+			{
+				// 애니메이션 블렌딩이 끝난다면 블렌딩에 쓰인 애니메이션을 클리어해준다.
+				ClearAnimationEvent(gi.GetNextAnimation());
 
-                desc.ClearNextAnimation();
-                gi.SetNextAnimation(nullptr);
-            }
-            else
-            {
-                desc.next.speed = nextAnimation->GetPlaySpeed();
-                desc.next.sumTime += (gi.GetPlaySpeed() * desc.next.speed * Time::GetDeltaTime());
-                if (desc.next.sumTime >= nextAnimation->GetDuration())
-                {
-                    if (nextAnimation->GetLoop())
-                    {
-                        desc.next.sumTime = 0;
-                    }
-                }
-                desc.next.currFrame = static_cast<__int32>(desc.next.sumTime * ratio);
-                desc.next.currFrame = min(static_cast<int>(desc.next.currFrame), totalFrame - 1);
-                desc.next.nextFrame = min(static_cast<int>(desc.next.currFrame + 1), totalFrame - 1);
-                desc.next.ratio = static_cast<float>(desc.next.sumTime - static_cast<float>(desc.next.currFrame) / ratio);
+				desc.ClearNextAnimation();
+				gi.SetNextAnimation(nullptr);
+			}
+			else
+			{
+				desc.next.speed = nextAnimation->GetPlaySpeed();
+				desc.next.sumTime += (gi.GetPlaySpeed() * desc.next.speed * Time::GetDeltaTime());
+				if (desc.next.sumTime >= nextAnimation->GetDuration())
+				{
+					if (nextAnimation->GetLoop())
+					{
+						desc.next.sumTime = 0;
+					}
+				}
+
+				desc.next.currFrame = static_cast<__int32>(desc.next.sumTime / frameDuration);
+				desc.next.currFrame = min(static_cast<int>(desc.next.currFrame), totalFrame - 1);
+				desc.next.nextFrame = min(static_cast<int>(desc.next.currFrame + 1), totalFrame - 1);
+				desc.next.ratio = (desc.next.sumTime - (desc.next.currFrame * frameDuration)) / frameDuration;
 
                 // 블렌딩 중인 애니메이션에 대한 이벤트까지 처리
                 for (auto& each : this->animationEventMap)
