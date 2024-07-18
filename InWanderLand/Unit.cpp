@@ -1949,6 +1949,17 @@ yunutyEngine::coroutine::Coroutine Unit::RevivalCoroutine(float revivalDelay)
     SetCurrentHp(unitTemplateData->pod.max_Health);
     SetIsAlive(true);
     ApplyBuff(UnitBuffInvulenerability{ unitTemplateData->pod.revivalInvulnerableDuration });
+    for (auto unitStatusUI : unitStatusUIs)
+    {
+        if (auto status = unitStatusUI.lock())
+        {
+            status->EnableElement();
+        }
+        if (unitStatusUI.lock()->runtimeFlags & UnitStatusBarFlag::ControlWithReallyDisabled)
+        {
+            unitStatusUI.lock()->reallyDisabled = false;
+        }
+    }
     co_return;
 }
 yunutyEngine::coroutine::Coroutine Unit::BirthCoroutine()
