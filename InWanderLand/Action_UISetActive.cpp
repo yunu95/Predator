@@ -16,10 +16,12 @@ namespace application
         auto elem{ UIManager::Instance().GetScriptUI(uiName) };
         if (active)
         {
+            elem->reallyDisabled = false;
             elem->EnableElement();
         }
         else
         {
+            elem->reallyDisabled = true;
             elem->DisableElement();
         }
         while (elem->GetUIEnabled())

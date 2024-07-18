@@ -1014,6 +1014,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="Action_Boss.h" />
     <ClInclude Include="Action_ForceUnitUnpaused.h" />
     <ClInclude Include="Action_Particle.h" />
+    <ClInclude Include="Action_Progress.h" />
     <ClInclude Include="Action_RequestState.h" />
     <ClInclude Include="Action_Ornament.h" />
     <ClInclude Include="Action_PauseWaves.h" />
@@ -1093,6 +1094,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="PassiveUrsulaSpeed.h" />
     <ClInclude Include="PlayerCharacterType.h" />
     <ClInclude Include="PlayerPortrait.h" />
+    <ClInclude Include="ProgressManager.h" />
+    <ClInclude Include="ProgressTracker.h" />
     <ClInclude Include="ProjectilePool.h" />
     <ClInclude Include="ProjectileSelector.h" />
     <ClInclude Include="ProjectileType.h" />
@@ -2014,6 +2017,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="UnitCommand.h" />
     <ClInclude Include="UnitController.h" />
     <ClInclude Include="UnitControllerType.h" />
+    <ClInclude Include="UnitDamageFontType.h" />
     <ClInclude Include="UnitData.h" />
     <ClInclude Include="DebuggingMeshPool.h" />
     <ClInclude Include="StatusEffect.h">
@@ -2130,6 +2134,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="Action_Boss.cpp" />
     <ClCompile Include="Action_ForceUnitUnpaused.cpp" />
     <ClCompile Include="Action_Particle.cpp" />
+    <ClCompile Include="Action_Progress.cpp" />
     <ClCompile Include="Action_RequestState.cpp" />
     <ClCompile Include="Action_Ornament.cpp" />
     <ClCompile Include="Action_PauseWaves.cpp" />
@@ -2432,6 +2437,8 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="PlayMusicTimer.cpp" />
     <ClCompile Include="PopDownOnDisable.cpp" />
     <ClCompile Include="PopupOnEnable.cpp" />
+    <ClCompile Include="ProgressManager.cpp" />
+    <ClCompile Include="ProgressTracker.cpp" />
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="ProjectilePool.cpp" />
     <ClCompile Include="ProjectileSelector.cpp" />
@@ -3170,6 +3177,9 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="PlaytimeRegion.cpp" />
     <ClCompile Include="Wave_TemplateData.cpp" />
     <ClCompile Include="Interactable_TrapArms.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ProgressTrackerList.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

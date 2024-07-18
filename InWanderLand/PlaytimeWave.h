@@ -50,7 +50,7 @@ public:
 
     void ReportUnitDeath(Unit* unit);
 
-    coroutine::Coroutine WaveEndCoroutine();
+    coroutine::Coroutine WaveEndCoroutine(Unit* lastStandingUnit);
 
     virtual void Start() override;
     virtual void Update() override;

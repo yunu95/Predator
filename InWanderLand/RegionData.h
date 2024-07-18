@@ -40,6 +40,8 @@ namespace application
             float x, z, angle, width, height;
             bool isObstacle{ false };
             int specialEvent{ 0 };
+            bool onceEnter{ true };
+            bool onceLeave{ true };
             Region_TemplateData* templateData;
             // 지역에 들어갔을 때 비활성화시킬 장식물들의 UUID를 저장합니다.
             std::vector<string> disablingOrnamentUUIDS;

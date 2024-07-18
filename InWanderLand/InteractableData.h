@@ -11,6 +11,7 @@
 #include "InteractablePalette.h"
 #include "GlobalConstant.h"
 #include "IObserver.h"
+#include "ProgressTracker.h"
 
 #include <memory>
 #include <string>
@@ -60,7 +61,7 @@ namespace application
         };
 
         class InteractableData
-            : public IEditableData, public IObserver
+            : public IEditableData, public IObserver, public application::ProgressTracker
         {
             friend class InstanceManager;
 
@@ -82,6 +83,10 @@ namespace application
             bool EraseTargetInteractables(InteractableData* target);
 
             virtual void ProcessObervationEvent(ObservationTarget* target, ObservationEvent event) override;
+
+            virtual void ProgressInitialize();
+            virtual void CurrentProgressSave();
+            virtual void Recovery();
 
             POD_Interactable pod;
 

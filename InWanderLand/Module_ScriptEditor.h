@@ -476,6 +476,16 @@ namespace application
                         Action_SetPlayerConstrainingRegion::ImGui_DrawDataPopup(static_cast<Action_SetPlayerConstrainingRegion*>(data));
                         break;
                     }
+                    case application::ActionType::ProgressSave:
+                    {
+                        Action_ProgressSave::ImGui_DrawDataPopup(static_cast<Action_ProgressSave*>(data));
+                        break;
+                    }
+                    case application::ActionType::ProgressLoad:
+                    {
+                        Action_ProgressLoad::ImGui_DrawDataPopup(static_cast<Action_ProgressLoad*>(data));
+                        break;
+                    }
                     default:
                         break;
                     }

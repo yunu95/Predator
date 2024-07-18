@@ -230,7 +230,7 @@ std::vector<string>& SFXManager::GetSFXRandomResorces(string soundPath)
 
 void SFXManager::OnGameStart()
 {
-	
+
 }
 
 void SFXManager::OnGameStop()
@@ -320,10 +320,16 @@ bool SFXManager::PreDecoding(const json& data)
 			continue;
 		}
 
-		SetSFXPriority(soundPath, data["SoundList"][soundPath]["Priority"]);
-		SettingSFXGroup(soundPath, data["SoundList"][soundPath]["SoundGroupIndex"]);
+		if (data["SoundList"][soundPath].contains("Priority"))
+		{
+			SetSFXPriority(soundPath, data["SoundList"][soundPath]["Priority"]);
+		}
 
-		/// 추후 업데이트 된 내용이라 충돌을 방지하고자 검토합니다.
+		if (data["SoundList"][soundPath].contains("SoundGroupIndex"))
+		{
+			SettingSFXGroup(soundPath, data["SoundList"][soundPath]["SoundGroupIndex"]);
+		}
+
 		if (data["SoundList"][soundPath].contains("RandomFlag"))
 		{
 			SetSFXRandomFlag(soundPath, data["SoundList"][soundPath]["RandomFlag"]);
@@ -340,11 +346,21 @@ bool SFXManager::PreDecoding(const json& data)
 
 	for (int i = 0; i < initSoundGroupCount; i++)
 	{
-		SetSFXGroupVolume(i, data["SoundGroupList"][i]["Volume"]);
-		SetSFXGroupMaxAudible(i, data["SoundGroupList"][i]["MaxAudible"]);
-		SetSFXGroupMaxAudibleBehavior(i, (SoundSystem::SOUNDGROUP_BEHAVIOR)data["SoundGroupList"][i]["Behavior"]);
-		
-		/// 추후 업데이트 된 내용이라 충돌을 방지하고자 검토합니다.
+		if (data["SoundGroupList"][i].contains("Volume"))
+		{
+			SetSFXGroupVolume(i, data["SoundGroupList"][i]["Volume"]);
+		}
+
+		if (data["SoundGroupList"][i].contains("MaxAudible"))
+		{
+			SetSFXGroupMaxAudible(i, data["SoundGroupList"][i]["MaxAudible"]);
+		}
+
+		if (data["SoundGroupList"][i].contains("Behavior"))
+		{
+			SetSFXGroupMaxAudibleBehavior(i, (SoundSystem::SOUNDGROUP_BEHAVIOR)data["SoundGroupList"][i]["Behavior"]);
+		}
+
 		if (data["SoundGroupList"][i].contains("Name"))
 		{
 			soundGroupNames[i] = data["SoundGroupList"][i]["Name"];

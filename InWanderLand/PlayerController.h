@@ -1,4 +1,5 @@
 #pragma once
+#pragma once
 #include "YunutyEngine.h"
 #include "SkillUpgradeType.h"
 #include <map>
@@ -89,6 +90,8 @@ public:
     virtual void OnPause() override;
     virtual void OnResume() override;
 
+    Vector3d GetCamOffsetNorm() const;
+
     static constexpr int playerTeamIndex = 1;
     static const std::unordered_map<UIEnumID, SkillUpgradeType::Enum> skillUpgradeByUI;
     DelegateCallback<void> onSkillSelect[(int)SkillType::SKILL_NUM];
@@ -125,7 +128,7 @@ private:
     void HandleSkillPreview();
     void HandleSkillCooltime();
     void HandleManaRegen();
-    void HandleMouseHover();
+    void HandleMouseCursorAndHover();
     void HandleUnitPickingCollider();
     void HandleComboState();
     void HandlePlayerConstrainingRegion();

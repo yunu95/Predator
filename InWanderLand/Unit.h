@@ -255,6 +255,8 @@ private:
     float DistanceTo(const Vector3d& target);
     void ReturnToPool();
     void SetSkinnedMeshRenderer(GameObject* fbxObj);
+    UIEnumID dmgDefaultUIID;
+    UIEnumID dmgCriticalUIID;
     int liveCountLeft{ 0 };
     // 유닛이 이동중, 정체 상태에 연속으로 jamCount번 이상 빠졌다면 이동 명령을 취소하고 공격모드 이동명령을 실행하게 된다.
     float jammedDuration = 0;

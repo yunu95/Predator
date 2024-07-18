@@ -387,6 +387,7 @@ void ResourceManager::CreateTextures(const std::vector<std::wstring>& texturePat
 }
 
 std::shared_ptr<yunuGI::ITexture>& ResourceManager::CreateTexture(const std::wstring& texturePath, unsigned int width, unsigned int height, DXGI_FORMAT format, D3D11_BIND_FLAG bindFlag,bool isMSAA, int arraySize, int sliceCount)
+std::shared_ptr<yunuGI::ITexture>& ResourceManager::CreateTexture(const std::wstring& texturePath, unsigned int width, unsigned int height, DXGI_FORMAT format, D3D11_BIND_FLAG bindFlag, bool isMSAA, int arraySize, int sliceCount)
 {
     auto iter = this->deferredTextureMap.find(texturePath);
     if (iter == this->deferredTextureMap.end())
@@ -424,25 +425,25 @@ std::shared_ptr<Texture>& ResourceManager::CreateTextureFromResource(const std::
 
 void ResourceManager::LoadVFXFrameInfo(const std::wstring& vfxPath)
 {
-	std::ifstream file(vfxPath);
+    std::ifstream file(vfxPath);
 
-	if (!file.is_open())
-	{
-		return;
-	}
+    if (!file.is_open())
+    {
+        return;
+    }
 
 
-	nlohmann::json jsonData;
-	file >> jsonData;
+    nlohmann::json jsonData;
+    file >> jsonData;
 
-	file.close();
+    file.close();
 
-	for (const auto& frameJson : jsonData)
-	{
+    for (const auto& frameJson : jsonData)
+    {
         std::string MaterialName = frameJson.at("material_name").get<std::string>();;
         std::wstring wMaterialName = this->String_To_Wstring(MaterialName);
         float frameRate = frameJson.at("frame_rate").get<float>();;
-        
+
         std::vector<yunuGI::VFXInfo> locationVec;
         float frame;
         for (const auto& loc : frameJson.at("location_data"))
@@ -482,7 +483,7 @@ void ResourceManager::LoadVFXFrameInfo(const std::wstring& vfxPath)
 
         this->vfxFrameInfoMap.insert({ wMaterialName,{frameRate, locationVec} });
         locationVec.clear();
-	}
+    }
 }
 
 void ResourceManager::LoadFBX(const char* filePath)
@@ -616,6 +617,10 @@ std::shared_ptr<yunuGI::IMaterial> ResourceManager::GetInstanceMaterial(const st
 std::shared_ptr<yunuGI::IShader> ResourceManager::GetShader(const std::wstring& shaderPath)
 {
     auto iter = shaderMap.find(shaderPath);
+    if (iter == shaderMap.end())
+    {
+        return std::shared_ptr<yunuGI::IShader>{};
+    }
     //assert(iter != shaderMap.end());
 
     return std::static_pointer_cast<Shader>(iter->second);
@@ -722,7 +727,7 @@ FBXNode* ResourceManager::GetFBXNode(const std::wstring& fbxName)
     return this->fbxNodeMap.find(fbxName)->second;
 }
 
-std::pair<float, std::vector<yunuGI::VFXInfo>>& ResourceManager::GetVFXInfo(const std::wstring& materialName) 
+std::pair<float, std::vector<yunuGI::VFXInfo>>& ResourceManager::GetVFXInfo(const std::wstring& materialName)
 {
     size_t pos = materialName.find(L"_instance");
     if (pos != std::wstring::npos)
@@ -1124,14 +1129,14 @@ void ResourceManager::CreateDefaultShader()
     CreateShader(L"RimForwardPS.cso");
     CreateShader(L"GuideLinePS.cso");
     CreateShader(L"Stage1FloorNoBlendPS.cso");
-	CreateShader(L"VFX_PS.cso");
-	CreateShader(L"MoveAnimTexturePS.cso");
-	CreateShader(L"TestDecalPS.cso");
-	CreateShader(L"TestDecalMaskPS.cso");
-	CreateShader(L"AAPassPS.cso");
-	CreateShader(L"Default_AlphaPS.cso");
-	CreateShader(L"SilhouettePS.cso");
-	CreateShader(L"DissolveShadowPS.cso");
+    CreateShader(L"VFX_PS.cso");
+    CreateShader(L"MoveAnimTexturePS.cso");
+    CreateShader(L"TestDecalPS.cso");
+    CreateShader(L"TestDecalMaskPS.cso");
+    CreateShader(L"AAPassPS.cso");
+    CreateShader(L"Default_AlphaPS.cso");
+    CreateShader(L"SilhouettePS.cso");
+    CreateShader(L"DissolveShadowPS.cso");
 	CreateShader(L"Default_CullFront_AlphaPS.cso");
 	CreateShader(L"Window_AlphaPS.cso");
 #pragma endregion
@@ -1244,10 +1249,10 @@ void ResourceManager::CreateDefaultMaterial()
             renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(UTIL)).get());
         material->SetTexture(yunuGI::Texture_Type::Temp5,
             renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->GetRTTexture(static_cast<int>(AMBIENT)).get());
-		material->SetTexture(yunuGI::Texture_Type::Temp6,
-			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->GetRTTexture(static_cast<int>(SPECULAR_LIGHT)).get());
-		material->SetTexture(yunuGI::Texture_Type::Temp7,
-			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::SILHOUETTE)]->GetRTTexture(static_cast<int>(SILHOUETTE)).get());
+        material->SetTexture(yunuGI::Texture_Type::Temp6,
+            renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::LIGHTING)]->GetRTTexture(static_cast<int>(SPECULAR_LIGHT)).get());
+        material->SetTexture(yunuGI::Texture_Type::Temp7,
+            renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::SILHOUETTE)]->GetRTTexture(static_cast<int>(SILHOUETTE)).get());
     }
 
     // BackBuffer
@@ -1259,27 +1264,27 @@ void ResourceManager::CreateDefaultMaterial()
             renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::FINAL)]->GetRTTexture(static_cast<int>(FINAL)).get());
         material->SetTexture(yunuGI::Texture_Type::Temp1,
             renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(POSITION)).get());
-		material->SetTexture(yunuGI::Texture_Type::Temp2,
-			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(OUTLINE_INFO)).get());
-		material->SetTexture(yunuGI::Texture_Type::Temp3,
-			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(UTIL)).get());
+        material->SetTexture(yunuGI::Texture_Type::Temp2,
+            renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(OUTLINE_INFO)).get());
+        material->SetTexture(yunuGI::Texture_Type::Temp3,
+            renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::G_BUFFER)]->GetRTTexture(static_cast<int>(UTIL)).get());
     }
 
     // AAMaterial -> 스왑체인의 백버퍼에 기록될 때 사용될 머터리얼
     {
-		yunuGI::IMaterial* material = CrateMaterial(L"AAMaterial");
-		material->SetVertexShader(GetDeferredShader(L"Deferred_FinalVS.cso").get());
-		material->SetPixelShader(GetShader(L"AAPassPS.cso").get());
-		material->SetTexture(yunuGI::Texture_Type::Temp0,
-			renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::BACKBUFFER)]->GetRTTexture(static_cast<int>(BACKBUFFER)).get());
+        yunuGI::IMaterial* material = CrateMaterial(L"AAMaterial");
+        material->SetVertexShader(GetDeferredShader(L"Deferred_FinalVS.cso").get());
+        material->SetPixelShader(GetShader(L"AAPassPS.cso").get());
+        material->SetTexture(yunuGI::Texture_Type::Temp0,
+            renderTargetGroupVec[static_cast<int>(RENDER_TARGET_TYPE::BACKBUFFER)]->GetRTTexture(static_cast<int>(BACKBUFFER)).get());
     }
 
     // silhouette material
-	{
-		yunuGI::IMaterial* material = CrateMaterial(L"SilhouetteMaterial");
-		material->SetVertexShader(GetShader(L"SkinnedVS.cso").get());
-		material->SetPixelShader(GetShader(L"SilhouettePS.cso").get());
-	}
+    {
+        yunuGI::IMaterial* material = CrateMaterial(L"SilhouetteMaterial");
+        material->SetVertexShader(GetShader(L"SkinnedVS.cso").get());
+        material->SetPixelShader(GetShader(L"SilhouettePS.cso").get());
+    }
 
     // 파티클 전용 머터리얼
     {
@@ -1385,10 +1390,10 @@ void ResourceManager::CreateDefaultTexture()
     CreateTexture(L"Texture/Stage1DiffuseHDR.dds");
     CreateTexture(L"Texture/Stage1SpecularHDR.dds");
 
-	CreateTexture(L"Texture/Stage2EnvHDR.dds");
-	CreateTexture(L"Texture/Stage2Brdf.dds");
-	CreateTexture(L"Texture/Stage2DiffuseHDR.dds");
-	CreateTexture(L"Texture/Stage2SpecularHDR.dds");
+    CreateTexture(L"Texture/Stage2EnvHDR.dds");
+    CreateTexture(L"Texture/Stage2Brdf.dds");
+    CreateTexture(L"Texture/Stage2DiffuseHDR.dds");
+    CreateTexture(L"Texture/Stage2SpecularHDR.dds");
 
     CreateTexture(L"Texture/Particle/default.dds");
     CreateTexture(L"Texture/TempTexture.dds");
@@ -1432,7 +1437,7 @@ void ResourceManager::CreateDefaultTexture()
 
     CreateTexture(L"ShadowDepth", SM_SIZE, SM_SIZE, DXGI_FORMAT_R24G8_TYPELESS, static_cast<D3D11_BIND_FLAG>(D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE));
 
-    CreateTexture(L"PointLightShadowDepth", PL_SM_SIZE, PL_SM_SIZE, DXGI_FORMAT_R24G8_TYPELESS, static_cast<D3D11_BIND_FLAG>(D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE),false, 6, MAX_POINT_LIGHT);
+    CreateTexture(L"PointLightShadowDepth", PL_SM_SIZE, PL_SM_SIZE, DXGI_FORMAT_R24G8_TYPELESS, static_cast<D3D11_BIND_FLAG>(D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE), false, 6, MAX_POINT_LIGHT);
 }
 
 void ResourceManager::FillFBXData(const std::wstring& fbxName, FBXNode* node, yunuGI::FBXData* fbxData, bool isPreLoad)

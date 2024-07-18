@@ -73,14 +73,14 @@ void PlaytimeWave::DeActivateWave()
 
 void PlaytimeWave::ReportUnitDeath(Unit* unit)
 {
-    if (unit->IsPlayerUnit())
+    if (unit->IsPlayerUnit() /*|| unit->GetUnitTemplateData().pod.skinnedFBXName == "SKM_HeartQueen"*/)
         return;
 
-    if (m_currentWaveUnits.size() == 1)
+    if (nextSummonUnitIndex >= waveData->pod.waveSizes[currentSequenceIndex] && m_currentWaveUnits.size() == 1 && currentSequenceIndex + 1 >= waveData->pod.waveSizes.size())
     {
         /// 웨이브 종료 코루틴 실행.
         bool isWaveEndActDone = false;
-        auto waveEndCoroutine = ContentsCoroutine::Instance().StartCoroutine(WaveEndCoroutine());
+        auto waveEndCoroutine = ContentsCoroutine::Instance().StartCoroutine(WaveEndCoroutine(unit));
         waveEndCoroutine.lock()->PushDestroyCallBack([=]()
             {
                 m_currentWaveUnits.erase(m_currentWaveUnits.find(unit));
@@ -92,7 +92,7 @@ void PlaytimeWave::ReportUnitDeath(Unit* unit)
     }
 }
 
-coroutine::Coroutine PlaytimeWave::WaveEndCoroutine()
+coroutine::Coroutine PlaytimeWave::WaveEndCoroutine(Unit* lastStandingUnit)
 {
     auto gc = GlobalConstant::GetSingletonInstance().pod;
     auto beforeZoomFactor = PlayerController::Instance().GetZoomFactor();
@@ -103,13 +103,34 @@ coroutine::Coroutine PlaytimeWave::WaveEndCoroutine()
     
     float realElapsedTime = dur * 2 / (b + a);
 
-    PlayerController::Instance().SetZoomFactor(beforeZoomFactor * gc.waveEndZoomFactor);
+    if (dur <= 0)
+        dur = 1;
 
-    coroutine::ForSeconds forSeconds{ gc.waveEndSlowTime };
+    //PlayerController::Instance().SetZoomFactor(beforeZoomFactor * gc.waveEndZoomFactor);
+
+    RTSCam::Instance().SetUpdateability(false);
+    auto camPivotPoint = lastStandingUnit->GetTransform()->GetWorldPosition();
+    Vector3d camStartPos = RTSCam::Instance().GetTransform()->GetWorldPosition();
+    Vector3d targetPos = camPivotPoint + PlayerController::Instance().GetCamOffsetNorm() * beforeZoomFactor * gc.waveEndZoomFactor * PlayerController::Instance().camZoomMultiplier;
+
+    coroutine::ForSeconds forSeconds{ gc.waveEndActionTime };
     forSeconds.isRealTime = true;
+
+    auto cameraMoveDuration = gc.waveEndCameraMoveDuration;
+    if (cameraMoveDuration > gc.waveEndActionTime)
+    {
+        cameraMoveDuration = gc.waveEndActionTime;
+    }
 
     while (forSeconds.Tick())
     {
+        /// 카메라 무브
+        if (forSeconds.Elapsed() <= cameraMoveDuration)
+        {
+            auto factor = forSeconds.Elapsed() / cameraMoveDuration;
+            RTSCam::Instance().GetTransform()->SetWorldPosition(Vector3d::Lerp(camStartPos, targetPos, factor));
+        }
+
         if (forSeconds.Elapsed() < realElapsedTime)
         {
             Time::SetTimeScale((b - a) * (a + b) / (2 * dur) * forSeconds.Elapsed() + a);
@@ -121,7 +142,7 @@ coroutine::Coroutine PlaytimeWave::WaveEndCoroutine()
         co_await std::suspend_always{};
 
     }
-
+    RTSCam::Instance().SetUpdateability(true);
     PlayerController::Instance().SetZoomFactor(beforeZoomFactor);
     Time::SetTimeScale(1);
 

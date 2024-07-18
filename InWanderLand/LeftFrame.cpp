@@ -162,7 +162,8 @@ namespace BossSummon
 		mesh->SetSelfActive(false);
 		auto idle = wanderResources::GetAnimation("SKM_Frame1", UnitAnimType::Idle);
 		idle->SetLoop(false);
-		unitFrame = UnitPool::SingleInstance().Borrow(frameData); 
+		unitFrame = UnitPool::SingleInstance().Borrow(frameData);
+		unitFrame.lock()->belongingWave = nullptr;
 		unitFrame.lock()->SetDefaultAnimation(UnitAnimType::Idle);
 		unitFrame.lock()->OnStateEngageCallback()[UnitBehaviourTree::Keywords::Death].AddVolatileCallback(
 			[this]() 
@@ -407,7 +408,7 @@ namespace BossSummon
 							finalPos.z = math::Random::GetRandomFloat(pivotPos.z - BossSummonMobSkill::pod.leftNoiseRadius, (pivotPos - BossSummonMobSkill::pod.leftNoiseRadius * summonRot.Right().Normalized()).z);
 							
 							auto sUnit = UnitPool::SingleInstance().Borrow(meleeCountList.begin()->first, finalPos, summonRot);
-
+							sUnit.lock()->belongingWave = nullptr;
 							summonUnit.insert(sUnit);
 							currentSummonMeleeUnitCount++;
 							if (currentSummonMeleeUnitCount >= meleeCountList.begin()->second)
@@ -455,6 +456,7 @@ namespace BossSummon
 							finalPos.x = math::Random::GetRandomFloat((pivotPos + BossSummonMobSkill::pod.leftNoiseRadius * summonRot.Right().Normalized()).x, pivotPos.x + BossSummonMobSkill::pod.leftNoiseRadius);
 							finalPos.z = math::Random::GetRandomFloat(pivotPos.z - BossSummonMobSkill::pod.leftNoiseRadius, (pivotPos - BossSummonMobSkill::pod.leftNoiseRadius * summonRot.Right().Normalized()).z);
 							auto sUnit = UnitPool::SingleInstance().Borrow(rangedCountList.begin()->first, finalPos, summonRot);
+							sUnit.lock()->belongingWave = nullptr;
 							summonUnit.insert(sUnit);
 							currentSummonRangedUnitCount++;
 							if (currentSummonRangedUnitCount >= rangedCountList.begin()->second)

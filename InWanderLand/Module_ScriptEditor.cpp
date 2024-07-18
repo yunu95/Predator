@@ -1739,7 +1739,7 @@ namespace application
                     static TriggerType triggerType = TriggerType::None;
 
                     ImGui::SetNextItemWidth(-1);
-                    if (ImGui::BeginCombo("##TriggerListCombo", triggerName.c_str()))
+                    if (ImGui::BeginCombo("##TriggerListCombo", triggerName.c_str(), ImGuiComboFlags_HeightLargest))
                     {
                         for (auto& [type, str] : ScriptSystem::triggerList)
                         {
@@ -1863,7 +1863,7 @@ namespace application
                     static ConditionType conditionType = ConditionType::None;
 
                     ImGui::SetNextItemWidth(-1);
-                    if (ImGui::BeginCombo("##ConditionListCombo", conditionName.c_str()))
+                    if (ImGui::BeginCombo("##ConditionListCombo", conditionName.c_str(), ImGuiComboFlags_HeightLargest))
                     {
                         for (auto& [type, str] : ScriptSystem::conditionList)
                         {
@@ -1977,7 +1977,7 @@ namespace application
                     static ActionType actionType = ActionType::None;
 
                     ImGui::SetNextItemWidth(-1);
-                    if (ImGui::BeginCombo("##ActionListCombo", actionName.c_str()))
+                    if (ImGui::BeginCombo("##ActionListCombo", actionName.c_str()), ImGuiComboFlags_HeightLargest)
                     {
                         for (auto& [type, str] : ScriptSystem::actionList)
                         {
@@ -2266,6 +2266,16 @@ namespace application
                             case application::ActionType::SetPlayerConstrainingRegion:
                             {
                                 selectedScript->AddAction<Action_SetPlayerConstrainingRegion>();
+                                break;
+                            }
+                            case application::ActionType::ProgressSave:
+                            {
+                                selectedScript->AddAction<Action_ProgressSave>();
+                                break;
+                            }
+                            case application::ActionType::ProgressLoad:
+                            {
+                                selectedScript->AddAction<Action_ProgressLoad>();
                                 break;
                             }
                             default:
