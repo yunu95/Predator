@@ -153,7 +153,6 @@ private:
     Vector3d GetMiddlePoint();
     // 연속으로 쌓은 콤보를 초기화한다.
     void ResetCombo();
-    void SetTacticCameraActive(bool boolen);
 
     void SetCooltime(SkillType::Enum skillType, float cooltime);
     void SetCooltime(std::weak_ptr<Unit> unit);

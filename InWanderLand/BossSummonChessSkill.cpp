@@ -66,7 +66,7 @@ coroutine::Coroutine BossSummonChessSkill::operator()()
 	}
 
 	Vector3d PlayerCenterPos = temp / wage;
-	auto distance = (PlayerCenterPos - owner.lock()->GetTransform()->GetWorldPosition()).Magnitude();
+	auto distance1 = (PlayerCenterPos - owner.lock()->GetTransform()->GetWorldPosition()).Magnitude();
 	auto direction = (PlayerCenterPos - owner.lock()->GetTransform()->GetWorldPosition()).Normalized();
 
 	auto camFocusPos = owner.lock()->GetTransform()->GetWorldPosition() + direction * distance / 2;

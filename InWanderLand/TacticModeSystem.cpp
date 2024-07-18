@@ -109,6 +109,14 @@ void TacticModeSystem::EngageTacticSystem()
     SFXManager::PlaySoundfile("sounds/Tactical mode/Tactical mode on.wav");
     ITacticObject::OnPauseAll();
     SyncWithTacticCommandQueueUI();
+
+    RTSCam::Instance().SetUpdateability(false);
+
+    //if (tacticCameraRef)
+    //{
+    //    RTSCam::Instance().SetIdealPosition(tacticCameraRef->GetTransform()->GetWorldPosition());
+    //    RTSCam::Instance().SetIdealRotation(tacticCameraRef->GetTransform()->GetWorldRotation());
+    //}
 }
 
 EnqueErrorType TacticModeSystem::EnqueueCommand(std::shared_ptr<UnitCommand> command)
