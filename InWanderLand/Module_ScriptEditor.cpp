@@ -1982,7 +1982,7 @@ namespace application
                     static ActionType actionType = ActionType::None;
 
                     ImGui::SetNextItemWidth(-1);
-                    if (ImGui::BeginCombo("##ActionListCombo", actionName.c_str()), ImGuiComboFlags_HeightLargest)
+                    if (ImGui::BeginCombo("##ActionListCombo", actionName.c_str(), ImGuiComboFlags_HeightLargest))
                     {
                         for (auto& [type, str] : ScriptSystem::actionList)
                         {
