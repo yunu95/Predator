@@ -738,6 +738,17 @@ void Unit::Recovery()
     else
     {
         ReturnToPool();
+        for (auto unitStatusUI : unitStatusUIs)
+        {
+            if (auto status = unitStatusUI.lock())
+            {
+                status->DisableElement();
+            }
+            if (unitStatusUI.lock()->runtimeFlags & UnitStatusBarFlag::ControlWithReallyDisabled)
+            {
+                unitStatusUI.lock()->reallyDisabled = true;
+            }
+        }
     }
 }
 

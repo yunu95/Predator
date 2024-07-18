@@ -27,6 +27,22 @@ bool PlaytimeWave::IsRemainEnemyAndWave()
 {
     return !m_currentWaveUnits.empty() && (currentSequenceIndex < waveData->pod.waveSizes.size());
 }
+void PlaytimeWave::Reset()
+{
+    currentSequenceIndex = 0;
+    nextSummonUnitIndex = 0;
+    waveDataIndex = 0;
+    m_elapsed = 0.0f;
+    isStoppedByTacticMode = false;
+    isWaveActivated = false;
+    isWaveFinished = false;
+    m_currentWaveUnits.clear();
+    SetActive(true);
+    if (currentOperativeWave.lock().get() == this)
+    {
+        currentOperativeWave.reset();
+    }
+}
 std::weak_ptr<PlaytimeWave> PlaytimeWave::GetCurrentOperatingWave()
 {
     return currentOperativeWave;
@@ -40,6 +56,7 @@ void PlaytimeWave::ActivateWave()
     currentOperativeWave = GetGameObject()->GetComponentWeakPtr<PlaytimeWave>();
     array<int, 3> comboObjectives = { waveData->pod.comboObjective1, waveData->pod.comboObjective2, waveData->pod.comboObjective3 };
     PlayerController::Instance().SetComboObjectives(comboObjectives);
+    PlayerController::Instance().triggeredWaves.insert(this);
     UIManager::Instance().ShowComboObjectives();
     //TacticModeSystem::Instance().RegisterCurrentWave(this);
 
@@ -67,6 +84,7 @@ void PlaytimeWave::DeActivateWave()
     isWaveActivated = false;
     UIManager::Instance().HideComboObjectvies();
     this->SetActive(false);
+    PlayerController::Instance().finishedWaves.insert(this);
     // 카메라 가동범위 제한
     if (auto rtsCam = dynamic_cast<RTSCam*>(graphics::Camera::GetMainCamera()))
     {

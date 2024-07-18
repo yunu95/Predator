@@ -124,6 +124,7 @@ public:
 
     // 스킬 업그레이드와 관련된 부분
     // 어떤 스킬을 업그레이드 할 것인지 미리 정한다. 미리 지정만 하는 것이지 바로 업그레이드까지 직행하는 것은 아니다.
+    std::unordered_set<PlaytimeWave*> triggeredWaves;
     std::unordered_set<PlaytimeWave*> finishedWaves;
 private:
     void SetState(State::Enum newState);
@@ -186,6 +187,7 @@ private:
     std::vector<Vector3d>& ModifyPathForAttack(std::vector<Vector3d>& path);
     std::vector<Vector3d>& ModifyPathForSkill(std::vector<Vector3d>& path, SkillType::Enum skillType);
     void SetAttackMoveMode(bool attackMoveMode);
+    std::unordered_set<PlaytimeWave*> triggeredWavesCaptured;
     std::unordered_set<PlaytimeWave*> finishedWavesCaptured;
     int skillButtonIDHovering;
     int parentEnumIDHovering;

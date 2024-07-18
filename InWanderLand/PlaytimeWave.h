@@ -43,6 +43,7 @@ public:
     virtual ~PlaytimeWave();
 
     bool IsRemainEnemyAndWave();
+    void Reset();
 
     void ActivateWave();
     void DeActivateWave();

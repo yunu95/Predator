@@ -102,3 +102,5 @@
 #include "ContentsCoroutine.h"
 #include "TacticModeSystem.h"
 #include "DuplicatedUIPool.h"
+#include "ProgressManager.h"
+#include "ProgressTracker.h"
