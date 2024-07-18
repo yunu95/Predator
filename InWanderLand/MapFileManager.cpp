@@ -125,8 +125,6 @@ namespace application
 						guidMap[loadedGUID]->pod.stage = loadedStage;
 						guidMap[loadedGUID]->ApplyAsPaletteInstance();
 
-
-
 						for (auto child : guidMap[loadedGUID]->GetPaletteInstance()->GetGameObject()->GetChildren())
 						{
 							if (child->getName() == guidMap[loadedGUID]->pod.templateData->pod.staticFBXName)
@@ -184,6 +182,7 @@ namespace application
 				{
 					if (!each->pod.madeEditor && each->pod.stage == loadedStage)
 					{
+						each->GetPaletteInstance()->GetGameObject()->SetSelfActive(false);
 						palette::OrnamentPalette::SingleInstance().Delete(each);
 					}
 				}

@@ -1671,6 +1671,11 @@ namespace application
             {
                 ImGui_AddActionPopup();
             }
+
+            ImGui::SameLine();
+            imgui::ShiftCursorX(20);
+            ImGui::Checkbox("Repeat", &data->repeat);
+
             imgui::ShiftCursorY(10);
 
             if (ImGui::CollapsingHeader("Triggers"))
@@ -1699,7 +1704,7 @@ namespace application
             }
             imgui::ShiftCursorY(10);
 
-            if (ImGui::CollapsingHeader("Actions"))
+            if (ImGui::CollapsingHeader("Actions    [Repeat]"))
             {
                 int finalIdx = -1;
                 int offset = 0;
@@ -2400,7 +2405,7 @@ namespace application
             }
 
             ImGui::PushID(data.get());
-            if (ImGui::Selectable(data->GetTypeName().c_str(), data == selectedAction))
+            if (ImGui::Selectable(data->GetTypeName().c_str(), data == selectedAction, 0, ImVec2(ImGui::GetContentRegionAvail().x - 30, 0)))
             {
                 if (selectedAction == data)
                 {
@@ -2413,6 +2418,12 @@ namespace application
                 selectedTrigger = nullptr;
                 selectedCondition = nullptr;
             }
+            ImGui::PopID();
+
+            ImGui::SameLine();
+            imgui::ShiftCursorX(ImGui::GetContentRegionAvail().x - 20);
+            ImGui::SetNextItemWidth(18);
+            ImGui::Checkbox(("##RepeatAction" + std::to_string((unsigned long long)static_cast<void*>(data.get()))).c_str(), &data->repeat);
 
             if (!data->IsValid())
             {
@@ -2428,7 +2439,6 @@ namespace application
 
             PopUpDataEdit<IAction>(data.get());
 
-            ImGui::PopID();
         }
     }
 }

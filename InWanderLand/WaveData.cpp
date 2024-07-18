@@ -56,7 +56,7 @@ namespace application
 		{
 			if (pod.triggerRegion)
 			{
-				pod.triggerRegion->playtimeRegion->OnEnter.push_back([=]() { playtimeWave->ActivateWave(); });
+				pod.triggerRegion->playtimeRegion->OnEnter.AddVolatileCallback([=]() { playtimeWave->ActivateWave(); });
 			}
 		}
 		void WaveData::InsertUnitData(WaveUnitData waveUnitData)
