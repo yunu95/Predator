@@ -719,13 +719,13 @@ void InstancingManager::RenderSkinnedShadow()
 			{
 				if (i->renderInfo.isActive == false) continue;
 
-				auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
-				auto aabb = i->renderInfo.mesh->GetBoundingBox(i->renderInfo.wtm, i->renderInfo.materialIndex);
+				//auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
+				//auto aabb = i->renderInfo.mesh->GetBoundingBox(i->renderInfo.wtm, i->renderInfo.materialIndex);
 
-				if (frustum.Intersects(aabb) == false)
-				{
-					continue;
-				}
+				//if (frustum.Intersects(aabb) == false)
+				//{
+				//	continue;
+				//}
 
 				const RenderInfo& renderInfo = i->renderInfo;
 				InstancingData data;
@@ -1164,13 +1164,13 @@ void InstancingManager::RenderSkinnedDeferred()
 			{
 				if (i->renderInfo.isActive == false) continue;
 
-				auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
-				auto aabb = i->renderInfo.mesh->GetBoundingBox(i->renderInfo.wtm, i->renderInfo.materialIndex);
+				//auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
+				//auto aabb = i->renderInfo.mesh->GetBoundingBox(i->renderInfo.wtm, i->renderInfo.materialIndex);
 
-				if (frustum.Intersects(aabb) == false)
-				{
-					continue;
-				}
+				//if (frustum.Intersects(aabb) == false)
+				//{
+				//	continue;
+				//}
 
 				const RenderInfo& renderInfo = i->renderInfo;
 				InstancingData data;

@@ -31,8 +31,9 @@ private:
 	Vector3d initScale = Vector3d(1, 1, 1);
 	float delayTime = 0;
 	float damage = 0;
-	float offset_Y = 14;
+	float offset_Y = 26.3f;
 	GameObject* mesh = nullptr;
+	graphics::Animator* meshAnimator = nullptr;
 	GameObject* particleObj = nullptr;
 	bool isPause = false;
 };
