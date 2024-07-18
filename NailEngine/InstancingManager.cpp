@@ -30,6 +30,11 @@ void InstancingManager::Init()
 	lightMapUVBuffer = std::make_shared<LightMapUVBuffer>();
 }
 
+void InstancingManager::ClearLightMapBuffer()
+{
+	this->lightMapUVBuffer->Clear();
+}
+
 bool InstancingManager::IsInTree(std::shared_ptr<RenderInfo>& renderInfo)
 {
 	auto iter = this->staticMeshRenderInfoIndexMap.find(renderInfo);
@@ -267,78 +272,6 @@ void InstancingManager::RenderStaticDeferred()
 	}
 
 	{
-		for (auto& pair : this->staticMeshDeferredMap)
-		{
-			auto& renderInfoVec = pair.second;
-
-			const InstanceID& instanceID = pair.first;
-
-			{
-				//for (int i = 0; i < renderInfoVec.size(); ++i)
-				int index = 0;
-				for (auto& i : renderInfoVec)
-				{
-					if (i->mesh == nullptr) continue;
-
-					if (i->isActive == false) continue;
-
-					const std::shared_ptr<RenderInfo>& renderInfo = i;
-					InstancingData data;
-					data.wtm = renderInfo->wtm;
-					AddData(instanceID, data);
-
-					lightMapUVBuffer->lightMapUV[index].lightMapIndex = renderInfo->lightMapIndex;
-					lightMapUVBuffer->lightMapUV[index].scaling = renderInfo->uvScaling;
-					lightMapUVBuffer->lightMapUV[index].uvOffset = renderInfo->uvOffset;
-					lightMapUVBuffer->lightMapUV[index].outlineInfo = renderInfo->outlineInfo;
-					lightMapUVBuffer->lightMapUV[index].isOutLine = renderInfo->isOutLine;
-					lightMapUVBuffer->castDecal = i->mesh->GetCastDecal();
-
-					index++;
-				}
-
-				NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::LIGHTMAP_UV))->PushGraphicsData(lightMapUVBuffer.get(),
-					sizeof(LightMapUVBuffer),
-					static_cast<int>(CB_TYPE::LIGHTMAP_UV), false);
-
-				if (renderInfoVec.size() != 0)
-				{
-					auto& buffer = _buffers[instanceID];
-					if (buffer->GetCount() > 0)
-					{
-						std::shared_ptr<RenderInfo> renderInfo = nullptr;
-						for (auto& each : renderInfoVec)
-						{
-							if (each.get())
-							{
-								renderInfo = each;
-							}
-						}
-
-						if (renderInfo == nullptr)
-						{
-							continue;
-						}
-
-						ExposureBuffer exposurrBuffer;
-						exposurrBuffer.diffuseExposure = renderInfo->mesh->GetDiffuseExposure();
-						exposurrBuffer.ambientExposure = renderInfo->mesh->GetAmbientExposure();
-
-						NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::EXPOSURE))->PushGraphicsData(&exposurrBuffer,
-							sizeof(ExposureBuffer),
-							static_cast<int>(CB_TYPE::EXPOSURE), false);
-
-						renderInfo->material->PushGraphicsData();
-						buffer->PushData();
-						renderInfo->mesh->Render(renderInfo->materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, true, buffer->GetCount(), buffer);
-					}
-				}
-			}
-		}
-	}
-
-
-	{
 		for (auto& pair : this->staticMeshDeferredRenderVec)
 		{
 			auto& renderInfoVec = pair.second;
@@ -430,6 +363,64 @@ void InstancingManager::RenderStaticDeferred()
 						renderInfo->material->PushGraphicsData();
 						buffer->PushData();
 						renderInfo->mesh->Render(renderInfo->materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, true, buffer->GetCount(), buffer);
+					}
+				}
+			}
+		}
+	}
+
+	{
+		for (auto& pair : this->staticMeshDeferredMap)
+		{
+			auto& renderInfoVec = pair.second;
+
+			InstanceID instanceID = pair.first;
+
+			{
+				//for (int i = 0; i < renderInfoVec.size(); ++i)
+				int index = 0;
+				for (auto& i : renderInfoVec)
+				{
+					if (i->mesh == nullptr) continue;
+
+					if (i->isActive == false) continue;
+
+					const std::shared_ptr<RenderInfo>& renderInfo = i;
+					InstancingData data;
+					data.wtm = renderInfo->wtm;
+					AddData(instanceID, data);
+
+					lightMapUVBuffer->lightMapUV[index].lightMapIndex = renderInfo->lightMapIndex;
+					lightMapUVBuffer->lightMapUV[index].scaling = renderInfo->uvScaling;
+					lightMapUVBuffer->lightMapUV[index].uvOffset = renderInfo->uvOffset;
+					lightMapUVBuffer->lightMapUV[index].outlineInfo = renderInfo->outlineInfo;
+					lightMapUVBuffer->lightMapUV[index].isOutLine = renderInfo->isOutLine;
+					lightMapUVBuffer->castDecal = i->mesh->GetCastDecal();
+
+					index++;
+				}
+
+				NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::LIGHTMAP_UV))->PushGraphicsData(lightMapUVBuffer.get(),
+					sizeof(LightMapUVBuffer),
+					static_cast<int>(CB_TYPE::LIGHTMAP_UV), false);
+
+				if (renderInfoVec.size() != 0)
+				{
+					auto& buffer = _buffers[instanceID];
+
+					if (buffer->GetCount() > 0)
+					{
+						ExposureBuffer exposurrBuffer;
+						exposurrBuffer.diffuseExposure = (*renderInfoVec.begin())->mesh->GetDiffuseExposure();
+						exposurrBuffer.ambientExposure = (*renderInfoVec.begin())->mesh->GetAmbientExposure();
+
+						NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::EXPOSURE))->PushGraphicsData(&exposurrBuffer,
+							sizeof(ExposureBuffer),
+							static_cast<int>(CB_TYPE::EXPOSURE), false);
+
+						(*renderInfoVec.begin())->material->PushGraphicsData();
+						buffer->PushData();
+						(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, true, buffer->GetCount(), buffer);
 					}
 				}
 			}
