@@ -2,6 +2,7 @@
 #include "YunutyEngine.h"
 #include "ContentsObservee.h"
 //#include "RegionData.h"
+#include "DelegateCallback.h"
 class Unit;
 
 /// <summary>
@@ -22,9 +23,9 @@ public:
     virtual ~PlaytimeRegion();
 
     // 주인공 일행이 하나라도 지역에 입장할 시에 추가로 호출되는 콜백
-    std::vector<std::function<void()>> OnEnter;
+    DelegateCallback<void> OnEnter;
     // 주인공 일행이 모두 지역에서 퇴장할 시에 추가로 호출되는 콜백
-    std::vector<std::function<void()>> OnLeave;
+    DelegateCallback<void> OnLeave;
     //void SetRegionName(std::wstring p_name);
     virtual void Start() override;
     bool IsUnitInside(physics::Collider* unitCollider);
@@ -34,14 +35,13 @@ public:
     void ApplyAsObstacle(bool asObstacle);
     static std::weak_ptr<PlaytimeRegion> GetPlayerConstrainingRegion();
     friend application::editor::RegionData;
+
 private:
     static std::weak_ptr<PlaytimeRegion> playerConstrainingRegion;
     application::editor::RegionData* regionData{ nullptr };
     NavigationObstacle* regionAsNavObstacle{ nullptr };
     //std::wstring m_regionName;
 
-    bool isOnceActivatedEnter{ false };
-    bool isOnceActivatedLeave{ false };
     std::unordered_set<physics::Collider*> enteredPlayerColliders;
     std::vector<std::shared_ptr<application::editor::OrnamentData::DisablingReference>> disablingReferences;
     friend application::Action_SetPlayerConstrainingRegion;

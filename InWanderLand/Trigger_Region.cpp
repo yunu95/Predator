@@ -24,7 +24,7 @@ namespace application
 		// Trigger_EnterRegion은 특정 지역에 플레이어 캐릭터가 진입할 시 호출됩니다.
 		// LinkCallback 함수가 호출될 때 regionData는 이미 playtimeRegion을 생성한 상태여야 합니다.
 		assert(targetRegion && targetRegion->playtimeRegion);
-		targetRegion->playtimeRegion->OnEnter.push_back([=]() { PullTrigger(); });
+		targetRegion->playtimeRegion->OnEnter.AddCallback([=]() { PullTrigger(); });
 	}
 
 	void Trigger_EnterRegion::SetRegion(editor::RegionData* region)
@@ -146,7 +146,7 @@ namespace application
 		// Trigger_LeaveRegion은 특정 지역에 플레이어 캐릭터가 이탈할 시 호출됩니다.
 		// LinkCallback 함수가 호출될 때 regionData는 이미 playtimeRegion을 생성한 상태여야 합니다.
 		assert(targetRegion && targetRegion->playtimeRegion);
-		targetRegion->playtimeRegion->OnLeave.push_back([=]() { PullTrigger(); });
+		targetRegion->playtimeRegion->OnLeave.AddCallback([=]() { PullTrigger(); });
 	}
 
 	void Trigger_LeaveRegion::SetRegion(editor::RegionData* region)

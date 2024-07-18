@@ -10,6 +10,7 @@
 #include "CoroutineObject.h"
 
 #include "IObserver.h"
+#include "ProgressTracker.h"
 
 #include "imgui.h"
 #include "imgui_Utility.h"
@@ -79,7 +80,7 @@ namespace application
     };
 
     struct IAction
-        : public Identifiable, public Storable, public IObserver
+        : public Identifiable, public Storable, public IObserver, public ProgressTracker
     {
         friend class Script;
 
@@ -104,6 +105,31 @@ namespace application
         /// 특별히 관찰할 대상이 있고, 그 대상으로부터 처리할 이벤트가 있을 경우,
         /// 해당 함수를 작성해야 합니다.
         virtual void ProcessObervationEvent(ObservationTarget* target, ObservationEvent event) {}
+
+        bool repeat = true;
+
+    protected:
+        /// override 시에 반드시 해당 함수를 호출해야합니다.
+        virtual void ProgressInitialize() override
+        {
+            doAction = false;
+            savedAction = false;
+        }
+
+        /// override 시에 반드시 해당 함수를 호출해야합니다.
+        virtual void CurrentProgressSave() override
+        {
+            savedAction = doAction;
+        }
+
+        /// override 시에 반드시 해당 함수를 호출해야합니다.
+        virtual void Recovery() override
+        {
+            doAction = savedAction;
+        }
+
+        bool doAction = false;
+        bool savedAction = false;
     };
 }
 
