@@ -10,6 +10,7 @@
 #include "SkillType.h"
 #include "UnitAcquisitionBoxCollider.h"
 #include "EnqueErrorType.h"
+#include "ProgressTracker.h"
 
 // 사용자 입력을 받고 플레이어 유닛들의 행동을 관리하는 클래스
 // 짬통 중의 짬통이다.
@@ -33,7 +34,7 @@ namespace application
 // GameManager의 역할 중 전투 시작과 전투 끝에 포즈를 잡는 것, 비전투 상태를 관리하는 것, 콤보를 출력하는 역할도 모두
 // 이 클래스가 담당한다.
 // 전술 모드에 진입하는 것도 이 클래스에서 진입한다.
-class PlayerController : public SingletonComponent<PlayerController>, public UnitController
+class PlayerController : public SingletonComponent<PlayerController>, public UnitController, public application::ProgressTracker
 {
 public:
     struct State
@@ -69,6 +70,7 @@ public:
     bool IsSkillUpgraded(SkillUpgradeType::Enum id);
     bool IsSkillUpgraded(UIEnumID skillUpgradeUITarget);
     void UpgradeSkill();
+    void SyncSkillUpgradesWithUI();
     void SetSkillPoints(int points);
     void SetZoomFactor(float zoomFactor);
     int GetSkillPoints();
@@ -107,8 +109,22 @@ public:
     void ApplyBeforeEngageSkillCoolTime();
     void SetTacticCamera(GameObject* cam);
 
+    // Game 을 재시작하게 될 경우,
+    // 초기화 세팅을 하기 위한 함수입니다.
+    virtual void ProgressInitialize();
+
+    // Game 진행 도중에 호출되어 현재의 상태를 저장하여
+    // 추후에 Recovery 에서 사용할 수 있도록 개별적으로 적합한
+    // Save Data 를 생성하는 함수입니다.
+    virtual void CurrentProgressSave();
+
+    // Game 진행 도중에 호출되어 저장되었던 상태를 통해 Load 하는 함수입니다.
+    // Callback 지원을 위해 DoRecoveryCallbacks 함수를 호출해야합니다.
+    virtual void Recovery();
+
     // 스킬 업그레이드와 관련된 부분
     // 어떤 스킬을 업그레이드 할 것인지 미리 정한다. 미리 지정만 하는 것이지 바로 업그레이드까지 직행하는 것은 아니다.
+    std::unordered_set<PlaytimeWave*> finishedWaves;
 private:
     void SetState(State::Enum newState);
     virtual Component* GetComponent() override { return this; }
@@ -170,6 +186,7 @@ private:
     std::vector<Vector3d>& ModifyPathForAttack(std::vector<Vector3d>& path);
     std::vector<Vector3d>& ModifyPathForSkill(std::vector<Vector3d>& path, SkillType::Enum skillType);
     void SetAttackMoveMode(bool attackMoveMode);
+    std::unordered_set<PlaytimeWave*> finishedWavesCaptured;
     int skillButtonIDHovering;
     int parentEnumIDHovering;
     int currentCombo{ 0 };
@@ -200,7 +217,9 @@ private:
     SkillUpgradeType::Enum skillUpgradeTarget;
     UIEnumID skillUpgradeUITarget;
     std::array<bool, SkillUpgradeType::END> skillUpgraded;
-    int skillPointsLeft{ 5 };
+    std::array<bool, SkillUpgradeType::END> skillUpgradedCaptured;
+    int skillPointsLeft{ 0 };
+    int skillPointsLeftCaptured{ 0 };
     float camZoomFactor = 5;
     shared_ptr<float> zoomMultiplierByState;
     shared_ptr<float> zoomMultiplierByNonSelection;

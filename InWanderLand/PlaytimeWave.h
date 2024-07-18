@@ -5,6 +5,7 @@
 #include <map>
 #include "ContentsObservee.h"
 #include "StaticInstanceRegistry.h"
+#include "ProgressTracker.h"
 
 namespace application
 {
@@ -16,11 +17,12 @@ namespace application
 }
 
 class UnitProductor;
+class PlayerController;
 
 /// <summary>
 /// 플레이타임에서 웨이브 하나에 대응되는 컴포넌트
 /// </summary>
-class PlaytimeWave : public Component, public ContentsObservee, public StaticInstanceRegistry<PlaytimeWave>
+class PlaytimeWave : public Component, public ContentsObservee, public StaticInstanceRegistry<PlaytimeWave>, public application::ProgressTracker
 {
 private:
     int currentSequenceIndex{ 0 };
@@ -28,18 +30,15 @@ private:
     int waveDataIndex{ 0 };
 
     bool isWaveActivated = false;
+    bool isWaveFinished = false;
 
     float m_elapsed{ 0.0f };
 
-    std::vector<UnitProductor*> productorSelector;
-
     bool isStoppedByTacticMode{ false };
-    //bool isAllUnitTerminated = false;
-
 public:
     static std::weak_ptr<PlaytimeWave> GetCurrentOperatingWave();
-	static std::weak_ptr<PlaytimeWave> currentOperativeWave;
-	std::set<Unit*> m_currentWaveUnits;
+    static std::weak_ptr<PlaytimeWave> currentOperativeWave;
+    std::set<Unit*> m_currentWaveUnits;
     Unit* inGameUnit;
     virtual ~PlaytimeWave();
 
@@ -62,4 +61,5 @@ public:
 
     std::unordered_map<int, std::vector<std::function<void()>>> waveStartCallbackMap = std::unordered_map<int, std::vector<std::function<void()>>>();
     std::unordered_map<int, std::vector<std::function<void()>>> waveEndCallbackMap = std::unordered_map<int, std::vector<std::function<void()>>>();
+    friend PlayerController;
 };

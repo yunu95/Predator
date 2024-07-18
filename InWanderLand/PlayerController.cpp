@@ -79,6 +79,10 @@ void PlayerController::UpgradeSkill()
     static constexpr float gray = 0.3f;
     // AdjustUpgradeButtonsByState
     skillUpgraded[skillUpgradeByUI.at(skillUpgradeUITarget)] = true;
+    SyncSkillUpgradesWithUI();
+}
+void PlayerController::SyncSkillUpgradesWithUI()
+{
     for (auto each : skillUpgradeByUI)
     {
         UIElement* uiElement = UIManager::Instance().GetUIElementByEnum(each.first);
@@ -1209,6 +1213,33 @@ void PlayerController::SelectSkill(SkillType::Enum skillType)
         break;
     }
 }
+void PlayerController::ProgressInitialize()
+{
+    std::fill(skillUpgradedCaptured.begin(), skillUpgradedCaptured.end(), false);
+    finishedWaves.clear();
+    finishedWavesCaptured.clear();
+}
+void PlayerController::CurrentProgressSave()
+{
+    skillUpgradedCaptured = skillUpgraded;
+    skillPointsLeftCaptured = skillPointsLeft;
+    finishedWavesCaptured = finishedWaves;
+}
+void PlayerController::Recovery()
+{
+    skillUpgraded = skillUpgradedCaptured;
+    skillPointsLeft = skillPointsLeftCaptured;
+    for (auto each : finishedWaves)
+    {
+        if (!finishedWavesCaptured.contains(each))
+        {
+            each->isWaveFinished = false;
+        }
+    }
+    finishedWaves = finishedWavesCaptured;
+    std::fill(skillCooltimeLeft.begin(), skillCooltimeLeft.end(), 0);
+    SyncSkillUpgradesWithUI();
+}
 void PlayerController::SetState(State::Enum newState)
 {
     if (newState == state)
@@ -1543,6 +1574,7 @@ void PlayerController::SetTacticCamera(GameObject* cam)
 {
     tacticCameraRef = cam;
 }
+
 
 float PlayerController::GetMana()
 {

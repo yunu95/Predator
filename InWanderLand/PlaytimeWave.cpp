@@ -34,6 +34,8 @@ std::weak_ptr<PlaytimeWave> PlaytimeWave::GetCurrentOperatingWave()
 std::weak_ptr<PlaytimeWave> PlaytimeWave::currentOperativeWave;
 void PlaytimeWave::ActivateWave()
 {
+    if (isWaveFinished)
+        return;
     isWaveActivated = true;
     currentOperativeWave = GetGameObject()->GetComponentWeakPtr<PlaytimeWave>();
     array<int, 3> comboObjectives = { waveData->pod.comboObjective1, waveData->pod.comboObjective2, waveData->pod.comboObjective3 };
@@ -61,6 +63,8 @@ void PlaytimeWave::DeActivateWave()
 
     currentOperativeWave.reset();
     waveDataIndex = 0;
+    isWaveFinished = true;
+    isWaveActivated = false;
     UIManager::Instance().HideComboObjectvies();
     this->SetActive(false);
     // 카메라 가동범위 제한
@@ -100,7 +104,7 @@ coroutine::Coroutine PlaytimeWave::WaveEndCoroutine(Unit* lastStandingUnit)
     float a = Time::GetTimeScale();
     float b = gc.waveEndSpeedMultiplier;
     float dur = gc.waveEndSlowStartTime;
-    
+
     float realElapsedTime = dur * 2 / (b + a);
 
     if (dur <= 0)
@@ -204,7 +208,7 @@ void PlaytimeWave::Update()
     }
     // 현재 웨이브에서 소환 대상이 되는 유닛들이 다 소환된 경우
     else
-    {        
+    {
         //for (auto& e : m_currentWaveUnits)
         //{
         //    // 한 유닛이라도 살아 있다면 bool값을 false로

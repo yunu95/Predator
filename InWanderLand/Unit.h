@@ -23,6 +23,7 @@
 #include "UnitCollider.h"
 #include "UnitStatusBarFlag.h"
 #include "PlaytimeWave.h"
+#include "ProgressTracker.h"
 
 class ManagedFBX;
 class ManagedDuplicatedUI;
@@ -60,7 +61,7 @@ namespace application
         class Unit_TemplateData;
     }
 }
-class Unit : public Component, public PermanentObservee, public ITacticObject
+class Unit : public Component, public PermanentObservee, public ITacticObject, public application::ProgressTracker
 {
 public:
     static Vector3d FromTo(std::weak_ptr<Unit> from, std::weak_ptr<Unit> to);
@@ -123,6 +124,16 @@ public:
     UnitOrderType GetPendingOrderType() const;
     float GetUnitCurrentHp() const;
     float GetUnitMaxHp() const;
+    // Game 을 재시작하게 될 경우,
+    // 초기화 세팅을 하기 위한 함수입니다.
+    virtual void ProgressInitialize();
+    // Game 진행 도중에 호출되어 현재의 상태를 저장하여
+    // 추후에 Recovery 에서 사용할 수 있도록 개별적으로 적합한
+    // Save Data 를 생성하는 함수입니다.
+    virtual void CurrentProgressSave();
+    // Game 진행 도중에 호출되어 저장되었던 상태를 통해 Load 하는 함수입니다.
+    // Callback 지원을 위해 DoRecoveryCallbacks 함수를 호출해야합니다.
+    virtual void Recovery();
     // AcquireFactor는 수치에 곱연산이 적용될 부분이며, AcquireDelta는 수치에 덧셈 연산이 적용될 부분이다.
     factor::Adder<float> multiplierDamage;
     factor::Adder<float> multiplierDamageReceive;
@@ -255,9 +266,11 @@ private:
     float DistanceTo(const Vector3d& target);
     void ReturnToPool();
     void SetSkinnedMeshRenderer(GameObject* fbxObj);
+    Vector3d capturedLastPosition;
     UIEnumID dmgDefaultUIID;
     UIEnumID dmgCriticalUIID;
     int liveCountLeft{ 0 };
+    int liveCountLeftCaptured{ 0 };
     // 유닛이 이동중, 정체 상태에 연속으로 jamCount번 이상 빠졌다면 이동 명령을 취소하고 공격모드 이동명령을 실행하게 된다.
     float jammedDuration = 0;
     static constexpr float jamDurationThreshold = 0.5f;
