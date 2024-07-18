@@ -86,6 +86,22 @@ void NailEngine::Render()
     //float4(0.7686, 0.8784, 0.9451, 1.f)
     const float red[] = { 0.7686, 0.8784, 0.9451, 1.f };
 
+
+	for (auto& iter : this->constantBuffers)
+	{
+		iter->Clear();
+	}
+
+	for (int i = 0; i < this->renderTargetGroup.size(); ++i)
+	{
+		this->renderTargetGroup[i]->UnBind();
+
+		//if (i == static_cast<int>(RENDER_TARGET_TYPE::IRRADIANCE)) continue;
+
+		this->renderTargetGroup[i]->Clear();
+	}
+
+
     // 렌더 타겟뷰를 내가 지정한 값으로 픽셀을 다 초기화하여 지운다.
     ResourceBuilder::Instance.Get().device->GetDeviceContext().Get()->ClearRenderTargetView(ResourceBuilder::Instance.Get().swapChain->GetRTV().Get(), red);
     // 뎁스 스텐실뷰를 초기화한다.
@@ -100,19 +116,7 @@ void NailEngine::Render()
     ResourceManager::Instance.Get().OrganizeResource();
 
 
-    for (auto& iter : this->constantBuffers)
-    {
-        iter->Clear();
-    }
-
-    for (int i = 0; i < this->renderTargetGroup.size(); ++i)
-    {
-        this->renderTargetGroup[i]->UnBind();
-
-        //if (i == static_cast<int>(RENDER_TARGET_TYPE::IRRADIANCE)) continue;
-
-        this->renderTargetGroup[i]->Clear();
-    }
+  
 }
 
 void NailEngine::Finalize()

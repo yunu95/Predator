@@ -996,7 +996,7 @@
             {
                 "AmbientExposure": 0.10000000149011612,
                 "CalculateShadow": true,
-                "CastDecal": false,
+                "CastDecal": true,
                 "DiffuseExposure": 0.10000000149011612,
                 "aabb": {
                     "maxPoint": {
@@ -1403,114 +1403,6 @@
                     "x": 100.0,
                     "y": 100.0,
                     "z": 100.0
-                }
-            }
-        ],
-        "hasAnimation": false,
-        "meshName": "",
-        "nodeName": "RootNode",
-        "pos": {
-            "x": -431602080.0,
-            "y": -431602080.0,
-            "z": -431602080.0
-        },
-        "quat": {
-            "w": -0.5,
-            "x": -0.5,
-            "y": -0.5,
-            "z": -0.5
-        },
-        "scale": {
-            "x": -431602080.0,
-            "y": -431602080.0,
-            "z": -431602080.0
-        }
-    },
-    {
-        "AmbientExposure": 1.0,
-        "CalculateShadow": true,
-        "CastDecal": false,
-        "DiffuseExposure": 1.0,
-        "FBXName : ": "SM_Frame_002",
-        "aabb": {
-            "maxPoint": {
-                "x": -431602080.0,
-                "y": -431602080.0,
-                "z": -431602080.0
-            },
-            "minPoint": {
-                "x": -431602080.0,
-                "y": -431602080.0,
-                "z": -431602080.0
-            }
-        },
-        "boneInfo": {
-            "index": -1
-        },
-        "child": [
-            {
-                "AmbientExposure": 1.0,
-                "CalculateShadow": true,
-                "CastDecal": false,
-                "DiffuseExposure": 1.0,
-                "aabb": {
-                    "maxPoint": {
-                        "x": 2.1071128845214844,
-                        "y": 0.20688965916633606,
-                        "z": 2.6692914962768555
-                    },
-                    "minPoint": {
-                        "x": -2.1071128845214844,
-                        "y": -1.4191352420311887e-05,
-                        "z": -2.6692912578582764
-                    }
-                },
-                "boneInfo": {
-                    "index": -1
-                },
-                "hasAnimation": false,
-                "materialVec": [
-                    {
-                        "albedoMap": "FBX/SM_Frame_002/SM_Frame_002.fbm/T_Frame_002_BaseColor.dds",
-                        "armMap": "FBX/SM_Frame_002/SM_Frame_002.fbm/T_Frame_002_ARM.dds",
-                        "emissionMap": "",
-                        "heightMap": "",
-                        "materialName": "M_Frame_002",
-                        "normalMap": "FBX/SM_Frame_002/SM_Frame_002.fbm/T_Frame_002_Normal.dds",
-                        "opacityMap": "",
-                        "ps": "DefaultPS.cso",
-                        "temp0Map": "",
-                        "temp10Map": "",
-                        "temp11Map": "",
-                        "temp1Map": "",
-                        "temp2Map": "",
-                        "temp3Map": "",
-                        "temp4Map": "",
-                        "temp5Map": "",
-                        "temp6Map": "",
-                        "temp7Map": "",
-                        "temp8Map": "",
-                        "temp9Map": "",
-                        "vs": "DefaultVS.cso"
-                    }
-                ],
-                "meshName": "SM_Frame_002",
-                "nodeName": "SM_Frame_002",
-                "pos": {
-                    "x": 0.0,
-                    "y": 0.0,
-                    "z": -0.0
-                },
-                "quat": {
-                    "w": -0.7071068286895752,
-                    "x": 0.7071068286895752,
-                    "y": 0.0,
-                    "z": 0.0
-                },
-                "scale": {
-                    "x": 1.0,
-                    "y": 1.0,
-                    "z": 1.0
                 }
             }
         ],
@@ -2061,7 +1953,7 @@
                         "armMap": "",
                         "emissionMap": "",
                         "heightMap": "",
-                        "materialName": "VFX_Ursula_Skill1_1",
+                        "materialName": "VFX_Ursula_Skill1_0",
                         "normalMap": "",
                         "opacityMap": "",
                         "ps": "DefaultPS.cso",
@@ -2252,7 +2144,7 @@
         "child": [
             {
                 "AmbientExposure": 1.0,
-                "CalculateShadow": true,
+                "CalculateShadow": false,
                 "CastDecal": false,
                 "DiffuseExposure": 1.0,
                 "aabb": {
@@ -2820,13 +2712,13 @@
                 "hasAnimation": false,
                 "materialVec": [
                     {
-                        "albedoMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_BaseColor.dds",
-                        "armMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_ARM.dds",
+                        "albedoMap": "FBX/SM_Corrider_Floor07/SM_Corrider_Floor07.fbm/T_Green_Chess_Pattern_BaseColor.dds",
+                        "armMap": "FBX/SM_Corrider_Floor07/SM_Corrider_Floor07.fbm/T_Green_Chess_Pattern_ARM.dds",
                         "emissionMap": "",
                         "heightMap": "",
-                        "materialName": "M_Chess_Pattern",
-                        "normalMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_Normal.dds",
-                        "opacityMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_Opacity.dds",
+                        "materialName": "M_Green_Chess_Pattern",
+                        "normalMap": "FBX/SM_Corrider_Floor07/SM_Corrider_Floor07.fbm/T_Green_Chess_Pattern_Normal.dds",
+                        "opacityMap": "FBX/SM_Corrider_Floor07/SM_Corrider_Floor07.fbm/T_Green_Chess_Pattern_Opacity.dds",
                         "ps": "Stage2FloorPS.cso",
                         "temp0Map": "",
                         "temp10Map": "",
@@ -2843,12 +2735,12 @@
                         "vs": "DefaultVS.cso"
                     },
                     {
-                        "albedoMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Black_Marble_BaseColor.dds",
-                        "armMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Black_Marble_ARM.dds",
+                        "albedoMap": "FBX/SM_Corrider_Floor07/SM_Corrider_Floor07.fbm/T_Green_Black_Marble_BaseColor.dds",
+                        "armMap": "FBX/SM_Corrider_Floor07/SM_Corrider_Floor07.fbm/T_Green_Black_Marble_ARM.dds",
                         "emissionMap": "",
                         "heightMap": "",
-                        "materialName": "M_Black_Marble",
-                        "normalMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Black_Marble_Normal.dds",
+                        "materialName": "M_Green_Black_Marble",
+                        "normalMap": "FBX/SM_Corrider_Floor07/SM_Corrider_Floor07.fbm/T_Green_Black_Marble_Normal.dds",
                         "opacityMap": "",
                         "ps": "DefaultPS.cso",
                         "temp0Map": "",
@@ -4126,7 +4018,7 @@
             {
                 "AmbientExposure": 0.10000000149011612,
                 "CalculateShadow": true,
-                "CastDecal": false,
+                "CastDecal": true,
                 "DiffuseExposure": 0.10000000149011612,
                 "aabb": {
                     "maxPoint": {
@@ -5649,13 +5541,13 @@
                 "hasAnimation": false,
                 "materialVec": [
                     {
-                        "albedoMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_BaseColor.dds",
-                        "armMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_ARM.dds",
+                        "albedoMap": "FBX/SM_Corrider_Floor06/SM_Corrider_Floor06.fbm/T_Purple_Chess_Pattern_BaseColor.dds",
+                        "armMap": "FBX/SM_Corrider_Floor06/SM_Corrider_Floor06.fbm/T_Purple_Chess_Pattern_ARM.dds",
                         "emissionMap": "",
                         "heightMap": "",
-                        "materialName": "M_Chess_Pattern",
-                        "normalMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_Normal.dds",
-                        "opacityMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_Opacity.dds",
+                        "materialName": "M_Purple_Chess_Pattern",
+                        "normalMap": "FBX/SM_Corrider_Floor06/SM_Corrider_Floor06.fbm/T_Purple_Chess_Pattern_Normal.dds",
+                        "opacityMap": "FBX/SM_Corrider_Floor06/SM_Corrider_Floor06.fbm/T_Purple_Chess_Pattern_Opacity.dds",
                         "ps": "Stage2FloorPS.cso",
                         "temp0Map": "",
                         "temp10Map": "",
@@ -5672,12 +5564,12 @@
                         "vs": "DefaultVS.cso"
                     },
                     {
-                        "albedoMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Black_Marble_BaseColor.dds",
-                        "armMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Black_Marble_ARM.dds",
+                        "albedoMap": "FBX/SM_Corrider_Floor06/SM_Corrider_Floor06.fbm/T_Purple_Black_Marble_BaseColor.dds",
+                        "armMap": "FBX/SM_Corrider_Floor06/SM_Corrider_Floor06.fbm/T_Purple_Black_Marble_ARM.dds",
                         "emissionMap": "",
                         "heightMap": "",
-                        "materialName": "M_Black_Marble",
-                        "normalMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Black_Marble_Normal.dds",
+                        "materialName": "M_Purple_Black_Marble",
+                        "normalMap": "FBX/SM_Corrider_Floor06/SM_Corrider_Floor06.fbm/T_Purple_Black_Marble_Normal.dds",
                         "opacityMap": "",
                         "ps": "DefaultPS.cso",
                         "temp0Map": "",
@@ -5764,14 +5656,14 @@
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
-                        "x": 2.5422122478485107,
-                        "y": 1.1754943508222875e-38,
-                        "z": 6.127094268798828
+                        "x": 2.5422120094299316,
+                        "y": 2.542212963104248,
+                        "z": 0.5933024883270264
                     },
                     "minPoint": {
-                        "x": -2.5422122478485107,
-                        "y": -1.6521265506744385,
-                        "z": 1.0426687002182007
+                        "x": -2.5422120094299316,
+                        "y": -2.542212724685669,
+                        "z": 0.010198300704360008
                     }
                 },
                 "boneInfo": {
@@ -6434,7 +6326,7 @@
                         "heightMap": "",
                         "materialName": "M_Chandelier",
                         "normalMap": "FBX/SM_Chandelier/SM_Chandelier.fbm/T_Chandelier_Normal.dds",
-                        "opacityMap": "",
+                        "opacityMap": "FBX/SM_Chandelier/SM_Chandelier.fbm/T_Chandelier_Opacity.dds",
                         "ps": "DefaultPS.cso",
                         "temp0Map": "",
                         "temp10Map": "",
@@ -6651,14 +6543,14 @@
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
-                        "x": 2.0138614177703857,
-                        "y": 2.108473300933838,
-                        "z": 3.680938482284546
+                        "x": 2.565803050994873,
+                        "y": 2.5836095809936523,
+                        "z": 3.7782931327819824
                     },
                     "minPoint": {
-                        "x": -2.0480494499206543,
-                        "y": -2.99495005607605,
-                        "z": 0.017343394458293915
+                        "x": -2.615189552307129,
+                        "y": -3.2471072673797607,
+                        "z": -0.021000033244490623
                     }
                 },
                 "boneInfo": {
@@ -6823,6 +6715,137 @@
                 ],
                 "meshName": "SM_Corrider_Floor",
                 "nodeName": "SM_Corrider_Floor",
+                "pos": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": -0.0
+                },
+                "quat": {
+                    "w": -0.7071068286895752,
+                    "x": 0.7071068286895752,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        ],
+        "hasAnimation": false,
+        "meshName": "",
+        "nodeName": "RootNode",
+        "pos": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        },
+        "quat": {
+            "w": -0.5,
+            "x": -0.5,
+            "y": -0.5,
+            "z": -0.5
+        },
+        "scale": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        }
+    },
+    {
+        "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
+        "DiffuseExposure": 1.0,
+        "FBXName : ": "SM_Corrider_Floor08",
+        "aabb": {
+            "maxPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            },
+            "minPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            }
+        },
+        "boneInfo": {
+            "index": -1
+        },
+        "child": [
+            {
+                "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": true,
+                "DiffuseExposure": 1.0,
+                "aabb": {
+                    "maxPoint": {
+                        "x": 8.500003814697266,
+                        "y": 17.5,
+                        "z": 1.7050758742698235e-06
+                    },
+                    "minPoint": {
+                        "x": -8.500003814697266,
+                        "y": -17.500001907348633,
+                        "z": -1.4649998547611176e-06
+                    }
+                },
+                "boneInfo": {
+                    "index": -1
+                },
+                "hasAnimation": false,
+                "materialVec": [
+                    {
+                        "albedoMap": "FBX/SM_Corrider_Floor06/SM_Corrider_Floor06.fbm/T_Purple_Chess_Pattern_BaseColor.dds",
+                        "armMap": "FBX/SM_Corrider_Floor06/SM_Corrider_Floor06.fbm/T_Purple_Chess_Pattern_ARM.dds",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "M_Purple_Chess_Pattern",
+                        "normalMap": "FBX/SM_Corrider_Floor06/SM_Corrider_Floor06.fbm/T_Purple_Chess_Pattern_Normal.dds",
+                        "opacityMap": "FBX/SM_Corrider_Floor06/SM_Corrider_Floor06.fbm/T_Purple_Chess_Pattern_Opacity.dds",
+                        "ps": "Stage2FloorPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    },
+                    {
+                        "albedoMap": "FBX/SM_Corrider_Floor06/SM_Corrider_Floor06.fbm/T_Purple_Black_Marble_BaseColor.dds",
+                        "armMap": "FBX/SM_Corrider_Floor06/SM_Corrider_Floor06.fbm/T_Purple_Black_Marble_ARM.dds",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "M_Purple_Black_Marble",
+                        "normalMap": "FBX/SM_Corrider_Floor06/SM_Corrider_Floor06.fbm/T_Purple_Black_Marble_Normal.dds",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    }
+                ],
+                "meshName": "SM_Corrider_Floor08",
+                "nodeName": "SM_Corrider_Floor08",
                 "pos": {
                     "x": 0.0,
                     "y": 0.0,
@@ -7233,7 +7256,7 @@
             {
                 "AmbientExposure": 1.0,
                 "CalculateShadow": true,
-                "CastDecal": false,
+                "CastDecal": true,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -7429,6 +7452,222 @@
         "CalculateShadow": true,
         "CastDecal": false,
         "DiffuseExposure": 1.0,
+        "FBXName : ": "SM_FlyingCandle_B",
+        "aabb": {
+            "maxPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            },
+            "minPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            }
+        },
+        "boneInfo": {
+            "index": -1
+        },
+        "child": [
+            {
+                "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
+                "DiffuseExposure": 1.0,
+                "aabb": {
+                    "maxPoint": {
+                        "x": 0.6022354364395142,
+                        "y": 0.6873800158500671,
+                        "z": 2.5004520416259766
+                    },
+                    "minPoint": {
+                        "x": -0.5996374487876892,
+                        "y": -0.6873794794082642,
+                        "z": -3.7312300804615006e-08
+                    }
+                },
+                "boneInfo": {
+                    "index": -1
+                },
+                "hasAnimation": false,
+                "materialVec": [
+                    {
+                        "albedoMap": "FBX/SM_FlyingCandle_B/SM_FlyingCandle_B.fbm/T_FlyingCandle_B_BaseColor.dds",
+                        "armMap": "FBX/SM_FlyingCandle_B/SM_FlyingCandle_B.fbm/T_FlyingCandle_B_ARM.dds",
+                        "emissionMap": "FBX/SM_FlyingCandle_B/SM_FlyingCandle_B.fbm/T_FlyingCandle_B_Emissive.dds",
+                        "heightMap": "",
+                        "materialName": "M_FlyingCandle_B",
+                        "normalMap": "FBX/SM_FlyingCandle_B/SM_FlyingCandle_B.fbm/T_FlyingCandle_B_Normal.dds",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    }
+                ],
+                "meshName": "SM_FlyingCandle_B",
+                "nodeName": "SM_FlyingCandle_B",
+                "pos": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": -0.0
+                },
+                "quat": {
+                    "w": -0.7071068286895752,
+                    "x": 0.7071068286895752,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        ],
+        "hasAnimation": false,
+        "meshName": "",
+        "nodeName": "RootNode",
+        "pos": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        },
+        "quat": {
+            "w": -0.5,
+            "x": -0.5,
+            "y": -0.5,
+            "z": -0.5
+        },
+        "scale": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        }
+    },
+    {
+        "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
+        "DiffuseExposure": 1.0,
+        "FBXName : ": "SM_FlyingCandle_G",
+        "aabb": {
+            "maxPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            },
+            "minPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            }
+        },
+        "boneInfo": {
+            "index": -1
+        },
+        "child": [
+            {
+                "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
+                "DiffuseExposure": 1.0,
+                "aabb": {
+                    "maxPoint": {
+                        "x": 0.6022354364395142,
+                        "y": 0.6873800158500671,
+                        "z": 2.5004520416259766
+                    },
+                    "minPoint": {
+                        "x": -0.5996374487876892,
+                        "y": -0.6873794794082642,
+                        "z": -3.7312300804615006e-08
+                    }
+                },
+                "boneInfo": {
+                    "index": -1
+                },
+                "hasAnimation": false,
+                "materialVec": [
+                    {
+                        "albedoMap": "FBX/SM_FlyingCandle_G/SM_FlyingCandle_G.fbm/T_FlyingCandle_G_BaseColor.dds",
+                        "armMap": "FBX/SM_FlyingCandle_G/SM_FlyingCandle_G.fbm/T_FlyingCandle_G_ARM.dds",
+                        "emissionMap": "FBX/SM_FlyingCandle_G/SM_FlyingCandle_G.fbm/T_FlyingCandle_G_Emissive.dds",
+                        "heightMap": "",
+                        "materialName": "M_FlyingCandle_G",
+                        "normalMap": "FBX/SM_FlyingCandle_G/SM_FlyingCandle_G.fbm/T_FlyingCandle_G_Normal.dds",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    }
+                ],
+                "meshName": "SM_FlyingCandle_G",
+                "nodeName": "SM_FlyingCandle_G",
+                "pos": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": -0.0
+                },
+                "quat": {
+                    "w": -0.7071068286895752,
+                    "x": 0.7071068286895752,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        ],
+        "hasAnimation": false,
+        "meshName": "",
+        "nodeName": "RootNode",
+        "pos": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        },
+        "quat": {
+            "w": -0.5,
+            "x": -0.5,
+            "y": -0.5,
+            "z": -0.5
+        },
+        "scale": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        }
+    },
+    {
+        "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
+        "DiffuseExposure": 1.0,
         "FBXName : ": "SM_Fork",
         "aabb": {
             "maxPoint": {
@@ -7537,7 +7776,7 @@
         "CalculateShadow": true,
         "CastDecal": false,
         "DiffuseExposure": 1.0,
-        "FBXName : ": "SM_Gimmick01",
+        "FBXName : ": "SM_Frame_002",
         "aabb": {
             "maxPoint": {
                 "x": -431602080.0,
@@ -7558,6 +7797,114 @@
                 "AmbientExposure": 1.0,
                 "CalculateShadow": true,
                 "CastDecal": false,
+                "DiffuseExposure": 1.0,
+                "aabb": {
+                    "maxPoint": {
+                        "x": 2.1071128845214844,
+                        "y": 0.20688965916633606,
+                        "z": 2.6692914962768555
+                    },
+                    "minPoint": {
+                        "x": -2.1071128845214844,
+                        "y": -1.4191352420311887e-05,
+                        "z": -2.6692912578582764
+                    }
+                },
+                "boneInfo": {
+                    "index": -1
+                },
+                "hasAnimation": false,
+                "materialVec": [
+                    {
+                        "albedoMap": "FBX/SM_Frame_002/SM_Frame_002.fbm/T_Frame_002_BaseColor.dds",
+                        "armMap": "FBX/SM_Frame_002/SM_Frame_002.fbm/T_Frame_002_ARM.dds",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "M_Frame_002",
+                        "normalMap": "FBX/SM_Frame_002/SM_Frame_002.fbm/T_Frame_002_Normal.dds",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    }
+                ],
+                "meshName": "SM_Frame_002",
+                "nodeName": "SM_Frame_002",
+                "pos": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": -0.0
+                },
+                "quat": {
+                    "w": -0.7071068286895752,
+                    "x": 0.7071068286895752,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        ],
+        "hasAnimation": false,
+        "meshName": "",
+        "nodeName": "RootNode",
+        "pos": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        },
+        "quat": {
+            "w": -0.5,
+            "x": -0.5,
+            "y": -0.5,
+            "z": -0.5
+        },
+        "scale": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        }
+    },
+    {
+        "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
+        "DiffuseExposure": 1.0,
+        "FBXName : ": "SM_Gimmick01",
+        "aabb": {
+            "maxPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            },
+            "minPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            }
+        },
+        "boneInfo": {
+            "index": -1
+        },
+        "child": [
+            {
+                "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": true,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -7665,7 +8012,7 @@
             {
                 "AmbientExposure": 1.0,
                 "CalculateShadow": true,
-                "CastDecal": false,
+                "CastDecal": true,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -7881,7 +8228,7 @@
             {
                 "AmbientExposure": 1.0,
                 "CalculateShadow": true,
-                "CastDecal": false,
+                "CastDecal": true,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -7989,7 +8336,7 @@
             {
                 "AmbientExposure": 1.0,
                 "CalculateShadow": true,
-                "CastDecal": false,
+                "CastDecal": true,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -9538,7 +9885,7 @@
             {
                 "AmbientExposure": 1.0,
                 "CalculateShadow": true,
-                "CastDecal": false,
+                "CastDecal": true,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -10144,12 +10491,12 @@
                 "hasAnimation": false,
                 "materialVec": [
                     {
-                        "albedoMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Black_Marble_BaseColor.dds",
-                        "armMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Black_Marble_ARM.dds",
+                        "albedoMap": "FBX/SM_Corrider_Floor06/SM_Corrider_Floor06.fbm/T_Purple_Black_Marble_BaseColor.dds",
+                        "armMap": "FBX/SM_Corrider_Floor06/SM_Corrider_Floor06.fbm/T_Purple_Black_Marble_ARM.dds",
                         "emissionMap": "",
                         "heightMap": "",
-                        "materialName": "M_Black_Marble",
-                        "normalMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Black_Marble_Normal.dds",
+                        "materialName": "M_Purple_Black_Marble",
+                        "normalMap": "FBX/SM_Corrider_Floor06/SM_Corrider_Floor06.fbm/T_Purple_Black_Marble_Normal.dds",
                         "opacityMap": "",
                         "ps": "DefaultPS.cso",
                         "temp0Map": "",
@@ -10167,13 +10514,13 @@
                         "vs": "DefaultVS.cso"
                     },
                     {
-                        "albedoMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_BaseColor.dds",
-                        "armMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_ARM.dds",
+                        "albedoMap": "FBX/SM_Corrider_Floor06/SM_Corrider_Floor06.fbm/T_Purple_Chess_Pattern_BaseColor.dds",
+                        "armMap": "FBX/SM_Corrider_Floor06/SM_Corrider_Floor06.fbm/T_Purple_Chess_Pattern_ARM.dds",
                         "emissionMap": "",
                         "heightMap": "",
-                        "materialName": "M_Chess_Pattern",
-                        "normalMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_Normal.dds",
-                        "opacityMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_Opacity.dds",
+                        "materialName": "M_Purple_Chess_Pattern",
+                        "normalMap": "FBX/SM_Corrider_Floor06/SM_Corrider_Floor06.fbm/T_Purple_Chess_Pattern_Normal.dds",
+                        "opacityMap": "FBX/SM_Corrider_Floor06/SM_Corrider_Floor06.fbm/T_Purple_Chess_Pattern_Opacity.dds",
                         "ps": "Stage2FloorPS.cso",
                         "temp0Map": "",
                         "temp10Map": "",
@@ -11486,7 +11833,7 @@
                 "hasAnimation": false,
                 "materialVec": [
                     {
-                        "albedoMap": "FBX/VFX_Hansel_Skill2/VFX_Hansel_Skill2.fbm/T_VFX_Hansel_Attack.dds",
+                        "albedoMap": "FBX/VFX_Hansel_Skill2/VFX_Hansel_Skill2.fbm/T_VFX_DeBuff_Blind_Hansel.dds",
                         "armMap": "",
                         "emissionMap": "",
                         "heightMap": "",
@@ -11574,7 +11921,7 @@
             {
                 "AmbientExposure": 1.0,
                 "CalculateShadow": true,
-                "CastDecal": false,
+                "CastDecal": true,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -12160,7 +12507,7 @@
             {
                 "AmbientExposure": 1.0,
                 "CalculateShadow": true,
-                "CastDecal": false,
+                "CastDecal": true,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -13077,7 +13424,7 @@
             {
                 "AmbientExposure": 1.0,
                 "CalculateShadow": true,
-                "CastDecal": false,
+                "CastDecal": true,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -13205,12 +13552,12 @@
                 "hasAnimation": false,
                 "materialVec": [
                     {
-                        "albedoMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Black_Marble_BaseColor.dds",
-                        "armMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Black_Marble_ARM.dds",
+                        "albedoMap": "FBX/SM_Corrider_Floor07/SM_Corrider_Floor07.fbm/T_Green_Black_Marble_BaseColor.dds",
+                        "armMap": "FBX/SM_Corrider_Floor07/SM_Corrider_Floor07.fbm/T_Green_Black_Marble_ARM.dds",
                         "emissionMap": "",
                         "heightMap": "",
-                        "materialName": "M_Black_Marble",
-                        "normalMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Black_Marble_Normal.dds",
+                        "materialName": "M_Green_Black_Marble",
+                        "normalMap": "FBX/SM_Corrider_Floor07/SM_Corrider_Floor07.fbm/T_Green_Black_Marble_Normal.dds",
                         "opacityMap": "",
                         "ps": "DefaultPS.cso",
                         "temp0Map": "",
@@ -13228,13 +13575,13 @@
                         "vs": "DefaultVS.cso"
                     },
                     {
-                        "albedoMap": "FBX/SM_Hall_Entrance_Floor/SM_Hall_Entrance_Floor.fbm/T_Chess_Pattern02_BaseColor.dds",
-                        "armMap": "FBX/SM_Hall_Entrance_Floor/SM_Hall_Entrance_Floor.fbm/T_Chess_Pattern02_ARM.dds",
+                        "albedoMap": "FBX/SM_Room_Floor01/SM_Room_Floor01.fbm/T_Green_Chess_Pattern02_BaseColor.dds",
+                        "armMap": "FBX/SM_Room_Floor01/SM_Room_Floor01.fbm/T_Green_Chess_Pattern02_ARM.dds",
                         "emissionMap": "",
                         "heightMap": "",
-                        "materialName": "M_Chess_Pattern02",
-                        "normalMap": "FBX/SM_Hall_Entrance_Floor/SM_Hall_Entrance_Floor.fbm/T_Chess_Pattern02_Normal.dds",
-                        "opacityMap": "FBX/SM_Hall_Entrance_Floor/SM_Hall_Entrance_Floor.fbm/T_Chess_Pattern_Opacity.dds",
+                        "materialName": "M_Green_Chess_Pattern02",
+                        "normalMap": "FBX/SM_Room_Floor01/SM_Room_Floor01.fbm/T_Green_Chess_Pattern02_Normal.dds",
+                        "opacityMap": "FBX/SM_Room_Floor01/SM_Room_Floor01.fbm/T_Green_Chess_Pattern_Opacity.dds",
                         "ps": "Stage2FloorPS.cso",
                         "temp0Map": "",
                         "temp10Map": "",
@@ -13251,13 +13598,13 @@
                         "vs": "DefaultVS.cso"
                     },
                     {
-                        "albedoMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_BaseColor.dds",
-                        "armMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_ARM.dds",
+                        "albedoMap": "FBX/SM_Corrider_Floor07/SM_Corrider_Floor07.fbm/T_Green_Chess_Pattern_BaseColor.dds",
+                        "armMap": "FBX/SM_Corrider_Floor07/SM_Corrider_Floor07.fbm/T_Green_Chess_Pattern_ARM.dds",
                         "emissionMap": "",
                         "heightMap": "",
-                        "materialName": "M_Chess_Pattern",
-                        "normalMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_Normal.dds",
-                        "opacityMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_Opacity.dds",
+                        "materialName": "M_Green_Chess_Pattern",
+                        "normalMap": "FBX/SM_Corrider_Floor07/SM_Corrider_Floor07.fbm/T_Green_Chess_Pattern_Normal.dds",
+                        "opacityMap": "FBX/SM_Corrider_Floor07/SM_Corrider_Floor07.fbm/T_Green_Chess_Pattern_Opacity.dds",
                         "ps": "Stage2FloorPS.cso",
                         "temp0Map": "",
                         "temp10Map": "",
@@ -13359,12 +13706,12 @@
                 "hasAnimation": false,
                 "materialVec": [
                     {
-                        "albedoMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Black_Marble_BaseColor.dds",
-                        "armMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Black_Marble_ARM.dds",
+                        "albedoMap": "FBX/SM_Corrider_Floor06/SM_Corrider_Floor06.fbm/T_Purple_Black_Marble_BaseColor.dds",
+                        "armMap": "FBX/SM_Corrider_Floor06/SM_Corrider_Floor06.fbm/T_Purple_Black_Marble_ARM.dds",
                         "emissionMap": "",
                         "heightMap": "",
-                        "materialName": "M_Black_Marble",
-                        "normalMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Black_Marble_Normal.dds",
+                        "materialName": "M_Purple_Black_Marble",
+                        "normalMap": "FBX/SM_Corrider_Floor06/SM_Corrider_Floor06.fbm/T_Purple_Black_Marble_Normal.dds",
                         "opacityMap": "",
                         "ps": "DefaultPS.cso",
                         "temp0Map": "",
@@ -13382,13 +13729,13 @@
                         "vs": "DefaultVS.cso"
                     },
                     {
-                        "albedoMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_BaseColor.dds",
-                        "armMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_ARM.dds",
+                        "albedoMap": "FBX/SM_Corrider_Floor06/SM_Corrider_Floor06.fbm/T_Purple_Chess_Pattern_BaseColor.dds",
+                        "armMap": "FBX/SM_Corrider_Floor06/SM_Corrider_Floor06.fbm/T_Purple_Chess_Pattern_ARM.dds",
                         "emissionMap": "",
                         "heightMap": "",
-                        "materialName": "M_Chess_Pattern",
-                        "normalMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_Normal.dds",
-                        "opacityMap": "FBX/SM_BossCorrider_Floor/SM_BossCorrider_Floor.fbm/T_Chess_Pattern_Opacity.dds",
+                        "materialName": "M_Purple_Chess_Pattern",
+                        "normalMap": "FBX/SM_Corrider_Floor06/SM_Corrider_Floor06.fbm/T_Purple_Chess_Pattern_Normal.dds",
+                        "opacityMap": "FBX/SM_Corrider_Floor06/SM_Corrider_Floor06.fbm/T_Purple_Chess_Pattern_Opacity.dds",
                         "ps": "Stage2FloorPS.cso",
                         "temp0Map": "",
                         "temp10Map": "",
@@ -13405,13 +13752,13 @@
                         "vs": "DefaultVS.cso"
                     },
                     {
-                        "albedoMap": "FBX/SM_Hall_Entrance_Floor/SM_Hall_Entrance_Floor.fbm/T_Chess_Pattern02_BaseColor.dds",
-                        "armMap": "FBX/SM_Hall_Entrance_Floor/SM_Hall_Entrance_Floor.fbm/T_Chess_Pattern02_ARM.dds",
+                        "albedoMap": "FBX/SM_Room_Floor03/SM_Room_Floor03.fbm/T_Purple_Chess_Pattern02_BaseColor.dds",
+                        "armMap": "FBX/SM_Room_Floor03/SM_Room_Floor03.fbm/T_Purple_Chess_Pattern02_ARM.dds",
                         "emissionMap": "",
                         "heightMap": "",
-                        "materialName": "M_Chess_Pattern02",
-                        "normalMap": "FBX/SM_Hall_Entrance_Floor/SM_Hall_Entrance_Floor.fbm/T_Chess_Pattern02_Normal.dds",
-                        "opacityMap": "FBX/SM_Hall_Entrance_Floor/SM_Hall_Entrance_Floor.fbm/T_Chess_Pattern_Opacity.dds",
+                        "materialName": "M_Purple_Chess_Pattern02",
+                        "normalMap": "FBX/SM_Room_Floor03/SM_Room_Floor03.fbm/T_Purple_Chess_Pattern02_Normal.dds",
+                        "opacityMap": "FBX/SM_Room_Floor03/SM_Room_Floor03.fbm/T_Purple_Chess_Pattern_Opacity.dds",
                         "ps": "Stage2FloorPS.cso",
                         "temp0Map": "",
                         "temp10Map": "",
@@ -13601,7 +13948,7 @@
             {
                 "AmbientExposure": 0.10000000149011612,
                 "CalculateShadow": true,
-                "CastDecal": false,
+                "CastDecal": true,
                 "DiffuseExposure": 0.10000000149011612,
                 "aabb": {
                     "maxPoint": {
@@ -13930,13 +14277,13 @@
                 "aabb": {
                     "maxPoint": {
                         "x": 1.8607605695724487,
-                        "y": 2.8607606887817383,
-                        "z": 1.1754943508222875e-38
+                        "y": 1.8607605695724487,
+                        "z": 2.418988458430249e-07
                     },
                     "minPoint": {
-                        "x": -1.8607606887817383,
-                        "y": -0.8607605695724487,
-                        "z": -1.000000238418579
+                        "x": -1.8607605695724487,
+                        "y": -1.8607605695724487,
+                        "z": -2.418988458430249e-07
                     }
                 },
                 "boneInfo": {
@@ -14056,7 +14403,7 @@
             {
                 "AmbientExposure": 1.0,
                 "CalculateShadow": true,
-                "CastDecal": false,
+                "CastDecal": true,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -15929,7 +16276,7 @@
             {
                 "AmbientExposure": 1.0,
                 "CalculateShadow": true,
-                "CastDecal": false,
+                "CastDecal": true,
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
@@ -19214,12 +19561,12 @@
                 "aabb": {
                     "maxPoint": {
                         "x": 2.709963083267212,
-                        "y": 0.9735954999923706,
+                        "y": 3.1560273782815784e-05,
                         "z": 2.709963083267212
                     },
                     "minPoint": {
                         "x": -2.709963083267212,
-                        "y": 0.9735323786735535,
+                        "y": -3.1560273782815784e-05,
                         "z": -2.709963083267212
                     }
                 },
@@ -19254,6 +19601,376 @@
                 ],
                 "meshName": "VFX_CandleLight",
                 "nodeName": "VFX_CandleLight",
+                "pos": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": -0.0
+                },
+                "quat": {
+                    "w": -0.7071068286895752,
+                    "x": 0.7071068286895752,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        ],
+        "hasAnimation": false,
+        "meshName": "",
+        "nodeName": "RootNode",
+        "pos": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        },
+        "quat": {
+            "w": -0.5,
+            "x": -0.5,
+            "y": -0.5,
+            "z": -0.5
+        },
+        "scale": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        }
+    },
+    {
+        "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
+        "DiffuseExposure": 1.0,
+        "FBXName : ": "VFX_CandleLight_B",
+        "aabb": {
+            "maxPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            },
+            "minPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            }
+        },
+        "boneInfo": {
+            "index": -1
+        },
+        "child": [
+            {
+                "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
+                "DiffuseExposure": 1.0,
+                "aabb": {
+                    "maxPoint": {
+                        "x": 2.709963083267212,
+                        "y": 3.1560273782815784e-05,
+                        "z": 2.709963083267212
+                    },
+                    "minPoint": {
+                        "x": -2.709963083267212,
+                        "y": -3.1560273782815784e-05,
+                        "z": -2.709963083267212
+                    }
+                },
+                "boneInfo": {
+                    "index": -1
+                },
+                "hasAnimation": false,
+                "materialVec": [
+                    {
+                        "albedoMap": "FBX/VFX_CandleLight_B/VFX_CandleLight_B.fbm/T_FlyingCandle_B_Light_BaseColor.dds",
+                        "armMap": "",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "M_CandleLight_B",
+                        "normalMap": "",
+                        "opacityMap": "",
+                        "ps": "CandleLightPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "TextureVS.cso"
+                    }
+                ],
+                "meshName": "VFX_CandleLight_B",
+                "nodeName": "VFX_CandleLight_B",
+                "pos": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": -0.0
+                },
+                "quat": {
+                    "w": -0.7071068286895752,
+                    "x": 0.7071068286895752,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        ],
+        "hasAnimation": false,
+        "meshName": "",
+        "nodeName": "RootNode",
+        "pos": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        },
+        "quat": {
+            "w": -0.5,
+            "x": -0.5,
+            "y": -0.5,
+            "z": -0.5
+        },
+        "scale": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        }
+    },
+    {
+        "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
+        "DiffuseExposure": 1.0,
+        "FBXName : ": "VFX_CandleLight_G",
+        "aabb": {
+            "maxPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            },
+            "minPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            }
+        },
+        "boneInfo": {
+            "index": -1
+        },
+        "child": [
+            {
+                "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
+                "DiffuseExposure": 1.0,
+                "aabb": {
+                    "maxPoint": {
+                        "x": 2.709963083267212,
+                        "y": 3.1560273782815784e-05,
+                        "z": 2.709963083267212
+                    },
+                    "minPoint": {
+                        "x": -2.709963083267212,
+                        "y": -3.1560273782815784e-05,
+                        "z": -2.709963083267212
+                    }
+                },
+                "boneInfo": {
+                    "index": -1
+                },
+                "hasAnimation": false,
+                "materialVec": [
+                    {
+                        "albedoMap": "FBX/VFX_CandleLight_G/VFX_CandleLight_G.fbm/T_FlyingCandle_G_Light_BaseColor.dds",
+                        "armMap": "",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "M_CandleLight_G",
+                        "normalMap": "",
+                        "opacityMap": "",
+                        "ps": "CandleLightPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "TextureVS.cso"
+                    }
+                ],
+                "meshName": "VFX_CandleLight_G",
+                "nodeName": "VFX_CandleLight_G",
+                "pos": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": -0.0
+                },
+                "quat": {
+                    "w": -0.7071068286895752,
+                    "x": 0.7071068286895752,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0,
+                    "z": 1.0
+                }
+            }
+        ],
+        "hasAnimation": false,
+        "meshName": "",
+        "nodeName": "RootNode",
+        "pos": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        },
+        "quat": {
+            "w": -0.5,
+            "x": -0.5,
+            "y": -0.5,
+            "z": -0.5
+        },
+        "scale": {
+            "x": -431602080.0,
+            "y": -431602080.0,
+            "z": -431602080.0
+        }
+    },
+    {
+        "AmbientExposure": 1.0,
+        "CalculateShadow": true,
+        "CastDecal": false,
+        "DiffuseExposure": 1.0,
+        "FBXName : ": "VFX_HeartQueen_Skill1",
+        "aabb": {
+            "maxPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            },
+            "minPoint": {
+                "x": -431602080.0,
+                "y": -431602080.0,
+                "z": -431602080.0
+            }
+        },
+        "boneInfo": {
+            "index": -1
+        },
+        "child": [
+            {
+                "AmbientExposure": 1.0,
+                "CalculateShadow": true,
+                "CastDecal": false,
+                "DiffuseExposure": 1.0,
+                "aabb": {
+                    "maxPoint": {
+                        "x": 3.8151745796203613,
+                        "y": 5.11722469329834,
+                        "z": 6.9944024085998535
+                    },
+                    "minPoint": {
+                        "x": -5.769143581390381,
+                        "y": -5.012209892272949,
+                        "z": -0.03793571516871452
+                    }
+                },
+                "boneInfo": {
+                    "index": -1
+                },
+                "hasAnimation": false,
+                "materialVec": [
+                    {
+                        "albedoMap": "FBX/VFX_HeartQueen_Skill1/VFX_HeartQueen_Skill1.fbm/T_VFX_HeartQueen_Attack.dds",
+                        "armMap": "",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "VFX_HeartQueen_Skill1_1",
+                        "normalMap": "",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    },
+                    {
+                        "albedoMap": "FBX/VFX_HeartQueen_Skill1/VFX_HeartQueen_Skill1.fbm/T_VFX_HeartQueen_Attack.dds",
+                        "armMap": "",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "VFX_HeartQueen_Skill1_2",
+                        "normalMap": "",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    },
+                    {
+                        "albedoMap": "FBX/VFX_HeartQueen_Skill1/VFX_HeartQueen_Skill1.fbm/T_VFX_HeartQueen_Attack.dds",
+                        "armMap": "",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "VFX_HeartQueen_Skill1_3",
+                        "normalMap": "",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    }
+                ],
+                "meshName": "VFX_HeartQueen_Skill1",
+                "nodeName": "VFX_HeartQueen_Skill1",
                 "pos": {
                     "x": 0.0,
                     "y": 0.0,
@@ -19753,14 +20470,14 @@
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
-                        "x": 1.5955357551574707,
-                        "y": 1.094910979270935,
-                        "z": 1.3252277374267578
+                        "x": 1.2153455018997192,
+                        "y": 1.0914099216461182,
+                        "z": 0.7686654925346375
                     },
                     "minPoint": {
-                        "x": -1.2123059034347534,
-                        "y": 4.739000658560144e-08,
-                        "z": -1.4633756875991821
+                        "x": -0.9209560751914978,
+                        "y": -1.0289101600646973,
+                        "z": 0.004004164598882198
                     }
                 },
                 "boneInfo": {
@@ -19768,6 +20485,29 @@
                 },
                 "hasAnimation": false,
                 "materialVec": [
+                    {
+                        "albedoMap": "FBX/VFX_Hansel_Attack_2/VFX_Hansel_Attack_2.fbm/T_VFX_Hansel_Attack.dds",
+                        "armMap": "",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "VFX_Hansel_Attack_3",
+                        "normalMap": "",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    },
                     {
                         "albedoMap": "FBX/VFX_Hansel_Attack_2/VFX_Hansel_Attack_2.fbm/T_VFX_Hansel_Attack.dds",
                         "armMap": "",
@@ -20210,12 +20950,12 @@
                     "maxPoint": {
                         "x": 3.0537209510803223,
                         "y": 3.709425926208496,
-                        "z": 3.657062292098999
+                        "z": 5.174800872802734
                     },
                     "minPoint": {
                         "x": -4.512997150421143,
                         "y": -4.313851356506348,
-                        "z": 0.28202685713768005
+                        "z": -0.36723577976226807
                     }
                 },
                 "boneInfo": {
@@ -20249,160 +20989,6 @@
                 ],
                 "meshName": "VFX_HeartQueen_Attack",
                 "nodeName": "VFX_HeartQueen_Attack",
-                "pos": {
-                    "x": 0.0,
-                    "y": 0.0,
-                    "z": -0.0
-                },
-                "quat": {
-                    "w": -0.7071068286895752,
-                    "x": 0.7071068286895752,
-                    "y": 0.0,
-                    "z": 0.0
-                },
-                "scale": {
-                    "x": 1.0,
-                    "y": 1.0,
-                    "z": 1.0
-                }
-            }
-        ],
-        "hasAnimation": false,
-        "meshName": "",
-        "nodeName": "RootNode",
-        "pos": {
-            "x": -431602080.0,
-            "y": -431602080.0,
-            "z": -431602080.0
-        },
-        "quat": {
-            "w": -0.5,
-            "x": -0.5,
-            "y": -0.5,
-            "z": -0.5
-        },
-        "scale": {
-            "x": -431602080.0,
-            "y": -431602080.0,
-            "z": -431602080.0
-        }
-    },
-    {
-        "AmbientExposure": 1.0,
-        "CalculateShadow": true,
-        "CastDecal": false,
-        "DiffuseExposure": 1.0,
-        "FBXName : ": "VFX_HeartQueen_Skill1",
-        "aabb": {
-            "maxPoint": {
-                "x": -431602080.0,
-                "y": -431602080.0,
-                "z": -431602080.0
-            },
-            "minPoint": {
-                "x": -431602080.0,
-                "y": -431602080.0,
-                "z": -431602080.0
-            }
-        },
-        "boneInfo": {
-            "index": -1
-        },
-        "child": [
-            {
-                "AmbientExposure": 1.0,
-                "CalculateShadow": true,
-                "CastDecal": false,
-                "DiffuseExposure": 1.0,
-                "aabb": {
-                    "maxPoint": {
-                        "x": 3.8151745796203613,
-                        "y": 5.11722469329834,
-                        "z": 6.9944024085998535
-                    },
-                    "minPoint": {
-                        "x": -5.769143581390381,
-                        "y": -5.012209892272949,
-                        "z": 0.32614991068840027
-                    }
-                },
-                "boneInfo": {
-                    "index": -1
-                },
-                "hasAnimation": false,
-                "materialVec": [
-                    {
-                        "albedoMap": "FBX/VFX_HeartQueen_Skill1/VFX_HeartQueen_Skill1.fbm/T_VFX_HeartQueen_Attack.dds",
-                        "armMap": "",
-                        "emissionMap": "",
-                        "heightMap": "",
-                        "materialName": "VFX_HeartQueen_Skill1_1",
-                        "normalMap": "",
-                        "opacityMap": "",
-                        "ps": "DefaultPS.cso",
-                        "temp0Map": "",
-                        "temp10Map": "",
-                        "temp11Map": "",
-                        "temp1Map": "",
-                        "temp2Map": "",
-                        "temp3Map": "",
-                        "temp4Map": "",
-                        "temp5Map": "",
-                        "temp6Map": "",
-                        "temp7Map": "",
-                        "temp8Map": "",
-                        "temp9Map": "",
-                        "vs": "DefaultVS.cso"
-                    },
-                    {
-                        "albedoMap": "FBX/VFX_HeartQueen_Skill1/VFX_HeartQueen_Skill1.fbm/T_VFX_HeartQueen_Attack.dds",
-                        "armMap": "",
-                        "emissionMap": "",
-                        "heightMap": "",
-                        "materialName": "VFX_HeartQueen_Skill1_2",
-                        "normalMap": "",
-                        "opacityMap": "",
-                        "ps": "DefaultPS.cso",
-                        "temp0Map": "",
-                        "temp10Map": "",
-                        "temp11Map": "",
-                        "temp1Map": "",
-                        "temp2Map": "",
-                        "temp3Map": "",
-                        "temp4Map": "",
-                        "temp5Map": "",
-                        "temp6Map": "",
-                        "temp7Map": "",
-                        "temp8Map": "",
-                        "temp9Map": "",
-                        "vs": "DefaultVS.cso"
-                    },
-                    {
-                        "albedoMap": "FBX/VFX_HeartQueen_Skill1/VFX_HeartQueen_Skill1.fbm/T_VFX_HeartQueen_Attack.dds",
-                        "armMap": "",
-                        "emissionMap": "",
-                        "heightMap": "",
-                        "materialName": "VFX_HeartQueen_Skill1_3",
-                        "normalMap": "",
-                        "opacityMap": "",
-                        "ps": "DefaultPS.cso",
-                        "temp0Map": "",
-                        "temp10Map": "",
-                        "temp11Map": "",
-                        "temp1Map": "",
-                        "temp2Map": "",
-                        "temp3Map": "",
-                        "temp4Map": "",
-                        "temp5Map": "",
-                        "temp6Map": "",
-                        "temp7Map": "",
-                        "temp8Map": "",
-                        "temp9Map": "",
-                        "vs": "DefaultVS.cso"
-                    }
-                ],
-                "meshName": "VFX_HeartQueen_Skill1",
-                "nodeName": "VFX_HeartQueen_Skill1",
                 "pos": {
                     "x": 0.0,
                     "y": 0.0,
@@ -21603,14 +22189,14 @@
                 "DiffuseExposure": 1.0,
                 "aabb": {
                     "maxPoint": {
-                        "x": 4.250010013580322,
-                        "y": 4.3211541175842285,
-                        "z": 11.095038414001465
+                        "x": 3.3534226417541504,
+                        "y": 3.409557342529297,
+                        "z": 10.112618446350098
                     },
                     "minPoint": {
-                        "x": -4.344955921173096,
-                        "y": -4.321155071258545,
-                        "z": 0.10531707853078842
+                        "x": -3.428338050842285,
+                        "y": -3.409559488296509,
+                        "z": 0.08916766196489334
                     }
                 },
                 "boneInfo": {
@@ -21618,6 +22204,29 @@
                 },
                 "hasAnimation": false,
                 "materialVec": [
+                    {
+                        "albedoMap": "FBX/VFX_Ursula_Skill1_2/VFX_Ursula_Skill1_2.fbm/T_VFX_Ursula_Attack.dds",
+                        "armMap": "",
+                        "emissionMap": "",
+                        "heightMap": "",
+                        "materialName": "VFX_Ursula_Skill1_3",
+                        "normalMap": "",
+                        "opacityMap": "",
+                        "ps": "DefaultPS.cso",
+                        "temp0Map": "",
+                        "temp10Map": "",
+                        "temp11Map": "",
+                        "temp1Map": "",
+                        "temp2Map": "",
+                        "temp3Map": "",
+                        "temp4Map": "",
+                        "temp5Map": "",
+                        "temp6Map": "",
+                        "temp7Map": "",
+                        "temp8Map": "",
+                        "temp9Map": "",
+                        "vs": "DefaultVS.cso"
+                    },
                     {
                         "albedoMap": "FBX/VFX_Ursula_Skill1_2/VFX_Ursula_Skill1_2.fbm/T_VFX_Ursula_Attack.dds",
                         "armMap": "",
@@ -21646,7 +22255,7 @@
                         "armMap": "",
                         "emissionMap": "",
                         "heightMap": "",
-                        "materialName": "VFX_Ursula_Skill1_3",
+                        "materialName": "VFX_Ursula_Skill1_1",
                         "normalMap": "",
                         "opacityMap": "",
                         "ps": "DefaultPS.cso",

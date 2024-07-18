@@ -32,8 +32,13 @@ FBXNode* ModelLoader::LoadModel(const char* filePath)
 	//	aiProcess_FlipWindingOrder | aiProcess_GenSmoothNormals | aiProcess_SplitLargeMeshes |
 	//	aiProcess_SortByPType | aiProcess_LimitBoneWeights;
 
-	const unsigned int flag		= aiProcess_Triangulate |
-		aiProcess_ConvertToLeftHanded | aiProcess_JoinIdenticalVertices | aiProcess_GenBoundingBoxes |
+	//const unsigned int flag		= aiProcess_Triangulate |
+	//	aiProcess_ConvertToLeftHanded | aiProcess_JoinIdenticalVertices | aiProcess_GenBoundingBoxes |
+	//	aiProcess_CalcTangentSpace | aiProcess_PopulateArmatureData |
+	//	aiProcess_GenSmoothNormals | aiProcess_SplitLargeMeshes |
+	//	aiProcess_SortByPType | aiProcess_LimitBoneWeights;
+	const unsigned int flag = aiProcess_Triangulate |
+		aiProcess_ConvertToLeftHanded | aiProcess_GenBoundingBoxes |
 		aiProcess_CalcTangentSpace | aiProcess_PopulateArmatureData |
 		aiProcess_GenSmoothNormals | aiProcess_SplitLargeMeshes |
 		aiProcess_SortByPType | aiProcess_LimitBoneWeights;

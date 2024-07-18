@@ -250,6 +250,15 @@ struct LightMapUV
     DirectX::SimpleMath::Vector2 uvOffset;
     DirectX::SimpleMath::Vector2 scaling;
     DirectX::SimpleMath::Vector4 outlineInfo{0,0,0,-1};
+
+    void Clear()
+    {
+        lightMapIndex = 0.f;
+        isOutLine = 0;
+        uvOffset = DirectX::SimpleMath::Vector2::Zero;
+        scaling = DirectX::SimpleMath::Vector2::Zero;
+        outlineInfo = DirectX::SimpleMath::Vector4{ 0,0,0,-1 };
+    }
 };
 
 struct LightMapUVBuffer
@@ -257,6 +266,14 @@ struct LightMapUVBuffer
     LightMapUV lightMapUV[MAX_STATIC_MODEL];
     int castDecal;
     DirectX::SimpleMath::Vector3 padding;
+
+    void Clear()
+    {
+        for (int i = 0; i < MAX_STATIC_MODEL; ++i)
+        {
+            lightMapUV[i].Clear();
+        }
+    }
 };
 
 

@@ -26,7 +26,7 @@ public:
 
 public:
 	void Init();
-
+	void ClearLightMapBuffer();
 	bool IsInTree(std::shared_ptr<RenderInfo>& renderInfo);
 
 	void SortByCameraDirection();

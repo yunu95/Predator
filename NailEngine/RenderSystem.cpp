@@ -174,6 +174,8 @@ void RenderSystem::PushCameraData()
 
 void RenderSystem::Render()
 {
+    //InstancingManager::Instance.Get().ClearLightMapBuffer();
+
     NailEngine::Instance.Get().GetLightMap()->Bind(24);
 
     UtilBuffer utilBuffer;
