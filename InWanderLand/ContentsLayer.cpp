@@ -157,7 +157,7 @@ void GraphicsTest()
 	{
 		auto obj = Scene::getCurrentScene()->AddGameObject();
 		auto particle = obj->AddComponent<yunutyEngine::graphics::ParticleRenderer>();
-		particle->SetTexture(_resourceManager->GetTexture(L"Texture/zoro.jpg"));
+		particle->SetTexture(_resourceManager->GetTexture(L"Texture/Particle/default.png"));
 		particle->SetIsAlphaDiminish(true);
 		particle->SetIsRandomScale(true);
 		particle->SetIsRandomAngle(true);
