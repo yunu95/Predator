@@ -66,6 +66,10 @@ coroutine::Coroutine BossSummonChessSkill::operator()()
 	}
 
 	Vector3d PlayerCenterPos = temp / wage;
+	auto distance = (PlayerCenterPos - owner.lock()->GetTransform()->GetWorldPosition()).Magnitude();
+	auto direction = (PlayerCenterPos - owner.lock()->GetTransform()->GetWorldPosition()).Normalized();
+
+	auto camFocusPos = owner.lock()->GetTransform()->GetWorldPosition() + direction * distance / 2;
 
 	owner.lock()->StartCoroutine(SummonChess(std::static_pointer_cast<BossSummonChessSkill>(selfWeakPtr.lock()), GetPlaceableIndex(farUnitPos)));
 	
