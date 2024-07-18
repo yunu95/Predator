@@ -706,6 +706,12 @@
     <FxCompile Include="RuntimeDependency\resources\Shader\DissolveShadowVS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\Default_CullFront_AlphaPS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="RuntimeDependency\resources\Shader\Window_AlphaPS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">

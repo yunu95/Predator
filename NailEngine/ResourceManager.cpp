@@ -487,8 +487,9 @@ void ResourceManager::LoadVFXFrameInfo(const std::wstring& vfxPath)
 
 void ResourceManager::LoadFBX(const char* filePath)
 {
-    FBXNode* node = ModelLoader::Instance.Get().LoadModel(filePath);
     std::wstring fbxName = std::filesystem::path(filePath).stem().wstring();
+
+    FBXNode* node = ModelLoader::Instance.Get().LoadModel(filePath);
     //////////////////////////////////////////////////////////////////////////this->fbxNodeMap.insert({ fbxName, node });
 
     auto iter = fbxDataMap.find(fbxName);
@@ -1135,6 +1136,8 @@ void ResourceManager::CreateDefaultShader()
     CreateShader(L"Default_AlphaPS.cso");
     CreateShader(L"SilhouettePS.cso");
     CreateShader(L"DissolveShadowPS.cso");
+	CreateShader(L"Default_CullFront_AlphaPS.cso");
+	CreateShader(L"Window_AlphaPS.cso");
 #pragma endregion
 
 #pragma region GS

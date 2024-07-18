@@ -55,15 +55,7 @@ void PlaytimeRegion::OnTriggerEnter(physics::Collider* collider)
 
 		if (enteredPlayerColliders.size() == 1)
 		{
-			for (auto& each : OnEnter)
-			{
-				each();
-			}
-
-			if (isOnceActivatedEnter)
-			{
-				OnEnter.clear();
-			}
+			OnEnter();
 		}
 
 		// 가려야 하는 장식물들을 가리는 부분
@@ -86,16 +78,7 @@ void PlaytimeRegion::OnTriggerExit(physics::Collider* collider)
 		enteredPlayerColliders.erase(collider);
 		if (enteredPlayerColliders.empty())
 		{
-			for (auto& each : OnLeave)
-			{
-				each();
-			}
-
-			if (isOnceActivatedLeave)
-			{
-				OnLeave.clear();
-			}
-
+			OnLeave();
 			disablingReferences.clear();
 		}
 	}
