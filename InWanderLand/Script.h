@@ -10,6 +10,7 @@
 #include "ConditionList.h"
 #include "ActionList.h"
 #include "ObservationTarget.h"
+#include "ProgressTracker.h"
 
 #include "YunutyEngine.h"
 
@@ -30,7 +31,7 @@ namespace application
 namespace application
 {
 	class Script
-		: public Identifiable, public Storable, public Component, public ObservationTarget
+		: public Identifiable, public Storable, public Component, public ObservationTarget, public ProgressTracker
 	{
 		friend class ScriptSystem;
 		friend class editor::Module_ScriptEditor;
@@ -78,6 +79,10 @@ namespace application
 
 		bool ReorderAction(const std::shared_ptr<IAction>& ptr, unsigned int idx);
 
+		virtual void ProgressInitialize() override;
+		virtual void CurrentProgressSave() override;
+		virtual void Recovery() override;
+
 	protected:
 		virtual bool PreEncoding(json& data) const override;
 		virtual bool PostEncoding(json& data) const override;
@@ -96,6 +101,9 @@ namespace application
 		std::vector<std::shared_ptr<IAction>> actionList;
 		std::queue<CoroutineObject<void>> coroutineQueue = std::queue<CoroutineObject<void>>();
 		std::vector<CoroutineObject<void>> coroutineInProgress = std::vector<CoroutineObject<void>>();
+		bool repeat = true;
+		bool doAction = false;
+		bool savedAction = false;
 	};
 
 	struct ScriptPredicate

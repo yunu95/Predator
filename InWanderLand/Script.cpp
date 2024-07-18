@@ -105,8 +105,29 @@ namespace application
         return false;
     }
 
+    void Script::ProgressInitialize()
+    {
+        doAction = false;
+        savedAction = false;
+    }
+
+    void Script::CurrentProgressSave()
+    {
+        savedAction = doAction;
+    }
+
+    void Script::Recovery()
+    {
+        doAction = savedAction;
+    }
+
     void Script::PullScriptTrigger()
     {
+        if (!repeat && doAction)
+        {
+            return;
+        }
+
         bool isConditionMet = true;
         for (auto& each : conditionList)
         {
@@ -116,6 +137,7 @@ namespace application
         if (isConditionMet)
         {
             PushCoroutine();
+            doAction = true;
         }
     }
 
@@ -123,6 +145,8 @@ namespace application
     {
         std::string uuidStr;
         data["name"] = name;
+        data["repeat"] = repeat;
+
         for (auto& each : triggerList)
         {
             uuidStr = UUID_To_String(each->GetUUID());
@@ -148,6 +172,7 @@ namespace application
         {
             uuidStr = UUID_To_String(each->GetUUID());
             data["ActionList"][index][uuidStr]["type"] = each->GetType();
+            data["ActionList"][index][uuidStr]["repeat"] = each->repeat;
             if (!each->PreEncoding(data["ActionList"][index][uuidStr]["0_Pre"]))
             {
                 return false;
@@ -218,6 +243,12 @@ namespace application
     {
         UUID uuid;
         name = data["name"];
+
+        if (data.contains("repeat"))
+        {
+            repeat = data["repeat"];
+        }
+
         if (data.contains("TriggerList"))
         {
             for (auto& [uuidStr, triggerData] : data["TriggerList"].items())
@@ -686,6 +717,10 @@ namespace application
                     // UUID
                     action->SetUUID(uuid);
 
+                    if (actionData.contains("repeat"))
+                    {
+                        action->repeat = actionData["repeat"];
+                    }
                     if (!action->PreDecoding(actionData["0_Pre"]))
                     {
                         return false;
@@ -775,6 +810,12 @@ namespace application
     {
         for (auto& action : actionList)
         {
+            if (!action->repeat && action->doAction)
+            {
+                continue;
+            }
+
+            action->doAction = true;
             auto coroutine = action->DoAction();
             coroutineInProgress.emplace_back(coroutine);
             if (action->GetType() == ActionType::WaitForSeconds

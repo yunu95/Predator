@@ -344,7 +344,7 @@ bool SFXManager::PreDecoding(const json& data)
 		}
 	}
 
-	for (int i = 0; i < initSoundGroupCount; i++)
+	for (int i = 0; i < data["SoundGroupList"].size(); i++)
 	{
 		if (data["SoundGroupList"][i].contains("Volume"))
 		{

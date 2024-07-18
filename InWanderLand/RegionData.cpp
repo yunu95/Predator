@@ -78,8 +78,6 @@ namespace application
             auto regionGameObject = yunutyEngine::Scene::getCurrentScene()->AddGameObject();
             playtimeRegion = regionGameObject->AddComponent<PlaytimeRegion>();
             playtimeRegion->regionData = this;
-            playtimeRegion->isOnceActivatedEnter = pod.onceEnter;
-            playtimeRegion->isOnceActivatedLeave = pod.onceLeave;
             regionGameObject->AddComponent<physics::BoxCollider>()->SetHalfExtent({ pod.width/2.0f, 1.0f, pod.height/2.0f });
             regionGameObject->GetTransform()->SetWorldPosition(Vector3d(pod.x, 1.0f, pod.z));
             regionGameObject->GetTransform()->SetWorldRotation(Vector3d(0, pod.angle, 0));
