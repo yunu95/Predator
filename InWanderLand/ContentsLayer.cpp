@@ -154,19 +154,19 @@ void GraphicsTest()
         }
     }
 
-	{
-		auto obj = Scene::getCurrentScene()->AddGameObject();
-		auto particle = obj->AddComponent<yunutyEngine::graphics::ParticleRenderer>();
-		particle->SetTexture(_resourceManager->GetTexture(L"Texture/Particle/default.png"));
-		particle->SetIsAlphaDiminish(true);
-		particle->SetIsRandomScale(true);
-		particle->SetIsRandomAngle(true);
-		particle->SetEndScale(5);
-		particle->SetStartAngle(0);
-		particle->SetEndAngle(360);
-		particle->SetLoop(true);
-		particle->Play();
-	}
+    {
+        auto obj = Scene::getCurrentScene()->AddGameObject();
+        auto particle = obj->AddComponent<yunutyEngine::graphics::ParticleRenderer>();
+        particle->SetTexture(_resourceManager->GetTexture(L"Texture/Particle/default.png"));
+        particle->SetIsAlphaDiminish(true);
+        particle->SetIsRandomScale(true);
+        particle->SetIsRandomAngle(true);
+        particle->SetEndScale(5);
+        particle->SetStartAngle(0);
+        particle->SetEndAngle(360);
+        particle->SetLoop(true);
+        particle->Play();
+    }
 
     /*{
         auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Stage1_Floor_01");
@@ -445,7 +445,7 @@ void application::contents::ContentsLayer::ShortcutInit()
     scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::Alt, true }, { KeyCode::T, false } },
         [=]()
         {
-            static float stoppedTimeScale = 0.00001;
+            static float stoppedTimeScale = 1;
             stoppedTimeScale = stoppedTimeScale < 1 ? 1 : 0.0001f;
             Time::SetTimeScale(stoppedTimeScale);
         });
