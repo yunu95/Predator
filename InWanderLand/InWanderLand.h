@@ -104,3 +104,4 @@
 #include "DuplicatedUIPool.h"
 #include "ProgressManager.h"
 #include "ProgressTracker.h"
+#include "UICurveType.h"

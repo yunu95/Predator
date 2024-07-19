@@ -1182,6 +1182,14 @@ bool UIManager::ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* 
                     }());
             });
         break;
+    case UIEnumID::LoadCheckPointButton1:
+    case UIEnumID::LoadCheckPointButton2:
+        ImportDefaultAction(uiData, GetUIElementWithIndex(uiData.uiIndex));
+        element->button->AddButtonClickFunction([=]()
+            {
+                ProgressManager::SingleInstance().LoadCheckPoint();
+            });
+        break;
     default:
         return false;
         break;

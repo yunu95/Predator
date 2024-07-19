@@ -155,17 +155,7 @@ void GraphicsTest()
     }
 
     {
-        auto obj = Scene::getCurrentScene()->AddGameObject();
-        auto particle = obj->AddComponent<yunutyEngine::graphics::ParticleRenderer>();
-        particle->SetTexture(_resourceManager->GetTexture(L"Texture/Particle/default.png"));
-        particle->SetIsAlphaDiminish(true);
-        particle->SetIsRandomScale(true);
-        particle->SetIsRandomAngle(true);
-        particle->SetEndScale(5);
-        particle->SetStartAngle(0);
-        particle->SetEndAngle(360);
-        particle->SetLoop(true);
-        particle->Play();
+        auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Wall_21m");
     }
 
     /*{
@@ -435,9 +425,9 @@ void application::contents::ContentsLayer::ShortcutInit()
     scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::Alt, true }, { KeyCode::L, false } },
         [=]()
         {
-            ProgressManager::SingleInstance().NotifyRecoveryAll();
+            ProgressManager::SingleInstance().LoadCheckPoint();
         });
-    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::Alt, true }, { KeyCode::S, false } },
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::Alt, true }, { KeyCode::C, false } },
         [=]()
         {
             ProgressManager::SingleInstance().NotifyCurrentProgressSaveAll();

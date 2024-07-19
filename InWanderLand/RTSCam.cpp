@@ -182,6 +182,19 @@ void RTSCam::ApplyShake(float shakeDistance, float frequency, float decreaseFact
     shakeCoroutines.push_back(StartCoroutine(ShakeCoroutine(shakeDistance, frequency, decreaseFactor, origin)));
 }
 
+void RTSCam::ProgressInitialize()
+{
+}
+
+void RTSCam::CurrentProgressSave()
+{
+}
+
+void RTSCam::Recovery()
+{
+    updateability = true;
+}
+
 coroutine::Coroutine RTSCam::ShakeCoroutine(float strength, float frequency, float decreaseFactor, Vector3d origin)
 {
     Vector3d direction = GetTransform()->GetWorldPosition() - origin;

@@ -1,14 +1,14 @@
 #include "Curve.h"
 
-// Linear : ÀÏÁ÷¼± y=x
+// Linear : ì¼ì§ì„  y=x
 const yunutyEngine::math::Curve yunutyEngine::math::Linear =
 yunutyEngine::math::Curve([](double t) {return t; });
-// ¼Óµµ°¡ »¡¶óÁö´Ù°¡ °©ÀÚ±â ¹°Ã¼°¡ ¸ØÃß´Â ¸ğ½ÀÀ» Ç¥ÇöÇÏ±â¿¡ ÀûÀıÇÑ Ä¿ºêÀÔ´Ï´Ù.
+// ì†ë„ê°€ ë¹¨ë¼ì§€ë‹¤ê°€ ê°‘ìê¸° ë¬¼ì²´ê°€ ë©ˆì¶”ëŠ” ëª¨ìŠµì„ í‘œí˜„í•˜ê¸°ì— ì ì ˆí•œ ì»¤ë¸Œì…ë‹ˆë‹¤.
 const yunutyEngine::math::Curve yunutyEngine::math::EaseInQuad =
 yunutyEngine::math::Curve([](double t) {return t * t; });
-// ÃÊ±â¼Óµµ°¡ ºü¸¥ »óÅÂ¿¡¼­ ¼Óµµ°¡ ÁÙ¾îµé¸ç ¼­¼­È÷ ¹°Ã¼°¡ ¸ØÃß´Â ¸ğ½ÀÀ» Ç¥ÇöÇÏ±â¿¡ ÀûÀıÇÑ Ä¿ºêÀÔ´Ï´Ù.
+// ì´ˆê¸°ì†ë„ê°€ ë¹ ë¥¸ ìƒíƒœì—ì„œ ì†ë„ê°€ ì¤„ì–´ë“¤ë©° ì„œì„œíˆ ë¬¼ì²´ê°€ ë©ˆì¶”ëŠ” ëª¨ìŠµì„ í‘œí˜„í•˜ê¸°ì— ì ì ˆí•œ ì»¤ë¸Œì…ë‹ˆë‹¤.
 const yunutyEngine::math::Curve yunutyEngine::math::EaseOutQuad =
-yunutyEngine::math::Curve([](double t) {return 1 - (1 - t) * (1 - t); });
-// ÃÊ±â¼Óµµ°¡ »¡¶óÁö´Ù°¡ ´Ù½Ã ¼Óµµ°¡ ÁÙ¾îµé¸ç ¼­¼­È÷ ¹°Ã¼°¡ ¸ØÃß´Â ¸ğ½ÀÀ» Ç¥ÇöÇÏ±â¿¡ ÀûÀıÇÑ Ä¿ºêÀÔ´Ï´Ù. 
+yunutyEngine::math::Curve([](double t) {return 1 - (1 - t) * (1 - t) * (1 - t) * (1 - t); });
+// ì´ˆê¸°ì†ë„ê°€ ë¹¨ë¼ì§€ë‹¤ê°€ ë‹¤ì‹œ ì†ë„ê°€ ì¤„ì–´ë“¤ë©° ì„œì„œíˆ ë¬¼ì²´ê°€ ë©ˆì¶”ëŠ” ëª¨ìŠµì„ í‘œí˜„í•˜ê¸°ì— ì ì ˆí•œ ì»¤ë¸Œì…ë‹ˆë‹¤. 
 const yunutyEngine::math::Curve yunutyEngine::math::easeInOutQuad =
 yunutyEngine::math::Curve([](double t) {return  t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2, 2) * (-2 * t + 2, 2) / 2; });

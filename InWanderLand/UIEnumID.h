@@ -88,6 +88,7 @@ enum class UIEnumID
     Ingame_Combo_TargetNumFinished3,
     Ingame_Combo_Check3,
     Ingame_Vinetting,
+    BlackMask_Alpha,
     BlackMask_RightToLeft,
     BlackMask_TopToBottom,
     BlackMask_LeftToRight,
@@ -191,6 +192,10 @@ enum class UIEnumID
     // 보스전때에만 출력되는 UI들
     BossUI_Default,
     BossUI_Tactic,
+    CheckPointReached,
+    LoadCheckPointButton1,
+    LoadCheckPointButton2,
+    InGameMenu,
 };
 
 template<>
@@ -285,6 +290,7 @@ const std::unordered_map<int, std::string>& application::POD_Enum<UIEnumID>::Get
         { static_cast<int>((int)UIEnumID::Ingame_Combo_TargetNumFinished3), "Ingame_Combo_TargetNumFinished3" },
         { static_cast<int>((int)UIEnumID::Ingame_Combo_Check3), "Ingame_Combo_Check3" },
         { static_cast<int>((int)UIEnumID::Ingame_Vinetting), "Ingame_Vinetting" },
+        { static_cast<int>((int)UIEnumID::BlackMask_Alpha), "BlackMask_Alpha" },
         { static_cast<int>((int)UIEnumID::BlackMask_RightToLeft), "BlackMask_RightToLeft" },
         { static_cast<int>((int)UIEnumID::BlackMask_TopToBottom), "BlackMask_TopToBottom" },
         { static_cast<int>((int)UIEnumID::BlackMask_LeftToRight), "BlackMask_LeftToRight" },
@@ -388,6 +394,8 @@ const std::unordered_map<int, std::string>& application::POD_Enum<UIEnumID>::Get
         // 보스전때에만 출력되는 UI들
         { static_cast<int>((int)UIEnumID::BossUI_Default), "BossUI_Default" },
         { static_cast<int>((int)UIEnumID::BossUI_Tactic), "BossUI_Tactic" },
+        { static_cast<int>((int)UIEnumID::CheckPointReached), "CheckPointReached" },
     };
+    ;
     return enumNameMap;
 }

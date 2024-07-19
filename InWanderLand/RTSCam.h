@@ -6,6 +6,8 @@
 #include "ContentsObservee.h"
 #include "SingletonComponent.h"
 #include "Adder.h"
+#include "ProgressManager.h"
+#include "ProgressTracker.h"
 
 using namespace yunutyEngine;
 
@@ -17,7 +19,7 @@ namespace application
     }
 }
 
-class RTSCam : public yunutyEngine::graphics::Camera, public SingletonComponent<RTSCam>, public PermanentObservee
+class RTSCam : public yunutyEngine::graphics::Camera, public SingletonComponent<RTSCam>, public PermanentObservee, public application::ProgressTracker
 {
 public:
     // 카메라가 타겟팅하는 게임 오브젝트가 여러개일 경우 distance에 곱해질 스케일러
@@ -56,6 +58,19 @@ public:
     // 초당 frequency만큼 진동하는 카메라 흔들림을 적용합니다.
     // 카메라의 흔들림 강도는 진원지로부터의 거리의 제곱의 역수에 비례합니다.
     void ApplyShake(float shakeDistance, float frequency, float decreaseFactor, const Vector3d& origin);
+
+    // Game 을 재시작하게 될 경우,
+    // 초기화 세팅을 하기 위한 함수입니다.
+    virtual void ProgressInitialize() override;
+
+    // Game 진행 도중에 호출되어 현재의 상태를 저장하여
+    // 추후에 Recovery 에서 사용할 수 있도록 개별적으로 적합한
+    // Save Data 를 생성하는 함수입니다.
+    virtual void CurrentProgressSave() override;
+
+    // Game 진행 도중에 호출되어 저장되었던 상태를 통해 Load 하는 함수입니다.
+    // Callback 지원을 위해 DoRecoveryCallbacks 함수를 호출해야합니다.
+    virtual void Recovery() override;
 
 private:
     // decreaseFactor는 초당 감쇠율
