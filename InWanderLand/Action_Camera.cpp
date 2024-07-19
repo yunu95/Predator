@@ -559,7 +559,7 @@ namespace application
 
     CoroutineObject<void> Action_SetTacticCamera::DoAction()
     {
-        if (camObjMap.contains(targetCam))
+        if (!camObjMap.contains(targetCam))
         {
             camObjMap[targetCam] = Scene::getCurrentScene()->AddGameObject();
             camObjMap[targetCam]->GetTransform()->SetWorldPosition({ targetCam->pod.position });
