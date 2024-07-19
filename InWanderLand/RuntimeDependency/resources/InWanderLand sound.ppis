@@ -8,10 +8,10 @@
             "type": 3
         },
         {
-            "animationName": "Rig_Robin_arpbob|Ani_Robin_Skill1-2",
-            "fbxName": "SKM_Robin",
-            "frame": 5.0,
-            "rscPath": "sounds/Robin/Robin skill1_2.mp3",
+            "animationName": "Ani_Frame2_Summon",
+            "fbxName": "SKM_Frame2",
+            "frame": 0.0,
+            "rscPath": "sounds/Heart Queen/Heart Queen summonGate activate.wav",
             "type": 3
         },
         {
@@ -19,6 +19,20 @@
             "fbxName": "SKM_Hansel",
             "frame": 12.0,
             "rscPath": "sounds/Hansel/Hansel normal attack.wav",
+            "type": 3
+        },
+        {
+            "animationName": "Rig_Robin_arpbob|Ani_Robin_Skill1-2",
+            "fbxName": "SKM_Robin",
+            "frame": 5.0,
+            "rscPath": "sounds/Robin/Robin skill1_2.mp3",
+            "type": 3
+        },
+        {
+            "animationName": "Rig_Robin|Ani_Hansel_Skill1",
+            "fbxName": "SKM_Hansel",
+            "frame": 55.0,
+            "rscPath": "sounds/Hansel/Hansel skill1 Impact.wav",
             "type": 3
         },
         {
@@ -36,13 +50,6 @@
             "type": 3
         },
         {
-            "animationName": "Ani_Frame2_Summon",
-            "fbxName": "SKM_Frame2",
-            "frame": 0.0,
-            "rscPath": "sounds/Heart Queen/Heart Queen summonGate activate.wav",
-            "type": 3
-        },
-        {
             "animationName": "Ani_HeartQueen_Death",
             "fbxName": "SKM_HeartQueen",
             "frame": 0.0,
@@ -52,15 +59,15 @@
         {
             "animationName": "Rig_Robin|Ani_Hansel_Skill1",
             "fbxName": "SKM_Hansel",
-            "frame": 55.0,
-            "rscPath": "sounds/Hansel/Hansel skill1 Impact.wav",
+            "frame": 40.0,
+            "rscPath": "sounds/Hansel/Hansel skill1 Jump.wav",
             "type": 3
         },
         {
-            "animationName": "Rig_Robin|Ani_Hansel_Skill1",
-            "fbxName": "SKM_Hansel",
-            "frame": 40.0,
-            "rscPath": "sounds/Hansel/Hansel skill1 Jump.wav",
+            "animationName": "Ani_Monster1_Attack",
+            "fbxName": "SKM_Monster1",
+            "frame": 42.0,
+            "rscPath": "sounds/Enemy melee/Melee attack.wav",
             "type": 3
         },
         {
@@ -78,10 +85,24 @@
             "type": 3
         },
         {
+            "animationName": "Rig_Robin|Ani_Hansel_Skill1",
+            "fbxName": "SKM_Hansel",
+            "frame": 20.0,
+            "rscPath": "sounds/Hansel/Hansel skill1 Jump.wav",
+            "type": 3
+        },
+        {
             "animationName": "Rig_Robin_arpbob|Ani_Robin_Skill2",
             "fbxName": "SKM_Robin",
             "frame": 10.0,
             "rscPath": "sounds/Robin/Robin skill2.wav",
+            "type": 3
+        },
+        {
+            "animationName": "Ani_Ursula_Skill1",
+            "fbxName": "SKM_Ursula",
+            "frame": 0.0,
+            "rscPath": "sounds/Ursula/Ursula skill1.wav",
             "type": 3
         },
         {
@@ -99,10 +120,10 @@
             "type": 3
         },
         {
-            "animationName": "Ani_Ursula_Skill1",
-            "fbxName": "SKM_Ursula",
-            "frame": 0.0,
-            "rscPath": "sounds/Ursula/Ursula skill1.wav",
+            "animationName": "Rig_Robin|Ani_Hansel_Skill2",
+            "fbxName": "SKM_Hansel",
+            "frame": 45.0,
+            "rscPath": "sounds/Hansel/Hansel skill2.wav",
             "type": 3
         },
         {
@@ -127,13 +148,6 @@
             "type": 3
         },
         {
-            "animationName": "Rig_Robin|Ani_Hansel_Skill2",
-            "fbxName": "SKM_Hansel",
-            "frame": 45.0,
-            "rscPath": "sounds/Hansel/Hansel skill2.wav",
-            "type": 3
-        },
-        {
             "animationName": "Ani_HeartQueen_Skill2",
             "fbxName": "SKM_HeartQueen",
             "frame": 85.0,
@@ -155,10 +169,10 @@
             "type": 3
         },
         {
-            "animationName": "Ani_Monster1_Attack",
-            "fbxName": "SKM_Monster1",
-            "frame": 42.0,
-            "rscPath": "sounds/Enemy melee/Melee attack.wav",
+            "animationName": "Ani_Ursula_Death",
+            "fbxName": "SKM_Ursula",
+            "frame": 0.0,
+            "rscPath": "sounds/Ursula/Ursula death.wav",
             "type": 3
         },
         {
@@ -183,13 +197,6 @@
             "type": 3
         },
         {
-            "animationName": "Ani_Ursula_Death",
-            "fbxName": "SKM_Ursula",
-            "frame": 0.0,
-            "rscPath": "sounds/Ursula/Ursula death.wav",
-            "type": 3
-        },
-        {
             "animationName": "Ani_HeartQueen_Skill1",
             "fbxName": "SKM_HeartQueen",
             "frame": 50.0,
@@ -204,13 +211,6 @@
             "type": 3
         },
         {
-            "animationName": "Rig_Robin|Ani_Hansel_Skill1",
-            "fbxName": "SKM_Hansel",
-            "frame": 20.0,
-            "rscPath": "sounds/Hansel/Hansel skill1 Jump.wav",
-            "type": 3
-        },
-        {
             "animationName": "Ani_Ursula_Skill2",
             "fbxName": "SKM_Ursula",
             "frame": 10.0,
@@ -222,6 +222,13 @@
             "fbxName": "SKM_HeartQueen",
             "frame": 0.0,
             "rscPath": "sounds/Heart Queen/Heart Queen appear1.wav",
+            "type": 3
+        },
+        {
+            "animationName": "Ani_Ursula_Skill2",
+            "fbxName": "SKM_Ursula",
+            "frame": 17.0,
+            "rscPath": "sounds/Ursula/Ursula skill2_2.mp3",
             "type": 3
         }
     ]
