@@ -189,6 +189,7 @@ namespace application
 
 				Vector3f position = Vector3f();
 				Vector3f rotation = Vector3f();
+				Quaternion rotQ = Quaternion();
 				Vector3f scale = Vector3f(1, 1, 1);
 
 				bool reset[9] = { false };
@@ -197,6 +198,8 @@ namespace application
 				{
 					position = (*selections.begin())->GetPaletteInstance()->GetTransform()->GetWorldPosition();
 					rotation = (*selections.begin())->GetPaletteInstance()->GetTransform()->GetWorldRotation().Euler();
+					rotQ = (*selections.begin())->GetPaletteInstance()->GetTransform()->GetWorldRotation();
+					auto prevRot = rotation;
 					scale = (*selections.begin())->GetPaletteInstance()->GetTransform()->GetLocalScale();
 
 					auto resetPosition = imgui::Vector3Control("Position", position.x, position.y, position.z);
@@ -323,7 +326,7 @@ namespace application
 					}
 
 					(*selections.begin())->OnRelocate(position);
-					(*selections.begin())->OnRerotate(Quaternion(rotation));
+					(*selections.begin())->OnRerotate(rotQ * Quaternion(rotation - prevRot));
 
 					if (scale.x == 0)
 					{
@@ -365,10 +368,6 @@ namespace application
 					Vector3f frotation = (*selections.begin())->GetPaletteInstance()->GetTransform()->GetWorldRotation().Euler();
 					Vector3f fscale = (*selections.begin())->GetPaletteInstance()->GetTransform()->GetLocalScale();
 
-					position = fposition;
-					rotation = frotation;
-					scale = fscale;
-
 					if (selections.size() > containerSize)
 					{
 						containerSize = selections.size();
@@ -381,6 +380,7 @@ namespace application
 					{
 						position = each->GetPaletteInstance()->GetTransform()->GetWorldPosition();
 						rotation = each->GetPaletteInstance()->GetTransform()->GetWorldRotation().Euler();
+						rotQ = each->GetPaletteInstance()->GetTransform()->GetWorldRotation();
 						scale = each->GetPaletteInstance()->GetTransform()->GetLocalScale();
 
 						if (abs(fposition.x - position.x) > errorRange)
@@ -670,6 +670,7 @@ namespace application
 
 						finalPosition = each->GetPaletteInstance()->GetTransform()->GetWorldPosition() + deltaPos;
 						finalRotation = each->GetPaletteInstance()->GetTransform()->GetWorldRotation().Euler() + deltaRot;
+						auto prevRotQ = each->GetPaletteInstance()->GetTransform()->GetWorldRotation();
 						finalScale = each->GetPaletteInstance()->GetTransform()->GetLocalScale() + deltaScl;
 
 						if (reset[0])
@@ -687,14 +688,17 @@ namespace application
 						else if (reset[3])
 						{
 							finalRotation.x = 0;
+							deltaRot.x = -prevRotQ.Euler().x;
 						}
 						else if (reset[4])
 						{
 							finalRotation.y = 0;
+							deltaRot.y = -prevRotQ.Euler().y;
 						}
 						else if (reset[5])
 						{
 							finalRotation.z = 0;
+							deltaRot.z = -prevRotQ.Euler().z;
 						}
 						else if (reset[6])
 						{
@@ -723,14 +727,17 @@ namespace application
 						else if (type[3])
 						{
 							finalRotation.x = frotation.x;
+							deltaRot.z = frotation.x - prevRotQ.Euler().x;
 						}
 						else if (type[4])
 						{
 							finalRotation.y = frotation.y;
+							deltaRot.y = frotation.y - prevRotQ.Euler().y;
 						}
 						else if (type[5])
 						{
 							finalRotation.z = frotation.z;
+							deltaRot.z = frotation.z - prevRotQ.Euler().z;
 						}
 						else if (type[6])
 						{
@@ -762,7 +769,7 @@ namespace application
 						}
 
 						each->OnRelocate(finalPosition);
-						each->OnRerotate(finalRotation);
+						each->OnRerotate(prevRotQ * Quaternion(deltaRot));
 
 						if (finalScale.x == 0)
 						{
@@ -824,9 +831,8 @@ namespace application
 						{
 							for (auto& each : selections)
 							{
-								auto rot = each->GetPaletteInstance()->GetTransform()->GetWorldRotation().Euler();
-								rot.x = finalRotation.x;
-								each->OnRerotate(rot);
+								auto rot = each->GetPaletteInstance()->GetTransform()->GetWorldRotation();
+								each->OnRerotate(rot * Quaternion(Vector3d(finalRotation.x - rot.Euler().x, 0, 0)));
 								each->ApplyAsPaletteInstance();
 							}
 						}
@@ -834,9 +840,8 @@ namespace application
 						{
 							for (auto& each : selections)
 							{
-								auto rot = each->GetPaletteInstance()->GetTransform()->GetWorldRotation().Euler();
-								rot.y = finalRotation.y;
-								each->OnRerotate(rot);
+								auto rot = each->GetPaletteInstance()->GetTransform()->GetWorldRotation();
+								each->OnRerotate(rot* Quaternion(Vector3d(finalRotation.y - rot.Euler().y, 0, 0)));
 								each->ApplyAsPaletteInstance();
 							}
 						}
@@ -844,9 +849,8 @@ namespace application
 						{
 							for (auto& each : selections)
 							{
-								auto rot = each->GetPaletteInstance()->GetTransform()->GetWorldRotation().Euler();
-								rot.z = finalRotation.z;
-								each->OnRerotate(rot);
+								auto rot = each->GetPaletteInstance()->GetTransform()->GetWorldRotation();
+								each->OnRerotate(rot * Quaternion(Vector3d(finalRotation.z - rot.Euler().z, 0, 0)));
 								each->ApplyAsPaletteInstance();
 							}
 						}

@@ -232,6 +232,12 @@ namespace application
                     pr->SetBurstsCount(sptr->particleData.burstsCount);
                     pr->SetInterval(sptr->particleData.interval);
 
+                    pr->SetStartAngle(sptr->particleData.startAngle);
+                    pr->SetEndAngle(sptr->particleData.endAngle);
+                    pr->SetIsRandomScale(sptr->particleData.isRandomScale);
+                    pr->SetIsRandomAngle(sptr->particleData.isRandomAngle);
+                    pr->SetIsAlphaDiminish(sptr->particleData.isAlphaDiminish);
+
                     std::wstring texturePath;
                     texturePath.assign(sptr->particleData.texturePath.begin(), sptr->particleData.texturePath.end());
                     auto texturePtr = resourceManager->GetTexture(texturePath);
@@ -416,16 +422,14 @@ namespace application
             }
         }
 
-        void InteractableData::ProgressInitialize()
-        {
-        }
-
         void InteractableData::CurrentProgressSave()
         {
+
         }
 
         void InteractableData::Recovery()
         {
+
         }
 
         bool InteractableData::PreEncoding(json& data) const

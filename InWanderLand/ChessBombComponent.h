@@ -31,6 +31,9 @@ public:
 	void OnPause();
 	void OnResume();
 
+	void CurrentProgressSave();
+	void Recovery();
+
 private:
 	GameObject* guideObj = nullptr;
 	GameObject* particleObj = nullptr;

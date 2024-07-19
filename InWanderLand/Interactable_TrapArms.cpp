@@ -63,6 +63,12 @@ void Interactable_TrapArms::Start()
 			pComp->SetBurstsCount(data->burstsCount);
 			pComp->SetInterval(data->interval);
 
+			pComp->SetStartAngle(data->startAngle);
+			pComp->SetEndAngle(data->endAngle);
+			pComp->SetIsRandomScale(data->isRandomScale);
+			pComp->SetIsRandomAngle(data->isRandomAngle);
+			pComp->SetIsAlphaDiminish(data->isAlphaDiminish);
+
 			static const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
 			std::wstring texturePath;
@@ -152,7 +158,7 @@ yunutyEngine::coroutine::Coroutine Interactable_TrapArms::DoInteraction()
 
 	meshAnimator->Play(anim_Down);
 	meshAnimator->Pause();
-	mesh->GetTransform()->SetLocalPosition(Vector3d(0, offset_Y, 0));
+	mesh->GetTransform()->SetLocalPosition(Vector3d(0, finalPos_Y + offset_Y, 0));
 	co_await std::suspend_always();
 
 	float ratio = 0;
@@ -171,12 +177,12 @@ yunutyEngine::coroutine::Coroutine Interactable_TrapArms::DoInteraction()
 			{
 				ratio = 1;
 			}
-			mesh->GetTransform()->SetLocalPosition(Vector3d::Lerp(Vector3d(0, offset_Y, 0), Vector3d(0, (double)(offset_Y - 2.0f), 0), ratio));
+			mesh->GetTransform()->SetLocalPosition(Vector3d::Lerp(Vector3d(0, finalPos_Y + offset_Y, 0), Vector3d(0, finalPos_Y, 0), ratio));
 			co_await std::suspend_always();
 		}
 	}
 
-	mesh->GetTransform()->SetLocalPosition(Vector3d(0, (double)(offset_Y - 2.0f), 0));
+	mesh->GetTransform()->SetLocalPosition(Vector3d(0, finalPos_Y, 0));
 	meshAnimator->Resume();
 
 	bool soundPlay = false;
@@ -190,6 +196,7 @@ yunutyEngine::coroutine::Coroutine Interactable_TrapArms::DoInteraction()
 			for (auto each : triggerStay)
 			{
 				each->Damaged(damage);
+				each->KnockBackRelativeVector(0.5 * (each->GetTransform()->GetWorldPosition() - GetTransform()->GetWorldPosition()).Normalized(), 0.5);
 			}
 			soundPlay = true;
 		}
@@ -197,10 +204,22 @@ yunutyEngine::coroutine::Coroutine Interactable_TrapArms::DoInteraction()
 	}
 
 	meshAnimator->Play(anim_Up);
-
+	ratio = 0;
+	animationTimer = 0;
+	auto upLowTime = anim_Up->GetDuration() * 20 / anim_Up->GetTotalFrame();
 	while (!meshAnimator->IsDone())
 	{
-		if (meshAnimator->GetCurrentFrame() >= 45)
+		if (meshAnimator->GetCurrentFrame() >= 20)
+		{
+			animationTimer += yunutyEngine::Time::GetDeltaTime();
+			ratio = animationTimer / upLowTime;
+			if (ratio > 1)
+			{
+				ratio = 1;
+			}
+			mesh->GetTransform()->SetLocalPosition(Vector3d::Lerp(Vector3d(0, finalPos_Y, 0), Vector3d(0, finalPos_Y + offset_Y, 0), ratio));
+		}
+		else if (meshAnimator->GetCurrentFrame() >= 45)
 		{
 			break;
 		}
@@ -255,5 +274,24 @@ void Interactable_TrapArms::OnResume()
 	if (particleObj)
 	{
 		particleObj->GetComponent<graphics::ParticleRenderer>()->Resume();
+	}
+}
+
+void Interactable_TrapArms::Recovery()
+{
+	if (!lastCoroutine.expired())
+	{
+		DeleteCoroutine(lastCoroutine);
+		isInteracting = false;
+		if (mesh)
+		{
+			mesh->SetSelfActive(false);
+		}
+		if (particleObj)
+		{
+			particleObj->GetComponent<graphics::ParticleRenderer>()->Reset();
+			particleObj->GetComponent<graphics::ParticleRenderer>()->Play();
+			particleObj->SetSelfActive(false);
+		}
 	}
 }

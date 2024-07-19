@@ -21,6 +21,9 @@ public:
 
 	virtual yunutyEngine::coroutine::Coroutine DoInteraction() override;
 
+	virtual void CurrentProgressSave() override;
+	virtual void Recovery() override;
+
 private:
 	std::unordered_set<Unit*> triggerStay = std::unordered_set<Unit*>();
 	Vector3d initPos = Vector3d(0, 0, 0);
@@ -33,5 +36,6 @@ private:
 	float ui_Width = -1;
 	float ui_Height = -1;
 	GameObject* uiImage = nullptr;
+	bool savedInteract = false;
 };
 

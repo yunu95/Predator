@@ -41,11 +41,17 @@ void Interactable_SpikeTrap::Update()
 {
     if (PlayerController::Instance().GetState() == PlayerController::State::Battle || PlayerController::Instance().GetState() == PlayerController::State::Tactic)
     {
-        spike->SetSelfActive(true);
+        if (!spike->GetActive())
+        {
+            appearAndHideCoro = StartCoroutine(AppearCoroutine());
+        }
     }
     else
     {
-        spike->SetSelfActive(false);
+        if (spike->GetActive() && appearAndHideCoro.expired())
+        {
+            appearAndHideCoro = StartCoroutine(HideCoroutine());
+        }
     }
 
     static auto eraseList = triggerStay;
@@ -143,4 +149,62 @@ void Interactable_SpikeTrap::SetDataFromEditorData(const application::editor::In
     initScale.z = data.pod.scale.z;
     delayTime = data.pod.templateData->pod.delayTime;
     damage = data.pod.templateData->pod.damage;
+}
+
+void Interactable_SpikeTrap::Recovery()
+{
+    if (!lastCoroutine.expired())
+    {
+        DeleteCoroutine(lastCoroutine);
+        interactingList.clear();
+    }
+
+    if (!appearAndHideCoro.expired())
+    {
+        DeleteCoroutine(appearAndHideCoro);
+        spike->SetSelfActive(false);
+    }
+}
+
+yunutyEngine::coroutine::Coroutine Interactable_SpikeTrap::AppearCoroutine()
+{
+    spike->SetSelfActive(true);
+    spike->GetTransform()->SetLocalPosition(Vector3d(0, -offset_y, 0));
+
+    float coroSpeed = offset_y * 2 / bounceTime;
+
+    yunutyEngine::coroutine::ForSeconds wait = yunutyEngine::coroutine::ForSeconds(1 / coroSpeed);
+    yunutyEngine::coroutine::ForSeconds wait2 = yunutyEngine::coroutine::ForSeconds(bounceTime);
+
+    while (wait.Tick())
+    {
+        spike->GetTransform()->SetLocalPosition(Vector3d(0, math::LerpF(-offset_y, 0, wait.ElapsedNormalized()), 0));
+        co_await std::suspend_always{};
+    }
+
+    while (wait2.Tick())
+    {
+        spike->GetTransform()->SetLocalScale(Vector3d(1, 1, 1 + 0.1 * std::sin(wait2.ElapsedNormalized() * math::PI)));
+        co_await std::suspend_always{};
+    }
+
+    spike->GetTransform()->SetLocalScale(Vector3d(1, 1, 1));
+    co_return;
+}
+
+yunutyEngine::coroutine::Coroutine Interactable_SpikeTrap::HideCoroutine()
+{
+    spike->GetTransform()->SetLocalScale(Vector3d(1, 1, 1));
+
+    yunutyEngine::coroutine::ForSeconds wait = yunutyEngine::coroutine::ForSeconds(bounceTime);
+
+    while (wait.Tick())
+    {
+
+        spike->GetTransform()->SetLocalPosition(Vector3d(0, math::LerpF(0, -offset_y, wait.ElapsedNormalized()), 0));
+        co_await std::suspend_always{};
+    }
+
+    spike->SetSelfActive(false);
+    co_return;
 }

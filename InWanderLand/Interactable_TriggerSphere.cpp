@@ -142,3 +142,13 @@ yunutyEngine::coroutine::Coroutine Interactable_TriggerSphere::DoInteraction()
 	/// 해당 Coroutine 은 호출되지 않을 것입니다.
 	co_return;
 }
+
+void Interactable_TriggerSphere::CurrentProgressSave()
+{
+	savedInteract = isInteracting;
+}
+
+void Interactable_TriggerSphere::Recovery()
+{
+	isInteracting = isInteracting;
+}

@@ -23,6 +23,8 @@ public:
 
 	virtual void OnPause() override;
 	virtual void OnResume() override;
+	
+	virtual void Recovery() override;
 
 private:
 	std::unordered_set<Unit*> triggerStay = std::unordered_set<Unit*>();
@@ -31,7 +33,8 @@ private:
 	Vector3d initScale = Vector3d(1, 1, 1);
 	float delayTime = 0;
 	float damage = 0;
-	float offset_Y = 26.3f;
+	float offset_Y = 50.0f;
+	float finalPos_Y = 24.3f;
 	GameObject* mesh = nullptr;
 	graphics::Animator* meshAnimator = nullptr;
 	GameObject* particleObj = nullptr;

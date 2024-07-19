@@ -255,3 +255,31 @@ void Interactable_ChessBishop::OnResume()
 		each->GetComponent<ChessBombComponent>()->OnResume();
 	}
 }
+
+void Interactable_ChessBishop::CurrentProgressSave()
+{
+	savedInteract = isInteracting;
+	for (auto each : bombObjList)
+	{
+		auto comp = each->GetComponent<ChessBombComponent>();
+		comp->CurrentProgressSave();
+	}
+}
+
+void Interactable_ChessBishop::Recovery()
+{
+	if (!savedInteract)
+	{
+		isInteracting = false;
+		mesh->SetSelfActive(true);
+		mesh->GetTransform()->SetLocalPosition(Vector3d::zero);
+		auto renderer = mesh->GetComponent<graphics::StaticMeshRenderer>();
+		renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::ALBEDO, orginTexture);
+		for (auto each : bombObjList)
+		{
+			auto comp = each->GetComponent<ChessBombComponent>();
+			comp->Recovery();
+			each->SetSelfActive(false);
+		}
+	}
+}

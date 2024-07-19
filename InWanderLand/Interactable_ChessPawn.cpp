@@ -238,3 +238,31 @@ void Interactable_ChessPawn::OnResume()
 		each->GetComponent<ChessBombComponent>()->OnResume();
 	}
 }
+
+void Interactable_ChessPawn::CurrentProgressSave()
+{
+	savedInteract = isInteracting;
+	for (auto each : bombObjList)
+	{
+		auto comp = each->GetComponent<ChessBombComponent>();
+		comp->CurrentProgressSave();
+	}
+}
+
+void Interactable_ChessPawn::Recovery()
+{
+	if (!savedInteract)
+	{
+		isInteracting = false;
+		mesh->SetSelfActive(true);
+		mesh->GetTransform()->SetLocalPosition(Vector3d::zero);
+		auto renderer = mesh->GetComponent<graphics::StaticMeshRenderer>();
+		renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::ALBEDO, orginTexture);
+		for (auto each : bombObjList)
+		{
+			auto comp = each->GetComponent<ChessBombComponent>();
+			comp->Recovery();
+			each->SetSelfActive(false);
+		}
+	}
+}

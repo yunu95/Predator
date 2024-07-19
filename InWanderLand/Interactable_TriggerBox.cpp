@@ -141,3 +141,13 @@ yunutyEngine::coroutine::Coroutine Interactable_TriggerBox::DoInteraction()
     /// 해당 Coroutine 은 호출되지 않을 것입니다.
     co_return;
 }
+
+void Interactable_TriggerBox::CurrentProgressSave()
+{
+	savedInteract = isInteracting;
+}
+
+void Interactable_TriggerBox::Recovery()
+{
+	isInteracting = savedInteract;
+}
