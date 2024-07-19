@@ -195,6 +195,7 @@ enum class UIEnumID
     CheckPointReached,
     LoadCheckPointButton1,
     LoadCheckPointButton2,
+    InGameMenu,
 };
 
 template<>
