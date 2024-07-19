@@ -648,6 +648,7 @@ yunutyEngine::coroutine::Coroutine Unit::HealEffectCoroutine()
     {
         FBXPool::Instance().Return(healVFX);
     }
+    co_await std::suspend_always{};
 
     healVFX = FBXPool::Instance().Borrow("VFX_Buff_Healing");
     auto vfxAnimator = healVFX.lock()->AcquireVFXAnimator();
@@ -657,8 +658,11 @@ yunutyEngine::coroutine::Coroutine Unit::HealEffectCoroutine()
 
     healVFX.lock()->GetTransform()->SetWorldPosition(Vector3d(GetTransform()->GetWorldPosition().x, 0, GetTransform()->GetWorldPosition().z));
     healVFX.lock()->GetTransform()->SetWorldRotation(GetTransform()->GetWorldRotation());
+    co_await std::suspend_always{};
 
-    while (!vfxAnimator.lock()->IsDone())
+    coroutine::ForSeconds forseconds{ vfxAnimator.lock()->GetDuration() };
+
+    while (forseconds.Tick())
     {
         co_await std::suspend_always{};
         healVFX.lock()->GetTransform()->SetWorldPosition(Vector3d(GetTransform()->GetWorldPosition().x, 0, GetTransform()->GetWorldPosition().z));
