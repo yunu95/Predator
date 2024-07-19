@@ -329,6 +329,21 @@ void Unit::OnStateEngage<UnitBehaviourTree::Move>()
     navAgentComponent.lock()->SetSpeed(unitTemplateData->pod.m_unitSpeed);
     //StartCoroutine(ShowPath(SingleNavigationField::Instance().GetSmoothPath(GetTransform()->GetWorldPosition() + GetTransform()->GetWorldRotation().Forward() * unitTemplateData->pod.collisionSize, moveDestination)));
     PlayAnimation(UnitAnimType::Move, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
+    if (unitTemplateData->pod.skinnedFBXName == "SKM_Hansel")
+    {
+        yunuGI::IAnimation* anim = wanderResources::GetAnimation("SKM_Hansel", UnitAnimType::Move);
+        anim->SetPlaySpeed(unitTemplateData->pod.m_unitSpeed * 1.5f / 10.0f);
+    }
+    else if (unitTemplateData->pod.skinnedFBXName == "SKM_Monster1")
+    {
+        yunuGI::IAnimation* anim = wanderResources::GetAnimation("SKM_Monster1", UnitAnimType::Move);
+        anim->SetPlaySpeed(unitTemplateData->pod.m_unitSpeed * 1.5f / 3.0f);
+    }
+    else if (unitTemplateData->pod.skinnedFBXName == "SKM_Monster2")
+    {
+        yunuGI::IAnimation* anim = wanderResources::GetAnimation("SKM_Monster2", UnitAnimType::Move);
+        anim->SetPlaySpeed(unitTemplateData->pod.m_unitSpeed * 1.0f / 4.0f);
+    }
     jammedDuration = 0;
 }
 template<>
