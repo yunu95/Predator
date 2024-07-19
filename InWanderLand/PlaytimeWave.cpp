@@ -40,6 +40,7 @@ void PlaytimeWave::Reset()
     SetActive(true);
     if (currentOperativeWave.lock().get() == this)
     {
+        PlayerController::Instance().UnlockCamFromRegion();
         currentOperativeWave.reset();
     }
 }
@@ -120,9 +121,11 @@ coroutine::Coroutine PlaytimeWave::WaveEndCoroutine(Unit* lastStandingUnit)
     auto beforeZoomFactor = PlayerController::Instance().GetZoomFactor();
 
     float a = Time::GetTimeScale();
-    float b = gc.waveEndSpeedMultiplier;
-    float dur = gc.waveEndSlowStartTime;
+    float b = gc.waveEndDestTimeScale;
+    float dur = gc.waveEndSlowLerpTime;
 
+    // 선형 그래프
+    //float realElapsedTime = dur * 2 / (b + a);
     float realElapsedTime = dur * 2 / (b + a);
 
     if (dur <= 0)
@@ -133,7 +136,7 @@ coroutine::Coroutine PlaytimeWave::WaveEndCoroutine(Unit* lastStandingUnit)
     RTSCam::Instance().SetUpdateability(false);
     auto camPivotPoint = lastStandingUnit->GetTransform()->GetWorldPosition();
     Vector3d camStartPos = RTSCam::Instance().GetTransform()->GetWorldPosition();
-    Vector3d targetPos = camPivotPoint + PlayerController::Instance().GetCamOffsetNorm() * beforeZoomFactor * gc.waveEndZoomFactor * PlayerController::Instance().camZoomMultiplier;
+    Vector3d targetPos = camPivotPoint + PlayerController::Instance().GetCamOffsetNorm() * gc.waveEndZoomFactor;
 
     coroutine::ForSeconds forSeconds{ gc.waveEndActionTime };
     forSeconds.isRealTime = true;
@@ -150,11 +153,12 @@ coroutine::Coroutine PlaytimeWave::WaveEndCoroutine(Unit* lastStandingUnit)
         if (forSeconds.Elapsed() <= cameraMoveDuration)
         {
             auto factor = forSeconds.Elapsed() / cameraMoveDuration;
-            RTSCam::Instance().GetTransform()->SetWorldPosition(Vector3d::Lerp(camStartPos, targetPos, factor));
+            RTSCam::Instance().GetTransform()->SetWorldPosition(Vector3d::Lerp(camStartPos, targetPos, UICurveFunctions[(int)UICurveType::EaseOutQuad](factor)));
         }
 
         if (forSeconds.Elapsed() < realElapsedTime)
         {
+            // 선형 그래프
             Time::SetTimeScale((b - a) * (a + b) / (2 * dur) * forSeconds.Elapsed() + a);
         }
         else
@@ -164,9 +168,15 @@ coroutine::Coroutine PlaytimeWave::WaveEndCoroutine(Unit* lastStandingUnit)
         co_await std::suspend_always{};
 
     }
+    coroutine::ForSeconds forSecondsAfter{ gc.waveEndRecoveryTime ,true };
+
     RTSCam::Instance().SetUpdateability(true);
-    PlayerController::Instance().SetZoomFactor(beforeZoomFactor);
     Time::SetTimeScale(1);
+    while (forSecondsAfter.Tick())
+    {
+        co_await std::suspend_always{};
+    }
+    //PlayerController::Instance().SetZoomFactor(beforeZoomFactor);
 
     co_return;
 }

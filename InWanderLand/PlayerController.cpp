@@ -1477,24 +1477,6 @@ void PlayerController::ResetCombo()
     UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Combo_Text)->DisableElement();
 }
 
-void PlayerController::SetTacticCameraActive(bool boolen)
-{
-    if (boolen)
-    {
-        auto tacticCamTransform = tacticCameraRef->GetTransform();
-        Vector3d endPos = { tacticCamTransform->GetWorldPosition().x, tacticCamTransform->GetWorldPosition().y, tacticCamTransform->GetWorldPosition().z };
-        Quaternion endRot = { tacticCamTransform->GetWorldRotation().w, tacticCamTransform->GetWorldRotation().x, tacticCamTransform->GetWorldRotation().y, tacticCamTransform->GetWorldRotation().z };
-    }
-    else
-    {
-
-    }
-    if (GlobalConstant::GetSingletonInstance().pod.tacticCameraLerpTime == 0)
-    {
-
-    }
-}
-
 void PlayerController::SetManaFull()
 {
     SetMana(GlobalConstant::GetSingletonInstance().pod.maxMana);

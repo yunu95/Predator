@@ -329,6 +329,21 @@ void Unit::OnStateEngage<UnitBehaviourTree::Move>()
     navAgentComponent.lock()->SetSpeed(unitTemplateData->pod.m_unitSpeed);
     //StartCoroutine(ShowPath(SingleNavigationField::Instance().GetSmoothPath(GetTransform()->GetWorldPosition() + GetTransform()->GetWorldRotation().Forward() * unitTemplateData->pod.collisionSize, moveDestination)));
     PlayAnimation(UnitAnimType::Move, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
+    if (unitTemplateData->pod.skinnedFBXName == "SKM_Hansel")
+    {
+        yunuGI::IAnimation* anim = wanderResources::GetAnimation("SKM_Hansel", UnitAnimType::Move);
+        anim->SetPlaySpeed(unitTemplateData->pod.m_unitSpeed * 1.5f / 10.0f);
+    }
+    else if (unitTemplateData->pod.skinnedFBXName == "SKM_Monster1")
+    {
+        yunuGI::IAnimation* anim = wanderResources::GetAnimation("SKM_Monster1", UnitAnimType::Move);
+        anim->SetPlaySpeed(unitTemplateData->pod.m_unitSpeed * 1.5f / 3.0f);
+    }
+    else if (unitTemplateData->pod.skinnedFBXName == "SKM_Monster2")
+    {
+        yunuGI::IAnimation* anim = wanderResources::GetAnimation("SKM_Monster2", UnitAnimType::Move);
+        anim->SetPlaySpeed(unitTemplateData->pod.m_unitSpeed * 1.0f / 4.0f);
+    }
     jammedDuration = 0;
 }
 template<>
@@ -580,7 +595,7 @@ void Unit::Damaged(std::weak_ptr<Unit> opponentUnit, float opponentDmg, DamageTy
 
         if (damageType == DamageType::AttackCrit)
         {
-            opponentDmg *= (1 - GetCritResistance()) * opponentUnit.lock()->GetCritMultiplier();
+            opponentDmg *= 1 + ((opponentUnit.lock()->GetCritMultiplier() - 1) * GetCritResistance());
         }
         opponentDmg *= 1 - GetArmor() * 0.01f;
         opponentUnit.lock()->onAttackHit(GetWeakPtr<Unit>());
@@ -629,20 +644,24 @@ void Unit::Heal(float healingPoint)
 
 yunutyEngine::coroutine::Coroutine Unit::HealEffectCoroutine()
 {
+    if (!healVFX.expired())
+    {
+        FBXPool::Instance().Return(healVFX);
+    }
+
     healVFX = FBXPool::Instance().Borrow("VFX_Buff_Healing");
-    co_await std::suspend_always{};
     auto vfxAnimator = healVFX.lock()->AcquireVFXAnimator();
     vfxAnimator.lock()->SetAutoActiveFalse();
     vfxAnimator.lock()->Init();
     vfxAnimator.lock()->Play();
 
-    healVFX.lock()->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
+    healVFX.lock()->GetTransform()->SetWorldPosition(Vector3d(GetTransform()->GetWorldPosition().x, 0, GetTransform()->GetWorldPosition().z));
     healVFX.lock()->GetTransform()->SetWorldRotation(GetTransform()->GetWorldRotation());
 
     while (!vfxAnimator.lock()->IsDone())
     {
         co_await std::suspend_always{};
-        healVFX.lock()->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
+        healVFX.lock()->GetTransform()->SetWorldPosition(Vector3d(GetTransform()->GetWorldPosition().x, 0, GetTransform()->GetWorldPosition().z));
         healVFX.lock()->GetTransform()->SetWorldRotation(GetTransform()->GetWorldRotation());
     }
 
@@ -1949,6 +1968,17 @@ yunutyEngine::coroutine::Coroutine Unit::RevivalCoroutine(float revivalDelay)
     SetCurrentHp(unitTemplateData->pod.max_Health);
     SetIsAlive(true);
     ApplyBuff(UnitBuffInvulenerability{ unitTemplateData->pod.revivalInvulnerableDuration });
+    for (auto unitStatusUI : unitStatusUIs)
+    {
+        if (auto status = unitStatusUI.lock())
+        {
+            status->EnableElement();
+        }
+        if (unitStatusUI.lock()->runtimeFlags & UnitStatusBarFlag::ControlWithReallyDisabled)
+        {
+            unitStatusUI.lock()->reallyDisabled = false;
+        }
+    }
     co_return;
 }
 yunutyEngine::coroutine::Coroutine Unit::BirthCoroutine()

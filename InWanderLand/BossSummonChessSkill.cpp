@@ -45,6 +45,10 @@ coroutine::Coroutine BossSummonChessSkill::operator()()
 	Vector3d ownerPos = owner.lock()->GetTransform()->GetWorldPosition();
 	/// Player 유닛만 받아서 가장 먼 거리 계산
 	float distance = 0;
+	
+	Vector3d temp = Vector3d::zero;
+	float wage = 1.f;
+
 	for (auto pUnit : PlayerController::Instance().GetPlayers())
 	{
 		if (pUnit.expired())
@@ -57,7 +61,15 @@ coroutine::Coroutine BossSummonChessSkill::operator()()
 			distance = tempVal;
 			farUnitPos = pUnit.lock()->GetTransform()->GetWorldPosition();
 		}
+		temp += pUnit.lock()->GetTransform()->GetWorldPosition() * pUnit.lock()->GetTransform()->GetWorldPosition().Magnitude();
+		wage += pUnit.lock()->GetTransform()->GetWorldPosition().Magnitude();
 	}
+
+	Vector3d PlayerCenterPos = temp / wage;
+	auto distance1 = (PlayerCenterPos - owner.lock()->GetTransform()->GetWorldPosition()).Magnitude();
+	auto direction = (PlayerCenterPos - owner.lock()->GetTransform()->GetWorldPosition()).Normalized();
+
+	auto camFocusPos = owner.lock()->GetTransform()->GetWorldPosition() + direction * distance / 2;
 
 	owner.lock()->StartCoroutine(SummonChess(std::static_pointer_cast<BossSummonChessSkill>(selfWeakPtr.lock()), GetPlaceableIndex(farUnitPos)));
 	

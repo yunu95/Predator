@@ -250,7 +250,7 @@ void UIElement::SetNumber(float number)
         {
             if (i > maxDigit)
             {
-                digits[i]->DisableElement();
+                digits[i]->DisableElementInstant();
             }
             else
             {
