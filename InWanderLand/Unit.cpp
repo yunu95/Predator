@@ -716,6 +716,46 @@ float Unit::GetUnitMaxHp() const
     return unitTemplateData->pod.max_Health;
 }
 
+void Unit::ProgressInitialize()
+{
+    CurrentProgressSave();
+}
+
+void Unit::CurrentProgressSave()
+{
+    if (GetUnitTemplateData().pod.unitControllerType.enumValue == UnitControllerType::PLAYER)
+    {
+        capturedLastPosition = GetTransform()->GetWorldPosition();
+        liveCountLeftCaptured = liveCountLeft;
+    }
+}
+
+void Unit::Recovery()
+{
+    if (GetUnitTemplateData().pod.unitControllerType.enumValue == UnitControllerType::PLAYER)
+    {
+        SetCurrentHp(GetUnitTemplateData().pod.max_Health);
+        SetIsAlive(true);
+        Relocate(capturedLastPosition);
+        liveCountLeft = liveCountLeftCaptured;
+    }
+    else
+    {
+        ReturnToPool();
+        for (auto unitStatusUI : unitStatusUIs)
+        {
+            if (auto status = unitStatusUI.lock())
+            {
+                status->DisableElement();
+            }
+            if (unitStatusUI.lock()->runtimeFlags & UnitStatusBarFlag::ControlWithReallyDisabled)
+            {
+                unitStatusUI.lock()->reallyDisabled = true;
+            }
+        }
+    }
+}
+
 void Unit::KnockBack(Vector3d targetPosition, float knockBackDuration)
 {
     if (IsAlive())

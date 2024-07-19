@@ -169,6 +169,9 @@ struct ParticleDesc
 {
     float3 pos;
     float scale;
+    float particleAngle;
+    float alpha;
+    float2 pad9;
 };
 
 cbuffer ParticleBuffer : register(b11)

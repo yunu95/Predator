@@ -23,8 +23,8 @@ void yunutyEngine::Time::Update()
         deltaTimeUnscaled = chrono::duration<double>(now - lastFrameTime).count();
 #if _DEBUG
         // 디버그 중 중단점을 찍었을 때, deltaTimeUnscaled이 10초 이상이 될 때도 있다. 그 때를 대비한 코드
-        if (deltaTimeUnscaled > 1)
-            deltaTimeUnscaled = 0.000001;
+        //if (deltaTimeUnscaled > 1)
+        //    deltaTimeUnscaled = 0.000001;
 #endif
     }
 

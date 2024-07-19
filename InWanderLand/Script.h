@@ -101,7 +101,7 @@ namespace application
 		std::vector<std::shared_ptr<IAction>> actionList;
 		std::queue<CoroutineObject<void>> coroutineQueue = std::queue<CoroutineObject<void>>();
 		std::vector<CoroutineObject<void>> coroutineInProgress = std::vector<CoroutineObject<void>>();
-		bool repeat = true;
+		bool repeat = false;
 		bool doAction = false;
 		bool savedAction = false;
 	};

@@ -93,6 +93,12 @@ namespace application::editor::palette
 				pComp->SetBurstsCount(data->pod.particleData.burstsCount);
 				pComp->SetInterval(data->pod.particleData.interval);
 
+				pComp->SetStartAngle(data->pod.particleData.startAngle);
+				pComp->SetEndAngle(data->pod.particleData.endAngle);
+				pComp->SetIsRandomScale(data->pod.particleData.isRandomScale);
+				pComp->SetIsRandomAngle(data->pod.particleData.isRandomAngle);
+				pComp->SetIsAlphaDiminish(data->pod.particleData.isAlphaDiminish);
+
 				static const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
 				std::wstring texturePath;

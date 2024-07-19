@@ -79,6 +79,10 @@ void PlayerController::UpgradeSkill()
     static constexpr float gray = 0.3f;
     // AdjustUpgradeButtonsByState
     skillUpgraded[skillUpgradeByUI.at(skillUpgradeUITarget)] = true;
+    SyncSkillUpgradesWithUI();
+}
+void PlayerController::SyncSkillUpgradesWithUI()
+{
     for (auto each : skillUpgradeByUI)
     {
         UIElement* uiElement = UIManager::Instance().GetUIElementByEnum(each.first);
@@ -775,7 +779,6 @@ void PlayerController::HandlePlayerOutOfCamUI()
             auto atn = std::atan2f(-(uiPos.y), (uiPos.x));
             auto angle = atn * 180 / math::PI;
             ui->GetLocalUIsByEnumID().at(UIEnumID::BeaconOutside_Arrow)->GetTransform()->SetWorldRotation(Vector3d{ 0,0,-std::atan2f(-uiPos.y,uiPos.x) * 180 / math::PI });
-            //ui->GetLocalUIsByEnumID().at(UIEnumID::BeaconOutside_Arrow)->GetTransform()->SetWorldRotation(Vector3d{ 0,0,90 });
         }
         else
         {
@@ -1209,6 +1212,36 @@ void PlayerController::SelectSkill(SkillType::Enum skillType)
         break;
     }
 }
+void PlayerController::ProgressInitialize()
+{
+    std::fill(skillUpgradedCaptured.begin(), skillUpgradedCaptured.end(), false);
+    finishedWaves.clear();
+    finishedWavesCaptured.clear();
+    triggeredWaves.clear();
+    triggeredWavesCaptured.clear();
+}
+void PlayerController::CurrentProgressSave()
+{
+    skillUpgradedCaptured = skillUpgraded;
+    skillPointsLeftCaptured = skillPointsLeft;
+    finishedWavesCaptured = finishedWaves;
+    triggeredWavesCaptured = triggeredWaves;
+}
+void PlayerController::Recovery()
+{
+    skillUpgraded = skillUpgradedCaptured;
+    SetSkillPoints(skillPointsLeftCaptured);
+    for (auto each : triggeredWaves)
+    {
+        if (!finishedWavesCaptured.contains(each))
+        {
+            each->Reset();
+        }
+    }
+    finishedWaves = finishedWavesCaptured;
+    std::fill(skillCooltimeLeft.begin(), skillCooltimeLeft.end(), 0);
+    SyncSkillUpgradesWithUI();
+}
 void PlayerController::SetState(State::Enum newState)
 {
     if (newState == state)
@@ -1525,6 +1558,7 @@ void PlayerController::SetTacticCamera(GameObject* cam)
 {
     tacticCameraRef = cam;
 }
+
 
 float PlayerController::GetMana()
 {

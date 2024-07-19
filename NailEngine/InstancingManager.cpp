@@ -719,13 +719,13 @@ void InstancingManager::RenderSkinnedShadow()
 			{
 				if (i->renderInfo.isActive == false) continue;
 
-				auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
-				auto aabb = i->renderInfo.mesh->GetBoundingBox(i->renderInfo.wtm, i->renderInfo.materialIndex);
+				//auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
+				//auto aabb = i->renderInfo.mesh->GetBoundingBox(i->renderInfo.wtm, i->renderInfo.materialIndex);
 
-				if (frustum.Intersects(aabb) == false)
-				{
-					continue;
-				}
+				//if (frustum.Intersects(aabb) == false)
+				//{
+				//	continue;
+				//}
 
 				const RenderInfo& renderInfo = i->renderInfo;
 				InstancingData data;
@@ -1164,13 +1164,13 @@ void InstancingManager::RenderSkinnedDeferred()
 			{
 				if (i->renderInfo.isActive == false) continue;
 
-				auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
-				auto aabb = i->renderInfo.mesh->GetBoundingBox(i->renderInfo.wtm, i->renderInfo.materialIndex);
+				//auto& frustum = CameraManager::Instance.Get().GetMainCamera()->GetFrustum();
+				//auto aabb = i->renderInfo.mesh->GetBoundingBox(i->renderInfo.wtm, i->renderInfo.materialIndex);
 
-				if (frustum.Intersects(aabb) == false)
-				{
-					continue;
-				}
+				//if (frustum.Intersects(aabb) == false)
+				//{
+				//	continue;
+				//}
 
 				const RenderInfo& renderInfo = i->renderInfo;
 				InstancingData data;
@@ -1402,6 +1402,8 @@ void InstancingManager::RenderParticle()
 		{
 			this->particleBuffer->particleDesc[index].pos = reinterpret_cast<DirectX::SimpleMath::Vector3&>(each2.position);
 			this->particleBuffer->particleDesc[index].scale = each2.curScale;
+			this->particleBuffer->particleDesc[index].particleAngle = each2.particleAngle;
+			this->particleBuffer->particleDesc[index].alpha = each2.alpha;
 			index++;
 		}
 

@@ -1595,8 +1595,16 @@ namespace application
                     imgui::DragFloat_2Col("Duration", particle->pod.particleData.duration);
                     imgui::DragFloat_2Col("Life Time", particle->pod.particleData.lifeTime);
                     imgui::DragFloat_2Col("Speed", particle->pod.particleData.speed);
+
                     imgui::DragFloat_2Col("Start Scale", particle->pod.particleData.startScale);
                     imgui::DragFloat_2Col("End Scale", particle->pod.particleData.endScale);
+                    imgui::Checkbox_2Col("Is Random Scale", particle->pod.particleData.isRandomScale);
+
+                    imgui::DragFloat_2Col("Start Angle", particle->pod.particleData.startAngle);
+                    imgui::DragFloat_2Col("End Angle", particle->pod.particleData.endAngle);
+                    imgui::Checkbox_2Col("Is Random Angle", particle->pod.particleData.isRandomAngle);
+
+                    imgui::Checkbox_2Col("Is Alpha Diminish", particle->pod.particleData.isAlphaDiminish);
 
                     int maxParticle = particle->pod.particleData.maxParticle;
                     if (imgui::DragInt_2Col("Max Particle", maxParticle, true, 1.f, 1, 500))

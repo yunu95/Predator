@@ -13,12 +13,18 @@ namespace yunuGI
 		//Vector3 deltaPosition;
 		//Vector3 direction;
 
+		// 입자 단위 크기 변경
 		float startScale;
 		float curScale;
 		float endScale;
 
+		// 입자 단위 회전 변경
+		float particleAngle;
+
 		float lifeTime;
 		float curLifeTime;
+
+		float alpha = 1.f;
 
 		void Reset()
 		{
@@ -28,6 +34,8 @@ namespace yunuGI
 			curScale = 0.f;
 			lifeTime = 0.f;
 			curLifeTime = 0.f;
+			particleAngle = 0.f;
+			alpha = 1.f;
 		}
 	};
 
