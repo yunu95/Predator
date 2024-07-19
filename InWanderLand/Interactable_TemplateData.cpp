@@ -11,7 +11,7 @@ namespace application
 	namespace editor
 	{
 		std::vector<std::string> Interactable_TemplateData::interactableFBXNameList = { "Trigger_Cube", "Trigger_Sphere", "Barricade_Cube", "Barricade_Sphere", "SM_Chess_Bishop", "SM_Chess_Pawn", "SM_Chess_Rook",
-			"SM_Spike01", "SM_Gimmick01", "SM_Gimmick02" };
+			"SM_Spike01", "SM_Gimmick01", "SKM_Gimmick02" };
 
 		Interactable_TemplateData::~Interactable_TemplateData()
 		{

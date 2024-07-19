@@ -188,7 +188,7 @@ namespace application
             {
                 comp = obj->AddComponent<Interactable_TrapSwitch>();
             }
-            else if (pod.templateData->pod.fBXName == "SM_Gimmick02")
+            else if (pod.templateData->pod.fBXName == "SKM_Gimmick02")
             {
                 comp = obj->AddComponent<Interactable_TrapArms>();
             }

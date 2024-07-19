@@ -5,7 +5,6 @@
 
 #include "Unit.h"
 
-
 #include "YunutyWaitForSeconds.h"
 #include "ParticleTool_Manager.h"
 #include "SFXManager.h"
@@ -23,9 +22,11 @@ void Interactable_TrapArms::Start()
 	auto boxCollider = GetGameObject()->AddComponent<physics::BoxCollider>();
 	boxCollider->SetHalfExtent(Vector3d(1, 1.25, 2.5));
 
+	meshAnimator = GetGameObject()->GetComponent<yunutyEngine::graphics::Animator>();
+
 	for (auto each : GetGameObject()->GetChildren())
 	{
-		auto renderer = each->GetComponent<graphics::StaticMeshRenderer>();
+		auto renderer = each->GetComponent<yunutyEngine::graphics::SkinnedMesh>();
 		if (renderer)
 		{
 			mesh = each;
@@ -133,7 +134,26 @@ yunutyEngine::coroutine::Coroutine Interactable_TrapArms::DoInteraction()
 {
 	float animationTimer = 0;
 	mesh->SetSelfActive(true);
+
+	yunuGI::IAnimation* anim_Up = nullptr;
+	yunuGI::IAnimation* anim_Down = nullptr;
+
+	for (auto each : graphics::Renderer::SingleInstance().GetResourceManager()->GetFBXAnimationList(L"SKM_Gimmick02"))
+	{
+		if (each->GetName() == L"Up")
+		{
+			anim_Up = each;
+		}
+		else if (each->GetName() == L"Down")
+		{
+			anim_Down = each;
+		}
+	}
+
+	meshAnimator->Play(anim_Down);
+	meshAnimator->Pause();
 	mesh->GetTransform()->SetLocalPosition(Vector3d(0, offset_Y, 0));
+	co_await std::suspend_always();
 
 	float ratio = 0;
 	if (delayTime != 0)
@@ -156,53 +176,34 @@ yunutyEngine::coroutine::Coroutine Interactable_TrapArms::DoInteraction()
 		}
 	}
 
-	ratio = 0;
-	animationTimer = 0;
-	while (ratio < 1)
-	{
-		while (isPause)
-		{
-			co_await std::suspend_always();
-		}
+	mesh->GetTransform()->SetLocalPosition(Vector3d(0, (double)(offset_Y - 2.0f), 0));
+	meshAnimator->Resume();
 
-		animationTimer += yunutyEngine::Time::GetDeltaTime();
-		ratio = animationTimer / 0.3;
-		if (ratio > 1)
+	bool soundPlay = false;
+	while (!meshAnimator->IsDone())
+	{
+		if (!soundPlay && meshAnimator->GetCurrentFrame() >= 19)
 		{
-			ratio = 1;
+			SFXManager::PlaySoundfile3D("sounds/trap/Scaffold Impact.wav", GetGameObject()->GetTransform()->GetWorldPosition());
+			particleObj->SetSelfActive(true);
+			particleObj->GetComponent<graphics::ParticleRenderer>()->Play();
+			for (auto each : triggerStay)
+			{
+				each->Damaged(damage);
+			}
+			soundPlay = true;
 		}
-		mesh->GetTransform()->SetLocalPosition(Vector3d::Lerp(Vector3d(0, (double)(offset_Y - 2.0f), 0), Vector3d::zero, ratio));
 		co_await std::suspend_always();
 	}
-	mesh->GetTransform()->SetLocalPosition(Vector3d::zero);
 
-	particleObj->SetSelfActive(true);
-	particleObj->GetComponent<graphics::ParticleRenderer>()->Play();
-	SFXManager::PlaySoundfile3D("sounds/trap/Scaffold Impact.wav", GetGameObject()->GetTransform()->GetWorldPosition());
+	meshAnimator->Play(anim_Up);
 
-	for (auto each : triggerStay)
+	while (!meshAnimator->IsDone())
 	{
-		each->Damaged(damage);
-	}
-
-	co_yield yunutyEngine::coroutine::WaitForSeconds(0.5, false);
-
-	ratio = 0;
-	animationTimer = 0;
-	while (ratio < 1)
-	{
-		while (isPause)
+		if (meshAnimator->GetCurrentFrame() >= 45)
 		{
-			co_await std::suspend_always();
+			break;
 		}
-
-		animationTimer += yunutyEngine::Time::GetDeltaTime();
-		ratio = animationTimer / 0.5;
-		if (ratio > 1)
-		{
-			ratio = 1;
-		}
-		mesh->GetTransform()->SetLocalPosition(Vector3d::Lerp(Vector3d::zero, Vector3d(0, offset_Y, 0), ratio));
 		co_await std::suspend_always();
 	}
 
@@ -231,6 +232,11 @@ void Interactable_TrapArms::OnPause()
 {
 	isPause = true;
 
+	if (meshAnimator)
+	{
+		meshAnimator->Pause();
+	}
+
 	if (particleObj)
 	{
 		particleObj->GetComponent<graphics::ParticleRenderer>()->Pause();
@@ -240,6 +246,11 @@ void Interactable_TrapArms::OnPause()
 void Interactable_TrapArms::OnResume()
 {
 	isPause = false;
+
+	if (meshAnimator)
+	{
+		meshAnimator->Resume();
+	}
 
 	if (particleObj)
 	{

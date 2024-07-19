@@ -268,6 +268,12 @@ namespace application
 			pObj->SetBurstsCount(particleList[name]->burstsCount);
 			pObj->SetInterval(particleList[name]->interval);
 
+			pObj->SetStartAngle(particleList[name]->startAngle);
+			pObj->SetEndAngle(particleList[name]->endAngle);
+			pObj->SetIsRandomScale(particleList[name]->isRandomScale);
+			pObj->SetIsRandomAngle(particleList[name]->isRandomAngle);
+			pObj->SetIsAlphaDiminish(particleList[name]->isAlphaDiminish);
+
 			static const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
 			std::wstring texturePath;
@@ -669,6 +675,12 @@ namespace application
 
 			pptr->SetBurstsCount(sptr->particleData.burstsCount);
 			pptr->SetInterval(sptr->particleData.interval);
+
+			pptr->SetStartAngle(sptr->particleData.startAngle);
+			pptr->SetEndAngle(sptr->particleData.endAngle);
+			pptr->SetIsRandomScale(sptr->particleData.isRandomScale);
+			pptr->SetIsRandomAngle(sptr->particleData.isRandomAngle);
+			pptr->SetIsAlphaDiminish(sptr->particleData.isAlphaDiminish);
 
 			static const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
