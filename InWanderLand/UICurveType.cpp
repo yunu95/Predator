@@ -26,6 +26,7 @@ template<> float GetUICurveVal<UICurveType::Anticipation>(float t)
         return -1.58587 * t3 + 2.121266 * t2 + 0.5150764 * t1 + -0.05047305;
     }
 }
+template<> float GetUICurveVal<UICurveType::EaseOutQuad>(float t) { return 1 - (1 - t) * (1 - t) * (1 - t) * (1 - t); }
 
 float (*UICurveFunctions[(int)UICurveType::End])(float t)
 {
@@ -34,4 +35,5 @@ float (*UICurveFunctions[(int)UICurveType::End])(float t)
         GetUICurveVal<UICurveType::EaseOut>,
         GetUICurveVal<UICurveType::EaseIn>,
         GetUICurveVal<UICurveType::Anticipation>,
+        GetUICurveVal<UICurveType::EaseOutQuad>,
 };

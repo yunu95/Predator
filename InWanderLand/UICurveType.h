@@ -10,6 +10,8 @@ enum class UICurveType
     EaseIn,
     // 반대편으로 살짝 갔다가 빠르게 진입 느리게 안착
     Anticipation,
+    // 빠르게 진입 느리게 안착
+    EaseOutQuad,
     End,
 };
 

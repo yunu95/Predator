@@ -40,6 +40,7 @@ void PlaytimeWave::Reset()
     SetActive(true);
     if (currentOperativeWave.lock().get() == this)
     {
+        PlayerController::Instance().UnlockCamFromRegion();
         currentOperativeWave.reset();
     }
 }
@@ -152,7 +153,7 @@ coroutine::Coroutine PlaytimeWave::WaveEndCoroutine(Unit* lastStandingUnit)
         if (forSeconds.Elapsed() <= cameraMoveDuration)
         {
             auto factor = forSeconds.Elapsed() / cameraMoveDuration;
-            RTSCam::Instance().GetTransform()->SetWorldPosition(Vector3d::Lerp(camStartPos, targetPos, std::sinf(factor * 0.5f * math::PI)));
+            RTSCam::Instance().GetTransform()->SetWorldPosition(Vector3d::Lerp(camStartPos, targetPos, UICurveFunctions[(int)UICurveType::EaseOutQuad](factor)));
         }
 
         if (forSeconds.Elapsed() < realElapsedTime)
@@ -167,9 +168,15 @@ coroutine::Coroutine PlaytimeWave::WaveEndCoroutine(Unit* lastStandingUnit)
         co_await std::suspend_always{};
 
     }
+    coroutine::ForSeconds forSecondsAfter{ gc.waveEndRecoveryTime ,true };
+
     RTSCam::Instance().SetUpdateability(true);
-    PlayerController::Instance().SetZoomFactor(beforeZoomFactor);
     Time::SetTimeScale(1);
+    while (forSecondsAfter.Tick())
+    {
+        co_await std::suspend_always{};
+    }
+    //PlayerController::Instance().SetZoomFactor(beforeZoomFactor);
 
     co_return;
 }

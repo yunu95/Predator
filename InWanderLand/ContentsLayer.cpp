@@ -435,9 +435,9 @@ void application::contents::ContentsLayer::ShortcutInit()
     scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::Alt, true }, { KeyCode::L, false } },
         [=]()
         {
-            ProgressManager::SingleInstance().NotifyRecoveryAll();
+            ProgressManager::SingleInstance().LoadCheckPoint();
         });
-    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::Alt, true }, { KeyCode::S, false } },
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::Alt, true }, { KeyCode::C, false } },
         [=]()
         {
             ProgressManager::SingleInstance().NotifyCurrentProgressSaveAll();
