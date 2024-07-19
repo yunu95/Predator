@@ -2412,9 +2412,6 @@
     <ClCompile Include="Easing.cpp">
       <Filter>Contents\Dotween</Filter>
     </ClCompile>
-    <ClCompile Include="TestUnitAnimation.cpp">
-      <Filter>TestCodes</Filter>
-    </ClCompile>
     <ClCompile Include="TestCaseGroupControl.cpp">
       <Filter>TestCodes</Filter>
     </ClCompile>
@@ -3408,6 +3405,9 @@
     </ClCompile>
     <ClCompile Include="Action_Progress.cpp">
       <Filter>Editor\ScriptSystem\2_Action\List\Action_Progress</Filter>
+    </ClCompile>
+    <ClCompile Include="TestUnitAnimation.cpp">
+      <Filter>UI\Effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

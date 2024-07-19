@@ -7,23 +7,26 @@
 
 namespace application
 {
-	class ProgressTracker;
-	class ProgressManager
-		: public SingletonClass<ProgressManager>, public application::PlayableComponent
-	{
-		friend class SingletonClass<ProgressManager>;
-		friend class ProgressTracker;
+    class ProgressTracker;
+    class ProgressManager
+        : public SingletonClass<ProgressManager>, public application::PlayableComponent
+    {
+        friend class SingletonClass<ProgressManager>;
+        friend class ProgressTracker;
 
-	public:
-		void NotifyInitializeAll();
-		void NotifyCurrentProgressSaveAll();
-		void NotifyRecoveryAll();
+    public:
+        void NotifyInitializeAll();
+        void NotifyCurrentProgressSaveAll();
+        void NotifyRecoveryAll();
 
-		virtual void OnGameStart();
+        virtual void OnGameStart();
+        // 페이드 아웃, 페이드 인 연출을 하면서 로드를 진행합니다.
+        void LoadCheckPoint();
 
-	private:
-		ProgressManager() = default;
-		std::unordered_set<ProgressTracker*> trackerList = std::unordered_set<ProgressTracker*>();
-	};
+    private:
+        coroutine::Coroutine LoadCheckPointCoro();
+        ProgressManager() = default;
+        std::unordered_set<ProgressTracker*> trackerList = std::unordered_set<ProgressTracker*>();
+    };
 }
 
