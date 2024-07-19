@@ -580,7 +580,7 @@ void Unit::Damaged(std::weak_ptr<Unit> opponentUnit, float opponentDmg, DamageTy
 
         if (damageType == DamageType::AttackCrit)
         {
-            opponentDmg *= (1 - GetCritResistance()) * opponentUnit.lock()->GetCritMultiplier();
+            opponentDmg *= 1 + ((opponentUnit.lock()->GetCritMultiplier() - 1) * GetCritResistance());
         }
         opponentDmg *= 1 - GetArmor() * 0.01f;
         opponentUnit.lock()->onAttackHit(GetWeakPtr<Unit>());
@@ -629,20 +629,24 @@ void Unit::Heal(float healingPoint)
 
 yunutyEngine::coroutine::Coroutine Unit::HealEffectCoroutine()
 {
+    if (!healVFX.expired())
+    {
+        FBXPool::Instance().Return(healVFX);
+    }
+
     healVFX = FBXPool::Instance().Borrow("VFX_Buff_Healing");
-    co_await std::suspend_always{};
     auto vfxAnimator = healVFX.lock()->AcquireVFXAnimator();
     vfxAnimator.lock()->SetAutoActiveFalse();
     vfxAnimator.lock()->Init();
     vfxAnimator.lock()->Play();
 
-    healVFX.lock()->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
+    healVFX.lock()->GetTransform()->SetWorldPosition(Vector3d(GetTransform()->GetWorldPosition().x, 0, GetTransform()->GetWorldPosition().z));
     healVFX.lock()->GetTransform()->SetWorldRotation(GetTransform()->GetWorldRotation());
 
     while (!vfxAnimator.lock()->IsDone())
     {
         co_await std::suspend_always{};
-        healVFX.lock()->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
+        healVFX.lock()->GetTransform()->SetWorldPosition(Vector3d(GetTransform()->GetWorldPosition().x, 0, GetTransform()->GetWorldPosition().z));
         healVFX.lock()->GetTransform()->SetWorldRotation(GetTransform()->GetWorldRotation());
     }
 

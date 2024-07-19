@@ -399,35 +399,45 @@ void PlayerController::HandleCamera()
     static constexpr float tacticZoomoutDistanceFactor = 1.2f;
     // 영웅이 선택되어 있고, 카메라가 선택된 영웅을 따라가는 경우 targetPos는 영웅의 위치로 설정됩니다.
     Vector3d targetPos;
-
-    if (!selectedCharacter.expired())
+    if (TacticModeSystem::Instance().IsOperation() && !TacticModeSystem::Instance().IsExecuting())
     {
-        camPivotPoint = selectedCharacter.lock()->GetTransform()->GetWorldPosition();
-        zoomMultiplierByNonSelection.reset();
+        if (tacticCameraRef)
+        {
+            RTSCam::Instance().SetIdealPosition(tacticCameraRef->GetTransform()->GetWorldPosition());
+            RTSCam::Instance().SetIdealRotation(tacticCameraRef->GetTransform()->GetWorldRotation());
+        }
     }
     else
     {
-        if (!zoomMultiplierByNonSelection)
+        if (!selectedCharacter.expired())
         {
-            zoomMultiplierByNonSelection = camZoomMultiplier.AcquireFactor();
-            *zoomMultiplierByNonSelection = GlobalConstant::GetSingletonInstance().pod.tacticZoomMultiplier;
+            camPivotPoint = selectedCharacter.lock()->GetTransform()->GetWorldPosition();
+            zoomMultiplierByNonSelection.reset();
         }
-        camPivotPoint = GetMiddlePoint();
+        else
+        {
+            if (!zoomMultiplierByNonSelection)
+            {
+                zoomMultiplierByNonSelection = camZoomMultiplier.AcquireFactor();
+                *zoomMultiplierByNonSelection = GlobalConstant::GetSingletonInstance().pod.tacticZoomMultiplier;
+            }
+            camPivotPoint = GetMiddlePoint();
+        }
+        // 카메라가 지역 제한에 걸렸을 경우, targetPos를 지역 안으로 정의합니다.
+        if (camLockRegion)
+        {
+            camPivotPoint.x = std::clamp(camPivotPoint.x, camLockRegion->pod.x - camLockRegion->pod.width * 0.5, camLockRegion->pod.x + camLockRegion->pod.width * 0.5);
+            camPivotPoint.z = std::clamp(camPivotPoint.z, camLockRegion->pod.z - camLockRegion->pod.height * 0.5, camLockRegion->pod.z + camLockRegion->pod.height * 0.5);
+        }
+        if (isConstraingCamUpdateDirection)
+        {
+            camPivotPoint = camPreviousPivotPoint + std::fmaxf(0, Vector3d::Dot(camPivotPoint - camPreviousPivotPoint, camContrainingDirection)) * camContrainingDirection;
+        }
+        targetPos = camPivotPoint + camOffsetNorm * camZoomFactor * camZoomMultiplier;
+        camPreviousPivotPoint = camPivotPoint;
+        RTSCam::Instance().SetIdealPosition(targetPos);
+        RTSCam::Instance().SetIdealRotation(camRotation);
     }
-    // 카메라가 지역 제한에 걸렸을 경우, targetPos를 지역 안으로 정의합니다.
-    if (camLockRegion)
-    {
-        camPivotPoint.x = std::clamp(camPivotPoint.x, camLockRegion->pod.x - camLockRegion->pod.width * 0.5, camLockRegion->pod.x + camLockRegion->pod.width * 0.5);
-        camPivotPoint.z = std::clamp(camPivotPoint.z, camLockRegion->pod.z - camLockRegion->pod.height * 0.5, camLockRegion->pod.z + camLockRegion->pod.height * 0.5);
-    }
-    if (isConstraingCamUpdateDirection)
-    {
-        camPivotPoint = camPreviousPivotPoint + std::fmaxf(0, Vector3d::Dot(camPivotPoint - camPreviousPivotPoint, camContrainingDirection)) * camContrainingDirection;
-    }
-    targetPos = camPivotPoint + camOffsetNorm * camZoomFactor * camZoomMultiplier;
-    camPreviousPivotPoint = camPivotPoint;
-    RTSCam::Instance().SetIdealPosition(targetPos);
-    RTSCam::Instance().SetIdealRotation(camRotation);
 }
 
 void PlayerController::HandleSkillPreview()
