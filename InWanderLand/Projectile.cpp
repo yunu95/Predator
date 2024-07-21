@@ -137,7 +137,8 @@ coroutine::Coroutine Projectile::ProjectileEffectCoroutine(std::weak_ptr<Unit> o
         damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
         auto temp = GetTransform()->GetLocalRotation();
         auto euler = temp.Euler();
-        euler.x += 180;
+        euler.x += 90;
+
         damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion{ euler });
     }
 
