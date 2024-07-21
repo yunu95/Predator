@@ -78,19 +78,15 @@ void Interactable_ChessPawn::Update()
 		if (!isInteracting)
 		{
 			lastCoroutine = StartCoroutine(DoInteraction());
-			lastCoroutine.lock()->PushDestroyCallBack([this]() 
-				{ 
+			lastCoroutine.lock()->PushDestroyCallBack([this]()
+				{
 					if (!GetWeakPtr<Interactable_ChessPawn>().expired())
 					{
+						OnInteractableTriggerExit();
 						GetGameObject()->SetSelfActive(false);
 					}
 				});
 			isInteracting = true;
-		}
-		else if (lastCoroutine.expired() || lastCoroutine.lock()->Done())
-		{
-			isInteracting = false;
-			OnInteractableTriggerExit();
 		}
 	}
 }
@@ -98,7 +94,9 @@ void Interactable_ChessPawn::Update()
 void Interactable_ChessPawn::OnTriggerEnter(physics::Collider* collider)
 {
 	if (Unit* colliderUnitComponent = UnitCollider::AcquireUnit(collider);
-		colliderUnitComponent != nullptr && colliderUnitComponent->IsAlive() && PlayerController::Instance().GetState() == PlayerController::State::Battle)
+		colliderUnitComponent != nullptr && 
+		colliderUnitComponent->IsPlayerUnit() &&
+		colliderUnitComponent->IsAlive() && PlayerController::Instance().GetState() == PlayerController::State::Battle)
 	{
 		unitSet.insert(colliderUnitComponent);
 	}
@@ -253,7 +251,20 @@ void Interactable_ChessPawn::Recovery()
 {
 	if (!savedInteract)
 	{
+		if (!lastCoroutine.expired())
+		{
+			lastCoroutine.lock()->PushDestroyCallBack([this]()
+				{
+					if (!GetWeakPtr<Interactable_ChessPawn>().expired())
+					{
+						GetGameObject()->SetSelfActive(true);
+					}
+				});
+			DeleteCoroutine(lastCoroutine);
+		}
+
 		isInteracting = false;
+		GetGameObject()->SetSelfActive(true);
 		mesh->SetSelfActive(true);
 		mesh->GetTransform()->SetLocalPosition(Vector3d::zero);
 		auto renderer = mesh->GetComponent<graphics::StaticMeshRenderer>();

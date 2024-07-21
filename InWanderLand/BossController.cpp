@@ -2,12 +2,15 @@
 #include "InWanderLand.h"
 #include "VFXAnimator.h"
 
+#include "UnitData.h"
 #include "LeftFrame.h"
 #include "RightFrame.h"
+#include "ChessPool.h"
 
 void BossController::RegisterUnit(std::weak_ptr<Unit> unit)
 {
     boss = unit;
+    bossData = const_cast<application::editor::UnitData*>(unit.lock()->unitData);
     EnemyController::RegisterUnit(unit);
 
     unit.lock()->onDamagedFromUnit.AddCallback([this](const std::weak_ptr<Unit>& target)
@@ -75,6 +78,7 @@ void BossController::RegisterUnit(std::weak_ptr<Unit> unit)
 
 void BossController::OnContentsStop()
 {
+    ClearCoroutines();
     summonState = 0;
     summonDone = true;
     currentState = 0;
@@ -94,6 +98,36 @@ void BossController::BossAppear()
 std::weak_ptr<Unit> BossController::GetBoss()
 {
     return boss;
+}
+
+void BossController::ProgressInitialize()
+{
+
+}
+
+void BossController::CurrentProgressSave()
+{
+    
+}
+
+void BossController::Recovery()
+{
+    OnContentsStop();
+    EnemyController::OnContentsPlay();
+    if (!boss.expired())
+    {
+        if (boss.lock()->IsAlive())
+        {
+            boss.lock()->GetGameObject()->SetSelfActive(false);
+        }
+        else
+        {
+            boss.reset();
+            bossData->ApplyAsPlaytimeObject();
+        }
+    }
+
+    BossSummon::ChessPool::Instance().OnBossDie();
 }
 
 void BossController::ChangeAttackTarget(const std::weak_ptr<Unit>& unit)

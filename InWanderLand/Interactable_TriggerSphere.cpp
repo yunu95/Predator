@@ -110,6 +110,10 @@ void Interactable_TriggerSphere::OnTriggerExit(physics::Collider* collider)
 			else
 			{
 				OnInteractableTriggerExit();
+				if (!repetition)
+				{
+					GetGameObject()->SetSelfActive(false);
+				}
 			}
 		}
 		triggerStay.erase(colliderUnitComponent);
@@ -150,5 +154,9 @@ void Interactable_TriggerSphere::CurrentProgressSave()
 
 void Interactable_TriggerSphere::Recovery()
 {
-	isInteracting = isInteracting;
+	isInteracting = savedInteract;
+	if (!isInteracting)
+	{
+		GetGameObject()->SetSelfActive(true);
+	}
 }

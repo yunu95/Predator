@@ -5,6 +5,7 @@
 
 #include "YunutyEngine.h"
 #include "ITacticObject.h"
+#include "ProgressTracker.h"
 
 #include <memory>
 
@@ -19,7 +20,7 @@ namespace application
 namespace BossSummon
 {
 	class BossSummonObject
-		: public ITacticObject
+		: public ITacticObject, public application::ProgressTracker
 	{
 	public:
 		/// Pool 에서 templateData 를 기준으로 필요한 데이터를 초기화하는 함수입니다.
@@ -41,6 +42,10 @@ namespace BossSummon
 
 		virtual void OnPause() = 0;
 		virtual void OnResume() = 0;
+
+		virtual void ProgressInitialize() {}
+		virtual void CurrentProgressSave() {}
+		virtual void Recovery() {}
 
 	protected:
 		/// Pool 로 관리할 때, 사용하기 위한 weak_ptr 입니다.

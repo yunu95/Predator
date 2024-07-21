@@ -424,12 +424,18 @@ namespace application
 
         void InteractableData::CurrentProgressSave()
         {
-
+            if (inGameInteractable)
+            {
+                inGameInteractable->CurrentProgressSave();
+            }
         }
 
         void InteractableData::Recovery()
         {
-
+            if (inGameInteractable)
+            {
+                inGameInteractable->Recovery();
+            }
         }
 
         bool InteractableData::PreEncoding(json& data) const
