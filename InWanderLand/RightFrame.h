@@ -46,6 +46,8 @@ namespace BossSummon
 		virtual void OnPause() override;
 		virtual void OnResume() override;
 
+		virtual void Recovery() override;
+
 		bool HasChangedUnit() const { return !unitFrame.expired(); }
 		bool IsAlive() const;
 

@@ -6,12 +6,13 @@ namespace application
 {
 	ProgressTracker::ProgressTracker()
 	{
-		ProgressManager::SingleInstance().trackerList.insert(this);
+		ProgressManager::SingleInstance().postTrackerList.insert(this);
 	}
 
 	ProgressTracker::~ProgressTracker()
 	{
 		ProgressManager::SingleInstance().trackerList.erase(this);
+		ProgressManager::SingleInstance().postTrackerList.erase(this);
 	}
 
 	void ProgressTracker::DoRecoveryCallbacks()

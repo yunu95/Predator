@@ -11,6 +11,14 @@ namespace application
         {
             each->ProgressInitialize();
         }
+
+        for (auto& each : postTrackerList)
+        {
+            each->ProgressInitialize();
+            trackerList.insert(each);
+        }
+
+        postTrackerList.clear();
     }
 
     void ProgressManager::NotifyCurrentProgressSaveAll()
@@ -29,6 +37,14 @@ namespace application
         {
             each->Recovery();
         }
+
+        for (auto& each : postTrackerList)
+        {
+            each->Recovery();
+            trackerList.insert(each);
+        }
+
+        postTrackerList.clear();
     }
 
     void ProgressManager::OnGameStart()
