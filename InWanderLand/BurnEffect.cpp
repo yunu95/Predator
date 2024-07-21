@@ -108,27 +108,27 @@ bool BurnEffect::IsDone()
 
 void BurnEffect::OnEnable()
 {
-	//if (isFirst)
-	//{
-	//	this->amount = 1.f;
-	//	isFirst = false;
-
-	//	for (int i = 0; i < originMaterialVec.size(); ++i)
-	//	{
-	//		renderer->GetGI().SetMaterial(i, burnMaterialVec[i]);
-	//		renderer->GetGI().GetMaterial(i)->SetColor(edgeColor);
-	//		renderer->GetGI().GetMaterial(i)->SetFloat(1, this->edgeThickness);
-	//	}
-	//}
-
-	//for (int i = 0; i < originMaterialVec.size(); ++i)
-	//{
-	//	renderer->GetGI().GetMaterial(i)->SetFloat(0, amount);
-	//}
+	if (duration == 0)
+	{
+		for (int i = 0; i < originMaterialVec.size(); ++i)
+		{
+			renderer->GetGI().SetMaterial(i, originMaterialVec[i], true);
+		}
+		isDone = true;
+		return;
+	}
 }
 
 void BurnEffect::OnDisable()
 {
+	isDisAppear = false;
+	isAppear = true;
+	isDone = false;
+	isFirst = true;
+	amount = 0.f;
+	uv = 0.f;
+	accTime = 0.f;
+
 	if (isFirst)
 	{
 		isFirst = false;
