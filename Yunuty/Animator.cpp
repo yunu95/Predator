@@ -23,6 +23,7 @@ void Animator::ClearAnimationEvent(yunuGI::IAnimation* animation)
 {
 	for (auto& [key, each] : this->animationEventMap[animation])
 	{
+		// 여기서 must되어있으면 무조건 호출함
 		if (each.isFirst && each.must)
 		{
 			each.func();
@@ -137,7 +138,18 @@ void Animator::OnEnable()
 
 void Animator::OnDisable()
 {
-	///ClearAnimationEvent(this->GetGI().GetCurrentAnimation());
+	// 현재 애니메이션 이벤트 다 호출
+	ClearAnimationEvent(this->GetGI().GetCurrentAnimation());
+
+	// 혹여나 다음 애니메이션이 있다면 다 호출
+	auto& gi = this->GetGI();
+	auto nextAnimation = gi.GetNextAnimation();
+	if (nextAnimation)
+	{
+		ClearAnimationEvent(nextAnimation);
+		gi.GetTransitionDesc().ClearNextAnimation();
+		gi.SetNextAnimation(nullptr);
+	}
 }
 
 void Animator::Update()
