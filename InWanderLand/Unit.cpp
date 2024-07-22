@@ -88,7 +88,14 @@ void Unit::Revive()
 {
 	if (!IsAlive() && coroutineRevival.expired())
 	{
-		StartCoroutine(RevivalCoroutine(0));
+		StartCoroutine(RevivalCoroutine(0)).lock()->PushDestroyCallBack([this]()
+			{
+				if (animatorComponent.lock()->GetCurrentAnimation()->GetName() 
+					!= wanderResources::GetAnimation(unitTemplateData->pod.skinnedFBXName, UnitAnimType::Death)->GetName())
+				{
+					PlayAnimation(UnitAnimType::Death);
+				}
+			});
 	}
 }
 void Unit::Update()
@@ -252,6 +259,14 @@ void Unit::OnStateEngage<UnitBehaviourTree::Reviving>()
 	enableNavObstacleByState = referenceEnableNavObstacle.Acquire();
 	disableNavAgentByState = referenceDisableNavAgent.Acquire();
 	coroutineRevival = StartCoroutine(RevivalCoroutine(unitTemplateData->pod.revivalDuration));
+	coroutineRevival.lock()->PushDestroyCallBack([this]()
+		{
+			if (animatorComponent.lock()->GetCurrentAnimation()->GetName()
+				!= wanderResources::GetAnimation(unitTemplateData->pod.skinnedFBXName, UnitAnimType::Death)->GetName())
+			{
+				PlayAnimation(UnitAnimType::Death);
+			}
+		});
 }
 template<>
 void Unit::OnStateExit<UnitBehaviourTree::Reviving>()
@@ -1962,9 +1977,47 @@ yunutyEngine::coroutine::Coroutine Unit::RevivalCoroutine(float revivalDelay)
 	float birthAnimDuration = wanderResources::GetAnimation(unitTemplateData->pod.skinnedFBXName, UnitAnimType::Birth)->GetDuration();
 	PlayAnimation(UnitAnimType::Death);
 	SetDefaultAnimation(UnitAnimType::None);
-	co_yield coroutine::WaitForSeconds(revivalDelay - birthAnimDuration);
-	PlayAnimation(UnitAnimType::Birth);
-	co_yield coroutine::WaitForSeconds(birthAnimDuration);
+
+	coroutine::ForSeconds preBirthForSeconds{ revivalDelay - birthAnimDuration };
+	bool isAllUnitDead{ true };
+	while (preBirthForSeconds.Tick())
+	{
+		isAllUnitDead = true;
+		/// 다른 플레이어들이 모두 죽었는지 체크
+		for (auto each : PlayerController::Instance().GetPlayers())
+		{
+			if (each.lock()->IsAlive())
+			{
+				isAllUnitDead = false;
+				break;
+			}
+		}
+		if (isAllUnitDead)
+		{
+			co_return;
+		}
+		co_await std::suspend_always();
+	}
+	PlayAnimation(UnitAnimType::Birth);	
+	coroutine::ForSeconds birthAnimForSeconds{ birthAnimDuration };
+	while (birthAnimForSeconds.Tick())
+	{
+		isAllUnitDead = true;
+		/// 다른 플레이어들이 모두 죽었는지 체크
+		for (auto each : PlayerController::Instance().GetPlayers())
+		{
+			if (each.lock()->IsAlive())
+			{
+				isAllUnitDead = false;
+				break;
+			}
+		}
+		if (isAllUnitDead)
+		{
+			co_return;
+		}
+		co_await std::suspend_always();
+	}
 	SetCurrentHp(unitTemplateData->pod.max_Health);
 	SetIsAlive(true);
 	ApplyBuff(UnitBuffInvulenerability{ unitTemplateData->pod.revivalInvulnerableDuration });
