@@ -121,8 +121,11 @@ coroutine::Coroutine PlaytimeWave::WaveEndCoroutine(Unit* lastStandingUnit)
     auto beforeZoomFactor = PlayerController::Instance().GetZoomFactor();
 
     float a = Time::GetTimeScale();
-    float b = gc.waveEndDestTimeScale;
-    float dur = gc.waveEndSlowLerpTime;
+    float b = lastStandingUnit->GetUnitTemplateData().pod.waveEndDestTimeScale;
+    float dur = lastStandingUnit->GetUnitTemplateData().pod.waveEndSlowLerpTime;
+    float waveEndZoomFactor = lastStandingUnit->GetUnitTemplateData().pod.waveEndZoomFactor;
+    float waveEndCameraMoveDuration = lastStandingUnit->GetUnitTemplateData().pod.waveEndCameraMoveDuration;
+    float waveEndActionTime = lastStandingUnit->GetUnitTemplateData().pod.waveEndActionTime;
 
     // 선형 그래프
     //float realElapsedTime = dur * 2 / (b + a);
@@ -136,15 +139,15 @@ coroutine::Coroutine PlaytimeWave::WaveEndCoroutine(Unit* lastStandingUnit)
     RTSCam::Instance().SetUpdateability(false);
     auto camPivotPoint = lastStandingUnit->GetTransform()->GetWorldPosition();
     Vector3d camStartPos = RTSCam::Instance().GetTransform()->GetWorldPosition();
-    Vector3d targetPos = camPivotPoint + PlayerController::Instance().GetCamOffsetNorm() * gc.waveEndZoomFactor;
+    Vector3d targetPos = camPivotPoint + PlayerController::Instance().GetCamOffsetNorm() * waveEndZoomFactor;
 
-    coroutine::ForSeconds forSeconds{ gc.waveEndActionTime };
+    coroutine::ForSeconds forSeconds{ waveEndActionTime };
     forSeconds.isRealTime = true;
 
-    auto cameraMoveDuration = gc.waveEndCameraMoveDuration;
-    if (cameraMoveDuration > gc.waveEndActionTime)
+    auto cameraMoveDuration = waveEndCameraMoveDuration;
+    if (cameraMoveDuration > waveEndActionTime)
     {
-        cameraMoveDuration = gc.waveEndActionTime;
+        cameraMoveDuration = waveEndActionTime;
     }
 
     while (forSeconds.Tick())

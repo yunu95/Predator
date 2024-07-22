@@ -97,6 +97,11 @@ namespace application
             float dmgIndicator_travelNoiseMax = 40.0f;
 
             float unit_scale{ 1.0f };
+            float waveEndSlowLerpTime{ 0.7f };
+            float waveEndDestTimeScale = 0.1f;
+            float waveEndActionTime = 3.0f;
+            float waveEndCameraMoveDuration = 2.0f;
+            float waveEndZoomFactor = 8.0f;
 
             std::map<std::pair<int, int>, float> animationBlendMap = std::map<std::pair<int, int>, float>();
 

@@ -12,6 +12,7 @@
 #include "UnitMoveCommand.h"
 #include "UnitAttackCommand.h"
 #include "UnitSkillCommand.h"
+#include "SFXManager.h"
 
 const std::unordered_map<UIEnumID, SkillUpgradeType::Enum> PlayerController::skillUpgradeByUI
 {
@@ -1221,6 +1222,7 @@ void PlayerController::ProgressInitialize()
     CurrentProgressSave();
     tacticCameraRef = nullptr;
     savedTacticCameraRef = nullptr;
+    savedBGM = "";
 }
 void PlayerController::CurrentProgressSave()
 {
@@ -1230,6 +1232,7 @@ void PlayerController::CurrentProgressSave()
     triggeredWavesCaptured = triggeredWaves;
     camZoomFactorCaptured = camZoomFactor;
     savedTacticCameraRef = tacticCameraRef;
+    savedBGM = SoundSystem::GetMusicIsPlaying();
 }
 void PlayerController::Recovery()
 {
@@ -1247,6 +1250,11 @@ void PlayerController::Recovery()
     std::fill(skillCooltimeLeft.begin(), skillCooltimeLeft.end(), 0);
     SyncSkillUpgradesWithUI();
     tacticCameraRef = savedTacticCameraRef;
+    if (savedBGM != SoundSystem::GetMusicIsPlaying() && !savedBGM.empty())
+    {
+        SoundSystem::StopMusic();
+        SoundSystem::PlayMusic(savedBGM);
+    }
 }
 void PlayerController::SetState(State::Enum newState)
 {
