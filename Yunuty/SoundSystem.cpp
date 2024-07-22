@@ -227,6 +227,7 @@ SoundSystem::SoundSystem()
     soundGroupPriorityFadeRatioMap[0] = 0.5f;
     soundGroupPriorityFadeOutTimeMap[0] = 1.0f;
     soundGroupPriorityFadeInTimeMap[0] = 1.0f;
+    currentBGM = "";
 }
 SoundSystem::~SoundSystem()
 {
@@ -368,6 +369,10 @@ void yunutyEngine::SoundSystem::UnpauseMusic()
 void yunutyEngine::SoundSystem::StopMusic(double fadeLength)
 {
     SoundSystem::SingleInstance()->mStopMusic(fadeLength);
+}
+string yunutyEngine::SoundSystem::GetMusicIsPlaying()
+{
+    return SoundSystem::SingleInstance()->currentBGM;
 }
 bool yunutyEngine::SoundSystem::LoadSound(string soundPath)
 {
@@ -682,6 +687,7 @@ void yunutyEngine::SoundSystem::mPlayMusic(string soundPath)
         sounds[soundPath]->setLoopCount(-1);
         fmodSystem->playSound(sounds[soundPath], 0, false, &bgmChannel);
         SetMusicVolume(musicVolume);
+        currentBGM = soundPath;
     }
 }
 void yunutyEngine::SoundSystem::mPauseMusic()
@@ -697,7 +703,10 @@ void yunutyEngine::SoundSystem::mContinueMusic()
 void yunutyEngine::SoundSystem::mStopMusic(double fadeLength)
 {
     if (bgmChannel)
+    {
         bgmChannel->stop();
+        currentBGM = "";
+    }
 }
 
 bool yunutyEngine::SoundSystem::mCreateSoundGroup(unsigned long long groupIndex, string name)

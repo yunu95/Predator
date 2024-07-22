@@ -250,6 +250,7 @@ private:
 
     GameObject* tacticCameraRef{ nullptr };
     GameObject* savedTacticCameraRef{ nullptr };
+    std::string savedBGM = "";
 
     State::Enum stateRequestedByAction = State::None;
     bool isStateAction = false;

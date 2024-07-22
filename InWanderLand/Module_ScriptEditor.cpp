@@ -2332,6 +2332,7 @@ namespace application
                 selectedCondition = nullptr;
                 selectedAction = nullptr;
             }
+            ImGui::PopID();
 
             if (!data->IsValid())
             {
@@ -2345,9 +2346,10 @@ namespace application
                 ImGui::OpenPopup(data->GetTypeName().c_str());
             }
 
-            PopUpDataEdit<ITrigger>(data.get());
-
-            ImGui::PopID();
+            if (selectedTrigger == data)
+            {
+                PopUpDataEdit<ITrigger>(data.get());
+            }
         }
 
         void Module_ScriptEditor::DrawCondition(std::shared_ptr<ICondition> data)
@@ -2375,6 +2377,7 @@ namespace application
                 selectedTrigger = nullptr;
                 selectedAction = nullptr;
             }
+            ImGui::PopID();
 
             if (!data->IsValid())
             {
@@ -2388,9 +2391,10 @@ namespace application
                 ImGui::OpenPopup(data->GetTypeName().c_str());
             }
 
-            PopUpDataEdit<ICondition>(data.get());
-
-            ImGui::PopID();
+            if (selectedCondition == data)
+            {
+                PopUpDataEdit<ICondition>(data.get());
+            }
         }
 
         void Module_ScriptEditor::DrawAction(std::shared_ptr<IAction> data)
@@ -2439,8 +2443,10 @@ namespace application
                 ImGui::OpenPopup(data->GetTypeName().c_str());
             }
 
-            PopUpDataEdit<IAction>(data.get());
-
+            if (selectedAction == data)
+            {
+                PopUpDataEdit<IAction>(data.get());
+            }
         }
     }
 }
