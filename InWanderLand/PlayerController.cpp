@@ -1248,7 +1248,7 @@ void PlayerController::Recovery()
     std::fill(skillCooltimeLeft.begin(), skillCooltimeLeft.end(), 0);
     SyncSkillUpgradesWithUI();
     tacticCameraRef = savedTacticCameraRef;
-    if (savedBGM != SoundSystem::GetMusicIsPlaying())
+    if (savedBGM != SoundSystem::GetMusicIsPlaying() && !savedBGM.empty())
     {
         SoundSystem::StopMusic();
         SoundSystem::PlayMusic(savedBGM);
