@@ -71,6 +71,7 @@ namespace application
             float m_atkRandomDelayMax = 0.125f;
             float m_atkRandomDelayMin = -0.0625f;
             float m_unitSpeed;
+            float m_moveAnimationSpeed = 1.0f;
             float rotationSpeed = 180.0f;
 
             // 유닛의 공격방식, 근거리 혹은 원거리
