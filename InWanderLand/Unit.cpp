@@ -761,17 +761,6 @@ void Unit::Recovery()
     else
     {
         ReturnToPool();
-        for (auto unitStatusUI : unitStatusUIs)
-        {
-            if (auto status = unitStatusUI.lock())
-            {
-                status->DisableElement();
-            }
-            if (unitStatusUI.lock()->runtimeFlags & UnitStatusBarFlag::ControlWithReallyDisabled)
-            {
-                unitStatusUI.lock()->reallyDisabled = true;
-            }
-        }
     }
 }
 
@@ -1992,6 +1981,7 @@ yunutyEngine::coroutine::Coroutine Unit::BirthCoroutine()
         onCreated();
         co_return;
     }
+    auto invulnerableGuard = referenceInvulnerable.Acquire();
 
     while (!IsPlayerUnit() && isPaused)
     {
@@ -2002,7 +1992,6 @@ yunutyEngine::coroutine::Coroutine Unit::BirthCoroutine()
 
     const auto& gc = GlobalConstant::GetSingletonInstance().pod;
     auto pauseGuard = referencePause.Acquire();
-    auto invulnerableGuard = referenceInvulnerable.Acquire();
     float animSpeed = wanderResources::GetAnimation(unitTemplateData->pod.skinnedFBXName, UnitAnimType::Birth)->GetDuration() / unitTemplateData->pod.birthTime;
     animatorComponent.lock()->GetGI().SetPlaySpeed(animSpeed);
     PlayAnimation(UnitAnimType::Birth, Animation::PlayFlag_::None);
@@ -2240,6 +2229,14 @@ void Unit::ReturnToPool()
 {
     for (auto unitStatusUI : unitStatusUIs)
     {
+        if (auto status = unitStatusUI.lock())
+        {
+            status->DisableElement();
+        }
+        if (unitStatusUI.lock()->runtimeFlags & UnitStatusBarFlag::ControlWithReallyDisabled)
+        {
+            unitStatusUI.lock()->reallyDisabled = true;
+        }
         if (!unitStatusUI.expired() && (unitStatusUI.lock()->runtimeFlags & UnitStatusBarFlag::DestroyOnDeath))
         {
             Scene::getCurrentScene()->DestroyGameObject(unitStatusUI.lock()->GetGameObject());
