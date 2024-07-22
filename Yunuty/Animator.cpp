@@ -216,7 +216,6 @@ void Animator::Update()
 		{
 			float duration = nextAnimation->GetDuration();
 			int totalFrame = nextAnimation->GetTotalFrame();
-			totalFrame = totalFrame + 1;
 			float frameDuration = duration / totalFrame; // 각 프레임의 시간 길이
 			desc.transitionTotalTime += (Time::GetDeltaTime() * desc.transitionSpeed);
 			desc.transitionRatio = desc.transitionTotalTime / desc.transitionDuration;
