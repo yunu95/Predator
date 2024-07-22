@@ -2080,6 +2080,11 @@ yunutyEngine::coroutine::Coroutine Unit::DeathCoroutine()
 
 yunutyEngine::coroutine::Coroutine Unit::AttackCoroutine(std::weak_ptr<Unit> opponent)
 {
+	//if (unitTemplateData->pod.skinnedFBXName == "SKM_HeartQueen")
+	//{
+	//	defaultAnimationType = UnitAnimType::None;
+	//}
+
 	//auto blockAttack = referenceBlockAttack.Acquire();
 	defaultAnimationType = UnitAnimType::Idle;
 	// 공격 애니메이션이 자연스럽게 맞물리기까지 필요한 최소시간
@@ -2157,7 +2162,8 @@ yunutyEngine::coroutine::Coroutine Unit::AttackCoroutine(std::weak_ptr<Unit> opp
 	auto blockCommand = referenceBlockPendingOrder.Acquire();
 	if (unitTemplateData->pod.skinnedFBXName == "SKM_HeartQueen")
 	{
-		PlayAnimation(UnitAnimType::AttackToIdle, Animation::PlayFlag_::None);
+		wanderResources::GetAnimation(unitTemplateData->pod.skinnedFBXName, UnitAnimType::AttackToIdle)->SetLoop(false);
+		PlayAnimation(UnitAnimType::AttackToIdle);
 		co_yield coroutine::WaitForSeconds(wanderResources::GetAnimation(unitTemplateData->pod.skinnedFBXName, UnitAnimType::AttackToIdle)->GetDuration());
 	}
 	else
