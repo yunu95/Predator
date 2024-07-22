@@ -762,7 +762,7 @@ void PlayerController::HandlePlayerOutOfCamUI()
         const Vector2d uiClampMin{ gc.camOutsideUIMinX, gc.camOutsideUIMinY };
         const Vector2d uiClampMax{ gc.camOutsideUIMaxX, gc.camOutsideUIMaxY };
         auto uiPos = UIManager::Instance().GetUIPosFromWorld(unit->GetTransform()->GetWorldPosition());
-        if (unit && unit->IsAlive() && state != State::Cinematic && (uiPos.x < 0 || uiPos.x>1920 || uiPos.y < 0 || uiPos.y>1080))
+        if ((state == State::Battle || state == State::Tactic) && (uiPos.x < 0 || uiPos.x>1920 || uiPos.y < 0 || uiPos.y>1080))
         {
             //auto uiClampedPos = uiPos;
             uiPos.x -= 960;
@@ -1215,11 +1215,11 @@ void PlayerController::SelectSkill(SkillType::Enum skillType)
 }
 void PlayerController::ProgressInitialize()
 {
-    std::fill(skillUpgradedCaptured.begin(), skillUpgradedCaptured.end(), false);
+    std::fill(skillUpgraded.begin(), skillUpgraded.end(), false);
+    skillPointsLeft = 0;
     finishedWaves.clear();
-    finishedWavesCaptured.clear();
     triggeredWaves.clear();
-    triggeredWavesCaptured.clear();
+    CurrentProgressSave();
     tacticCameraRef = nullptr;
     savedTacticCameraRef = nullptr;
     savedBGM = "";
@@ -1230,6 +1230,7 @@ void PlayerController::CurrentProgressSave()
     skillPointsLeftCaptured = skillPointsLeft;
     finishedWavesCaptured = finishedWaves;
     triggeredWavesCaptured = triggeredWaves;
+    camZoomFactorCaptured = camZoomFactor;
     savedTacticCameraRef = tacticCameraRef;
     savedBGM = SoundSystem::GetMusicIsPlaying();
 }
@@ -1244,6 +1245,7 @@ void PlayerController::Recovery()
             each->Reset();
         }
     }
+    camZoomFactor = camZoomFactorCaptured;
     finishedWaves = finishedWavesCaptured;
     std::fill(skillCooltimeLeft.begin(), skillCooltimeLeft.end(), 0);
     SyncSkillUpgradesWithUI();

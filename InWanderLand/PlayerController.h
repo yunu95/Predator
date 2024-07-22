@@ -222,6 +222,7 @@ private:
     int skillPointsLeft{ 0 };
     int skillPointsLeftCaptured{ 0 };
     float camZoomFactor = 5;
+    float camZoomFactorCaptured;
     shared_ptr<float> zoomMultiplierByState;
     shared_ptr<float> zoomMultiplierByNonSelection;
     Vector3d camOffsetNorm;

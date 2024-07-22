@@ -68,6 +68,7 @@ namespace application
         NotifyRecoveryAll();
         coroutine::ForSeconds forSecondsAfter{ 0.5f, true };
         while (forSecondsAfter.Tick()) { co_await std::suspend_always{}; }
+        UIManager::Instance().HideComboObjectvies();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_Alpha)->DisableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::InGameMenu)->DisableElement();
 

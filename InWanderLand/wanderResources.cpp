@@ -1,8 +1,11 @@
 #include "wanderResources.h"
 #include "FBXPool.h"
+#include "SoundEnumID.h"
 std::unordered_map<std::string, std::unordered_map<UnitAnimType, yunuGI::IAnimation*>> animMap;
 std::unordered_map<std::string, std::unordered_map<yunuGI::IAnimation*, UnitAnimType>> animTypeMap;
 std::unordered_map<std::string, std::unordered_map<UnitAnimType, std::string>> fbxMap;
+std::unordered_map<std::string, std::unordered_map<SoundEnumID, std::string>> soundMap;
+
 std::unordered_map<std::string, std::string> projectileBirthSounds;
 std::unordered_map<std::string, std::string> projectileDeathSounds;
 
@@ -127,6 +130,15 @@ void InitAnimMap()
         }
     }
 };
+
+void InitSoundMap()
+{
+    //std::unordered_map<std::wstring, yunuGI::IAnimation*> localSooundMap;
+    //std::transform(SoundSystem::GetLoadedSoundsList().begin(),
+    //    SoundSystem::GetLoadedSoundsList().end(),
+    //    std::inserter(localSooundMap, localSooundMap.end()), [](auto each) { return std::pair<std::wstring, yunuGI::IAnimation*>{each->GetName(), each}; });
+    //animMap["SKM_Robin"][UnitAnimType::Idle] = localSooundMap[L"Rig_Robin_arpbob|Ani_Robin_Idle"];
+}
 
 yunuGI::IAnimation* wanderResources::GetAnimation(const std::string& fbx, UnitAnimType animType)
 {
