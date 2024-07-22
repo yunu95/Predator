@@ -280,7 +280,7 @@ namespace application
                                         particle->SetSelfActive(true);
                                         auto ptr = particle->GetComponent<graphics::ParticleRenderer>();
                                         ptr->Play();
-                                    });
+                                    }, true);
 
                                 break;
                             }
@@ -300,7 +300,7 @@ namespace application
                                 animator->PushAnimationWithFunc(each, event->frame, [=]()
                                     {
                                         particle->SetSelfActive(false);
-                                    });
+                                    }, true);
 
                                 break;
                             }
