@@ -1209,7 +1209,7 @@ void Unit::Init(const application::editor::Unit_TemplateData* unitTemplateData)
 							particle->SetSelfActive(true);
 							auto ptr = particle->GetComponent<graphics::ParticleRenderer>();
 							ptr->Play();
-						});
+						}, true);
 
 					break;
 				}
@@ -1229,7 +1229,7 @@ void Unit::Init(const application::editor::Unit_TemplateData* unitTemplateData)
 					animatorComponent.lock()->PushAnimationWithFunc(each, event->frame, [=]()
 						{
 							particle->SetSelfActive(false);
-						});
+						}, true);
 
 					break;
 				}
