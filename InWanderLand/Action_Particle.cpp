@@ -329,6 +329,18 @@ namespace application
 		return true;
 	}
 
+	void Action_ParticleMoveWithRotateAndRescale::PostRecovery()
+	{
+		if (!doAction && targetParticle->tookAction)
+		{
+			auto particleInstance = targetParticle->GetPaletteInstance();
+			particleInstance->GetTransform()->SetWorldPosition({ targetParticle->pod.position.x,targetParticle->pod.position.y,targetParticle->pod.position.z });
+			particleInstance->GetTransform()->SetWorldRotation({ targetParticle->pod.rotation.w, targetParticle->pod.rotation.x, targetParticle->pod.rotation.y, targetParticle->pod.rotation.z });
+			particleInstance->GetTransform()->SetLocalScale({ targetParticle->pod.scale.x,targetParticle->pod.scale.y,targetParticle->pod.scale.z });
+			targetParticle->tookAction = false;
+		}
+	}
+
 	Action_ParticleShow::~Action_ParticleShow()
 	{
 		if (targetParticle)
@@ -450,6 +462,28 @@ namespace application
 		return true;
 	}
 
+	void Action_ParticleShow::ProgressInitialize()
+	{
+		IAction::ProgressInitialize();
+		savedActive = true;
+	}
+
+	void Action_ParticleShow::CurrentProgressSave()
+	{
+		IAction::CurrentProgressSave();
+		savedActive = static_cast<editor::palette::ParticleEditorInstance*>(targetParticle->GetPaletteInstance())->GetParticleObject()->GetSelfActive();
+	}
+
+	void Action_ParticleShow::Recovery()
+	{
+		IAction::Recovery();
+		if (!doAction && !savedActive)
+		{
+			static_cast<editor::palette::ParticleEditorInstance*>(targetParticle->GetPaletteInstance())->HideParticleObject();
+			targetParticle->tookAction = false;
+		}
+	}
+
 	Action_ParticleHide::~Action_ParticleHide()
 	{
 		if (targetParticle)
@@ -569,5 +603,27 @@ namespace application
 	{
 		SetTargetParticle(UUIDManager::GetSingletonInstance().GetPointerFromUUID<editor::ParticleData*>(String_To_UUID(data["targetParticle"])));
 		return true;
+	}
+
+	void Action_ParticleHide::ProgressInitialize()
+	{
+		IAction::ProgressInitialize();
+		savedActive = false;
+	}
+
+	void Action_ParticleHide::CurrentProgressSave()
+	{
+		IAction::CurrentProgressSave();
+		savedActive = static_cast<editor::palette::ParticleEditorInstance*>(targetParticle->GetPaletteInstance())->GetParticleObject()->GetSelfActive();
+	}
+
+	void Action_ParticleHide::Recovery()
+	{
+		IAction::Recovery();
+		if (!doAction && savedActive)
+		{
+			static_cast<editor::palette::ParticleEditorInstance*>(targetParticle->GetPaletteInstance())->ShowParticleObject();
+			targetParticle->tookAction = false;
+		}
 	}
 }

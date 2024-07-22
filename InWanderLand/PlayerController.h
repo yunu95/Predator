@@ -249,6 +249,7 @@ private:
     yunutyEngine::graphics::StaticMeshRenderer* enemyHoverEffectRenderer{ nullptr };
 
     GameObject* tacticCameraRef{ nullptr };
+    GameObject* savedTacticCameraRef{ nullptr };
 
     State::Enum stateRequestedByAction = State::None;
     bool isStateAction = false;

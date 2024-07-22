@@ -745,30 +745,6 @@ void Unit::Recovery()
 		Relocate(capturedLastPosition);
 		liveCountLeft = liveCountLeftCaptured;
 	}
-	else if (GetUnitTemplateData().pod.unitControllerType.enumValue == UnitControllerType::HEART_QUEEN)
-	{
-		if (unitData == nullptr)
-		{
-			return;
-		}
-
-		Reset();		
-		Relocate(Vector3d(unitData->pod.position));
-		GetTransform()->SetWorldPosition(Vector3d(unitData->pod.position));
-		SetRotation(Quaternion(unitData->pod.rotation.w, unitData->pod.rotation.x, unitData->pod.rotation.y, unitData->pod.rotation.z), 0);
-
-		for (auto unitStatusUI : unitStatusUIs)
-		{
-			if (auto status = unitStatusUI.lock())
-			{
-				status->DisableElement();
-			}
-			if (unitStatusUI.lock()->runtimeFlags & UnitStatusBarFlag::ControlWithReallyDisabled)
-			{
-				unitStatusUI.lock()->reallyDisabled = true;
-			}
-		}
-	}
 	else
 	{
 		ReturnToPool();
@@ -2009,6 +1985,8 @@ yunutyEngine::coroutine::Coroutine Unit::BirthCoroutine()
 {
 	if (unitTemplateData->pod.birthTime <= 0)
 	{
+		burnEffect.lock()->SetDuration(0);
+		burnEffect.lock()->Appear();
 		onCreated();
 		co_return;
 	}
@@ -2044,6 +2022,8 @@ yunutyEngine::coroutine::Coroutine Unit::DeathCoroutine()
 {
 	if (unitTemplateData->pod.deathBurnTime <= 0)
 	{
+		burnEffect.lock()->SetDuration(0);
+		burnEffect.lock()->Disappear();
 		ReturnToPool();
 		co_return;
 	}

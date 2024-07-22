@@ -1219,6 +1219,8 @@ void PlayerController::ProgressInitialize()
     finishedWaves.clear();
     triggeredWaves.clear();
     CurrentProgressSave();
+    tacticCameraRef = nullptr;
+    savedTacticCameraRef = nullptr;
 }
 void PlayerController::CurrentProgressSave()
 {
@@ -1227,6 +1229,7 @@ void PlayerController::CurrentProgressSave()
     finishedWavesCaptured = finishedWaves;
     triggeredWavesCaptured = triggeredWaves;
     camZoomFactorCaptured = camZoomFactor;
+    savedTacticCameraRef = tacticCameraRef;
 }
 void PlayerController::Recovery()
 {
@@ -1243,6 +1246,7 @@ void PlayerController::Recovery()
     finishedWaves = finishedWavesCaptured;
     std::fill(skillCooltimeLeft.begin(), skillCooltimeLeft.end(), 0);
     SyncSkillUpgradesWithUI();
+    tacticCameraRef = savedTacticCameraRef;
 }
 void PlayerController::SetState(State::Enum newState)
 {

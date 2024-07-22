@@ -44,6 +44,11 @@ namespace application
             trackerList.insert(each);
         }
 
+        for (auto& each : trackerList)
+        {
+            each->PostRecovery();
+        }
+
         postTrackerList.clear();
     }
 
