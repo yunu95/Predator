@@ -334,6 +334,14 @@ namespace application
 		return true;
 	}
 
+	void Action_UnitMove::PostRecovery()
+	{
+		if (targetUnit->inGameUnit.expired())
+		{
+			targetUnit->ApplyAsPlaytimeObject();
+		}
+	}
+
 	Action_UnitRotate::~Action_UnitRotate()
 	{
 		if (targetUnit)
@@ -344,11 +352,12 @@ namespace application
 
 	CoroutineObject<void> Action_UnitRotate::DoAction()
 	{
-		auto ingameUnit = targetUnit->inGameUnit.lock();
-		if (ingameUnit == nullptr)
+		if (targetUnit->inGameUnit.expired())
 		{
 			co_return;
 		}
+
+		auto ingameUnit = targetUnit->inGameUnit.lock();
 		if (withdrawPauseRequestBefore)
 			ingameUnit->pauseRequested = false;
 		if (addUnpauseRequestBefore)
@@ -681,6 +690,14 @@ namespace application
 		return true;
 	}
 
+	void Action_UnitRotate::PostRecovery()
+	{
+		if (targetUnit->inGameUnit.expired())
+		{
+			targetUnit->ApplyAsPlaytimeObject();
+		}
+	}
+
 	Action_UnitRescale::~Action_UnitRescale()
 	{
 		if (targetUnit)
@@ -937,6 +954,14 @@ namespace application
 		return true;
 	}
 
+	void Action_UnitRescale::PostRecovery()
+	{
+		if (targetUnit->inGameUnit.expired())
+		{
+			targetUnit->ApplyAsPlaytimeObject();
+		}
+	}
+
 	Action_UnitMoveWithRotateAndRescale::~Action_UnitMoveWithRotateAndRescale()
 	{
 		if (targetUnit)
@@ -953,8 +978,12 @@ namespace application
 
 	CoroutineObject<void> Action_UnitMoveWithRotateAndRescale::DoAction()
 	{
+		if (targetUnit->inGameUnit.expired())
+		{
+			co_return;
+		}
+
 		auto inGameUnit = targetUnit->inGameUnit.lock();
-		if (!inGameUnit) co_return;
 
 		if (withdrawPauseRequestBefore)
 			inGameUnit->pauseRequested = false;
@@ -1317,6 +1346,14 @@ namespace application
 		return true;
 	}
 
+	void Action_UnitMoveWithRotateAndRescale::PostRecovery()
+	{
+		if (targetUnit->inGameUnit.expired())
+		{
+			targetUnit->ApplyAsPlaytimeObject();
+		}
+	}
+
 	Action_UnitPlayAnimation::~Action_UnitPlayAnimation()
 	{
 		if (targetUnit)
@@ -1662,5 +1699,13 @@ namespace application
 	{
 		SetTargetUnit(UUIDManager::GetSingletonInstance().GetPointerFromUUID<editor::UnitData*>(String_To_UUID(data["targetUnit"])));
 		return true;
+	}
+
+	void Action_UnitPlayAnimation::PostRecovery()
+	{
+		if (targetUnit->inGameUnit.expired())
+		{
+			targetUnit->ApplyAsPlaytimeObject();
+		}
 	}
 }

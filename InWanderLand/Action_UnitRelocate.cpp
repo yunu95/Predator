@@ -26,6 +26,7 @@ namespace application
         {
             co_return;
         }
+
         auto ts = targetUnit->inGameUnit.lock()->GetTransform();
         auto startPos = ts->GetWorldPosition();
 
@@ -252,5 +253,13 @@ namespace application
         SetTargetUnit(UUIDManager::GetSingletonInstance().GetPointerFromUUID<editor::UnitData*>(String_To_UUID(data["targetUnit"])));
         SetDestinationUnit(UUIDManager::GetSingletonInstance().GetPointerFromUUID<editor::UnitData*>(String_To_UUID(data["destinationUnit"])));
         return true;
+    }
+
+    void Action_UnitRelocate::PostRecovery()
+    {
+        if (targetUnit->inGameUnit.expired())
+        {
+            targetUnit->ApplyAsPlaytimeObject();
+        }
     }
 }
