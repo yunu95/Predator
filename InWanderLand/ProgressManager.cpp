@@ -11,6 +11,14 @@ namespace application
         {
             each->ProgressInitialize();
         }
+
+        for (auto& each : postTrackerList)
+        {
+            each->ProgressInitialize();
+            trackerList.insert(each);
+        }
+
+        postTrackerList.clear();
     }
 
     void ProgressManager::NotifyCurrentProgressSaveAll()
@@ -29,6 +37,19 @@ namespace application
         {
             each->Recovery();
         }
+
+        for (auto& each : postTrackerList)
+        {
+            each->Recovery();
+            trackerList.insert(each);
+        }
+
+        for (auto& each : trackerList)
+        {
+            each->PostRecovery();
+        }
+
+        postTrackerList.clear();
     }
 
     void ProgressManager::OnGameStart()
@@ -47,6 +68,7 @@ namespace application
         NotifyRecoveryAll();
         coroutine::ForSeconds forSecondsAfter{ 0.5f, true };
         while (forSecondsAfter.Tick()) { co_await std::suspend_always{}; }
+        UIManager::Instance().HideComboObjectvies();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_Alpha)->DisableElement();
         UIManager::Instance().GetUIElementByEnum(UIEnumID::InGameMenu)->DisableElement();
 

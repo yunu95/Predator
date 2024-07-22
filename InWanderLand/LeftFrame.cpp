@@ -249,9 +249,19 @@ namespace BossSummon
 		}
 	}
 
+	void LeftFrame::Recovery()
+	{
+		ClearCoroutines();
+		if (mesh)
+		{
+			mesh->SetSelfActive(false);
+		}
+		unitFrame.reset();
+	}
+
 	bool LeftFrame::IsAlive() const
 	{
-		return HasChangedUnit() && unitFrame.lock()->GetGameObject()->GetActive() && unitFrame.lock()->IsAlive();
+		return HasChangedUnit() && unitFrame.lock()->IsAlive();
 	}
 
 	coroutine::Coroutine LeftFrame::OnAppear()

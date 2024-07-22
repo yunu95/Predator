@@ -49,6 +49,8 @@ namespace application
         virtual bool PreDecoding(const json& data) override;
         virtual bool PostDecoding(const json& data) override;
 
+        virtual void PostRecovery() override;
+
     private:
         editor::UnitData* targetUnit = nullptr;
         editor::UnitData* destinationUnit = nullptr;
@@ -86,6 +88,8 @@ namespace application
         virtual bool PostEncoding(json& data) const override;
         virtual bool PreDecoding(const json& data) override;
         virtual bool PostDecoding(const json& data) override;
+
+        virtual void PostRecovery() override;
 
     private:
         editor::UnitData* targetUnit = nullptr;
@@ -125,6 +129,8 @@ namespace application
         virtual bool PreDecoding(const json& data) override;
         virtual bool PostDecoding(const json& data) override;
 
+        virtual void PostRecovery() override;
+
     private:
         editor::UnitData* targetUnit = nullptr;
         yunuGI::Vector3 scale = yunuGI::Vector3(1, 1, 1);
@@ -158,6 +164,8 @@ namespace application
         virtual bool PostEncoding(json& data) const override;
         virtual bool PreDecoding(const json& data) override;
         virtual bool PostDecoding(const json& data) override;
+
+        virtual void PostRecovery() override;
 
     private:
         editor::UnitData* targetUnit = nullptr;
@@ -197,6 +205,8 @@ namespace application
         virtual bool PostEncoding(json& data) const override;
         virtual bool PreDecoding(const json& data) override;
         virtual bool PostDecoding(const json& data) override;
+
+        virtual void PostRecovery() override;
 
     private:
         editor::UnitData* targetUnit = nullptr;

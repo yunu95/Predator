@@ -126,7 +126,7 @@ coroutine::Coroutine Projectile::ProjectileEffectCoroutine(std::weak_ptr<Unit> o
     if (GetTransform()->GetWorldPosition().y < 0)
     {
         damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldPosition(Vector3d(GetTransform()->GetWorldPosition().x, 0.0f, GetTransform()->GetWorldPosition().z));
-        damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion{ Vector3d(-90, 0, 0) });
+        damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion{ Vector3d(90, 0, 0) });
         //auto temp = GetTransform()->GetLocalRotation();
         //auto euler = temp.Euler();
         //euler.x += 180;
@@ -137,7 +137,8 @@ coroutine::Coroutine Projectile::ProjectileEffectCoroutine(std::weak_ptr<Unit> o
         damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
         auto temp = GetTransform()->GetLocalRotation();
         auto euler = temp.Euler();
-        euler.x += 180;
+        euler.x += 90;
+
         damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion{ euler });
     }
 

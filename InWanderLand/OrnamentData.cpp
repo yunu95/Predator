@@ -128,7 +128,7 @@ namespace application
                 {
                     GameObject* targetObj = nullptr;
 
-                    for (auto each : GetPaletteInstance()->GetGameObject()->GetChildren())
+                    for (auto each : ornamentInstance->GetGameObject()->GetChildren())
                     {
                         if (each->getName() != pod.templateData->pod.staticFBXName)
                         {

@@ -49,6 +49,8 @@ namespace application
 		virtual bool PreDecoding(const json& data) override;
 		virtual bool PostDecoding(const json& data) override;
 
+		virtual void Recovery() override;
+
 	private:
 		editor::OrnamentData* targetOrnament = nullptr;
 		editor::OrnamentData* destinationOrnament = nullptr;
@@ -82,10 +84,15 @@ namespace application
 		virtual bool PreDecoding(const json& data) override;
 		virtual bool PostDecoding(const json& data) override;
 
+		virtual void ProgressInitialize() override;
+		virtual void CurrentProgressSave() override;
+		virtual void Recovery() override;
+
 	private:
 		editor::OrnamentData* targetOrnament = nullptr;
 		float lerpTime = 0;
 		bool isEditing = false;
+		bool savedActive = true;
 	};
 
 	/// Ornament 의 Active 를 false 로 서서히 바꾸는 Action 입니다.
@@ -114,10 +121,15 @@ namespace application
 		virtual bool PreDecoding(const json& data) override;
 		virtual bool PostDecoding(const json& data) override;
 
+		virtual void ProgressInitialize() override;
+		virtual void CurrentProgressSave() override;
+		virtual void Recovery() override;
+
 	private:
 		editor::OrnamentData* targetOrnament = nullptr;
 		float lerpTime = 0;
 		bool isEditing = false;
+		bool savedActive = false;
 	};
 
 	/// Ornament 가 떠다니는 것처럼 만드는 Action 입니다.
@@ -150,11 +162,16 @@ namespace application
 		virtual bool PreDecoding(const json& data) override;
 		virtual bool PostDecoding(const json& data) override;
 
+		virtual void ProgressInitialize() override;
+		virtual void CurrentProgressSave() override;
+		virtual void Recovery() override;
+
 	private:
 		editor::OrnamentData* targetOrnament = nullptr;
 		yunuGI::Vector3 scale = yunuGI::Vector3(1, 1, 1);
 		float distance = 0;
 		float roundTripTime = 1;
 		bool isEditing = false;
+		bool prevCoroBreak = false;
 	};
 }

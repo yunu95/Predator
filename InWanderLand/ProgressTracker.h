@@ -27,6 +27,9 @@ namespace application
 		// Callback 지원을 위해 DoRecoveryCallbacks 함수를 호출해야합니다.
 		virtual void Recovery() {}
 
+		// Recovery 로직 후에 반영되어야 할 로직을 적용하는 함수입니다.
+		virtual void PostRecovery() {}
+
 		// Recovery 시에 혹시 모를 Callback 요청을 위해 지원하는 함수입니다.
 		void DoRecoveryCallbacks();
 		unsigned long long AddRecoveryCallback(const std::function<void()>& func);

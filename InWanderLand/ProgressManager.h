@@ -27,6 +27,7 @@ namespace application
         coroutine::Coroutine LoadCheckPointCoro();
         ProgressManager() = default;
         std::unordered_set<ProgressTracker*> trackerList = std::unordered_set<ProgressTracker*>();
+        std::unordered_set<ProgressTracker*> postTrackerList = std::unordered_set<ProgressTracker*>();
     };
 }
 

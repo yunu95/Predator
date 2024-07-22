@@ -43,7 +43,7 @@ void yunutyEngine::GameObject::DeleteComponent(Component* component)
 
     components.erase(component);
 }
-bool yunutyEngine::GameObject::GetActive()
+bool yunutyEngine::GameObject::GetActive() const
 {
     if (!selfActive)
         return false;
@@ -52,7 +52,7 @@ bool yunutyEngine::GameObject::GetActive()
     else
         return true;
 }
-bool yunutyEngine::GameObject::GetSelfActive()
+bool yunutyEngine::GameObject::GetSelfActive() const
 {
     return selfActive;
 }

@@ -71,6 +71,11 @@ void UIManager::FadeOutTop(float duration)
 }
 void UIManager::FadeIn(float duration)
 {
+    if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_Alpha); elm->GetGameObject()->GetActive())
+    {
+        elm->colorTintOnDisable->duration = duration;
+        elm->DisableElement();
+    }
     if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_TopToBottom); elm->GetGameObject()->GetActive())
     {
         elm->disableTransition->duration = duration;
@@ -1287,6 +1292,34 @@ bool UIManager::ImportDealWithSpecialCases_Post(const JsonUIData& uiData, UIElem
         element->button->AddExternalButtonClickFunction([=]()
             {
                 TacticModeSystem::Instance().PopCommand();
+            });
+        break;
+    case UIEnumID::Sound_Off:
+        ImportDefaultAction_Post(uiData, GetUIElementWithIndex(uiData.uiIndex));
+        element->button->AddExternalButtonClickFunction([=]()
+            {
+                // 상준형님 여깁니다!
+            });
+        break;
+    case UIEnumID::Sound_On:
+        ImportDefaultAction_Post(uiData, GetUIElementWithIndex(uiData.uiIndex));
+        element->button->AddExternalButtonClickFunction([=]()
+            {
+                // 상준형님 여깁니다!
+            });
+        break;
+    case UIEnumID::Music_Off:
+        ImportDefaultAction_Post(uiData, GetUIElementWithIndex(uiData.uiIndex));
+        element->button->AddExternalButtonClickFunction([=]()
+            {
+                // 상준형님 여깁니다!
+            });
+        break;
+    case UIEnumID::Music_On:
+        ImportDefaultAction_Post(uiData, GetUIElementWithIndex(uiData.uiIndex));
+        element->button->AddExternalButtonClickFunction([=]()
+            {
+                // 상준형님 여깁니다!
             });
         break;
     default:
