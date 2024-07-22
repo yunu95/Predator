@@ -46,6 +46,7 @@ namespace yunutyEngine
         static void PauseMusic();
         static void UnpauseMusic();
         static void StopMusic(double fadeLength = 0);
+        static string GetMusicIsPlaying();
         static bool LoadSound(string soundPath);
         static bool Load3DSound(string soundPath);
         static bool IsSoundLoaded(string soundPath);
@@ -122,6 +123,7 @@ namespace yunutyEngine
         float musicVolume = 1.0f;
         float sfxVolume = 1.0f;
         void* extradriverdata = 0;
+        string currentBGM;
         unordered_set<string> loadedSounds;
         unordered_set<string> loadedSounds3D;
         unordered_map<string, FMOD::Sound*> sounds;
