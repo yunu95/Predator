@@ -442,7 +442,7 @@ void application::contents::ContentsLayer::ShortcutInit()
     scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::Alt, true }, { KeyCode::DownArrow, false } },
         [=]()
         {
-            Time::SetTimeScale(Time::GetTimeScale() - 0.09);
+            Time::SetTimeScale(std::fmaxf(0.01, Time::GetTimeScale() - 0.09));
         });
     scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::Alt, true }, { KeyCode::UpArrow, false } },
         [=]()
