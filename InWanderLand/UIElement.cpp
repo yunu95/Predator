@@ -23,6 +23,10 @@ void UIElement::Update()
 };
 void UIElement::EnableElement()
 {
+    if (importedUIData.enumID == (int)UIEnumID::BlackMask_Alpha)
+    {
+        int a = 3;
+    }
     if (enabled && !(importedUIData.customFlags2 & (int)UIExportFlag2::RedundantEnable))
     {
         return;

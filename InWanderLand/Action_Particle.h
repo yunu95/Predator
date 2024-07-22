@@ -49,6 +49,8 @@ namespace application
 		virtual bool PreDecoding(const json& data) override;
 		virtual bool PostDecoding(const json& data) override;
 
+		virtual void PostRecovery() override;
+
 	private:
 		editor::ParticleData* targetParticle = nullptr;
 		editor::ParticleData* destinationParticle = nullptr;
@@ -81,9 +83,14 @@ namespace application
 		virtual bool PreDecoding(const json& data) override;
 		virtual bool PostDecoding(const json& data) override;
 
+		virtual void ProgressInitialize() override;
+		virtual void CurrentProgressSave() override;
+		virtual void Recovery() override;
+
 	private:
 		editor::ParticleData* targetParticle = nullptr;
 		bool isEditing = false;
+		bool savedActive = true;
 	};
 
 	/// Particle 의 Active 를 false 로 서서히 바꾸는 Action 입니다.
@@ -111,8 +118,13 @@ namespace application
 		virtual bool PreDecoding(const json& data) override;
 		virtual bool PostDecoding(const json& data) override;
 
+		virtual void ProgressInitialize() override;
+		virtual void CurrentProgressSave() override;
+		virtual void Recovery() override;
+
 	private:
 		editor::ParticleData* targetParticle = nullptr;
 		bool isEditing = false;
+		bool savedActive = false;
 	};
 }

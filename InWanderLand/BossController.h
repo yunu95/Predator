@@ -30,6 +30,7 @@ public:
 	virtual void ProgressInitialize();
 	virtual void CurrentProgressSave();
 	virtual void Recovery();
+	virtual void PostRecovery();
 
 private:
 	void ChangeAttackTarget(const std::weak_ptr<Unit>& unit);

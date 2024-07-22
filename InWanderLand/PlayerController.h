@@ -222,6 +222,7 @@ private:
     int skillPointsLeft{ 0 };
     int skillPointsLeftCaptured{ 0 };
     float camZoomFactor = 5;
+    float camZoomFactorCaptured;
     shared_ptr<float> zoomMultiplierByState;
     shared_ptr<float> zoomMultiplierByNonSelection;
     Vector3d camOffsetNorm;
@@ -248,6 +249,7 @@ private:
     yunutyEngine::graphics::StaticMeshRenderer* enemyHoverEffectRenderer{ nullptr };
 
     GameObject* tacticCameraRef{ nullptr };
+    GameObject* savedTacticCameraRef{ nullptr };
 
     State::Enum stateRequestedByAction = State::None;
     bool isStateAction = false;

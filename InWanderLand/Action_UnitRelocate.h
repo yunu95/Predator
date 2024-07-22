@@ -47,6 +47,8 @@ namespace application
         virtual bool PreDecoding(const json& data) override;
         virtual bool PostDecoding(const json& data) override;
 
+        virtual void PostRecovery() override;
+
     private:
         editor::UnitData* targetUnit = nullptr;
         editor::UnitData* destinationUnit = nullptr;

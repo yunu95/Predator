@@ -116,20 +116,16 @@ void BossController::Recovery()
 {
     OnContentsStop();
     EnemyController::OnContentsPlay();
-    if (!boss.expired())
-    {
-        if (boss.lock()->IsAlive())
-        {
-            boss.lock()->GetGameObject()->SetSelfActive(false);
-        }
-        else
-        {
-            boss.reset();
-            bossData->ApplyAsPlaytimeObject();
-        }
-    }
-
     BossSummon::ChessPool::Instance().OnBossDie();
+}
+
+void BossController::PostRecovery()
+{
+    if (bossData->inGameUnit.expired())
+    {
+        boss.reset();
+        bossData->ApplyAsPlaytimeObject();
+    }
 }
 
 void BossController::ChangeAttackTarget(const std::weak_ptr<Unit>& unit)
