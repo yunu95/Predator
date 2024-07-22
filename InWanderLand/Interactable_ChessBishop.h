@@ -29,6 +29,9 @@ public:
 	virtual void OnPause() override;
 	virtual void OnResume() override;
 
+	virtual void CurrentProgressSave() override;
+	virtual void Recovery() override;
+
 private:
 	Vector3d initPos = Vector3d(0, 0, 0);
 	Quaternion initRotation = Quaternion();
@@ -46,5 +49,6 @@ private:
 	std::vector<GameObject*> bombObjList = std::vector<GameObject*>();
 	float guideUp_Y = 0.01;
 	bool isPause = false;
+	bool savedInteract = false;
 };
 

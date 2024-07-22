@@ -104,6 +104,12 @@ namespace BossSummon
                 pComp->SetBurstsCount(data->burstsCount);
                 pComp->SetInterval(data->interval);
 
+                pComp->SetStartAngle(data->startAngle);
+                pComp->SetEndAngle(data->endAngle);
+                pComp->SetIsRandomScale(data->isRandomScale);
+                pComp->SetIsRandomAngle(data->isRandomAngle);
+                pComp->SetIsAlphaDiminish(data->isAlphaDiminish);
+
                 static const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
                 std::wstring texturePath;

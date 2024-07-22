@@ -84,7 +84,6 @@ namespace application
 
             virtual void ProcessObervationEvent(ObservationTarget* target, ObservationEvent event) override;
 
-            virtual void ProgressInitialize();
             virtual void CurrentProgressSave();
             virtual void Recovery();
 

@@ -99,23 +99,21 @@ void Interactable_ChessBishop::Update()
 				{
 					if (!GetWeakPtr<Interactable_ChessBishop>().expired())
 					{
+						OnInteractableTriggerExit();
 						GetGameObject()->SetSelfActive(false);
 					}
 				});
 			isInteracting = true;
-		}
-		else if (lastCoroutine.expired() || lastCoroutine.lock()->Done())
-		{
-			isInteracting = false;
-			OnInteractableTriggerExit();
-		}
+		}	
 	}
 }
 
 void Interactable_ChessBishop::OnTriggerEnter(physics::Collider* collider)
 {
 	if (Unit* colliderUnitComponent = UnitCollider::AcquireUnit(collider);
-		colliderUnitComponent != nullptr && colliderUnitComponent->IsAlive() && PlayerController::Instance().GetState() == PlayerController::State::Battle)
+		colliderUnitComponent != nullptr &&
+		colliderUnitComponent->IsPlayerUnit() &&
+		colliderUnitComponent->IsAlive() && PlayerController::Instance().GetState() == PlayerController::State::Battle)
 	{
 		unitSet.insert(colliderUnitComponent);
 	}
@@ -253,5 +251,46 @@ void Interactable_ChessBishop::OnResume()
 	for (auto each : bombObjList)
 	{
 		each->GetComponent<ChessBombComponent>()->OnResume();
+	}
+}
+
+void Interactable_ChessBishop::CurrentProgressSave()
+{
+	savedInteract = isInteracting;
+	for (auto each : bombObjList)
+	{
+		auto comp = each->GetComponent<ChessBombComponent>();
+		comp->CurrentProgressSave();
+	}
+}
+
+void Interactable_ChessBishop::Recovery()
+{
+	if (!savedInteract)
+	{
+		if (!lastCoroutine.expired())
+		{
+			lastCoroutine.lock()->PushDestroyCallBack([this]()
+				{
+					if (!GetWeakPtr<Interactable_ChessBishop>().expired())
+					{
+						GetGameObject()->SetSelfActive(true);
+					}
+				});
+			DeleteCoroutine(lastCoroutine);
+		}
+
+		isInteracting = false;
+		GetGameObject()->SetSelfActive(true);
+		mesh->SetSelfActive(true);
+		mesh->GetTransform()->SetLocalPosition(Vector3d::zero);
+		auto renderer = mesh->GetComponent<graphics::StaticMeshRenderer>();
+		renderer->GetGI().GetMaterial()->SetTexture(yunuGI::Texture_Type::ALBEDO, orginTexture);
+		for (auto each : bombObjList)
+		{
+			auto comp = each->GetComponent<ChessBombComponent>();
+			comp->Recovery();
+			each->SetSelfActive(false);
+		}
 	}
 }

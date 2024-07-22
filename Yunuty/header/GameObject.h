@@ -169,10 +169,10 @@ namespace yunutyEngine
         void DeleteComponent(Component* component);
         // 게임 오브젝트가 활성화되어 있는지의 여부를 반환합니다.
         // 부모 객체가 활성화되어 있지 않다면 무조건 비활성화된 상태로 표시됩니다.
-        bool GetActive();
+        bool GetActive() const;
         // 게임 오브젝트가 스스로 활성화되어 있는지의 여부를 반환합니다.
         // 부모 객체가 활성화되어 있지 않다면 전역적으로 활성화된 상태는 아닐수도 있습니다.
-        bool GetSelfActive();
+        bool GetSelfActive() const;
         void SetSelfActive(bool selfActive);
         // 게임 오브젝트의 부모 게임 오브젝트를 반환합니다. 부모가 없다면 null 포인터를 반환합니다.
         GameObject* GetParentGameObject();

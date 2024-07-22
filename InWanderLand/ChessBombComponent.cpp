@@ -54,6 +54,12 @@ void ChessBombComponent::Start()
 			pComp->SetBurstsCount(data->burstsCount);
 			pComp->SetInterval(data->interval);
 
+			pComp->SetStartAngle(data->startAngle);
+			pComp->SetEndAngle(data->endAngle);
+			pComp->SetIsRandomScale(data->isRandomScale);
+			pComp->SetIsRandomAngle(data->isRandomAngle);
+			pComp->SetIsAlphaDiminish(data->isAlphaDiminish);
+
 			static const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
 
 			std::wstring texturePath;
@@ -139,6 +145,8 @@ void ChessBombComponent::OnReturn()
 
 	if (particleObj)
 	{
+		particleObj->GetComponent<graphics::ParticleRenderer>()->Reset();
+		particleObj->GetComponent<graphics::ParticleRenderer>()->Play();
 		particleObj->SetSelfActive(false);
 	}
 
@@ -170,5 +178,34 @@ void ChessBombComponent::OnResume()
 	if (particleObj && particleObj->GetActive())
 	{
 		particleObj->GetComponent<graphics::ParticleRenderer>()->Resume();
+	}
+}
+
+void ChessBombComponent::CurrentProgressSave()
+{
+	
+}
+
+void ChessBombComponent::Recovery()
+{
+	coroutineStart = false;
+	isPause = false;
+	unitSet.clear();
+
+	if (particleObj)
+	{
+		particleObj->GetComponent<graphics::ParticleRenderer>()->Reset();
+		particleObj->GetComponent<graphics::ParticleRenderer>()->Play();
+		particleObj->SetSelfActive(false);
+	}
+
+	if (guideObj)
+	{
+		guideObj->SetSelfActive(false);
+	}
+
+	if (!lastCoroutine.expired())
+	{
+		DeleteCoroutine(lastCoroutine);
 	}
 }

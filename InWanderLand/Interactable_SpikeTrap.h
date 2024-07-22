@@ -20,6 +20,8 @@ public:
 
 	virtual void SetDataFromEditorData(const application::editor::InteractableData& data) override;
 
+	virtual void Recovery() override;
+
 private:
 	std::unordered_set<Unit*> triggerStay = std::unordered_set<Unit*>();
 	std::unordered_set<Unit*> interactingList = std::unordered_set<Unit*>();
@@ -30,5 +32,11 @@ private:
 	float damage = 0;
 	GameObject* spike = nullptr;
 	GameObject* frame = nullptr;
+
+	float bounceTime = 0.1f;
+	float offset_y = 1.0f;
+	yunutyEngine::coroutine::Coroutine AppearCoroutine();
+	yunutyEngine::coroutine::Coroutine HideCoroutine();
+	std::weak_ptr<yunutyEngine::coroutine::Coroutine> appearAndHideCoro = std::weak_ptr<yunutyEngine::coroutine::Coroutine>();
 };
 

@@ -326,6 +326,18 @@ namespace application
 		return true;
 	}
 
+	void Action_OrnamentMoveWithRotateAndRescale::Recovery()
+	{
+		IAction::Recovery();
+		if (!doAction)
+		{
+			auto ornamentInstance = targetOrnament->GetPaletteInstance();
+			ornamentInstance->GetTransform()->SetWorldPosition({ targetOrnament->pod.position.x,targetOrnament->pod.position.y,targetOrnament->pod.position.z });
+			ornamentInstance->GetTransform()->SetWorldRotation({ targetOrnament->pod.rotation.w, targetOrnament->pod.rotation.x, targetOrnament->pod.rotation.y, targetOrnament->pod.rotation.z });
+			ornamentInstance->GetTransform()->SetLocalScale({ targetOrnament->pod.scale.x,targetOrnament->pod.scale.y,targetOrnament->pod.scale.z });
+		}
+	}
+
 	Action_OrnamentShow::~Action_OrnamentShow()
 	{
 		if (targetOrnament)
@@ -374,7 +386,7 @@ namespace application
 			float ratio = 0;
 			bool isFirst = false;
 			bool isDeferred = (renderer->GetGI().GetMaterial()->GetPixelShader()->GetShaderInfo().shaderType == yunuGI::ShaderType::Deferred);
-			
+
 			while (ratio < 1)
 			{
 				localTimer += yunutyEngine::Time::GetDeltaTime();
@@ -499,7 +511,7 @@ namespace application
 					}
 				}, 300);
 		}
-		
+
 		if (ImGui::MenuItem("SetLerpTime"))
 		{
 			editor::EditorLayer::SetInputControl(false);
@@ -557,6 +569,60 @@ namespace application
 	{
 		SetTargetOrnament(UUIDManager::GetSingletonInstance().GetPointerFromUUID<editor::OrnamentData*>(String_To_UUID(data["targetOrnament"])));
 		return true;
+	}
+
+	void Action_OrnamentShow::ProgressInitialize()
+	{
+		IAction::ProgressInitialize();
+		savedActive = true;
+	}
+
+	void Action_OrnamentShow::CurrentProgressSave()
+	{
+		IAction::CurrentProgressSave();
+		savedActive = targetOrnament->GetPaletteInstance()->GetGameObject()->GetSelfActive();
+	}
+
+	void Action_OrnamentShow::Recovery()
+	{
+		IAction::Recovery();
+		if (!doAction && !savedActive)
+		{
+			auto ornamentInstance = targetOrnament->GetPaletteInstance();
+			ornamentInstance->GetGameObject()->SetSelfActive(false);
+
+			GameObject* targetObj = nullptr;
+
+			for (auto each : ornamentInstance->GetGameObject()->GetChildren())
+			{
+				if (each->getName() != targetOrnament->pod.templateData->pod.staticFBXName)
+				{
+					continue;
+				}
+
+				targetObj = each;
+			}
+
+			yunutyEngine::graphics::StaticMeshRenderer* renderer = nullptr;
+			for (auto each : targetObj->GetChildren())
+			{
+				renderer = each->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+				if (renderer)
+				{
+					break;
+				}
+			}
+
+			if (renderer)
+			{
+				for (int i = 0; i < renderer->GetGI().GetMaterialCount(); ++i)
+				{
+					renderer->GetGI().GetMaterial(i)->SetColor(yunuGI::Color{ 1,1,1,0 });
+				}
+			}
+
+			targetOrnament->tookAction = false;
+		}
 	}
 
 	Action_OrnamentHide::~Action_OrnamentHide()
@@ -792,6 +858,60 @@ namespace application
 		return true;
 	}
 
+	void Action_OrnamentHide::ProgressInitialize()
+	{
+		IAction::ProgressInitialize();
+		savedActive = false;
+	}
+
+	void Action_OrnamentHide::CurrentProgressSave()
+	{
+		IAction::CurrentProgressSave();
+		savedActive = targetOrnament->GetPaletteInstance()->GetGameObject()->GetSelfActive();
+	}
+
+	void Action_OrnamentHide::Recovery()
+	{
+		IAction::Recovery();
+		if (!doAction && savedActive)
+		{
+			auto ornamentInstance = targetOrnament->GetPaletteInstance();
+			ornamentInstance->GetGameObject()->SetSelfActive(true);
+
+			GameObject* targetObj = nullptr;
+
+			for (auto each : ornamentInstance->GetGameObject()->GetChildren())
+			{
+				if (each->getName() != targetOrnament->pod.templateData->pod.staticFBXName)
+				{
+					continue;
+				}
+
+				targetObj = each;
+			}
+
+			yunutyEngine::graphics::StaticMeshRenderer* renderer = nullptr;
+			for (auto each : targetObj->GetChildren())
+			{
+				renderer = each->GetComponent<yunutyEngine::graphics::StaticMeshRenderer>();
+				if (renderer)
+				{
+					break;
+				}
+			}
+
+			if (renderer)
+			{
+				for (int i = 0; i < renderer->GetGI().GetMaterialCount(); ++i)
+				{
+					renderer->GetGI().GetMaterial(i)->SetColor(yunuGI::Color{ 1,1,1,1 });
+				}
+			}
+
+			targetOrnament->tookAction = false;
+		}
+	}
+
 	Action_OrnamentFloating::~Action_OrnamentFloating()
 	{
 		if (targetOrnament)
@@ -811,7 +931,7 @@ namespace application
 		auto startPos = ts->GetWorldPosition();
 		float localTimer = 0;
 		float ratio = 0;
-		while (true)
+		while (!prevCoroBreak)
 		{
 			localTimer += yunutyEngine::Time::GetDeltaTime();
 			ratio = localTimer / roundTripTime;
@@ -824,6 +944,8 @@ namespace application
 			ts->SetWorldPosition(Vector3d(startPos.x, startPos.y + distance * ((-std::cos(ratio * 2 * M_PI) + 1) * 0.5), startPos.z));
 			co_await std::suspend_always();
 		}
+
+		prevCoroBreak = false;
 	}
 
 	bool Action_OrnamentFloating::IsValid()
@@ -1012,5 +1134,27 @@ namespace application
 	{
 		SetTargetOrnament(UUIDManager::GetSingletonInstance().GetPointerFromUUID<editor::OrnamentData*>(String_To_UUID(data["targetOrnament"])));
 		return true;
+	}
+
+	void Action_OrnamentFloating::ProgressInitialize()
+	{
+		IAction::ProgressInitialize();
+		prevCoroBreak = false;
+	}
+
+	void Action_OrnamentFloating::CurrentProgressSave()
+	{
+		IAction::CurrentProgressSave();
+	}
+
+	void Action_OrnamentFloating::Recovery()
+	{
+		if (!savedAction && doAction)
+		{
+			prevCoroBreak = true;
+			targetOrnament->GetPaletteInstance()->GetTransform()->SetWorldPosition({ targetOrnament->pod.position.x,targetOrnament->pod.position.y,targetOrnament->pod.position.z });
+		}
+
+		IAction::Recovery();
 	}
 }

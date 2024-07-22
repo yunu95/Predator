@@ -54,6 +54,9 @@ public:
 
 	virtual Component* GetComponent() { return this; }
 
+	virtual void CurrentProgressSave() {}
+	virtual void Recovery() {}
+
 protected:
 
 	/// triggerOn 을 true 로 변환합니다.
