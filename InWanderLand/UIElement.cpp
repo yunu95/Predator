@@ -203,10 +203,10 @@ void UIElement::DisableElement()
     {
         GetGameObject()->SetSelfActive(false);
     }
-    if (parentPriorityLayout)
+    /*if (parentPriorityLayout)
     {
         parentPriorityLayout->DisableChildUI(GetGameObject());
-    }
+    }*/
     if (importedUIData.customFlags & (int)UIExportFlag::TimeContinueOnDisable)
     {
         if (timePauseOnEnable)
