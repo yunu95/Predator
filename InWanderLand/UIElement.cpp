@@ -304,4 +304,8 @@ void UIElement::DisableElementInstant()
 {
     GetGameObject()->SetSelfActive(false);
     enabled = false;
+    if (parentPriorityLayout)
+    {
+        parentPriorityLayout->DisableChildUI(GetGameObject());
+    }
 }

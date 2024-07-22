@@ -85,12 +85,7 @@ namespace application
         GC<float> camOutsideUIMaxX = 1920.0f - 150.0f;
         GC<float> camOutsideUIMaxY = 1080.0f - 400.0f;
 
-        GC<float> waveEndZoomFactor = 8.0f;
-        GC<float> waveEndDestTimeScale = 0.1f;
-        GC<float> waveEndActionTime = 3.0f;
-        GC<float> waveEndSlowLerpTime = 0.7f;
         GC<float> waveEndRecoveryTime = 1.0f;
-        GC<float> waveEndCameraMoveDuration = 2.0f;
 
         TO_JSON(POD_GlobalConstant)
             FROM_JSON(POD_GlobalConstant)
