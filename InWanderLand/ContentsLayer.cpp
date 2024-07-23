@@ -92,23 +92,24 @@ public:
 class TestComponent4 : public yunutyEngine::Component
 {
 public:
-    BurnEffect* effect;
+    yunutyEngine::graphics::Animator* anim;
+    yunuGI::IAnimation* idle;
+    yunuGI::IAnimation* walk;
     virtual void Update() override
     {
         if (Input::isKeyPushed(yunutyEngine::KeyCode::LeftArrow))
         {
-            effect->Init();
-            //effect->Appear();
+            anim->ChangeAnimation(idle, 0.31, 1);
         }
 
         if (Input::isKeyPushed(yunutyEngine::KeyCode::RightArrow))
         {
-            effect->Appear();
+            anim->ChangeAnimation(walk, 0.31, 1);
         }
 
         if (Input::isKeyPushed(yunutyEngine::KeyCode::UpArrow))
         {
-            effect->Pause();
+            Time::SetTimeScale(0.1);
         }
     }
 };
@@ -137,16 +138,16 @@ void GraphicsTest()
 
     for (auto& i : animationList)
     {
-        if (i->GetName() == L"Ani_Monster2_Idle")
+        if (i->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Idle")
         {
             animation = i;
             animation->SetLoop(true);
         }
 
-        if (i->GetName() == L"Rig_Robin_arpbob|Ani_Robin_BattleIdle")
+        if (i->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Walk")
         {
-            i->SetPlaySpeed(0.01);
             animation2 = i;
+            animation2->SetLoop(true);
         }
         if (i->GetName() == L"Rig_Robin_arpbob|Ani_Robin_Skill1")
         {
@@ -155,7 +156,18 @@ void GraphicsTest()
     }
 
     {
-        auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Wall_21m");
+        auto obj2 = Scene::getCurrentScene()->AddGameObject();
+        auto test = obj2->AddComponent<TestComponent4>();
+
+        auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Robin");
+        auto anim = obj->GetComponent<yunutyEngine::graphics::Animator>();
+        anim->PushAnimation(animation);
+        anim->PushAnimation(animation2);
+        anim->Play(animation);
+
+        test->anim = anim;
+        test->idle = animation;
+        test->walk = animation2;
     }
 
     /*{

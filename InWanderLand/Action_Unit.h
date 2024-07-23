@@ -215,4 +215,34 @@ namespace application
         float duration = -1;
         bool repeat = false;
     };
+
+    class Action_UnitSetHP
+        : public IAction
+    {
+        friend class editor::Module_ScriptEditor;
+
+    public:
+        DEFINE_ACTION(UnitSetHP)
+
+        virtual ~Action_UnitSetHP();
+
+        virtual CoroutineObject<void> DoAction() override;
+
+        virtual bool IsValid() override;
+
+        void SetTargetUnit(editor::UnitData* unit);
+        void SetHP(float hp);
+
+        virtual void ProcessObervationEvent(ObservationTarget* target, ObservationEvent event) override;
+
+        virtual bool PreEncoding(json& data) const override;
+        virtual bool PostEncoding(json& data) const override;
+        virtual bool PreDecoding(const json& data) override;
+        virtual bool PostDecoding(const json& data) override;
+
+    private:
+        editor::UnitData* targetUnit = nullptr;
+        bool isEditing = false;
+        float hp = 0;
+    };
 }

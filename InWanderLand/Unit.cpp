@@ -88,7 +88,14 @@ void Unit::Revive()
 {
     if (!IsAlive() && coroutineRevival.expired())
     {
-        StartCoroutine(RevivalCoroutine(0));
+        StartCoroutine(RevivalCoroutine(0)).lock()->PushDestroyCallBack([this]()
+            {
+                if (animatorComponent.lock()->GetCurrentAnimation()->GetName()
+                    != wanderResources::GetAnimation(unitTemplateData->pod.skinnedFBXName, UnitAnimType::Death)->GetName())
+                {
+                    PlayAnimation(UnitAnimType::Death);
+                }
+            });
     }
 }
 void Unit::Update()
@@ -252,6 +259,14 @@ void Unit::OnStateEngage<UnitBehaviourTree::Reviving>()
     enableNavObstacleByState = referenceEnableNavObstacle.Acquire();
     disableNavAgentByState = referenceDisableNavAgent.Acquire();
     coroutineRevival = StartCoroutine(RevivalCoroutine(unitTemplateData->pod.revivalDuration));
+    coroutineRevival.lock()->PushDestroyCallBack([this]()
+        {
+            if (animatorComponent.lock()->GetCurrentAnimation()->GetName()
+                != wanderResources::GetAnimation(unitTemplateData->pod.skinnedFBXName, UnitAnimType::Death)->GetName())
+            {
+                PlayAnimation(UnitAnimType::Death);
+            }
+        });
 }
 template<>
 void Unit::OnStateExit<UnitBehaviourTree::Reviving>()
@@ -556,7 +571,7 @@ Vector3d Unit::GetRandomPositionInsideCapsuleCollider()
 {
     const auto& pod = GetUnitTemplateData().pod;
     auto unitPos = GetTransform()->GetWorldPosition();
-    return unitPos + Vector3d{ math::Random::GetRandomFloat(pod.collisionSize * 0.5f), pod.collisionSize + math::Random::GetRandomFloat(0 , pod.collisionHeight * 0.7f), math::Random::GetRandomFloat(pod.collisionSize * 0.f) };
+    return unitPos + Vector3d{ math::Random::GetRandomFloat(pod.collisionSize * 0.5f), pod.collisionHeight * 0.5f * math::Random::GetRandomFloat(0.5f , 1.5f), math::Random::GetRandomFloat(pod.collisionSize * 0.5f) };
 }
 void Unit::EraseBuff(UnitBuffType buffType)
 {
@@ -643,7 +658,7 @@ yunutyEngine::coroutine::Coroutine Unit::HealEffectCoroutine()
     vfxAnimator.lock()->Init();
     vfxAnimator.lock()->Play();
 
-    healVFX.lock()->GetTransform()->SetWorldPosition(Vector3d(GetTransform()->GetWorldPosition().x, 0, GetTransform()->GetWorldPosition().z));
+    healVFX.lock()->GetTransform()->SetWorldPosition(Vector3d(GetTransform()->GetWorldPosition().x, 0.2f, GetTransform()->GetWorldPosition().z));
     healVFX.lock()->GetTransform()->SetWorldRotation(GetTransform()->GetWorldRotation());
     co_await std::suspend_always{};
 
@@ -652,7 +667,7 @@ yunutyEngine::coroutine::Coroutine Unit::HealEffectCoroutine()
     while (forseconds.Tick())
     {
         co_await std::suspend_always{};
-        healVFX.lock()->GetTransform()->SetWorldPosition(Vector3d(GetTransform()->GetWorldPosition().x, 0, GetTransform()->GetWorldPosition().z));
+        healVFX.lock()->GetTransform()->SetWorldPosition(Vector3d(GetTransform()->GetWorldPosition().x, 0.2f, GetTransform()->GetWorldPosition().z));
         healVFX.lock()->GetTransform()->SetWorldRotation(GetTransform()->GetWorldRotation());
     }
 
@@ -757,17 +772,6 @@ void Unit::Recovery()
     else
     {
         ReturnToPool();
-        for (auto unitStatusUI : unitStatusUIs)
-        {
-            if (auto status = unitStatusUI.lock())
-            {
-                status->DisableElement();
-            }
-            if (unitStatusUI.lock()->runtimeFlags & UnitStatusBarFlag::ControlWithReallyDisabled)
-            {
-                unitStatusUI.lock()->reallyDisabled = true;
-            }
-        }
     }
 }
 
@@ -1622,6 +1626,7 @@ void Unit::Reset()
 
     isPaused = false;
     localTimeScale = 1.0f;
+    belongingWave = nullptr;
 
     ResetSharedRef();
 }
@@ -1971,9 +1976,47 @@ yunutyEngine::coroutine::Coroutine Unit::RevivalCoroutine(float revivalDelay)
     float birthAnimDuration = wanderResources::GetAnimation(unitTemplateData->pod.skinnedFBXName, UnitAnimType::Birth)->GetDuration();
     PlayAnimation(UnitAnimType::Death);
     SetDefaultAnimation(UnitAnimType::None);
-    co_yield coroutine::WaitForSeconds(revivalDelay - birthAnimDuration);
+
+    coroutine::ForSeconds preBirthForSeconds{ revivalDelay - birthAnimDuration };
+    bool isAllUnitDead{ true };
+    while (preBirthForSeconds.Tick())
+    {
+        isAllUnitDead = true;
+        /// 다른 플레이어들이 모두 죽었는지 체크
+        for (auto each : PlayerController::Instance().GetPlayers())
+        {
+            if (each.lock()->IsAlive())
+            {
+                isAllUnitDead = false;
+                break;
+            }
+        }
+        if (isAllUnitDead)
+        {
+            co_return;
+        }
+        co_await std::suspend_always();
+    }
     PlayAnimation(UnitAnimType::Birth);
-    co_yield coroutine::WaitForSeconds(birthAnimDuration);
+    coroutine::ForSeconds birthAnimForSeconds{ birthAnimDuration };
+    while (birthAnimForSeconds.Tick())
+    {
+        isAllUnitDead = true;
+        /// 다른 플레이어들이 모두 죽었는지 체크
+        for (auto each : PlayerController::Instance().GetPlayers())
+        {
+            if (each.lock()->IsAlive())
+            {
+                isAllUnitDead = false;
+                break;
+            }
+        }
+        if (isAllUnitDead)
+        {
+            co_return;
+        }
+        co_await std::suspend_always();
+    }
     SetCurrentHp(unitTemplateData->pod.max_Health);
     SetIsAlive(true);
     ApplyBuff(UnitBuffInvulenerability{ unitTemplateData->pod.revivalInvulnerableDuration });
@@ -2166,6 +2209,7 @@ yunutyEngine::coroutine::Coroutine Unit::AttackCoroutine(std::weak_ptr<Unit> opp
 yunutyEngine::coroutine::Coroutine Unit::MeleeAttackEffectCoroutine(std::weak_ptr<Unit> opponent)
 {
     /// VFX 실행
+    /// VFX 실행
     attackVFX = wanderResources::GetVFX(unitTemplateData->pod.skinnedFBXName, UnitAnimType::Attack);
 
     co_await std::suspend_always{};
@@ -2259,6 +2303,14 @@ void Unit::ReturnToPool()
         {
             Scene::getCurrentScene()->DestroyGameObject(unitStatusUI.lock()->GetGameObject());
             unitStatusUI.reset();
+        }
+        if (auto status = unitStatusUI.lock())
+        {
+            status->DisableElement();
+        }
+        if (unitStatusUI.lock()->runtimeFlags & UnitStatusBarFlag::ControlWithReallyDisabled)
+        {
+            unitStatusUI.lock()->reallyDisabled = true;
         }
     }
     unitStatusUIs.clear();

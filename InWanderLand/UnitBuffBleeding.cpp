@@ -16,11 +16,16 @@ void UnitBuffBleeding::OnStart()
     buffEffectAnimator.lock()->Play();
 }
 
-void UnitBuffBleeding::OnUpdate() 
+void UnitBuffBleeding::OnUpdate()
 {
     if (!isPaused)
     {
-        owner.lock()->Damaged(Inflictor, damagePerSecond * yunutyEngine::Time::GetDeltaTime());
+        accumulatedDeltaTime += yunutyEngine::Time::GetDeltaTime();
+        if (accumulatedDeltaTime > dmgInterval)
+        {
+            owner.lock()->Damaged(Inflictor, damagePerSecond * accumulatedDeltaTime);
+            accumulatedDeltaTime = 0;
+        }
     }
     if (!buffEffect.expired())
     {
@@ -32,6 +37,8 @@ void UnitBuffBleeding::OnUpdate()
 
 void UnitBuffBleeding::OnEnd()
 {
+    owner.lock()->Damaged(Inflictor, damagePerSecond * accumulatedDeltaTime);
+    accumulatedDeltaTime = 0;
     FBXPool::Instance().Return(buffEffect);
 }
 

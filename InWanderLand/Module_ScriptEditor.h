@@ -486,6 +486,11 @@ namespace application
                         Action_ProgressLoad::ImGui_DrawDataPopup(static_cast<Action_ProgressLoad*>(data));
                         break;
                     }
+                    case application::ActionType::UnitSetHP:
+                    {
+                        Action_UnitSetHP::ImGui_DrawDataPopup(static_cast<Action_UnitSetHP*>(data));
+                        break;
+                    }
                     default:
                         break;
                     }

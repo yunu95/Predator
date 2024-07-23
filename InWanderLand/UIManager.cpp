@@ -222,13 +222,13 @@ void UIManager::SummonMoveToFeedback(const Vector3d& worldPos, bool attackMove)
     if (attackMove)
     {
         attackMoveToSpriteAnim->GetGameObject()->SetSelfActive(true);
-        attackMoveToSpriteAnim->GetTransform()->SetWorldPosition(worldPos + Vector3d::up * 0.1);
+        attackMoveToSpriteAnim->GetTransform()->SetWorldPosition(worldPos + Vector3d::up * 0.3);
         attackMoveToSpriteAnim->Play();
     }
     else
     {
         moveToSpriteAnim->GetGameObject()->SetSelfActive(true);
-        moveToSpriteAnim->GetTransform()->SetWorldPosition(worldPos + Vector3d::up * 0.1);
+        moveToSpriteAnim->GetTransform()->SetWorldPosition(worldPos + Vector3d::up * 0.3);
         moveToSpriteAnim->Play();
     }
 }
@@ -1138,7 +1138,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
                 GetUIElementByEnum(UIEnumID::PopUpMessage_RequirementNotMet)->EnableElement();
             }
         );
-                }
+    }
     // 초기 상태가 비활성화 상태라면...
     if (uiData.customFlags & (int)UIExportFlag::DisableOnStart)
     {
@@ -1169,7 +1169,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
     {
         std::transform(uiData.exclusiveEnableGroup.begin(), uiData.exclusiveEnableGroup.end(), std::back_inserter(element->exclusiveEnableGroup), [&](int idx) {return GetUIElementWithIndex(idx); });
     }
-            }
+}
 // 특별한 로직이 적용되어야 하는 경우 참, 그렇지 않으면 거짓을 반환합니다.
 bool UIManager::ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* element)
 {

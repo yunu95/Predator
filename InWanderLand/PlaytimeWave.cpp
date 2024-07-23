@@ -96,7 +96,7 @@ void PlaytimeWave::DeActivateWave()
 
 void PlaytimeWave::ReportUnitDeath(Unit* unit)
 {
-    if (unit->IsPlayerUnit() /*|| unit->GetUnitTemplateData().pod.skinnedFBXName == "SKM_HeartQueen"*/)
+    if (unit->IsPlayerUnit() || m_currentWaveUnits.empty())
         return;
 
     if (nextSummonUnitIndex >= waveData->pod.waveSizes[currentSequenceIndex] && m_currentWaveUnits.size() == 1 && currentSequenceIndex + 1 >= waveData->pod.waveSizes.size())
