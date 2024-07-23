@@ -154,6 +154,7 @@ namespace application
 		/// 왕복 운동 시간입니다.
 		/// 0 일 경우, Action 을 수행하지 않습니다.
 		void SetRoundTripTime(float roundTripTime);
+		void SetDirection(bool isUp);
 
 		virtual void ProcessObervationEvent(ObservationTarget* target, ObservationEvent event) override;
 
@@ -171,6 +172,7 @@ namespace application
 		yunuGI::Vector3 scale = yunuGI::Vector3(1, 1, 1);
 		float distance = 0;
 		float roundTripTime = 1;
+		bool isUpDirection = true;
 		bool isEditing = false;
 		bool prevCoroBreak = false;
 	};
