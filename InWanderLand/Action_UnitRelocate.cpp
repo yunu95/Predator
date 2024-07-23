@@ -259,7 +259,7 @@ namespace application
     {
         if (targetUnit->inGameUnit.expired())
         {
-            targetUnit->ApplyAsPlaytimeObject();
+            UnitPool::SingleInstance().Borrow(targetUnit);
         }
     }
 }
