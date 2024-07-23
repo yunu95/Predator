@@ -1238,6 +1238,7 @@ void PlayerController::CurrentProgressSave()
     camZoomFactorCaptured = camZoomFactor;
     savedTacticCameraRef = tacticCameraRef;
     savedBGM = SoundSystem::GetMusicIsPlaying();
+    stateRequestedByActionCaptured = stateRequestedByAction;
 }
 void PlayerController::Recovery()
 {
@@ -1260,6 +1261,7 @@ void PlayerController::Recovery()
         SoundSystem::StopMusic();
         SoundSystem::PlayMusic(savedBGM);
     }
+    stateRequestedByAction = stateRequestedByActionCaptured;
 }
 void PlayerController::SetState(State::Enum newState)
 {
