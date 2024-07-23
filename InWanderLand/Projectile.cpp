@@ -47,9 +47,20 @@ void Projectile::Update()
 
         if (auto target = homingTarget.lock(); target.get())
         {
-            relativePositionFromTarget += speed * Time::GetDeltaTime();
-            GetTransform()->SetWorldPosition(target->GetTransform()->GetWorldPosition() + relativePositionFromTarget);
-            GetTransform()->SetLocalRotation(Quaternion::MakeWithForwardUp(speed, speed.up));
+            if (!homingTarget.lock()->IsAlive())
+            {
+                if (projectileType == ProjectileType::DIRECT)
+                {
+                    projectileType = ProjectileType::CURVE;
+                }
+                homingTarget.reset();
+            }
+            else
+            {
+                relativePositionFromTarget += speed * Time::GetDeltaTime();
+                GetTransform()->SetWorldPosition(target->GetTransform()->GetWorldPosition() + relativePositionFromTarget);
+                GetTransform()->SetLocalRotation(Quaternion::MakeWithForwardUp(speed, speed.up));
+            }
         }
         else
         {
