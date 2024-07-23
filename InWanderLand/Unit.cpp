@@ -507,7 +507,15 @@ bool Unit::IsInvulenerable() const
 bool Unit::IsAlive() const
 {
 	//return isAlive;
-	return isAlive && GetGameObject()->GetSelfActive();
+
+	if (unitTemplateData->pod.lingeringCorpse)
+	{
+		return isAlive;
+	}
+	else
+	{
+		return isAlive && GetGameObject()->GetSelfActive();
+	}
 }
 
 bool Unit::IsPreempted() const
@@ -637,19 +645,26 @@ void Unit::Heal(float healingPoint)
 	if (currentHitPoint >= unitTemplateData->pod.max_Health)
 		SetCurrentHp(unitTemplateData->pod.max_Health);
 
+	if (!coroutineHealEffect.expired())
+	{
+		FBXPool::Instance().Return(healVFX);
+		DeleteCoroutine(coroutineHealEffect);
+	}
+
 	coroutineHealEffect = StartCoroutine(HealEffectCoroutine());
 	coroutineHealEffect.lock()->PushDestroyCallBack([this]()
 		{
-			FBXPool::Instance().Return(healVFX);
+			if (!healVFX.expired())
+				FBXPool::Instance().Return(healVFX);
 		});
 }
 
 yunutyEngine::coroutine::Coroutine Unit::HealEffectCoroutine()
 {
-	if (!healVFX.expired())
-	{
-		FBXPool::Instance().Return(healVFX);
-	}
+	//if (!healVFX.expired())
+	//{
+	//	FBXPool::Instance().Return(healVFX);
+	//}
 	co_await std::suspend_always{};
 
 	healVFX = FBXPool::Instance().Borrow("VFX_Buff_Healing");
@@ -1995,6 +2010,7 @@ yunutyEngine::coroutine::Coroutine Unit::RevivalCoroutine(float revivalDelay)
 		}
 		if (isAllUnitDead)
 		{
+			PlayerController::Instance().OnPlayerChracterAllDead();
 			co_return;
 		}
 		co_await std::suspend_always();
@@ -2015,6 +2031,7 @@ yunutyEngine::coroutine::Coroutine Unit::RevivalCoroutine(float revivalDelay)
 		}
 		if (isAllUnitDead)
 		{
+			PlayerController::Instance().OnPlayerChracterAllDead();
 			co_return;
 		}
 		co_await std::suspend_always();
