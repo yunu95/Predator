@@ -23,7 +23,8 @@ void UIElement::Update()
 };
 void UIElement::EnableElement()
 {
-    if (importedUIData.enumID == (int)UIEnumID::BlackMask_Alpha)
+    if (importedUIData.enumID == (int)UIEnumID::BlackMask_Alpha ||
+        importedUIData.enumID == (int)UIEnumID::StatusBar_Boss)
     {
         int a = 3;
     }
