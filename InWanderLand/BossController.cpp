@@ -152,12 +152,12 @@ coroutine::Coroutine BossController::BossAppearCoroutine()
 {
     auto& gc = GlobalConstant::GetSingletonInstance().pod;
 
-    auto unitStatusUI1 = UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_Boss);
-    auto unitStatusUI2 = UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_Boss_Tactic);
-    unitStatusUI1->reallyDisabled = false;
-    unitStatusUI2->reallyDisabled = false;
-    unitStatusUI1->EnableElement();
-    unitStatusUI2->EnableElement();
+    //auto unitStatusUI1 = UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_Boss);
+    //auto unitStatusUI2 = UIManager::Instance().GetUIElementByEnum(UIEnumID::StatusBar_Boss_Tactic);
+    //unitStatusUI1->reallyDisabled = false;
+    //unitStatusUI2->reallyDisabled = false;
+    //unitStatusUI1->EnableElement();
+    //unitStatusUI2->EnableElement();
 
     auto pause = boss.lock()->referencePause.Acquire();
     auto blockFollowingNavigation = boss.lock()->referenceBlockFollowingNavAgent.Acquire();

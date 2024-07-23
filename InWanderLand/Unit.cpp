@@ -506,16 +506,16 @@ bool Unit::IsInvulenerable() const
 }
 bool Unit::IsAlive() const
 {
-	//return isAlive;
+    //return isAlive;
 
-	if (unitTemplateData->pod.lingeringCorpse)
-	{
-		return isAlive;
-	}
-	else
-	{
-		return isAlive && GetGameObject()->GetSelfActive();
-	}
+    if (unitTemplateData->pod.lingeringCorpse)
+    {
+        return isAlive;
+    }
+    else
+    {
+        return isAlive && GetGameObject()->GetSelfActive();
+    }
 }
 
 bool Unit::IsPreempted() const
@@ -645,27 +645,27 @@ void Unit::Heal(float healingPoint)
     if (currentHitPoint >= unitTemplateData->pod.max_Health)
         SetCurrentHp(unitTemplateData->pod.max_Health);
 
-	if (!coroutineHealEffect.expired())
-	{
-		FBXPool::Instance().Return(healVFX);
-		DeleteCoroutine(coroutineHealEffect);
-	}
+    if (!coroutineHealEffect.expired())
+    {
+        FBXPool::Instance().Return(healVFX);
+        DeleteCoroutine(coroutineHealEffect);
+    }
 
-	coroutineHealEffect = StartCoroutine(HealEffectCoroutine());
-	coroutineHealEffect.lock()->PushDestroyCallBack([this]()
-		{
-			if (!healVFX.expired())
-				FBXPool::Instance().Return(healVFX);
-		});
+    coroutineHealEffect = StartCoroutine(HealEffectCoroutine());
+    coroutineHealEffect.lock()->PushDestroyCallBack([this]()
+        {
+            if (!healVFX.expired())
+                FBXPool::Instance().Return(healVFX);
+        });
 }
 
 yunutyEngine::coroutine::Coroutine Unit::HealEffectCoroutine()
 {
-	//if (!healVFX.expired())
-	//{
-	//	FBXPool::Instance().Return(healVFX);
-	//}
-	co_await std::suspend_always{};
+    //if (!healVFX.expired())
+    //{
+    //	FBXPool::Instance().Return(healVFX);
+    //}
+    co_await std::suspend_always{};
 
     healVFX = FBXPool::Instance().Borrow("VFX_Buff_Healing");
     auto vfxAnimator = healVFX.lock()->AcquireVFXAnimator();
@@ -1992,63 +1992,63 @@ yunutyEngine::coroutine::Coroutine Unit::RevivalCoroutine(float revivalDelay)
     PlayAnimation(UnitAnimType::Death);
     SetDefaultAnimation(UnitAnimType::None);
 
-	coroutine::ForSeconds preBirthForSeconds{ revivalDelay - birthAnimDuration };
-	bool isAllUnitDead{ true };
-	while (preBirthForSeconds.Tick())
-	{
-		isAllUnitDead = true;
-		/// 다른 플레이어들이 모두 죽었는지 체크
-		for (auto each : PlayerController::Instance().GetPlayers())
-		{
-			if (each.lock()->IsAlive())
-			{
-				isAllUnitDead = false;
-				break;
-			}
-		}
-		if (isAllUnitDead)
-		{
-			PlayerController::Instance().OnPlayerChracterAllDead();
-			co_return;
-		}
-		co_await std::suspend_always();
-	}
-	PlayAnimation(UnitAnimType::Birth);	
-	coroutine::ForSeconds birthAnimForSeconds{ birthAnimDuration };
-	while (birthAnimForSeconds.Tick())
-	{
-		isAllUnitDead = true;
-		/// 다른 플레이어들이 모두 죽었는지 체크
-		for (auto each : PlayerController::Instance().GetPlayers())
-		{
-			if (each.lock()->IsAlive())
-			{
-				isAllUnitDead = false;
-				break;
-			}
-		}
-		if (isAllUnitDead)
-		{
-			PlayerController::Instance().OnPlayerChracterAllDead();
-			co_return;
-		}
-		co_await std::suspend_always();
-	}
-	SetCurrentHp(unitTemplateData->pod.max_Health);
-	SetIsAlive(true);
-	ApplyBuff(UnitBuffInvulenerability{ unitTemplateData->pod.revivalInvulnerableDuration });
-	for (auto unitStatusUI : unitStatusUIs)
-	{
-		if (auto status = unitStatusUI.lock())
-		{
-			status->EnableElement();
-		}
-		if (unitStatusUI.lock()->runtimeFlags & UnitStatusBarFlag::ControlWithReallyDisabled)
-		{
-			unitStatusUI.lock()->reallyDisabled = false;
-		}
-	}
-	co_return;
+    coroutine::ForSeconds preBirthForSeconds{ revivalDelay - birthAnimDuration };
+    bool isAllUnitDead{ true };
+    while (preBirthForSeconds.Tick())
+    {
+        isAllUnitDead = true;
+        /// 다른 플레이어들이 모두 죽었는지 체크
+        for (auto each : PlayerController::Instance().GetPlayers())
+        {
+            if (each.lock()->IsAlive())
+            {
+                isAllUnitDead = false;
+                break;
+            }
+        }
+        if (isAllUnitDead)
+        {
+            PlayerController::Instance().OnPlayerChracterAllDead();
+            co_return;
+        }
+        co_await std::suspend_always();
+    }
+    PlayAnimation(UnitAnimType::Birth);
+    coroutine::ForSeconds birthAnimForSeconds{ birthAnimDuration };
+    while (birthAnimForSeconds.Tick())
+    {
+        isAllUnitDead = true;
+        /// 다른 플레이어들이 모두 죽었는지 체크
+        for (auto each : PlayerController::Instance().GetPlayers())
+        {
+            if (each.lock()->IsAlive())
+            {
+                isAllUnitDead = false;
+                break;
+            }
+        }
+        if (isAllUnitDead)
+        {
+            PlayerController::Instance().OnPlayerChracterAllDead();
+            co_return;
+        }
+        co_await std::suspend_always();
+    }
+    SetCurrentHp(unitTemplateData->pod.max_Health);
+    SetIsAlive(true);
+    ApplyBuff(UnitBuffInvulenerability{ unitTemplateData->pod.revivalInvulnerableDuration });
+    for (auto unitStatusUI : unitStatusUIs)
+    {
+        if (auto status = unitStatusUI.lock())
+        {
+            status->EnableElement();
+        }
+        if (unitStatusUI.lock()->runtimeFlags & UnitStatusBarFlag::ControlWithReallyDisabled)
+        {
+            unitStatusUI.lock()->reallyDisabled = false;
+        }
+    }
+    co_return;
 }
 yunutyEngine::coroutine::Coroutine Unit::BirthCoroutine()
 {
@@ -2316,11 +2316,6 @@ void Unit::ReturnToPool()
 {
     for (auto unitStatusUI : unitStatusUIs)
     {
-        if (!unitStatusUI.expired() && (unitStatusUI.lock()->runtimeFlags & UnitStatusBarFlag::DestroyOnDeath))
-        {
-            Scene::getCurrentScene()->DestroyGameObject(unitStatusUI.lock()->GetGameObject());
-            unitStatusUI.reset();
-        }
         if (auto status = unitStatusUI.lock())
         {
             status->DisableElement();
@@ -2328,6 +2323,11 @@ void Unit::ReturnToPool()
         if (unitStatusUI.lock()->runtimeFlags & UnitStatusBarFlag::ControlWithReallyDisabled)
         {
             unitStatusUI.lock()->reallyDisabled = true;
+        }
+        if (!unitStatusUI.expired() && (unitStatusUI.lock()->runtimeFlags & UnitStatusBarFlag::DestroyOnDeath))
+        {
+            Scene::getCurrentScene()->DestroyGameObject(unitStatusUI.lock()->GetGameObject());
+            unitStatusUI.reset();
         }
     }
     unitStatusUIs.clear();
