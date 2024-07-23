@@ -571,7 +571,7 @@ Vector3d Unit::GetRandomPositionInsideCapsuleCollider()
 {
 	const auto& pod = GetUnitTemplateData().pod;
 	auto unitPos = GetTransform()->GetWorldPosition();
-	return unitPos + Vector3d{ math::Random::GetRandomFloat(pod.collisionSize * 0.5f), pod.collisionSize + math::Random::GetRandomFloat(0 , pod.collisionHeight * 0.7f), math::Random::GetRandomFloat(pod.collisionSize * 0.f) };
+	return unitPos + Vector3d{ math::Random::GetRandomFloat(pod.collisionSize * 0.5f), pod.collisionHeight * 0.5f * math::Random::GetRandomFloat(0.5f , 1.5f), math::Random::GetRandomFloat(pod.collisionSize * 0.5f) };
 }
 void Unit::EraseBuff(UnitBuffType buffType)
 {
@@ -658,7 +658,7 @@ yunutyEngine::coroutine::Coroutine Unit::HealEffectCoroutine()
 	vfxAnimator.lock()->Init();
 	vfxAnimator.lock()->Play();
 
-	healVFX.lock()->GetTransform()->SetWorldPosition(Vector3d(GetTransform()->GetWorldPosition().x, 0, GetTransform()->GetWorldPosition().z));
+	healVFX.lock()->GetTransform()->SetWorldPosition(Vector3d(GetTransform()->GetWorldPosition().x, 0.2f, GetTransform()->GetWorldPosition().z));
 	healVFX.lock()->GetTransform()->SetWorldRotation(GetTransform()->GetWorldRotation());
 	co_await std::suspend_always{};
 
@@ -667,7 +667,7 @@ yunutyEngine::coroutine::Coroutine Unit::HealEffectCoroutine()
 	while (forseconds.Tick())
 	{
 		co_await std::suspend_always{};
-		healVFX.lock()->GetTransform()->SetWorldPosition(Vector3d(GetTransform()->GetWorldPosition().x, 0, GetTransform()->GetWorldPosition().z));
+		healVFX.lock()->GetTransform()->SetWorldPosition(Vector3d(GetTransform()->GetWorldPosition().x, 0.2f, GetTransform()->GetWorldPosition().z));
 		healVFX.lock()->GetTransform()->SetWorldRotation(GetTransform()->GetWorldRotation());
 	}
 
@@ -1628,6 +1628,7 @@ void Unit::Reset()
 
 	isPaused = false;
 	localTimeScale = 1.0f;
+	belongingWave = nullptr;
 
 	ResetSharedRef();
 }
@@ -2209,6 +2210,7 @@ yunutyEngine::coroutine::Coroutine Unit::AttackCoroutine(std::weak_ptr<Unit> opp
 }
 yunutyEngine::coroutine::Coroutine Unit::MeleeAttackEffectCoroutine(std::weak_ptr<Unit> opponent)
 {
+	/// VFX 실행
 	/// VFX 실행
 	attackVFX = wanderResources::GetVFX(unitTemplateData->pod.skinnedFBXName, UnitAnimType::Attack);
 

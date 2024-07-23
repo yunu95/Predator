@@ -87,19 +87,6 @@ namespace application
 
         GC<float> waveEndRecoveryTime = 1.0f;
 
-        GC<float> tempForward = 0.0f;
-        GC<float> tempUp = 0.0f;
-        GC<float> tempRight = 0.0f;
-
-        GC<float> tempRotX = 0.0f;
-        GC<float> tempRotY = 0.0f;
-        
-        GC<float> tempProRotX = 0.0f;
-        GC<float> tempProRotY = 0.0f;
-        GC<float> tempProRotZ = 0.0f;
-
-        
-
         TO_JSON(POD_GlobalConstant)
             FROM_JSON(POD_GlobalConstant)
     };

@@ -129,7 +129,7 @@ coroutine::Coroutine Projectile::ProjectileEffectCoroutine(std::weak_ptr<Unit> o
 
         auto gc = GlobalConstant::GetSingletonInstance().pod;
 
-        damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion{ Vector3d(180.0f, 0, 0)});
+        damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion{ Vector3d(270.0f, 0, 0)});
         //auto temp = GetTransform()->GetLocalRotation();
         //auto euler = temp.Euler();
         //euler.x += 180;
@@ -140,7 +140,7 @@ coroutine::Coroutine Projectile::ProjectileEffectCoroutine(std::weak_ptr<Unit> o
         damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldPosition(GetTransform()->GetWorldPosition());
         auto temp = GetTransform()->GetLocalRotation();
         auto euler = temp.Euler();
-        euler.x += 180;
+        euler.x += 90.0f;
 
         damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion{ euler });
     }
@@ -165,7 +165,7 @@ coroutine::Coroutine Projectile::ProjectileEffectCoroutine(std::weak_ptr<Unit> o
             damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldPosition(opponent.lock()->GetTransform()->GetWorldPosition() + relativePos);
             auto gc = GlobalConstant::GetSingletonInstance().pod;
 
-            damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion{ Vector3d(gc.tempProRotX, gc.tempProRotY, gc.tempProRotZ) });
+            //damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion{ Vector3d(gc.tempProRotX, gc.tempProRotY, gc.tempProRotZ) });
             //damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(damagedVFX.lock()->GetGameObject()->GetTransform()->GetWorldRotation() * Quaternion(Vector3d{ 0, prevRot - QuaternionToEastAngle(GetTransform()->GetWorldRotation()), 0}));
             //prevRot = QuaternionToEastAngle(GetTransform()->GetWorldRotation());
             co_await std::suspend_always{};
