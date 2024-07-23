@@ -31,6 +31,14 @@ namespace application
 
 		void InstanceManager::Clear()
 		{
+			for (auto& [idx, each] : list)
+			{
+				if (each->GetPaletteInstance())
+				{
+					each->GetPaletteInstance()->GetGameObject()->SetSelfActive(false);
+				}
+			}
+
 			tdMap.clear();
 			listBeforeMatching.clear();
 			list.clear();

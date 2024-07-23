@@ -1298,28 +1298,28 @@ bool UIManager::ImportDealWithSpecialCases_Post(const JsonUIData& uiData, UIElem
         ImportDefaultAction_Post(uiData, GetUIElementWithIndex(uiData.uiIndex));
         element->button->AddExternalButtonClickFunction([=]()
             {
-                // 상준형님 여깁니다!
+                SFXManager::SingleInstance().SetSFXVolume(1);
             });
         break;
     case UIEnumID::Sound_On:
         ImportDefaultAction_Post(uiData, GetUIElementWithIndex(uiData.uiIndex));
         element->button->AddExternalButtonClickFunction([=]()
             {
-                // 상준형님 여깁니다!
+                SFXManager::SingleInstance().SetSFXVolume(0);
             });
         break;
     case UIEnumID::Music_Off:
         ImportDefaultAction_Post(uiData, GetUIElementWithIndex(uiData.uiIndex));
         element->button->AddExternalButtonClickFunction([=]()
             {
-                // 상준형님 여깁니다!
+                SoundSystem::UnmuteMusic();
             });
         break;
     case UIEnumID::Music_On:
         ImportDefaultAction_Post(uiData, GetUIElementWithIndex(uiData.uiIndex));
         element->button->AddExternalButtonClickFunction([=]()
             {
-                // 상준형님 여깁니다!
+                SoundSystem::MuteMusic();
             });
         break;
     default:
