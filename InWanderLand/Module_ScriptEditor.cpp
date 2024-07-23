@@ -1531,6 +1531,40 @@ namespace application
                             epm.Return();
                         }
                     }
+
+                    if (epm.GetReturnPopupName() == "SetTargetUnit(HP)")
+                    {
+                        ImGui::Begin("Unit HP Setting Popup(SetTarget)", &pop, flag);
+                        auto rect = ImGui::GetContentRegionAvail();
+                        auto size = ImGui::CalcTextSize("Please Setting Target Unit");
+                        imgui::ShiftCursorX((rect.x - size.x) / 2);
+                        imgui::ShiftCursorY((rect.y - size.y) / 2);
+                        ImGui::Text("Please Setting Target Unit");
+                        ImGui::BringWindowToFocusFront(ImGui::GetCurrentWindow());
+                        ImGui::End();
+
+                        pp.ChangeTab("Unit");
+
+                        auto data = epm.GetReturnPopupData<Action_UnitSetHP>();
+                        if (data->isEditing == false && pm.GetCurrentPalette() == &up)
+                        {
+                            data->isEditing = true;
+                            up.Reset();
+                        }
+
+                        if (data->isEditing == true && up.GetSelections().size() == 1)
+                        {
+                            data->SetTargetUnit(static_cast<UnitData*>(*up.GetSelections().begin()));
+                            data->isEditing = false;
+                            epm.Return();
+                        }
+
+                        if (!pop)
+                        {
+                            data->isEditing = false;
+                            epm.Return();
+                        }
+                    }
                 }
             }
             ImGui::End();
@@ -2283,6 +2317,11 @@ namespace application
                                 selectedScript->AddAction<Action_ProgressLoad>();
                                 break;
                             }
+                            case application::ActionType::UnitSetHP:
+                            {
+                                selectedScript->AddAction<Action_UnitSetHP>();
+                                break;
+                            }
                             default:
                                 break;
                             }
@@ -2409,6 +2448,7 @@ namespace application
             }
 
             ImGui::PushID(data.get());
+            ImGui::BeginGroup();
             if (ImGui::Selectable(data->GetTypeName().c_str(), data == selectedAction, 0, ImVec2(ImGui::GetContentRegionAvail().x - 30, 0)))
             {
                 if (selectedAction == data)
@@ -2422,8 +2462,6 @@ namespace application
                 selectedTrigger = nullptr;
                 selectedCondition = nullptr;
             }
-            ImGui::PopID();
-
             bool rightClick = ImGui::IsItemClicked(ImGuiMouseButton_Right);
 
             ImGui::SameLine();
@@ -2447,6 +2485,8 @@ namespace application
             {
                 PopUpDataEdit<IAction>(data.get());
             }
+            ImGui::EndGroup();
+            ImGui::PopID();
         }
     }
 }

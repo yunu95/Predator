@@ -705,6 +705,11 @@ namespace application
                         action = AddAction<Action_ProgressLoad>();
                         break;
                     }
+                    case application::ActionType::UnitSetHP:
+                    {
+                        action = AddAction<Action_UnitSetHP>();
+                        break;
+                    }
                     default:
                         break;
                     }
