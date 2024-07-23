@@ -197,21 +197,40 @@ void UIManager::UpdateHighestPriorityButton()
             m_highestPriorityButton->m_onMouseFunction();
     }
 }
-void UIManager::SummonMoveToFeedback(const Vector3d& worldPos)
+void UIManager::SummonMoveToFeedback(const Vector3d& worldPos, bool attackMove)
 {
     if (!moveToSpriteAnim)
     {
         static constexpr float spriteSize{ 3.0f };
         moveToSpriteAnim = Scene::getCurrentScene()->AddGameObject()->AddComponent<SpriteAnimation>();
-        moveToSpriteAnim->SetSprites(L"Texture/SpriteAnimations/MoveClickAnim");
+        moveToSpriteAnim->SetSprites(L"Texture/Ingame/NewFolder/SpriteAnimations/MoveClickAnim");
         moveToSpriteAnim->GetTransform()->SetLocalScale(Vector3d::one * spriteSize);
         moveToSpriteAnim->GetTransform()->SetLocalRotation(Vector3d{ 90,0,0 });
         moveToSpriteAnim->isRepeating = false;
         moveToSpriteAnim->realTime = true;
     }
-    moveToSpriteAnim->GetGameObject()->SetSelfActive(true);
-    moveToSpriteAnim->GetTransform()->SetWorldPosition(worldPos + Vector3d::up * 0.1);
-    moveToSpriteAnim->Play();
+    if (!attackMoveToSpriteAnim)
+    {
+        static constexpr float spriteSize{ 3.0f };
+        attackMoveToSpriteAnim = Scene::getCurrentScene()->AddGameObject()->AddComponent<SpriteAnimation>();
+        attackMoveToSpriteAnim->SetSprites(L"Texture/Ingame/NewFolder/SpriteAnimations/AttackMoveClickAnim");
+        attackMoveToSpriteAnim->GetTransform()->SetLocalScale(Vector3d::one * spriteSize);
+        attackMoveToSpriteAnim->GetTransform()->SetLocalRotation(Vector3d{ 90,0,0 });
+        attackMoveToSpriteAnim->isRepeating = false;
+        attackMoveToSpriteAnim->realTime = true;
+    }
+    if (attackMove)
+    {
+        attackMoveToSpriteAnim->GetGameObject()->SetSelfActive(true);
+        attackMoveToSpriteAnim->GetTransform()->SetWorldPosition(worldPos + Vector3d::up * 0.3);
+        attackMoveToSpriteAnim->Play();
+    }
+    else
+    {
+        moveToSpriteAnim->GetGameObject()->SetSelfActive(true);
+        moveToSpriteAnim->GetTransform()->SetWorldPosition(worldPos + Vector3d::up * 0.3);
+        moveToSpriteAnim->Play();
+    }
 }
 
 Vector3d UIManager::GetUIPosFromWorld(Vector3d worldPosition)
@@ -320,7 +339,7 @@ UIElement* UIManager::GetUIElementByEnum(UIEnumID uiEnumID)
         if (auto itr = uisByEnumID.find(uiEnumID); itr != uisByEnumID.end())
             return itr->second;
     }
-    ASSERT_WITH_MESSAGE(false, "찾으려는 ui 요소가 존재하지 않습니다! .iwui 파일이 최신 파일이 아닌지 확인해보십시오. UI ID : " + POD_Enum<UIEnumID>::GetEnumNameMap().at((int)uiEnumID));
+    //ASSERT_WITH_MESSAGE(false, "찾으려는 ui 요소가 존재하지 않습니다! .iwui 파일이 최신 파일이 아닌지 확인해보십시오. UI ID : " + POD_Enum<UIEnumID>::GetEnumNameMap().at((int)uiEnumID));
     return nullptr;
 }
 const std::vector<std::string>& UIManager::GetDialogueTimed_KeyStrings()
@@ -1298,28 +1317,28 @@ bool UIManager::ImportDealWithSpecialCases_Post(const JsonUIData& uiData, UIElem
         ImportDefaultAction_Post(uiData, GetUIElementWithIndex(uiData.uiIndex));
         element->button->AddExternalButtonClickFunction([=]()
             {
-                // 상준형님 여깁니다!
+                SFXManager::SingleInstance().SetSFXVolume(1);
             });
         break;
     case UIEnumID::Sound_On:
         ImportDefaultAction_Post(uiData, GetUIElementWithIndex(uiData.uiIndex));
         element->button->AddExternalButtonClickFunction([=]()
             {
-                // 상준형님 여깁니다!
+                SFXManager::SingleInstance().SetSFXVolume(0);
             });
         break;
     case UIEnumID::Music_Off:
         ImportDefaultAction_Post(uiData, GetUIElementWithIndex(uiData.uiIndex));
         element->button->AddExternalButtonClickFunction([=]()
             {
-                // 상준형님 여깁니다!
+                SoundSystem::UnmuteMusic();
             });
         break;
     case UIEnumID::Music_On:
         ImportDefaultAction_Post(uiData, GetUIElementWithIndex(uiData.uiIndex));
         element->button->AddExternalButtonClickFunction([=]()
             {
-                // 상준형님 여깁니다!
+                SoundSystem::MuteMusic();
             });
         break;
     default:

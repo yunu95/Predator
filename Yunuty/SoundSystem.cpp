@@ -358,6 +358,14 @@ void yunutyEngine::SoundSystem::PlayMusic(string soundPath)
 {
     return SoundSystem::SingleInstance()->mPlayMusic(soundPath);
 }
+void yunutyEngine::SoundSystem::MuteMusic()
+{
+    SoundSystem::SingleInstance()->mMuteMusic();
+}
+void yunutyEngine::SoundSystem::UnmuteMusic()
+{
+    SoundSystem::SingleInstance()->mUnmuteMusic();
+}
 void yunutyEngine::SoundSystem::PauseMusic()
 {
     return SoundSystem::SingleInstance()->mPauseMusic();
@@ -688,7 +696,24 @@ void yunutyEngine::SoundSystem::mPlayMusic(string soundPath)
         fmodSystem->playSound(sounds[soundPath], 0, false, &bgmChannel);
         SetMusicVolume(musicVolume);
         currentBGM = soundPath;
+
+        if (bgmMute)
+        {
+            mMuteMusic();
+        }
     }
+}
+void yunutyEngine::SoundSystem::mMuteMusic()
+{
+    if (bgmChannel)
+        bgmChannel->setMute(true);
+    bgmMute = true;
+}
+void yunutyEngine::SoundSystem::mUnmuteMusic()
+{
+    if (bgmChannel)
+        bgmChannel->setMute(false);
+    bgmMute = false;
 }
 void yunutyEngine::SoundSystem::mPauseMusic()
 {

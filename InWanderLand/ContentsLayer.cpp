@@ -407,6 +407,8 @@ void application::contents::ContentsLayer::StopContents(ContentsStopFlag stopFla
         UIManager::Instance().Clear();
 
     wanderUtils::ClearContentsCallbacks();
+    SFXManager::SingleInstance().SetSFXVolume(1);
+    SoundSystem::UnmuteMusic();
 }
 
 bool application::contents::ContentsLayer::IsPlayingContents() const

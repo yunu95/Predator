@@ -65,6 +65,7 @@ void SpriteAnimation::Start()
 void SpriteAnimation::Play()
 {
     isPlaying = true;
+    currentIdx = 0;
 }
 void SpriteAnimation::Update()
 {

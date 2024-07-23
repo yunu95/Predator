@@ -60,6 +60,7 @@ void PlayerController::RegisterUnit(std::weak_ptr<Unit> unit)
     unit.lock()->OnStateEngageCallback()[UnitBehaviourTree::Keywords::Death].AddCallback([=]() {
         TacticModeSystem::Instance().InterruptedCommand(unit.lock().get());
         });
+    //SelectPlayerUnit(PlayerCharacterType::Robin);
 }
 
 void PlayerController::SetSkillUpgradeTarget(UIEnumID skillUpgradeUITarget)
@@ -255,24 +256,27 @@ void PlayerController::HandleByState()
     case State::Peace:
     {
         const auto& gc = GlobalConstant::GetSingletonInstance().pod;
-        Vector3d forward = { std::cos(selectedCharacter.lock()->desiredRotation * math::Deg2Rad) , 0, std::sin(selectedCharacter.lock()->desiredRotation * math::Deg2Rad) };
-        Vector3d right = { std::cos((selectedCharacter.lock()->desiredRotation - 90) * math::Deg2Rad) , 0, std::sin((selectedCharacter.lock()->desiredRotation - 90) * math::Deg2Rad) };
-        peaceFollowingDestination[0] = selectedCharacter.lock()->GetTransform()->GetWorldPosition();
-        peaceFollowingDestination[0] += forward * gc.peaceFollowingZOffest;
-        peaceFollowingDestination[0] += right * gc.peaceFollowingXOffest;
-        peaceFollowingDestination[1] = selectedCharacter.lock()->GetTransform()->GetWorldPosition();
-        peaceFollowingDestination[1] += forward * gc.peaceFollowingZOffest * 1.2f;
-        peaceFollowingDestination[1] -= right * gc.peaceFollowingXOffest * 0.8f;
-
-        if (std::max(peaceFollowingUnits[0].lock()->DistanceSquare(peaceFollowingDestination[0]),
-            peaceFollowingUnits[1].lock()->DistanceSquare(peaceFollowingDestination[1])) >
-            std::max(peaceFollowingUnits[0].lock()->DistanceSquare(peaceFollowingDestination[1]),
-                peaceFollowingUnits[1].lock()->DistanceSquare(peaceFollowingDestination[0])))
+        if (!selectedCharacter.expired())
         {
-            std::swap(peaceFollowingDestination[0], peaceFollowingDestination[1]);
+            Vector3d forward = { std::cos(selectedCharacter.lock()->desiredRotation * math::Deg2Rad) , 0, std::sin(selectedCharacter.lock()->desiredRotation * math::Deg2Rad) };
+            Vector3d right = { std::cos((selectedCharacter.lock()->desiredRotation - 90) * math::Deg2Rad) , 0, std::sin((selectedCharacter.lock()->desiredRotation - 90) * math::Deg2Rad) };
+            peaceFollowingDestination[0] = selectedCharacter.lock()->GetTransform()->GetWorldPosition();
+            peaceFollowingDestination[0] += forward * gc.peaceFollowingZOffest;
+            peaceFollowingDestination[0] += right * gc.peaceFollowingXOffest;
+            peaceFollowingDestination[1] = selectedCharacter.lock()->GetTransform()->GetWorldPosition();
+            peaceFollowingDestination[1] += forward * gc.peaceFollowingZOffest * 1.2f;
+            peaceFollowingDestination[1] -= right * gc.peaceFollowingXOffest * 0.8f;
+
+            if (std::max(peaceFollowingUnits[0].lock()->DistanceSquare(peaceFollowingDestination[0]),
+                peaceFollowingUnits[1].lock()->DistanceSquare(peaceFollowingDestination[1])) >
+                std::max(peaceFollowingUnits[0].lock()->DistanceSquare(peaceFollowingDestination[1]),
+                    peaceFollowingUnits[1].lock()->DistanceSquare(peaceFollowingDestination[0])))
+            {
+                std::swap(peaceFollowingDestination[0], peaceFollowingDestination[1]);
+            }
+            peaceFollowingUnits[0].lock()->OrderMove(peaceFollowingDestination[0]);
+            peaceFollowingUnits[1].lock()->OrderMove(peaceFollowingDestination[1]);
         }
-        peaceFollowingUnits[0].lock()->OrderMove(peaceFollowingDestination[0]);
-        peaceFollowingUnits[1].lock()->OrderMove(peaceFollowingDestination[1]);
         break;
     }
     }
@@ -791,7 +795,8 @@ void PlayerController::HandlePlayerOutOfCamUI()
 void PlayerController::SelectPlayerUnit(PlayerCharacterType::Enum charType)
 {
     UnSelectSkill();
-    if (charType == selectedCharacterType)
+    if (charType == selectedCharacterType ||
+        (charType != PlayerCharacterType::None && characters[charType].expired()))
     {
         return;
     }
@@ -1027,7 +1032,7 @@ void PlayerController::OrderAttackMove(Vector3d position)
     if (auto unit = selectedCharacter.lock())
     {
         unit->OrderAttackMove(position);
-        UIManager::Instance().SummonMoveToFeedback(GetWorldCursorPosition());
+        UIManager::Instance().SummonMoveToFeedback(GetWorldCursorPosition(), true);
     }
 }
 
@@ -1288,13 +1293,15 @@ void PlayerController::SetState(State::Enum newState)
     switch (state)
     {
     case State::Peace:
-        if (selectedCharacter.expired())
-        {
-            SelectPlayerUnit(PlayerCharacterType::Robin);
-        }
+        SelectPlayerUnit(PlayerCharacterType::Robin);
         UnSelectSkill();
         for (auto& each : characters)
         {
+            if (each.expired())
+            {
+                continue;
+            }
+
             each.lock()->playingBattleAnim = false;
             each.lock()->Revive();
         }
@@ -1501,7 +1508,10 @@ void PlayerController::SetMana(float mana)
     this->mana = std::clamp<float>(mana, 0, gc.maxMana);
     UIManager::Instance().GetUIElementByEnum(UIEnumID::ManaBar1)->adjuster->SetTargetFloat(1 - GetManaNormalized());
     UIManager::Instance().GetUIElementByEnum(UIEnumID::ManaBar2)->adjuster->SetTargetFloat(1 - GetManaNormalized());
-    UIManager::Instance().GetUIElementByEnum(UIEnumID::Mana_Text_MaxMP)->SetNumber(gc.maxMana);
+    if (auto elem = UIManager::Instance().GetUIElementByEnum(UIEnumID::Mana_Text_MaxMP))
+    {
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::Mana_Text_MaxMP)->SetNumber(gc.maxMana);
+    }
     UIManager::Instance().GetUIElementByEnum(UIEnumID::Mana_Text_CurrentMP)->SetNumber(this->mana);
 }
 
