@@ -47,11 +47,11 @@ private:
     coroutine::Coroutine SpawningFieldEffect(std::weak_ptr<HanselChargeSkill> skill);
     std::weak_ptr<UnitAcquisitionSphereCollider> stompCollider;
     std::weak_ptr<ManagedFBX> stompEffect1;
-    std::weak_ptr<ManagedFBX> stompEffect2;
+    //std::weak_ptr<ManagedFBX> stompEffect2;
     std::weak_ptr<coroutine::Coroutine> effectColliderCoroutine;
     std::weak_ptr<yunutyEngine::graphics::Animator> animator;
     std::weak_ptr<VFXAnimator> stompEffect1Animator;
-    std::weak_ptr<VFXAnimator> stompEffect2Animator;
+//    std::weak_ptr<VFXAnimator> stompEffect2Animator;
 
 
     float colliderEffectRatio;

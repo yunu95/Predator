@@ -31,10 +31,10 @@ coroutine::Coroutine HanselChargeSkill::operator()()
         {
             animator.lock()->GetGI().SetPlaySpeed(1);
             stompEffect1Animator.lock()->SetSpeed(1);
-            stompEffect2Animator.lock()->SetSpeed(1);
+            //stompEffect2Animator.lock()->SetSpeed(1);
             UnitAcquisitionSphereColliderPool::Instance().Return(stompCollider);
             FBXPool::Instance().Return(stompEffect1);
-            FBXPool::Instance().Return(stompEffect2);
+            //FBXPool::Instance().Return(stompEffect2);
         });
     float localForeswingDuration;
     if (pod.foreswingDuration > 0)
@@ -106,47 +106,6 @@ coroutine::Coroutine HanselChargeSkill::SpawningFieldEffect(std::weak_ptr<Hansel
     Vector3d endPos = startPos + deltaPos;
     Vector3d currentPos = startPos;
 
-    stompCollider = UnitAcquisitionSphereColliderPool::Instance().Borrow(owner.lock());
-    stompCollider.lock()->SetRadius(pod.skillRadius);
-    stompCollider.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
-
-    /// 이펙트도 생성
-    stompEffect1 = FBXPool::Instance().Borrow("VFX_Hansel_Skill1_1");
-    stompEffect1.lock()->GetGameObject()->GetTransform()->SetWorldPosition(targetPos);
-    stompEffect1.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
-    stompEffect1.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(actualCollideRange, actualCollideRange, actualCollideRange));
-    stompEffect1.lock()->GetGameObject()->SetSelfActive(false);
-
-    stompEffect2 = FBXPool::Instance().Borrow("VFX_Hansel_Skill1_2");
-    stompEffect2.lock()->GetGameObject()->GetTransform()->SetWorldPosition(targetPos);
-    stompEffect2.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
-    stompEffect2.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(actualCollideRange, actualCollideRange, actualCollideRange));
-    stompEffect2.lock()->GetGameObject()->SetSelfActive(false);
-
-    stompEffect1Animator = stompEffect1.lock()->AcquireVFXAnimator();
-    stompEffect1Animator.lock()->SetAutoActiveFalse();
-    stompEffect1Animator.lock()->Init();
-
-    stompEffect2Animator = stompEffect2.lock()->AcquireVFXAnimator();
-    stompEffect2Animator.lock()->SetAutoActiveFalse();
-    stompEffect2Animator.lock()->Init();
-
-    auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill1);
-
-    float localForeswingDuration;
-    if (pod.foreswingDuration > 0)
-    {
-        foreswingSpeed = jumpForeswingTime / pod.foreswingDuration;
-        localForeswingDuration = pod.foreswingDuration;
-    }
-    else
-    {
-        localForeswingDuration = jumpForeswingTime;
-    }
-    animator.lock()->GetGI().SetPlaySpeed(foreswingSpeed);
-
-    co_yield coroutine::WaitForSeconds(localForeswingDuration);
-
     float localSkillDuration;
     float localJumpDuration;
     float localDamageDuration;
@@ -164,6 +123,51 @@ coroutine::Coroutine HanselChargeSkill::SpawningFieldEffect(std::weak_ptr<Hansel
         localJumpDuration = JumpAndLandDuration;
         localDamageDuration = damageDelay;
     }
+
+    stompCollider = UnitAcquisitionSphereColliderPool::Instance().Borrow(owner.lock());
+    stompCollider.lock()->SetRadius(pod.skillRadius);
+    stompCollider.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
+
+    /// 이펙트도 생성
+    stompEffect1 = FBXPool::Instance().Borrow("VFX_Hansel_Skill1_1");
+    stompEffect1.lock()->GetGameObject()->GetTransform()->SetWorldPosition(targetPos);
+    stompEffect1.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
+    stompEffect1.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(actualCollideRange, actualCollideRange, actualCollideRange));
+    //stompEffect1.lock()->GetGameObject()->SetSelfActive(false);
+
+    //stompEffect2 = FBXPool::Instance().Borrow("VFX_Hansel_Skill1_2");
+    //stompEffect2.lock()->GetGameObject()->GetTransform()->SetWorldPosition(targetPos);
+    //stompEffect2.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion::MakeWithForwardUp(direction, direction.up));
+    //stompEffect2.lock()->GetGameObject()->GetTransform()->SetWorldScale(Vector3d(actualCollideRange, actualCollideRange, actualCollideRange));
+    //stompEffect2.lock()->GetGameObject()->SetSelfActive(false);
+
+    stompEffect1Animator = stompEffect1.lock()->AcquireVFXAnimator();
+    stompEffect1Animator.lock()->SetAutoActiveFalse();
+    stompEffect1Animator.lock()->Init();
+
+    stompEffect1.lock()->GetGameObject()->SetSelfActive(true);
+    stompEffect1Animator.lock()->SetSpeed(skillSpeed);
+    stompEffect1Animator.lock()->Play();
+
+    //stompEffect2Animator = stompEffect2.lock()->AcquireVFXAnimator();
+    //stompEffect2Animator.lock()->SetAutoActiveFalse();
+    //stompEffect2Animator.lock()->Init();
+
+    auto anim = wanderResources::GetAnimation(owner.lock()->GetFBXName(), UnitAnimType::Skill1);
+
+    float localForeswingDuration;
+    if (pod.foreswingDuration > 0)
+    {
+        foreswingSpeed = jumpForeswingTime / pod.foreswingDuration;
+        localForeswingDuration = pod.foreswingDuration;
+    }
+    else
+    {
+        localForeswingDuration = jumpForeswingTime;
+    }
+    animator.lock()->GetGI().SetPlaySpeed(foreswingSpeed);
+
+    co_yield coroutine::WaitForSeconds(localForeswingDuration);
 
     animator.lock()->GetGI().SetPlaySpeed(jumpSpeed);
 
@@ -191,17 +195,13 @@ coroutine::Coroutine HanselChargeSkill::SpawningFieldEffect(std::weak_ptr<Hansel
         co_await std::suspend_always{};
     }
     animator.lock()->GetGI().SetPlaySpeed(skillSpeed);
-    stompEffect1Animator.lock()->SetSpeed(skillSpeed);
-    stompEffect2Animator.lock()->SetSpeed(skillSpeed);
+    //stompEffect2Animator.lock()->SetSpeed(skillSpeed);
 
     stompCollider.lock()->GetTransform()->SetWorldPosition(owner.lock()->GetTransform()->GetWorldPosition());
     co_await std::suspend_always{};
 
-    stompEffect1.lock()->GetGameObject()->SetSelfActive(true);
-    stompEffect2.lock()->GetGameObject()->SetSelfActive(true);
-
-    stompEffect1Animator.lock()->Play();
-    stompEffect2Animator.lock()->Play();
+    //stompEffect2.lock()->GetGameObject()->SetSelfActive(true);
+    // stompEffect2Animator.lock()->Play();
 
     for (auto each : stompCollider.lock()->GetEnemies())
     {
@@ -239,7 +239,7 @@ coroutine::Coroutine HanselChargeSkill::SpawningFieldEffect(std::weak_ptr<Hansel
 
     animator.lock()->GetGI().SetPlaySpeed(backswingSpeed);
     stompEffect1Animator.lock()->SetSpeed(backswingSpeed);
-    stompEffect2Animator.lock()->SetSpeed(backswingSpeed);
+    //stompEffect2Animator.lock()->SetSpeed(backswingSpeed);
 
     wanderUtils::UnitCoroutine::ForSecondsFromUnit backForSeconds{ owner, localBackswingDuration };
 
