@@ -155,7 +155,15 @@ void GraphicsTest()
     }
 
     {
-        auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SM_Wall_21m");
+        auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("VFX_Hansel_Skill1_1");
+        auto anim = obj->AddComponent<VFXAnimator>();
+        anim->Init();
+        anim->SetLoop(true);
+        anim->SetAutoActiveFalse();
+        anim->Play();
+    }
+    {
+        auto obj = Scene::getCurrentScene()->AddGameObjectFromFBX("SKM_Hansel");
     }
 
     /*{
