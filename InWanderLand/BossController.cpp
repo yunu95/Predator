@@ -124,7 +124,7 @@ void BossController::PostRecovery()
     if (bossData->inGameUnit.expired())
     {
         boss.reset();
-        bossData->ApplyAsPlaytimeObject();
+        boss = UnitPool::SingleInstance().Borrow(bossData);
     }
 }
 
@@ -201,6 +201,9 @@ coroutine::Coroutine BossController::BossAppearCoroutine()
     {
         co_await std::suspend_always();
     }
+
+    boss.lock()->Relocate(boss.lock()->GetTransform()->GetWorldPosition());
+
     co_return;
 }
 
