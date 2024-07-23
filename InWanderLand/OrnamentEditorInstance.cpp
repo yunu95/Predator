@@ -192,6 +192,7 @@ namespace application::editor::palette
     }
     coroutine::Coroutine OrnamentEditorInstance::Fade(bool& visible)
     {
+        /// 성찬아 여기봐 
         static constexpr float fadeSpeed = 2.5f;
         GameObject* targetObj = nullptr;
         for (auto each : GetGameObject()->GetChildren())

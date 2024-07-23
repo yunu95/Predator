@@ -291,6 +291,7 @@ void UIElement::SetAsWorldSpaceUI(const Vector3d& origin)
     worldParentOrigin = origin;
     worldParent->SetWorldPosition(UIManager::Instance().GetUIPosFromWorld(worldParentOrigin));
     GetGameObject()->SetParent(worldParent->GetGameObject());
+    GetTransform()->SetLocalPosition(Vector3d::zero);
 }
 void UIElement::SetAsScreenSpaceUI()
 {

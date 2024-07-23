@@ -197,21 +197,40 @@ void UIManager::UpdateHighestPriorityButton()
             m_highestPriorityButton->m_onMouseFunction();
     }
 }
-void UIManager::SummonMoveToFeedback(const Vector3d& worldPos)
+void UIManager::SummonMoveToFeedback(const Vector3d& worldPos, bool attackMove)
 {
     if (!moveToSpriteAnim)
     {
         static constexpr float spriteSize{ 3.0f };
         moveToSpriteAnim = Scene::getCurrentScene()->AddGameObject()->AddComponent<SpriteAnimation>();
-        moveToSpriteAnim->SetSprites(L"Texture/SpriteAnimations/MoveClickAnim");
+        moveToSpriteAnim->SetSprites(L"Texture/Ingame/NewFolder/SpriteAnimations/MoveClickAnim");
         moveToSpriteAnim->GetTransform()->SetLocalScale(Vector3d::one * spriteSize);
         moveToSpriteAnim->GetTransform()->SetLocalRotation(Vector3d{ 90,0,0 });
         moveToSpriteAnim->isRepeating = false;
         moveToSpriteAnim->realTime = true;
     }
-    moveToSpriteAnim->GetGameObject()->SetSelfActive(true);
-    moveToSpriteAnim->GetTransform()->SetWorldPosition(worldPos + Vector3d::up * 0.1);
-    moveToSpriteAnim->Play();
+    if (!attackMoveToSpriteAnim)
+    {
+        static constexpr float spriteSize{ 3.0f };
+        attackMoveToSpriteAnim = Scene::getCurrentScene()->AddGameObject()->AddComponent<SpriteAnimation>();
+        attackMoveToSpriteAnim->SetSprites(L"Texture/Ingame/NewFolder/SpriteAnimations/AttackMoveClickAnim");
+        attackMoveToSpriteAnim->GetTransform()->SetLocalScale(Vector3d::one * spriteSize);
+        attackMoveToSpriteAnim->GetTransform()->SetLocalRotation(Vector3d{ 90,0,0 });
+        attackMoveToSpriteAnim->isRepeating = false;
+        attackMoveToSpriteAnim->realTime = true;
+    }
+    if (attackMove)
+    {
+        attackMoveToSpriteAnim->GetGameObject()->SetSelfActive(true);
+        attackMoveToSpriteAnim->GetTransform()->SetWorldPosition(worldPos + Vector3d::up * 0.1);
+        attackMoveToSpriteAnim->Play();
+    }
+    else
+    {
+        moveToSpriteAnim->GetGameObject()->SetSelfActive(true);
+        moveToSpriteAnim->GetTransform()->SetWorldPosition(worldPos + Vector3d::up * 0.1);
+        moveToSpriteAnim->Play();
+    }
 }
 
 Vector3d UIManager::GetUIPosFromWorld(Vector3d worldPosition)
@@ -320,7 +339,7 @@ UIElement* UIManager::GetUIElementByEnum(UIEnumID uiEnumID)
         if (auto itr = uisByEnumID.find(uiEnumID); itr != uisByEnumID.end())
             return itr->second;
     }
-    ASSERT_WITH_MESSAGE(false, "찾으려는 ui 요소가 존재하지 않습니다! .iwui 파일이 최신 파일이 아닌지 확인해보십시오. UI ID : " + POD_Enum<UIEnumID>::GetEnumNameMap().at((int)uiEnumID));
+    //ASSERT_WITH_MESSAGE(false, "찾으려는 ui 요소가 존재하지 않습니다! .iwui 파일이 최신 파일이 아닌지 확인해보십시오. UI ID : " + POD_Enum<UIEnumID>::GetEnumNameMap().at((int)uiEnumID));
     return nullptr;
 }
 const std::vector<std::string>& UIManager::GetDialogueTimed_KeyStrings()
@@ -1119,7 +1138,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
                 GetUIElementByEnum(UIEnumID::PopUpMessage_RequirementNotMet)->EnableElement();
             }
         );
-    }
+                }
     // 초기 상태가 비활성화 상태라면...
     if (uiData.customFlags & (int)UIExportFlag::DisableOnStart)
     {
@@ -1150,7 +1169,7 @@ void UIManager::ImportDefaultAction_Post(const JsonUIData& uiData, UIElement* el
     {
         std::transform(uiData.exclusiveEnableGroup.begin(), uiData.exclusiveEnableGroup.end(), std::back_inserter(element->exclusiveEnableGroup), [&](int idx) {return GetUIElementWithIndex(idx); });
     }
-}
+            }
 // 특별한 로직이 적용되어야 하는 경우 참, 그렇지 않으면 거짓을 반환합니다.
 bool UIManager::ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* element)
 {

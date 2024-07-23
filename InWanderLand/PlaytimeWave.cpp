@@ -51,7 +51,7 @@ std::weak_ptr<PlaytimeWave> PlaytimeWave::GetCurrentOperatingWave()
 std::weak_ptr<PlaytimeWave> PlaytimeWave::currentOperativeWave;
 void PlaytimeWave::ActivateWave()
 {
-    if (isWaveFinished)
+    if (isWaveFinished || isWaveActivated)
         return;
     isWaveActivated = true;
     currentOperativeWave = GetGameObject()->GetComponentWeakPtr<PlaytimeWave>();

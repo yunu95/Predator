@@ -118,7 +118,6 @@ namespace application
 
         void OrnamentData::ApplyAsPlaytimeObject()
         {
-            /// 성찬아 여기봐 
             ApplyAsPaletteInstance();
             if (!pod.isGuide)
             {

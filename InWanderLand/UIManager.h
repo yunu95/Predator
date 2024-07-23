@@ -39,6 +39,7 @@ private:
     virtual void OnContentsPlay();
 
     SpriteAnimation* moveToSpriteAnim{ nullptr };
+    SpriteAnimation* attackMoveToSpriteAnim{ nullptr };
     int uiImportingPriority{ 0 };
     struct ButtonCompare
     {
@@ -126,7 +127,7 @@ public:
     // 만약 현재의 highestPirorityButton이 여전히 가장 높은 우선순위를 가지고 있다면, 아무 일도 벌어지지 않습니다.
     void UpdateHighestPriorityButton();
 
-    void SummonMoveToFeedback(const Vector3d& worldPos);
+    void SummonMoveToFeedback(const Vector3d& worldPos, bool attackMove = false);
     Vector3d GetUIPosFromWorld(Vector3d worldPosition);
     bool IsMouseOnButton();
     weak_ptr<UIElement> DuplicateUIElement(UIElement* ui);
