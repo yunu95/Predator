@@ -263,7 +263,7 @@ namespace application
 						particle->SetSelfActive(true);
 						auto ptr = particle->GetComponent<graphics::ParticleRenderer>();
 						ptr->Play();
-					}, true);
+					});
 
 				if (funcIndex == 0)
 				{
@@ -450,7 +450,7 @@ namespace application
 						particle->SetSelfActive(true);
 						auto ptr = particle->GetComponent<graphics::ParticleRenderer>();
 						ptr->Play();
-					}, true);
+					});
 
 				if (funcIndex == 0)
 				{

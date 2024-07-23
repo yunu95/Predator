@@ -1237,7 +1237,7 @@ void Unit::Init(const application::editor::Unit_TemplateData* unitTemplateData)
                         particle->SetSelfActive(true);
                         auto ptr = particle->GetComponent<graphics::ParticleRenderer>();
                         ptr->Play();
-                    }, true);
+                    });
 
                 break;
             }
