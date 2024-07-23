@@ -34,6 +34,7 @@ void Animator::ClearAnimationEvent(yunuGI::IAnimation* animation)
 
 void Animator::ChangeAnimation(yunuGI::IAnimation* animation, float transitionDuration, float transitionSpeed)
 {
+	isPlay = true;
 	auto& gi = this->GetGI();
 
 	gi.ChangeAnimation(animation, transitionDuration, transitionSpeed);
@@ -130,10 +131,10 @@ float yunutyEngine::graphics::Animator::GetCurrentFrame()
 
 void Animator::OnEnable()
 {
-	if (this->GetGI().GetCurrentAnimation())
-	{
-		this->Play(this->GetGI().GetCurrentAnimation());
-	}
+	//if (this->GetGI().GetCurrentAnimation())
+	//{
+	//	this->Play(this->GetGI().GetCurrentAnimation());
+	//}
 }
 
 void Animator::OnDisable()
@@ -150,6 +151,8 @@ void Animator::OnDisable()
 		gi.GetTransitionDesc().ClearNextAnimation();
 		gi.SetNextAnimation(nullptr);
 	}
+
+	isPlay = false;
 }
 
 void Animator::Update()

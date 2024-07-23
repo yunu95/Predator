@@ -270,7 +270,7 @@ void InstancingManager::RenderStaticDeferred()
 			each->isCulled = true;
 		}
 	}
-
+	//ClearLightMapBuffer();
 	{
 		for (auto& pair : this->staticMeshDeferredRenderVec)
 		{
@@ -317,6 +317,16 @@ void InstancingManager::RenderStaticDeferred()
 					AddData(instanceID, data);
 
 					lightMapUVBuffer->lightMapUV[index].lightMapIndex = renderInfo->lightMapIndex;
+					if (renderInfo->lightMapIndex == -1)
+					{
+						if (renderInfo->mesh->GetName() == L"SM_Wall_7m")
+						{
+							if (renderInfo->material->GetName() == L"M_SquarePattern_wall")
+							{
+								int a = 1;
+							}
+						}
+					}
 					lightMapUVBuffer->lightMapUV[index].scaling = renderInfo->uvScaling;
 					lightMapUVBuffer->lightMapUV[index].uvOffset = renderInfo->uvOffset;
 					lightMapUVBuffer->lightMapUV[index].outlineInfo = renderInfo->outlineInfo;
@@ -370,6 +380,8 @@ void InstancingManager::RenderStaticDeferred()
 	}
 
 	{
+		ClearData();
+		//ClearLightMapBuffer();
 		for (auto& pair : this->staticMeshDeferredMap)
 		{
 			auto& renderInfoVec = pair.second;
@@ -391,6 +403,16 @@ void InstancingManager::RenderStaticDeferred()
 					AddData(instanceID, data);
 
 					lightMapUVBuffer->lightMapUV[index].lightMapIndex = renderInfo->lightMapIndex;
+					if (renderInfo->lightMapIndex == -1 )
+					{
+						if (renderInfo->mesh->GetName() == L"SM_Wall_7m")
+						{
+							if (renderInfo->material->GetName() == L"M_SquarePattern_wall")
+							{
+								int a = 1;
+							}
+						}
+					}
 					lightMapUVBuffer->lightMapUV[index].scaling = renderInfo->uvScaling;
 					lightMapUVBuffer->lightMapUV[index].uvOffset = renderInfo->uvOffset;
 					lightMapUVBuffer->lightMapUV[index].outlineInfo = renderInfo->outlineInfo;
@@ -446,6 +468,7 @@ void InstancingManager::RenderStaticForward()
 
 	//	cache[instanceID].push_back(each);
 	//}
+	///this->ClearLightMapBuffer();
 	for (auto& pair : this->staticMeshForwardCache)
 	{
 		std::set<std::shared_ptr<RenderInfo>>& renderInfoVec = pair.second;
@@ -765,7 +788,7 @@ void InstancingManager::RenderSkinnedShadow()
 
 				if (buffer->GetCount() > 0)
 				{
-					
+
 
 					//auto opacityMap = (*renderInfoVec.begin())->renderInfo.material->GetTexture(yunuGI::Texture_Type::OPACITY);
 					//if (opacityMap)
@@ -783,7 +806,7 @@ void InstancingManager::RenderSkinnedShadow()
 					//}
 					(*renderInfoVec.begin())->renderInfo.material->PushGraphicsData();
 
-					
+
 
 					if ((*renderInfoVec.begin())->renderInfo.material->GetVertexShader()->GetName() == L"DissolveVS.cso")
 					{
@@ -942,6 +965,22 @@ void InstancingManager::RegisterStaticDeferredData(std::shared_ptr<RenderInfo>& 
 	InstanceID instanceID = std::make_pair(renderInfo->mesh, renderInfo->material);
 
 
+
+
+
+	//auto instanceIter = this->staticMeshInstanceIDIndexMap.find(instanceID);
+	//if (instanceIter != this->staticMeshInstanceIDIndexMap.end())
+	//{
+	//	auto renderInfoIter = this->staticMeshRenderInfoIndexMap.find(renderInfo);
+	//	if (renderInfoIter != this->staticMeshRenderInfoIndexMap.end())
+	//	{
+	//		return;
+	//	}
+	//	else
+	//	{
+	//		this->staticMeshDeferredRenderVec[instanceIter->second].second.push_back(renderInfo);
+	//	}
+	//}
 	auto renderInfoIter = this->staticMeshRenderInfoIndexMap.find(renderInfo);
 	if (renderInfoIter != this->staticMeshRenderInfoIndexMap.end())
 	{

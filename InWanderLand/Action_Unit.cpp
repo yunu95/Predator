@@ -1708,4 +1708,176 @@ namespace application
 			targetUnit->ApplyAsPlaytimeObject();
 		}
 	}
+
+	Action_UnitSetHP::~Action_UnitSetHP()
+	{
+		if (targetUnit)
+		{
+			targetUnit->RemoveObserver(this);
+		}
+	}
+
+	CoroutineObject<void> Action_UnitSetHP::DoAction()
+	{
+		if (targetUnit->inGameUnit.expired())
+		{
+			co_return;
+		}
+
+		if (hp >= targetUnit->inGameUnit.lock()->GetUnitCurrentHp())
+		{
+			targetUnit->inGameUnit.lock()->SetCurrentHp(hp);
+		}
+		else
+		{
+			targetUnit->inGameUnit.lock()->Damaged(targetUnit->inGameUnit.lock()->GetUnitCurrentHp() - hp);
+		}
+	}
+
+	bool Action_UnitSetHP::IsValid()
+	{
+		return (targetUnit == nullptr) ? false : true;
+	}
+
+	void Action_UnitSetHP::SetTargetUnit(editor::UnitData* unit)
+	{
+		if (targetUnit)
+		{
+			targetUnit->RemoveObserver(this);
+		}
+
+		targetUnit = unit;
+		if (unit)
+		{
+			unit->RegisterObserver(this);
+		}
+	}
+
+	void Action_UnitSetHP::SetHP(float hp)
+	{
+		this->hp = hp;
+	}
+
+	void Action_UnitSetHP::ProcessObervationEvent(ObservationTarget* target, ObservationEvent event)
+	{
+		switch (event)
+		{
+			case application::ObservationEvent::Destroy:
+			{
+				if (targetUnit == static_cast<editor::UnitData*>(target))
+				{
+					targetUnit = nullptr;
+				}
+				break;
+			}
+			default:
+				break;
+		}
+	}
+
+	void Action_UnitSetHP::ImGui_DrawDataPopup(Action_UnitSetHP* data)
+	{
+		if (ImGui::MenuItem("SetTargetUnit(HP)"))
+		{
+			editor::EditorLayer::SetInputControl(false);
+			editor::imgui::ShowMessageBox("SetTargetUnit(HP)", [data]()
+				{
+					auto& pp = editor::PalettePanel::GetSingletonInstance();
+					auto& up = editor::palette::UnitPalette::SingleInstance();
+
+					editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
+
+					ImGui::Separator();
+
+					ImGui::SetNextItemWidth(-1);
+					if (data->targetUnit)
+					{
+						ImGui::Text(data->targetUnit->pod.templateData->pod.skinnedFBXName.c_str());
+						pp.ChangeTab("Unit");
+						up.Reset();
+						up.SelectUnitInstance(data->targetUnit);
+					}
+					else
+					{
+						ImGui::Text("------");
+					}
+
+					ImGui::Separator();
+
+					if (ImGui::Button("Edit"))
+					{
+						ImGui::CloseCurrentPopup();
+						editor::imgui::CloseMessageBox("SetTargetUnit(HP)");
+						editor::EditorLayer::SetInputControl(true);
+						editor::EditorPopupManager::GetSingletonInstance().PushReturnPopup<Action_UnitSetHP>("SetTargetUnit(HP)", data);
+					}
+					ImGui::SameLine();
+
+					if (ImGui::Button("Cancel"))
+					{
+						ImGui::CloseCurrentPopup();
+						editor::imgui::CloseMessageBox("SetTargetUnit(HP)");
+						editor::EditorLayer::SetInputControl(true);
+					}
+				}, 300);
+		}
+
+		if (ImGui::MenuItem("SetUnitHP"))
+		{
+			editor::EditorLayer::SetInputControl(false);
+			static float hp = 0;
+			hp = data->hp;
+			editor::imgui::ShowMessageBox("SetUnitHP", [data]()
+				{
+					editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
+
+					ImGui::Separator();
+
+					ImGui::SetNextItemWidth(-1);
+					ImGui::DragFloat("##UnitHP", &hp);
+
+					ImGui::Separator();
+
+					if (ImGui::Button("OK"))
+					{
+						data->SetHP(hp);
+						ImGui::CloseCurrentPopup();
+						editor::imgui::CloseMessageBox("SetUnitHP");
+						editor::EditorLayer::SetInputControl(true);
+					}
+					ImGui::SameLine();
+
+					if (ImGui::Button("Cancel"))
+					{
+						ImGui::CloseCurrentPopup();
+						editor::imgui::CloseMessageBox("SetUnitHP");
+						editor::EditorLayer::SetInputControl(true);
+					}
+				}, 300);
+		}
+	}
+
+	bool Action_UnitSetHP::PreEncoding(json& data) const
+	{
+		data["hp"] = hp;
+		return true;
+	}
+
+	bool Action_UnitSetHP::PostEncoding(json& data) const
+	{
+		data["targetUnit"] = targetUnit ? UUID_To_String(targetUnit->GetUUID()) : "nullptr";
+		return true;
+	}
+
+	bool Action_UnitSetHP::PreDecoding(const json& data)
+	{
+		hp = data["hp"];
+		return true;
+	}
+
+	bool Action_UnitSetHP::PostDecoding(const json& data)
+	{
+		SetTargetUnit(UUIDManager::GetSingletonInstance().GetPointerFromUUID<editor::UnitData*>(String_To_UUID(data["targetUnit"])));
+		return true;
+	}
 }
