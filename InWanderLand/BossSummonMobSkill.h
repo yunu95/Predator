@@ -45,6 +45,7 @@ struct POD_BossSummonMobSkill
 	float rightNoiseRadius = 5.0f;
 
 	float summonPeriod = 15.0f;
+	float summoningTime = 5.0f;
 
 	TO_JSON(POD_BossSummonMobSkill)
 		FROM_JSON(POD_BossSummonMobSkill)
