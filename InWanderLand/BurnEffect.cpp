@@ -117,10 +117,7 @@ void BurnEffect::OnEnable()
 		isDone = true;
 		return;
 	}
-}
 
-void BurnEffect::OnDisable()
-{
 	isDisAppear = false;
 	isAppear = true;
 	isDone = false;
@@ -144,6 +141,11 @@ void BurnEffect::OnDisable()
 		renderer->GetGI().GetMaterial(i)->SetFloat(0, this->defaultStart * GetGameObject()->GetTransform()->GetWorldScale().x);
 		renderer->GetGI().GetMaterial(i)->SetFloat(1, 0);
 	}
+}
+
+void BurnEffect::OnDisable()
+{
+
 }
 
 void BurnEffect::Start()
