@@ -76,7 +76,8 @@ namespace application
         SetRegionAsNavObstacle,
         SetPlayerConstrainingRegion,
         ProgressSave,
-        ProgressLoad
+        ProgressLoad,
+        UnitSetHP,
     };
 
     struct IAction
