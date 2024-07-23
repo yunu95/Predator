@@ -278,10 +278,11 @@ coroutine::Coroutine BossController::RoutinePerUnit(std::weak_ptr<Unit> unit)
                 }
             }
 
-            if (!targetUnit.expired())
+            if (targetUnit.expired())
             {
                 targetUnit = PlayerController::Instance().GetPlayers()[math::Random::GetRandomInt(0, 2)];
             }
+
             skillDir = (targetUnit.lock()->GetTransform()->GetWorldPosition() - unit.lock()->GetTransform()->GetWorldPosition()).Normalized();
 
             unit.lock()->OrderSkill(BossImpaleSkill{}, unit.lock()->GetTransform()->GetWorldPosition() + skillDir);
@@ -330,6 +331,12 @@ coroutine::Coroutine BossController::RoutinePerUnit(std::weak_ptr<Unit> unit)
                     break;
                 }
             }
+
+            if (targetUnit.expired())
+            {
+                targetUnit = PlayerController::Instance().GetPlayers()[math::Random::GetRandomInt(0, 2)];
+            }
+
             skillDir = (targetUnit.lock()->GetTransform()->GetWorldPosition() - unit.lock()->GetTransform()->GetWorldPosition()).Normalized();
             unit.lock()->OrderSkill(BossImpaleSkill{}, unit.lock()->GetTransform()->GetWorldPosition() + skillDir);
             break;
@@ -389,6 +396,12 @@ coroutine::Coroutine BossController::RoutinePerUnit(std::weak_ptr<Unit> unit)
                     break;
                 }
             }
+
+            if (targetUnit.expired())
+            {
+                targetUnit = PlayerController::Instance().GetPlayers()[math::Random::GetRandomInt(0, 2)];
+            }
+
             skillDir = (targetUnit.lock()->GetTransform()->GetWorldPosition() - unit.lock()->GetTransform()->GetWorldPosition()).Normalized();
             unit.lock()->OrderSkill(BossImpaleSkill{}, unit.lock()->GetTransform()->GetWorldPosition() + skillDir);
             break;

@@ -43,6 +43,8 @@ namespace yunutyEngine
         static void StopSound(double fadeLength = 0);
         // Music을 따로 채널에서 관리한다? 이건 찐빠같은 설계로, 복잡한 게임을 구현하기 위해서는 AudioSource 객체에서 채널 컨트롤이 가능하게 해야한다.
         static void PlayMusic(string soundPath);
+        static void MuteMusic();
+        static void UnmuteMusic();
         static void PauseMusic();
         static void UnpauseMusic();
         static void StopMusic(double fadeLength = 0);
@@ -103,6 +105,8 @@ namespace yunutyEngine
         const unordered_set<string>& mGetLoaded3DSoundsList();
         // Music을 따로 채널에서 관리한다? 이건 찐빠같은 설계로, 복잡한 게임을 구현하기 위해서는 AudioSource 객체에서 채널 컨트롤이 가능하게 해야한다.
         void mPlayMusic(string soundPath);
+        void mMuteMusic();
+        void mUnmuteMusic();
         void mPauseMusic();
         void mContinueMusic();
         void mStopMusic(double fadeLength);
@@ -111,6 +115,7 @@ namespace yunutyEngine
         FMOD::Channel* channels[128] = { nullptr };
         FMOD::Channel* bgmChannel = nullptr;
         FMOD::System* fmodSystem = nullptr;
+        bool bgmMute = false;
         // 0번 Index 는 masterSoundGroup 으로 사용하며, 기본적으로 생성합니다.
         unordered_map<unsigned long long, FMOD::SoundGroup*> soundGroups;
         unordered_map<unsigned long long, float> soundGroupVolumes;

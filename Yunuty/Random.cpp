@@ -10,11 +10,23 @@ Random::Random()
 }
 int Random::GetRandomInt(int min, int max)
 {
+    if (min > max)
+    {
+        int tempVal = max;
+        max = min;
+        min = tempVal;
+    }
     std::uniform_int_distribution<int> dis(min, max);
     return dis(SingleInstance()->gen);
 }
 float Random::GetRandomFloat(float min, float max)
 {
+    if (min > max)
+    {
+        float tempVal = max;
+        max = min;
+        min = tempVal;
+    }
     std::uniform_real_distribution<float> dis(min, max);
     return dis(SingleInstance()->gen);
 }
