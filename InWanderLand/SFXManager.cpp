@@ -33,6 +33,10 @@ SFXManager::SFXManager()
 void SFXManager::PlaySoundfile(string soundPath)
 {
 	auto& sfxManager = SingleInstance();
+	if (!sfxManager.soundRandomFlagMap.contains(soundPath))
+	{
+		return;
+	}
 	if (sfxManager.soundRandomFlagMap[soundPath] && GetSFXRandomSize(soundPath) != 0)
 	{
 		auto randomIdx = math::Random::GetRandomInt(0, GetSFXRandomSize(soundPath));
@@ -51,6 +55,10 @@ void SFXManager::PlaySoundfile(string soundPath)
 void SFXManager::PlaySoundfile3D(string soundPath, Vector3d worldPosition)
 {
 	auto& sfxManager = SingleInstance();
+	if (!sfxManager.soundRandomFlagMap.contains(soundPath))
+	{
+		return;
+	}
 	if (sfxManager.soundRandomFlagMap[soundPath] && GetSFXRandomSize(soundPath) != 0)
 	{
 		auto randomIdx = math::Random::GetRandomInt(0, GetSFXRandomSize(soundPath));

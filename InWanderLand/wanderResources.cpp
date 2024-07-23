@@ -1,13 +1,9 @@
 #include "wanderResources.h"
 #include "FBXPool.h"
-#include "SoundEnumID.h"
 std::unordered_map<std::string, std::unordered_map<UnitAnimType, yunuGI::IAnimation*>> animMap;
 std::unordered_map<std::string, std::unordered_map<yunuGI::IAnimation*, UnitAnimType>> animTypeMap;
 std::unordered_map<std::string, std::unordered_map<UnitAnimType, std::string>> fbxMap;
-std::unordered_map<std::string, std::unordered_map<SoundEnumID, std::string>> soundMap;
-
-std::unordered_map<std::string, std::string> projectileBirthSounds;
-std::unordered_map<std::string, std::string> projectileDeathSounds;
+std::unordered_map<EffectSoundType::Enum, std::string> soundMap;
 
 // 온갖 지저분한 애니메이션 상수 키들은 다 여기에 집어넣는다.
 void InitAnimMap()
@@ -131,15 +127,6 @@ void InitAnimMap()
     }
 };
 
-void InitSoundMap()
-{
-    //std::unordered_map<std::wstring, yunuGI::IAnimation*> localSooundMap;
-    //std::transform(SoundSystem::GetLoadedSoundsList().begin(),
-    //    SoundSystem::GetLoadedSoundsList().end(),
-    //    std::inserter(localSooundMap, localSooundMap.end()), [](auto each) { return std::pair<std::wstring, yunuGI::IAnimation*>{each->GetName(), each}; });
-    //animMap["SKM_Robin"][UnitAnimType::Idle] = localSooundMap[L"Rig_Robin_arpbob|Ani_Robin_Idle"];
-}
-
 yunuGI::IAnimation* wanderResources::GetAnimation(const std::string& fbx, UnitAnimType animType)
 {
     if (animMap.empty())
@@ -234,4 +221,34 @@ bool wanderResources::FindVFXMap(const std::string& fbx, UnitAnimType animType)
     {
         return true;
     }
+}
+
+yunuGI::IAnimation* wanderResources::GetAnimation(const std::string& fbx, UnitAnimType animType)
+{
+    if (animMap.empty())
+        InitAnimMap();
+    return animMap.at(fbx).at(animType);
+}
+
+void InitSoundMap()
+{
+    soundMap[EffectSoundType::Enum::Projectile_Ursula] = "";
+    soundMap[EffectSoundType::Enum::Projectile_Hansel] = "";
+    soundMap[EffectSoundType::Enum::Projectile_RangedEnemy] = "";
+    soundMap[EffectSoundType::Enum::HitSkill_Robin_Q_RushHit] = "";
+    soundMap[EffectSoundType::Enum::HitSkill_Robin_W_Taunt] = "";
+    soundMap[EffectSoundType::Enum::HitSkill_Ursula_Q] = "";
+    soundMap[EffectSoundType::Enum::HitSkill_Ursula_W] = "";
+    soundMap[EffectSoundType::Enum::HitSkill_Hansel_Q] = "";
+    soundMap[EffectSoundType::Enum::HitSkill_Hansel_W_PieDisappear] = "";
+    soundMap[EffectSoundType::Enum::HitSkill_Hansel_W_Buff_Friends] = "";
+    soundMap[EffectSoundType::Enum::HitSkill_Hansel_W_Buff_Enemies] = "";
+    soundMap[EffectSoundType::Enum::Interaction_Hansel_Passive_Cake] = "";
+}
+
+std::string GetSoundPath(EffectSoundType::Enum soundType)
+{
+    if (soundMap.empty())
+        InitSoundMap();
+    return soundMap.at(soundType);
 }
