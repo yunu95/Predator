@@ -134,7 +134,7 @@ void Unit::Update()
     {
         buff.get()->OnUpdate();
         buff.get()->durationLeft -= Time::GetDeltaTime() * localBuffTimeScale;
-        if (buff.get()->durationLeft < 0 || currentHitPoint <= 0.0f)
+        if (buff.get()->durationLeft < 0 /*|| currentHitPoint <= 0.0f*/)
             buff.get()->OnEnd();
     }
     std::erase_if(buffs, [](std::pair<const UnitBuffType, std::shared_ptr<UnitBuff>>& pair)
