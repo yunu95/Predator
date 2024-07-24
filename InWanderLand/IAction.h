@@ -78,6 +78,8 @@ namespace application
         ProgressSave,
         ProgressLoad,
         UnitSetHP,
+        InteractableShow,
+        InteractableHide,
     };
 
     struct IAction

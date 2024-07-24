@@ -1013,6 +1013,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="Action_BlockSkillSelection.h" />
     <ClInclude Include="Action_Boss.h" />
     <ClInclude Include="Action_ForceUnitUnpaused.h" />
+    <ClInclude Include="Action_Interactable.h" />
     <ClInclude Include="Action_Particle.h" />
     <ClInclude Include="Action_Progress.h" />
     <ClInclude Include="Action_RequestState.h" />
@@ -2135,6 +2136,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClCompile Include="Action_BlockSkillSelection.cpp" />
     <ClCompile Include="Action_Boss.cpp" />
     <ClCompile Include="Action_ForceUnitUnpaused.cpp" />
+    <ClCompile Include="Action_Interactable.cpp" />
     <ClCompile Include="Action_Particle.cpp" />
     <ClCompile Include="Action_Progress.cpp" />
     <ClCompile Include="Action_RequestState.cpp" />
