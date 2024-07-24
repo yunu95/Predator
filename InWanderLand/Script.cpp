@@ -715,6 +715,16 @@ namespace application
                         action = AddAction<Action_UnitSetHP>();
                         break;
                     }
+                    case application::ActionType::InteractableShow:
+                    {
+                        action = AddAction<Action_InteractableShow>();
+                        break;
+                    }
+                    case application::ActionType::InteractableHide:
+                    {
+                        action = AddAction<Action_InteractableHide>();
+                        break;
+                    }
                     default:
                         break;
                     }

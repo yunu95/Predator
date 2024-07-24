@@ -15,6 +15,7 @@ protected:
     ProjectileType::Enum projectileType;
     std::weak_ptr<Unit> homingTarget;
     Vector3d relativePositionFromTarget;
+    Vector3d targetDeadPosition;
     Vector3d speed;
     std::weak_ptr<Unit> opponentUnit;
     float damage;
@@ -30,12 +31,13 @@ protected:
     virtual void OnResume() override {}
 
     yunutyEngine::Transform* previousTransform;
-
+    Vector3d beforeDirectionVector = Vector3d::zero;
+    Vector3d offsetTargetPos{ Vector3d::zero };
     std::weak_ptr<ManagedFBX> damagedVFX;
     GameObject* fbxObject;
 
 public:
-    void ExplodeAtCurrentPosition();
+    void ExplodeAtCurrentPosition(bool withEffectOn = true);
     coroutine::Coroutine ProjectileEffectCoroutine(std::weak_ptr<Unit> opponent);
     void SetDamageType(DamageType damageType);
     void SetSpeed(Vector3d startPosition, Vector3d endPosition, float projectileSpeed);
