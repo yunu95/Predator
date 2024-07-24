@@ -806,11 +806,12 @@ void Unit::Recovery()
         DeleteCoroutine(coroutineBirth);
         DeleteCoroutine(coroutineDeath);
         ClearCoroutines();
-        passiveSkill.reset();
         onAttackHit.Clear();
+        onAttack.Clear();
         switch (unitTemplateData->pod.playerUnitType.enumValue)
         {
         case PlayerCharacterType::Robin:
+            passiveSkill.reset();
             unitStatusPortraitUI = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin)->GetWeakPtr<UIElement>();
             unitStatusPortraitUI2 = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin_Left)->GetWeakPtr<UIElement>();
             AddPassiveSkill(std::static_pointer_cast<PassiveSkill>(std::make_shared<PassiveRobinBleed>()));
@@ -821,6 +822,7 @@ void Unit::Recovery()
             AddPassiveSkill(std::static_pointer_cast<PassiveSkill>(std::make_shared<PassiveUrsula>()));
             break;
         case PlayerCharacterType::Hansel:
+            onAttack.Clear();
             unitStatusPortraitUI = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel)->GetWeakPtr<UIElement>();
             unitStatusPortraitUI2 = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel_Left)->GetWeakPtr<UIElement>();
             AddPassiveSkill(std::static_pointer_cast<PassiveSkill>(std::make_shared<PassiveHanselHeal>()));

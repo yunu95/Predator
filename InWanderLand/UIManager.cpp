@@ -69,6 +69,14 @@ void UIManager::FadeOutTop(float duration)
         elm->EnableElement();
     }
 }
+void UIManager::FadeOut(float duration)
+{
+    if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_Alpha); !elm->GetGameObject()->GetActive())
+    {
+        elm->colorTintOnEnable->duration = duration;
+        elm->EnableElement();
+    }
+}
 void UIManager::FadeIn(float duration)
 {
     if (auto elm = UIManager::Instance().GetUIElementByEnum(UIEnumID::BlackMask_Alpha); elm->GetGameObject()->GetActive())
@@ -1199,8 +1207,8 @@ bool UIManager::ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* 
         element->button->AddButtonClickFunction([=]()
             {
                 StartCoroutine([=]() ->coroutine::Coroutine {
-                    FadeOutTop(2);
-                    co_yield coroutine::WaitForSeconds(3.2f);
+                    FadeOut(1);
+                    co_yield coroutine::WaitForSeconds(1.7f);
                     Application::GetInstance().TurnOff();
                     co_return;
                     }());
