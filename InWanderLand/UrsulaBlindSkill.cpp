@@ -177,26 +177,29 @@ coroutine::Coroutine UrsulaBlindSkill::SpawningFieldEffect(std::weak_ptr<UrsulaB
 
             for (auto& each : circle_Top.lock()->GetEnemies())
             {
-                each->ApplyBuff(UnitBuffBlinded{});
-                each->Damaged(owner, GetSkillDamage());
                 /// 실명
                 /// 실명 대상은 skillBlindTime 동안 실명 상태
+                each->ApplyBuff(UnitBuffBlinded{});
+                each->Damaged(owner, GetSkillDamage());
+				SFXManager::PlaySoundfile3D(wanderResources::GetSoundPath(EffectSoundType::Enum::HitSkill_Ursula_Q), each->GetTransform()->GetWorldPosition());
             }
 
             for (auto& each : circle_Left.lock()->GetEnemies())
             {
-                each->ApplyBuff(UnitBuffBlinded{});
-                each->Damaged(owner, GetSkillDamage());
                 /// 실명
                 /// 실명 대상은 skillBlindTime 동안 실명 상태
+                each->ApplyBuff(UnitBuffBlinded{});
+                each->Damaged(owner, GetSkillDamage());
+				SFXManager::PlaySoundfile3D(wanderResources::GetSoundPath(EffectSoundType::Enum::HitSkill_Ursula_Q), each->GetTransform()->GetWorldPosition());
             }
 
             for (auto& each : circle_Right.lock()->GetEnemies())
             {
-                each->ApplyBuff(UnitBuffBlinded{});
-                each->Damaged(owner, GetSkillDamage());
                 /// 실명
                 /// 실명 대상은 skillBlindTime 동안 실명 상태
+                each->ApplyBuff(UnitBuffBlinded{});
+                each->Damaged(owner, GetSkillDamage());
+				SFXManager::PlaySoundfile3D(wanderResources::GetSoundPath(EffectSoundType::Enum::HitSkill_Ursula_Q), each->GetTransform()->GetWorldPosition());
             }
         }
 

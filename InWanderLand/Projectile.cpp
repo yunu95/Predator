@@ -21,6 +21,19 @@ void Projectile::Update()
             }
             else
             {
+                if (fbxObject->getName() == "VFX_Ursula_Attack_1")
+                {
+                    SFXManager::PlaySoundfile3D(wanderResources::GetSoundPath(EffectSoundType::Enum::Projectile_Ursula), (*enemies.begin())->GetTransform()->GetWorldPosition());
+                }
+                else if (fbxObject->getName() == "SM_Pie")
+                {
+                    SFXManager::PlaySoundfile3D(wanderResources::GetSoundPath(EffectSoundType::Enum::Projectile_Hansel), (*enemies.begin())->GetTransform()->GetWorldPosition());
+                }
+                else if (fbxObject->getName() == "Spear")
+                {
+                    SFXManager::PlaySoundfile3D(wanderResources::GetSoundPath(EffectSoundType::Enum::Projectile_RangedEnemy), (*enemies.begin())->GetTransform()->GetWorldPosition());
+                }
+
                 (*enemies.begin())->Damaged(owner, damage, damageType);
                 if (wanderResources::FindVFXMap(owner.lock()->GetUnitTemplateData().pod.skinnedFBXName, UnitAnimType::Damaged))
                 {

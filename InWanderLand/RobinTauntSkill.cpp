@@ -158,6 +158,7 @@ coroutine::Coroutine RobinTauntSkill::SpawningSkillffect(std::weak_ptr<RobinTaun
                 each->ApplyBuff(UnitBuffTaunted{ owner });
                 each->OrderAttack(owner);
                 each->Damaged(owner, GetSkillDamage());
+                SFXManager::PlaySoundfile3D(wanderResources::GetSoundPath(EffectSoundType::Enum::HitSkill_Robin_W_Taunt), each->GetTransform()->GetWorldPosition());
             }
         }
     }

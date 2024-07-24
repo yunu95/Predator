@@ -172,6 +172,7 @@ coroutine::Coroutine UrsulaParalysisSkill::SpawningFieldEffect(std::weak_ptr<Urs
                 {
                     each->KnockBack(targetPos, pod.knockBackDuration);
 	    			each->Paralyze(pod.skillParalysisTime);
+                    SFXManager::PlaySoundfile3D(wanderResources::GetSoundPath(EffectSoundType::Enum::HitSkill_Ursula_W), each->GetTransform()->GetWorldPosition());
                 }
             }
         }
