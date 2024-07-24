@@ -1265,6 +1265,7 @@ void PlayerController::Recovery()
         SoundSystem::PlayMusic(savedBGM);
     }
     stateRequestedByAction = stateRequestedByActionCaptured;
+    UnconstrainCamUpdateDirection();
 }
 void PlayerController::SetState(State::Enum newState)
 {
