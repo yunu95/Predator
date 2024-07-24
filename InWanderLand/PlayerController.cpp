@@ -169,6 +169,7 @@ void PlayerController::OnContentsPlay()
     AttachDebugMesh(cursorUnitDetector.lock()->GetGameObject(), DebugMeshType::Cube, yunuGI::Color::white());
     SetSkillPoints(0);
     SetManaFull();
+    DeactivateOPMode();
     SetState(State::Peace);
     InitUnitMouseInteractionEffects();
     charactersOutOfCamUI[PlayerCharacterType::Robin] = UIManager::Instance().GetUIElementByEnum(UIEnumID::BeaconOutside_Robin);
@@ -1498,6 +1499,27 @@ void PlayerController::ResetCombo()
     elapsedTimeSinceLastCombo = 0;
     UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Combo_Number)->DisableElement();
     UIManager::Instance().GetUIElementByEnum(UIEnumID::Ingame_Combo_Text)->DisableElement();
+}
+
+void PlayerController::ActivateOPMode()
+{
+    charactersOPFactors.clear();
+    for (auto each : characters)
+    {
+        auto opFactor = each.lock()->multiplierDamage.AcquireFactor();
+        *opFactor = 10;
+        charactersOPFactors.push_back(opFactor);
+    }
+}
+
+void PlayerController::DeactivateOPMode()
+{
+    charactersOPFactors.clear();
+}
+
+bool PlayerController::IsOPMode()
+{
+    return !charactersOPFactors.empty();
 }
 
 void PlayerController::SetManaFull()
