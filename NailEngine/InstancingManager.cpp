@@ -46,6 +46,11 @@ bool InstancingManager::IsInTree(std::shared_ptr<RenderInfo>& renderInfo)
 	return false;
 }
 
+void InstancingManager::SortEveryFrame()
+{
+
+}
+
 void InstancingManager::SortByCameraDirection()
 {
 	if (!this->staticMeshDeferredRenderVec.empty())
@@ -270,7 +275,7 @@ void InstancingManager::RenderStaticDeferred()
 			each->isCulled = true;
 		}
 	}
-	//ClearLightMapBuffer();
+	ClearLightMapBuffer();
 	{
 		for (auto& pair : this->staticMeshDeferredRenderVec)
 		{
@@ -379,10 +384,79 @@ void InstancingManager::RenderStaticDeferred()
 		}
 	}
 
+	// 임시로 M_Glass Material을 사용하는 얘들만 따로 빼서 컨테이너에 담아두고 진행하는걸로...
+	std::map<InstanceID, std::set<std::shared_ptr<RenderInfo>>> tempStaticMeshDeferredMap;
+
 	{
 		ClearData();
-		//ClearLightMapBuffer();
+		ClearLightMapBuffer();
 		for (auto& pair : this->staticMeshDeferredMap)
+		{
+			auto& renderInfoVec = pair.second;
+
+			InstanceID instanceID = pair.first;
+
+			{
+				//for (int i = 0; i < renderInfoVec.size(); ++i)
+				int index = 0;
+				for (auto& i : renderInfoVec)
+				{
+					if (i->mesh == nullptr) continue;
+
+					if (i->isActive == false) continue;
+
+					const std::shared_ptr<RenderInfo>& renderInfo = i;
+					auto materialName = renderInfo->material->GetName(true);
+					if (materialName == L"M_Glass")
+					{
+						tempStaticMeshDeferredMap[instanceID].insert(i);
+						continue;
+					}
+					InstancingData data;
+					data.wtm = renderInfo->wtm;
+					AddData(instanceID, data);
+
+					lightMapUVBuffer->lightMapUV[index].lightMapIndex = renderInfo->lightMapIndex;
+					lightMapUVBuffer->lightMapUV[index].scaling = renderInfo->uvScaling;
+					lightMapUVBuffer->lightMapUV[index].uvOffset = renderInfo->uvOffset;
+					lightMapUVBuffer->lightMapUV[index].outlineInfo = renderInfo->outlineInfo;
+					lightMapUVBuffer->lightMapUV[index].isOutLine = renderInfo->isOutLine;
+					lightMapUVBuffer->castDecal = i->mesh->GetCastDecal();
+
+					index++;
+				}
+				NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::LIGHTMAP_UV))->PushGraphicsData(lightMapUVBuffer.get(),
+					sizeof(LightMapUVBuffer),
+					static_cast<int>(CB_TYPE::LIGHTMAP_UV), false);
+
+				if (renderInfoVec.size() != 0)
+				{
+					auto& buffer = _buffers[instanceID];
+
+					if (buffer->GetCount() > 0)
+					{
+						ExposureBuffer exposurrBuffer;
+						exposurrBuffer.diffuseExposure = (*renderInfoVec.begin())->mesh->GetDiffuseExposure();
+						exposurrBuffer.ambientExposure = (*renderInfoVec.begin())->mesh->GetAmbientExposure();
+
+						NailEngine::Instance.Get().GetConstantBuffer(static_cast<int>(CB_TYPE::EXPOSURE))->PushGraphicsData(&exposurrBuffer,
+							sizeof(ExposureBuffer),
+							static_cast<int>(CB_TYPE::EXPOSURE), false);
+
+						(*renderInfoVec.begin())->material->PushGraphicsData();
+						buffer->PushData();
+						(*renderInfoVec.begin())->mesh->Render((*renderInfoVec.begin())->materialIndex, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, true, buffer->GetCount(), buffer);
+					}
+				}
+			}
+		}
+	}
+
+	// 임시로 materialName이 M_Glass인 얘들만 이 아래 부분에서 따로 렌더링한다...
+	{
+		ClearData();
+		ClearLightMapBuffer();
+		for (auto& pair : tempStaticMeshDeferredMap)
 		{
 			auto& renderInfoVec = pair.second;
 
@@ -403,16 +477,6 @@ void InstancingManager::RenderStaticDeferred()
 					AddData(instanceID, data);
 
 					lightMapUVBuffer->lightMapUV[index].lightMapIndex = renderInfo->lightMapIndex;
-					if (renderInfo->lightMapIndex == -1 )
-					{
-						if (renderInfo->mesh->GetName() == L"SM_Wall_7m")
-						{
-							if (renderInfo->material->GetName() == L"M_SquarePattern_wall")
-							{
-								int a = 1;
-							}
-						}
-					}
 					lightMapUVBuffer->lightMapUV[index].scaling = renderInfo->uvScaling;
 					lightMapUVBuffer->lightMapUV[index].uvOffset = renderInfo->uvOffset;
 					lightMapUVBuffer->lightMapUV[index].outlineInfo = renderInfo->outlineInfo;
@@ -526,7 +590,6 @@ void InstancingManager::RenderStaticForward()
 					{
 						continue;
 					}
-
 
 					renderInfo->material->PushGraphicsData();
 					auto test = renderInfo->mesh->GetMaterialCount();

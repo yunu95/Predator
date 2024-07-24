@@ -138,6 +138,14 @@ Texture* NailEngine::GetLightMap()
     return this->lightMap;
 }
 
+void NailEngine::ClearCBBuffer()
+{
+	for (auto& iter : this->constantBuffers)
+	{
+		iter->Clear();
+	}
+}
+
 void NailEngine::SetResolution(unsigned int width, unsigned int height)
 {
     this->windowInfo.width = width;

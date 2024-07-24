@@ -275,6 +275,12 @@ void PixelShader::CreateDepthStencilState(const std::string& fileContent)
 				depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
 				depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
 			}
+			else if (shaderType == "LessEqualNoWrite")
+			{
+				depthStencilDesc.DepthEnable = true;
+				depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
+				depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
+			}
 			else
 			{
 				// 뒤에 입력이 없었으니 assert

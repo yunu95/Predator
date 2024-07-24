@@ -29,6 +29,7 @@ public:
 	void ClearLightMapBuffer();
 	bool IsInTree(std::shared_ptr<RenderInfo>& renderInfo);
 
+	void SortEveryFrame();
 	void SortByCameraDirection();
 
 	void RenderStaticDeferred();
@@ -76,7 +77,10 @@ private:
 	std::vector<std::pair<InstanceID, std::vector<std::shared_ptr<RenderInfo>>>> staticMeshDeferredRenderVec;
 	//
 
+	//
 	std::map<InstanceID, std::set<std::shared_ptr<RenderInfo>>> staticMeshDeferredMap;
+	//std::vector<std::pair<InstanceID, std::vector<std::shared_ptr<RenderInfo>>>> staticMeshDeferredRenderMap;
+	//
 	std::map<InstanceID, std::set<std::shared_ptr<RenderInfo>>> staticMeshForwardCache;
 
 	std::map<InstanceID, std::set<std::shared_ptr<SkinnedRenderInfo>>> skinnedMeshDeferredCache;
