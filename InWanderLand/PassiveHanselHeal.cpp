@@ -14,6 +14,9 @@ coroutine::Coroutine PassiveHanselHeal::CookieLingering(Vector3d pos, std::weak_
     collider.lock()->SetRadius(pod.cookieRadius);
     cookieMesh.lock()->GetTransform()->SetLocalScale(pod.cookieScale * Vector3d::one);
     
+    cookieContainer.insert(cookieMesh);
+    colliderContainer.insert(collider);
+
 	auto cookieEffectAnimator = cookieMesh.lock()->AcquireVFXAnimator();
     cookieEffectAnimator.lock()->SetLoop(true);
 	cookieEffectAnimator.lock()->SetAutoActiveFalse();
@@ -78,8 +81,9 @@ coroutine::Coroutine PassiveHanselHeal::CookieLingering(Vector3d pos, std::weak_
         }
         co_await std::suspend_always{};
     }
-    FBXPool::Instance().Return(cookieMesh);
-    UnitAcquisitionSphereColliderPool::Instance().Return(collider);
+    //FBXPool::Instance().Return(cookieMesh);
+    //UnitAcquisitionSphereColliderPool::Instance().Return(collider);
+    returnScheduledPair = { cookieMesh, collider };
     co_return;
 }
 
@@ -109,6 +113,17 @@ void PassiveHanselHeal::OnResume()
 void PassiveHanselHeal::Recovery()
 {
     // 활성화된 케이크들을 모두 없애는 로직
+    for (auto each : cookieContainer)
+    {
+        FBXPool::Instance().Return(each);
+    }
+    for (auto each : colliderContainer)
+    {
+        UnitAcquisitionSphereColliderPool::Instance().Return(each);
+    }
+
+    cookieContainer.clear();
+    colliderContainer.clear();
 }
 
 void PassiveHanselHeal::IncrementHitCounter()
@@ -116,7 +131,11 @@ void PassiveHanselHeal::IncrementHitCounter()
     hitCounter++;
     if (hitCounter >= pod.hitsRequired)
     {
-        ContentsCoroutine::StartRoutine(CookieLingering(owner.lock()->GetTransform()->GetWorldPosition(), owner));
+        ContentsCoroutine::StartRoutine(CookieLingering(owner.lock()->GetTransform()->GetWorldPosition(), owner)).lock()->PushDestroyCallBack([=]()
+            {
+                cookieContainer.erase(returnScheduledPair.first);
+                colliderContainer.erase(returnScheduledPair.second);
+            });
         hitCounter = 0;
     };
 }

@@ -1626,6 +1626,10 @@ void Unit::Reset()
     passiveSkill.reset();
     pauseRequested = false;
     unpauseRequested = false;
+    for (auto& [buffID, buff] : buffs)
+    {
+        buff.get()->OnEnd();
+    }
     buffs.clear();
     liveCountLeft = unitTemplateData->pod.liveCount;
     currentTargetUnit.reset();

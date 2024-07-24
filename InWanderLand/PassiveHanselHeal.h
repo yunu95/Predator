@@ -39,6 +39,12 @@ private:
     void IncrementHitCounter();
     coroutine::Coroutine CookieLingering(Vector3d pos, std::weak_ptr<Unit> owner);
     bool isPaused = false;
+
+    std::pair <std::weak_ptr<ManagedFBX>, std::weak_ptr<UnitAcquisitionSphereCollider>> returnScheduledPair;
+
+    std::set<std::weak_ptr<ManagedFBX>> cookieContainer;
+    std::set<std::weak_ptr<UnitAcquisitionSphereCollider>> colliderContainer;
+    //std::unordered_map<std::weak_ptr<ManagedFBX>, std::weak_ptr<UnitAcquisitionSphereCollider>>> cookieContainer;
     //coroutine::Coroutine CookieDisappear(const Vector3d& pos, std::weak_ptr<Unit> owner);
 };
 
