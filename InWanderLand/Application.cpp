@@ -139,12 +139,13 @@ namespace application
         RECT wndRect;
         GetClientRect(hWND, &wndRect);
 
+#ifdef EDITOR
         int newWidth = 1920 + (1920 - wndRect.right);
         int newHeight = 1080 + (1080 - wndRect.bottom);
-
-        //float desiredRatio = 1920.0f / 1080.0f;
-
         SetWindowPos(hWND, NULL, 0, 0, newWidth, newHeight, SWP_NOMOVE | SWP_NOZORDER);
+#else
+        SetWindowPos(hWND, NULL, 0, 0, 1920, 1080, SWP_NOMOVE | SWP_NOZORDER);
+#endif
 
         yunutyEngine::YunutyCycle::SingleInstance().preThreadAction = [&, this]()
             {
@@ -259,7 +260,7 @@ namespace application
         yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"NailEngine.dll");
         yunutyEngine::graphics::Renderer::SingleInstance().SetResolution(appSpecification.windowWidth, appSpecification.windowHeight);
         yunutyEngine::graphics::Renderer::SingleInstance().SetOutputWindow(hWND);
-            }
+    }
 
     Application::Application(int* hInstance)
     {
@@ -284,12 +285,13 @@ namespace application
         RECT wndRect;
         GetClientRect(hWND, &wndRect);
 
+#ifdef EDITOR
         int newWidth = 1920 + (1920 - wndRect.right);
         int newHeight = 1080 + (1080 - wndRect.bottom);
-
-        //float desiredRatio = 1920.0f / 1080.0f;
-
         SetWindowPos(hWND, NULL, 0, 0, newWidth, newHeight, SWP_NOMOVE | SWP_NOZORDER);
+#else
+        SetWindowPos(hWND, NULL, 0, 0, 1920, 1080, SWP_NOMOVE | SWP_NOZORDER);
+#endif
 
         yunutyEngine::YunutyCycle::SingleInstance().preThreadAction = [&, this]()
             {
@@ -404,7 +406,7 @@ namespace application
         yunutyEngine::graphics::Renderer::SingleInstance().LoadGraphicsDll(L"NailEngine.dll");
         yunutyEngine::graphics::Renderer::SingleInstance().SetResolution(appSpecification.windowWidth, appSpecification.windowHeight);
         yunutyEngine::graphics::Renderer::SingleInstance().SetOutputWindow(hWND);
-            }
+    }
 
     void Application::Initialize()
     {
@@ -818,7 +820,7 @@ namespace application
         return layers[(int)LayerList::ContentsLayer];
     }
 
-    }
+}
 
 //#ifdef EDITOR
 // Helper functions
