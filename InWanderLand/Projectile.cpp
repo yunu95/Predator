@@ -21,6 +21,19 @@ void Projectile::Update()
             }
             else
             {
+                if (fbxObject->getName() == "VFX_Ursula_Attack_1")
+                {
+                    SFXManager::PlaySoundfile3D(wanderResources::GetSoundPath(EffectSoundType::Enum::Projectile_Ursula), (*enemies.begin())->GetTransform()->GetWorldPosition());
+                }
+                else if (fbxObject->getName() == "SM_Pie")
+                {
+                    SFXManager::PlaySoundfile3D(wanderResources::GetSoundPath(EffectSoundType::Enum::Projectile_Hansel), (*enemies.begin())->GetTransform()->GetWorldPosition());
+                }
+                else if (fbxObject->getName() == "Spear")
+                {
+                    SFXManager::PlaySoundfile3D(wanderResources::GetSoundPath(EffectSoundType::Enum::Projectile_RangedEnemy), (*enemies.begin())->GetTransform()->GetWorldPosition());
+                }
+
                 (*enemies.begin())->Damaged(owner, damage, damageType);
                 if (wanderResources::FindVFXMap(owner.lock()->GetUnitTemplateData().pod.skinnedFBXName, UnitAnimType::Damaged))
                 {
@@ -138,13 +151,11 @@ coroutine::Coroutine Projectile::ProjectileEffectCoroutine(std::weak_ptr<Unit> o
     {
         damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldPosition(Vector3d(GetTransform()->GetWorldPosition().x, 0.0f, GetTransform()->GetWorldPosition().z));
 
-        auto gc = GlobalConstant::GetSingletonInstance().pod;
-
-        damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion{ Vector3d(270.0f, 0, 0)});
-        //auto temp = GetTransform()->GetLocalRotation();
-        //auto euler = temp.Euler();
-        //euler.x += 180;
-        //damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion{ euler });
+        auto temp = GetTransform()->GetLocalRotation();
+        auto euler = temp.Euler();
+        euler.x = 0;
+        
+        damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion{ euler });
     }
     else
     {

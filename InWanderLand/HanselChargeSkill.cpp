@@ -206,6 +206,7 @@ coroutine::Coroutine HanselChargeSkill::SpawningFieldEffect(std::weak_ptr<Hansel
     for (auto each : stompCollider.lock()->GetEnemies())
     {
         each->Damaged(owner, GetDamage());
+        SFXManager::PlaySoundfile3D(wanderResources::GetSoundPath(EffectSoundType::Enum::HitSkill_Hansel_Q), each->GetTransform()->GetWorldPosition());
     }
     RTSCam::Instance().ApplyShake(pod.impactCamShakeDistance1, pod.impactCamShakeFrequency1, pod.impactCamShakeDecreaseFactor1, endPos);
 
@@ -217,6 +218,7 @@ coroutine::Coroutine HanselChargeSkill::SpawningFieldEffect(std::weak_ptr<Hansel
     for (auto each : stompCollider.lock()->GetEnemies())
     {
         each->Damaged(owner, GetDamage());
+        SFXManager::PlaySoundfile3D(wanderResources::GetSoundPath(EffectSoundType::Enum::HitSkill_Hansel_Q), each->GetTransform()->GetWorldPosition());
         Vector3d delta = pod.impactKnockbackDistance * (each->GetTransform()->GetWorldPosition() - currentPos).Normalized();
 
         if (BossSummonMobSkill::GetRightFrameUnit().expired() || (each != BossSummonMobSkill::GetLeftFrameUnit().lock().get() && each != BossSummonMobSkill::GetRightFrameUnit().lock().get()))

@@ -136,6 +136,11 @@ namespace application
                         Trigger_StageStart::ImGui_DrawDataPopup(static_cast<Trigger_StageStart*>(data));
                         break;
                     }
+                    case application::TriggerType::Shortcut:
+                    {
+                        Trigger_Shortcut::ImGui_DrawDataPopup(static_cast<Trigger_Shortcut*>(data));
+                        break;
+                    }
                     default:
                         break;
                     }

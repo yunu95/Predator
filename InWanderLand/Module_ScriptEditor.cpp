@@ -1865,6 +1865,11 @@ namespace application
                                 selectedScript->AddTrigger<Trigger_StageStart>();
                                 break;
                             }
+                            case application::TriggerType::Shortcut:
+                            {
+                                selectedScript->AddTrigger<Trigger_Shortcut>();
+                                break;
+                            }
                             default:
                                 break;
                             }

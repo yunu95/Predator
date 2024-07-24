@@ -185,6 +185,8 @@ enum class UIEnumID
     DamageIndicator_Critical_RedFont,
     DamageIndicator_Default_BlueFont,
     DamageIndicator_Critical_BlueFont,
+    DamageIndicator_Default_Cyan,
+    DamageIndicator_Critical_Cyan,
     DamageIndicator_Default_BlackWhiteFont,
     DamageIndicator_Critical_BlackWhiteFont,
     DamageIndicator_Missed,

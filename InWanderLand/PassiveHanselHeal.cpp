@@ -73,6 +73,7 @@ coroutine::Coroutine PassiveHanselHeal::CookieLingering(Vector3d pos, std::weak_
             if (unit->GetTeamIndex() == PlayerController::playerTeamIndex && unit->GetUnitCurrentHp() < unit->GetUnitTemplateData().pod.max_Health)
             {
                 unit->Heal(PassiveHanselHeal::GetHealAmount());
+                SFXManager::PlaySoundfile3D(wanderResources::GetSoundPath(EffectSoundType::Enum::Interaction_Hansel_Passive_Cake), unit->GetTransform()->GetWorldPosition());
                 FBXPool::Instance().Return(cookieMesh);
                 UnitAcquisitionSphereColliderPool::Instance().Return(collider);
                 cookieContainer.erase(cookieMesh);
@@ -115,7 +116,7 @@ void PassiveHanselHeal::OnResume()
 
 void PassiveHanselHeal::Recovery()
 {
-    // í™œì„±í™”ëœ ì¼€ì´í¬ë“¤ì„ ëª¨ë‘ ì—†ì• ëŠ” ë¡œì§
+    // È°¼ºÈ­µÈ ÄÉÀÌÅ©µéÀ» ¸ğµÎ ¾ø¾Ö´Â ·ÎÁ÷
     for (auto each : cookieContainer)
     {
         FBXPool::Instance().Return(each);

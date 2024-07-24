@@ -61,6 +61,7 @@ coroutine::Coroutine HanselProjectileSkill::ThrowingPie(std::weak_ptr<HanselProj
                 onceCollidedUnits.insert(each);
                 //each->StartCoroutine(SpawningSkillffect(each->GetWeakPtr<Unit>()));
                 each->ApplyBuff(UnitBuffHanselDebuff{});
+                SFXManager::PlaySoundfile3D(wanderResources::GetSoundPath(EffectSoundType::Enum::HitSkill_Hansel_W_Buff_Enemies), each->GetTransform()->GetWorldPosition());
                 localMaxCollideCount--;
             }
         }
@@ -73,11 +74,13 @@ coroutine::Coroutine HanselProjectileSkill::ThrowingPie(std::weak_ptr<HanselProj
                 onceCollidedUnits.insert(each);
                 each->ApplyBuff(UnitBuffHanselBuff{});
                 each->Heal(pod.healPoint);
+                SFXManager::PlaySoundfile3D(wanderResources::GetSoundPath(EffectSoundType::Enum::HitSkill_Hansel_W_Buff_Friends), each->GetTransform()->GetWorldPosition());
                 localMaxCollideCount--;
             }
         }
     }
 
+    SFXManager::PlaySoundfile3D(wanderResources::GetSoundPath(EffectSoundType::Enum::HitSkill_Hansel_W_PieDisappear), currentPos);
     co_return;
 }
 

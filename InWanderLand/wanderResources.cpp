@@ -225,18 +225,18 @@ bool wanderResources::FindVFXMap(const std::string& fbx, UnitAnimType animType)
 
 void InitSoundMap()
 {
-    soundMap[EffectSoundType::Enum::Projectile_Ursula] = "";
-    soundMap[EffectSoundType::Enum::Projectile_Hansel] = "";
-    soundMap[EffectSoundType::Enum::Projectile_RangedEnemy] = "";
-    soundMap[EffectSoundType::Enum::HitSkill_Robin_Q_RushHit] = "";
-    soundMap[EffectSoundType::Enum::HitSkill_Robin_W_Taunt] = "";
-    soundMap[EffectSoundType::Enum::HitSkill_Ursula_Q] = "";
-    soundMap[EffectSoundType::Enum::HitSkill_Ursula_W] = "";
-    soundMap[EffectSoundType::Enum::HitSkill_Hansel_Q] = "";
-    soundMap[EffectSoundType::Enum::HitSkill_Hansel_W_PieDisappear] = "";
-    soundMap[EffectSoundType::Enum::HitSkill_Hansel_W_Buff_Friends] = "";
-    soundMap[EffectSoundType::Enum::HitSkill_Hansel_W_Buff_Enemies] = "";
-    soundMap[EffectSoundType::Enum::Interaction_Hansel_Passive_Cake] = "";
+    soundMap[EffectSoundType::Enum::Projectile_Ursula] = "sounds/Ursula/Ursula normal attack hit.wav";
+    soundMap[EffectSoundType::Enum::Projectile_Hansel] = "sounds/Hansel/Hansel normal attack hit.wav";
+    soundMap[EffectSoundType::Enum::Projectile_RangedEnemy] = "sounds/Enemy ranged/Ranged attack hit.wav";
+    soundMap[EffectSoundType::Enum::HitSkill_Robin_Q_RushHit] = "sounds/Robin/Robin Q hit.wav";
+    soundMap[EffectSoundType::Enum::HitSkill_Robin_W_Taunt] = "sounds/Robin/Robin W provocation.wav";
+    soundMap[EffectSoundType::Enum::HitSkill_Ursula_Q] = "sounds/Ursula/Ursula Q noise hit.wav";
+    soundMap[EffectSoundType::Enum::HitSkill_Ursula_W] = "sounds/Ursula/Ursula W hit.wav";
+    soundMap[EffectSoundType::Enum::HitSkill_Hansel_Q] = "sounds/Hansel/Hansel Q hit.wav";
+    soundMap[EffectSoundType::Enum::HitSkill_Hansel_W_PieDisappear] = "sounds/Hansel/Hansel W disappear.wav";
+    soundMap[EffectSoundType::Enum::HitSkill_Hansel_W_Buff_Friends] = "sounds/Hansel/Hansel buff.wav";
+    soundMap[EffectSoundType::Enum::HitSkill_Hansel_W_Buff_Enemies] = "sounds/Hansel/Hansel Debuff.wav";
+    soundMap[EffectSoundType::Enum::Interaction_Hansel_Passive_Cake] = "sounds/Hansel/Hansel heal.wav";
 }
 
 std::string wanderResources::GetSoundPath(EffectSoundType::Enum soundType)

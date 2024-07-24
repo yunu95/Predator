@@ -196,6 +196,7 @@ void Unit::OnStateEngage<UnitBehaviourTree::Death>()
     {
         buff.get()->OnEnd();
     }
+    buffs.clear();
 }
 template<>
 void Unit::OnStateExit<UnitBehaviourTree::Death>()
@@ -218,7 +219,7 @@ void Unit::OnStateEngage<UnitBehaviourTree::Knockback>()
 {
     onStateEngage[UnitBehaviourTree::Knockback]();
     blockFollowingNavAgentByState = referenceBlockFollowingNavAgent.Acquire();
-    PlayAnimation(UnitAnimType::Airborne, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
+    PlayAnimation(UnitAnimType::Airborne, Animation::PlayFlag_::Blending);
 }
 template<>
 void Unit::OnStateEngage<UnitBehaviourTree::Stun>()
@@ -1646,6 +1647,10 @@ void Unit::Summon(application::editor::Unit_TemplateData* templateData)
         dmgDefaultUIID = UIEnumID::DamageIndicator_Default_BlackWhiteFont;
         dmgCriticalUIID = UIEnumID::DamageIndicator_Critical_BlackWhiteFont;
         break;
+    case UnitDamageFontType::Cyan:
+        dmgDefaultUIID = UIEnumID::DamageIndicator_Default_BlackWhiteFont;
+        dmgCriticalUIID = UIEnumID::DamageIndicator_Critical_BlackWhiteFont;
+        break;
 
     }
     currentRotationSpeed = unitTemplateData->pod.rotationSpeed;
@@ -2406,6 +2411,11 @@ void Unit::ReturnToPool()
         }
         unitData = nullptr;
     }
+    for (auto& [buffID, buff] : buffs)
+    {
+        buff.get()->OnEnd();
+    }
+    buffs.clear();
     UnitPool::SingleInstance().Return(GetWeakPtr<Unit>());
 }
 void Unit::SetSkinnedMeshRenderer(GameObject* fbxObj)
