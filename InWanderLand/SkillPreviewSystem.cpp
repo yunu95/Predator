@@ -298,7 +298,7 @@ void SkillPreviewSystem::ShowRobinQSkill(const yunutyEngine::Vector3d& objectPos
     if (distance > rushThickness * 2)
     {
         this->robinQSkillPreviewObj->GetChildren()[static_cast<int>(RobinQSkillInfo::ArrowBody)]->GetTransform()->SetLocalPosition(normalizedVec * ((distance - rushThickness * 2) / 2));
-        this->robinQSkillPreviewObj->GetChildren()[static_cast<int>(RobinQSkillInfo::ArrowBody)]->GetTransform()->SetLocalScale(Vector3d{ (distance - rushThickness * 2),rushThickness, rushThickness });
+        this->robinQSkillPreviewObj->GetChildren()[static_cast<int>(RobinQSkillInfo::ArrowBody)]->GetTransform()->SetLocalScale(Vector3d{ (distance - rushThickness * 2),rushThickness * 2, rushThickness * 2});
         this->robinQSkillPreviewObj->GetChildren()[static_cast<int>(RobinQSkillInfo::ArrowHead)]->GetTransform()->SetLocalPosition(normalizedVec * (distance - rushThickness));
         this->robinQSkillPreviewObj->GetChildren()[static_cast<int>(RobinQSkillInfo::ArrowHead)]->GetTransform()->SetLocalScale(Vector3d::one * rushThickness * 2);
     }
@@ -543,7 +543,7 @@ void SkillPreviewSystem::ShowHanselWSkill(const Vector3d& objectPos, const Vecto
     if (distance > thickness * 2)
     {
         this->hanselWSkillPreviewObj->GetChildren()[static_cast<int>(HanselWSkillInfo::ArrowBody)]->GetTransform()->SetLocalPosition(normalizedVec * ((distance - thickness * 2) / 2));
-        this->hanselWSkillPreviewObj->GetChildren()[static_cast<int>(HanselWSkillInfo::ArrowBody)]->GetTransform()->SetLocalScale(Vector3d{ (distance - thickness * 2),thickness, thickness });
+        this->hanselWSkillPreviewObj->GetChildren()[static_cast<int>(HanselWSkillInfo::ArrowBody)]->GetTransform()->SetLocalScale(Vector3d{ (distance - thickness * 2),thickness *2, thickness *2});
         this->hanselWSkillPreviewObj->GetChildren()[static_cast<int>(HanselWSkillInfo::ArrowHead)]->GetTransform()->SetLocalPosition(normalizedVec * (distance - thickness));
         this->hanselWSkillPreviewObj->GetChildren()[static_cast<int>(HanselWSkillInfo::ArrowHead)]->GetTransform()->SetLocalScale(Vector3d::one * thickness * 2);
     }
