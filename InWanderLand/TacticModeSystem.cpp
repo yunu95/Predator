@@ -66,14 +66,16 @@ void TacticModeSystem::Update()
         }
         else
         {
-            UIManager::Instance().GetUIElementByEnum(UIEnumID::Toggle_TacticMode_Overlay)->imageComponent.lock()->GetGI().SetRadialFillMode(false);
+            //UIManager::Instance().GetUIElementByEnum(UIEnumID::Toggle_TacticMode_Overlay)->imageComponent.lock()->GetGI().SetRadialFillMode(false);
+            UIManager::Instance().GetUIElementByEnum(UIEnumID::Toggle_TacticMode_Overlay)->imageComponent.lock()->GetGI().SetRadialFillDegree(360.01);
             //UIManager::Instance().GetUIElementByEnum(UIEnumID::Toggle_TacticMode_Overlay)->adjuster->SetTargetFloat(1);
             UIManager::Instance().GetUIElementByEnum(UIEnumID::Toggle_TacticMode_Cooltime_Number)->DisableElement();
         }
     }
     else
     {
-        UIManager::Instance().GetUIElementByEnum(UIEnumID::Toggle_TacticMode_Overlay)->imageComponent.lock()->GetGI().SetRadialFillMode(false);
+        //UIManager::Instance().GetUIElementByEnum(UIEnumID::Toggle_TacticMode_Overlay)->imageComponent.lock()->GetGI().SetRadialFillMode(false);
+        UIManager::Instance().GetUIElementByEnum(UIEnumID::Toggle_TacticMode_Overlay)->imageComponent.lock()->GetGI().SetRadialFillDegree(360.01);
         //UIManager::Instance().GetUIElementByEnum(UIEnumID::Toggle_TacticMode_Overlay)->adjuster->SetTargetFloat(1);
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Toggle_TacticMode_Cooltime_Number)->DisableElement();
     }
