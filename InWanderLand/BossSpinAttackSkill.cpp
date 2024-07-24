@@ -5,7 +5,7 @@
 POD_BossSpinAttackSkill BossSpinAttackSkill::pod = POD_BossSpinAttackSkill();
 
 const float totalTime = 5.2f;
-const float spinEndTime = 3.15f;
+const float spinEndTime = 2.95f;
 const float spinStartTime = 2.07f;
 const float spinAttackingTime = spinEndTime - spinStartTime;
 const float afterSpinDelay = totalTime - spinStartTime - spinAttackingTime;
@@ -182,7 +182,7 @@ coroutine::Coroutine BossSpinAttackSkill::SpawningSkillffect(std::weak_ptr<BossS
     animator.lock()->GetGI().SetPlaySpeed(skillSpeed);
     chargeEffectAnimator.lock()->SetSpeed(skillSpeed);
 
-    wanderUtils::UnitCoroutine::ForSecondsFromUnit forSeconds{ skill.lock()->owner, localForeswingDuration };
+    wanderUtils::UnitCoroutine::ForSecondsFromUnit forSeconds{ skill.lock()->owner, localSkillDuration };
     while (forSeconds.Tick())
     {
         co_await std::suspend_always{};
