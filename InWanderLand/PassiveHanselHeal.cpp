@@ -73,18 +73,20 @@ coroutine::Coroutine PassiveHanselHeal::CookieLingering(Vector3d pos, std::weak_
             if (unit->GetTeamIndex() == PlayerController::playerTeamIndex && unit->GetUnitCurrentHp() < unit->GetUnitTemplateData().pod.max_Health)
             {
                 unit->Heal(PassiveHanselHeal::GetHealAmount());
-
                 FBXPool::Instance().Return(cookieMesh);
                 UnitAcquisitionSphereColliderPool::Instance().Return(collider);
+                cookieContainer.erase(cookieMesh);
+                colliderContainer.erase(collider);
                 co_return;
             }
         }
         co_await std::suspend_always{};
     }
-    //FBXPool::Instance().Return(cookieMesh);
-    //UnitAcquisitionSphereColliderPool::Instance().Return(collider);
-    returnScheduledCookie = cookieMesh;
-    returnScheduledCollider = collider;
+    FBXPool::Instance().Return(cookieMesh);
+    UnitAcquisitionSphereColliderPool::Instance().Return(collider);
+    cookieContainer.erase(cookieMesh);
+    colliderContainer.erase(collider);
+
     co_return;
 }
 
@@ -132,11 +134,7 @@ void PassiveHanselHeal::IncrementHitCounter()
     hitCounter++;
     if (hitCounter >= pod.hitsRequired)
     {
-        ContentsCoroutine::StartRoutine(CookieLingering(owner.lock()->GetTransform()->GetWorldPosition(), owner)).lock()->PushDestroyCallBack([=]()
-            {
-                cookieContainer.erase(returnScheduledCookie);
-                colliderContainer.erase(returnScheduledCollider);
-            });
+        ContentsCoroutine::StartRoutine(CookieLingering(owner.lock()->GetTransform()->GetWorldPosition(), owner));
         hitCounter = 0;
     };
 }

@@ -783,6 +783,11 @@ void Unit::Recovery()
         SetIsAlive(true);
         Relocate(capturedLastPosition);
         liveCountLeft = liveCountLeftCaptured;
+        for (auto& [buffID, buff] : buffs)
+        {
+            buff.get()->OnEnd();
+        }
+        buffs.clear();
     }
     else
     {

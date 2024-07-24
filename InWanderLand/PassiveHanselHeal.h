@@ -35,16 +35,29 @@ public:
     virtual void Recovery() override;
 
 private:
+    struct CustomCompManagedFBX
+    {
+        bool operator()(const std::weak_ptr<ManagedFBX>& lp, const std::weak_ptr<ManagedFBX>& rp) const
+        {
+            return lp.lock().get() > rp.lock().get();
+        }
+    };
+
+    struct CustomCompUnitAcquisitionSphereCollider
+    {
+        bool operator()(const std::weak_ptr<UnitAcquisitionSphereCollider>& lp, const std::weak_ptr<UnitAcquisitionSphereCollider>& rp) const
+        {
+            return lp.lock().get() > rp.lock().get();
+        }
+    };
+
     int hitCounter{ 0 };
     void IncrementHitCounter();
     coroutine::Coroutine CookieLingering(Vector3d pos, std::weak_ptr<Unit> owner);
     bool isPaused = false;
 
-    std::weak_ptr<ManagedFBX> returnScheduledCookie;
-    std::weak_ptr<UnitAcquisitionSphereCollider> returnScheduledCollider;
-
-    std::set<std::weak_ptr<ManagedFBX>> cookieContainer;
-    std::set<std::weak_ptr<UnitAcquisitionSphereCollider>> colliderContainer;
+    std::set<std::weak_ptr<ManagedFBX>, CustomCompManagedFBX> cookieContainer;
+    std::set<std::weak_ptr<UnitAcquisitionSphereCollider>, CustomCompUnitAcquisitionSphereCollider> colliderContainer;
     //std::unordered_map<std::weak_ptr<ManagedFBX>, std::weak_ptr<UnitAcquisitionSphereCollider>>> cookieContainer;
     //coroutine::Coroutine CookieDisappear(const Vector3d& pos, std::weak_ptr<Unit> owner);
 };

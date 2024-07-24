@@ -1,5 +1,6 @@
 #pragma once
 #include "PassiveSkill.h"
+#include "ProgressTracker.h"
 
 struct POD_PassiveUrsulaSpeed
 {
@@ -15,7 +16,7 @@ struct POD_PassiveUrsulaSpeed
         FROM_JSON(POD_PassiveUrsulaSpeed)
 };
 
-class PassiveUrsula : public PassiveSkill
+class PassiveUrsula : public PassiveSkill, public application::ProgressTracker
 {
 public:
     virtual void Init(std::weak_ptr<Unit> owner) override;
@@ -24,6 +25,7 @@ public:
     static float GetDuration();
     static float GetAttackSpeedBonusPerStack();
     static float GetCritChanceBonusPerStack();
+
 private:
 };
 
