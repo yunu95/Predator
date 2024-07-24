@@ -1717,7 +1717,7 @@ void Unit::InitBehaviorTree()
     // 이 행동 트리에 대한 설계문서는 Document/프로그래밍 폴더 내부의 파일 "InWanderLand Behaviour tree.drawio"입니다.
     unitBehaviourTree[UnitBehaviourTree::Death].enteringCondtion = [this]()
         {
-            return !referenceBlockDeath.BeingReferenced() && !isAlive && liveCountLeft < 0;
+            return !coroutineDeath.expired() || (!referenceBlockDeath.BeingReferenced() && !isAlive && liveCountLeft < 0);
         };
     unitBehaviourTree[UnitBehaviourTree::Death].onEnter = [this]()
         {
@@ -1781,7 +1781,7 @@ void Unit::InitBehaviorTree()
         };
     unitBehaviourTree[UnitBehaviourTree::Reviving].enteringCondtion = [this]()
         {
-            return !isAlive;
+            return !isAlive && liveCountLeft >= 0;
         };
     unitBehaviourTree[UnitBehaviourTree::Reviving].onEnter = [this]()
         {
