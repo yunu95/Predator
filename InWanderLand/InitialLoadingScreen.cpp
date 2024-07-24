@@ -68,6 +68,23 @@ coroutine::Coroutine InitialLoadingScreen::ShowLoadingScreen()
     UIManager::Instance().FadeIn(2);
 #endif
 #endif 
+    // 로딩이 끝났으면 1초간 검정색으로 페이드아웃
+    coroutine::ForSeconds firstFadeTime{ 1 };
+    while (firstFadeTime.Tick())
+    {
+        float rgb = 1 - firstFadeTime.ElapsedNormalized();
+        uiImage->GetGI().SetColor({ .r = rgb, .g = rgb, .b = rgb, .a = 1 });
+        co_await std::suspend_always{};
+    }
+    // 검정 페이드아웃이 끝났으면 1초간 검정 투명색으로 페이드아웃
+    coroutine::ForSeconds secondFadeTime{ 1 };
+    while (secondFadeTime.Tick())
+    {
+        float a = 1 - secondFadeTime.ElapsedNormalized();
+        uiImage->GetGI().SetColor({ .r = 0, .g = 0, .b = 0, .a = a });
+        co_await std::suspend_always{};
+    }
+
     Scene::getCurrentScene()->DestroyGameObject(GetGameObject());
     Scene::getCurrentScene()->DestroyGameObject(videoObj);
     co_return;
