@@ -784,6 +784,64 @@ void Unit::Recovery()
         SetIsAlive(true);
         Relocate(capturedLastPosition);
         liveCountLeft = liveCountLeftCaptured;
+        
+        for (auto& [buffID, buff] : buffs)
+        {
+            buff.get()->OnEnd();
+        }
+        buffs.clear();
+
+        DeleteCoroutine(coroutineKnockBack);
+        DeleteCoroutine(coroutineAttack);
+        if (!coroutineSkill.expired())
+        {
+            if (onGoingSkill)
+            {
+                onGoingSkill->OnInterruption();
+            }
+            DeleteCoroutine(coroutineSkill);
+            onGoingSkill.reset();
+        }
+        DeleteCoroutine(coroutineRevival);
+        DeleteCoroutine(coroutineBirth);
+        DeleteCoroutine(coroutineDeath);
+        ClearCoroutines();
+        passiveSkill.reset();
+        onAttackHit.Clear();
+        switch (unitTemplateData->pod.playerUnitType.enumValue)
+        {
+            case PlayerCharacterType::Robin:
+                unitStatusPortraitUI = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin)->GetWeakPtr<UIElement>();
+                unitStatusPortraitUI2 = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin_Left)->GetWeakPtr<UIElement>();
+                AddPassiveSkill(std::static_pointer_cast<PassiveSkill>(std::make_shared<PassiveRobinBleed>()));
+                break;
+            case PlayerCharacterType::Ursula:
+                unitStatusPortraitUI = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Ursula)->GetWeakPtr<UIElement>();
+                unitStatusPortraitUI2 = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Ursula_Left)->GetWeakPtr<UIElement>();
+                AddPassiveSkill(std::static_pointer_cast<PassiveSkill>(std::make_shared<PassiveUrsula>()));
+                break;
+            case PlayerCharacterType::Hansel:
+                unitStatusPortraitUI = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel)->GetWeakPtr<UIElement>();
+                unitStatusPortraitUI2 = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel_Left)->GetWeakPtr<UIElement>();
+                AddPassiveSkill(std::static_pointer_cast<PassiveSkill>(std::make_shared<PassiveHanselHeal>()));
+                break;
+            default:
+                break;
+        }
+
+        pauseRequested = false;
+        unpauseRequested = false;
+        for (auto& [buffID, buff] : buffs)
+        {
+            buff.get()->OnEnd();
+        }
+        buffs.clear();
+
+        currentTargetUnit.reset();
+        currentOrderType = UnitOrderType::AttackMove;
+        pendingOrderType = UnitOrderType::AttackMove;
+        attackMoveDestination = moveDestination = GetGameObject()->GetTransform()->GetWorldPosition();
+        ResetSharedRef();
     }
     else
     {
@@ -1631,6 +1689,10 @@ void Unit::Reset()
     passiveSkill.reset();
     pauseRequested = false;
     unpauseRequested = false;
+    for (auto& [buffID, buff] : buffs)
+    {
+        buff.get()->OnEnd();
+    }
     buffs.clear();
     liveCountLeft = unitTemplateData->pod.liveCount;
     currentTargetUnit.reset();
@@ -2317,7 +2379,7 @@ float Unit::DistanceTo(const Vector3d& target)
 {
     return (GetTransform()->GetWorldPosition() - target).Magnitude();
 }
-void Unit::ReturnToPool()
+void Unit::ReturnToPool() 
 {
     for (auto unitStatusUI : unitStatusUIs)
     {

@@ -1,5 +1,6 @@
 #pragma once
 #include "PassiveSkill.h"
+#include "ProgressTracker.h"
 
 struct POD_PassiveHanselHeal
 {
@@ -20,7 +21,7 @@ struct POD_PassiveHanselHeal
 
 class ManagedFBX;
 class UnitAcquisitionSphereCollider;
-class PassiveHanselHeal : public PassiveSkill
+class PassiveHanselHeal : public PassiveSkill, public application::ProgressTracker
 {
 public:
     virtual void Init(std::weak_ptr<Unit> owner) override;
@@ -31,11 +32,33 @@ public:
     virtual void OnPause() override;
     virtual void OnResume() override;
 
+    virtual void Recovery() override;
+
 private:
+    struct CustomCompManagedFBX
+    {
+        bool operator()(const std::weak_ptr<ManagedFBX>& lp, const std::weak_ptr<ManagedFBX>& rp) const
+        {
+            return lp.lock().get() > rp.lock().get();
+        }
+    };
+
+    struct CustomCompUnitAcquisitionSphereCollider
+    {
+        bool operator()(const std::weak_ptr<UnitAcquisitionSphereCollider>& lp, const std::weak_ptr<UnitAcquisitionSphereCollider>& rp) const
+        {
+            return lp.lock().get() > rp.lock().get();
+        }
+    };
+
     int hitCounter{ 0 };
     void IncrementHitCounter();
     coroutine::Coroutine CookieLingering(Vector3d pos, std::weak_ptr<Unit> owner);
     bool isPaused = false;
+
+    std::set<std::weak_ptr<ManagedFBX>, CustomCompManagedFBX> cookieContainer;
+    std::set<std::weak_ptr<UnitAcquisitionSphereCollider>, CustomCompUnitAcquisitionSphereCollider> colliderContainer;
+    //std::unordered_map<std::weak_ptr<ManagedFBX>, std::weak_ptr<UnitAcquisitionSphereCollider>>> cookieContainer;
     //coroutine::Coroutine CookieDisappear(const Vector3d& pos, std::weak_ptr<Unit> owner);
 };
 

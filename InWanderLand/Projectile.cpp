@@ -60,9 +60,20 @@ void Projectile::Update()
 
         if (auto target = homingTarget.lock(); target.get())
         {
-            relativePositionFromTarget += speed * Time::GetDeltaTime();
-            GetTransform()->SetWorldPosition(target->GetTransform()->GetWorldPosition() + relativePositionFromTarget);
-            GetTransform()->SetLocalRotation(Quaternion::MakeWithForwardUp(speed, speed.up));
+            if (!homingTarget.lock()->IsAlive())
+            {
+                if (projectileType == ProjectileType::DIRECT)
+                {
+                    projectileType = ProjectileType::CURVE;
+                }
+                homingTarget.reset();
+            }
+            else
+            {
+                relativePositionFromTarget += speed * Time::GetDeltaTime();
+                GetTransform()->SetWorldPosition(target->GetTransform()->GetWorldPosition() + relativePositionFromTarget);
+                GetTransform()->SetLocalRotation(Quaternion::MakeWithForwardUp(speed, speed.up));
+            }
         }
         else
         {
@@ -140,13 +151,11 @@ coroutine::Coroutine Projectile::ProjectileEffectCoroutine(std::weak_ptr<Unit> o
     {
         damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldPosition(Vector3d(GetTransform()->GetWorldPosition().x, 0.0f, GetTransform()->GetWorldPosition().z));
 
-        auto gc = GlobalConstant::GetSingletonInstance().pod;
-
-        damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion{ Vector3d(270.0f, 0, 0)});
-        //auto temp = GetTransform()->GetLocalRotation();
-        //auto euler = temp.Euler();
-        //euler.x += 180;
-        //damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion{ euler });
+        auto temp = GetTransform()->GetLocalRotation();
+        auto euler = temp.Euler();
+        euler.x = 0;
+        
+        damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion{ euler });
     }
     else
     {
