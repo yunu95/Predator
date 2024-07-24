@@ -496,6 +496,16 @@ namespace application
                         Action_UnitSetHP::ImGui_DrawDataPopup(static_cast<Action_UnitSetHP*>(data));
                         break;
                     }
+                    case application::ActionType::InteractableShow:
+                    {
+                        Action_InteractableShow::ImGui_DrawDataPopup(static_cast<Action_InteractableShow*>(data));
+                        break;
+                    }
+                    case application::ActionType::InteractableHide:
+                    {
+                        Action_InteractableHide::ImGui_DrawDataPopup(static_cast<Action_InteractableHide*>(data));
+                        break;
+                    }
                     default:
                         break;
                     }

@@ -43,3 +43,4 @@
 #include "Action_SetPlayerConstrainingRegion.h"
 #include "Action_Script.h"
 #include "Action_Progress.h"
+#include "Action_Interactable.h"

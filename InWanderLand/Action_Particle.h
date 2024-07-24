@@ -58,8 +58,7 @@ namespace application
 		bool isEditing = false;
 	};
 
-	/// Particle 의 Active 를 true 로 서서히 바꾸는 Action 입니다.
-	/// lerpTime 이 0 일 경우 즉시 변환합니다.
+	/// Particle 의 Active 를 true 로 바꾸는 Action 입니다.
 	class Action_ParticleShow
 		: public IAction
 	{
@@ -93,8 +92,7 @@ namespace application
 		bool savedActive = true;
 	};
 
-	/// Particle 의 Active 를 false 로 서서히 바꾸는 Action 입니다.
-	/// lerpTime 이 0 일 경우 즉시 변환합니다.
+	/// Particle 의 Active 를 false 로 바꾸는 Action 입니다.
 	class Action_ParticleHide
 		: public IAction
 	{

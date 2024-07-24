@@ -1565,6 +1565,74 @@ namespace application
                             epm.Return();
                         }
                     }
+
+                    if (epm.GetReturnPopupName() == "SetTargetInteractable(Show)")
+                    {
+                        ImGui::Begin("Interactable Show Popup(Set Target)", &pop, flag);
+                        auto rect = ImGui::GetContentRegionAvail();
+                        auto size = ImGui::CalcTextSize("Please Setting Target Interactable");
+                        imgui::ShiftCursorX((rect.x - size.x) / 2);
+                        imgui::ShiftCursorY((rect.y - size.y) / 2);
+                        ImGui::Text("Please Setting Target Interactable");
+                        ImGui::BringWindowToFocusFront(ImGui::GetCurrentWindow());
+                        ImGui::End();
+
+                        pp.ChangeTab("Interactable");
+
+                        auto data = epm.GetReturnPopupData<Action_InteractableShow>();
+                        if (data->isEditing == false && pm.GetCurrentPalette() == &ip)
+                        {
+                            data->isEditing = true;
+                            ip.Reset();
+                        }
+
+                        if (data->isEditing == true && ip.GetSelections().size() == 1)
+                        {
+                            data->SetTargetInteractable(static_cast<InteractableData*>(*ip.GetSelections().begin()));
+                            data->isEditing = false;
+                            epm.Return();
+                        }
+
+                        if (!pop)
+                        {
+                            data->isEditing = false;
+                            epm.Return();
+                        }
+                    }
+
+                    if (epm.GetReturnPopupName() == "SetTargetInteractable(Hide)")
+                    {
+                        ImGui::Begin("Interactable Hide Popup(Set Target)", &pop, flag);
+                        auto rect = ImGui::GetContentRegionAvail();
+                        auto size = ImGui::CalcTextSize("Please Setting Target Interactable");
+                        imgui::ShiftCursorX((rect.x - size.x) / 2);
+                        imgui::ShiftCursorY((rect.y - size.y) / 2);
+                        ImGui::Text("Please Setting Target Interactable");
+                        ImGui::BringWindowToFocusFront(ImGui::GetCurrentWindow());
+                        ImGui::End();
+
+                        pp.ChangeTab("Interactable");
+
+                        auto data = epm.GetReturnPopupData<Action_InteractableHide>();
+                        if (data->isEditing == false && pm.GetCurrentPalette() == &ip)
+                        {
+                            data->isEditing = true;
+                            ip.Reset();
+                        }
+
+                        if (data->isEditing == true && ip.GetSelections().size() == 1)
+                        {
+                            data->SetTargetInteractable(static_cast<InteractableData*>(*ip.GetSelections().begin()));
+                            data->isEditing = false;
+                            epm.Return();
+                        }
+
+                        if (!pop)
+                        {
+                            data->isEditing = false;
+                            epm.Return();
+                        }
+                    }
                 }
             }
             ImGui::End();
@@ -2325,6 +2393,16 @@ namespace application
                             case application::ActionType::UnitSetHP:
                             {
                                 selectedScript->AddAction<Action_UnitSetHP>();
+                                break;
+                            }
+                            case application::ActionType::InteractableShow:
+                            {
+                                selectedScript->AddAction<Action_InteractableShow>();
+                                break;
+                            }
+                            case application::ActionType::InteractableHide:
+                            {
+                                selectedScript->AddAction<Action_InteractableHide>();
                                 break;
                             }
                             default:
