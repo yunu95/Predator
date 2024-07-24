@@ -1106,6 +1106,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="RightFrame.h" />
     <ClInclude Include="RobinTauntSkill.h" />
     <ClInclude Include="RotatingUI.h" />
+    <ClInclude Include="ShortcutType.h" />
     <ClInclude Include="SkillList.h" />
     <ClInclude Include="SkillManager.h" />
     <ClInclude Include="SkillType.h" />

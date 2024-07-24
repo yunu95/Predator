@@ -934,6 +934,12 @@
     <Filter Include="UI\UnityRelated\EffectSoundType">
       <UniqueIdentifier>{a4480087-8435-4e87-be4d-7238d18061dc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor\ScriptSystem\0_Trigger\List\Trigger_Shortcut">
+      <UniqueIdentifier>{0bba803f-c624-403b-93ef-ce44e2154f0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\ScriptSystem\0_Trigger\List\Trigger_Shortcut\ShortcutType">
+      <UniqueIdentifier>{240ef1ef-0cc1-40ff-bd32-0461d9c65bd8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -2274,6 +2280,9 @@
     </ClInclude>
     <ClInclude Include="UnitDamageFontType.h">
       <Filter>Contents_Refactored\Unit\UnitDamageFontType</Filter>
+    </ClInclude>
+    <ClInclude Include="ShortcutType.h">
+      <Filter>Editor\ScriptSystem\0_Trigger\List\Trigger_Shortcut\ShortcutType</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
