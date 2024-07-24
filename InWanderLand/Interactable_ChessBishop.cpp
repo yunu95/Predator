@@ -112,7 +112,6 @@ void Interactable_ChessBishop::OnTriggerEnter(physics::Collider* collider)
 {
 	if (Unit* colliderUnitComponent = UnitCollider::AcquireUnit(collider);
 		colliderUnitComponent != nullptr &&
-		colliderUnitComponent->IsPlayerUnit() &&
 		colliderUnitComponent->IsAlive() && PlayerController::Instance().GetState() == PlayerController::State::Battle)
 	{
 		unitSet.insert(colliderUnitComponent);

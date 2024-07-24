@@ -112,7 +112,12 @@ void PlaytimeWave::ReportUnitDeath(Unit* unit)
     }
     else
     {
-        m_currentWaveUnits.erase(m_currentWaveUnits.find(unit));
+        if (m_currentWaveUnits.find(unit) == m_currentWaveUnits.end())
+        {
+            int a = 0;
+        }
+		if (m_currentWaveUnits.find(unit) != m_currentWaveUnits.end())
+			m_currentWaveUnits.erase(m_currentWaveUnits.find(unit));
     }
 }
 
