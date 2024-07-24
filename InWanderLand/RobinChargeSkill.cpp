@@ -68,6 +68,7 @@ coroutine::Coroutine RobinChargeSkill::operator()()
 			each->Damaged(owner, GetDamageRush());
 			if (each != BossSummonMobSkill::GetLeftFrameUnit().lock().get() && each != BossSummonMobSkill::GetRightFrameUnit().lock().get())
 			{
+				SFXManager::PlaySoundfile3D(wanderResources::GetSoundPath(EffectSoundType::Enum::HitSkill_Robin_Q_RushHit), each->GetTransform()->GetWorldPosition());
 				each->KnockBackRelativeVector(delta, pod.rushKnockbackDuration);
 			}
 		}
