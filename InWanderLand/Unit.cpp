@@ -808,6 +808,7 @@ void Unit::Recovery()
         ClearCoroutines();
         passiveSkill.reset();
         onAttackHit.Clear();
+        onAttack.Clear();
         switch (unitTemplateData->pod.playerUnitType.enumValue)
         {
         case PlayerCharacterType::Robin:

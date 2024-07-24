@@ -107,17 +107,28 @@ void PlaytimeWave::ReportUnitDeath(Unit* unit)
         auto waveEndCoroutine = ContentsCoroutine::Instance().StartCoroutine(WaveEndCoroutine(unit));
         waveEndCoroutine.lock()->PushDestroyCallBack([=]()
             {
-                m_currentWaveUnits.erase(m_currentWaveUnits.find(unit));
+                if (!m_currentWaveUnits.empty())        /// 타이밍이 안좋으면 두 번 불릴 수 있다. 조치는 되었을테지만 혹시 모르니...
+                {
+					m_currentWaveUnits.erase(m_currentWaveUnits.find(unit));
+                }
+                else
+                {
+                    /// 들어와선 안되는 부분. 디버깅 용
+                    int a = 0;
+                }
             });
     }
     else
     {
-        if (m_currentWaveUnits.find(unit) == m_currentWaveUnits.end())
+		if (m_currentWaveUnits.find(unit) != m_currentWaveUnits.end())
         {
+			m_currentWaveUnits.erase(m_currentWaveUnits.find(unit));
+		}
+        else
+        {
+			/// 들어와선 안되는 부분. 디버깅 용
             int a = 0;
         }
-		if (m_currentWaveUnits.find(unit) != m_currentWaveUnits.end())
-			m_currentWaveUnits.erase(m_currentWaveUnits.find(unit));
     }
 }
 
