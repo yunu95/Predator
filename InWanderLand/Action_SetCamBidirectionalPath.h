@@ -31,6 +31,9 @@ namespace application
         virtual bool PreDecoding(const json& data) override;
         virtual bool PostDecoding(const json& data) override;
 
+		virtual void ProgressInitialize() override;
+		virtual void CurrentProgressSave() override;
+		virtual void Recovery() override;
     private:
         float pathX = 1;
         float pathZ = 1;
