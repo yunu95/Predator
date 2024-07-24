@@ -252,13 +252,25 @@ namespace application::editor::palette
                 co_await std::suspend_always();
             }
             renderer->GetGameObject()->SetSelfActive(visible);
-
+            auto scale = renderer->GetGameObject()->GetTransform()->GetWorldScale();
+            auto isMinus = false;
+            if (scale.x < 0 || scale.y < 0 || scale.z < 0)
+            {
+                isMinus = true;
+            }
             static const yunuGI::IResourceManager* resourceManager = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
             if (visible)
             {
                 for (int i = 0; i < renderer->GetGI().GetMaterialCount(); ++i)
                 {
-                    renderer->GetGI().SetMaterial(i, resourceManager->GetMaterial(renderer->GetGI().GetMaterial(i)->GetName(true)), true);
+                    if (!isMinus)
+                    {
+                        renderer->GetGI().SetMaterial(i, resourceManager->GetMaterial(renderer->GetGI().GetMaterial(i)->GetName(true)), true);
+                    }
+                    else
+                    {
+                        renderer->GetGI().GetMaterial(i)->SetPixelShader(resourceManager->GetShader(L"Default_CullFrontPS.cso"));
+                    }
                 }
             }
         }
