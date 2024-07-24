@@ -94,6 +94,11 @@ public:
     virtual void OnResume() override;
 
     Vector3d GetCamOffsetNorm() const;
+    // 아군의 평타 공격력을 모두 10배로 만든다.
+    void ActivateOPMode();
+    // 아군의 평타 공격력을 모두 원상복구한다.
+    void DeactivateOPMode();
+    bool IsOPMode();
 
     static constexpr int playerTeamIndex = 1;
     static const std::unordered_map<UIEnumID, SkillUpgradeType::Enum> skillUpgradeByUI;
@@ -211,6 +216,7 @@ private:
     PlayerCharacterType::Enum selectedCharacterType = PlayerCharacterType::None;
     std::weak_ptr<UnitAcquisitionBoxCollider> cursorUnitDetector;
     std::array<std::weak_ptr<Unit>, (int)PlayerCharacterType::Num> characters;
+    std::vector<std::shared_ptr<float>> charactersOPFactors;
     std::array<UIElement*, (int)PlayerCharacterType::Num> charactersOutOfCamUI;
     std::weak_ptr<Unit> selectedCharacter;
     std::weak_ptr<Unit> selectedDebugCharacter;

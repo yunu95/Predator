@@ -60,9 +60,18 @@ void Projectile::Update()
 
         if (auto target = homingTarget.lock(); target.get())
         {
-            relativePositionFromTarget += speed * Time::GetDeltaTime();
-            GetTransform()->SetWorldPosition(target->GetTransform()->GetWorldPosition() + relativePositionFromTarget);
-            GetTransform()->SetLocalRotation(Quaternion::MakeWithForwardUp(speed, speed.up));
+            if (!homingTarget.lock()->IsAlive())
+            {
+                // 쫓던 유닛이 사망한 경우 해당 유닛의 위치를 목표 지점으로 설정, 도달할 경우 이펙트 없이 터뜨린다.
+                targetDeadPosition = homingTarget.lock()->GetTransform()->GetWorldPosition() + offsetTargetPos;
+                homingTarget.reset();
+            }
+            else
+            {
+                relativePositionFromTarget += speed * Time::GetDeltaTime();
+                GetTransform()->SetWorldPosition(target->GetTransform()->GetWorldPosition() + relativePositionFromTarget);
+                GetTransform()->SetLocalRotation(Quaternion::MakeWithForwardUp(speed, speed.up));
+            }
         }
         else
         {
@@ -94,6 +103,29 @@ void Projectile::Update()
                 ProjectilePool::SingleInstance().Return(GetWeakPtr<Projectile>());
             }
         }
+        if (targetDeadPosition != Vector3d::zero)
+        {
+            Vector3d startPosition = Vector3d(GetTransform()->GetWorldPosition().x,
+                targetDeadPosition.y, GetTransform()->GetWorldPosition().z);
+
+            Vector3d directionVector = (targetDeadPosition - startPosition).Normalized();
+
+            if (beforeDirectionVector != Vector3d::zero)
+            {
+                float dotProducted = Vector3d::Dot(beforeDirectionVector, directionVector);
+                float multipledLength = directionVector.Magnitude() * beforeDirectionVector.Magnitude();
+                float angle = dotProducted / multipledLength;
+                if (angle < 0)
+                {
+                    ExplodeAtCurrentPosition(false);
+                }
+            }
+            beforeDirectionVector = directionVector;
+        }
+        else
+        {
+            int a = 0;
+        }
     }
 }
 void Projectile::SetSpeed(Vector3d speed)
@@ -106,12 +138,12 @@ void Projectile::OnContentsStop()
     ProjectilePool::SingleInstance().Return(GetWeakPtr<Projectile>());
 }
 
-void Projectile::ExplodeAtCurrentPosition()
+void Projectile::ExplodeAtCurrentPosition(bool withEffectOn)
 {
     fbxObject->SetSelfActive(false);
     traveling = false;
 
-    if (owner.lock()->GetUnitTemplateData().pod.skinnedFBXName != "SKM_Monster2")
+    if (owner.lock()->GetUnitTemplateData().pod.skinnedFBXName != "SKM_Monster2" && withEffectOn)
     {
         StartCoroutine(ProjectileEffectCoroutine(std::weak_ptr<Unit>())).lock()->PushDestroyCallBack([this]()
             {
@@ -122,6 +154,11 @@ void Projectile::ExplodeAtCurrentPosition()
                 fbxObject->SetSelfActive(true);
                 ProjectilePool::SingleInstance().Return(GetWeakPtr<Projectile>());
             });
+    }
+    else
+    {
+        targetDeadPosition = Vector3d::zero;
+        ProjectilePool::SingleInstance().Return(GetWeakPtr<Projectile>());
     }
 }
 
@@ -140,13 +177,11 @@ coroutine::Coroutine Projectile::ProjectileEffectCoroutine(std::weak_ptr<Unit> o
     {
         damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldPosition(Vector3d(GetTransform()->GetWorldPosition().x, 0.0f, GetTransform()->GetWorldPosition().z));
 
-        auto gc = GlobalConstant::GetSingletonInstance().pod;
-
-        damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion{ Vector3d(270.0f, 0, 0)});
-        //auto temp = GetTransform()->GetLocalRotation();
-        //auto euler = temp.Euler();
-        //euler.x += 180;
-        //damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion{ euler });
+        auto temp = GetTransform()->GetLocalRotation();
+        auto euler = temp.Euler();
+        euler.x = 0;
+        
+        damagedVFX.lock()->GetGameObject()->GetTransform()->SetWorldRotation(Quaternion{ euler });
     }
     else
     {

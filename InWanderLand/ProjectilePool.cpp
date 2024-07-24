@@ -14,6 +14,8 @@ std::weak_ptr<Projectile> ProjectilePool::Borrow(std::weak_ptr<Unit> owner, std:
     std::weak_ptr<Projectile> ret = poolsByFBX[fbxname]->Borrow();
     auto projectile = ret.lock();
     projectile->owner = owner;
+    projectile->targetDeadPosition = Vector3d::zero;
+    projectile->beforeDirectionVector = Vector3d::zero;
     const auto& ownerTD = ownerPtr->GetUnitTemplateData().pod;
     const auto& v = ownerTD.projectileOffset;
     DirectX::XMVECTOR offset = DirectX::XMVectorSet(v.x, v.y, v.z, 1);
@@ -31,10 +33,11 @@ std::weak_ptr<Projectile> ProjectilePool::Borrow(std::weak_ptr<Unit> owner, std:
         projectile->homingTarget.reset();
     }
     projectile->projectileType = (ProjectileType::Enum)ownerTD.projectileType.enumValue;
-    projectile->damage = ownerPtr->GetUnitTemplateData().pod.m_autoAttackDamage + ownerPtr->adderAttackDamage;
+    projectile->damage = ownerPtr->GetUnitTemplateData().pod.m_autoAttackDamage * (1 + ownerPtr->multiplierDamage) + ownerPtr->adderAttackDamage;
     projectile->traveling = true;
     auto opponentPtr = opponent.lock();
     auto destination = opponentPtr->GetRandomPositionInsideCapsuleCollider();
+    projectile->offsetTargetPos = destination - opponentPtr->GetTransform()->GetWorldPosition();
     float distanceToOpponent = (-projectile->GetTransform()->GetWorldPosition() + destination).Magnitude();
     float noise = math::Random::GetRandomFloat(0.0f, ownerTD.projectileTargetNoise * distanceToOpponent) - opponentPtr->GetUnitTemplateData().pod.collisionSize;
     if (noise > 0)

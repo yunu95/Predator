@@ -1138,6 +1138,7 @@ void ResourceManager::CreateDefaultShader()
     CreateShader(L"DissolveShadowPS.cso");
 	CreateShader(L"Default_CullFront_AlphaPS.cso");
 	CreateShader(L"Window_AlphaPS.cso");
+	CreateShader(L"BlankPS.cso");
 #pragma endregion
 
 #pragma region GS

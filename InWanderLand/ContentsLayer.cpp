@@ -446,6 +446,27 @@ void application::contents::ContentsLayer::ShortcutInit()
         {
             ProgressManager::SingleInstance().NotifyCurrentProgressSaveAll();
         });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::Alt, true }, { KeyCode::M, false } },
+        [=]()
+        {
+            for (auto& [uiID, skillUpgradeType] : PlayerController::Instance().skillUpgradeByUI)
+            {
+                PlayerController::Instance().SetSkillUpgradeTarget(uiID);
+                PlayerController::Instance().UpgradeSkill();
+            }
+        });
+    scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::Alt, true }, { KeyCode::O, false } },
+        [=]()
+        {
+            if (PlayerController::Instance().IsOPMode())
+            {
+                PlayerController::Instance().DeactivateOPMode();
+            }
+            else
+            {
+                PlayerController::Instance().ActivateOPMode();
+            }
+        });
     scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::Alt, true }, { KeyCode::T, false } },
         [=]()
         {

@@ -14,6 +14,9 @@ coroutine::Coroutine PassiveHanselHeal::CookieLingering(Vector3d pos, std::weak_
     collider.lock()->SetRadius(pod.cookieRadius);
     cookieMesh.lock()->GetTransform()->SetLocalScale(pod.cookieScale * Vector3d::one);
     
+    cookieContainer.insert(cookieMesh);
+    colliderContainer.insert(collider);
+
 	auto cookieEffectAnimator = cookieMesh.lock()->AcquireVFXAnimator();
     cookieEffectAnimator.lock()->SetLoop(true);
 	cookieEffectAnimator.lock()->SetAutoActiveFalse();
@@ -73,6 +76,8 @@ coroutine::Coroutine PassiveHanselHeal::CookieLingering(Vector3d pos, std::weak_
                 SFXManager::PlaySoundfile3D(wanderResources::GetSoundPath(EffectSoundType::Enum::Interaction_Hansel_Passive_Cake), unit->GetTransform()->GetWorldPosition());
                 FBXPool::Instance().Return(cookieMesh);
                 UnitAcquisitionSphereColliderPool::Instance().Return(collider);
+                cookieContainer.erase(cookieMesh);
+                colliderContainer.erase(collider);
                 co_return;
             }
         }
@@ -80,6 +85,9 @@ coroutine::Coroutine PassiveHanselHeal::CookieLingering(Vector3d pos, std::weak_
     }
     FBXPool::Instance().Return(cookieMesh);
     UnitAcquisitionSphereColliderPool::Instance().Return(collider);
+    cookieContainer.erase(cookieMesh);
+    colliderContainer.erase(collider);
+
     co_return;
 }
 
@@ -104,6 +112,22 @@ void PassiveHanselHeal::OnPause()
 void PassiveHanselHeal::OnResume()
 {
     isPaused = false;
+}
+
+void PassiveHanselHeal::Recovery()
+{
+    // 활성화된 케이크들을 모두 없애는 로직
+    for (auto each : cookieContainer)
+    {
+        FBXPool::Instance().Return(each);
+    }
+    for (auto each : colliderContainer)
+    {
+        UnitAcquisitionSphereColliderPool::Instance().Return(each);
+    }
+
+    cookieContainer.clear();
+    colliderContainer.clear();
 }
 
 void PassiveHanselHeal::IncrementHitCounter()
