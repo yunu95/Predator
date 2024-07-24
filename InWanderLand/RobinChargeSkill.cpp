@@ -56,6 +56,8 @@ coroutine::Coroutine RobinChargeSkill::operator()()
 	knockbackCollider.lock()->SetRadius(pod.rushKnockbackRadius);
 	bool isAnimChangedToSlam = false;
 
+	std::unordered_set<Unit*> processedUnitList = std::unordered_set<Unit*>();
+
 	while (forSeconds.Tick())
 	{
 		currentPos += direction * pod.rushSpeed * Time::GetDeltaTime();
@@ -64,6 +66,10 @@ coroutine::Coroutine RobinChargeSkill::operator()()
 		co_await std::suspend_always{};
 		for (auto& each : knockbackCollider.lock()->GetEnemies())
 		{
+			if (processedUnitList.contains(each))
+			{
+				continue;
+			}
 			Vector3d delta = pod.rushKnockbackDistance * (each->GetTransform()->GetWorldPosition() - currentPos).Normalized();
 			each->Damaged(owner, GetDamageRush());
 			if (each != BossSummonMobSkill::GetLeftFrameUnit().lock().get() && each != BossSummonMobSkill::GetRightFrameUnit().lock().get())
@@ -71,6 +77,7 @@ coroutine::Coroutine RobinChargeSkill::operator()()
 				SFXManager::PlaySoundfile3D(wanderResources::GetSoundPath(EffectSoundType::Enum::HitSkill_Robin_Q_RushHit), each->GetTransform()->GetWorldPosition());
 				each->KnockBackRelativeVector(delta, pod.rushKnockbackDuration);
 			}
+			processedUnitList.insert(each);
 		}
 
 		if (forSeconds.ElapsedNormalized() >= 0.9f && !isAnimChangedToSlam)
