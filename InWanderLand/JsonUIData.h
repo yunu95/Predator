@@ -73,6 +73,7 @@ struct JsonUIData
     bool videoUnscaledDeltaTime;
     // 숫자를 가운데 정렬할지의 여부입니다.
     bool centerAlign;
+    bool reAlignOnDisable;
 
     int customFlags;
     int customFlags2;

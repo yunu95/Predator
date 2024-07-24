@@ -253,6 +253,7 @@ private:
     std::string savedBGM = "";
 
     State::Enum stateRequestedByAction = State::None;
+    State::Enum stateRequestedByActionCaptured = State::None;
     bool isStateAction = false;
     float elapsedTimeSinceLastCombo{ 0 };
     int localTimeScale{ 1 };
