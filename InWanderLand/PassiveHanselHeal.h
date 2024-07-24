@@ -40,7 +40,8 @@ private:
     coroutine::Coroutine CookieLingering(Vector3d pos, std::weak_ptr<Unit> owner);
     bool isPaused = false;
 
-    std::pair <std::weak_ptr<ManagedFBX>, std::weak_ptr<UnitAcquisitionSphereCollider>> returnScheduledPair;
+    std::weak_ptr<ManagedFBX> returnScheduledCookie;
+    std::weak_ptr<UnitAcquisitionSphereCollider> returnScheduledCollider;
 
     std::set<std::weak_ptr<ManagedFBX>> cookieContainer;
     std::set<std::weak_ptr<UnitAcquisitionSphereCollider>> colliderContainer;

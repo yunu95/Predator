@@ -83,7 +83,8 @@ coroutine::Coroutine PassiveHanselHeal::CookieLingering(Vector3d pos, std::weak_
     }
     //FBXPool::Instance().Return(cookieMesh);
     //UnitAcquisitionSphereColliderPool::Instance().Return(collider);
-    returnScheduledPair = { cookieMesh, collider };
+    returnScheduledCookie = cookieMesh;
+    returnScheduledCollider = collider;
     co_return;
 }
 
@@ -133,8 +134,8 @@ void PassiveHanselHeal::IncrementHitCounter()
     {
         ContentsCoroutine::StartRoutine(CookieLingering(owner.lock()->GetTransform()->GetWorldPosition(), owner)).lock()->PushDestroyCallBack([=]()
             {
-                cookieContainer.erase(returnScheduledPair.first);
-                colliderContainer.erase(returnScheduledPair.second);
+                cookieContainer.erase(returnScheduledCookie);
+                colliderContainer.erase(returnScheduledCollider);
             });
         hitCounter = 0;
     };
