@@ -55,6 +55,7 @@ void PlaytimeWave::ActivateWave()
         return;
     isWaveActivated = true;
     currentOperativeWave = GetGameObject()->GetComponentWeakPtr<PlaytimeWave>();
+    m_currentWaveUnits.clear();
     array<int, 3> comboObjectives = { waveData->pod.comboObjective1, waveData->pod.comboObjective2, waveData->pod.comboObjective3 };
     PlayerController::Instance().SetComboObjectives(comboObjectives);
     PlayerController::Instance().triggeredWaves.insert(this);
