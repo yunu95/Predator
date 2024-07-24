@@ -280,7 +280,7 @@ namespace application
                                         particle->SetSelfActive(true);
                                         auto ptr = particle->GetComponent<graphics::ParticleRenderer>();
                                         ptr->Play();
-                                    }, true);
+                                    });
 
                                 break;
                             }

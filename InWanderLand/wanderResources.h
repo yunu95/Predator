@@ -6,6 +6,7 @@
 #include "Command.h"
 #include "UnitCommand.h"
 #include "PlayerCharacterType.h"
+#include "EffectSoundType.h"
 
 class ManagedFBX;
 namespace wanderResources
@@ -19,6 +20,7 @@ namespace wanderResources
     std::weak_ptr<yunuGI::IVideo> GetPortraitVideoHurt(PlayerCharacterType::Enum playerType);
     std::weak_ptr<ManagedFBX> GetVFX(const std::string& fbx, UnitAnimType animType);
     bool FindVFXMap(const std::string& fbx, UnitAnimType animType);
+    std::string GetSoundPath(EffectSoundType::Enum soundType);
 
     namespace texture
     {

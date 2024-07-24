@@ -547,9 +547,6 @@
     <Filter Include="Contents\ContentsLayerInitializer">
       <UniqueIdentifier>{8ff44db1-26ce-476a-b37c-b46b522a6b05}</UniqueIdentifier>
     </Filter>
-    <Filter Include="UI\UnityRelated\SoundEnumID">
-      <UniqueIdentifier>{a4480087-8435-4e87-be4d-7238d18061dc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Contents_Refactored">
       <UniqueIdentifier>{dae5e22f-5f7e-4307-8b0e-eb03286c3279}</UniqueIdentifier>
     </Filter>
@@ -933,6 +930,9 @@
     </Filter>
     <Filter Include="Contents_Refactored\Unit\UnitDamageFontType">
       <UniqueIdentifier>{b9f405a1-c9a7-4770-a1de-bdb2e4d0532d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\UnityRelated\EffectSoundType">
+      <UniqueIdentifier>{a4480087-8435-4e87-be4d-7238d18061dc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1879,8 +1879,8 @@
     <ClInclude Include="Interactable_TriggerSphere.h">
       <Filter>Contents_Refactored\InteractableComponent\InteractableList</Filter>
     </ClInclude>
-    <ClInclude Include="SoundEnumID.h">
-      <Filter>UI\UnityRelated\SoundEnumID</Filter>
+    <ClInclude Include="EffectSoundType.h">
+      <Filter>UI\UnityRelated\EffectSoundType</Filter>
     </ClInclude>
     <ClInclude Include="UnitCommand.h">
       <Filter>Contents_Refactored\UnitCommand</Filter>

@@ -1,7 +1,7 @@
 [
     {
         "material_name": "VFX_Hansel_Skill1_1",
-        "frame_rate": 24,
+        "frame_rate": 30,
         "location_data": [
             {
                 "frame": 0,
