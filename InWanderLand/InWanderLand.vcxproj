@@ -1112,6 +1112,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     <ClInclude Include="SkillType.h" />
     <ClInclude Include="SkillUpgradeType.h" />
     <ClInclude Include="BossSummonObject.h" />
+    <ClInclude Include="Trigger_Shortcut.h" />
     <ClInclude Include="Trigger_Stage.h" />
     <ClInclude Include="Trigger_Wave.h" />
     <ClInclude Include="UIVideoPlayer.h" />
@@ -3045,6 +3046,7 @@ xcopy "$(projectdir)RuntimeDependency\$(platform)\$Release" "$(targetdir)" /D /E
     </ClCompile>
     <ClCompile Include="Trigger_GameStart.cpp" />
     <ClCompile Include="Trigger_RepeatPeriodically.cpp" />
+    <ClCompile Include="Trigger_Shortcut.cpp" />
     <ClCompile Include="Trigger_Stage.cpp" />
     <ClCompile Include="Trigger_Unit.cpp" />
     <ClCompile Include="Trigger_Wave.cpp" />

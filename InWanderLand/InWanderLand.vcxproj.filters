@@ -2284,6 +2284,9 @@
     <ClInclude Include="ShortcutType.h">
       <Filter>Editor\ScriptSystem\0_Trigger\List\Trigger_Shortcut\ShortcutType</Filter>
     </ClInclude>
+    <ClInclude Include="Trigger_Shortcut.h">
+      <Filter>Editor\ScriptSystem\0_Trigger\List\Trigger_Shortcut</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -3417,6 +3420,9 @@
     </ClCompile>
     <ClCompile Include="TestUnitAnimation.cpp">
       <Filter>UI\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Trigger_Shortcut.cpp">
+      <Filter>Editor\ScriptSystem\0_Trigger\List\Trigger_Shortcut</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

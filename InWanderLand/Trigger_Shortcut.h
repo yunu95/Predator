@@ -4,6 +4,7 @@
 #pragma once
 
 #include "ITrigger.h"
+#include "ShortcutType.h"
 
 namespace application
 {
@@ -15,15 +16,13 @@ namespace application
 
             virtual void LinkCallback() override;
 
-        void SetRepeatTime(float time);
-
         virtual bool PreEncoding(json& data) const override;
         virtual bool PostEncoding(json& data) const override;
         virtual bool PreDecoding(const json& data) override;
         virtual bool PostDecoding(const json& data) override;
 
     private:
-        float repeatTime = 0;
+        POD_Enum<ShortcutType::Enum> shortcutType;
     };
 }
 
