@@ -931,6 +931,11 @@ namespace application
 		auto startPos = ts->GetWorldPosition();
 		float localTimer = 0;
 		float ratio = 0;
+		float direction = 1.0f;
+		if (!isUpDirection)
+		{
+			direction = -1.0f;
+		}
 		while (!prevCoroBreak)
 		{
 			localTimer += yunutyEngine::Time::GetDeltaTime();
@@ -941,7 +946,7 @@ namespace application
 				ratio = 0;
 			}
 
-			ts->SetWorldPosition(Vector3d(startPos.x, startPos.y + distance * ((-std::cos(ratio * 2 * M_PI) + 1) * 0.5), startPos.z));
+			ts->SetWorldPosition(Vector3d(startPos.x, startPos.y + distance * direction * ((-std::cos(ratio * 2 * M_PI) + 1) * 0.5), startPos.z));
 			co_await std::suspend_always();
 		}
 
@@ -975,6 +980,11 @@ namespace application
 	void Action_OrnamentFloating::SetRoundTripTime(float roundTripTime)
 	{
 		this->roundTripTime = roundTripTime;
+	}
+
+	void Action_OrnamentFloating::SetDirection(bool isUp)
+	{
+		isUpDirection = isUp;
 	}
 
 	void Action_OrnamentFloating::ProcessObervationEvent(ObservationTarget* target, ObservationEvent event)
@@ -1108,12 +1118,47 @@ namespace application
 					}
 				}, 300);
 		}
+
+		if (ImGui::MenuItem("SetDirection(OrnamentFloat)"))
+		{
+			editor::EditorLayer::SetInputControl(false);
+			static bool isUp = true;
+			isUp = data->isUpDirection;
+			editor::imgui::ShowMessageBox("SetDirection(OrnamentFloat)", [data]()
+				{
+					editor::imgui::SmartStyleVar padding(ImGuiStyleVar_FramePadding, ImVec2(10, 7));
+
+					ImGui::Separator();
+
+					ImGui::SetNextItemWidth(-1);
+					ImGui::Checkbox("Up Direction", &isUp);
+
+					ImGui::Separator();
+
+					if (ImGui::Button("OK"))
+					{
+						data->SetDirection(isUp);
+						ImGui::CloseCurrentPopup();
+						editor::imgui::CloseMessageBox("SetDirection(OrnamentFloat)");
+						editor::EditorLayer::SetInputControl(true);
+					}
+					ImGui::SameLine();
+
+					if (ImGui::Button("Cancel"))
+					{
+						ImGui::CloseCurrentPopup();
+						editor::imgui::CloseMessageBox("SetDirection(OrnamentFloat)");
+						editor::EditorLayer::SetInputControl(true);
+					}
+				}, 300);
+		}
 	}
 
 	bool Action_OrnamentFloating::PreEncoding(json& data) const
 	{
 		data["distance"] = distance;
 		data["roundTripTime"] = roundTripTime;
+		data["isUpDirection"] = isUpDirection;
 		return true;
 	}
 
@@ -1127,6 +1172,10 @@ namespace application
 	{
 		distance = data["distance"];
 		roundTripTime = data["roundTripTime"];
+		if (data.contains("isUpDirection"))
+		{
+			isUpDirection = data["isUpDirection"];
+		}
 		return true;
 	}
 

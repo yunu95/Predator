@@ -120,10 +120,13 @@ coroutine::Coroutine UrsulaParalysisSkill::SpawningFieldEffect(std::weak_ptr<Urs
 
     co_await std::suspend_always{};
 
+    float localElapsed{ 0.0f };
+
     bool hit = false;
     while (!hit)
     {
         auto curFrame = tentacleAnimator->GetCurrentFrame();
+        localElapsed += Time::GetDeltaTime();
 
         if (curFrame >= 30)
         {
@@ -154,7 +157,7 @@ coroutine::Coroutine UrsulaParalysisSkill::SpawningFieldEffect(std::weak_ptr<Urs
     while (!knockBacked)
     {
         auto curFrame = tentacleAnimator->GetCurrentFrame();
-
+		localElapsed += Time::GetDeltaTime();
         if (curFrame >= 70)
         {
             knockBacked = true;
@@ -175,10 +178,7 @@ coroutine::Coroutine UrsulaParalysisSkill::SpawningFieldEffect(std::weak_ptr<Urs
         co_await std::suspend_always{};
     }
 
-    while (!waveVFXAnimator.lock()->IsDone())
-    {
-        co_await std::suspend_always{};
-    }
+    co_yield coroutine::WaitForSeconds{ tentacleAnimation->GetDuration() - localElapsed };
 
     co_return;
 }
