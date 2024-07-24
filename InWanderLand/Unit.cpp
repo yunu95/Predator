@@ -807,6 +807,7 @@ void Unit::Recovery()
         DeleteCoroutine(coroutineDeath);
         ClearCoroutines();
         onAttackHit.Clear();
+        onAttack.Clear();
         switch (unitTemplateData->pod.playerUnitType.enumValue)
         {
         case PlayerCharacterType::Robin:
