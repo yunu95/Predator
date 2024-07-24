@@ -219,7 +219,7 @@ void Unit::OnStateEngage<UnitBehaviourTree::Knockback>()
 {
     onStateEngage[UnitBehaviourTree::Knockback]();
     blockFollowingNavAgentByState = referenceBlockFollowingNavAgent.Acquire();
-    PlayAnimation(UnitAnimType::Airborne, Animation::PlayFlag_::Blending | Animation::PlayFlag_::Repeat);
+    PlayAnimation(UnitAnimType::Airborne, Animation::PlayFlag_::Blending);
 }
 template<>
 void Unit::OnStateEngage<UnitBehaviourTree::Stun>()
