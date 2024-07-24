@@ -223,6 +223,11 @@ bool wanderResources::FindVFXMap(const std::string& fbx, UnitAnimType animType)
     }
 }
 
+std::string wanderResources::GetSoundPath(EffectSoundType::Enum soundType)
+{
+    return std::string();
+}
+
 void InitSoundMap()
 {
     soundMap[EffectSoundType::Enum::Projectile_Ursula] = "";
@@ -239,7 +244,7 @@ void InitSoundMap()
     soundMap[EffectSoundType::Enum::Interaction_Hansel_Passive_Cake] = "";
 }
 
-std::string GetSoundPath(EffectSoundType::Enum soundType)
+std::string wanderResources::GetSoundPath(EffectSoundType::Enum soundType)
 {
     if (soundMap.empty())
         InitSoundMap();
