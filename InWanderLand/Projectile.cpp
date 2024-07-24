@@ -62,10 +62,6 @@ void Projectile::Update()
         {
             if (!homingTarget.lock()->IsAlive())
             {
-                if (projectileType == ProjectileType::DIRECT)
-                {
-                    projectileType = ProjectileType::CURVE;
-                }
                 homingTarget.reset();
             }
             else
