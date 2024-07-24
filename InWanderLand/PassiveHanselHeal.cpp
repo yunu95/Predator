@@ -106,6 +106,11 @@ void PassiveHanselHeal::OnResume()
     isPaused = false;
 }
 
+void PassiveHanselHeal::Recovery()
+{
+    // 활성화된 케이크들을 모두 없애는 로직
+}
+
 void PassiveHanselHeal::IncrementHitCounter()
 {
     hitCounter++;

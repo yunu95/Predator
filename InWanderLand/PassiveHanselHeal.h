@@ -1,5 +1,6 @@
 #pragma once
 #include "PassiveSkill.h"
+#include "ProgressTracker.h"
 
 struct POD_PassiveHanselHeal
 {
@@ -20,7 +21,7 @@ struct POD_PassiveHanselHeal
 
 class ManagedFBX;
 class UnitAcquisitionSphereCollider;
-class PassiveHanselHeal : public PassiveSkill
+class PassiveHanselHeal : public PassiveSkill, public application::ProgressTracker
 {
 public:
     virtual void Init(std::weak_ptr<Unit> owner) override;
@@ -30,6 +31,8 @@ public:
 
     virtual void OnPause() override;
     virtual void OnResume() override;
+
+    virtual void Recovery() override;
 
 private:
     int hitCounter{ 0 };
