@@ -114,4 +114,13 @@ namespace application
     {
         return true;
     }
+    void Action_SetCamBidirectionalPath::ProgressInitialize()
+    {
+    }
+    void Action_SetCamBidirectionalPath::CurrentProgressSave()
+    {
+    }
+    void Action_SetCamBidirectionalPath::Recovery()
+    {
+    }
 }
