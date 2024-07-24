@@ -7,7 +7,8 @@ struct UnitDamageFontType
         None = -1,
         Red,
         Blue,
-        BlackAndWhite
+        BlackAndWhite,
+        Cyan,
     };
 };
 
@@ -21,7 +22,8 @@ const std::unordered_map<int, std::string>& application::POD_Enum<UnitDamageFont
         { static_cast<int>((int)UnitDamageFontType::None), "None" },
         { static_cast<int>((int)UnitDamageFontType::Red), "Red" },
         { static_cast<int>((int)UnitDamageFontType::Blue), "Blue" },
-        { static_cast<int>((int)UnitDamageFontType::BlackAndWhite), "BlackAndWhite" }
+        { static_cast<int>((int)UnitDamageFontType::BlackAndWhite), "BlackAndWhite" },
+        { static_cast<int>((int)UnitDamageFontType::Cyan), "Cyan" },
     };
     return enumNameMap;
 }
