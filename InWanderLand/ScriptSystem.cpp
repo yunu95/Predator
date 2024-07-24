@@ -24,6 +24,7 @@ namespace application
         triggerList.push_back({ TriggerType::StartWave, "StartWave" });
         triggerList.push_back({ TriggerType::EndWave, "EndWave" });
         triggerList.push_back({ TriggerType::StageStart, "StageStart" });
+        triggerList.push_back({ TriggerType::Shortcut, "Shortcut" });
 
         /// Condition
         conditionList.push_back({ ConditionType::CinematicModeOn, "CinematicModeOn" });

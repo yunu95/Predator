@@ -321,6 +321,11 @@ namespace application
                     trigger = AddTrigger<Trigger_StageStart>();
                     break;
                 }
+                case application::TriggerType::Shortcut:
+                {
+                    trigger = AddTrigger<Trigger_Shortcut>();
+                    break;
+                }
                 default:
                     break;
                 }

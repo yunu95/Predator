@@ -19,6 +19,8 @@ struct UnitStatusBarType
 template<>
 const std::unordered_map<int, std::string>& application::POD_Enum<UnitStatusBarType::Enum>::GetEnumNameMap()
 {
+    // vim command
+    // '<,'>g!/\/\//s/\w\+/{ static_cast<int>((int)UnitDamageFontType::&), "&" }
     static std::unordered_map<int, std::string> enumNameMap
     {
         {static_cast<int>(UnitStatusBarType::NONE), "NONE"},
