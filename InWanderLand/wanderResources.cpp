@@ -223,13 +223,6 @@ bool wanderResources::FindVFXMap(const std::string& fbx, UnitAnimType animType)
     }
 }
 
-yunuGI::IAnimation* wanderResources::GetAnimation(const std::string& fbx, UnitAnimType animType)
-{
-    if (animMap.empty())
-        InitAnimMap();
-    return animMap.at(fbx).at(animType);
-}
-
 void InitSoundMap()
 {
     soundMap[EffectSoundType::Enum::Projectile_Ursula] = "";
