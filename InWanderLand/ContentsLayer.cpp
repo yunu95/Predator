@@ -458,16 +458,13 @@ void application::contents::ContentsLayer::ShortcutInit()
     scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::Alt, true }, { KeyCode::O, false } },
         [=]()
         {
-            for (auto& eachChar : PlayerController::Instance().GetPlayers())
+            if (PlayerController::Instance().IsOPMode())
             {
-                if (PlayerController::Instance().IsOPMode())
-                {
-                    PlayerController::Instance().DeactivateOPMode();
-                }
-                else
-                {
-                    PlayerController::Instance().ActivateOPMode();
-                }
+                PlayerController::Instance().DeactivateOPMode();
+            }
+            else
+            {
+                PlayerController::Instance().ActivateOPMode();
             }
         });
     scsys.RegisterUniqueTrigger({ { KeyCode::Control, true }, { KeyCode::Alt, true }, { KeyCode::T, false } },

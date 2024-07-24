@@ -31,7 +31,7 @@ std::weak_ptr<Projectile> ProjectilePool::Borrow(std::weak_ptr<Unit> owner, std:
         projectile->homingTarget.reset();
     }
     projectile->projectileType = (ProjectileType::Enum)ownerTD.projectileType.enumValue;
-    projectile->damage = ownerPtr->GetUnitTemplateData().pod.m_autoAttackDamage + ownerPtr->adderAttackDamage;
+    projectile->damage = ownerPtr->GetUnitTemplateData().pod.m_autoAttackDamage * (1 + ownerPtr->multiplierDamage) + ownerPtr->adderAttackDamage;
     projectile->traveling = true;
     auto opponentPtr = opponent.lock();
     auto destination = opponentPtr->GetRandomPositionInsideCapsuleCollider();
