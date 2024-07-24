@@ -239,7 +239,7 @@ void InitSoundMap()
     soundMap[EffectSoundType::Enum::Interaction_Hansel_Passive_Cake] = "";
 }
 
-std::string GetSoundPath(EffectSoundType::Enum soundType)
+std::string wanderResources::GetSoundPath(EffectSoundType::Enum soundType)
 {
     if (soundMap.empty())
         InitSoundMap();
