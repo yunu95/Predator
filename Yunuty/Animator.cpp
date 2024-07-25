@@ -187,6 +187,13 @@ void Animator::Update()
 			desc.curr.currFrame = static_cast<__int32>(desc.curr.sumTime / frameDuration);
 			desc.curr.currFrame = min(static_cast<int>(desc.curr.currFrame), totalFrame - 1);
 			desc.curr.nextFrame = min(static_cast<int>(desc.curr.currFrame + 1), totalFrame - 1);
+			if (currentAnimation->GetLoop())
+			{
+				if (desc.curr.currFrame == totalFrame - 1)
+				{
+					desc.curr.nextFrame = 0;
+				}
+			}
 			desc.curr.ratio = (desc.curr.sumTime - (desc.curr.currFrame * frameDuration)) / frameDuration;
 		}
 
@@ -240,13 +247,20 @@ void Animator::Update()
 				{
 					if (nextAnimation->GetLoop())
 					{
-						desc.next.sumTime = 0;
+						desc.next.sumTime -= duration;
 					}
 				}
 
 				desc.next.currFrame = static_cast<__int32>(desc.next.sumTime / frameDuration);
 				desc.next.currFrame = min(static_cast<int>(desc.next.currFrame), totalFrame - 1);
 				desc.next.nextFrame = min(static_cast<int>(desc.next.currFrame + 1), totalFrame - 1);
+				if (nextAnimation->GetLoop())
+				{
+					if (desc.next.currFrame == totalFrame - 1)
+					{
+						desc.next.nextFrame = 0;
+					}
+				}
 				desc.next.ratio = (desc.next.sumTime - (desc.next.currFrame * frameDuration)) / frameDuration;
 
 				// 블렌딩 중인 애니메이션에 대한 이벤트까지 처리

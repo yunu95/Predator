@@ -208,6 +208,8 @@ void PlayerController::Update()
     HandleComboState();
     HandlePlayerConstrainingRegion();
     HandlePlayerOutOfCamUI();
+    if (pendingManaCost != 0)
+        SetPendingManaCost(pendingManaCost);
     static yunutyEngine::graphics::UIText* text_State{ nullptr };
     if (text_State == nullptr)
     {
@@ -1263,6 +1265,7 @@ void PlayerController::Recovery()
         SoundSystem::PlayMusic(savedBGM);
     }
     stateRequestedByAction = stateRequestedByActionCaptured;
+    UnconstrainCamUpdateDirection();
 }
 void PlayerController::SetState(State::Enum newState)
 {
@@ -1541,6 +1544,7 @@ void PlayerController::SetMana(float mana)
 
 void PlayerController::SetPendingManaCost(float manaCost)
 {
+    pendingManaCost = manaCost;
     const auto& maxMana = GlobalConstant::GetSingletonInstance().pod.maxMana;
     float manabar1Width = UIManager::Instance().GetUIElementByEnum(UIEnumID::ManaBar1)->imageComponent.lock()->GetGI().GetWidth();
     float manabar2Width = UIManager::Instance().GetUIElementByEnum(UIEnumID::ManaBar2)->imageComponent.lock()->GetGI().GetWidth();

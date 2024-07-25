@@ -34,6 +34,7 @@ public:
 public:
     void SetLightMap(const std::wstring& lightMapName);
     Texture* GetLightMap();
+    void ClearCBBuffer();
 
     void SetResolution(unsigned int width, unsigned int height);
     void SetUseIBL(bool useIBL);

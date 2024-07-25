@@ -263,6 +263,7 @@ private:
     bool isStateAction = false;
     float elapsedTimeSinceLastCombo{ 0 };
     int localTimeScale{ 1 };
+    float pendingManaCost{ 0 };
     friend application::Action_BlockSkillCancel;
     friend application::Action_BlockSkillSelection;
     friend application::Action_BlockPlayerSwitch;

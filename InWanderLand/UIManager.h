@@ -114,6 +114,7 @@ public:
     void FadeOutLeft(float duration = 1);
     void FadeOutTop(float duration = 1);
     void FadeOutBottom(float duration = 1);
+    void FadeOut(float duration);
     void FadeIn(float duration = 1);
     void SetIngameUIVisible(bool visible);
     void SetLetterBoxVisible(bool visible);

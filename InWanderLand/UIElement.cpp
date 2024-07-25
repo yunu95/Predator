@@ -204,7 +204,7 @@ void UIElement::DisableElement()
     {
         GetGameObject()->SetSelfActive(false);
     }
-    if (parentPriorityLayout && importedUIData.reAlignOnDisable)
+    if (parentPriorityLayout && GetGameObject()->GetParentGameObject()->GetComponent<UIElement>()->importedUIData.reAlignOnDisable)
     {
         parentPriorityLayout->DisableChildUI(GetGameObject());
     }

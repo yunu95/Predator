@@ -806,11 +806,12 @@ void Unit::Recovery()
         DeleteCoroutine(coroutineBirth);
         DeleteCoroutine(coroutineDeath);
         ClearCoroutines();
-        passiveSkill.reset();
         onAttackHit.Clear();
+        onAttack.Clear();
         switch (unitTemplateData->pod.playerUnitType.enumValue)
         {
         case PlayerCharacterType::Robin:
+            passiveSkill.reset();
             unitStatusPortraitUI = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin)->GetWeakPtr<UIElement>();
             unitStatusPortraitUI2 = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Robin_Left)->GetWeakPtr<UIElement>();
             AddPassiveSkill(std::static_pointer_cast<PassiveSkill>(std::make_shared<PassiveRobinBleed>()));
@@ -821,6 +822,7 @@ void Unit::Recovery()
             AddPassiveSkill(std::static_pointer_cast<PassiveSkill>(std::make_shared<PassiveUrsula>()));
             break;
         case PlayerCharacterType::Hansel:
+            onAttack.Clear();
             unitStatusPortraitUI = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel)->GetWeakPtr<UIElement>();
             unitStatusPortraitUI2 = UIManager::Instance().GetUIElementByEnum(UIEnumID::CharInfo_Hansel_Left)->GetWeakPtr<UIElement>();
             AddPassiveSkill(std::static_pointer_cast<PassiveSkill>(std::make_shared<PassiveHanselHeal>()));
@@ -1717,7 +1719,7 @@ void Unit::InitBehaviorTree()
     // 이 행동 트리에 대한 설계문서는 Document/프로그래밍 폴더 내부의 파일 "InWanderLand Behaviour tree.drawio"입니다.
     unitBehaviourTree[UnitBehaviourTree::Death].enteringCondtion = [this]()
         {
-            return !referenceBlockDeath.BeingReferenced() && !isAlive && liveCountLeft < 0;
+            return !coroutineDeath.expired() || (!referenceBlockDeath.BeingReferenced() && !isAlive && liveCountLeft < 0);
         };
     unitBehaviourTree[UnitBehaviourTree::Death].onEnter = [this]()
         {
@@ -1781,7 +1783,7 @@ void Unit::InitBehaviorTree()
         };
     unitBehaviourTree[UnitBehaviourTree::Reviving].enteringCondtion = [this]()
         {
-            return !isAlive;
+            return !isAlive && liveCountLeft >= 0;
         };
     unitBehaviourTree[UnitBehaviourTree::Reviving].onEnter = [this]()
         {
