@@ -65,6 +65,12 @@ void BossController::RegisterUnit(std::weak_ptr<Unit> unit)
         }
     );
 
+    unit.lock()->onDamaged.AddCallback([this]()
+        {
+            unitRoutineFlag = true;
+        }
+    );
+
     unit.lock()->OnStateEngageCallback()[UnitBehaviourTree::Death].AddVolatileCallback([this]()
         {
             BossSummonMobSkill::OnBossDie();
@@ -81,6 +87,7 @@ void BossController::RegisterUnit(std::weak_ptr<Unit> unit)
 void BossController::OnContentsStop()
 {
     ClearCoroutines();
+    unitRoutineFlag = false;
     summonState = 0;
     summonDone = true;
     currentState = 0;
@@ -227,7 +234,7 @@ coroutine::Coroutine BossController::BossAppearEffectCoroutine()
 
 coroutine::Coroutine BossController::RoutinePerUnit(std::weak_ptr<Unit> unit)
 {
-    if (unit.lock()->GetActive() && !unit.lock()->IsAlive())
+    if (!unit.lock()->IsAlive() || !unitRoutineFlag)
     {
         co_return;
     }

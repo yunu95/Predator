@@ -925,6 +925,8 @@ void PlayerController::OnRightClick()
         {
             if (auto target = GetUnitOnCursor(); target && target->teamIndex != playerTeamIndex)
             {
+                if (selectedCharacter.lock()->isAttacking && (selectedCharacter.lock()->currentTargetUnit.lock().get() == target))
+                    return;
                 OrderAttack(target->GetWeakPtr<Unit>());
             }
             else

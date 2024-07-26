@@ -4,6 +4,9 @@
 
 POD_PassiveHanselHeal PassiveHanselHeal::pod;
 
+std::set<std::weak_ptr<ManagedFBX>, PassiveHanselHeal::CustomCompManagedFBX> PassiveHanselHeal::cookieContainer = std::set<std::weak_ptr<ManagedFBX>, PassiveHanselHeal::CustomCompManagedFBX>();
+std::set<std::weak_ptr<UnitAcquisitionSphereCollider>, PassiveHanselHeal::CustomCompUnitAcquisitionSphereCollider> PassiveHanselHeal::colliderContainer = std::set<std::weak_ptr<UnitAcquisitionSphereCollider>, PassiveHanselHeal::CustomCompUnitAcquisitionSphereCollider>();
+
 coroutine::Coroutine PassiveHanselHeal::CookieLingering(Vector3d pos, std::weak_ptr<Unit> owner)
 {
     auto persistance = owner.lock();
@@ -116,7 +119,7 @@ void PassiveHanselHeal::OnResume()
 
 void PassiveHanselHeal::Recovery()
 {
-    // È°¼ºÈ­µÈ ÄÉÀÌÅ©µéÀ» ¸ğµÎ ¾ø¾Ö´Â ·ÎÁ÷
+    // í™œì„±í™”ëœ ì¼€ì´í¬ë“¤ì„ ëª¨ë‘ ì—†ì• ëŠ” ë¡œì§
     for (auto each : cookieContainer)
     {
         FBXPool::Instance().Return(each);

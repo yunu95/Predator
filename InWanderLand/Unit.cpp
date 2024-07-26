@@ -297,6 +297,7 @@ void Unit::OnStateEngage<UnitBehaviourTree::Attack>()
     defaultAnimationType = UnitAnimType::Idle;
     enableNavObstacleByState = referenceEnableNavObstacle.Acquire();
     disableNavAgentByState = referenceDisableNavAgent.Acquire();
+    isAttacking = true;
 }
 template<>
 void Unit::OnStateExit<UnitBehaviourTree::Attack>()
@@ -307,6 +308,7 @@ void Unit::OnStateExit<UnitBehaviourTree::Attack>()
     onStateExit[UnitBehaviourTree::Attack]();
     enableNavObstacleByState.reset();
     disableNavAgentByState.reset();
+    isAttacking = false;
 }
 template<>
 void Unit::OnStateUpdate<UnitBehaviourTree::Attack>()

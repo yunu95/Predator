@@ -84,6 +84,8 @@ namespace BossSummon
 		static application::editor::Unit_TemplateData* siegeProjectileUnitMold;
 		static application::editor::Unit_TemplateData* eliteProjectileUnitMold;
 		bool isPause = false;
+
+		Reference disNav;
 	};
 
 }

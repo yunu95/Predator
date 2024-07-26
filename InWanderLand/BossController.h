@@ -47,4 +47,5 @@ private:
 	int currentState = 0;
 	int beforeSkillIndex = 0;
 	virtual coroutine::Coroutine RoutinePerUnit(std::weak_ptr<Unit> unit) override;
+	bool unitRoutineFlag = false;
 };
