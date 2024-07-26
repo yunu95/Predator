@@ -163,6 +163,7 @@ namespace BossSummon
 		auto idle = wanderResources::GetAnimation("SKM_Frame1", UnitAnimType::Idle);
 		idle->SetLoop(false);
 		unitFrame = UnitPool::SingleInstance().Borrow(frameData);
+		unitFrame.lock()->Relocate(GetGameObject()->GetTransform()->GetWorldPosition());
 		unitFrame.lock()->belongingWave = nullptr;
 		disNav = unitFrame.lock()->referenceDisableNavAgent;
 		unitFrame.lock()->SetDefaultAnimation(UnitAnimType::Idle);
