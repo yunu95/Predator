@@ -163,6 +163,7 @@ namespace BossSummon
 		auto idle = wanderResources::GetAnimation("SKM_Frame1", UnitAnimType::Idle);
 		idle->SetLoop(false);
 		unitFrame = UnitPool::SingleInstance().Borrow(frameData);
+		unitFrame.lock()->Relocate(GetGameObject()->GetTransform()->GetWorldPosition());
 		unitFrame.lock()->belongingWave = nullptr;
 		unitFrame.lock()->SetDefaultAnimation(UnitAnimType::Idle);
 		unitFrame.lock()->OnStateEngageCallback()[UnitBehaviourTree::Keywords::Death].AddVolatileCallback(
