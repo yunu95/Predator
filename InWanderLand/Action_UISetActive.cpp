@@ -24,10 +24,6 @@ namespace application
             elem->reallyDisabled = true;
             elem->DisableElement();
         }
-        while (elem->GetUIEnabled())
-        {
-            co_await std::suspend_always{};
-        }
         co_return;
     }
 
