@@ -348,6 +348,8 @@ private:
     float localTimeScale = 1.0f;
     float localBuffTimeScale = 1.0f;
 
+    bool isAttacking{ false };
+
     void ResetCallbacks();
 
 

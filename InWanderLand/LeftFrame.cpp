@@ -164,6 +164,7 @@ namespace BossSummon
 		idle->SetLoop(false);
 		unitFrame = UnitPool::SingleInstance().Borrow(frameData);
 		unitFrame.lock()->belongingWave = nullptr;
+		disNav = unitFrame.lock()->referenceDisableNavAgent;
 		unitFrame.lock()->SetDefaultAnimation(UnitAnimType::Idle);
 		unitFrame.lock()->OnStateEngageCallback()[UnitBehaviourTree::Keywords::Death].AddVolatileCallback(
 			[this]() 
