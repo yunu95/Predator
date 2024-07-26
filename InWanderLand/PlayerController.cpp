@@ -1540,6 +1540,7 @@ void PlayerController::SetMana(float mana)
         UIManager::Instance().GetUIElementByEnum(UIEnumID::Mana_Text_MaxMP)->SetNumber(gc.maxMana);
     }
     UIManager::Instance().GetUIElementByEnum(UIEnumID::Mana_Text_CurrentMP)->SetNumber(this->mana);
+    UIManager::Instance().GetUIElementByEnum(UIEnumID::Mana_Text_CurrentMP_Tactic)->SetNumber(this->mana);
 }
 
 void PlayerController::SetPendingManaCost(float manaCost)
