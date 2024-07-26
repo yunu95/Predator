@@ -56,10 +56,8 @@ private:
     coroutine::Coroutine CookieLingering(Vector3d pos, std::weak_ptr<Unit> owner);
     bool isPaused = false;
 
-    std::set<std::weak_ptr<ManagedFBX>, CustomCompManagedFBX> cookieContainer;
-    std::set<std::weak_ptr<UnitAcquisitionSphereCollider>, CustomCompUnitAcquisitionSphereCollider> colliderContainer;
-    //std::unordered_map<std::weak_ptr<ManagedFBX>, std::weak_ptr<UnitAcquisitionSphereCollider>>> cookieContainer;
-    //coroutine::Coroutine CookieDisappear(const Vector3d& pos, std::weak_ptr<Unit> owner);
+    static std::set<std::weak_ptr<ManagedFBX>, CustomCompManagedFBX> cookieContainer;
+    static std::set<std::weak_ptr<UnitAcquisitionSphereCollider>, CustomCompUnitAcquisitionSphereCollider> colliderContainer;
 };
 
 template <>
