@@ -5,6 +5,7 @@
 #include "UIEnumID.h"
 #include "JsonUIData.h"
 #include "ContentsObservee.h"
+#include "LanguageType.h"
 /// <summary>
 /// UIButton 객체들을 관리하는 컴포넌트.
 /// 역할
@@ -55,6 +56,7 @@ private:
     int m_currentHighestLayer = 0;
     UIButton* m_highestPriorityButton;
     UIElement* localContext{ nullptr };
+    LanguageType currentLanguage{ LanguageType::KOREAN };
 
     bool isButtonActiviated = false;
     std::vector<UIElement*> rootUIs;
@@ -136,6 +138,7 @@ public:
     JsonUIData GetUIDataWithIndex(int index);
     UIElement* GetUIElementByEnum(UIEnumID uiEnumID);
     void ImportUI(const char* path);
+    void SetLanguage(LanguageType languageType);
 
     virtual void Update() override;
 };

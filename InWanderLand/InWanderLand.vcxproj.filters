@@ -940,6 +940,9 @@
     <Filter Include="Editor\ScriptSystem\0_Trigger\List\Trigger_Shortcut\ShortcutType">
       <UniqueIdentifier>{240ef1ef-0cc1-40ff-bd32-0461d9c65bd8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UI\LanguageType">
+      <UniqueIdentifier>{0fe21cc4-f8ac-419c-9a16-3c80237695d3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -2289,6 +2292,9 @@
     </ClInclude>
     <ClInclude Include="Action_Interactable.h">
       <Filter>Editor\ScriptSystem\2_Action\List</Filter>
+    </ClInclude>
+    <ClInclude Include="LanguageType.h">
+      <Filter>UI\LanguageType</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

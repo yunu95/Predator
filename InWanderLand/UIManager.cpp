@@ -599,6 +599,31 @@ void UIManager::ImportUI(const char* path)
         }
     }
 }
+void UIManager::SetLanguage(LanguageType languageType)
+{
+    currentLanguage = languageType;
+    for (auto& each : uisByIndex)
+    {
+        if (each.second->importedUIData.customFlags2 & (int)UIExportFlag2::MultiLanguage)
+        {
+            auto rsrcMgr = yunutyEngine::graphics::Renderer::SingleInstance().GetResourceManager();
+            yunuGI::ITexture* texture{ nullptr };
+            switch (languageType)
+            {
+            case LanguageType::KOREAN:
+                texture = rsrcMgr->GetTexture(yutility::GetWString(each.second->importedUIData.koreanImagePath).c_str());
+                break;
+            case LanguageType::JAPANESE:
+                texture = rsrcMgr->GetTexture(yutility::GetWString(each.second->importedUIData.japaneseImagePath).c_str());
+                break;
+            case LanguageType::ENGLISH:
+                texture = rsrcMgr->GetTexture(yutility::GetWString(each.second->importedUIData.englishImagePath).c_str());
+                break;
+            }
+            each.second->imageComponent.lock()->GetGI().SetImage(texture);
+        }
+    }
+}
 void UIManager::ClearDialogueInfos()
 {
     dialogueTimed.clear();
@@ -1220,6 +1245,24 @@ bool UIManager::ImportDealWithSpecialCases(const JsonUIData& uiData, UIElement* 
         element->button->AddButtonClickFunction([=]()
             {
                 ProgressManager::SingleInstance().LoadCheckPoint();
+            });
+        break;
+    case UIEnumID::Localization:
+        ImportDefaultAction(uiData, GetUIElementWithIndex(uiData.uiIndex));
+        element->button->AddButtonClickFunction([=]()
+            {
+                switch (currentLanguage)
+                {
+                case LanguageType::KOREAN:
+                    SetLanguage(LanguageType::ENGLISH);
+                    break;
+                case LanguageType::ENGLISH:
+                    SetLanguage(LanguageType::JAPANESE);
+                    break;
+                case LanguageType::JAPANESE:
+                    SetLanguage(LanguageType::KOREAN);
+                    break;
+                }
             });
         break;
     default:
