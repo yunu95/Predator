@@ -20,6 +20,7 @@
 #include "Action_BlockPlayerSwitch.h"
 #include "Action_BlockSkillCancel.h"
 #include "Action_BlockSkillSelection.h"
+#include "Action_BlockTacticMode.h"
 #include "Action_SetTimeScale.h"
 #include "Action_UnitPauseAll.h"
 #include "Action_PlayerSelect.h"

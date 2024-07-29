@@ -23,6 +23,7 @@ namespace application
     class Action_BlockSkillCancel;
     class Action_BlockSkillSelection;
     class Action_BlockPlayerSwitch;
+    class Action_BlockTacticMode;
     namespace editor
     {
         class RegionData;
@@ -208,6 +209,7 @@ private:
     bool isConstraingCamUpdateDirection{ false };
     bool blockSkillCancel{ false };
     bool playerSwitchable{ true };
+    bool tacticActionPermitted{ true };
     std::array<bool, SkillType::SKILL_NUM> blockSkillSelection{ false };
     float mana{ 0 };
     State::Enum state{ State::Battle };
@@ -267,4 +269,5 @@ private:
     friend application::Action_BlockSkillCancel;
     friend application::Action_BlockSkillSelection;
     friend application::Action_BlockPlayerSwitch;
+    friend application::Action_BlockTacticMode;
 };

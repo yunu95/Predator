@@ -943,6 +943,9 @@
     <Filter Include="UI\LanguageType">
       <UniqueIdentifier>{0fe21cc4-f8ac-419c-9a16-3c80237695d3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor\ScriptSystem\2_Action\List\Action_BlockTacticMode">
+      <UniqueIdentifier>{1de5bc94-2f9c-4010-a25f-c7284f765606}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -2296,6 +2299,9 @@
     <ClInclude Include="LanguageType.h">
       <Filter>UI\LanguageType</Filter>
     </ClInclude>
+    <ClInclude Include="Action_BlockTacticMode.h">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_BlockTacticMode</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntryPoint.cpp">
@@ -3435,6 +3441,9 @@
     </ClCompile>
     <ClCompile Include="Action_Interactable.cpp">
       <Filter>Editor\ScriptSystem\2_Action\List</Filter>
+    </ClCompile>
+    <ClCompile Include="Action_BlockTacticMode.cpp">
+      <Filter>Editor\ScriptSystem\2_Action\List\Action_BlockTacticMode</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

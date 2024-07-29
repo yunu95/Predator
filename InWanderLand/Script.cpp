@@ -555,6 +555,11 @@ namespace application
                         action = AddAction<Action_BlockSkillSelection>();
                         break;
                     }
+                    case application::ActionType::BlockTacticMode:
+                    {
+                        action = AddAction<Action_BlockTacticMode>();
+                        break;
+                    }
                     case application::ActionType::AwaitSkillSelection:
                     {
                         action = AddAction<Action_AwaitSkillSelection>();
