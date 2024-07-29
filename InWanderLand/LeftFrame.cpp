@@ -436,7 +436,7 @@ namespace BossSummon
 					{
 						if (meleeSummonCount < totalMeleeCount && !meleeCountList.empty())
 						{
-							if (meleeCountList.begin()->first == nullptr)
+							if (meleeCountList.begin()->second <= 0)
 							{
 								meleeCountList.erase(meleeCountList.begin());
 								break;
@@ -484,7 +484,7 @@ namespace BossSummon
 					{
 						if (projectileSummonCount < totalRangedCount && !rangedCountList.empty())
 						{
-							if (rangedCountList.begin()->first == nullptr)
+							if (rangedCountList.begin()->second <= 0)
 							{
 								rangedCountList.erase(rangedCountList.begin());
 								break;
