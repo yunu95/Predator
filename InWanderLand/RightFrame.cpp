@@ -19,14 +19,14 @@ namespace BossSummon
 	application::editor::Unit_TemplateData* RightFrame::meleeUnitMold = nullptr;
 	application::editor::Unit_TemplateData* RightFrame::weakMeleeUnitMold = nullptr;
 	application::editor::Unit_TemplateData* RightFrame::eliteMeleeUnitMold = nullptr;
-
+	
 	application::editor::Unit_TemplateData* RightFrame::projectileUnitMold = nullptr;
 	application::editor::Unit_TemplateData* RightFrame::weakProjectileUnitMold = nullptr;
 	application::editor::Unit_TemplateData* RightFrame::weakApproachProjectileUnitMold = nullptr;
 	application::editor::Unit_TemplateData* RightFrame::kitingProjectileUnitMold = nullptr;
 	application::editor::Unit_TemplateData* RightFrame::siegeProjectileUnitMold = nullptr;
 	application::editor::Unit_TemplateData* RightFrame::eliteProjectileUnitMold = nullptr;
-
+	
 	RightFrame::~RightFrame()
 	{
 		summonEffect = std::weak_ptr<ManagedFBX>();
@@ -42,6 +42,8 @@ namespace BossSummon
 		siegeProjectileUnitMold = nullptr;
 		eliteProjectileUnitMold = nullptr;
 		BossSummonMobSkill::SetRightFrame(nullptr);
+
+		disNav.reset();
 	}
 
 	void RightFrame::Init(application::editor::ITemplateData* templateData)
@@ -161,9 +163,10 @@ namespace BossSummon
 		auto idle = wanderResources::GetAnimation("SKM_Frame2", UnitAnimType::Idle);
 		idle->SetLoop(false);
 		unitFrame = UnitPool::SingleInstance().Borrow(frameData);
-		unitFrame.lock()->Relocate(GetGameObject()->GetTransform()->GetWorldPosition());
 		unitFrame.lock()->belongingWave = nullptr;
-		disNav = unitFrame.lock()->referenceDisableNavAgent;
+		disNav = unitFrame.lock()->referenceDisableNavAgent.Acquire();
+		Vector3d framePos = Vector3d(frameData->pod.position.x, frameData->pod.position.y, frameData->pod.position.z);
+		unitFrame.lock()->GetTransform()->SetWorldPosition(framePos);
 		unitFrame.lock()->SetDefaultAnimation(UnitAnimType::Idle);
 		unitFrame.lock()->OnStateEngageCallback()[UnitBehaviourTree::Keywords::Death].AddVolatileCallback(
 			[this]()

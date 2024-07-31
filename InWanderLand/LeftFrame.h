@@ -85,7 +85,7 @@ namespace BossSummon
 		static application::editor::Unit_TemplateData* eliteProjectileUnitMold;
 		bool isPause = false;
 
-		Reference disNav;
+		std::shared_ptr<Reference::Guard> disNav;
 	};
 
 }

@@ -44,6 +44,8 @@ namespace BossSummon
 		siegeProjectileUnitMold = nullptr;
 		eliteProjectileUnitMold = nullptr;
 		BossSummonMobSkill::SetLeftFrame(nullptr);
+
+		disNav.reset();
 	}
 
 	void LeftFrame::Init(application::editor::ITemplateData* templateData)
@@ -163,9 +165,10 @@ namespace BossSummon
 		auto idle = wanderResources::GetAnimation("SKM_Frame1", UnitAnimType::Idle);
 		idle->SetLoop(false);
 		unitFrame = UnitPool::SingleInstance().Borrow(frameData);
-		unitFrame.lock()->Relocate(GetGameObject()->GetTransform()->GetWorldPosition());
 		unitFrame.lock()->belongingWave = nullptr;
-		disNav = unitFrame.lock()->referenceDisableNavAgent;
+		disNav = unitFrame.lock()->referenceDisableNavAgent.Acquire();
+		Vector3d framePos = Vector3d(frameData->pod.position.x, frameData->pod.position.y, frameData->pod.position.z);
+		unitFrame.lock()->GetTransform()->SetWorldPosition(framePos);
 		unitFrame.lock()->SetDefaultAnimation(UnitAnimType::Idle);
 		unitFrame.lock()->OnStateEngageCallback()[UnitBehaviourTree::Keywords::Death].AddVolatileCallback(
 			[this]() 
