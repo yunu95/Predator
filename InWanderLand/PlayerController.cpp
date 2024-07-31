@@ -1559,7 +1559,7 @@ void PlayerController::SetPendingManaCost(float manaCost)
 
 void PlayerController::TryTogglingTacticMode()
 {
-    if (UIManager::Instance().GetScriptUI("UiEnum:Toggle_TacticMode")->GetUIEnabled() && ((state == State::Battle) || state == State::Tactic))
+    if (UIManager::Instance().GetScriptUI("UiEnum:Toggle_TacticMode")->GetUIEnabled() && ((state == State::Battle) || state == State::Tactic) && tacticActionPermitted)
     {
         if ((TacticModeSystem::Instance().IsCoolTime() == false) && (TacticModeSystem::Instance().IsExecuting() == false))
         {

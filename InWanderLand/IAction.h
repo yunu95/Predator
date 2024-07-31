@@ -80,6 +80,7 @@ namespace application
         UnitSetHP,
         InteractableShow,
         InteractableHide,
+        BlockTacticMode,
     };
 
     struct IAction

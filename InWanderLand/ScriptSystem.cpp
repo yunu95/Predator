@@ -96,6 +96,7 @@ namespace application
         actionList.push_back({ ActionType::UnitSetHP,"UnitSetHP" });
         actionList.push_back({ ActionType::InteractableShow,"InteractableShow" });
         actionList.push_back({ ActionType::InteractableHide,"InteractableHide" });
+        actionList.push_back({ ActionType::BlockTacticMode,"BlockTacticMode" });
 
         std::sort(triggerList.begin(), triggerList.end(), [](const std::pair<TriggerType, std::string>& a, const std::pair<TriggerType, std::string>& b) { return a.second < b.second; });
         std::sort(conditionList.begin(), conditionList.end(), [](const std::pair<ConditionType, std::string>& a, const std::pair<ConditionType, std::string>& b) { return a.second < b.second; });

@@ -336,6 +336,11 @@ namespace application
                         Action_BlockSkillSelection::ImGui_DrawDataPopup(static_cast<Action_BlockSkillSelection*>(data));
                         break;
                     }
+                    case application::ActionType::BlockTacticMode:
+                    {
+                        Action_BlockTacticMode::ImGui_DrawDataPopup(static_cast<Action_BlockTacticMode*>(data));
+                        break;
+                    }
                     case application::ActionType::AwaitSkillSelection:
                     {
                         Action_AwaitSkillSelection::ImGui_DrawDataPopup(static_cast<Action_AwaitSkillSelection*>(data));

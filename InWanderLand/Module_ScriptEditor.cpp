@@ -2231,6 +2231,11 @@ namespace application
                                 selectedScript->AddAction<Action_BlockSkillSelection>();
                                 break;
                             }
+                            case application::ActionType::BlockTacticMode:
+                            {
+                                selectedScript->AddAction<Action_BlockTacticMode>();
+                                break;
+                            }
                             case application::ActionType::AwaitSkillSelection:
                             {
                                 selectedScript->AddAction<Action_AwaitSkillSelection>();
