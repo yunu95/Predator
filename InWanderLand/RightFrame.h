@@ -85,6 +85,7 @@ namespace BossSummon
 		bool isPause = false;
 
 		std::shared_ptr<Reference::Guard> disNav;
+		std::shared_ptr<Reference::Guard> blockFollowingNav;
 	};
 
 }

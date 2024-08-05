@@ -44,6 +44,7 @@ namespace BossSummon
 		BossSummonMobSkill::SetRightFrame(nullptr);
 
 		disNav.reset();
+		blockFollowingNav.reset();
 	}
 
 	void RightFrame::Init(application::editor::ITemplateData* templateData)
@@ -165,6 +166,7 @@ namespace BossSummon
 		unitFrame = UnitPool::SingleInstance().Borrow(frameData);
 		unitFrame.lock()->belongingWave = nullptr;
 		disNav = unitFrame.lock()->referenceDisableNavAgent.Acquire();
+		blockFollowingNav = unitFrame.lock()->referenceBlockFollowingNavAgent.Acquire();
 		Vector3d framePos = Vector3d(frameData->pod.position.x, frameData->pod.position.y, frameData->pod.position.z);
 		unitFrame.lock()->GetTransform()->SetWorldPosition(framePos);
 		unitFrame.lock()->SetDefaultAnimation(UnitAnimType::Idle);
