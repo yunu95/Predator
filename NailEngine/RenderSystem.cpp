@@ -232,7 +232,7 @@ void RenderSystem::Render()
     RenderUI();
 
     // 디퍼드 정보 출력
-    ///DrawDeferredInfo();
+    DrawDeferredInfo();
 
     // 디퍼드용 SRV UnBind
     static auto Deferred_DirectionalLight = std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"Deferred_DirectionalLight"));
@@ -707,7 +707,7 @@ void RenderSystem::DrawDeferredInfo()
     auto windowInfo = NailEngine::Instance.Get().GetWindowInfo();
     int width = windowInfo.width;
     int height = windowInfo.height;
-    for (int i = 0; i < 9; i++)
+    for (int i = 0; i < 5; i++)
     {
         DirectX::SimpleMath::Matrix matSclae = DirectX::SimpleMath::Matrix::CreateScale(DirectX::SimpleMath::Vector3(width / 10.f, height / 10.f, 1.f));
         DirectX::SimpleMath::Matrix matRotation = DirectX::SimpleMath::Matrix::CreateRotationX(0.f);
@@ -731,25 +731,25 @@ void RenderSystem::DrawDeferredInfo()
             std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"DeferredDepth"))->PushGraphicsData();
         else if (i == 4)
             std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"DeferredARM"))->PushGraphicsData();
-        else if (i == 5)
-            std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"DeferredDiffuseLight"))->PushGraphicsData();
-        else if (i == 6)
-            std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"DeferredSpecularLight"))->PushGraphicsData();
-        else if (i == 7)
-        {
-            DirectX::SimpleMath::Matrix matTranslation = DirectX::SimpleMath::Matrix::CreateTranslation(DirectX::SimpleMath::Vector3(
-                ((-SM_SIZE / 2.f) + ((SM_SIZE * 0.05) + ((SM_SIZE / 10.f) * i)))
-                , ((SM_SIZE / 2.f) - ((SM_SIZE * 0.05)))
-                , 1.f)
-            );
-            matSclae = DirectX::SimpleMath::Matrix::CreateScale(DirectX::SimpleMath::Vector3(SM_SIZE / 10.f, SM_SIZE / 10.f, 1.f));
-            std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"DeferredShadow"))->PushGraphicsData();
-        }
-        else if (i == 8)
-        {
-            //matSclae = DirectX::SimpleMath::Matrix::CreateScale(DirectX::SimpleMath::Vector3(128 / 10.f, 128 / 10.f, 1.f));
-            std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"PBRIrradiance"))->PushGraphicsData();
-        }
+        //else if (i == 5)
+        //    std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"DeferredDiffuseLight"))->PushGraphicsData();
+        //else if (i == 6)
+        //    std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"DeferredSpecularLight"))->PushGraphicsData();
+        //else if (i == 7)
+        //{
+        //    DirectX::SimpleMath::Matrix matTranslation = DirectX::SimpleMath::Matrix::CreateTranslation(DirectX::SimpleMath::Vector3(
+        //        ((-SM_SIZE / 2.f) + ((SM_SIZE * 0.05) + ((SM_SIZE / 10.f) * i)))
+        //        , ((SM_SIZE / 2.f) - ((SM_SIZE * 0.05)))
+        //        , 1.f)
+        //    );
+        //    matSclae = DirectX::SimpleMath::Matrix::CreateScale(DirectX::SimpleMath::Vector3(SM_SIZE / 10.f, SM_SIZE / 10.f, 1.f));
+        //    std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"DeferredShadow"))->PushGraphicsData();
+        //}
+        //else if (i == 8)
+        //{
+        //    //matSclae = DirectX::SimpleMath::Matrix::CreateScale(DirectX::SimpleMath::Vector3(128 / 10.f, 128 / 10.f, 1.f));
+        //    std::static_pointer_cast<Material>(ResourceManager::Instance.Get().GetMaterial(L"PBRIrradiance"))->PushGraphicsData();
+        //}
 
         DirectX::SimpleMath::Matrix wtm = matSclae * matRotation * matTranslation;
         MatrixBuffer matrixBuffer;
