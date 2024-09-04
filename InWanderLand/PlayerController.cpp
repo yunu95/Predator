@@ -885,6 +885,26 @@ void PlayerController::OnLeftClick()
     }
     else
     {
+        // 실행하려던 스킬이 해당 캐릭터가 사용중인 스킬일 경우 스킬 프리뷰를 지운다.
+        if (auto playerOngoingSkill = selectedCharacter.lock()->onGoingSkill;
+            playerOngoingSkill.get() != nullptr &&
+            playerOngoingSkill->GetSkillType() == selectedSkill)
+        {
+			switch (selectedSkill)
+			{
+				case SkillType::ROBIN_Q: SkillPreviewSystem::Instance().HideRobinQSkill(); break;
+				case SkillType::URSULA_Q: SkillPreviewSystem::Instance().HideUrsulaQSkill(); break;
+				case SkillType::URSULA_W: SkillPreviewSystem::Instance().HideUrsulaWSkill(); break;
+				case SkillType::HANSEL_Q: SkillPreviewSystem::Instance().HideHanselQSkill(); break;
+				case SkillType::HANSEL_W: SkillPreviewSystem::Instance().HideHanselWSkill(); break;
+				default:
+					break;
+			}
+            SkillPreviewSystem::Instance().HideSkillMaxRange();
+			selectedSkill = SkillType::NONE;
+			return;
+        }
+
         ActivateSkill(selectedSkill, GetWorldCursorPosition());
         if (state != State::Tactic)
         {
@@ -1177,7 +1197,7 @@ void PlayerController::SelectSkill(SkillType::Enum skillType)
         return;
     }
 
-    UnSelectSkill();
+    UnSelectSkill(true);
     // 소모될 마나량을 출력
     switch (skillType)
     {
@@ -1559,6 +1579,11 @@ void PlayerController::SetPendingManaCost(float manaCost)
 
 void PlayerController::TryTogglingTacticMode()
 {
+    if (Time::GetTimeScale() < 0.01)
+    {
+        // TimeScale이 0인 경우는 ui를 통한 조작 뿐인걸 전제.
+        return;
+    }
     if (UIManager::Instance().GetScriptUI("UiEnum:Toggle_TacticMode")->GetUIEnabled() && ((state == State::Battle) || state == State::Tactic) && tacticActionPermitted)
     {
         if ((TacticModeSystem::Instance().IsCoolTime() == false) && (TacticModeSystem::Instance().IsExecuting() == false))
